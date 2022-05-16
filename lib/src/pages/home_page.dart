@@ -13,7 +13,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const PreferredSize(
-        preferredSize: const Size.fromHeight(65.0),
+        preferredSize: Size.fromHeight(65.0),
         child: AppBarOffline(),
       ),
       body: Column(
