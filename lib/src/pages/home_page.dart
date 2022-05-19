@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/appbar_offline.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/app_bar_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

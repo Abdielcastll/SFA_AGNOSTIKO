@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/appbar_offline.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/app_bar_widget.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/test_widget.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -9,15 +10,101 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: PreferredSize(
+    return Scaffold(
+      appBar: const PreferredSize(
         preferredSize: Size.fromHeight(65.0),
         child: AppBarOffline(),
       ),
-      body: Center(
-        child: Text('Login'),
+      body: Column(
+        children: [
+          const SizedBox(height: 25),
+          const Center(
+            child: Text(
+              'Bienvenido a Sales2Go!',
+              style: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          const SizedBox(height: 30),
+          const Text('Ingresa tus datos para iniciar sesión:'),
+          const SizedBox(height: 30),
+          SingleChildScrollView(
+            child: Container(
+              height: 355,
+              width: 425,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 10,
+                    offset: Offset(0, 10),
+                  ),
+                ],
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 30),
+                    SizedBox(
+                      width: 300,
+                      child: TextField(
+                        controller: emailController,
+                        cursorColor: Colors.white,
+                        textInputAction: TextInputAction.next,
+                        decoration: const InputDecoration(
+                          labelText: 'Email',
+                          suffixIcon: Icon(
+                            Icons.email,
+                            size: 17,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    SizedBox(
+                      width: 300,
+                      child: TextField(
+                        controller: passwordController,
+                        cursorColor: Colors.white,
+                        textInputAction: TextInputAction.next,
+                        decoration: const InputDecoration(
+                          suffixIconColor: Colors.purple,
+                          labelText: 'Contraseña',
+                          suffixIcon: Icon(
+                            Icons.lock,
+                            size: 17,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 50),
+                    SizedBox(
+                      width: 150,
+                      child: ElevatedButton.icon(
+                          icon: const Icon(Icons.lock_open, size: 20),
+                          label: const Text('Ingresar',
+                              style: TextStyle(fontSize: 15)),
+                          onPressed: () {}),
+                    ),
+                    const SizedBox(height: 50),
+                    const TestWidgets(),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

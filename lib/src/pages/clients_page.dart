@@ -10,6 +10,10 @@ class ClientsPage extends StatefulWidget {
 class _ClientsPageState extends State<ClientsPage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      body: Center(
+        child: Text('Productos'),
+      ),
+    );
   }
 }

@@ -6,6 +6,7 @@ import 'package:pwa_sales2go_flutter/src/pages/login_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/home_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/roles_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -21,11 +22,12 @@ class MyApp extends StatelessWidget {
         'login': (BuildContext context) => LoginPage(),
         'product': (BuildContext context) => ProductsPage(),
         'client': (BuildContext context) => ClientsPage(),
+        'roles': (BuildContext context) => RolesPage(),
       },
       debugShowCheckedModeBanner: false,
       title: 'Apps2Go',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.purple,
       ),
     );
   }

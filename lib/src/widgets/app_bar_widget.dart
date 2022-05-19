@@ -8,6 +8,7 @@ class AppBarOffline extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: false,
       title: Container(
         padding: const EdgeInsets.only(top: 10),
         child: const Text(' '),
