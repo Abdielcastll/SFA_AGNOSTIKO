@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:pwa_sales2go_flutter/src/auth/auth.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/app_bar_widget.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/test_widget.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/login_widgets/test_widget.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -12,6 +14,16 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final firebaseGetAuth = FirebaseAuth.instance.currentUser;
+  bool _isLoading = false;
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,15 +101,31 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     const SizedBox(height: 50),
-                    SizedBox(
-                      width: 150,
-                      child: ElevatedButton.icon(
-                          icon: const Icon(Icons.lock_open, size: 20),
-                          label: const Text('Ingresar',
-                              style: TextStyle(fontSize: 15)),
-                          onPressed: () {}),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        // Mostrara una barra de progreso mientras se esta cargando el usuario
+                        _isLoading
+                            ? const CircularProgressIndicator()
+                            : SizedBox(
+                                width: 150,
+                                child: ElevatedButton.icon(
+                                  icon: const Icon(Icons.lock_open, size: 20),
+                                  label: const Text('Ingresar',
+                                      style: TextStyle(fontSize: 15)),
+                                  onPressed: () {
+                                    signIn(
+                                      context,
+                                      emailController,
+                                      passwordController,
+                                    );
+                                  },
+                                ),
+                              ),
+                      ],
                     ),
                     const SizedBox(height: 50),
+                    // Botones de Prueba para re-dirigir a la página de productos y clientes
                     const TestWidgets(),
                   ],
                 ),
