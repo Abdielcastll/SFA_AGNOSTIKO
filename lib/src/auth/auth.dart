@@ -3,41 +3,31 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:pwa_sales2go_flutter/src/utils/utils.dart';
 
-Future signIn(
-  context,
-  emailController,
-  passwordController,
-) async {
-  try {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: emailController.text.trim().toLowerCase(),
-      password: passwordController.text.trim(),
+class AuthHelper {
+  static FirebaseAuth _auth = FirebaseAuth.instance;
+
+  static signIn({
+    required String email,
+    required String password,
+    context,
+  }) async {
+    final res = await _auth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
     );
-    //Una vez logeado, se redirecciona a la página productos.
     Navigator.pushReplacementNamed(context, 'product');
-    // Test para ver que se esta mandando en el email y contraseña.
-    print(emailController);
-    print(passwordController);
-  } on FirebaseAuthException catch (e) {
-    print('Error en el logeo');
-
-    Utils.showSnackBar(e.message);
+    final User? user = res.user;
+    return user;
   }
-}
 
-Future signOut(context) async {
-  showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (context) => const Center(child: CircularProgressIndicator()),
-  );
-  try {
-    await FirebaseAuth.instance.signOut();
+  static signOut(context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(child: CircularProgressIndicator()),
+    );
+    _auth.signOut();
     Navigator.pushReplacementNamed(context, 'login');
-  } on FirebaseAuthException catch (e) {
-    print('Error en el logeo');
-    Utils.showSnackBar(e.message);
+    print('Logout exitoso');
   }
-
-  // navigatorKey.currentState!.popUntil((route) => route.isFirst);
 }

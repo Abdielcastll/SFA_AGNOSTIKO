@@ -1,8 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/src/auth/auth.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/app_bar_widget.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/login_widgets/test_widget.dart';
+import 'package:pwa_sales2go_flutter/src/test/test_widget.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -14,7 +14,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  final firebaseGetAuth = FirebaseAuth.instance.currentUser;
   bool _isLoading = false;
 
   @override
@@ -70,9 +69,9 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 30),
                     SizedBox(
                       width: 300,
-                      child: TextField(
+                      child: TextFormField(
                         controller: emailController,
-                        cursorColor: Colors.white,
+                        cursorColor: Colors.purple,
                         textInputAction: TextInputAction.next,
                         decoration: const InputDecoration(
                           labelText: 'Email',
@@ -81,14 +80,19 @@ class _LoginPageState extends State<LoginPage> {
                             size: 17,
                           ),
                         ),
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (email) =>
+                            email != null && !EmailValidator.validate(email)
+                                ? 'Email invalido'
+                                : null,
                       ),
                     ),
                     const SizedBox(height: 30),
                     SizedBox(
                       width: 300,
-                      child: TextField(
+                      child: TextFormField(
                         controller: passwordController,
-                        cursorColor: Colors.white,
+                        cursorColor: Colors.purple,
                         textInputAction: TextInputAction.next,
                         decoration: const InputDecoration(
                           suffixIconColor: Colors.purple,
@@ -98,9 +102,14 @@ class _LoginPageState extends State<LoginPage> {
                             size: 17,
                           ),
                         ),
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (password) => password != null &&
+                                password.length < 6
+                            ? 'La contraseña debe tener al menos 6 caracteres'
+                            : null,
                       ),
                     ),
-                    const SizedBox(height: 50),
+                    const SizedBox(height: 40),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -113,12 +122,19 @@ class _LoginPageState extends State<LoginPage> {
                                   icon: const Icon(Icons.lock_open, size: 20),
                                   label: const Text('Ingresar',
                                       style: TextStyle(fontSize: 15)),
-                                  onPressed: () {
-                                    signIn(
-                                      context,
-                                      emailController,
-                                      passwordController,
-                                    );
+                                  onPressed: () async {
+                                    try {
+                                      final user = await AuthHelper.signIn(
+                                        email: emailController.text,
+                                        password: passwordController.text,
+                                        context: context,
+                                      );
+                                      if (user != null) {
+                                        print('Login exitoso');
+                                      }
+                                    } catch (e) {
+                                      print(e);
+                                    }
                                   },
                                 ),
                               ),

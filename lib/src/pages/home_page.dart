@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:pwa_sales2go_flutter/src/auth/auth.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/app_bar_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -10,15 +11,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  //Obtenemos el usuario actual y puede ser data o null
   final firebaseGetAuth = FirebaseAuth.instance.currentUser;
-  bool _isLoading = false;
 
   @override
   void initState() {
     // print(firebaseGetAuth);
     if (firebaseGetAuth != null) {
-      Navigator.pushReplacementNamed(context, 'product');
+      Navigator.pushReplacementNamed(context, '/');
     }
 
     super.initState();

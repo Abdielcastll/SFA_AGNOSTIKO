@@ -24,9 +24,9 @@ class TestWidgets extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 10),
           child: ElevatedButton.icon(
             icon: const Icon(Icons.person, size: 20),
-            label: const Text('Test clientes', style: TextStyle(fontSize: 15)),
+            label: const Text('Test', style: TextStyle(fontSize: 15)),
             onPressed: () {
-              Navigator.of(context).pushReplacementNamed('client');
+              Navigator.of(context).pushReplacementNamed('test');
             },
           ),
         ),
