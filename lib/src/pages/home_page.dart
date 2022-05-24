@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/auth/auth.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/app_bar_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -28,7 +27,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(65.0),
-        child: AppBarOffline(),
+        child: AppBarWidget(),
       ),
       body: Column(
         children: [

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/src/auth/auth.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/app_bar_widget.dart';
-import 'package:pwa_sales2go_flutter/src/test/test_widget.dart';
+import 'package:pwa_sales2go_flutter/test/test_widget.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(65.0),
-        child: AppBarOffline(),
+        child: AppBarWidget(),
       ),
       body: Column(
         children: [
@@ -124,6 +124,7 @@ class _LoginPageState extends State<LoginPage> {
                                       style: TextStyle(fontSize: 15)),
                                   onPressed: () async {
                                     try {
+                                      setState(() => _isLoading = true);
                                       final user = await AuthHelper.signIn(
                                         email: emailController.text,
                                         password: passwordController.text,
@@ -131,9 +132,11 @@ class _LoginPageState extends State<LoginPage> {
                                       );
                                       if (user != null) {
                                         print('Login exitoso');
+                                        setState(() => _isLoading = false);
                                       }
                                     } catch (e) {
                                       print(e);
+                                      setState(() => _isLoading = false);
                                     }
                                   },
                                 ),

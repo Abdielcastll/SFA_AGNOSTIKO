@@ -46,6 +46,7 @@ dependencies:
   firebase_core: ^1.17.0
   #Dependencie for getting device information
   device_info_plus: ^3.2.3
+  package_info_plus: ^1.4.2
 
 dev_dependencies:
   flutter_test:

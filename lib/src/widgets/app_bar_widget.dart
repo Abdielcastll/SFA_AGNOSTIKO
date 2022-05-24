@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class AppBarOffline extends StatelessWidget {
-  const AppBarOffline({
+class AppBarWidget extends StatelessWidget {
+  const AppBarWidget({
     Key? key,
   }) : super(key: key);
 
@@ -41,7 +41,7 @@ class AppBarOffline extends StatelessWidget {
           child: IconButton(
             splashRadius: 20,
             icon: const Icon(Icons.exit_to_app),
-            onPressed: () => Navigator.of(context).pushNamed('login'),
+            onPressed: () => {Navigator.of(context).pushNamed('login')},
           ),
         ),
       ],

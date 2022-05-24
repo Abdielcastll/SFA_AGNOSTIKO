@@ -1,7 +1,13 @@
-import 'package:flutter/material.dart';
+// Paquetes para obtención de información del dispositivo
+import 'dart:io';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+// Firestore
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:pwa_sales2go_flutter/src/utils/utils.dart';
+// Material
+import 'package:flutter/material.dart';
 
 class AuthHelper {
   static FirebaseAuth _auth = FirebaseAuth.instance;
@@ -21,12 +27,14 @@ class AuthHelper {
   }
 
   static signOut(context) {
+    _auth.signOut();
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => const Center(child: CircularProgressIndicator()),
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(),
+      ),
     );
-    _auth.signOut();
     Navigator.pushReplacementNamed(context, 'login');
     print('Logout exitoso');
   }
