@@ -132,7 +132,6 @@ class _LoginPageState extends State<LoginPage> {
                                       );
                                       if (user != null) {
                                         print('Login exitoso');
-                                        setState(() => _isLoading = false);
                                       }
                                     } catch (e) {
                                       print(e);

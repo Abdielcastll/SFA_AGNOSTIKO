@@ -39,3 +39,92 @@ class AuthHelper {
     print('Logout exitoso');
   }
 }
+
+// UserHelper de prueba, no se usa dentro de la app principal porque se usan
+// usuarios pre-establecidos - Posee funciones para usos futuros de
+// los modulos futuros que usan colecciones dentro de usuarios.
+// TODO: Investigar mas sobre el uso de colecciones dentro de usuarios
+
+class UserHelper {
+  static FirebaseFirestore _db = FirebaseFirestore.instance;
+
+  static saveUser(User user) async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    Map<String, dynamic> userData = {
+      'active': true,
+      'email': user.email,
+      'esGerente': false,
+      'esVendedor': true,
+      'idRol': '',
+      'indice': '',
+      'nombre': '',
+      'nro_ci': '',
+      'password': '',
+      'rol': '',
+      'zona': '',
+      // 'last login': user.metadata.lastSignInTime.millisecondsSinceEpoch,
+      // 'created at': user.metadata.creationTime.millisecondsSinceEpoch,
+      // 'build_number': buildNumber,
+    };
+
+    final userRef = _db.collection('users').doc(user.uid);
+
+    if ((await userRef.get()).exists) {
+      await userRef.update({
+        // 'last login': user.metadata.lastSignInTime.millisecondsSinceEpoch,
+        // 'build_number': buildNumber,
+      });
+    } else {
+      await userRef.set(userData);
+    }
+    await _saveDevice(user);
+  }
+
+  static _saveDevice(User user) async {
+    DeviceInfoPlugin devicePlugin = DeviceInfoPlugin();
+    String? deviceId;
+
+    Map<String, dynamic> deviceData;
+    if (Platform.isAndroid) {
+      final deviceInfo = await devicePlugin.androidInfo;
+      deviceId = deviceInfo.androidId;
+      deviceData = {
+        'os_version': deviceInfo.version.sdkInt.toString(),
+        'plaftorm': 'Android',
+        'model': deviceInfo.model,
+        'device': deviceInfo.device,
+      };
+    }
+    if (Platform.isIOS) {
+      final deviceInfo = await devicePlugin.iosInfo;
+      deviceId = deviceInfo.identifierForVendor;
+      deviceData = {
+        'os_version': deviceInfo.systemVersion,
+        'plaftorm': 'IOS',
+        'model': deviceInfo.model,
+        'device': deviceInfo.name,
+      };
+    }
+    final nowMs = DateTime.now().millisecondsSinceEpoch;
+
+    final deviceRef = _db
+        .collection('users')
+        .doc(user.uid)
+        .collection('devices')
+        .doc(deviceId);
+    if ((await deviceRef.get()).exists) {
+      await deviceRef.update({
+        'updated_at': nowMs,
+        'unistalled:': false,
+      });
+    } else {
+      await deviceRef.set({
+        'created_at': nowMs,
+        'updated_at': nowMs,
+        'unistalled:': false,
+        'id': deviceId,
+        // 'device_info': deviceData,
+      });
+    }
+  }
+}

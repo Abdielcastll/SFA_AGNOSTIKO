@@ -14,7 +14,6 @@ import 'package:pwa_sales2go_flutter/src/pages/roles_page.dart';
 
 // Se declara en el main todo el enrutamiento de la aplicación
 Future main() async {
-  print('Inicializando Firebase...');
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

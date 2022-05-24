@@ -12,7 +12,11 @@
 // // Material
 // import 'package:flutter/material.dart';
 
-// class TestUserHelper {
+//   // SaveUser de prueba, no se usa dentro de la app principal porque se usa
+//   // usuarios pre-establecidos - No usar - funciones para usos futuros de
+//   // los modulos futuros que usan colecciones dentro de usuarios
+
+// class UserHelper {
 //   static FirebaseFirestore _db = FirebaseFirestore.instance;
 
 
