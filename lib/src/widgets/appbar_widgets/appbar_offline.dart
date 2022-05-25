@@ -6,7 +6,7 @@ class AppBarOffline extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String? route = ModalRoute.of(context)!.settings.name;
-    print(route);
+    print('Offline - Ruta: $route');
 
     return AppBar(
       automaticallyImplyLeading: false,

@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/src/auth/auth.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar_widgets/appbar_widget.dart';
@@ -10,6 +12,10 @@ class ProductsPage extends StatefulWidget {
 }
 
 class _ProductsPageState extends State<ProductsPage> {
+  var userCollection = FirebaseFirestore.instance.collection('usuarios');
+  var userEmail = FirebaseAuth.instance.currentUser?.email;
+  var roleCollection = FirebaseFirestore.instance.collection('roles');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

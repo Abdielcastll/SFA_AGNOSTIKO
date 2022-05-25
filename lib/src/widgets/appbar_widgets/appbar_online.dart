@@ -1,10 +1,29 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class AppBarOnline extends StatelessWidget {
+class AppBarOnline extends StatefulWidget {
   const AppBarOnline({Key? key}) : super(key: key);
 
   @override
+  State<AppBarOnline> createState() => _AppBarOnlineState();
+}
+
+class _AppBarOnlineState extends State<AppBarOnline> {
+  @override
   Widget build(BuildContext context) {
+    // Extraer ruta actual mientras esta appbar se esta utilizando
+    final String? route = ModalRoute.of(context)!.settings.name;
+    print('Online - Ruta: $route');
+
+    // // Verificar usuario actual
+    // final User user = FirebaseAuth.instance.currentUser!;
+    // var userFirestore =
+    //     FirebaseFirestore.instance.collection('usuarios').doc(user.uid);
+    // print(userFirestore);
+    // final Stream<QuerySnapshot> _userStream =
+    //     FirebaseFirestore.instance.collection('usuarios').snapshots().where((doc) => doc == user.uid);
+
     return AppBar(
       automaticallyImplyLeading: false,
       title: Container(
