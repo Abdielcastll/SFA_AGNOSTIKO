@@ -1,7 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/src/auth/auth.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/app_bar_widget.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/appbar_widgets/appbar_widget.dart';
 import 'package:pwa_sales2go_flutter/test/test_widget.dart';
 
 class LoginPage extends StatefulWidget {
@@ -15,6 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   bool _isLoading = false;
+  var _url = FirebaseAuth.instance.currentUser;
 
   @override
   void dispose() {

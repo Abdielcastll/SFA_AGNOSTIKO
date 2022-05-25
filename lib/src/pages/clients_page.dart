@@ -12,7 +12,7 @@ class _ClientsPageState extends State<ClientsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text('Productos'),
+        child: Text('Clientes'),
       ),
     );
   }

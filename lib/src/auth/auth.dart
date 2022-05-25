@@ -12,6 +12,14 @@ import 'package:flutter/material.dart';
 class AuthHelper {
   static FirebaseAuth _auth = FirebaseAuth.instance;
 
+  // static checkUrl(String url, context) {
+  //   if (_auth.currentUser != null &&
+  //       ModalRoute.of(context)!.settings.name == url) {
+  //     Navigator.pushReplacementNamed(context, '/');
+  //   }
+  // }
+
+  // Funcion para logearse dentro de la aplicacion
   static signIn({
     required String email,
     required String password,
@@ -26,6 +34,7 @@ class AuthHelper {
     return user;
   }
 
+  // Funcion para deslogearse dentro de la aplicacion
   static signOut(context) {
     _auth.signOut();
     showDialog(

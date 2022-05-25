@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/app_bar_widget.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/appbar_widgets/appbar_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -12,15 +12,16 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final firebaseGetAuth = FirebaseAuth.instance.currentUser;
 
-  @override
-  void initState() {
-    // print(firebaseGetAuth);
-    if (firebaseGetAuth != null) {
-      Navigator.pushReplacementNamed(context, '/');
-    }
+  // @override
+  // void initState() {
+  //   // print(firebaseGetAuth);
+  //   if (firebaseGetAuth != null &&
+  //       ModalRoute.of(context)!.settings.name == 'login') {
+  //     Navigator.pushReplacementNamed(context, '/');
+  //   }
 
-    super.initState();
-  }
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {

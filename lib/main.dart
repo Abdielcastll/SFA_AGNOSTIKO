@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         'client': (BuildContext context) => ClientsPage(),
         'roles': (BuildContext context) => RolesPage(),
         //Rutas para probar cosas
-        'test': (BuildContext context) => LoadInfo(),
+        // 'test': (BuildContext context) => LoadInfo(),
       },
       debugShowCheckedModeBanner: false,
       title: 'Apps2Go',

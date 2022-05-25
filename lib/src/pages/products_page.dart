@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/src/auth/auth.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/appbar_widgets/appbar_widget.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({Key? key}) : super(key: key);
@@ -12,6 +13,10 @@ class _ProductsPageState extends State<ProductsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(65.0),
+        child: AppBarWidget(),
+      ),
       body: Center(
         child: SizedBox(
           width: 150,
