@@ -16,7 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   bool _isLoading = false;
-  var _url = FirebaseAuth.instance.currentUser;
+  var _user = FirebaseAuth.instance.currentUser;
 
   @override
   void dispose() {

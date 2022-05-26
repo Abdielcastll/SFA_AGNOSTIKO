@@ -12,12 +12,11 @@ class ProductsPage extends StatefulWidget {
 }
 
 class _ProductsPageState extends State<ProductsPage> {
-  var userCollection = FirebaseFirestore.instance.collection('usuarios');
-  var userEmail = FirebaseAuth.instance.currentUser?.email;
-  var roleCollection = FirebaseFirestore.instance.collection('roles');
-
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser!;
+    final Stream<QuerySnapshot> _productsStream =
+        FirebaseFirestore.instance.collection('productos').snapshots();
     return Scaffold(
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(65.0),

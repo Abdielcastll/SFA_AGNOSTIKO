@@ -16,14 +16,6 @@ class _AppBarOnlineState extends State<AppBarOnline> {
     final String? route = ModalRoute.of(context)!.settings.name;
     print('Online - Ruta: $route');
 
-    // // Verificar usuario actual
-    // final User user = FirebaseAuth.instance.currentUser!;
-    // var userFirestore =
-    //     FirebaseFirestore.instance.collection('usuarios').doc(user.uid);
-    // print(userFirestore);
-    // final Stream<QuerySnapshot> _userStream =
-    //     FirebaseFirestore.instance.collection('usuarios').snapshots().where((doc) => doc == user.uid);
-
     return AppBar(
       automaticallyImplyLeading: false,
       title: Container(
