@@ -1,6 +1,11 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/app_bar_widget.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/test_widget.dart';
+import 'package:pwa_sales2go_flutter/src/auth/auth.dart';
+import 'package:email_validator/email_validator.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/appbar_widgets/appbar_widget.dart';
+import 'package:pwa_sales2go_flutter/test/test_widget.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -14,11 +19,19 @@ class _LoginPageState extends State<LoginPage> {
   final passwordController = TextEditingController();
 
   @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(65.0),
-        child: AppBarOffline(),
+        child: AppBarWidget(),
       ),
       body: Column(
         children: [
@@ -58,9 +71,9 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 30),
                     SizedBox(
                       width: 300,
-                      child: TextField(
+                      child: TextFormField(
                         controller: emailController,
-                        cursorColor: Colors.white,
+                        cursorColor: Colors.purple,
                         textInputAction: TextInputAction.next,
                         decoration: const InputDecoration(
                           labelText: 'Email',
@@ -69,14 +82,19 @@ class _LoginPageState extends State<LoginPage> {
                             size: 17,
                           ),
                         ),
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (email) =>
+                            email != null && !EmailValidator.validate(email)
+                                ? 'Email invalido'
+                                : null,
                       ),
                     ),
                     const SizedBox(height: 30),
                     SizedBox(
                       width: 300,
-                      child: TextField(
+                      child: TextFormField(
                         controller: passwordController,
-                        cursorColor: Colors.white,
+                        cursorColor: Colors.purple,
                         textInputAction: TextInputAction.next,
                         decoration: const InputDecoration(
                           suffixIconColor: Colors.purple,
@@ -86,18 +104,35 @@ class _LoginPageState extends State<LoginPage> {
                             size: 17,
                           ),
                         ),
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (password) => password != null &&
+                                password.length < 6
+                            ? 'La contraseña debe tener al menos 6 caracteres'
+                            : null,
                       ),
                     ),
-                    const SizedBox(height: 50),
-                    SizedBox(
-                      width: 150,
-                      child: ElevatedButton.icon(
-                          icon: const Icon(Icons.lock_open, size: 20),
-                          label: const Text('Ingresar',
-                              style: TextStyle(fontSize: 15)),
-                          onPressed: () {}),
+                    const SizedBox(height: 40),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        SizedBox(
+                          width: 150,
+                          child: ElevatedButton.icon(
+                            icon: Icon(Icons.lock_open, size: 20),
+                            label: Text('Ingresar',
+                                style: TextStyle(fontSize: 15)),
+                            onPressed: () => {
+                              AuthHelper().signIn(
+                                  email: emailController,
+                                  password: passwordController,
+                                  context: context),
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 50),
+                    // Botones de Prueba para re-dirigir a la página de productos y clientes
                     const TestWidgets(),
                   ],
                 ),
