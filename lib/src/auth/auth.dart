@@ -10,26 +10,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class AuthHelper {
-  static FirebaseAuth _auth = FirebaseAuth.instance;
-
   // Funcion para logearse dentro de la aplicacion
-  static signIn({
-    required String email,
-    required String password,
-    context,
-  }) async {
-    final res = await _auth.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-    Navigator.pushReplacementNamed(context, 'product');
-    final User? user = res.user;
-    return user;
-  }
-
-  // Funcion para deslogearse dentro de la aplicacion
-  static signOut(context) {
-    _auth.signOut();
+  Future signIn({email, password, context}) async {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -37,8 +19,34 @@ class AuthHelper {
         child: CircularProgressIndicator(),
       ),
     );
-    Navigator.pushReplacementNamed(context, 'login');
-    print('Logout exitoso');
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email.text.trim().toLowerCase(),
+        password: password.text.trim(),
+      );
+      Navigator.pushReplacementNamed(context, 'product');
+      print('Login exitoso');
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // Funcion para deslogearse dentro de la aplicacion
+  Future signOut(context) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+    try {
+      await FirebaseAuth.instance.signOut();
+      Navigator.pushReplacementNamed(context, 'login');
+      print('Logout exitoso');
+    } catch (e) {
+      print(e);
+    }
   }
 }
 

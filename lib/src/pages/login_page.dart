@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/src/auth/auth.dart';
@@ -15,8 +17,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  bool _isLoading = false;
-  var _user = FirebaseAuth.instance.currentUser;
 
   @override
   void dispose() {
@@ -115,33 +115,20 @@ class _LoginPageState extends State<LoginPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        // Mostrara una barra de progreso mientras se esta cargando el usuario
-                        _isLoading
-                            ? const CircularProgressIndicator()
-                            : SizedBox(
-                                width: 150,
-                                child: ElevatedButton.icon(
-                                  icon: const Icon(Icons.lock_open, size: 20),
-                                  label: const Text('Ingresar',
-                                      style: TextStyle(fontSize: 15)),
-                                  onPressed: () async {
-                                    try {
-                                      setState(() => _isLoading = true);
-                                      final user = await AuthHelper.signIn(
-                                        email: emailController.text,
-                                        password: passwordController.text,
-                                        context: context,
-                                      );
-                                      if (user != null) {
-                                        print('Login exitoso');
-                                      }
-                                    } catch (e) {
-                                      print(e);
-                                      setState(() => _isLoading = false);
-                                    }
-                                  },
-                                ),
-                              ),
+                        SizedBox(
+                          width: 150,
+                          child: ElevatedButton.icon(
+                            icon: Icon(Icons.lock_open, size: 20),
+                            label: Text('Ingresar',
+                                style: TextStyle(fontSize: 15)),
+                            onPressed: () => {
+                              AuthHelper().signIn(
+                                  email: emailController,
+                                  password: passwordController,
+                                  context: context),
+                            },
+                          ),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 50),
