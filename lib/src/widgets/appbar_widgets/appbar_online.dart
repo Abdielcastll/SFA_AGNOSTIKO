@@ -28,7 +28,7 @@ class _AppBarOnlineState extends State<AppBarOnline> {
         Container(
           width: 120,
           padding: const EdgeInsets.only(top: 10, right: 10),
-          child: Image.asset('/images/apps2go.png'),
+          // child: Image.asset('/images/apps2go.png'),
         ),
       ],
     );

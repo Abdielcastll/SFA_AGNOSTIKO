@@ -12,13 +12,6 @@ import 'package:flutter/material.dart';
 class AuthHelper {
   // Funcion para logearse dentro de la aplicacion
   Future signIn({email, password, context}) async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => const Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email.text.trim().toLowerCase(),
@@ -28,6 +21,19 @@ class AuthHelper {
       print('Login exitoso');
     } catch (e) {
       print(e);
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Error'),
+          content: const Text('Usuario o contraseña incorrectos'),
+          actions: [
+            TextButton(
+              child: const Text('Aceptar'),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        ),
+      );
     }
   }
 
