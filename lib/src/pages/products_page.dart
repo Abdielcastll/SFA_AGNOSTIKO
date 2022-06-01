@@ -11,7 +11,7 @@ class ProductsPage extends StatefulWidget {
 }
 
 class _ProductsPageState extends State<ProductsPage> {
-  final _auth = AuthHelper();
+  // final _auth = AuthHelper();
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser!;
@@ -35,7 +35,7 @@ class _ProductsPageState extends State<ProductsPage> {
                 label: const Text('Logout de prueba',
                     style: TextStyle(fontSize: 15)),
                 onPressed: () {
-                  _auth.signOut(context);
+                  // _auth.signOut(context);
                 },
               ),
             ),

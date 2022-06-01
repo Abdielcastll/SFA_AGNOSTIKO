@@ -1,10 +1,17 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pwa_sales2go_flutter/src/auth/auth.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/appbar_widgets/appbar_offline.dart';
+import 'package:pwa_sales2go_flutter/src/global/global.dart';
+import 'package:pwa_sales2go_flutter/src/pages/home_page.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_home.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/custom_text_field.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/loading_dialog.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -26,11 +33,101 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  validateForm() {
+    if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
+      // Allow user to login
+      loginNow();
+    } else {
+      Fluttertoast.showToast(msg: 'Por favor ingrese su correo y contraseña');
+    }
+  }
+
+  loginNow() async {
+    showDialog(
+      context: context,
+      builder: (c) {
+        return LoadingDialogWidget(
+          message: 'Revisando credenciales',
+        );
+      },
+    );
+
+    User? currentUser;
+    await FirebaseAuth.instance
+        .signInWithEmailAndPassword(
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
+    )
+        .then((auth) {
+      currentUser = auth.user;
+    }).catchError((errorMessage) {
+      Navigator.pop(context);
+      Fluttertoast.showToast(msg: 'Hubo un error inesperado: \n $errorMessage');
+    });
+    if (currentUser != null) {
+      checkIfUserRecordExists(currentUser!);
+    }
+  }
+
+  checkIfUserRecordExists(User currentUser) async {
+    await FirebaseFirestore.instance
+        .collection('usuarios')
+        .doc(currentUser.uid)
+        .get()
+        .then(
+      ((record) async {
+        // Comprobar si User record existe
+        if (record.exists) {
+          // En caso de que exista
+          if (record.data()!['activo'] == 'activo') {
+            // Enviar usuario a la home screen
+            // Guardar información localmente
+            await sharedPreferences!.setString('email', currentUser.email!);
+            await sharedPreferences!.setString('uid', currentUser.uid);
+            await sharedPreferences!
+                .setString('nombre', record.data()!['nombre']);
+            await sharedPreferences!
+                .setString('nro_cedula', record.data()!['nro_cedula']);
+            // Obtener lista del indice
+            List<String> indice = record.data()!['indice'].cast<String>();
+            await sharedPreferences!.setStringList('indice', indice);
+            // Revisar si es gerente
+            if (record.data()!['esGerente'] == false) {
+              // En caso de no ser gerente, revisar si es vendedor
+              if (record.data()!['esVendedor'] == false) {
+                // En caso de no ser vendedor, se le asigna cobrador
+                await sharedPreferences!.setString('cargo', 'cobrador');
+              } else {
+                // En caso de ser vendedor, se le asigna vendedor
+                await sharedPreferences!.setString('cargo', 'vendedor');
+              }
+            } else {
+              // Si se verifica que es gerente, asignar rol a gerente
+              await sharedPreferences!.setString('cargo', 'gerente');
+            }
+            // Enviar usuario a la home screen
+            // ignore: use_build_context_synchronously
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (c) => HomePage(),
+              ),
+            );
+          }
+        } else {
+          // En caso de que no exista
+          Fluttertoast.showToast(
+              msg: 'Este usuario no existe o no esta activo');
+        }
+      }),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       // Use of Appbaroffline Widget
-      appBar: AppBarOffline(
+      appBar: AppBarHome(
         title: 'Login',
         // backgroundColor: Color(0xFF4f42ed),
       ),
@@ -91,7 +188,10 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                // Login
+                validateForm();
+              },
               icon: Icon(Icons.login_rounded),
               label: Text(
                 'Iniciar Sesión',
@@ -112,116 +212,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-
-// Widget _loginBody(BuildContext context) {
-//   return SingleChildScrollView(
-//     child: Column(
-//       children: [
-//         const SizedBox(height: 25),
-//         const Center(
-//           child: Text(
-//             'Bienvenido a Sales2Go!',
-//             style: TextStyle(
-//               fontSize: 25,
-//               fontWeight: FontWeight.bold,
-//               color: Colors.black,
-//             ),
-//           ),
-//         ),
-//         const SizedBox(height: 30),
-//         const Text('Ingresa tus datos para iniciar sesión:'),
-//         const SizedBox(height: 30),
-//         SingleChildScrollView(
-//           child: Container(
-//             height: 355,
-//             width: 425,
-//             decoration: BoxDecoration(
-//               color: Colors.white,
-//               borderRadius: BorderRadius.circular(10),
-//               boxShadow: const [
-//                 BoxShadow(
-//                   color: Colors.black12,
-//                   blurRadius: 10,
-//                   offset: Offset(0, 10),
-//                 ),
-//               ],
-//             ),
-//             child: SingleChildScrollView(
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.center,
-//                 children: [
-//                   const SizedBox(height: 30),
-//                   SizedBox(
-//                     width: 300,
-//                     child: TextFormField(
-//                       controller: emailController,
-//                       cursorColor: Colors.purple,
-//                       textInputAction: TextInputAction.next,
-//                       decoration: const InputDecoration(
-//                         labelText: 'Email',
-//                         suffixIcon: Icon(
-//                           Icons.email,
-//                           size: 17,
-//                         ),
-//                       ),
-//                       autovalidateMode: AutovalidateMode.onUserInteraction,
-//                       validator: (email) =>
-//                           email != null && !EmailValidator.validate(email)
-//                               ? 'Email invalido'
-//                               : null,
-//                     ),
-//                   ),
-//                   const SizedBox(height: 30),
-//                   SizedBox(
-//                     width: 300,
-//                     child: TextFormField(
-//                       controller: passwordController,
-//                       cursorColor: Colors.purple,
-//                       textInputAction: TextInputAction.next,
-//                       decoration: const InputDecoration(
-//                         suffixIconColor: Colors.purple,
-//                         labelText: 'Contraseña',
-//                         suffixIcon: Icon(
-//                           Icons.lock,
-//                           size: 17,
-//                         ),
-//                       ),
-//                       autovalidateMode: AutovalidateMode.onUserInteraction,
-//                       validator: (password) => password != null &&
-//                               password.length < 6
-//                           ? 'La contraseña debe tener al menos 6 caracteres'
-//                           : null,
-//                     ),
-//                   ),
-//                   const SizedBox(height: 40),
-//                   Row(
-//                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-//                     children: [
-//                       SizedBox(
-//                         width: 150,
-//                         child: ElevatedButton.icon(
-//                           icon: Icon(Icons.lock_open, size: 20),
-//                           label: Text('Ingresar',
-//                               style: TextStyle(fontSize: 15)),
-//                           onPressed: () => {
-//                             AuthHelper().signIn(
-//                                 email: emailController,
-//                                 password: passwordController,
-//                                 context: context),
-//                           },
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                   const SizedBox(height: 50),
-//                   // Botones de Prueba para re-dirigir a la página de productos y clientes
-//                   // const TestWidgets(),
-//                 ],
-//               ),
-//             ),
-//           ),
-//         ),
-//       ],
-//     ),
-//   );
-// }

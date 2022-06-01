@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class AppBarOffline extends StatelessWidget implements PreferredSizeWidget {
-  const AppBarOffline({
+class AppBarHome extends StatelessWidget implements PreferredSizeWidget {
+  const AppBarHome({
     Key? key,
     required this.title,
     // required this.backgroundColor,

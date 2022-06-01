@@ -17,7 +17,7 @@ class _ClientsPageState extends State<ClientsPage> {
   final Stream<QuerySnapshot> _clientesStream =
       FirebaseFirestore.instance.collection('clientes').snapshots();
 
-  final _auth = AuthHelper();
+  // final _auth = AuthHelper();
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class _ClientsPageState extends State<ClientsPage> {
                 label: const Text('Logout de prueba',
                     style: TextStyle(fontSize: 15)),
                 onPressed: () {
-                  _auth.signOut(context);
+                  // _auth.signOut(context);
                 },
               ),
             ),

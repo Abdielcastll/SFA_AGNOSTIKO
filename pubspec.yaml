@@ -47,7 +47,9 @@ dependencies:
   #Dependencie for getting device information
   device_info_plus: ^3.2.3
   package_info_plus: ^1.4.2
-
+  shared_preferences: ^2.0.15
+  fluttertoast: ^8.0.9
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

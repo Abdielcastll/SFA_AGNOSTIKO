@@ -8,6 +8,7 @@
 //  Firebase Core: Contiene las funciones de Firebase y las opciones que se
 //  usaran dependiendo del sistema operativo.
 import 'package:firebase_core/firebase_core.dart';
+import 'package:pwa_sales2go_flutter/src/pages/Catalogue/catalogue_page.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/splashscreen_widget.dart';
 import 'firebase_options.dart';
 // Paquete principal de Material de Flutter
@@ -19,7 +20,7 @@ import 'package:pwa_sales2go_flutter/src/pages/clients_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/home_page.dart';
 
 // Funcion principal para iniciar la aplicacion.
-Future main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

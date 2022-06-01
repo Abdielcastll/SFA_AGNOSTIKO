@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/src/pages/home_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/login_page.dart';
 
 class SplashScreenWidget extends StatefulWidget {
   const SplashScreenWidget({Key? key}) : super(key: key);
@@ -17,7 +18,7 @@ class _SplashScreenWidgetState extends State<SplashScreenWidget> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const HomePage(),
+            builder: (context) => const LoginPage(),
           ),
         );
       },

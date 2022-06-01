@@ -21,7 +21,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               children: const [
                 //user name
                 Text(
-                  'Nombre de usuario - Rango',
+                  'Nombre de usuario - Rol',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -51,6 +51,25 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   ),
                   title: const Text(
                     'Inicio',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                  onTap: () {
+                    //
+                  },
+                ),
+                const Divider(
+                  height: 10,
+                  color: Colors.grey,
+                  thickness: 2,
+                ),
+                //home
+                ListTile(
+                  leading: const Icon(
+                    Icons.notifications_rounded,
+                    color: Colors.grey,
+                  ),
+                  title: const Text(
+                    'Notificaciones',
                     style: TextStyle(color: Colors.grey),
                   ),
                   onTap: () {
@@ -174,14 +193,14 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 ),
                 const Divider(
                   height: 10,
-                  color: Colors.grey,
+                  color: Colors.red,
                   thickness: 2,
                 ),
                 //home
                 ListTile(
                   leading: const Icon(
                     Icons.logout_rounded,
-                    color: Colors.grey,
+                    color: Colors.red,
                   ),
                   title: const Text(
                     'Cerrar Sesión',

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:pwa_sales2go_flutter/firebase_options.dart';
 //Test
-import 'package:pwa_sales2go_flutter/test/test_get_info_device.dart';
+import 'package:pwa_sales2go_flutter/examples/test_get_info_device.dart';
 // Paquete principal de Material
 import 'package:flutter/material.dart';
 // Paquetes que traen las paginas a redireccionar

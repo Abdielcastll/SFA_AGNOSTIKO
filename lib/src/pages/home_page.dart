@@ -4,7 +4,7 @@
 
 // Paquete principal de Material de Flutter
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/appbar_widgets/appbar_offline.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_home.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/drawer_widget.dart';
 // Widget de cambio de Appbar en caso de que haya un usuario conectado
 // import 'package:pwa_sales2go_flutter/src/widgets/appbar_widgets/appbar_widget.dart';
@@ -16,7 +16,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: DrawerWidget(),
-      appBar: AppBarOffline(
+      appBar: AppBarHome(
         title: 'SFA Agnostiko',
         // backgroundColor: Color(0xFF4f42ed),
       ),
