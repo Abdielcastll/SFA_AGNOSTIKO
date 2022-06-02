@@ -1,9 +1,9 @@
-// ignore_for_file: prefer_const_constructors
 // + Home Page: Pagina inicial de la aplicación, se mostrara por ahora solo el
 // logo de la compañia.
 
 // Paquete principal de Material de Flutter
 import 'package:flutter/material.dart';
+import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_home.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/drawer_widget.dart';
 // Widget de cambio de Appbar en caso de que haya un usuario conectado
@@ -14,14 +14,16 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // print('Localmente se tiene:');
+    // print(sharedPreferences?.getString('uid'));
     return Scaffold(
-      drawer: DrawerWidget(),
-      appBar: AppBarHome(
+      drawer: const DrawerWidget(),
+      appBar: const AppBarHome(
         title: 'SFA Agnostiko',
         // backgroundColor: Color(0xFF4f42ed),
       ),
       body: Container(
-        child: SingleChildScrollView(),
+        child: const SingleChildScrollView(),
       ),
     );
   }

@@ -22,6 +22,7 @@ class LoadingDialogWidget extends StatelessWidget {
               ),
             ),
           ),
+          const SizedBox(height: 20),
           Text('$message, por favor espere...'),
         ],
       ),
