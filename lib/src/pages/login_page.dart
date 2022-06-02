@@ -10,8 +10,11 @@ import 'package:pwa_sales2go_flutter/src/auth/auth.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/pages/home_page.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_home.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_login.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/custom_text_field.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/loading_dialog.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/splashscreen_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -44,6 +47,7 @@ class _LoginPageState extends State<LoginPage> {
 
   loginNow() async {
     showDialog(
+      // barrierDismissible: false,
       context: context,
       builder: (c) {
         return LoadingDialogWidget(
@@ -60,9 +64,10 @@ class _LoginPageState extends State<LoginPage> {
     )
         .then((auth) {
       currentUser = auth.user;
+      // print(auth.user);
     }).catchError((errorMessage) {
       Navigator.pop(context);
-      Fluttertoast.showToast(msg: 'Hubo un error inesperado: \n $errorMessage');
+      Fluttertoast.showToast(msg: 'Usuario o Contraseñas invalidos');
     });
     if (currentUser != null) {
       checkIfUserRecordExists(currentUser!);
@@ -70,64 +75,85 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   checkIfUserRecordExists(User currentUser) async {
+    final sharedPreferences = await SharedPreferences.getInstance();
     await FirebaseFirestore.instance
         .collection('usuarios')
         .doc(currentUser.uid)
         .get()
-        .then(
-      ((record) async {
-        // Comprobar si User record existe
-        if (record.exists) {
-          // En caso de que exista
-          if (record.data()!['activo'] == 'activo') {
-            // Enviar usuario a la home screen
-            // Guardar información localmente
-            await sharedPreferences!.setString('email', currentUser.email!);
-            await sharedPreferences!.setString('uid', currentUser.uid);
-            await sharedPreferences!
-                .setString('nombre', record.data()!['nombre']);
-            await sharedPreferences!
-                .setString('nro_cedula', record.data()!['nro_cedula']);
+        .then((record) async {
+      // Comprobar si se obtiene informacion de la coleccion
+      if (record.exists) {
+        // En caso de que el registro exista
+        try {
+          print(
+              'Usuario activo y conexión establecida, intento de almacenar datos extraidos de la base de datos en una variable global');
+          // Verificar si el usuario esta activo
+          if (record.data()!['activo'] == true) {
+            print('El usuario esta activo');
+            // Proceder a cuadra la información en variable global
+            await sharedPreferences.setString('uid', currentUser.uid);
+            print("Se ha almacenado: ${sharedPreferences.getString('uid')}");
+            await sharedPreferences.setString('email', currentUser.email!);
+            print("Se ha almacenado: ${sharedPreferences.getString('email')}");
+            await sharedPreferences.setString(
+                'nombre', record.data()!['nombre']);
+            print("Se ha almacenado: ${sharedPreferences.getString('nombre')}");
+            await sharedPreferences.setInt(
+                'nro_cedula', record.data()!['nro_cedula']);
+            print(
+                "Se ha almacenado: ${sharedPreferences.getInt('nro_cedula')}");
             // Obtener lista del indice
             List<String> indice = record.data()!['indice'].cast<String>();
-            await sharedPreferences!.setStringList('indice', indice);
+            await sharedPreferences.setStringList('indice', indice);
+            print(
+                "Se ha almacenado: ${sharedPreferences.getStringList('indice')}");
             // Revisar si es gerente
             if (record.data()!['esGerente'] == false) {
-              // En caso de no ser gerente, revisar si es vendedor
+              // Si no es gerente, verificar si es vendedor
               if (record.data()!['esVendedor'] == false) {
-                // En caso de no ser vendedor, se le asigna cobrador
-                await sharedPreferences!.setString('cargo', 'cobrador');
+                // Si no es vendedor, entonces se le asigna cargo = cobrador
+                await sharedPreferences.setString('cargo', 'cobrador');
               } else {
-                // En caso de ser vendedor, se le asigna vendedor
-                await sharedPreferences!.setString('cargo', 'vendedor');
+                // Si es vendedor, asignar cargo = vendedor
+                await sharedPreferences.setString('cargo', 'vendedor');
               }
             } else {
-              // Si se verifica que es gerente, asignar rol a gerente
-              await sharedPreferences!.setString('cargo', 'gerente');
+              // Si es gerente, almacenar que cargo = gerente
+              await sharedPreferences.setString('cargo', 'gerente');
             }
-            // Enviar usuario a la home screen
+            print('Se ha almacenado: ${sharedPreferences.getString('cargo')}');
+            print('login exitoso, datos extraidos');
+            // Enviar el usuario a la homePage
             // ignore: use_build_context_synchronously
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (c) => HomePage(),
+                builder: (c) => SplashScreenWidget(),
               ),
             );
+          } else {
+            print('El usuario no esta activo');
+            Navigator.pop(context);
+            Fluttertoast.showToast(msg: 'Usuario no activo o bloqueado');
           }
-        } else {
-          // En caso de que no exista
-          Fluttertoast.showToast(
-              msg: 'Este usuario no existe o no esta activo');
+        } catch (e) {
+          print(e);
         }
-      }),
-    );
+      } else {
+        // En caso de que el registro no exista
+        FirebaseAuth.instance.signOut();
+        Navigator.pop(context);
+        Fluttertoast.showToast(
+            msg: 'Este usuario no existe dentro de la base de datos');
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       // Use of Appbaroffline Widget
-      appBar: AppBarHome(
+      appBar: AppBarLogin(
         title: 'Login',
         // backgroundColor: Color(0xFF4f42ed),
       ),

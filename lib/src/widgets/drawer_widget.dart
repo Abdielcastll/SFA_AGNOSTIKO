@@ -1,4 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/splashscreen_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DrawerWidget extends StatefulWidget {
   const DrawerWidget({Key? key}) : super(key: key);
@@ -8,6 +12,20 @@ class DrawerWidget extends StatefulWidget {
 }
 
 class _DrawerWidgetState extends State<DrawerWidget> {
+  String? name = 'Nombre de usuarios';
+  String? cargo = 'Cargo';
+  retrieveSharedData() async {
+    final sharedPreferences = await SharedPreferences.getInstance();
+    String? name = sharedPreferences.getString('name');
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    retrieveSharedData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -18,11 +36,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           Container(
             padding: const EdgeInsets.only(top: 26, bottom: 12),
             child: Column(
-              children: const [
+              children: [
                 //user name
                 Text(
-                  'Nombre de usuario - Rol',
-                  style: TextStyle(
+                  '$name - $cargo',
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -207,7 +225,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     style: TextStyle(color: Colors.grey),
                   ),
                   onTap: () {
-                    //
+                    //Cerrar Sesion
+                    FirebaseAuth.instance.signOut();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SplashScreenWidget()));
+                    Fluttertoast.showToast(msg: 'Sesion cerrada.');
                   },
                 ),
               ],

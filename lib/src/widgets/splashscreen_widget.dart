@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/src/pages/home_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/login_page.dart';
@@ -13,14 +14,27 @@ class SplashScreenWidget extends StatefulWidget {
 class _SplashScreenWidgetState extends State<SplashScreenWidget> {
   splashScreenTimer() {
     Timer(
-      const Duration(seconds: 3),
+      const Duration(seconds: 2),
       () async {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const LoginPage(),
-          ),
-        );
+        if (FirebaseAuth.instance.currentUser != null) {
+          // User is signed in
+          print("uid: ${FirebaseAuth.instance.currentUser!.uid}");
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const HomePage(),
+            ),
+          );
+        } else {
+          // User is not signed in
+          print('No hay usuario logeado');
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const LoginPage(),
+            ),
+          );
+        }
       },
     );
   }
