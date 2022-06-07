@@ -4,10 +4,10 @@ class AppBarLogin extends StatelessWidget implements PreferredSizeWidget {
   const AppBarLogin({
     Key? key,
     required this.title,
-    // required this.backgroundColor,
+    required this.backgroundColor,
   }) : super(key: key);
   final String title;
-  // final Color backgroundColor;
+  final Color backgroundColor;
 
   @override
   Size get preferredSize => const Size.fromHeight(55.0);
@@ -25,20 +25,7 @@ class AppBarLogin extends StatelessWidget implements PreferredSizeWidget {
       ),
       centerTitle: true,
       elevation: 0,
-      flexibleSpace: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Color(0xFF4f42ed),
-              Color.fromARGB(255, 130, 32, 147),
-            ],
-            begin: FractionalOffset(0.0, 0.0),
-            end: FractionalOffset(1.0, 0.0),
-            stops: [0.0, 1.0],
-            tileMode: TileMode.clamp,
-          ),
-        ),
-      ),
+      backgroundColor: backgroundColor,
     );
   }
 }
