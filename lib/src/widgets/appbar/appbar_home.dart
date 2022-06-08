@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/search/search_delegate.dart';
 
 class AppBarHome extends StatelessWidget implements PreferredSizeWidget {
   const AppBarHome({
@@ -18,13 +19,50 @@ class AppBarHome extends StatelessWidget implements PreferredSizeWidget {
       title: Text(
         title,
         style: const TextStyle(
-          fontSize: 24,
+          fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
       ),
       centerTitle: false,
       elevation: 0,
       backgroundColor: backgroundColor,
+      actions: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            IconButton(
+              padding: const EdgeInsets.symmetric(horizontal: 7.0),
+              constraints: const BoxConstraints(),
+              splashRadius: 20.0,
+              icon: const Icon(Icons.search_rounded),
+              onPressed: () {
+                print('Search button pressed');
+                showSearch(context: context, delegate: DataSearch());
+              },
+            ),
+            IconButton(
+              padding: const EdgeInsets.symmetric(horizontal: 7.0),
+              constraints: const BoxConstraints(),
+              splashRadius: 20.0,
+              icon: const Icon(Icons.notifications_none_rounded),
+              onPressed: () {
+                print('Notification button pressed');
+                Navigator.pushNamed(context, 'notifications');
+              },
+            ),
+            IconButton(
+              padding: const EdgeInsets.symmetric(horizontal: 7.0),
+              constraints: const BoxConstraints(),
+              splashRadius: 20.0,
+              icon: const Icon(Icons.shopping_cart_outlined),
+              onPressed: () {
+                print('Cart button pressed');
+                Navigator.pushNamed(context, 'cart');
+              },
+            ),
+          ],
+        )
+      ],
     );
   }
 }

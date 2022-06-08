@@ -10,19 +10,13 @@ class AppBarLogin extends StatelessWidget implements PreferredSizeWidget {
   final Color backgroundColor;
 
   @override
-  Size get preferredSize => const Size.fromHeight(55.0);
+  Size get preferredSize => const Size.fromHeight(10.0);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
-      title: Text(
-        title,
-        style: const TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
+      title: Container(),
       centerTitle: true,
       elevation: 0,
       backgroundColor: backgroundColor,
