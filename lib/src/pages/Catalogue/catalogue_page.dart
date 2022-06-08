@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/pages/Catalogue/catalogue_tab.dart';
-import 'package:pwa_sales2go_flutter/src/pages/Catalogue/promotions_tab.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_home.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/drawer/drawer_widget.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/appbar/bottom_decoration.dart';
 
 class CataloguePage extends StatefulWidget {
   const CataloguePage({Key? key}) : super(key: key);
@@ -14,23 +12,21 @@ class CataloguePage extends StatefulWidget {
 class _CataloguePageState extends State<CataloguePage> {
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        drawer: const DrawerWidget(),
-        appBar: const AppBarHome(
-          title: 'Catalogo',
-          backgroundColor: Color(0xFF4f42ed),
-        ),
-        body: Container(
-          // decoration: BoxDecoration(),
-          child: const TabBarView(
-            children: [
-              PromotionTab(),
-              CatalogueTab(),
-            ],
-          ),
-        ),
+    return Scaffold(
+      appBar: const AppBarHome(
+        title: 'Catalogo',
+        backgroundColor: Color(0xFF4f42ed),
+      ),
+      bottomNavigationBar: const BottomDecoration(),
+      backgroundColor: Colors.white,
+      body: catalogueBody(),
+    );
+  }
+
+  Widget catalogueBody() {
+    return SingleChildScrollView(
+      child: Column(
+        children: [],
       ),
     );
   }
