@@ -70,25 +70,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     color: Colors.white,
                   ),
                   title: const Text(
-                    'Inicio',
+                    'Dashboard',
                     style: TextStyle(color: Colors.white),
                   ),
-                  onTap: () => Navigator.of(context).pushNamed('home'),
+                  onTap: () => Navigator.of(context).pushNamed('dashboard'),
                 ),
                 //home
-                ListTile(
-                  leading: const Icon(
-                    Icons.notifications_rounded,
-                    color: Colors.white,
-                  ),
-                  title: const Text(
-                    'Notificaciones',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onTap: () {
-                    //
-                  },
-                ),
+
                 ListTile(
                   leading: const Icon(
                     Icons.library_books_rounded,
@@ -98,9 +86,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     'Catalogo',
                     style: TextStyle(color: Colors.white),
                   ),
-                  onTap: () {
-                    //
-                  },
+                  onTap: () => Navigator.of(context).pushNamed('catalogue'),
                 ),
                 ListTile(
                   leading: const Icon(
@@ -135,9 +121,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     'Visitas',
                     style: TextStyle(color: Colors.white),
                   ),
-                  onTap: () {
-                    //
-                  },
+                  onTap: () => Navigator.of(context).pushNamed('visits'),
                 ),
                 ListTile(
                   leading: const Icon(
@@ -148,9 +132,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     'Pedidos',
                     style: TextStyle(color: Colors.white),
                   ),
-                  onTap: () {
-                    //
-                  },
+                  onTap: () => Navigator.of(context).pushNamed('orders'),
                 ),
                 ListTile(
                   leading: const Icon(
@@ -161,9 +143,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     'Facturas',
                     style: TextStyle(color: Colors.white),
                   ),
-                  onTap: () {
-                    //
-                  },
+                  onTap: () => Navigator.of(context).pushNamed('invoices'),
                 ),
                 ListTile(
                   leading: const Icon(
