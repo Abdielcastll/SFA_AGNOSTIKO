@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 //Widgets
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_login.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/appbar/bottom_decoration.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/custom_text_field/custom_text_field_widget.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/loading_dialog/loading_dialog_widget.dart';
 
@@ -127,13 +128,13 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Use of Appbaroffline Widget
       appBar: const AppBarLogin(
         title: 'Login',
         backgroundColor: Color(0xFF4f42ed),
       ),
-      // Body of the Login
       body: _loginBody(context),
+      bottomNavigationBar: const BottomDecoration(),
+      backgroundColor: Colors.white,
     );
   }
 
@@ -142,72 +143,101 @@ class _LoginPageState extends State<LoginPage> {
       child: Center(
         child: Column(
           children: [
-            const SizedBox(height: 20),
-            const Text(
-              'Bienvenido a Sales2Go!',
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
+            const SizedBox(height: 125.0),
+            Container(
+              alignment: Alignment.center,
+              width: 400.0,
+              child: Image.asset('assets/images/logo.png'),
+            ),
+            const SizedBox(height: 75.0),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 35.0),
+              alignment: Alignment.centerLeft,
+              child: const Text(
+                'Iniciar sesión',
+                style: TextStyle(
+                  fontSize: 14.0,
+                  color: Colors.grey,
+                ),
               ),
             ),
-            const SizedBox(height: 20),
-            Image.asset('assets/images/logo.png'),
-            const SizedBox(height: 20),
-            const Text(
-              'Ingresa tus datos para iniciar sesión:',
-              style: TextStyle(
-                fontSize: 16.0,
-                color: Colors.black,
-              ),
-            ),
-            const SizedBox(height: 30),
-            // Inputs form Fields
+            const SizedBox(height: 5.0),
             Form(
               key: formKey,
               child: Column(
                 children: [
-                  // Para el email
                   CustomTextField(
                     textEditingController: emailController,
-                    iconData: Icons.email_rounded,
-                    hintText: 'Email',
+                    // iconData: Icons.email_rounded,
+                    hintText: 'Correo',
                     isObsecure: false,
                     enabled: true,
                   ),
-
-                  // Para la contraseña
                   CustomTextField(
                     textEditingController: passwordController,
-                    iconData: Icons.lock_rounded,
+                    // iconData: Icons.lock_rounded,
                     hintText: 'Contraseña',
                     isObsecure: true,
                     enabled: true,
                   ),
-                  const SizedBox(height: 30),
                 ],
               ),
             ),
-            ElevatedButton.icon(
-              onPressed: () {
-                // Login
-                validateForm();
-              },
-              icon: const Icon(Icons.login_rounded),
-              label: const Text(
-                'Iniciar Sesión',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 17.0,
+            const SizedBox(height: 0.0),
+            // Container(
+            //   padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            //   alignment: Alignment.centerRight,
+            //   child: TextButton(
+            //     onPressed: () => Navigator.pushNamed(context, 'password_reset'),
+            //     style: ButtonStyle(
+            //       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            //           RoundedRectangleBorder(
+            //         borderRadius: BorderRadius.circular(20.0),
+            //       )),
+            //       overlayColor: MaterialStateColor.resolveWith(
+            //         (states) => Colors.grey.shade200,
+            //       ),
+            //     ),
+            //     child: const Text(
+            //       '¿Olvidaste tu contraseña?',
+            //       style: TextStyle(
+            //         fontSize: 14.0,
+            //         color: Colors.grey,
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            const SizedBox(height: 40.0),
+            SizedBox(
+              width: 300.0,
+              child: ElevatedButton(
+                onPressed: () {
+                  // Login
+                  validateForm();
+                },
+                style: ButtonStyle(
+                  alignment: Alignment.center,
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                    const Color(0xFF4f42ed),
+                  ),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      side: const BorderSide(color: Color(0xFF4f42ed)),
+                    ),
+                  ),
+                ),
+                child: const Text(
+                  'Iniciar Sesión',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15.0,
+                  ),
                 ),
               ),
-              style: ElevatedButton.styleFrom(
-                primary: const Color(0xFF009B77),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
-              ),
             ),
+            const SizedBox(height: 80.0),
           ],
         ),
       ),
