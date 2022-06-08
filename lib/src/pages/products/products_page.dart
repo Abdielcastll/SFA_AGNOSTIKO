@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_home.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/appbar/bottom_decoration.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/drawer/drawer_widget.dart';
 
 class ProductsPage extends StatefulWidget {
@@ -17,10 +18,10 @@ class _ProductsPageState extends State<ProductsPage> {
   Widget build(BuildContext context) {
     final Stream<QuerySnapshot> productsStream =
         FirebaseFirestore.instance.collection('productos').snapshots();
-    final Stream<QuerySnapshot> preciosStream =
-        FirebaseFirestore.instance.collection('lista_de_precios').snapshots();
-    final Stream<QuerySnapshot> stockStream =
-        FirebaseFirestore.instance.collection('stock').snapshots();
+    // final Stream<QuerySnapshot> preciosStream =
+    //     FirebaseFirestore.instance.collection('lista_de_precios').snapshots();
+    // final Stream<QuerySnapshot> stockStream =
+    //     FirebaseFirestore.instance.collection('stock').snapshots();
 
     return Scaffold(
       drawer: const DrawerWidget(),
@@ -28,11 +29,13 @@ class _ProductsPageState extends State<ProductsPage> {
         title: 'Productos',
         backgroundColor: Color(0xFF4f42ed),
       ),
-      body: productsBody(productsStream, stockStream, preciosStream),
+      backgroundColor: Colors.white,
+      bottomNavigationBar: const BottomDecoration(),
+      body: productsBody(productsStream),
     );
   }
 
-  Widget productsBody(productsStream, preciosStream, stockStream) {
+  Widget productsBody(productsStream) {
     return SingleChildScrollView(
       child: Container(
         height: MediaQuery.of(context).size.height,
@@ -68,7 +71,7 @@ class _ProductsPageState extends State<ProductsPage> {
                         );
                       }
                       return Container(
-                          child: Text('Revisar reglas para permisos'));
+                          child: Text('Datos obtenidos con exito'));
                     },
                   ),
                 ),
