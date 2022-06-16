@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/search/search_delegate.dart';
+import 'package:pwa_sales2go_flutter/src/search/search_delegate.dart';
 
 class AppBarHome extends StatelessWidget implements PreferredSizeWidget {
   const AppBarHome({
@@ -30,15 +30,17 @@ class AppBarHome extends StatelessWidget implements PreferredSizeWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            IconButton(
-              padding: const EdgeInsets.symmetric(horizontal: 7.0),
-              constraints: const BoxConstraints(),
-              splashRadius: 20.0,
-              icon: const Icon(Icons.search_rounded),
-              onPressed: () {
-                print('Search button pressed');
-                showSearch(context: context, delegate: DataSearch());
-              },
+            Container(
+              child: IconButton(
+                padding: const EdgeInsets.symmetric(horizontal: 7.0),
+                constraints: const BoxConstraints(),
+                splashRadius: 20.0,
+                icon: const Icon(Icons.search_rounded),
+                onPressed: () {
+                  print('Search button pressed');
+                  showSearch(context: context, delegate: DataSearch());
+                },
+              ),
             ),
             IconButton(
               padding: const EdgeInsets.symmetric(horizontal: 7.0),
@@ -48,16 +50,6 @@ class AppBarHome extends StatelessWidget implements PreferredSizeWidget {
               onPressed: () {
                 print('Notification button pressed');
                 Navigator.pushNamed(context, 'notifications');
-              },
-            ),
-            IconButton(
-              padding: const EdgeInsets.symmetric(horizontal: 7.0),
-              constraints: const BoxConstraints(),
-              splashRadius: 20.0,
-              icon: const Icon(Icons.shopping_cart_outlined),
-              onPressed: () {
-                print('Cart button pressed');
-                Navigator.pushNamed(context, 'cart');
               },
             ),
           ],
