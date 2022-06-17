@@ -19,7 +19,7 @@ class _SplashScreenWidgetState extends State<SplashScreenWidget> {
         if (FirebaseAuth.instance.currentUser != null) {
           // User is signed in
           print('Usuario ya logeado, redireccionando a Home');
-          Navigator.pushReplacementNamed(context, 'tabs');
+          Navigator.pushReplacementNamed(context, 'navi');
         } else {
           // User is not signed in
           print('No hay usuario logeado, redireccionando a Login');
