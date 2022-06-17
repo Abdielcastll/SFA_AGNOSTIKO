@@ -49,7 +49,7 @@ class SfaAgnostiko extends StatelessWidget {
       initialRoute: 'splashscreen',
       routes: {
         'splashscreen': (BuildContext context) => SplashScreenWidget(),
-        'tabs': (BuildContext context) => NaviPages(),
+        'navi': (BuildContext context) => NaviPages(),
         'dashboard': (BuildContext context) => DashboardPage(),
         'login': (BuildContext context) => LoginPage(),
         'password_reset': (BuildContext context) => ForgotPasswordPage(),
