@@ -11,7 +11,7 @@ class AppBarHome extends StatelessWidget implements PreferredSizeWidget {
   final Color backgroundColor;
 
   @override
-  Size get preferredSize => const Size.fromHeight(55.0);
+  Size get preferredSize => const Size.fromHeight(60.0);
 
   @override
   Widget build(BuildContext context) {
