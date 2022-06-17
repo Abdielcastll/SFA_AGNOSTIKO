@@ -1,13 +1,8 @@
-//Flutter
 // ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper_plus/flutter_swiper_plus.dart';
-//Variable global
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
-//Widgets
-import 'package:pwa_sales2go_flutter/src/widgets/appbar/bottom_decoration.dart';
 
 class DashboardPage extends StatelessWidget {
   DashboardPage({Key? key}) : super(key: key);
@@ -16,20 +11,40 @@ class DashboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     print('Usuario conectado:');
     print(sharedPreferences!.getString('uid'));
+    print('pantalla dasghboard activa');
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          // ignore: prefer_const_literals_to_create_immutables
-          children: [
-            _ListCategories(),
-            SizedBox(height: 10.0),
-            _PromotionSwiper(),
-            SizedBox(height: 30.0),
-            _CategoryListView(),
-          ],
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            // ignore: prefer_const_literals_to_create_immutables
+            children: [
+              _ListCategories(),
+              SizedBox(height: 10.0),
+              _PromotionSwiper(),
+              SizedBox(height: 20.0),
+              _CategoryListView(),
+              SizedBox(height: 10.0),
+              _PendingOrders(
+                title: 'Pedidos pendientes',
+                quantity: 5,
+              ),
+              SizedBox(height: 10.0),
+              _PendingOrders(
+                title: 'Visitas pendientes',
+                quantity: 2,
+              ),
+              SizedBox(height: 10.0),
+              _PendingOrders(
+                title: 'Facturas no cobradas',
+                quantity: 10,
+              ),
+              SizedBox(height: 30.0),
+            ],
+          ),
         ),
       ),
     );
@@ -43,7 +58,7 @@ class _ListCategories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final categories = [
+    final _categories = [
       'Acceso rapido',
       'Acceso rapido',
       'Acceso rapido',
@@ -63,9 +78,9 @@ class _ListCategories extends StatelessWidget {
       child: ListView.builder(
         physics: BouncingScrollPhysics(),
         scrollDirection: Axis.horizontal,
-        itemCount: categories.length,
+        itemCount: _categories.length,
         itemBuilder: (BuildContext context, int i) {
-          final cName = categories[i];
+          final cName = _categories[i];
           final cIcon = icons[i];
           return Padding(
             padding: EdgeInsets.all(8.0),
@@ -138,14 +153,25 @@ class _PromotionSwiper extends StatelessWidget {
     ];
 
     return Swiper(
+      autoplay: true,
+      autoplayDisableOnInteraction: true,
+      autoplayDelay: 5000,
       layout: SwiperLayout.STACK,
       itemWidth: 330.0,
       itemHeight: 115.0,
       itemCount: promotions.length,
       itemBuilder: (BuildContext context, int index) {
-        return Image.network(
-          promotions[index],
-          fit: BoxFit.cover,
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(20.0),
+          child: GestureDetector(
+            onTap: () {
+              print('promotion tapped');
+            },
+            child: Image.network(
+              promotions[index],
+              fit: BoxFit.cover,
+            ),
+          ),
         );
       },
     );
@@ -159,10 +185,167 @@ class _CategoryListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<Map<String, dynamic>> categoriesList = [
+      {
+        'name': 'categoria 1',
+        'picture':
+            'https://nypost.com/wp-content/uploads/sites/2/2022/03/Best-Amazon-Products.jpg?quality=75&strip=all',
+      },
+      {
+        'name': 'categoria 2',
+        'picture':
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnO8le2AWamrna2gmvj1AcxLL5dKXXI_n0Eg&usqp=CAU',
+      },
+      {
+        'name': 'categoria 3',
+        'picture':
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrRdQFKgATKJ-5RAVZ-ftSPK6chgGKV579gA&usqp=CAU',
+      },
+      {
+        'name': 'categoria 4',
+        'picture':
+            'https://nypost.com/wp-content/uploads/sites/2/2022/03/Best-Amazon-Products.jpg?quality=75&strip=all',
+      },
+      {
+        'name': 'categoria 5',
+        'picture':
+            'https://nypost.com/wp-content/uploads/sites/2/2022/03/Best-Amazon-Products.jpg?quality=75&strip=all',
+      },
+    ];
+
     return Container(
-      color: Colors.grey[300],
-      height: 100,
-      width: 100,
+      margin: EdgeInsets.symmetric(horizontal: 15.0),
+      // color: Colors.grey[300],
+      height: 150,
+      width: double.infinity,
+      child: ListView.builder(
+        physics: BouncingScrollPhysics(),
+        scrollDirection: Axis.horizontal,
+        itemCount: categoriesList.length,
+        itemBuilder: (BuildContext context, int i) {
+          final cImg = categoriesList[i];
+          return Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _CategoryListViewButton(
+                  imgCategory: cImg['picture'],
+                ),
+                SizedBox(
+                  height: 8.0,
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text(
+                    cImg['name'],
+                    style: TextStyle(
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _CategoryListViewButton extends StatelessWidget {
+  const _CategoryListViewButton({
+    Key? key,
+    required this.imgCategory,
+  }) : super(key: key);
+
+  final String imgCategory;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 1.0),
+      // color: Colors.grey[500],
+      height: 100.0,
+      width: 118.0,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20.0),
+        child: Image.network(
+          imgCategory,
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+}
+
+class _PendingOrders extends StatelessWidget {
+  const _PendingOrders({
+    Key? key,
+    required this.quantity,
+    required this.title,
+  }) : super(key: key);
+
+  final int quantity;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        print('Redireccionar a su lista respectiva');
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 20.0),
+        height: 35.0,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.0),
+          color: Colors.grey.shade100,
+          border: Border.all(
+            color: myTheme.colorScheme.secondary.withOpacity(0.3),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Container(
+              padding: EdgeInsets.only(left: 1.0),
+              child: Text(title),
+            ),
+            SizedBox(width: 30.0),
+            Container(
+              width: 25.0,
+              height: 25.0,
+              margin: EdgeInsets.only(right: 1.0),
+              decoration: BoxDecoration(
+                color: myTheme.colorScheme.secondary,
+                shape: BoxShape.circle,
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 5.0,
+                    spreadRadius: 1.0,
+                  ),
+                ],
+              ),
+              child: Center(
+                child: Text(
+                  '$quantity',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              child: Icon(Icons.arrow_forward_ios),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
