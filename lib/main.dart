@@ -2,18 +2,19 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/cart_tabs/cart/cart_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/cart_tabs/cart/checkout_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/cart_tabs/invoices/invoices_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/cart_tabs/orders/orders_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/cart_tabs/tabs.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/cart_tabs/visits/visits_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/catalogue/catalogue_page.dart';
 import 'firebase_options.dart';
 import 'package:pwa_sales2go_flutter/src/pages/auth_pages/login/forgot_password_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/auth_pages/login/login_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/auth_pages/splashscreen/splashscreen.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/cart/cart_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/cart/checkout_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/clients/clients_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/dashboard/dashboard_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/records/invoices/invoices_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/records/orders/orders_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/records/records_tabs.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
@@ -24,7 +25,6 @@ import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/navi_pages.dart'
 import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
 
 import 'package:pwa_sales2go_flutter/src/pages/notifications/notifications_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/visits/visits_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -62,7 +62,7 @@ class SfaAgnostiko extends StatelessWidget {
         'orders': (BuildContext context) => OrdersPage(),
         'invoices': (BuildContext context) => InvoicesPage(),
         'visits': (BuildContext context) => VisitsPage(),
-        'records': (BuildContext context) => RecordTabs(),
+        'cart_tabs': (BuildContext context) => CartTabs(),
       },
     );
   }

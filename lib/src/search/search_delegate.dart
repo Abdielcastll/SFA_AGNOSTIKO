@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
@@ -11,11 +13,13 @@ class DataSearch extends SearchDelegate<String> {
       iconTheme: IconThemeData(
         color: Colors.white,
       ),
-      textTheme: Theme.of(context).textTheme.copyWith(
-            headline6: Theme.of(context).textTheme.headline6!.copyWith(
-                  color: Colors.white,
-                ),
-          ),
+      textTheme: TextTheme(
+        headline6: TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
     );
   }
 

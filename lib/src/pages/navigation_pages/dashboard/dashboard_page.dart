@@ -24,7 +24,7 @@ class DashboardPage extends StatelessWidget {
             children: [
               _ListCategories(),
               SizedBox(height: 10.0),
-              _PromotionSwiper(),
+              PromotionSwiper(),
               SizedBox(height: 20.0),
               _CategoryListView(),
               SizedBox(height: 10.0),
@@ -39,7 +39,7 @@ class DashboardPage extends StatelessWidget {
               ),
               SizedBox(height: 10.0),
               _PendingOrders(
-                title: 'Facturas no cobradas',
+                title: 'Facturas pendientes',
                 quantity: 10,
               ),
               SizedBox(height: 30.0),
@@ -139,8 +139,8 @@ class _CategoryButton extends StatelessWidget {
   }
 }
 
-class _PromotionSwiper extends StatelessWidget {
-  const _PromotionSwiper({
+class PromotionSwiper extends StatelessWidget {
+  const PromotionSwiper({
     Key? key,
   }) : super(key: key);
 
@@ -152,28 +152,34 @@ class _PromotionSwiper extends StatelessWidget {
       'https://image.shutterstock.com/image-vector/brush-sale-banner-promotion-ribbon-260nw-1182942766.jpg',
     ];
 
-    return Swiper(
-      autoplay: true,
-      autoplayDisableOnInteraction: true,
-      autoplayDelay: 5000,
-      layout: SwiperLayout.STACK,
-      itemWidth: 330.0,
-      itemHeight: 115.0,
-      itemCount: promotions.length,
-      itemBuilder: (BuildContext context, int index) {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(20.0),
-          child: GestureDetector(
-            onTap: () {
-              print('promotion tapped');
-            },
-            child: Image.network(
-              promotions[index],
-              fit: BoxFit.cover,
-            ),
-          ),
-        );
-      },
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Swiper(
+          autoplay: true,
+          autoplayDisableOnInteraction: true,
+          autoplayDelay: 5000,
+          layout: SwiperLayout.STACK,
+          itemWidth: 330.0,
+          itemHeight: 115.0,
+          itemCount: promotions.length,
+          itemBuilder: (BuildContext context, int index) {
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(20.0),
+              child: GestureDetector(
+                onTap: () {
+                  print('promotion tapped');
+                },
+                child: Image.network(
+                  promotions[index],
+                  fit: BoxFit.cover,
+                ),
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 }
@@ -311,15 +317,15 @@ class _PendingOrders extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Container(
-              padding: EdgeInsets.only(left: 1.0),
-              child: Text(title),
+            SizedBox(
+              width: 150.0,
+              child: Text(title, textWidthBasis: TextWidthBasis.longestLine),
             ),
             SizedBox(width: 30.0),
             Container(
               width: 25.0,
               height: 25.0,
-              margin: EdgeInsets.only(right: 1.0),
+              // margin: EdgeInsets.only(right: 1.0),
               decoration: BoxDecoration(
                 color: myTheme.colorScheme.secondary,
                 shape: BoxShape.circle,

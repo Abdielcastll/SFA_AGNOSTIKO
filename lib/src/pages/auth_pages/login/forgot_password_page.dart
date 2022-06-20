@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/appbar/bottom_decoration.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/bottom_decoratior.dart/bottom_decoration.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   ForgotPasswordPage({Key? key}) : super(key: key);

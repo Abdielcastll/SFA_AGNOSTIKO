@@ -1,14 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/cart/cart_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/catalogue/catalogue_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/clients/clients_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/cart_tabs/tabs.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/catalogue/catalogue_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/dashboard/dashboard_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/records/records_tabs.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_home.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/appbar/bottom_decoration.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/bottom_decoratior.dart/bottom_decoration.dart';
 
 class NaviPages extends StatefulWidget {
   const NaviPages({Key? key}) : super(key: key);
@@ -23,7 +22,7 @@ class _NaviPagesState extends State<NaviPages> {
     DashboardPage(),
     ClientsPage(),
     CataloguePage(),
-    CartPage(),
+    CartTabs(),
   ];
 
   @override
@@ -100,7 +99,7 @@ class _NaviPagesState extends State<NaviPages> {
                     Icons.shopping_cart_rounded,
                     color: Colors.white,
                   ),
-                  label: 'Carrito',
+                  label: 'Negocio',
                 ),
               ],
             ),

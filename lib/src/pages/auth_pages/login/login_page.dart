@@ -7,7 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 //Widgets
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_login.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/appbar/bottom_decoration.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/bottom_decoratior.dart/bottom_decoration.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/custom_text_field/custom_text_field_widget.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/loading_dialog/loading_dialog_widget.dart';
 

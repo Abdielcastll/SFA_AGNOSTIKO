@@ -3,7 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_home.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/appbar/bottom_decoration.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/bottom_decoratior.dart/bottom_decoration.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({Key? key}) : super(key: key);
