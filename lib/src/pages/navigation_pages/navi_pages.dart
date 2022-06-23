@@ -5,6 +5,7 @@ import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/clients/clients_
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/cart_tabs/tabs.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/catalogue/catalogue_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/dashboard/dashboard_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/products/products_page.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_home.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/bottom_decoratior.dart/bottom_decoration.dart';
@@ -22,6 +23,7 @@ class _NaviPagesState extends State<NaviPages> {
     DashboardPage(),
     ClientsPage(),
     CataloguePage(),
+    ProductsPage(),
     CartTabs(),
   ];
 
@@ -89,6 +91,17 @@ class _NaviPagesState extends State<NaviPages> {
                     color: Colors.white,
                   ),
                   label: 'Catalogo',
+                ),
+                NavigationDestination(
+                  icon: Icon(
+                    Icons.category_outlined,
+                    color: myTheme.colorScheme.tertiary,
+                  ),
+                  selectedIcon: Icon(
+                    Icons.category_rounded,
+                    color: Colors.white,
+                  ),
+                  label: 'Productos',
                 ),
                 NavigationDestination(
                   icon: Icon(

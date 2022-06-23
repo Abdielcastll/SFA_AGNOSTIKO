@@ -9,6 +9,7 @@ import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/cart_tabs/orders
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/cart_tabs/tabs.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/cart_tabs/visits/visits_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/catalogue/catalogue_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/products/products_page.dart';
 import 'firebase_options.dart';
 import 'package:pwa_sales2go_flutter/src/pages/auth_pages/login/forgot_password_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/auth_pages/login/login_page.dart';
@@ -19,11 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
-
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/navi_pages.dart';
-
-import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
-
 import 'package:pwa_sales2go_flutter/src/pages/notifications/notifications_page.dart';
 
 Future<void> main() async {
