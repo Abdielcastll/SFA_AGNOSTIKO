@@ -30,17 +30,17 @@ class DashboardPage extends StatelessWidget {
               SizedBox(height: 10.0),
               _PendingOrders(
                 title: 'Pedidos pendientes',
-                quantity: 5,
+                quantity: 0,
               ),
               SizedBox(height: 10.0),
               _PendingOrders(
                 title: 'Visitas pendientes',
-                quantity: 2,
+                quantity: 0,
               ),
               SizedBox(height: 10.0),
               _PendingOrders(
                 title: 'Facturas pendientes',
-                quantity: 10,
+                quantity: 0,
               ),
               SizedBox(height: 30.0),
             ],
@@ -345,9 +345,6 @@ class _PendingOrders extends StatelessWidget {
                   ),
                 ),
               ),
-            ),
-            Container(
-              child: Icon(Icons.arrow_forward_ios),
             ),
           ],
         ),
