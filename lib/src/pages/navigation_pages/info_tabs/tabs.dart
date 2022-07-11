@@ -1,10 +1,9 @@
 // ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers
 
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/cart_tabs/invoices/invoices_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/cart_tabs/orders/orders_page.dart';
-
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/cart_tabs/visits/visits_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/info_tabs/invoices/invoices_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/info_tabs/orders/orders_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/info_tabs/visits/visits_page.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class CartTabs extends StatelessWidget {

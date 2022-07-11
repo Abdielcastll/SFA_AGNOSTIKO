@@ -2,18 +2,17 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/cart_tabs/cart/cart_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/cart_tabs/cart/checkout_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/cart_tabs/invoices/invoices_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/cart_tabs/orders/orders_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/cart_tabs/tabs.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/cart_tabs/visits/visits_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/catalogue/catalogue_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/info_tabs/cart/cart_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/info_tabs/cart/checkout_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/info_tabs/invoices/invoices_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/info_tabs/orders/orders_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/info_tabs/tabs.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/info_tabs/visits/visits_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/products/products_page.dart';
 import 'firebase_options.dart';
-import 'package:pwa_sales2go_flutter/src/pages/auth_pages/login/forgot_password_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/auth_pages/login/login_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/auth_pages/splashscreen/splashscreen.dart';
+import 'package:pwa_sales2go_flutter/src/pages/auth/login/login_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/auth/splashscreen/splashscreen.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/clients/clients_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/dashboard/dashboard_page.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +48,6 @@ class SfaAgnostiko extends StatelessWidget {
         'navi': (BuildContext context) => NaviPages(),
         'dashboard': (BuildContext context) => DashboardPage(),
         'login': (BuildContext context) => LoginPage(),
-        'password_reset': (BuildContext context) => ForgotPasswordPage(),
         'cart': (BuildContext context) => CartPage(),
         'checkout': (BuildContext context) => CheckoutPage(),
         'notifications': (BuildContext context) => NotificationsPage(),
@@ -59,7 +57,7 @@ class SfaAgnostiko extends StatelessWidget {
         'orders': (BuildContext context) => OrdersPage(),
         'invoices': (BuildContext context) => InvoicesPage(),
         'visits': (BuildContext context) => VisitsPage(),
-        'cart_tabs': (BuildContext context) => CartTabs(),
+        'info_tabs': (BuildContext context) => CartTabs(),
       },
     );
   }

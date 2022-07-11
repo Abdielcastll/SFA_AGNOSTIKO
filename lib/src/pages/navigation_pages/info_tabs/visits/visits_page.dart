@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_home.dart';
@@ -46,47 +48,17 @@ class _FilterSection extends StatefulWidget {
 class _FilterSectionState extends State<_FilterSection> {
   @override
   Widget build(BuildContext context) {
-    String? dropdownValue;
-    final List<Map<String, dynamic>> visits = [
-      {
-        'name': 'Cliente 1',
-        'doc': 'J-26314578',
-        'date': '12/12/2020',
-        'status:': 'Pendiente',
-      },
-      {
-        'name': 'Cliente 2',
-        'doc': 'J-26314578',
-        'date': '12/12/2020',
-        'status:': 'Pendiente',
-      },
-      {
-        'name': 'Cliente 3',
-        'doc': 'J-26314578',
-        'date': '12/12/2020',
-        'status:': 'Completado',
-      },
-      {
-        'name': 'Cliente 4',
-        'doc': 'J-26314578',
-        'date': '12/12/2020',
-        'status:': 'Completado',
-      },
-      {
-        'name': 'Cliente 5',
-        'doc': 'J-26314578',
-        'date': '12/12/2020',
-        'status:': 'Cancelado',
-      },
-    ];
-
     return Container(
       height: 50.0,
       width: double.infinity,
       color: Colors.grey[300],
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [],
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(
+            child: Text('Seccion reservada para los filtros'),
+          ),
+        ],
       ),
     );
   }

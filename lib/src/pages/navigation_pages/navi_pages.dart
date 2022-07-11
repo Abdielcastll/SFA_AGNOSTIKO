@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/clients/clients_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/cart_tabs/tabs.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/info_tabs/tabs.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/catalogue/catalogue_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/dashboard/dashboard_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/products/products_page.dart';
