@@ -1,4 +1,4 @@
-package com.example.pwa_sales2go_flutter
+package com.example.sfa_agnostiko_flutter
 
 import io.flutter.embedding.android.FlutterActivity
 

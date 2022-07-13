@@ -1,15 +1,14 @@
-//Firebase
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-//Flutter
+// ignore_for_file: prefer_const_constructors
+
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:pwa_sales2go_flutter/src/global/global.dart';
-//Widgets
+import 'package:pwa_sales2go_flutter/src/services/auth.dart';
+import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_login.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/bottom_decoratior.dart/bottom_decoration.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/custom_text_field/custom_text_field_widget.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/loading_dialog/loading_dialog_widget.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/loading/loading_widget.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -19,121 +18,27 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-  @override
-  void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    super.dispose();
-  }
-
-  validateForm() {
-    if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
-      // Allow user to login
-      loginNow();
-    } else {
-      Fluttertoast.showToast(msg: 'Por favor ingrese su correo y contraseña');
-    }
-  }
-
-  loginNow() async {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (c) {
-        return const LoadingDialogWidget(
-          message: 'Revisando credenciales',
-        );
-      },
-    );
-
-    User? currentUser;
-    await FirebaseAuth.instance
-        .signInWithEmailAndPassword(
-      email: emailController.text.trim(),
-      password: passwordController.text.trim(),
-    )
-        .then((auth) {
-      currentUser = auth.user;
-    }).catchError((errorMessage) {
-      Navigator.pop(context);
-      Fluttertoast.showToast(msg: 'Usuario o Contraseñas invalidos');
-    });
-    if (currentUser != null) {
-      checkIfUserRecordExists(currentUser!);
-    }
-  }
-
-  checkIfUserRecordExists(User currentUser) async {
-    await FirebaseFirestore.instance
-        .collection('usuarios')
-        .doc(currentUser.uid)
-        .get()
-        .then((record) async {
-      if (record.exists) {
-        try {
-          if (record.data()!['activo'] == true) {
-            await sharedPreferences!.setString('uid', currentUser.uid);
-            await sharedPreferences!.setString('email', currentUser.email!);
-            await sharedPreferences!
-                .setString('nombre', record.data()!['nombre']);
-
-            await sharedPreferences!
-                .setInt('nro_cedula', record.data()!['nro_cedula']);
-
-            List<String> indice = record.data()!['indice'].cast<String>();
-            await sharedPreferences!.setStringList('indice', indice);
-
-            if (record.data()!['esGerente'] == false) {
-              if (record.data()!['esVendedor'] == false) {
-                await sharedPreferences!.setString('cargo', 'Cobrador');
-              } else {
-                await sharedPreferences!.setString('cargo', 'Vendedor');
-              }
-            } else {
-              await sharedPreferences!.setString('cargo', 'Gerente');
-            }
-            Navigator.pushNamed(context, 'splashscreen');
-            print('/////////////////////////////////////////////////');
-            print('Si usuario existe guardar datos en sharedPreferences.');
-            print(sharedPreferences!.getString('uid'));
-            print(sharedPreferences!.getString('email'));
-            print(sharedPreferences!.getString('nombre'));
-            print(sharedPreferences!.getInt('nro_cedula'));
-            print(sharedPreferences!.getStringList('indice'));
-            print(sharedPreferences!.getString('cargo'));
-            print('/////////////////////////////////////////////////');
-          } else {
-            Navigator.pop(context);
-            Fluttertoast.showToast(msg: 'Usuario no activo o bloqueado');
-          }
-        } catch (e) {
-          Fluttertoast.showToast(msg: 'Error en la petición');
-        }
-      } else {
-        // En caso de que el registro no exista
-        FirebaseAuth.instance.signOut();
-        Navigator.pop(context);
-        Fluttertoast.showToast(
-            msg: 'Este usuario no existe dentro de la base de datos');
-      }
-    });
-  }
+  final AuthService _auth = AuthService();
+  final formKey = GlobalKey<FormState>();
+  bool loading = false;
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const AppBarLogin(
-        title: 'Login',
-        backgroundColor: Color(0xFF4f42ed),
-      ),
-      body: _loginBody(context),
-      bottomNavigationBar: const BottomDecoration(),
-      backgroundColor: Colors.white,
-    );
+    return loading
+        ? LoadingWidget(
+            message: 'Verificando Credenciales',
+          )
+        : Scaffold(
+            appBar: AppBarLogin(
+              title: 'Login',
+              backgroundColor: myTheme.colorScheme.secondary,
+            ),
+            body: _loginBody(context),
+            bottomNavigationBar: const BottomDecoration(),
+            backgroundColor: Colors.white,
+          );
   }
 
   Widget _loginBody(context) {
@@ -147,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
               width: 400.0,
               child: Image.asset('assets/images/logo.png'),
             ),
-            const SizedBox(height: 75.0),
+            const SizedBox(height: 50.0),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 35.0),
               alignment: Alignment.centerLeft,
@@ -164,54 +69,99 @@ class _LoginPageState extends State<LoginPage> {
               key: formKey,
               child: Column(
                 children: [
-                  CustomTextField(
-                    textEditingController: emailController,
-                    // iconData: Icons.email_rounded,
-                    hintText: 'Correo',
-                    isObsecure: false,
-                    enabled: true,
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 35),
+                    child: TextFormField(
+                      maxLines: 1,
+                      maxLength: 100,
+                      keyboardType: TextInputType.emailAddress,
+                      controller: emailController,
+                      cursorColor: myTheme.colorScheme.secondary,
+                      textInputAction: TextInputAction.next,
+                      decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.only(
+                              left: 20.0, top: 10.0, right: 10.0),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(25.0),
+                            borderSide: const BorderSide(
+                              color: Color(0xFF4f42ed),
+                            ),
+                          ),
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 191, 191, 191)),
+                            borderRadius: BorderRadius.all(Radius.circular(50)),
+                          ),
+                          focusColor: Theme.of(context).primaryColor,
+                          labelText: 'Email',
+                          suffixIcon: Icon(
+                            Icons.email,
+                            size: 20,
+                            color: myTheme.colorScheme.secondary,
+                          )),
+                      validator: (email) =>
+                          email != null && !EmailValidator.validate(email)
+                              ? 'Email inválido'
+                              : null,
+                    ),
                   ),
-                  CustomTextField(
-                    textEditingController: passwordController,
-                    // iconData: Icons.lock_rounded,
-                    hintText: 'Contraseña',
-                    isObsecure: true,
-                    enabled: true,
+                  const SizedBox(height: 5),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 35),
+                    child: TextFormField(
+                      maxLines: 1,
+                      maxLength: 100,
+                      controller: passwordController,
+                      cursorColor: myTheme.colorScheme.secondary,
+                      textInputAction: TextInputAction.next,
+                      decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.only(
+                              left: 20.0, top: 10.0, right: 10.0),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(25.0),
+                            borderSide: const BorderSide(
+                              color: Color(0xFF4f42ed),
+                            ),
+                          ),
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 191, 191, 191)),
+                            borderRadius: BorderRadius.all(Radius.circular(50)),
+                          ),
+                          focusColor: Theme.of(context).primaryColor,
+                          labelText: 'Contraseña',
+                          suffixIcon: Icon(
+                            Icons.lock,
+                            size: 20,
+                            color: myTheme.colorScheme.secondary,
+                          )),
+                      validator: (password) =>
+                          password != null && password.length < 6
+                              ? 'Contraseña inválido'
+                              : null,
+                    ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 0.0),
-            // Container(
-            //   padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            //   alignment: Alignment.centerRight,
-            //   child: TextButton(
-            //     onPressed: () => Navigator.pushNamed(context, 'password_reset'),
-            //     style: ButtonStyle(
-            //       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            //           RoundedRectangleBorder(
-            //         borderRadius: BorderRadius.circular(20.0),
-            //       )),
-            //       overlayColor: MaterialStateColor.resolveWith(
-            //         (states) => Colors.grey.shade200,
-            //       ),
-            //     ),
-            //     child: const Text(
-            //       '¿Olvidaste tu contraseña?',
-            //       style: TextStyle(
-            //         fontSize: 14.0,
-            //         color: Colors.grey,
-            //       ),
-            //     ),
-            //   ),
-            // ),
             const SizedBox(height: 40.0),
             SizedBox(
               width: 300.0,
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   // Login
-                  validateForm();
+                  print('Loggin button pressed');
+                  print('email: ${emailController.text}');
+                  print('password: ${passwordController.text}');
+                  if (formKey.currentState!.validate()) {
+                    setState(() {
+                      loading = true;
+                    });
+                    await _auth.signInWithEmailAndPassword(
+                        emailController.text.toString(),
+                        passwordController.text.toString());
+                  }
+                  // // validateForm();
                 },
                 style: ButtonStyle(
                   alignment: Alignment.center,

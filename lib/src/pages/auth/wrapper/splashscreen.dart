@@ -2,7 +2,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 //Firebase
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
+import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class SplashScreenWidget extends StatefulWidget {
   const SplashScreenWidget({Key? key}) : super(key: key);
@@ -13,20 +15,9 @@ class SplashScreenWidget extends StatefulWidget {
 
 class _SplashScreenWidgetState extends State<SplashScreenWidget> {
   splashScreenTimer() {
-    Timer(
-      const Duration(seconds: 2),
-      () async {
-        if (FirebaseAuth.instance.currentUser != null) {
-          // User is signed in
-          print('Usuario ya logeado, redireccionando a Home');
-          Navigator.pushReplacementNamed(context, 'navi');
-        } else {
-          // User is not signed in
-          print('No hay usuario logeado, redireccionando a Login');
-          Navigator.pushReplacementNamed(context, 'login');
-        }
-      },
-    );
+    Timer(const Duration(seconds: 2), () {
+      Navigator.pushReplacementNamed(context, 'wrapper');
+    });
   }
 
   @override
@@ -40,7 +31,7 @@ class _SplashScreenWidgetState extends State<SplashScreenWidget> {
     return Material(
       child: Container(
         decoration: const BoxDecoration(
-          color: Color(0xFF4f42ed),
+          color: Color(0xFF2E3EAE),
         ),
         child: Center(
           child: Column(
