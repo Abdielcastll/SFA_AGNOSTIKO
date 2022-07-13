@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:pwa_sales2go_flutter/src/search/search_delegate.dart';
 
 class AppBarHome extends StatelessWidget implements PreferredSizeWidget {
   const AppBarHome({
     Key? key,
     required this.title,
-    // required this.backgroundColor,
+    required this.backgroundColor,
   }) : super(key: key);
   final String title;
-  // final Color backgroundColor;
+  final Color backgroundColor;
 
   @override
-  Size get preferredSize => const Size.fromHeight(55.0);
+  Size get preferredSize => const Size.fromHeight(60.0);
 
   @override
   Widget build(BuildContext context) {
@@ -18,26 +19,42 @@ class AppBarHome extends StatelessWidget implements PreferredSizeWidget {
       title: Text(
         title,
         style: const TextStyle(
-          fontSize: 24,
+          fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
       ),
-      centerTitle: true,
+      centerTitle: false,
       elevation: 0,
-      flexibleSpace: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Color(0xFF4f42ed),
-              Color.fromARGB(255, 130, 32, 147),
-            ],
-            begin: FractionalOffset(0.0, 0.0),
-            end: FractionalOffset(1.0, 0.0),
-            stops: [0.0, 1.0],
-            tileMode: TileMode.clamp,
-          ),
-        ),
-      ),
+      backgroundColor: backgroundColor,
+      actions: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Container(
+              child: IconButton(
+                padding: const EdgeInsets.symmetric(horizontal: 7.0),
+                constraints: const BoxConstraints(),
+                splashRadius: 20.0,
+                icon: const Icon(Icons.search_rounded),
+                onPressed: () {
+                  print('Search button pressed');
+                  showSearch(context: context, delegate: DataSearch());
+                },
+              ),
+            ),
+            IconButton(
+              padding: const EdgeInsets.symmetric(horizontal: 7.0),
+              constraints: const BoxConstraints(),
+              splashRadius: 20.0,
+              icon: const Icon(Icons.notifications_none_rounded),
+              onPressed: () {
+                print('Notification button pressed');
+                Navigator.pushNamed(context, 'notifications');
+              },
+            ),
+          ],
+        )
+      ],
     );
   }
 }

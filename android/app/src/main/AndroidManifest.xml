@@ -1,9 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.pwa_sales2go_flutter">
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
+    package="com.example.sfa_agnostiko_flutter">
    <application
-        android:label="pwa_sales2go_flutter"
+        android:label="sfa_agnostiko_flutter"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
