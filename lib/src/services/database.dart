@@ -1,14 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
+import 'package:pwa_sales2go_flutter/src/models/banks_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/brands_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/catalogue_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/catalogue_products_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/categories_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/design_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/devices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/idtype_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/lines_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/promotions_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/quality_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/sizes_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/subcategories_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/teams_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/zones_model.dart';
 
 class DatabaseService {
@@ -151,5 +160,72 @@ class DatabaseService {
     return pricesCollection
         .snapshots()
         .map((PricesfromSnapshot().priceListfromSnapshot));
+  }
+
+  // get lines stream
+  Stream<List<LineModel>> get line {
+    return linesCollection
+        .snapshots()
+        .map((LinefromSnapshot().lineListfromSnapshot));
+  }
+
+  // get teams stream
+  Stream<List<TeamsModel>> get team {
+    return teamsCollection
+        .snapshots()
+        .map((TeamfromSnapshot().teamListfromSnapshot));
+  }
+
+  // get devices stream
+  Stream<List<DeviceModel>> get device {
+    return devicesCollection
+        .snapshots()
+        .map((DevicefromSnapshot().deviceListfromSnapshot));
+  }
+
+  // get designs stream
+  Stream<List<DesignModel>> get design {
+    return designsCollection
+        .snapshots()
+        .map((DesignfromSnapshot().designListfromSnapshot));
+  }
+
+  // get clients stream
+  Stream<List<ClientModel>> get client {
+    return clientsCollection
+        .snapshots()
+        .map((ClientfromSnapshot().clientListfromSnapshot));
+  }
+
+  // get categories stream
+  Stream<List<CategorieModel>> get categorie {
+    return categoriesCollection
+        .snapshots()
+        .map((CategoriefromSnapshot().categorieListfromSnapshot));
+  }
+
+  // get catalogue strema
+  Stream<List<CatalogueModel>> get catalogue {
+    return catalogueCollection
+        .snapshots()
+        .map((CataloguefromSnapshot().catalogueListfromSnapshot));
+  }
+
+  Stream<List<CatalogueProductsModel>> get catalogueProduct {
+    return catalogueProductsCollection
+        .snapshots()
+        .map((CatalogueProductfromSnapshot().idTypeListfromSnapshot));
+  }
+
+  Stream<List<QualityModel>> get quality {
+    return qualitiesCollection
+        .snapshots()
+        .map((QualityfromSnapshot().qualityListfromSnapshot));
+  }
+
+  Stream<List<BankModel>> get bank {
+    return banksCollection
+        .snapshots()
+        .map((BankfromSnapshot().bankListfromSnapshot));
   }
 }

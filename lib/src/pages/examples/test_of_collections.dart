@@ -63,17 +63,16 @@ class _CollectionListExampleState extends State<CollectionListExample> {
     final stock = Provider.of<List<StockModel>?>(context) ?? [];
 
     // Check if there is data inside the streams
-    for (var stock in stock) {
-      print(stock.stock);
-    }
-
-    // if (products != null) {
-    //   for (var product in products) {
-    //     // print(product.name);
-    //     // print(product.id);
-    //     print(product.brand);
-    //   }
+    // for (var stock in stock) {
+    //   print(stock.stock);
     // }
+
+    // for (var product in products) {
+    //   print(product.name);
+    //   print(product.id);
+    //   print(product.brand);
+    // }
+
     return ListView.builder(
       itemCount: 1,
       itemBuilder: (context, index) {
