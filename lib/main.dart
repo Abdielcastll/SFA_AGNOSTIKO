@@ -33,10 +33,10 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  print('Firebase inicializado');
+  // print('Firebase inicializado');
   sharedPreferences = await SharedPreferences.getInstance();
   runApp(const SfaAgnostiko());
-  print('App inicializado');
+  // print('App inicializado');
 }
 
 class SfaAgnostiko extends StatelessWidget {

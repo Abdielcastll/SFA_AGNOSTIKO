@@ -28,13 +28,26 @@ class ProductModel {
   });
 }
 
+dynamic qualityData;
+
 class ProductsFromSnashot {
   List<ProductModel> productListfromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
+      dynamic quality = doc.get('calidad');
+      dynamic result;
+
+      quality.get().then((DocumentSnapshot value) {
+        result = value.data();
+        print('Data transmutada: ${result['nombre']}');
+        qualityData = result['nombre'] ?? 'no data';
+        print(qualityData);
+        return qualityData;
+      });
+
       return ProductModel(
         name: doc.get('nombre'),
         id: doc.get('codigo'),
-        quality: doc.get('calidad'),
+        quality: qualityData,
         catalogue: doc.get('catalogo'),
         categorie: doc.get('categoria'),
         subCategorie: doc.get('subcategoria'),

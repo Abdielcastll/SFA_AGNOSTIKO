@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterfire_ui/firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
@@ -71,10 +72,11 @@ class _CollectionListExampleState extends State<CollectionListExample> {
     //   print(product.name);
     //   print(product.id);
     //   print(product.brand);
+
     // }
 
     return ListView.builder(
-      itemCount: 1,
+      itemCount: products.length,
       itemBuilder: (context, index) {
         return CollectionTile(
           product: products[index],
@@ -99,11 +101,11 @@ class CollectionTile extends StatefulWidget {
 class _CollectionTileState extends State<CollectionTile> {
   @override
   Widget build(BuildContext context) {
-    print('//////// datos que llegan para las tiles ////////');
-    print(widget.product?.name);
-    print(widget.product?.id);
-    print(widget.product?.quality);
-    print('//////////////////////////////////');
+    // print('//////// datos que llegan para las tiles ////////');
+    // print(widget.product?.name);
+    // print(widget.product?.id);
+    // print(widget.product?.quality);
+    // print('//////////////////////////////////');
     return Padding(
       padding: EdgeInsets.only(top: 8.0),
       child: Card(

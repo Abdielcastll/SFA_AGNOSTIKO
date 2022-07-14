@@ -24,7 +24,7 @@ class AuthService {
 
   Future signInWithEmailAndPassword(String email, String password) async {
     try {
-      print('Sign in with email and password pressed');
+      // print('Sign in with email and password pressed');
       UserCredential result = await _auth.signInWithEmailAndPassword(
         email: email.trim().toLowerCase(),
         password: password.trim(),
@@ -35,7 +35,7 @@ class AuthService {
         checkIfUserRecordExist(user);
       }
     } catch (e) {
-      print(e.toString());
+      // print(e.toString());
       return null;
     }
   }
@@ -72,15 +72,15 @@ class AuthService {
             } else {
               await sharedPreferences!.setString('cargo', 'Gerente');
             }
-            print('/////////////////////////////////////////////////');
-            print('Saving Data on shared preferences');
-            print(sharedPreferences!.getString('uid'));
-            print(sharedPreferences!.getString('email'));
-            print(sharedPreferences!.getString('nombre'));
-            print(sharedPreferences!.getInt('nro_cedula'));
-            print(sharedPreferences!.getStringList('indice'));
-            print(sharedPreferences!.getString('cargo'));
-            print('/////////////////////////////////////////////////');
+            // print('/////////////////////////////////////////////////');
+            // print('Saving Data on shared preferences');
+            // print(sharedPreferences!.getString('uid'));
+            // print(sharedPreferences!.getString('email'));
+            // print(sharedPreferences!.getString('nombre'));
+            // print(sharedPreferences!.getInt('nro_cedula'));
+            // print(sharedPreferences!.getStringList('indice'));
+            // print(sharedPreferences!.getString('cargo'));
+            // print('/////////////////////////////////////////////////');
 
             return _userFromFirebaseUser(user);
           } else {

@@ -22,8 +22,10 @@ import 'package:pwa_sales2go_flutter/src/models/zones_model.dart';
 
 class DatabaseService {
   // Coleccion de Productos
-  final CollectionReference productsCollection =
-      FirebaseFirestore.instance.collection('productos');
+  final productsCollection = FirebaseFirestore.instance
+      .collection('productos')
+      .orderBy('nombre')
+      .limit(3);
   // Coleccion de Zonas
   final CollectionReference zonesCollection =
       FirebaseFirestore.instance.collection('zonas');

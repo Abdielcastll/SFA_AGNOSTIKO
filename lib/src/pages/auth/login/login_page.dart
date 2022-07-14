@@ -150,9 +150,9 @@ class _LoginPageState extends State<LoginPage> {
               child: ElevatedButton(
                 onPressed: () async {
                   // Login
-                  print('Loggin button pressed');
-                  print('email: ${emailController.text}');
-                  print('password: ${passwordController.text}');
+                  // print('Loggin button pressed');
+                  // print('email: ${emailController.text}');
+                  // print('password: ${passwordController.text}');
                   if (formKey.currentState!.validate()) {
                     setState(() {
                       loading = true;

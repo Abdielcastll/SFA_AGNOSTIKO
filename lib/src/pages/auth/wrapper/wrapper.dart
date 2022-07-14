@@ -19,23 +19,23 @@ class _WrapperState extends State<Wrapper> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserModel?>(context);
-    print('Verificando si hay usuario conectado');
+    // print('Verificando si hay usuario conectado');
     if (user == null) {
-      print('instancia de user no detectada');
-      print(user);
+      // print('instancia de user no detectada');
+      // print(user);
       return LoginPage();
     } else {
-      print('instancia de user detectada');
-      print(user);
-      print('/////////////////////////////////////////////////');
-      print('Data in shared preferences');
-      print(sharedPreferences!.getString('uid'));
-      print(sharedPreferences!.getString('email'));
-      print(sharedPreferences!.getString('nombre'));
-      print(sharedPreferences!.getInt('nro_cedula'));
-      print(sharedPreferences!.getStringList('indice'));
-      print(sharedPreferences!.getString('cargo'));
-      print('/////////////////////////////////////////////////');
+      // print('instancia de user detectada');
+      // print(user);
+      // print('/////////////////////////////////////////////////');
+      // print('Data in shared preferences');
+      // print(sharedPreferences!.getString('uid'));
+      // print(sharedPreferences!.getString('email'));
+      // print(sharedPreferences!.getString('nombre'));
+      // print(sharedPreferences!.getInt('nro_cedula'));
+      // print(sharedPreferences!.getStringList('indice'));
+      // print(sharedPreferences!.getString('cargo'));
+      // print('/////////////////////////////////////////////////');
       return CollectionsExample();
     }
   }
