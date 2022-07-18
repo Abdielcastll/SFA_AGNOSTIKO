@@ -13,10 +13,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppBarHome(
-        title: 'Notificaciones',
-        backgroundColor: Color(0xFF4f42ed),
-      ),
       bottomNavigationBar: const BottomDecoration(),
       backgroundColor: Colors.white,
       body: notificationBody(),

@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/products/widgets/product_card.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_products.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({Key? key}) : super(key: key);
@@ -20,6 +21,7 @@ class _ProductsPageState extends State<ProductsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBarProducts(),
       backgroundColor: Colors.grey[200],
       body: SingleChildScrollView(
         child: Column(

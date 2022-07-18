@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/src/search/search_delegate.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
-class AppBarHome extends StatelessWidget implements PreferredSizeWidget {
-  const AppBarHome({
+class AppBarCatalogue extends StatelessWidget implements PreferredSizeWidget {
+  const AppBarCatalogue({
     Key? key,
   }) : super(key: key);
 
@@ -23,7 +23,7 @@ class AppBarHome extends StatelessWidget implements PreferredSizeWidget {
       title: Padding(
         padding: EdgeInsets.only(top: 20),
         child: Text(
-          'Tu Empresa',
+          'Catálogo',
           style: const TextStyle(
             fontSize: 21,
             fontWeight: FontWeight.w300,

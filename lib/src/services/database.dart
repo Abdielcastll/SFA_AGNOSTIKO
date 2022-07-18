@@ -96,9 +96,7 @@ class DatabaseService {
 
   // get products stream
   Stream<List<ProductModel>> get products {
-    return productsCollection
-        .snapshots()
-        .map((ProductsFromSnashot().productListfromSnapshot));
+    return productsCollection.snapshots().map(productListfromSnapshot);
   }
 
   // get zones stream

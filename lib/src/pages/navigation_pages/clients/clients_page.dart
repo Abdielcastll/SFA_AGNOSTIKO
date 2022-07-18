@@ -45,7 +45,7 @@ class _ClientList extends StatelessWidget {
       height: MediaQuery.of(context).size.height * 0.75,
       color: Colors.grey[100],
       child: StreamBuilder<QuerySnapshot>(
-        stream: _clientsQuery.orderBy('nombre').snapshots(),
+        stream: _clientsQuery.orderBy('nombre').limit(10).snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());

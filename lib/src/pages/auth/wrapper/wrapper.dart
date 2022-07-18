@@ -7,6 +7,7 @@ import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/auth/login/login_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/examples/home_example.dart';
 import 'package:pwa_sales2go_flutter/src/pages/examples/test_of_collections.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/navi_pages.dart';
 
 class Wrapper extends StatefulWidget {
   Wrapper({Key? key}) : super(key: key);
@@ -36,7 +37,7 @@ class _WrapperState extends State<Wrapper> {
       // print(sharedPreferences!.getStringList('indice'));
       // print(sharedPreferences!.getString('cargo'));
       // print('/////////////////////////////////////////////////');
-      return CollectionsExample();
+      return NaviPages();
     }
   }
 }

@@ -9,12 +9,12 @@ import 'package:pwa_sales2go_flutter/src/pages/auth/wrapper/wrapper.dart';
 import 'package:pwa_sales2go_flutter/src/pages/examples/home_example.dart';
 import 'package:pwa_sales2go_flutter/src/pages/examples/test_of_collections.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/catalogue/catalogue_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/info_tabs/cart/cart_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/info_tabs/cart/checkout_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/info_tabs/invoices/invoices_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/info_tabs/orders/orders_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/info_tabs/tabs.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/info_tabs/visits/visits_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/cart/cart_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/cart/checkout_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/invoices/invoices_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/orders/orders_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/diary_tabs.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/visits/visits_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/products/products_page.dart';
 import 'package:pwa_sales2go_flutter/src/services/auth.dart';
 import 'firebase_options.dart';
@@ -67,16 +67,18 @@ class SfaAgnostiko extends StatelessWidget {
           /// routes
           'navi': (BuildContext context) => NaviPages(),
           'dashboard': (BuildContext context) => DashboardPage(),
-          'cart': (BuildContext context) => CartPage(),
+          'cart': (BuildContext context) => DiaryPage(),
           'checkout': (BuildContext context) => CheckoutPage(),
           'notifications': (BuildContext context) => NotificationsPage(),
           'catalogue': (BuildContext context) => CataloguePage(),
           'products': (BuildContext context) => ProductsPage(),
-          'clients': (BuildContext context) => ClientsPage(),
+          'diary_tabs': (BuildContext context) => DiaryTabs(),
           'orders': (BuildContext context) => OrdersPage(),
           'invoices': (BuildContext context) => InvoicesPage(),
           'visits': (BuildContext context) => VisitsPage(),
-          'info_tabs': (BuildContext context) => CartTabs(),
+          'clients': (BuildContext context) => ClientsPage(),
+          // Profile
+          // 'profile': (BuildContext context) => ProfilePage(),
         },
       ),
     );

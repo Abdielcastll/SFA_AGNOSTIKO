@@ -1,11 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:pwa_sales2go_flutter/src/pages/examples/profile_example.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/clients/clients_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/info_tabs/tabs.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/diary_tabs.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/catalogue/catalogue_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/dashboard/dashboard_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/products/products_page.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_home.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/bottom_decoratior.dart/bottom_decoration.dart';
@@ -21,19 +21,15 @@ class _NaviPagesState extends State<NaviPages> {
   int index = 0;
   final screens = [
     DashboardPage(),
-    ClientsPage(),
     CataloguePage(),
-    ProductsPage(),
-    CartTabs(),
+    DiaryTabs(),
+    ClientsPage(),
+    ProfilePage(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarHome(
-        backgroundColor: myTheme.colorScheme.secondary,
-        title: 'SFA Agnostiko',
-      ),
       body: screens[index],
       bottomNavigationBar: Stack(
         // mainAxisAlignment: MainAxisAlignment.end,
@@ -61,6 +57,8 @@ class _NaviPagesState extends State<NaviPages> {
               },
               // ignore: prefer_const_literals_to_create_immutables
               destinations: [
+                ///////////////////////////////////// 1 ///////////////////////////////
+
                 NavigationDestination(
                   icon: Icon(Icons.dashboard_outlined,
                       color: myTheme.colorScheme.tertiary),
@@ -70,49 +68,57 @@ class _NaviPagesState extends State<NaviPages> {
                   ),
                   label: 'Inicio',
                 ),
+                ///////////////////////////////////// 2 ///////////////////////////////
+
                 NavigationDestination(
                   icon: Icon(
-                    Icons.storefront_outlined,
+                    Icons.sell_outlined,
                     color: myTheme.colorScheme.tertiary,
                   ),
                   selectedIcon: Icon(
-                    Icons.storefront_rounded,
-                    color: Colors.white,
-                  ),
-                  label: 'Clientes',
-                ),
-                NavigationDestination(
-                  icon: Icon(
-                    Icons.shopping_bag_outlined,
-                    color: myTheme.colorScheme.tertiary,
-                  ),
-                  selectedIcon: Icon(
-                    Icons.shopping_bag_rounded,
+                    Icons.sell_rounded,
                     color: Colors.white,
                   ),
                   label: 'Catalogo',
                 ),
+                ///////////////////////////////////// 3 ///////////////////////////////
+
                 NavigationDestination(
                   icon: Icon(
-                    Icons.category_outlined,
+                    Icons.receipt_outlined,
                     color: myTheme.colorScheme.tertiary,
                   ),
                   selectedIcon: Icon(
-                    Icons.category_rounded,
+                    Icons.receipt_rounded,
                     color: Colors.white,
                   ),
-                  label: 'Productos',
+                  label: 'Agenda',
                 ),
+                ///////////////////////////////////// 4 ///////////////////////////////
+
                 NavigationDestination(
                   icon: Icon(
-                    Icons.shopping_cart_outlined,
+                    Icons.store_outlined,
                     color: myTheme.colorScheme.tertiary,
                   ),
                   selectedIcon: Icon(
-                    Icons.shopping_cart_rounded,
+                    Icons.store_rounded,
                     color: Colors.white,
                   ),
-                  label: 'Negocio',
+                  label: 'Clientes',
+                ),
+                ///////////////////////////////////// 5 ///////////////////////////////
+
+                NavigationDestination(
+                  icon: Icon(
+                    Icons.person_outline_rounded,
+                    color: myTheme.colorScheme.tertiary,
+                  ),
+                  selectedIcon: Icon(
+                    Icons.person_rounded,
+                    color: Colors.white,
+                  ),
+                  label: 'Perfil',
                 ),
               ],
             ),
