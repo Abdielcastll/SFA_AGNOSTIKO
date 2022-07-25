@@ -1,6 +1,10 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_home.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/bottom_decoratior.dart/bottom_decoration.dart';
+import 'package:pwa_sales2go_flutter/src/pages/examples/example_orders_list.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/orders/widgets/filter_orders..dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/orders/widgets/orders_completed.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/orders/widgets/orders_on_process.dart';
 
 class OrdersPage extends StatefulWidget {
   const OrdersPage({Key? key}) : super(key: key);
@@ -12,8 +16,32 @@ class OrdersPage extends StatefulWidget {
 class _OrdersPageState extends State<OrdersPage> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('OrdersPage'),
+    final listExample = ordersList;
+    List onProcess = [];
+    List completed = [];
+    for (var i = 0; i < listExample.length; i++) {
+      if (listExample[i]['completed'] == 'true') {
+        completed.add(listExample[i]);
+      } else if (listExample[i]['completed'] == 'false') {
+        onProcess.add(listExample[i]);
+      }
+    }
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.grey[200],
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              FilterOrders(),
+              SizedBox(height: 10),
+              OrdersOnProcess(onProcessList: onProcess),
+              CompletedOrders(completedList: completed),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

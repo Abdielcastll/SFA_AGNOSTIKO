@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/pages/examples/example_list_of_visits.dart';
+import 'package:pwa_sales2go_flutter/src/pages/examples/example_visit_list.dart';
 
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/visits/widgets/filter_visits.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/visits/widgets/visits_completed.dart';

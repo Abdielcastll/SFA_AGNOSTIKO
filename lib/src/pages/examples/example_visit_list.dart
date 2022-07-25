@@ -7,7 +7,7 @@ final List<Map<String, dynamic>> visitsList = [
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi interdum libero sit amet odio semper molestie. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.',
     'date': '19/09/1998',
     'hour': '0:00 AM/PM',
-    'status': 'On process'
+    'status': 'On process',
   },
   {
     'name': 'Cliente 2',

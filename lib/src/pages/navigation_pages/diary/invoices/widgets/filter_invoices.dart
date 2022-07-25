@@ -1,19 +1,21 @@
+import 'package:flutter/material.dart';
+
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
-class FilterSection extends StatefulWidget {
-  const FilterSection({
+class FilterInvoices extends StatefulWidget {
+  const FilterInvoices({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<FilterSection> createState() => FilterSectionState();
+  State<FilterInvoices> createState() => FilterInvoicesState();
 }
 
-class FilterSectionState extends State<FilterSection> {
+class FilterInvoicesState extends State<FilterInvoices> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -25,8 +27,8 @@ class FilterSectionState extends State<FilterSection> {
         children: [
           GestureDetector(
             onTap: () {
-              print('redireccion a search delegate de visitas');
-              // Redireccionar a search delegate de visitas
+              print('redireccion a search delegate de facturas');
+              // Redireccionar a search delegate de facturas
             },
             child: Padding(
               padding: EdgeInsets.only(left: 8),
@@ -51,12 +53,12 @@ class FilterSectionState extends State<FilterSection> {
                       ),
                       SizedBox(width: 20),
                       Text(
-                        'Busqueda de visitas...',
+                        'Busqueda de facturas...',
                         style: TextStyle(
                           color: Colors.grey.shade400,
                         ),
                       ),
-                      SizedBox(width: 84),
+                      SizedBox(width: 76),
                       Icon(
                         Fontisto.arrow_right,
                         color: Colors.grey.shade400,

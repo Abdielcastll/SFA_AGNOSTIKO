@@ -1,10 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/visits/widgets/visit_card.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/invoices/widgets/invoice_card.dart';
 
-class VisitsOnProcess extends StatelessWidget {
-  const VisitsOnProcess({
+class InvoicesOnProcess extends StatefulWidget {
+  InvoicesOnProcess({
     Key? key,
     required this.onProcessList,
   }) : super(key: key);
@@ -12,8 +12,13 @@ class VisitsOnProcess extends StatelessWidget {
   final List onProcessList;
 
   @override
+  State<InvoicesOnProcess> createState() => _InvoicesOnProcessState();
+}
+
+class _InvoicesOnProcessState extends State<InvoicesOnProcess> {
+  @override
   Widget build(BuildContext context) {
-    print('cantidad en proceso: ${onProcessList.length}');
+    print('cantidad en proceso: ${widget.onProcessList.length}');
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -43,16 +48,17 @@ class VisitsOnProcess extends StatelessWidget {
               child: Scrollbar(
                 child: ListView.builder(
                   // physics: BouncingScrollPhysics(),
-                  itemCount: onProcessList.length,
+                  itemCount: widget.onProcessList.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final client = onProcessList[index];
-                    // print(client);
-                    return VisitCard(
-                      name: client['name'],
-                      adress: client['address'],
-                      hour: client['hour'],
-                      date: client['date'],
-                      status: client['status'],
+                    final invoice = widget.onProcessList[index];
+                    // print(invoice);
+                    return InvoiceCard(
+                      name: invoice['nombre'] ?? 'No name',
+                      orderId: invoice['orderID'] ?? 'No id',
+                      date: invoice['date'] ?? 'No date',
+                      total: invoice['total'] ?? 'no total',
+                      completed: invoice['pagada'] ?? false,
+                      salesman: invoice['salesman'] ?? 'no salesman',
                     );
                   },
                 ),
