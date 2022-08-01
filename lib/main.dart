@@ -6,8 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/auth/wrapper/splashscreen.dart';
 import 'package:pwa_sales2go_flutter/src/pages/auth/wrapper/wrapper.dart';
-import 'package:pwa_sales2go_flutter/src/pages/examples/home_example.dart';
-import 'package:pwa_sales2go_flutter/src/pages/examples/test_of_collections.dart';
+import 'package:pwa_sales2go_flutter/examples/home_example.dart';
+import 'package:pwa_sales2go_flutter/examples/test_of_collections.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/catalogue/catalogue_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/cart/cart_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/cart/checkout_page.dart';
@@ -53,19 +53,10 @@ class SfaAgnostiko extends StatelessWidget {
         theme: myTheme,
         initialRoute: 'splashscreen',
         routes: {
-          // wrapper to verificate auth status
           'wrapper': (BuildContext context) => Wrapper(),
           'splashscreen': (BuildContext context) => SplashScreenWidget(),
-          // if User is not logged in already
           'login': (BuildContext context) => LoginPage(),
-          // if User is logged in already
-          /////////////////////////////////////////////////////////
-          // Test sites
-          'home_ex': (BuildContext context) => HomeExample(),
-          'products_ex': (BuildContext context) => CollectionsExample(),
-          /////////////////////////////////////////////////////////
-          /// routes
-          'navi': (BuildContext context) => NaviPages(),
+          'navi': (BuildContext context) => NavigationPages(),
           'dashboard': (BuildContext context) => DashboardPage(),
           'cart': (BuildContext context) => DiaryPage(),
           'checkout': (BuildContext context) => CheckoutPage(),
@@ -77,8 +68,10 @@ class SfaAgnostiko extends StatelessWidget {
           'invoices': (BuildContext context) => InvoicesPage(),
           'visits': (BuildContext context) => VisitsPage(),
           'clients': (BuildContext context) => ClientsPage(),
-          // Profile
           // 'profile': (BuildContext context) => ProfilePage(),
+          // Test sites
+          'home_ex': (BuildContext context) => HomeExample(),
+          'products_ex': (BuildContext context) => CollectionsExample(),
         },
       ),
     );

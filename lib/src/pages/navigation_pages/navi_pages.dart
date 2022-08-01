@@ -1,23 +1,22 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/pages/examples/profile_example.dart';
+import 'package:pwa_sales2go_flutter/examples/profile_example.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/clients/clients_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/diary_tabs.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/catalogue/catalogue_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/dashboard/dashboard_page.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_home.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/bottom_decoratior.dart/bottom_decoration.dart';
 
-class NaviPages extends StatefulWidget {
-  const NaviPages({Key? key}) : super(key: key);
+class NavigationPages extends StatefulWidget {
+  const NavigationPages({Key? key}) : super(key: key);
 
   @override
-  State<NaviPages> createState() => _NaviPagesState();
+  State<NavigationPages> createState() => _NavigationPagesState();
 }
 
-class _NaviPagesState extends State<NaviPages> {
+class _NavigationPagesState extends State<NavigationPages> {
   int index = 0;
   final screens = [
     DashboardPage(),
@@ -32,7 +31,6 @@ class _NaviPagesState extends State<NaviPages> {
     return Scaffold(
       body: screens[index],
       bottomNavigationBar: Stack(
-        // mainAxisAlignment: MainAxisAlignment.end,
         children: [
           NavigationBarTheme(
             data: NavigationBarThemeData(
@@ -42,6 +40,7 @@ class _NaviPagesState extends State<NaviPages> {
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
                   color: Colors.white,
+                  fontFamily: 'Poppins-regular',
                 ),
               ),
             ),

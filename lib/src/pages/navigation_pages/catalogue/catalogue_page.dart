@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/catalogue/widgets/category_gridview.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/catalogue/widgets/promotion_swiper.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/catalogue/components/category_gridview.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/catalogue/components/promotion_swiper.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_catalogue.dart';
 
@@ -37,6 +37,7 @@ class _CataloguePageState extends State<CataloguePage> {
                   fontWeight: FontWeight.bold,
                   color: myTheme.colorScheme.secondary,
                   fontSize: 18,
+                  fontFamily: 'Poppins-regular',
                 ),
               ),
             ),

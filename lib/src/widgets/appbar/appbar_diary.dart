@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:pwa_sales2go_flutter/src/pages/place_order/place_oder_page.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
@@ -44,6 +45,12 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
               onPressed: () {
                 print('New order button pressed');
                 // redireccion a nueva orden
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => PlaceOrderPage(),
+                  ),
+                );
               },
             ),
           ],

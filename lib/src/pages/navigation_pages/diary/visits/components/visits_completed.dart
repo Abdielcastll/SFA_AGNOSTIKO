@@ -1,10 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/invoices/widgets/invoice_card.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/visits/components/visit_card.dart';
 
-class InvoicesList extends StatelessWidget {
-  const InvoicesList({Key? key, required this.completedList}) : super(key: key);
+class VisitsList extends StatelessWidget {
+  const VisitsList({
+    Key? key,
+    required this.completedList,
+  }) : super(key: key);
 
   final List completedList;
 
@@ -39,15 +42,14 @@ class InvoicesList extends StatelessWidget {
             physics: BouncingScrollPhysics(),
             itemCount: completedList.length,
             itemBuilder: (BuildContext context, int index) {
-              final invoice = completedList[index];
+              final client = completedList[index];
               // print(client);
-              return InvoiceCard(
-                name: invoice['nombre'] ?? 'No name',
-                orderId: invoice['orderID'] ?? 'No id',
-                date: invoice['date'] ?? 'No date',
-                total: invoice['total'] ?? 'no total',
-                completed: invoice['pagada'] ?? false,
-                salesman: invoice['salesman'] ?? 'no salesman',
+              return VisitCard(
+                name: client['name'],
+                adress: client['address'],
+                hour: client['hour'],
+                date: client['date'],
+                status: client['status'],
               );
             },
           ),

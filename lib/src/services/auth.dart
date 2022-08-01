@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
+import 'package:flutter/material.dart';
+import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -24,18 +26,20 @@ class AuthService {
 
   Future signInWithEmailAndPassword(String email, String password) async {
     try {
-      // print('Sign in with email and password pressed');
       UserCredential result = await _auth.signInWithEmailAndPassword(
         email: email.trim().toLowerCase(),
         password: password.trim(),
       );
       User? user = result.user;
-      // return _userFromFirebaseUser(user);
       if (user != null) {
         checkIfUserRecordExist(user);
       }
     } catch (e) {
-      // print(e.toString());
+      Fluttertoast.showToast(
+        msg: 'Los datos proporcionados son invalidos',
+        backgroundColor: myTheme.colorScheme.secondary,
+        textColor: Colors.white,
+      );
       return null;
     }
   }
@@ -84,13 +88,25 @@ class AuthService {
 
             return _userFromFirebaseUser(user);
           } else {
-            Fluttertoast.showToast(msg: 'Usuario no activo o bloqueado');
+            Fluttertoast.showToast(
+              msg: 'Usuario no activo o bloqueado',
+              backgroundColor: myTheme.colorScheme.secondary,
+              textColor: Colors.white,
+            );
           }
         } catch (e) {
-          Fluttertoast.showToast(msg: 'Error en la petición');
+          Fluttertoast.showToast(
+            msg: 'Error en la petición',
+            backgroundColor: myTheme.colorScheme.secondary,
+            textColor: Colors.white,
+          );
         }
       } else {
-        Fluttertoast.showToast(msg: 'Este usuario no existe');
+        Fluttertoast.showToast(
+          msg: 'Este usuario no existe',
+          backgroundColor: myTheme.colorScheme.secondary,
+          textColor: Colors.white,
+        );
       }
     });
   }

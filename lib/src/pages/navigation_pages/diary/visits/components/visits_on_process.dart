@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/visits/widgets/visit_card.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/visits/components/visit_card.dart';
 
 class VisitsOnProcess extends StatelessWidget {
   const VisitsOnProcess({

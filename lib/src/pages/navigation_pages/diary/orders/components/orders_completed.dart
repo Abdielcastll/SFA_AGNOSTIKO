@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/orders/widgets/order_card.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/orders/components/order_card.dart';
 
 class CompletedOrders extends StatelessWidget {
   const CompletedOrders({

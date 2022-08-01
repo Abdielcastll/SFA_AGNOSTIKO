@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_constructors, sort_child_properties_last
 
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/clients/clients_details/widgets/client_header.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/clients/clients_details/widgets/client_info.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/clients/clients_details/components/client_header.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/clients/clients_details/components/client_info.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class ClientDetails extends StatefulWidget {

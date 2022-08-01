@@ -2,8 +2,8 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/products/product_details/widgets/details_card.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/products/product_details/widgets/product_images.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/products/product_details/components/details_card.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/products/product_details/components/product_images.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class ProductDetails extends StatefulWidget {

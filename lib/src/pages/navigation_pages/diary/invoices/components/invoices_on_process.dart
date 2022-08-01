@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/invoices/widgets/invoice_card.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/invoices/components/invoice_card.dart';
 
 class InvoicesOnProcess extends StatefulWidget {
   InvoicesOnProcess({

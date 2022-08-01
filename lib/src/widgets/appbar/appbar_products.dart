@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/search/search_delegate.dart';
+import 'package:pwa_sales2go_flutter/src/pages/place_order/place_oder_page.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class AppBarProducts extends StatelessWidget implements PreferredSizeWidget {
@@ -27,6 +27,7 @@ class AppBarProducts extends StatelessWidget implements PreferredSizeWidget {
           style: const TextStyle(
             fontSize: 21,
             fontWeight: FontWeight.w300,
+            fontFamily: 'Poppins-regular',
           ),
         ),
       ),
@@ -44,6 +45,12 @@ class AppBarProducts extends StatelessWidget implements PreferredSizeWidget {
               onPressed: () {
                 print('New order button pressed');
                 // redireccion a nueva orden
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => PlaceOrderPage(),
+                  ),
+                );
               },
             ),
           ],

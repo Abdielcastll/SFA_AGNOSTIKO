@@ -2,7 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/clients/widgets/client_card.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/clients/components/client_card.dart';
 
 class ClientsPage extends StatelessWidget {
   const ClientsPage({Key? key}) : super(key: key);

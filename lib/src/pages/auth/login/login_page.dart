@@ -61,6 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                 style: TextStyle(
                   fontSize: 14.0,
                   color: Colors.grey,
+                  fontFamily: 'Poppins-regular',
                 ),
               ),
             ),
@@ -78,27 +79,29 @@ class _LoginPageState extends State<LoginPage> {
                       controller: emailController,
                       cursorColor: myTheme.colorScheme.secondary,
                       textInputAction: TextInputAction.next,
+                      style: TextStyle(fontFamily: 'Poppins-regular'),
                       decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.only(
-                              left: 20.0, top: 10.0, right: 10.0),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25.0),
-                            borderSide: const BorderSide(
-                              color: Color(0xFF4f42ed),
-                            ),
+                        contentPadding: const EdgeInsets.only(
+                            left: 20.0, top: 10.0, right: 10.0),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          borderSide: const BorderSide(
+                            color: Color(0xFF4f42ed),
                           ),
-                          enabledBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Color.fromARGB(255, 191, 191, 191)),
-                            borderRadius: BorderRadius.all(Radius.circular(50)),
-                          ),
-                          focusColor: Theme.of(context).primaryColor,
-                          labelText: 'Email',
-                          suffixIcon: Icon(
-                            Icons.email,
-                            size: 20,
-                            color: myTheme.colorScheme.secondary,
-                          )),
+                        ),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Color.fromARGB(255, 191, 191, 191)),
+                          borderRadius: BorderRadius.all(Radius.circular(50)),
+                        ),
+                        focusColor: Theme.of(context).primaryColor,
+                        labelText: 'Email',
+                        suffixIcon: Icon(
+                          Icons.email,
+                          size: 20,
+                          color: myTheme.colorScheme.secondary,
+                        ),
+                      ),
                       validator: (email) =>
                           email != null && !EmailValidator.validate(email)
                               ? 'Email inválido'
@@ -113,31 +116,33 @@ class _LoginPageState extends State<LoginPage> {
                       maxLength: 100,
                       controller: passwordController,
                       cursorColor: myTheme.colorScheme.secondary,
+                      style: TextStyle(fontFamily: 'Poppins-regular'),
                       textInputAction: TextInputAction.next,
                       decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.only(
-                              left: 20.0, top: 10.0, right: 10.0),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25.0),
-                            borderSide: const BorderSide(
-                              color: Color(0xFF4f42ed),
-                            ),
+                        contentPadding: const EdgeInsets.only(
+                            left: 20.0, top: 10.0, right: 10.0),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          borderSide: const BorderSide(
+                            color: Color(0xFF4f42ed),
                           ),
-                          enabledBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Color.fromARGB(255, 191, 191, 191)),
-                            borderRadius: BorderRadius.all(Radius.circular(50)),
-                          ),
-                          focusColor: Theme.of(context).primaryColor,
-                          labelText: 'Contraseña',
-                          suffixIcon: Icon(
-                            Icons.lock,
-                            size: 20,
-                            color: myTheme.colorScheme.secondary,
-                          )),
+                        ),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Color.fromARGB(255, 231, 209, 209)),
+                          borderRadius: BorderRadius.all(Radius.circular(50)),
+                        ),
+                        focusColor: Theme.of(context).primaryColor,
+                        labelText: 'Contraseña',
+                        suffixIcon: Icon(
+                          Icons.lock,
+                          size: 20,
+                          color: myTheme.colorScheme.secondary,
+                        ),
+                      ),
                       validator: (password) =>
                           password != null && password.length < 6
-                              ? 'Contraseña inválido'
+                              ? 'Contraseña inválida'
                               : null,
                     ),
                   ),
@@ -154,14 +159,23 @@ class _LoginPageState extends State<LoginPage> {
                   // print('email: ${emailController.text}');
                   // print('password: ${passwordController.text}');
                   if (formKey.currentState!.validate()) {
-                    setState(() {
-                      loading = true;
-                    });
-                    await _auth.signInWithEmailAndPassword(
-                        emailController.text.toString(),
-                        passwordController.text.toString());
+                    setState(
+                      () {
+                        loading = true;
+                      },
+                    );
+                    final user = await _auth.signInWithEmailAndPassword(
+                      emailController.text.toString(),
+                      passwordController.text.toString(),
+                    );
+                    if (user == null) {
+                      setState(
+                        () {
+                          loading = false;
+                        },
+                      );
+                    }
                   }
-                  // // validateForm();
                 },
                 style: ButtonStyle(
                   alignment: Alignment.center,
@@ -181,6 +195,7 @@ class _LoginPageState extends State<LoginPage> {
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 15.0,
+                    fontFamily: 'Poppins-regular',
                   ),
                 ),
               ),

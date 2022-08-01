@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/catalogue/widgets/category_item.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/catalogue/components/category_item.dart';
 
 class CategoryGridView extends StatelessWidget {
   const CategoryGridView({

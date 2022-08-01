@@ -2,11 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/auth/login/login_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/examples/home_example.dart';
-import 'package:pwa_sales2go_flutter/src/pages/examples/test_of_collections.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/navi_pages.dart';
 
 class Wrapper extends StatefulWidget {
@@ -20,10 +17,7 @@ class _WrapperState extends State<Wrapper> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserModel?>(context);
-    // print('Verificando si hay usuario conectado');
     if (user == null) {
-      // print('instancia de user no detectada');
-      // print(user);
       return LoginPage();
     } else {
       // print('instancia de user detectada');
@@ -37,7 +31,7 @@ class _WrapperState extends State<Wrapper> {
       // print(sharedPreferences!.getStringList('indice'));
       // print(sharedPreferences!.getString('cargo'));
       // print('/////////////////////////////////////////////////');
-      return NaviPages();
+      return NavigationPages();
     }
   }
 }

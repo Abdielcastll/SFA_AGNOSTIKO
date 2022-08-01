@@ -1,10 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/pages/examples/example_orders_list.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/orders/widgets/filter_orders..dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/orders/widgets/orders_completed.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/orders/widgets/orders_on_process.dart';
+import 'package:pwa_sales2go_flutter/examples/example_orders_list.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/orders/components/filter_orders..dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/orders/components/orders_completed.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/orders/components/orders_on_process.dart';
 
 class OrdersPage extends StatefulWidget {
   const OrdersPage({Key? key}) : super(key: key);

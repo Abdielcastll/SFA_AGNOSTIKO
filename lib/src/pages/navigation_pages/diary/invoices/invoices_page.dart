@@ -1,10 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/pages/examples/example_invoices_list.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/invoices/widgets/filter_invoices.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/invoices/widgets/invoice_completed.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/invoices/widgets/invoices_on_process.dart';
+import 'package:pwa_sales2go_flutter/examples/example_invoices_list.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/invoices/components/filter_invoices.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/invoices/components/invoice_completed.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/invoices/components/invoices_on_process.dart';
 
 class InvoicesPage extends StatefulWidget {
   const InvoicesPage({Key? key}) : super(key: key);

@@ -53,6 +53,7 @@ class CategoryItem extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     color: myTheme.colorScheme.secondary,
                     fontSize: 16,
+                    fontFamily: 'Poppins-regular',
                   ),
                 ),
               ),
