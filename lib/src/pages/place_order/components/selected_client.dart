@@ -18,21 +18,21 @@ class SelectedClient extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        // Container(
+        //   padding: EdgeInsets.fromLTRB(16, 16, 0, 0),
+        //   alignment: Alignment.topLeft,
+        //   color: Colors.transparent,
+        //   child: Text(
+        //     'Cliente Seleccionado',
+        //     style: TextStyle(
+        //       color: myTheme.colorScheme.secondary,
+        //       fontSize: 15,
+        //       fontWeight: FontWeight.w500,
+        //     ),
+        //   ),
+        // ),
         Container(
-          padding: EdgeInsets.fromLTRB(16, 16, 0, 0),
-          alignment: Alignment.topLeft,
-          color: Colors.transparent,
-          child: Text(
-            'Cliente Seleccionado',
-            style: TextStyle(
-              color: myTheme.colorScheme.secondary,
-              fontSize: 15,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-        Container(
-          height: 100,
+          height: 105,
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
             color: Colors.transparent,
@@ -45,7 +45,8 @@ class SelectedClient extends StatelessWidget {
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: myTheme.colorScheme.secondary.withOpacity(0.4),
+                // color: myTheme.colorScheme.secondary.withOpacity(0.4),
+                color: Colors.white,
               ),
             ),
             child: Row(
@@ -66,17 +67,18 @@ class SelectedClient extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.fromLTRB(14, 4, 0, 0),
+                      margin: EdgeInsets.fromLTRB(14, 0, 0, 0),
+                      height: 30,
                       width: 180,
                       child: Text(
                         widget.clientAddress,
-                        maxLines: 1,
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontFamily: 'Poppins-regular',
                           fontSize: 11,
                           fontWeight: FontWeight.w500,
-                          color: Colors.grey.shade400,
+                          color: Colors.grey.shade500,
                         ),
                       ),
                     ),
@@ -117,6 +119,15 @@ class SelectedClient extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+          ),
+        ),
+        Center(
+          child: SizedBox(
+            width: 325,
+            child: Divider(
+              height: 10,
+              color: myTheme.colorScheme.secondary.withOpacity(0.2),
             ),
           ),
         ),

@@ -20,8 +20,8 @@ const allProductInShoppingCart = [
   Product(
       productName: 'ALMOHADA CLASS.KING NAC.NIEVE FIRME',
       productUnits: 10,
-      unitPrice: 23.10,
-      totalPrice: 23.10 * 10,
+      unitPrice: 23.13,
+      totalPrice: 23.13 * 10,
       urlImg:
           'https://colchonesvelez.com/wp-content/uploads/2017/01/almohadas-50x70-1.jpg'),
   Product(
@@ -30,7 +30,7 @@ const allProductInShoppingCart = [
     unitPrice: 20.50,
     totalPrice: 20.50 * 3,
     urlImg:
-        'https://colchonesvelez.com/wp-content/uploads/2017/01/almohadas-50x70-1.jpg',
+        'https://ae01.alicdn.com/kf/Hafdfe64334a94c59bc3277cd48aa5e5ao/Almohada-central-para-Hotel-almohada-de-cinco-estrellas-de-Color-puro-de-alta-calidad-para-el.jpg_Q90.jpg_.webp',
   ),
   Product(
     productName: 'BATA KIMONO WAFFLE T-G  BRIDE & GLEN SANDERS MANSION',
