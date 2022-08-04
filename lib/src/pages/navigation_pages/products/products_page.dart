@@ -56,7 +56,7 @@ class _ProductListState extends State<_ProductList> {
       color: Colors.grey[100],
       child: Center(
         child: StreamBuilder<QuerySnapshot>(
-          stream: _productsQuery.orderBy('codigo').snapshots(),
+          stream: _productsQuery.orderBy('codigo').limit(2).snapshots(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());

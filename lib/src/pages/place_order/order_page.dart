@@ -50,7 +50,7 @@ class OrderBody extends StatelessWidget {
     return Column(
       children: [
         SelectedClient(widget: widget),
-        SelectedProducts(),
+        SelectedProducts(widget: widget),
       ],
     );
   }
