@@ -21,14 +21,16 @@ class ShowProductPics extends StatelessWidget {
             width: 328.0,
             height: 328.0,
             color: Colors.transparent,
-            child: FadeInImage(
-              image: NetworkImage(
-                'https://i.pinimg.com/474x/39/0d/cc/390dccf32a0ee4023cf7c56979133283.jpg',
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: FadeInImage(
+                image: NetworkImage(
+                  'https://i.pinimg.com/474x/39/0d/cc/390dccf32a0ee4023cf7c56979133283.jpg',
 
-                // fit: BoxFit.cover,
+                  // fit: BoxFit.cover,
+                ),
+                placeholder: AssetImage('assets/images/loading.gif'),
               ),
-              placeholder: NetworkImage(
-                  'https://i.pinimg.com/736x/61/ea/94/61ea94b38db7f292dcf6dda1513b8253.jpg'),
             ),
           ),
         ),

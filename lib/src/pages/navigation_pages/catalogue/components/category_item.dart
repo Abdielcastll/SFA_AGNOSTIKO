@@ -11,13 +11,14 @@ class CategoryItem extends StatelessWidget {
   }) : super(key: key);
 
   final String name;
-  final String picture;
+  final picture;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         // Redireccionar a productos de esta categoria
+        Navigator.pushNamed(context, 'products');
       },
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
@@ -35,9 +36,9 @@ class CategoryItem extends StatelessWidget {
                   color: Colors.transparent,
                   height: 120.0,
                   width: 156.0,
-                  child: Image.network(
-                    picture,
-                    // fit: BoxFit.cover,
+                  child: FadeInImage(
+                    placeholder: AssetImage('assets/images/loading.gif'),
+                    image: NetworkImage(picture),
                   ),
                 ),
               ),

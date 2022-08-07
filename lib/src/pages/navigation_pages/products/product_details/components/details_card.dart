@@ -64,13 +64,16 @@ class DetailsCard extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: 30),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Container(
-                      width: 156,
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    width: 156,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
                       child: ElevatedButton.icon(
                         onPressed: () {
-                          //
+                          // Añadir Producto
                         },
                         style: ElevatedButton.styleFrom(
                           primary: myTheme.colorScheme.secondary,
@@ -81,7 +84,7 @@ class DetailsCard extends StatelessWidget {
                           color: Colors.white,
                         ),
                         label: Text(
-                          'Nuevo Pedido',
+                          'Añadir producto',
                           style: TextStyle(color: Colors.white),
                         ),
                       ),

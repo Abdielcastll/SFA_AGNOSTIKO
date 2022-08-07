@@ -38,9 +38,9 @@ class PromotionSwiper extends StatelessWidget {
                 onTap: () {
                   print('promotion tapped');
                 },
-                child: Image.network(
-                  promotions[index],
-                  fit: BoxFit.cover,
+                child: FadeInImage(
+                  placeholder: AssetImage('assets/images/loading.gif'),
+                  image: NetworkImage(promotions[index]),
                 ),
               ),
             );

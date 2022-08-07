@@ -68,7 +68,7 @@ class CategoryGridView extends StatelessWidget {
               children: categories.map((dynamic doc) {
                 return CategoryItem(
                   name: doc['name'],
-                  picture: doc['picture'].toString(),
+                  picture: doc['picture'],
                 );
               }).toList(),
             ),

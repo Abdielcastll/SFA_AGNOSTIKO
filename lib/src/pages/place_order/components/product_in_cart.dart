@@ -3,7 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/components/products.dart';
+import 'package:pwa_sales2go_flutter/src/pages/place_order/details.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
+import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class ProductsInCart extends StatefulWidget {
   const ProductsInCart({
@@ -15,12 +17,27 @@ class ProductsInCart extends StatefulWidget {
   final List<Product> products;
   final OrderPage widget;
 
-
   @override
   State<ProductsInCart> createState() => _ProductsInCartState();
 }
 
 class _ProductsInCartState extends State<ProductsInCart> {
+  // @override
+  // void showSettingsPanel() {
+  //   showModalBottomSheet(
+  //     isScrollControlled: true,
+  //     context: context,
+  //     builder: (context) {
+  //       return SafeArea(
+  //         child: Container(
+  //           padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+  //           child: SettingsForm(),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -87,7 +104,33 @@ class _ProductsInCartState extends State<ProductsInCart> {
                           IconButton(
                             onPressed: () {
                               // Bottom Menus for changing details
-                              print('Bottom Menu pressed');
+                              showModalBottomSheet(
+                                elevation: 0,
+                                backgroundColor: Colors.grey.shade200,
+                                barrierColor: myTheme.colorScheme.secondary
+                                    .withOpacity(0.5),
+                                isScrollControlled: true,
+                                context: context,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(20),
+                                  ),
+                                ),
+                                builder: (context) {
+                                  return SafeArea(
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 20, horizontal: 20),
+                                      child: SettingsForm(
+                                        productName: product.productName,
+                                        productPrice: product.unitPrice,
+                                        productUnits: product.productUnits,
+                                        productImg: product.urlImg,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
                             },
                             icon: Icon(
                               Feather.more_vertical,

@@ -97,7 +97,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                   child: ElevatedButton.icon(
                     onPressed: () {
                       // Agregar Productos
-                      print('Agregar productos');
+                      Navigator.pushNamed(context, 'catalogue');
                     },
                     icon: Icon(
                       MaterialCommunityIcons.tag_plus,
