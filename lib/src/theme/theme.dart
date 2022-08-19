@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
-// Color scheme for the project
-
 final myTheme = ThemeData.light().copyWith(
-  primaryColor: const Color(0xFFF8F8F8),
   colorScheme: const ColorScheme.light(
-    secondary: Color(0xFF2E3EAE),
-    tertiary: Color(0xFF2f278e),
+    primary: Color.fromRGBO(46, 62, 174, 1),
+    secondary: Color.fromARGB(255, 0, 13, 114),
+    tertiary: Color.fromRGBO(255, 255, 255, 1),
+    background: Color.fromRGBO(238, 238, 238, 1),
   ),
 );

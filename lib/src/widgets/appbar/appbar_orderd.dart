@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
-
 class AppBarOrder extends StatelessWidget implements PreferredSizeWidget {
   const AppBarOrder({
     Key? key,
@@ -15,6 +14,11 @@ class AppBarOrder extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          bottom: Radius.circular(20),
+        ),
+      ),
       title: Text(
         'Pedido',
         style: TextStyle(

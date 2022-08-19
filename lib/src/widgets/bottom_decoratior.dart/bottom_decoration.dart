@@ -11,13 +11,13 @@ class BottomDecoration extends StatelessWidget {
     return SizedBox(
       height: 20.0,
       child: BottomAppBar(
-        color: myTheme.colorScheme.secondary,
+        color: myTheme.colorScheme.primary,
         child: Center(
           child: Container(
             padding: const EdgeInsets.only(top: 3.0),
             width: 80.0,
-            child: const Divider(
-              color: Colors.white,
+            child: Divider(
+              color: myTheme.colorScheme.tertiary,
               thickness: 2,
             ),
           ),

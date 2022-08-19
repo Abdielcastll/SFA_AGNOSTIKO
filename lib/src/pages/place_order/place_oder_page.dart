@@ -56,6 +56,7 @@ class _PlacerOrderBodyState extends State<PlacerOrderBody> {
 
   @override
   Widget build(BuildContext context) {
+    print(clients);
     return Column(
       children: [
         Container(

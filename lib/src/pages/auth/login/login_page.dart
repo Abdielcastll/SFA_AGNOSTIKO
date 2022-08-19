@@ -112,6 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 35),
                     child: TextFormField(
+                      obscureText: true,
                       maxLines: 1,
                       maxLength: 100,
                       controller: passwordController,

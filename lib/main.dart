@@ -6,27 +6,17 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/auth/wrapper/splashscreen.dart';
 import 'package:pwa_sales2go_flutter/src/pages/auth/wrapper/wrapper.dart';
-import 'package:pwa_sales2go_flutter/examples/home_example.dart';
-import 'package:pwa_sales2go_flutter/examples/test_of_collections.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/catalogue/catalogue_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/cart/cart_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/cart/checkout_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/invoices/invoices_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/orders/orders_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/diary_tabs.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/diary/visits/visits_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/products/products_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/catalogue/catalogue_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/navigation/navigation.dart';
+import 'package:pwa_sales2go_flutter/src/pages/notifications/notifications_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/place_order/place_oder_page.dart';
 import 'package:pwa_sales2go_flutter/src/services/auth.dart';
 import 'firebase_options.dart';
 import 'package:pwa_sales2go_flutter/src/pages/auth/login/login_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/clients/clients_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/dashboard/dashboard_page.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
-import 'package:pwa_sales2go_flutter/src/pages/navigation_pages/navi_pages.dart';
-import 'package:pwa_sales2go_flutter/src/pages/notifications/notifications_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,7 +26,7 @@ Future<void> main() async {
   // print('Firebase inicializado');
   sharedPreferences = await SharedPreferences.getInstance();
   runApp(const SfaAgnostiko());
-  // print('App inicializado');
+  print('App inicializado');
 }
 
 class SfaAgnostiko extends StatelessWidget {
@@ -51,27 +41,14 @@ class SfaAgnostiko extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'SFA Agnostiko',
         theme: myTheme,
-        initialRoute: 'splashscreen',
+        initialRoute: 'wrapper',
         routes: {
           'wrapper': (BuildContext context) => Wrapper(),
-          'splashscreen': (BuildContext context) => SplashScreenWidget(),
           'login': (BuildContext context) => LoginPage(),
-          'navi': (BuildContext context) => NavigationPages(),
-          'dashboard': (BuildContext context) => DashboardPage(),
-          'cart': (BuildContext context) => DiaryPage(),
-          'checkout': (BuildContext context) => CheckoutPage(),
+          'navigation': (BuildContext context) => NavigationPages(),
           'notifications': (BuildContext context) => NotificationsPage(),
+          'place_order': (BuildContext context) => PlaceOrderPage(),
           'catalogue': (BuildContext context) => CataloguePage(),
-          'products': (BuildContext context) => ProductsPage(),
-          'diary_tabs': (BuildContext context) => DiaryTabs(),
-          'orders': (BuildContext context) => OrdersPage(),
-          'invoices': (BuildContext context) => InvoicesPage(),
-          'visits': (BuildContext context) => VisitsPage(),
-          'clients': (BuildContext context) => ClientsPage(),
-          // 'profile': (BuildContext context) => ProfilePage(),
-          // Test sites
-          'home_ex': (BuildContext context) => HomeExample(),
-          'products_ex': (BuildContext context) => CollectionsExample(),
         },
       ),
     );
