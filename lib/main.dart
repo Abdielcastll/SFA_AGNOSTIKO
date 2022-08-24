@@ -7,9 +7,11 @@ import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/auth/wrapper/splashscreen.dart';
 import 'package:pwa_sales2go_flutter/src/pages/auth/wrapper/wrapper.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/catalogue_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/clients/clients_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation/navigation.dart';
 import 'package:pwa_sales2go_flutter/src/pages/notifications/notifications_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/place_oder_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
 import 'package:pwa_sales2go_flutter/src/services/auth.dart';
 import 'firebase_options.dart';
 import 'package:pwa_sales2go_flutter/src/pages/auth/login/login_page.dart';
@@ -49,6 +51,8 @@ class SfaAgnostiko extends StatelessWidget {
           'notifications': (BuildContext context) => NotificationsPage(),
           'place_order': (BuildContext context) => PlaceOrderPage(),
           'catalogue': (BuildContext context) => CataloguePage(),
+          'products': (BuildContext context) => ProductsPage(),
+          'clients': (BuildContext context) => ClientsPage(),
         },
       ),
     );

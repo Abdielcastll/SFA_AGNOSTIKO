@@ -3,24 +3,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
-class NewProductsWidget extends StatefulWidget {
-  const NewProductsWidget({Key? key, this.listOfProducts}) : super(key: key);
+class MostSelledProducts extends StatefulWidget {
+  const MostSelledProducts({Key? key, required this.listOfProducts})
+      : super(key: key);
 
-  final listOfProducts;
+  final List listOfProducts;
 
   @override
-  State<NewProductsWidget> createState() => _NewProductsWidgetState();
+  State<MostSelledProducts> createState() => _MostSelledProductsState();
 }
 
-class _NewProductsWidgetState extends State<NewProductsWidget> {
+class _MostSelledProductsState extends State<MostSelledProducts> {
   @override
   Widget build(BuildContext context) {
-    print(widget.listOfProducts);
     return Container(
-      margin: EdgeInsets.fromLTRB(0, 10.0, 0, 0),
+      margin: EdgeInsets.fromLTRB(0, 10.0, 0, 15.0),
       child: Column(
         children: [
           Row(
@@ -28,14 +27,14 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
               Padding(
                 padding: const EdgeInsets.only(left: 10.0),
                 child: Icon(
-                  CupertinoIcons.sparkles,
+                  AntDesign.dotchart,
                   color: myTheme.colorScheme.primary,
-                  size: 25.0,
+                  size: 20.0,
                 ),
               ),
               SizedBox(width: 5.0),
               Text(
-                'Nuevos Productos',
+                'Más Vendidos',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: myTheme.colorScheme.secondary,

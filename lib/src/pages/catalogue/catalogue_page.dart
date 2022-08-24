@@ -1,8 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:pwa_sales2go_flutter/examples/catalogue_example.dart';
 import 'package:pwa_sales2go_flutter/examples/products_example.dart';
+import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/category_list.dart';
+import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/most_selled_products.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/new_products.dart';
+import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/product_list_button.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/promotions.dart';
 
@@ -35,6 +39,7 @@ class CatalogueBody extends StatefulWidget {
 
 class _CatalogueBodyState extends State<CatalogueBody> {
   List<ProductExample> productExampleList = allProducts;
+  List<CatalogueExample> catalogueExampleList = allCategories;
 
   @override
   Widget build(BuildContext context) {
@@ -56,10 +61,9 @@ class _CatalogueBodyState extends State<CatalogueBody> {
         children: [
           PromotionsWidget(productsWithPromotion: productsFilteredByPromotion),
           NewProductsWidget(listOfProducts: productExampleList),
-          // SizedBox(height: 10),
-          // PromotionSwiper(),
-          // SizedBox(height: 20),
-          // CategoryGridView(),
+          ListOfProductsButton(),
+          ListOfCategories(categories: catalogueExampleList),
+          MostSelledProducts(listOfProducts: productExampleList),
         ],
       ),
     );

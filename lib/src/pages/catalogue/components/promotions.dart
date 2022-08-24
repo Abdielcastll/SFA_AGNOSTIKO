@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:pwa_sales2go_flutter/src/pages/products/product_details/product_details.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class PromotionsWidget extends StatefulWidget {
@@ -32,8 +34,8 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
           Row(
             children: [
               Icon(
-                MdiIcons.starOutline,
-                color: myTheme.colorScheme.secondary,
+                MaterialIcons.star_outline,
+                color: myTheme.colorScheme.primary,
                 size: 25.0,
               ),
               SizedBox(width: 5.0),
@@ -49,59 +51,76 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
             ],
           ),
           SizedBox(
-            height: 160,
+            height: 165,
             width: double.infinity,
-            child: ListView.builder(
-              physics: BouncingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              itemCount: widget.productsWithPromotion.length,
-              itemBuilder: (BuildContext context, index) {
-                final productWithPromotion =
-                    widget.productsWithPromotion[index];
-                // print(productWithPromotion.name);
-                return GestureDetector(
-                  onTap: () {
-                    //TODO: Redireccionar a producto en promoción,
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                        height: 120,
-                        width: 300,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: Image.network(
-                            '${productWithPromotion.imageUrl}',
-                            fit: BoxFit.cover,
+            child: RawScrollbar(
+              thumbColor: myTheme.colorScheme.primary.withOpacity(0.3),
+              thickness: 4,
+              radius: Radius.circular(16),
+              child: ListView.builder(
+                physics: BouncingScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                itemCount: widget.productsWithPromotion.length,
+                itemBuilder: (BuildContext context, index) {
+                  final productWithPromotion =
+                      widget.productsWithPromotion[index];
+                  // print(productWithPromotion.name);
+                  return GestureDetector(
+                    onTap: () {
+                      // Redireccionar a producto en promoción,
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => ProductDetails(
+                            code: productWithPromotion.code,
+                            line: productWithPromotion.line,
+                            imageUrl: productWithPromotion.imageUrl,
+                            isProductNew: false,
+                            name: productWithPromotion.name,
                           ),
                         ),
-                      ),
-                      SizedBox(height: 10),
-                      Container(
-                        padding: EdgeInsets.only(left: 10),
-                        width: 300,
-                        height: 20,
-                        child: Text(
-                          productWithPromotion.name,
-                          maxLines: 1,
-                          textAlign: TextAlign.start,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontFamily: 'Poppins-regular',
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: myTheme.colorScheme.secondary,
+                      );
+                    },
+                    child: Column(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                          height: 120,
+                          width: 260,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: Image.network(
+                              '${productWithPromotion.imageUrl}',
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                );
-              },
+                        SizedBox(height: 10),
+                        Container(
+                          padding: EdgeInsets.only(left: 10),
+                          width: 260,
+                          height: 20,
+                          child: Text(
+                            productWithPromotion.name,
+                            maxLines: 1,
+                            textAlign: TextAlign.start,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontFamily: 'Poppins-regular',
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: myTheme.colorScheme.secondary,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         ],

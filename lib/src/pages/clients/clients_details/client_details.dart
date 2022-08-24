@@ -1,29 +1,45 @@
 // ignore_for_file: prefer_const_constructors, sort_child_properties_last
 
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/components/client_header.dart';
-import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/components/client_info.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/components/address_info.dart';
+import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/components/button_options.dart';
+import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/components/client_picture.dart';
+import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/components/contact_info.dart';
+import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/components/delivery_address.dart';
+import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/components/invoice_info.dart';
+import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/components/prices_dropdown_menu.dart';
+import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/components/zones_dropdown_menu.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/bottom_decoratior.dart/bottom_decoration.dart';
 
 class ClientDetails extends StatefulWidget {
-  const ClientDetails(
-      {Key? key,
-      required this.name,
-      required this.address,
-      required this.specialContributor,
-      required this.phone,
-      required this.email,
-      required this.clientId,
-      this.zone})
-      : super(key: key);
+  const ClientDetails({
+    Key? key,
+    required this.specialContribuyer,
+    required this.masterDiscount,
+    required this.fiscalAddress,
+    required this.email,
+    required this.listOfPrices,
+    required this.name,
+    required this.tlf1,
+    required this.tlf2,
+    required this.zone,
+    required this.nameId,
+    required this.typeId,
+  }) : super(key: key);
 
-  final String name;
-  final String address;
-  final bool specialContributor;
-  final String phone;
+  final bool specialContribuyer;
+  final int masterDiscount;
+  final String fiscalAddress;
   final String email;
-  final dynamic clientId;
-  final dynamic zone;
+  final String listOfPrices;
+  final String name;
+  final String tlf1;
+  final String tlf2;
+  final String zone;
+  final int nameId;
+  final String typeId;
 
   @override
   State<ClientDetails> createState() => _ClientDetailsState();
@@ -35,35 +51,77 @@ class _ClientDetailsState extends State<ClientDetails> {
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
-        backgroundColor: myTheme.colorScheme.secondary,
-        title: Text(
-          widget.name,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
+        toolbarHeight: 40,
+        elevation: 0,
+        backgroundColor: myTheme.colorScheme.primary,
       ),
-      body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: Container(
-          color: Colors.grey.shade200,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            // ignore: prefer_const_literals_to_create_immutables
-            children: [
-              ClientHeader(),
-              ClientInfo(
-                name: widget.name,
-                address: widget.address,
-                specialContributor: widget.specialContributor,
-                phone: widget.phone,
-                email: widget.email,
-                clientId: widget.clientId,
-                zone: widget.zone,
-              ),
-            ],
+      bottomNavigationBar: BottomDecoration(),
+      body: ClientDetailsBody(
+        specialContribuyer: widget.specialContribuyer,
+        masterDiscount: widget.masterDiscount,
+        fiscalAddress: widget.fiscalAddress,
+        email: widget.email,
+        listOfPrices: widget.listOfPrices,
+        name: widget.name,
+        tlf1: widget.tlf1,
+        tlf2: widget.tlf2,
+        typeId: widget.typeId,
+        nameId: widget.nameId,
+        zone: widget.zone,
+      ),
+    );
+  }
+}
+
+class ClientDetailsBody extends StatelessWidget {
+  const ClientDetailsBody({
+    Key? key,
+    required this.specialContribuyer,
+    required this.masterDiscount,
+    required this.fiscalAddress,
+    required this.email,
+    required this.listOfPrices,
+    required this.name,
+    required this.tlf1,
+    required this.tlf2,
+    required this.zone,
+    required this.nameId,
+    required this.typeId,
+  }) : super(key: key);
+  final bool specialContribuyer;
+  final int masterDiscount;
+  final String fiscalAddress;
+  final String email;
+  final String listOfPrices;
+  final String name;
+  final String tlf1;
+  final String tlf2;
+  final String zone;
+  final int nameId;
+  final String typeId;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          ClientPicture(name: name),
+          ButtonOptions(),
+          Container(
+            margin: EdgeInsets.fromLTRB(10, 15, 10, 0),
+            child: Column(
+              children: [
+                AddressInfo(fiscalAddress: fiscalAddress),
+                ContactInfo(tlf1: tlf1, email: email),
+                InvoiceInfo(tlf2: tlf2, typeId: typeId, nameId: nameId),
+                DeliveryAddress(fiscalAddress: fiscalAddress),
+                ZonesDropDownMenu(zone: zone),
+                PricesDropDownMenu(
+                    listOfPrices: listOfPrices, masterDiscount: masterDiscount),
+              ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
