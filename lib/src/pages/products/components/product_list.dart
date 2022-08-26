@@ -8,7 +8,10 @@ import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 class ProductList extends StatefulWidget {
   ProductList({
     Key? key,
+    this.listOfProducts,
   }) : super(key: key);
+
+  final listOfProducts;
 
   @override
   State<ProductList> createState() => _ProductListState();
@@ -16,8 +19,15 @@ class ProductList extends StatefulWidget {
 
 class _ProductListState extends State<ProductList> {
   final searchController = TextEditingController();
-  List<ProductExample> products = allProducts;
+  var products;
   final moneySymbol = '\$';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    products = widget.listOfProducts;
+  }
 
   void searchProduct(String query) {
     final suggestions = allProducts.where((element) {
@@ -124,9 +134,9 @@ class _ProductListState extends State<ProductList> {
           height: MediaQuery.of(context).size.height,
           child: ListView.builder(
             physics: BouncingScrollPhysics(),
-            itemCount: products.length,
+            itemCount: products!.length,
             itemBuilder: (BuildContext context, index) {
-              final product = products[index];
+              final product = products![index];
               return Container(
                 margin: EdgeInsets.only(top: 10.0),
                 height: 120,

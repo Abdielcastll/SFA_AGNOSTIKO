@@ -29,18 +29,33 @@ class _OrdersPageState extends State<OrdersPage> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.grey[200],
-        body: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              FilterOrders(),
-              SizedBox(height: 10),
-              OrdersOnProcess(onProcessList: onProcess),
-              CompletedOrders(completedList: completed),
-            ],
-          ),
-        ),
+        body: OrdersBody(onProcess: onProcess, completed: completed),
+      ),
+    );
+  }
+}
+
+class OrdersBody extends StatelessWidget {
+  const OrdersBody({
+    Key? key,
+    required this.onProcess,
+    required this.completed,
+  }) : super(key: key);
+
+  final List onProcess;
+  final List completed;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: 10),
+          OrdersOnProcess(onProcessList: onProcess),
+          CompletedOrders(completedList: completed),
+        ],
       ),
     );
   }

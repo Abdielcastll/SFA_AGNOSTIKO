@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:pwa_sales2go_flutter/examples/products_example.dart';
+import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class ListOfCategories extends StatefulWidget {
@@ -13,6 +15,8 @@ class ListOfCategories extends StatefulWidget {
 }
 
 class _ListOfCategoriesState extends State<ListOfCategories> {
+  List<ProductExample> productExampleList = allProducts;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -53,6 +57,17 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                 return GestureDetector(
                   onTap: () {
                     // Redireccionar a productos filtrados por catalogo,
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => ProductsPage(
+                          listOfProducts: allProducts
+                              .where((element) =>
+                                  element.categorie == categorie.categorie)
+                              .toList(),
+                        ),
+                      ),
+                    );
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(10.0, 5.0, 5.0, 0),

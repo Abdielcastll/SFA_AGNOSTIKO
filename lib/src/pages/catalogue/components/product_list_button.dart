@@ -3,10 +3,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:pwa_sales2go_flutter/examples/products_example.dart';
+import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class ListOfProductsButton extends StatefulWidget {
-  ListOfProductsButton({Key? key}) : super(key: key);
+  ListOfProductsButton({Key? key, required this.listOfProducts})
+      : super(key: key);
+
+  final List<ProductExample> listOfProducts;
 
   @override
   State<ListOfProductsButton> createState() => _ListOfProductsButtonState();
@@ -25,7 +30,11 @@ class _ListOfProductsButtonState extends State<ListOfProductsButton> {
         child: ElevatedButton.icon(
           onPressed: () {
             // Redireccionar a list full de productos
-            Navigator.pushNamed(context, 'products');
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        ProductsPage(listOfProducts: widget.listOfProducts)));
           },
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(Colors.white),

@@ -16,16 +16,27 @@ class DiaryTabs extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.grey.shade200,
         appBar: AppBarDiary(),
-        body: Container(
-          child: TabBarView(
-            // ignore: prefer_const_literals_to_create_immutables
-            children: [
-              VisitsPage(),
-              OrdersPage(),
-              InvoicesPage(),
-            ],
-          ),
-        ),
+        body: DiaryBody(),
+      ),
+    );
+  }
+}
+
+class DiaryBody extends StatelessWidget {
+  const DiaryBody({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: TabBarView(
+        // ignore: prefer_const_literals_to_create_immutables
+        children: [
+          VisitsPage(),
+          OrdersPage(),
+          InvoicesPage(),
+        ],
       ),
     );
   }

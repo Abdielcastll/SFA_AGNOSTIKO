@@ -12,7 +12,7 @@ class CatalogueExample {
 
 final allCategories = [
   CatalogueExample(
-    categorie: 'FUNDA',
+    categorie: 'SABANAS',
     imageUrl:
         'https://s3-alpha-sig.figma.com/img/e635/6704/763efb57dfc709e70cd86f44e10e0021?Expires=1662336000&Signature=Uc~W1GyR1E7tiXkyBUA8SKQ29or-72cygesktvWERYfkpSDbgTPfN9YMTRtsVRltL-rt8uhdZTWfHgUO5eItRPMJybLyV08KAK0zYE3fNGP1SayHh9i0CsgYAY693SEn09Xx54QZXidNzzeUyXNUE-~wJ9yoqkpCsyiSNJZaAGWXE5sfUSWq5O4J6umxY~5dOC12KIZ0Eu56VRAUP-JaurEg3R5NHB8EN4x5qdHdU1gNb0MVhRUdWjZ8A3Tgy0ZeX1a-pZv69HCZF7UA6HjrMwmMQaXkBHuAh1o4wpCJF97Qv5m7hmcU8pZwUjQW~~tSUiwYUkQWWAPT39uXxTFUEQ__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA',
   ),

@@ -1,10 +1,20 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:flutterfire_ui/firestore.dart';
 import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
+import 'package:pwa_sales2go_flutter/src/pages/profile/components/list_tile_options.dart';
+import 'package:pwa_sales2go_flutter/src/pages/profile/components/logout_button.dart';
+import 'package:pwa_sales2go_flutter/src/pages/profile/components/user_info.dart';
 import 'package:pwa_sales2go_flutter/src/services/auth.dart';
 import 'package:pwa_sales2go_flutter/src/services/database.dart';
+import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/powered_by_agnostiko/powered_by_agnostiko.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({Key? key}) : super(key: key);
@@ -14,111 +24,46 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final AuthService _auth = AuthService();
-
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<List<ProductModel>?>.value(
-      initialData: null,
-      value: DatabaseService().products,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Profile test'),
-          backgroundColor: Colors.brown.shade400,
-          elevation: 0.0,
-          actions: [
-            ElevatedButton.icon(
-              onPressed: () async {
-                // sign out
-                await _auth.signOut();
-              },
-              style: ElevatedButton.styleFrom(
-                primary: Colors.brown.shade400,
-                elevation: 0.0,
-                shadowColor: Colors.transparent,
-              ),
-              icon: Icon(Icons.person),
-              label: Text('Logout'),
-            ),
-          ],
-        ),
-        body: CollectionListExample(),
-      ),
+    return Scaffold(
+      appBar: AppBarNavigation(message: 'Perfil'),
+      backgroundColor: Colors.grey.shade100,
+      body: ProfileBody(),
     );
   }
 }
 
-class CollectionListExample extends StatefulWidget {
-  const CollectionListExample({
+class ProfileBody extends StatefulWidget {
+  const ProfileBody({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<CollectionListExample> createState() => _CollectionListExampleState();
+  State<ProfileBody> createState() => _ProfileBodyState();
 }
 
-class _CollectionListExampleState extends State<CollectionListExample> {
+class _ProfileBodyState extends State<ProfileBody> {
+  final String? userName = sharedPreferences!.getString('nombre');
+  final String? charge = sharedPreferences!.getString('cargo');
+  final String? uid = sharedPreferences!.getString('uid');
   @override
   Widget build(BuildContext context) {
-    final products = Provider.of<List<ProductModel>?>(context) ?? [];
-    final stock = Provider.of<List<StockModel>?>(context) ?? [];
-
-    // Check if there is data inside the streams
-    // for (var stock in stock) {
-    //   print(stock.stock);
-    // }
-
-    // for (var product in products) {
-    //   print(product.name);
-    //   print(product.id);
-    //   print(product.brand);
-
-    // }
-
-    return ListView.builder(
-      itemCount: products.length,
-      itemBuilder: (context, index) {
-        return CollectionTile(
-          product: products[index],
-        );
-      },
-    );
-  }
-}
-
-class CollectionTile extends StatefulWidget {
-  const CollectionTile({
-    Key? key,
-    this.product,
-  }) : super(key: key);
-
-  final ProductModel? product;
-
-  @override
-  State<CollectionTile> createState() => _CollectionTileState();
-}
-
-class _CollectionTileState extends State<CollectionTile> {
-  @override
-  Widget build(BuildContext context) {
-    // print('//////// datos que llegan para las tiles ////////');
-    // print(widget.product?.name);
-    // print(widget.product?.id);
-    // print(widget.product?.quality);
-    // print('//////////////////////////////////');
-    return Padding(
-      padding: EdgeInsets.only(top: 8.0),
-      child: Card(
-        margin: EdgeInsets.only(top: 8),
-        child: ListTile(
-          leading: CircleAvatar(
-            radius: 25,
-            backgroundColor: Colors.brown[300],
-          ),
-          title: Text(widget.product!.name),
-          subtitle: Text(
-              'ID ${widget.product!.id} and Quality ${widget.product!.quality}'),
-        ),
+    return SingleChildScrollView(
+      physics: BouncingScrollPhysics(),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          UserInfo(userName: userName, charge: charge),
+          SizedBox(height: 30),
+          ListTileOptions(charge: charge),
+          SizedBox(height: 15),
+          LogoutButton(),
+          SizedBox(height: 15),
+          PoweredByAgnostiko(),
+          SizedBox(height: 15),
+        ],
       ),
     );
   }

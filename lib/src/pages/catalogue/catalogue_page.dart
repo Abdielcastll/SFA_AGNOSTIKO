@@ -43,17 +43,10 @@ class _CatalogueBodyState extends State<CatalogueBody> {
 
   @override
   Widget build(BuildContext context) {
-    var productsFilteredByPromotion = productExampleList
+    List<ProductExample> productsFilteredByPromotion = productExampleList
         .where((element) => element.promotion == true)
         .toList();
 
-    //  print(productExampleList.sort((a, b) {
-    //     return a.modified
-    //         .toString()
-    //         .toLowerCase()
-    //         .compareTo(b.modified.toString().toLowerCase());
-    //   }),
-    //  );
     return SingleChildScrollView(
       physics: BouncingScrollPhysics(),
       child: Column(
@@ -61,7 +54,7 @@ class _CatalogueBodyState extends State<CatalogueBody> {
         children: [
           PromotionsWidget(productsWithPromotion: productsFilteredByPromotion),
           NewProductsWidget(listOfProducts: productExampleList),
-          ListOfProductsButton(),
+          ListOfProductsButton(listOfProducts: productExampleList),
           ListOfCategories(categories: catalogueExampleList),
           MostSelledProducts(listOfProducts: productExampleList),
         ],

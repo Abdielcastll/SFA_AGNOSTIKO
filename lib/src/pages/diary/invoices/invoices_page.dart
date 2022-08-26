@@ -30,19 +30,34 @@ class _InvoicesPageState extends State<InvoicesPage> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.grey[200],
-        body: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            // ignore: prefer_const_literals_to_create_immutables
-            children: [
-              FilterInvoices(),
-              SizedBox(height: 10),
-              InvoicesOnProcess(onProcessList: onProcess),
-              InvoicesList(completedList: completed),
-            ],
-          ),
-        ),
+        body: InvoicesBody(onProcess: onProcess, completed: completed),
+      ),
+    );
+  }
+}
+
+class InvoicesBody extends StatelessWidget {
+  const InvoicesBody({
+    Key? key,
+    required this.onProcess,
+    required this.completed,
+  }) : super(key: key);
+
+  final List onProcess;
+  final List completed;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        // ignore: prefer_const_literals_to_create_immutables
+        children: [
+          SizedBox(height: 10),
+          InvoicesOnProcess(onProcessList: onProcess),
+          InvoicesList(completedList: completed),
+        ],
       ),
     );
   }

@@ -28,22 +28,36 @@ class _VisitsPageState extends State<VisitsPage> {
       }
       // print(cancelled);
     }
-    print('pantalla visitas activa');
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.grey[200],
-        body: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              FilterSection(),
-              SizedBox(height: 10),
-              VisitsOnProcess(onProcessList: onProcess),
-              VisitsList(completedList: completed),
-            ],
-          ),
-        ),
+        body: VisitsBody(onProcess: onProcess, completed: completed),
+      ),
+    );
+  }
+}
+
+class VisitsBody extends StatelessWidget {
+  const VisitsBody({
+    Key? key,
+    required this.onProcess,
+    required this.completed,
+  }) : super(key: key);
+
+  final List onProcess;
+  final List completed;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: 10),
+          VisitsOnProcess(onProcessList: onProcess),
+          VisitsList(completedList: completed),
+        ],
       ),
     );
   }
