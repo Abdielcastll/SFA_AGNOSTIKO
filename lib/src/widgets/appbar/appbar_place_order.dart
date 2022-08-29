@@ -25,7 +25,7 @@ class AppBarPlaceOrder extends StatelessWidget implements PreferredSizeWidget {
           color: Colors.white,
         ),
       ),
-      backgroundColor: myTheme.colorScheme.secondary,
+      backgroundColor: myTheme.colorScheme.primary,
       elevation: 0,
     );
   }

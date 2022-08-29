@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:pwa_sales2go_flutter/examples/clients_example.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/components/products.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/details.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
@@ -11,11 +12,11 @@ class ProductsInCart extends StatefulWidget {
   const ProductsInCart({
     Key? key,
     required this.products,
-    required this.widget,
+    required this.client,
   }) : super(key: key);
 
   final List<Product> products;
-  final OrderPage widget;
+  final CLientsExample client;
 
   @override
   State<ProductsInCart> createState() => _ProductsInCartState();
@@ -40,6 +41,14 @@ class _ProductsInCartState extends State<ProductsInCart> {
 
   @override
   Widget build(BuildContext context) {
+    isDiscountActive(promotionDiscount, promotion) {
+      if (promotion == true) {
+        return '- $promotionDiscount%';
+      } else {
+        return '';
+      }
+    }
+
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 325,
@@ -142,6 +151,7 @@ class _ProductsInCartState extends State<ProductsInCart> {
                         ],
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Container(
                             margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -166,7 +176,7 @@ class _ProductsInCartState extends State<ProductsInCart> {
                             ),
                           ),
                           Container(
-                            margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                            margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                             child: Text(
                               'Total: ${product.totalPrice.toStringAsFixed(2)}',
                               style: TextStyle(
@@ -176,6 +186,18 @@ class _ProductsInCartState extends State<ProductsInCart> {
                               ),
                             ),
                           ),
+                          // Container(
+                          //   margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          //   child: Text(
+                          //     isDiscountActive(
+                          //         product.promotionDiscount, product.promotion),
+                          //     style: TextStyle(
+                          //       color: Colors.purple.shade600,
+                          //       fontFamily: 'Poppins-regular',
+                          //       fontSize: 12,
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                     ],

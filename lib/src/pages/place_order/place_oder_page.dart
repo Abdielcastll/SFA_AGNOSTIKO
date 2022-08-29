@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pwa_sales2go_flutter/examples/clients_example.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/components/clients.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -15,7 +16,19 @@ class PlaceOrderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarPlaceOrder(),
+      appBar: AppBar(
+        title: Text(
+          'Nuevo Pedido',
+          style: TextStyle(
+            fontFamily: 'Poppins-regular',
+            fontSize: 21,
+            fontWeight: FontWeight.w300,
+            color: Colors.white,
+          ),
+        ),
+        backgroundColor: myTheme.colorScheme.primary,
+        elevation: 0,
+      ),
       bottomNavigationBar: const BottomDecoration(),
       body: SingleChildScrollView(child: PlacerOrderBody()),
     );
@@ -33,12 +46,12 @@ class PlacerOrderBody extends StatefulWidget {
 
 class _PlacerOrderBodyState extends State<PlacerOrderBody> {
   final clientController = TextEditingController();
-  List<Client> clients = allClients;
+  List<CLientsExample> clients = allClients;
 
-  identifyStatus(String status) {
-    if (status == 'active') {
+  identifyStatus(bool status) {
+    if (status == true) {
       return Colors.green;
-    } else if (status == 'unactive') {
+    } else if (status == false) {
       return Colors.red;
     }
   }
@@ -56,12 +69,11 @@ class _PlacerOrderBodyState extends State<PlacerOrderBody> {
 
   @override
   Widget build(BuildContext context) {
-    print(clients);
     return Column(
       children: [
         Container(
           decoration: BoxDecoration(
-            color: myTheme.colorScheme.secondary,
+            color: myTheme.colorScheme.primary,
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(20),
               bottomRight: Radius.circular(20),
@@ -87,14 +99,14 @@ class _PlacerOrderBodyState extends State<PlacerOrderBody> {
                     filled: true,
                     fillColor: Colors.white,
                     hintStyle: TextStyle(
-                      color: myTheme.colorScheme.secondary,
+                      color: myTheme.colorScheme.primary,
                       fontFamily: 'Poppins-regular',
                     ),
                     hintText: 'Busca un Cliente...',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
                       borderSide:
-                          BorderSide(color: myTheme.colorScheme.secondary),
+                          BorderSide(color: myTheme.colorScheme.primary),
                     ),
                   ),
                   onChanged: searchClient,
@@ -120,7 +132,7 @@ class _PlacerOrderBodyState extends State<PlacerOrderBody> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                       side: BorderSide(
-                        color: myTheme.colorScheme.secondary,
+                        color: myTheme.colorScheme.primary,
                       ),
                     ),
                     title: Text(
@@ -130,21 +142,21 @@ class _PlacerOrderBodyState extends State<PlacerOrderBody> {
                       ),
                     ),
                     subtitle: Text(
-                      client.address,
+                      client.fiscalAddress,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     trailing: Icon(
                       Icons.person,
-                      color: identifyStatus(client.status),
+                      color: identifyStatus(client.active),
                       size: 40,
                     ),
                     onTap: () {
-                      if (client.status == 'unactive') {
+                      if (client.active == false) {
                         Fluttertoast.showToast(
                           msg:
                               'El cliente que desea seleccionar no esta disponible',
-                          backgroundColor: myTheme.colorScheme.secondary,
+                          backgroundColor: myTheme.colorScheme.primary,
                           textColor: Colors.white,
                         );
                       } else {
@@ -152,9 +164,7 @@ class _PlacerOrderBodyState extends State<PlacerOrderBody> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => OrderPage(
-                              clientName: client.name,
-                              clientAddress: client.address,
-                              clientStatus: client.status,
+                              client: client,
                             ),
                           ),
                         );

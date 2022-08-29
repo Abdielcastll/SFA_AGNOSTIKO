@@ -47,6 +47,7 @@ class _ProfileBodyState extends State<ProfileBody> {
   final String? userName = sharedPreferences!.getString('nombre');
   final String? charge = sharedPreferences!.getString('cargo');
   final String? uid = sharedPreferences!.getString('uid');
+  final String? email = sharedPreferences!.getString('email');
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -57,7 +58,7 @@ class _ProfileBodyState extends State<ProfileBody> {
         children: [
           UserInfo(userName: userName, charge: charge),
           SizedBox(height: 30),
-          ListTileOptions(charge: charge),
+          ListTileOptions(charge: charge, name: userName, email: email),
           SizedBox(height: 15),
           LogoutButton(),
           SizedBox(height: 15),

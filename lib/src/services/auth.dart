@@ -76,15 +76,15 @@ class AuthService {
             } else {
               await sharedPreferences!.setString('cargo', 'Gerente');
             }
-            // print('/////////////////////////////////////////////////');
-            // print('Saving Data on shared preferences');
-            // print(sharedPreferences!.getString('uid'));
-            // print(sharedPreferences!.getString('email'));
-            // print(sharedPreferences!.getString('nombre'));
-            // print(sharedPreferences!.getInt('nro_cedula'));
-            // print(sharedPreferences!.getStringList('indice'));
-            // print(sharedPreferences!.getString('cargo'));
-            // print('/////////////////////////////////////////////////');
+            print('/////////////////////////////////////////////////');
+            print('Saving Data on shared preferences');
+            print(sharedPreferences!.getString('uid'));
+            print(sharedPreferences!.getString('email'));
+            print(sharedPreferences!.getString('nombre'));
+            print(sharedPreferences!.getInt('nro_cedula'));
+            print(sharedPreferences!.getStringList('indice'));
+            print(sharedPreferences!.getString('cargo'));
+            print('/////////////////////////////////////////////////');
 
             return _userFromFirebaseUser(user);
           } else {
@@ -123,6 +123,16 @@ class AuthService {
       await sharedPreferences!.setStringList('indice', []);
       await sharedPreferences!.setString('cargo', '');
       await sharedPreferences!.setString('cargo', '');
+      print('/////////////////////////////////////////////////');
+      print('Saving Data on shared preferences');
+      print(sharedPreferences!.getString('uid'));
+      print(sharedPreferences!.getString('email'));
+      print(sharedPreferences!.getString('nombre'));
+      print(sharedPreferences!.getInt('nro_cedula'));
+      print(sharedPreferences!.getStringList('indice'));
+      print(sharedPreferences!.getString('cargo'));
+      print('/////////////////////////////////////////////////');
+
       return await _auth.signOut();
     } catch (e) {
       print(e.toString());

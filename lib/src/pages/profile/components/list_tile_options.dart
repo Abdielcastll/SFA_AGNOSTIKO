@@ -9,9 +9,13 @@ class ListTileOptions extends StatelessWidget {
   const ListTileOptions({
     Key? key,
     this.charge,
+    this.name,
+    this.email,
   }) : super(key: key);
 
   final String? charge;
+  final String? name;
+  final String? email;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +33,62 @@ class ListTileOptions extends StatelessWidget {
           sub: 'Zona de ventas asignada y gerentes',
           function: () {
             //Funcion para abrir dialog que muere zona de ventas y gerente
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    title: Text(
+                      'Zona de Ventas',
+                      style: TextStyle(
+                        fontFamily: 'Poppins-regular',
+                        color: myTheme.colorScheme.secondary,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    content: Container(
+                      height: 50,
+                      width: 100,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'TERRITORIO 1',
+                            style: TextStyle(
+                              fontFamily: 'Poppins-regular',
+                              color: myTheme.colorScheme.secondary,
+                              fontSize: 14,
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                'Gerente: ',
+                                style: TextStyle(
+                                  fontFamily: 'Poppins-regular',
+                                  color: myTheme.colorScheme.secondary,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                'Ana Avila 01',
+                                style: TextStyle(
+                                  fontFamily: 'Poppins-regular',
+                                  color: myTheme.colorScheme.secondary,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                });
           },
           icon: MaterialIcons.map,
         ),
@@ -53,6 +113,57 @@ class ListTileOptions extends StatelessWidget {
           sub: 'Correo, contraseñas y ajustes de perfil',
           function: () {
             //Funcion para bottom Sheet menu para cambiar nombr
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    title: Text(
+                      'Informacion de este usuario',
+                      style: TextStyle(
+                        fontFamily: 'Poppins-regular',
+                        color: myTheme.colorScheme.secondary,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    content: Container(
+                      height: 100,
+                      width: 100,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Nombre: $name ',
+                            style: TextStyle(
+                              fontFamily: 'Poppins-regular',
+                              color: myTheme.colorScheme.secondary,
+                              fontSize: 14,
+                            ),
+                          ),
+                          Text(
+                            'Email: $email',
+                            style: TextStyle(
+                              fontFamily: 'Poppins-regular',
+                              color: myTheme.colorScheme.secondary,
+                              fontSize: 14,
+                            ),
+                          ),
+                          Text(
+                            'Cargo: $charge',
+                            style: TextStyle(
+                              fontFamily: 'Poppins-regular',
+                              color: myTheme.colorScheme.secondary,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                });
           },
           icon: MaterialIcons.mail_outline,
         ),
@@ -61,6 +172,7 @@ class ListTileOptions extends StatelessWidget {
           sub: 'Notificaciones de la aplicación y sus movimientos',
           function: () {
             // Funcion que redigire a las notificaciones del usuario
+            Navigator.pushNamed(context, 'notifications');
           },
           icon: MaterialCommunityIcons.bell_outline,
         ),
@@ -68,7 +180,67 @@ class ListTileOptions extends StatelessWidget {
           title: 'Ayuda',
           sub: 'Tips de Uso y centro de contacto',
           function: () {
-            //
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    title: Text(
+                      'Informacion de Soporte al usuario',
+                      style: TextStyle(
+                        fontFamily: 'Poppins-regular',
+                        color: myTheme.colorScheme.secondary,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    content: Container(
+                      height: 150,
+                      width: 100,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Si necesita ayuda con algun lado de la aplicacion, comunicarse al:',
+                            style: TextStyle(
+                              fontFamily: 'Poppins-regular',
+                              color: myTheme.colorScheme.secondary,
+                              fontSize: 14,
+                            ),
+                          ),
+                          Text(
+                            '731XXX000 EXT 000 ',
+                            style: TextStyle(
+                              fontFamily: 'Poppins-regular',
+                              color: myTheme.colorScheme.secondary,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            'Email:',
+                            style: TextStyle(
+                              fontFamily: 'Poppins-regular',
+                              color: myTheme.colorScheme.secondary,
+                              fontSize: 14,
+                            ),
+                          ),
+                          Text(
+                            'examplesupport@email.com',
+                            style: TextStyle(
+                              fontFamily: 'Poppins-regular',
+                              color: myTheme.colorScheme.secondary,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                });
           },
           icon: MaterialIcons.info_outline,
         ),

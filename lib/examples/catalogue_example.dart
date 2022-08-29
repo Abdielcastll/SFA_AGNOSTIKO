@@ -22,7 +22,7 @@ final allCategories = [
         'https://s3-alpha-sig.figma.com/img/0d11/bcfd/092ead551cb8998c124740bd05d86c12?Expires=1662336000&Signature=fRLexpaK-4B05I12le~cHe8D2qBIpBmrC0dCMHYlL0MmjZtS7-wZD-gj63N24Je9ztlHgkDTb6L6K8v1DHYHhH0N6uH27CiHQQw7e9oSl7vinwruadEcuVCX107QZu0bgSsCVSDId7ZoonvB639oUb5m6B9dD7X-m8jdhM1TCNwUxxtiQmNmrXtNl3Y~drnV4iCUpDKnBWxLSACmXpI-T49b2uW3QmS8bGsj4gqJI2QPy8ZdOZKXYfKAoyffDflMPrV3jIXhW2fC-1T1wvCimJx1lqFfv2i1~lNVFOKIFy7A-IiaDBnUQrsissOteaNNEFZ~KvimGQnFv8vrhR3p7Q__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA',
   ),
   CatalogueExample(
-    categorie: 'CONSUMIBLES',
+    categorie: 'COLCHON',
     imageUrl:
         'https://s3-alpha-sig.figma.com/img/1fb7/e7de/0e410fd7fb9dd60131d3de2ab770c253?Expires=1662336000&Signature=JjrGDn2M8eSGxRw2mMO4MuWNzLNLK0x3wDA-eJG1O2HNlIBZqQ4-W39YnnY6RQqKVUtp~gUZxbBuDJGITcdYkkXP4lBHJPEKjbdpxMJik-nu4J1yul4cCMJcl48u84WexsCB-Xo4rqqldVkVug7KZJKspYqGLP0oKwwi8wFYBOV9RrmP5eBjyAtSGwO-7lerqDrm86OtdHzfYoCwC~L~dcAjqZa5soReexRxjxJSu07NGZ23PCrs-ClhG9GLmZB9Jmo8dsO34glR4XOv3YmOZgwv5S3GIAroL0CyfWloxCZrpSHxJK6CpqsJErqUFei7OnHBImOKNonLVfIxj9Ky5g__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA',
   ),

@@ -122,6 +122,74 @@ class _TeamsBodyState extends State<TeamsBody> {
                     ),
                     onTap: () {
                       // Dialog para ver los teams
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            title: Text(
+                              team.name,
+                              style: TextStyle(
+                                fontFamily: 'Poppins-regular',
+                                color: myTheme.colorScheme.secondary,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            content: Container(
+                              width: 200,
+                              height: 300,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Gerente: ${team.manager}',
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins-regular',
+                                      color: myTheme.colorScheme.primary,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                    child: Text(
+                                      'Integrantes',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins-regular',
+                                        color: myTheme.colorScheme.secondary,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                                    height: 200,
+                                    width: 200,
+                                    child: ListView.builder(
+                                      itemCount: team.sellers.length,
+                                      itemBuilder:
+                                          (BuildContext context, index) {
+                                        final member = team.sellers[index];
+                                        return Text(
+                                          member,
+                                          style: TextStyle(
+                                            fontFamily: 'Poppins-regular',
+                                            color: myTheme.colorScheme.primary,
+                                            fontSize: 14,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
                     },
                   ),
                 );

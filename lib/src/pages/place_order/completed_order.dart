@@ -6,7 +6,14 @@ import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/bottom_decoratior.dart/bottom_decoration.dart';
 
 class CompletedOrderPage extends StatelessWidget {
-  const CompletedOrderPage({Key? key}) : super(key: key);
+  const CompletedOrderPage(
+      {Key? key, this.client, this.total, this.method, this.date})
+      : super(key: key);
+
+  final client;
+  final total;
+  final method;
+  final date;
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +30,17 @@ class CompletedOrderPage extends StatelessWidget {
           ),
           automaticallyImplyLeading: false,
           elevation: 0,
-          backgroundColor: myTheme.colorScheme.secondary,
+          backgroundColor: myTheme.colorScheme.primary,
         ),
       ),
-      body: SingleChildScrollView(child: CompletedOrderBody()),
+      body: SingleChildScrollView(
+        child: CompletedOrderBody(
+          client: client,
+          total: total,
+          method: method,
+          date: date,
+        ),
+      ),
     );
   }
 }
@@ -34,7 +48,15 @@ class CompletedOrderPage extends StatelessWidget {
 class CompletedOrderBody extends StatefulWidget {
   const CompletedOrderBody({
     Key? key,
+    this.client,
+    this.total,
+    this.method,
+    this.date,
   }) : super(key: key);
+  final client;
+  final total;
+  final method;
+  final date;
 
   @override
   State<CompletedOrderBody> createState() => _CompletedOrderBody();
@@ -75,12 +97,16 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                       fontSize: 16,
                     ),
                   ),
-                  Text(
-                    'Nombre del Cliente',
-                    style: TextStyle(
-                      color: Colors.grey.shade500,
-                      fontFamily: 'Poppins-regular',
-                      fontSize: 12,
+                  Container(
+                    width: 150,
+                    height: 50,
+                    child: Text(
+                      widget.client,
+                      style: TextStyle(
+                        color: Colors.grey.shade500,
+                        fontFamily: 'Poppins-regular',
+                        fontSize: 12,
+                      ),
                     ),
                   ),
                 ],
@@ -99,7 +125,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                     ),
                   ),
                   Text(
-                    '00/00/0000',
+                    widget.date,
                     style: TextStyle(
                       color: Colors.grey.shade500,
                       fontFamily: 'Poppins-regular',
@@ -129,7 +155,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                     ),
                   ),
                   Text(
-                    '#56ar4rg6s',
+                    '#000571',
                     style: TextStyle(
                       color: Colors.grey.shade500,
                       fontFamily: 'Poppins-regular',
@@ -152,7 +178,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                     ),
                   ),
                   Text(
-                    'Transferencia',
+                    widget.method,
                     style: TextStyle(
                       color: Colors.grey.shade500,
                       fontFamily: 'Poppins-regular',
@@ -182,7 +208,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                     ),
                   ),
                   Text(
-                    'USD\$ 000.00',
+                    'USD\$ ${widget.total}',
                     style: TextStyle(
                       color: Colors.grey.shade500,
                       fontFamily: 'Poppins-regular',
@@ -209,7 +235,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                 Navigator.popUntil(context, (route) => route.isFirst);
               },
               style: ElevatedButton.styleFrom(
-                primary: myTheme.colorScheme.secondary,
+                primary: myTheme.colorScheme.primary,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
