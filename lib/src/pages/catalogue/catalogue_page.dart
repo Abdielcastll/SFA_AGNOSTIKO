@@ -1,12 +1,15 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/examples/catalogue_example.dart';
 import 'package:pwa_sales2go_flutter/examples/products_example.dart';
+import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/category_list.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/most_selled_products.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/new_products.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/product_list_button.dart';
+import 'package:pwa_sales2go_flutter/src/services/database.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/promotions.dart';
 
@@ -20,10 +23,21 @@ class CataloguePage extends StatefulWidget {
 class _CataloguePageState extends State<CataloguePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBarNavigation(message: 'Apps2Go'),
-      backgroundColor: Colors.grey[200],
-      body: CatalogueBody(),
+    return MultiProvider(
+      providers: [
+        StreamProvider<List<ProductModel>?>.value(
+          value: DatabaseService().products,
+          initialData: null,
+          catchError: (context, error) {
+            print(error);
+          },
+        ),
+      ],
+      child: Scaffold(
+        appBar: AppBarNavigation(message: 'Apps2Go'),
+        backgroundColor: Colors.grey[200],
+        body: CatalogueBody(),
+      ),
     );
   }
 }
@@ -46,6 +60,9 @@ class _CatalogueBodyState extends State<CatalogueBody> {
     List<ProductExample> productsFilteredByPromotion = productExampleList
         .where((element) => element.promotion == true)
         .toList();
+    // Stream de Productos
+    // final products = Provider.of<List<ProductModel>?>(context) ?? [];
+    // print(products);
 
     return SingleChildScrollView(
       physics: BouncingScrollPhysics(),
