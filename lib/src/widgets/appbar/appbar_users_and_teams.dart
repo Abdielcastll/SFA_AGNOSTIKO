@@ -23,11 +23,11 @@ class AppBarUsersAndTeams extends StatelessWidget
           fontFamily: 'Poppins-regular',
         ),
       ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          bottom: Radius.circular(20),
-        ),
-      ),
+      // shape: RoundedRectangleBorder(
+      //   borderRadius: BorderRadius.vertical(
+      //     bottom: Radius.circular(20),
+      //   ),
+      // ),
       centerTitle: true,
       elevation: 0,
       backgroundColor: myTheme.colorScheme.primary,

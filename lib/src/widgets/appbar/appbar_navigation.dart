@@ -16,25 +16,22 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
   final String message;
 
   @override
-  Size get preferredSize => const Size.fromHeight(70);
+  Size get preferredSize => const Size.fromHeight(60);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          bottom: Radius.circular(20),
-        ),
-      ),
-      title: Padding(
-        padding: EdgeInsets.only(top: 20),
-        child: Text(
-          message,
-          style: const TextStyle(
-            fontSize: 21,
-            fontWeight: FontWeight.w300,
-            fontFamily: 'Poppins-regular',
-          ),
+      // shape: RoundedRectangleBorder(
+      //   borderRadius: BorderRadius.vertical(
+      //     bottom: Radius.circular(20),
+      //   ),
+      // ),
+      title: Text(
+        message,
+        style: const TextStyle(
+          fontSize: 21,
+          fontWeight: FontWeight.w300,
+          fontFamily: 'Poppins-regular',
         ),
       ),
       elevation: 0,
@@ -44,7 +41,7 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+              margin: EdgeInsets.fromLTRB(0, 0, 10, 7),
               child: IconButton(
                 constraints: const BoxConstraints(),
                 splashRadius: 20.0,
@@ -56,7 +53,7 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+              margin: EdgeInsets.fromLTRB(0, 0, 10, 7),
               child: IconButton(
                 constraints: const BoxConstraints(),
                 splashRadius: 20.0,

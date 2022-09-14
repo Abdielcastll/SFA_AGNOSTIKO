@@ -411,4 +411,31 @@ final allProducts = [
     imageUrl:
         'https://ae01.alicdn.com/kf/H5927ea2a7c074984a8f9d9601d3e00e0t/Bata-de-ba-o-rosa-para-hombre-y-mujer-ropa-de-dormir-Sexy-secci-n-delgada.jpg_Q90.jpg_.webp',
   ),
+  ProductExample(
+    quality: '2DA',
+    catalogue: 'SET DE PLAYA MZ BURGGARTEN',
+    categorie: 'LENTES',
+    subcategorie: 'BAÑO',
+    code: '1AC1K010',
+    codeIndex: [
+      "1a",
+      "1ac",
+      "1ac1",
+      "1ac1k",
+      "1ac1k0",
+      "1ac1k00",
+      "1ac1k000",
+      "1ac1k0010",
+    ],
+    design: 'LOMO',
+    line: 'PROMO',
+    brand: 'Ama de casa',
+    modified: DateTime.utc(2021, 8, 18, 22, 46, 52),
+    name: 'BATA DE PLAYA Class King NAC.NIEVE',
+    promotion: true,
+    promotionDiscount: 50,
+    size: 'GRANDE',
+    imageUrl:
+        'https://ae01.alicdn.com/kf/H5927ea2a7c074984a8f9d9601d3e00e0t/Bata-de-ba-o-rosa-para-hombre-y-mujer-ropa-de-dormir-Sexy-secci-n-delgada.jpg_Q90.jpg_.webp',
+  ),
 ];

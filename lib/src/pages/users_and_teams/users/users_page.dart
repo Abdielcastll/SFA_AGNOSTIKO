@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/examples/usesrs_example.dart';
+import 'package:pwa_sales2go_flutter/src/pages/role_manager/role_manager.dart';
+import 'package:pwa_sales2go_flutter/src/pages/users_and_teams/users/new_user/new_user_page.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class UsersPage extends StatelessWidget {
@@ -11,7 +13,7 @@ class UsersPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: Wrap(
-        direction: Axis.horizontal,
+        direction: Axis.vertical,
         children: [
           Container(
             margin: const EdgeInsets.all(10.0),
@@ -23,11 +25,41 @@ class UsersPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(0)),
                 backgroundColor: myTheme.colorScheme.primary,
                 onPressed: () {
-                  // BottomSheetMenu para crear equipos
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => NewUserPage(),
+                    ),
+                  );
                 },
                 // ignore: prefer_const_constructors
                 child: Icon(
                   Icons.person_add,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.all(10.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: FloatingActionButton(
+                heroTag: '2',
+                elevation: 0,
+                shape: BeveledRectangleBorder(
+                    borderRadius: BorderRadius.circular(0)),
+                backgroundColor: myTheme.colorScheme.secondary,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => RolesManagerPage(),
+                    ),
+                  );
+                },
+                child: Icon(
+                  Icons.manage_accounts,
                   color: Colors.white,
                 ),
               ),

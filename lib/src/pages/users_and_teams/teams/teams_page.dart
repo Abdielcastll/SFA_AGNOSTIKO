@@ -138,9 +138,7 @@ class _TeamsBodyState extends State<TeamsBody> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            content: Container(
-                              width: 200,
-                              height: 300,
+                            content: SingleChildScrollView(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [

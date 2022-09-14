@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:pwa_sales2go_flutter/src/pages/account_balance/account_balance.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/components/address_info.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/components/button_options.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/components/client_picture.dart';
@@ -49,6 +50,31 @@ class _ClientDetailsState extends State<ClientDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: Wrap(
+        direction: Axis.horizontal,
+        children: [
+          Container(
+            margin: EdgeInsets.all(10.0),
+            child: FloatingActionButton(
+              elevation: 0,
+              backgroundColor: myTheme.colorScheme.primary,
+              onPressed: () {
+                // Redireccionar a estado de cuenta
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => AccountBalancePage(),
+                  ),
+                );
+              },
+              child: Icon(
+                Icons.account_balance,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
       backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
         toolbarHeight: 40,

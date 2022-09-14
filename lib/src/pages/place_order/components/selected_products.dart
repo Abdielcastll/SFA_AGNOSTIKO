@@ -67,7 +67,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
             children: [
               SizedBox(height: 10),
               Container(
-                margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                margin: EdgeInsets.fromLTRB(20, 0, 20, 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

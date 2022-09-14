@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pwa_sales2go_flutter/examples/products_example.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
@@ -21,6 +22,8 @@ class _ProductListState extends State<ProductList> {
   final searchController = TextEditingController();
   var products;
   final moneySymbol = '\$';
+  bool isChecked = false;
+  bool isDescending = false;
 
   @override
   void initState() {
@@ -83,62 +86,74 @@ class _ProductListState extends State<ProductList> {
           ),
         ),
         Container(
-          alignment: Alignment.centerLeft,
-          child: Container(
-            margin: EdgeInsets.only(top: 15.0, left: 16.0),
-            width: 160,
-            height: 38,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: ElevatedButton(
-                onPressed: () {
-                  // Abrir bottomsheet para filtros
-                },
+          margin: EdgeInsets.fromLTRB(20.0, 5.0, 0, 0),
+          child: Row(
+            children: [
+              TextButton(
                 style: ButtonStyle(
-                  shadowColor:
-                      MaterialStateProperty.all<Color>(Colors.transparent),
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                    Color.fromARGB(255, 159, 165, 252).withOpacity(0.3),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
                   ),
-                  overlayColor: MaterialStateProperty.all<Color>(
-                      myTheme.colorScheme.primary.withOpacity(0.3)),
                 ),
                 child: Row(
-                  // ignore: prefer_const_literals_to_create_immutables
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Filtrar y Ordenar',
-                      style: TextStyle(
-                          color: myTheme.colorScheme.primary,
-                          fontFamily: 'Poppins-regular',
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold),
-                    ),
                     Icon(
-                      MaterialIcons.filter_alt,
-                      color: myTheme.colorScheme.primary,
-                      size: 20,
+                      MaterialCommunityIcons.order_alphabetical_ascending,
+                      color: Colors.grey.shade500,
+                      size: 25,
+                    ),
+                    SizedBox(width: 5),
+                    Text(
+                      isDescending ? 'Ascendente' : 'Descendente',
+                      style: TextStyle(
+                          fontFamily: 'Poppins-regular',
+                          color: Colors.grey.shade500,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
+                // splashRadius: 15,
+                onPressed: () {
+                  // Re ordenar el list view alfabeticamente
+                  setState(() => isDescending = !isDescending);
+                },
               ),
-            ),
+              IconButton(
+                icon: Icon(
+                  MaterialCommunityIcons.filter_variant,
+                  color: Colors.grey.shade500,
+                  size: 25,
+                ),
+                splashRadius: 15,
+                onPressed: () {
+                  // Abrir si se quiere ver por prospecto o no
+                  Fluttertoast.showToast(
+                    msg:
+                        'Boton para re-ordenar la lista en orden ascendente y descendente',
+                    textColor: Colors.white,
+                    backgroundColor: myTheme.colorScheme.primary,
+                  );
+                },
+              ),
+            ],
           ),
         ),
-        SizedBox(height: 10),
         Container(
-          // margin: EdgeInsets.only(top: 10.0),
+          // margin: EdgeInsets.fromLTRB(0, 0, 0, 40),
           width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
+          height: MediaQuery.of(context).size.height * 0.67,
           child: ListView.builder(
             physics: BouncingScrollPhysics(),
             itemCount: products!.length,
             itemBuilder: (BuildContext context, index) {
-              final product = products![index];
+              final sortedProducts =
+                  isDescending ? products.reversed.toList() : products;
+              final product = sortedProducts![index];
               return Container(
-                margin: EdgeInsets.only(top: 10.0),
+                margin: EdgeInsets.only(bottom: 10.0),
                 height: 120,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
@@ -163,12 +178,24 @@ class _ProductListState extends State<ProductList> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                              height: 15,
-                              width: 15,
+                              height: 17,
+                              width: 17,
+                              margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
+                                borderRadius: BorderRadius.circular(16),
                                 color: Colors.grey.shade400,
                               ),
+                              child: Checkbox(
+                                  side: MaterialStateBorderSide.resolveWith(
+                                      (states) => BorderSide(
+                                          width: 1.0,
+                                          color: Colors.transparent)),
+                                  shape: CircleBorder(),
+                                  activeColor: myTheme.colorScheme.primary,
+                                  value: isChecked,
+                                  onChanged: (value) {
+                                    setState(() => isChecked = value!);
+                                  }),
                             ),
                           ],
                         ),

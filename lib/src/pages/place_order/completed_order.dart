@@ -23,11 +23,11 @@ class CompletedOrderPage extends StatelessWidget {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(20),
         child: AppBar(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(20),
-            ),
-          ),
+          // shape: RoundedRectangleBorder(
+          //   borderRadius: BorderRadius.vertical(
+          //     bottom: Radius.circular(20),
+          //   ),
+          // ),
           automaticallyImplyLeading: false,
           elevation: 0,
           backgroundColor: myTheme.colorScheme.primary,
@@ -178,7 +178,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                     ),
                   ),
                   Text(
-                    widget.method,
+                    '${widget.method}',
                     style: TextStyle(
                       color: Colors.grey.shade500,
                       fontFamily: 'Poppins-regular',

@@ -23,7 +23,7 @@ class UserInfo extends StatelessWidget {
         child: ListTile(
           leading: CircleAvatar(
             radius: 30,
-            backgroundColor: Colors.grey.shade400,
+            backgroundColor: Colors.grey.shade300,
             child: Icon(
               Icons.person,
               size: 40,

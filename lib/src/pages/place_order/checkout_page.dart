@@ -273,7 +273,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         children: [
                           Expanded(
                             child: Text(
-                              'Fiscal',
+                              selectedValue ?? 'Fiscal',
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
@@ -491,6 +491,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                 ),
                 Container(
                   margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
+                  width: 300,
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton2(
                       isExpanded: true,
@@ -499,7 +500,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         children: [
                           Expanded(
                             child: Text(
-                              'Factura',
+                              'Seleccione una opcion',
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
@@ -639,7 +640,6 @@ class _CheckoutBodyState extends State<CheckoutBody> {
               borderRadius: BorderRadius.circular(16),
               child: ElevatedButton(
                 onPressed: () {
-                  // TODO: Hacer Showdialog de confirmacion
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
@@ -653,7 +653,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: myTheme.colorScheme.primary,
+                  backgroundColor: myTheme.colorScheme.primary,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

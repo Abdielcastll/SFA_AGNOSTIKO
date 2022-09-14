@@ -37,7 +37,7 @@ class CompletedOrders extends StatelessWidget {
         ),
         SizedBox(height: 10),
         Container(
-          height: MediaQuery.of(context).size.height,
+          height: MediaQuery.of(context).size.height * 0.7,
           child: ListView.builder(
             physics: BouncingScrollPhysics(),
             itemCount: completedList.length,

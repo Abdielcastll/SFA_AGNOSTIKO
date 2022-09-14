@@ -1,11 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pwa_sales2go_flutter/src/pages/users_and_teams/users_and_teams.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
-class ListTileOptions extends StatelessWidget {
+class ListTileOptions extends StatefulWidget {
   const ListTileOptions({
     Key? key,
     this.charge,
@@ -18,9 +19,16 @@ class ListTileOptions extends StatelessWidget {
   final String? email;
 
   @override
+  State<ListTileOptions> createState() => _ListTileOptionsState();
+}
+
+class _ListTileOptionsState extends State<ListTileOptions> {
+  @override
   Widget build(BuildContext context) {
+    String? selectedValue;
+
     bool isAdmin;
-    if (charge == 'Cobrador' || charge == 'Administrador') {
+    if (widget.charge == 'Cobrador' || widget.charge == 'Administrador') {
       isAdmin = true;
     } else {
       isAdmin = false;
@@ -136,7 +144,7 @@ class ListTileOptions extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Nombre: $name ',
+                            'Nombre: ${widget.name} ',
                             style: TextStyle(
                               fontFamily: 'Poppins-regular',
                               color: myTheme.colorScheme.secondary,
@@ -144,7 +152,7 @@ class ListTileOptions extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            'Email: $email',
+                            'Email: ${widget.email}',
                             style: TextStyle(
                               fontFamily: 'Poppins-regular',
                               color: myTheme.colorScheme.secondary,
@@ -152,7 +160,7 @@ class ListTileOptions extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            'Cargo: $charge',
+                            'Cargo: ${widget.charge}',
                             style: TextStyle(
                               fontFamily: 'Poppins-regular',
                               color: myTheme.colorScheme.secondary,
@@ -175,6 +183,129 @@ class ListTileOptions extends StatelessWidget {
             Navigator.pushNamed(context, 'notifications');
           },
           icon: MaterialCommunityIcons.bell_outline,
+        ),
+        ListTileProfile(
+          title: 'Cambiar Moneda',
+          sub: 'Notificaciones de la aplicación y sus movimientos',
+          function: () {
+            // Funcion que redigire a las notificaciones del usuario
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return StatefulBuilder(builder: (context, setState) {
+                    List? items = [
+                      'Dolares (\$)',
+                      'Bolivares (Bs)',
+                      'Bitcoin (BTC)',
+                    ];
+                    return AlertDialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      title: Text(
+                        'Cambiar Moneda',
+                        style: TextStyle(
+                          fontFamily: 'Poppins-regular',
+                          color: myTheme.colorScheme.secondary,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      content: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton2(
+                                  isExpanded: true,
+                                  // ignore: prefer_const_literals_to_create_immutables
+                                  hint: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          selectedValue ?? 'Dolares (\$)',
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                            color: myTheme.colorScheme.primary
+                                                .withOpacity(0.7),
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  items: items
+                                      .map((item) => DropdownMenuItem<String>(
+                                            value: item,
+                                            child: Text(
+                                              item,
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold,
+                                                color:
+                                                    myTheme.colorScheme.primary,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ))
+                                      .toList(),
+                                  value: selectedValue,
+                                  onChanged: (value) {
+                                    setState(
+                                      () {
+                                        selectedValue = value as String;
+                                      },
+                                    );
+                                    // Mover la funcion en la base de datos para cambiar la lista
+                                  },
+                                  icon: const Icon(
+                                    Icons.arrow_forward_ios_outlined,
+                                  ),
+                                  iconSize: 11,
+                                  iconEnabledColor: myTheme.colorScheme.primary
+                                      .withOpacity(0.5),
+                                  iconDisabledColor: Colors.grey,
+                                  buttonHeight: 50,
+                                  buttonWidth: 200,
+                                  buttonPadding: const EdgeInsets.only(
+                                      left: 14, right: 14),
+                                  buttonDecoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    border: Border.all(
+                                      color: myTheme.colorScheme.primary
+                                          .withOpacity(0.3),
+                                    ),
+                                    color: Colors.white,
+                                  ),
+                                  buttonElevation: 0,
+                                  itemHeight: 40,
+                                  itemPadding: const EdgeInsets.only(
+                                      left: 14, right: 14),
+                                  dropdownMaxHeight: 200,
+                                  dropdownWidth: 200,
+                                  dropdownPadding: null,
+                                  dropdownDecoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.white,
+                                  ),
+                                  dropdownElevation: 8,
+                                  scrollbarRadius: const Radius.circular(10),
+                                  scrollbarThickness: 6,
+                                  scrollbarAlwaysShow: true,
+                                  offset: const Offset(-20, 0),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  });
+                });
+          },
+          icon: Icons.monetization_on,
         ),
         ListTileProfile(
           title: 'Ayuda',
