@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
         : Scaffold(
             appBar: AppBarLogin(
               title: 'Login',
-              backgroundColor: myTheme.colorScheme.secondary,
+              backgroundColor: myTheme.colorScheme.primary,
             ),
             body: _loginBody(context),
             bottomNavigationBar: const BottomDecoration(),
@@ -180,12 +180,12 @@ class _LoginPageState extends State<LoginPage> {
                 style: ButtonStyle(
                   alignment: Alignment.center,
                   backgroundColor: MaterialStateProperty.all<Color>(
-                    const Color(0xFF4f42ed),
+                    myTheme.colorScheme.primary,
                   ),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
-                      side: const BorderSide(color: Color(0xFF4f42ed)),
+                      side: BorderSide(color: myTheme.colorScheme.primary),
                     ),
                   ),
                 ),
