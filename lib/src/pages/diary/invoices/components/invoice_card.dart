@@ -1576,8 +1576,8 @@ class _InvoiceCardState extends State<InvoiceCard> {
                           completed
                               ? Container()
                               : Container(
-                                  margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                                  width: 150,
+                                  margin: EdgeInsets.fromLTRB(5, 5, 5, 0),
+                                  width: MediaQuery.of(context).size.width,
                                   height: 40,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(16),

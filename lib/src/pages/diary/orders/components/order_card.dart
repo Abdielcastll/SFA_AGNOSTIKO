@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class OrderCard extends StatefulWidget {
@@ -128,6 +129,24 @@ class _OrderCardState extends State<OrderCard> {
                                 child: TextButton(
                                   onPressed: () {
                                     // Ver resumen de Cliente
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            ClientDetails(
+                                                specialContribuyer: true,
+                                                masterDiscount: 10,
+                                                fiscalAddress: 'Example',
+                                                email: 'example@tech.com',
+                                                listOfPrices: 'GER-03',
+                                                name: 'Example',
+                                                tlf1: '0000000',
+                                                tlf2: '0000000000',
+                                                zone: 'Territorio example',
+                                                nameId: 555666,
+                                                typeId: 'J'),
+                                      ),
+                                    );
                                   },
                                   style: TextButton.styleFrom(
                                     foregroundColor:
