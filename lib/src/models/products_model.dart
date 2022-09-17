@@ -12,6 +12,7 @@ class ProductModel {
   final name;
   final subCategorie;
   final size;
+  final promotion;
 
   ProductModel({
     required this.quality,
@@ -25,6 +26,7 @@ class ProductModel {
     required this.name,
     required this.subCategorie,
     required this.size,
+    this.promotion,
   });
 }
 
@@ -42,6 +44,9 @@ List<ProductModel> productListfromSnapshot(QuerySnapshot snapshot) {
       name: doc.get('nombre'),
       subCategorie: doc.get('subcategoria').id,
       size: doc.get('tamano').id,
+      promotion: doc.data().toString().contains('promocion')
+          ? doc.get('promocion').id
+          : '',
     );
   }).toList();
 }

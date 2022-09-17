@@ -57,18 +57,18 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                 return GestureDetector(
                   onTap: () {
                     // Redireccionar a detalles del producto
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => ProductDetails(
-                          code: productByDate.code,
-                          line: productByDate.line,
-                          imageUrl: productByDate.imageUrl,
-                          isProductNew: false,
-                          name: productByDate.name,
-                        ),
-                      ),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (BuildContext context) => ProductDetails(
+                    //       code: productByDate.code,
+                    //       line: productByDate.line,
+                    //       imageUrl: productByDate.imageUrl,
+                    //       isProductNew: false,
+                    //       name: productByDate.name,
+                    //     ),
+                    //   ),
+                    // );
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(10.0, 8.0, 5.0, 0),

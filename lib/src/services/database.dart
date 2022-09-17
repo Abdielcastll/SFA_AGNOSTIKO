@@ -17,81 +17,143 @@ import 'package:pwa_sales2go_flutter/src/models/quality_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/sizes_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/subcategories_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/teams_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/zones_model.dart';
 
 class DatabaseService {
-  // Coleccion de Productos
+  // Colecciones de informacion dentro de la DB
+
+  // Colecciones de productos
   final productsCollection = FirebaseFirestore.instance.collection('productos');
+
   // Coleccion de Zonas
-  final CollectionReference zonesCollection =
-      FirebaseFirestore.instance.collection('zonas');
+  final zonesCollection = FirebaseFirestore.instance.collection('zonas');
+
   // Coleccion de tamanos
-  final CollectionReference sizesCollection =
-      FirebaseFirestore.instance.collection('tamanos');
+  final sizesCollection = FirebaseFirestore.instance.collection('tamanos');
+
   // Coleccion de sub categorias
-  final CollectionReference subCategoriesCollection =
+  final subCategoriesCollection =
       FirebaseFirestore.instance.collection('subcategorias');
+
   // Coleccion de stock
-  final CollectionReference stockCollection =
-      FirebaseFirestore.instance.collection('stock');
+  final stockCollection = FirebaseFirestore.instance.collection('stock');
+
   // Collecion de roles
-  final CollectionReference rolesCollection =
-      FirebaseFirestore.instance.collection('roles');
+  final rolesCollection = FirebaseFirestore.instance.collection('roles');
+
   // Collecion de promociones
-  final CollectionReference promotionsCollection =
+  final promotionsCollection =
       FirebaseFirestore.instance.collection('promociones');
+
   // Collecion de monedas
-  final CollectionReference coinCollection =
-      FirebaseFirestore.instance.collection('monedas');
+  final coinCollection = FirebaseFirestore.instance.collection('monedas');
+
   // Collecion de precios
-  final CollectionReference pricesCollection =
+  final pricesCollection =
       FirebaseFirestore.instance.collection('lista_de_precios');
+
   // Collecion de lineas
-  final CollectionReference linesCollection =
-      FirebaseFirestore.instance.collection('lineas');
+  final linesCollection = FirebaseFirestore.instance.collection('lineas');
+
   // Collecion de equipos
-  final CollectionReference teamsCollection =
-      FirebaseFirestore.instance.collection('equipos');
+  final teamsCollection = FirebaseFirestore.instance.collection('equipos');
+
   // Collecion de dispositivos
-  final CollectionReference devicesCollection =
+  final devicesCollection =
       FirebaseFirestore.instance.collection('dispositivos');
+
   // Collecion de disenos
-  final CollectionReference designsCollection =
-      FirebaseFirestore.instance.collection('disenos');
+  final designsCollection = FirebaseFirestore.instance.collection('disenos');
+
   // Collecion de config
-  final CollectionReference configCollection =
-      FirebaseFirestore.instance.collection('config');
+  final configCollection = FirebaseFirestore.instance.collection('config');
+
   // Collecion de clientes
-  final CollectionReference clientsCollection =
-      FirebaseFirestore.instance.collection('clientes');
+  final clientsCollection = FirebaseFirestore.instance.collection('clientes');
+
   // Collecion de categorias
-  final CollectionReference categoriesCollection =
+  final categoriesCollection =
       FirebaseFirestore.instance.collection('categorias');
+
   // Collecion de catalogo
-  final CollectionReference catalogueCollection =
+  final catalogueCollection =
       FirebaseFirestore.instance.collection('catalogos');
+
   // Collecion de catalogo_productos
-  final CollectionReference catalogueProductsCollection =
-      FirebaseFirestore.instance.collection('catalogo_productos');
-  // Collecion de calidades
-  final CollectionReference qualitiesCollection =
-      FirebaseFirestore.instance.collection('calidades');
-  // Collecion de bancos
-  final CollectionReference banksCollection =
-      FirebaseFirestore.instance.collection('bancos');
-  // Collecion de bancos
-  final CollectionReference idTypesCollection =
-      FirebaseFirestore.instance.collection('tipos_id');
-  // Collection de marcas
-  final CollectionReference brandsCollection =
-      FirebaseFirestore.instance.collection('marcas');
+  final brandsCollection = FirebaseFirestore.instance.collection('marcas');
+
+  //Coleccion de Calidades
+  final qualityCollection = FirebaseFirestore.instance.collection('calidades');
 
   DatabaseService();
 
   // Streams
 
+  // Stream de Productos
+
   Stream<List<ProductModel>> get products {
     return productsCollection.snapshots().map(productListfromSnapshot);
+  }
+
+  // Stream de Stock
+
+  Stream<StockModel> get stockValues {
+    return stockCollection
+        .doc('productos')
+        .snapshots()
+        .map(stockListfromSnapshot);
+  }
+
+  // Streams de resumenes
+
+  Stream<QualitySummary> get qualitySummary {
+    return qualityCollection
+        .doc('resumen')
+        .snapshots()
+        .map(qualitySummaryFromSnapshot);
+  }
+
+  Stream<CategorieSummary> get categorieSummary {
+    return categoriesCollection
+        .doc('resumen')
+        .snapshots()
+        .map(categorieSummaryFromSnapshot);
+  }
+
+  Stream<DesignSummary> get designSummary {
+    return designsCollection
+        .doc('resumen')
+        .snapshots()
+        .map(designSummaryFromSnapshot);
+  }
+
+  Stream<LineSummary> get lineSummary {
+    return linesCollection
+        .doc('resumen')
+        .snapshots()
+        .map(lineSummaryFromSnapshot);
+  }
+
+  Stream<BrandSummary> get brandSymmary {
+    return brandsCollection
+        .doc('resumen')
+        .snapshots()
+        .map(brandSummaryFromSnapshot);
+  }
+
+  Stream<SubCategorieSummary> get subCategorieSummary {
+    return subCategoriesCollection
+        .doc('resumen')
+        .snapshots()
+        .map(subCategoriesFromSnapshot);
+  }
+
+  Stream<SizeSummary> get sizeSummary {
+    return sizesCollection
+        .doc('resumen')
+        .snapshots()
+        .map(sizeSummaryFromSnapshot);
   }
 }

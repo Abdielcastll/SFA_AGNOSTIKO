@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/product_details/product_details.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
@@ -19,6 +21,9 @@ class NewProductsWidget extends StatefulWidget {
 class _NewProductsWidgetState extends State<NewProductsWidget> {
   @override
   Widget build(BuildContext context) {
+    List<ProductModel> products =
+        Provider.of<List<ProductModel>?>(context) ?? [];
+
     return Container(
       margin: EdgeInsets.fromLTRB(0, 10.0, 0, 0),
       child: Column(
@@ -51,24 +56,31 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
             child: ListView.builder(
               physics: BouncingScrollPhysics(),
               scrollDirection: Axis.horizontal,
-              itemCount: widget.listOfProducts.length,
+              itemCount: products.isEmpty ? products.length : 15,
               itemBuilder: (BuildContext context, index) {
-                final productByDate = widget.listOfProducts[index];
+                var productsByDate = products;
+                productsByDate.sort(
+                  (a, b) => a.lastModifiedDate
+                      .toString()
+                      .compareTo(b.lastModifiedDate.toString()),
+                );
+                // print(productsByDate);
+                final product = widget.listOfProducts?[index] ?? '';
                 return GestureDetector(
                   onTap: () {
                     // Redireccionar a detalles del producto
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => ProductDetails(
-                          code: productByDate.code,
-                          line: productByDate.line,
-                          imageUrl: productByDate.imageUrl,
-                          isProductNew: true,
-                          name: productByDate.name,
-                        ),
-                      ),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (BuildContext context) => ProductDetails(
+                    //       code: productByDate.code,
+                    //       line: productByDate.line,
+                    //       imageUrl: productByDate.imageUrl,
+                    //       isProductNew: true,
+                    //       name: productByDate.name,
+                    //     ),
+                    //   ),
+                    // );
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(10.0, 8.0, 5.0, 0),
@@ -85,15 +97,19 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                             topLeft: Radius.circular(16),
                             topRight: Radius.circular(16),
                           ),
-                          child: Image.network(
-                            '${productByDate.imageUrl}',
-                            fit: BoxFit.cover,
+                          child: Container(
+                            height: 120,
+                            width: 120,
+                            child: Image.network(
+                              'https://i.imgur.com/BPbj6Gy.jpg',
+                              fit: BoxFit.fill,
+                            ),
                           ),
                         ),
                         Container(
                           margin: EdgeInsets.fromLTRB(5.0, 5.0, 0, 0),
                           child: Text(
-                            '${productByDate.name}',
+                            '${product.name}',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             // textAlign: TextAlign.start,
