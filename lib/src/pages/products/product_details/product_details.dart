@@ -3,7 +3,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/examples/products_example.dart';
+import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
@@ -156,13 +158,12 @@ class ProductDetailsBody extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (BuildContext context) => ProductsPage(
-                                  listOfProducts: allProducts
-                                      .where((element) => element.name == name)
-                                      .toList(),
-                                ),
+                                builder: (BuildContext context) =>
+                                    ProductsPage(productName: name.toString()),
                               ),
                             );
+                            print(
+                                'Detalles de este producto en la lista completa');
                           },
                           icon: Icon(
                             MaterialCommunityIcons.view_list,

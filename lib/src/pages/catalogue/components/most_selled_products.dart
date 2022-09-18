@@ -3,14 +3,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/product_details/product_details.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class MostSelledProducts extends StatefulWidget {
-  const MostSelledProducts({Key? key, required this.listOfProducts})
-      : super(key: key);
-
-  final List listOfProducts;
+  const MostSelledProducts({Key? key}) : super(key: key);
 
   @override
   State<MostSelledProducts> createState() => _MostSelledProductsState();
@@ -19,6 +18,10 @@ class MostSelledProducts extends StatefulWidget {
 class _MostSelledProductsState extends State<MostSelledProducts> {
   @override
   Widget build(BuildContext context) {
+    final productsBySales = Provider.of<List<ProductsByDate>?>(context) ?? [];
+    var productsBySalesList = productsBySales;
+    // print(productsBySalesList);
+
     return Container(
       margin: EdgeInsets.fromLTRB(0, 10.0, 0, 15.0),
       child: Column(
@@ -51,9 +54,9 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
             child: ListView.builder(
               physics: BouncingScrollPhysics(),
               scrollDirection: Axis.horizontal,
-              itemCount: widget.listOfProducts.length,
+              itemCount: productsBySalesList.length,
               itemBuilder: (BuildContext context, index) {
-                final productByDate = widget.listOfProducts[index];
+                final product = productsBySalesList[index];
                 return GestureDetector(
                   onTap: () {
                     // Redireccionar a detalles del producto
@@ -69,6 +72,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                     //     ),
                     //   ),
                     // );
+                    print('Redireccionar a este producto mas vendido');
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(10.0, 8.0, 5.0, 0),
@@ -85,15 +89,19 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                             topLeft: Radius.circular(16),
                             topRight: Radius.circular(16),
                           ),
-                          child: Image.network(
-                            '${productByDate.imageUrl}',
-                            fit: BoxFit.cover,
+                          child: Container(
+                            height: 120,
+                            width: 120,
+                            child: Image.network(
+                              'https://i.imgur.com/BPbj6Gy.jpg',
+                              fit: BoxFit.fill,
+                            ),
                           ),
                         ),
                         Container(
                           margin: EdgeInsets.fromLTRB(5.0, 5.0, 0, 0),
                           child: Text(
-                            '${productByDate.name}',
+                            '${product.name}',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             // textAlign: TextAlign.start,

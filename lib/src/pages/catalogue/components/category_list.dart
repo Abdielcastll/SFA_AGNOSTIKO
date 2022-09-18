@@ -1,24 +1,25 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/examples/products_example.dart';
+import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class ListOfCategories extends StatefulWidget {
-  ListOfCategories({Key? key, required this.categories}) : super(key: key);
-
-  final List categories;
+  ListOfCategories({Key? key}) : super(key: key);
 
   @override
   State<ListOfCategories> createState() => _ListOfCategoriesState();
 }
 
 class _ListOfCategoriesState extends State<ListOfCategories> {
-  List<ProductExample> productExampleList = allProducts;
-
   @override
   Widget build(BuildContext context) {
+    final categories = Provider.of<CategorieSummary?>(context)?.summary ?? {};
+    List categoriesSummary = categories.values.toList();
+    // print(categoriesSummary);
     return Container(
       margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0),
       child: Column(
@@ -51,9 +52,9 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
             child: ListView.builder(
               physics: BouncingScrollPhysics(),
               scrollDirection: Axis.horizontal,
-              itemCount: widget.categories.length,
+              itemCount: categoriesSummary.length,
               itemBuilder: (BuildContext context, index) {
-                final categorie = widget.categories[index];
+                final categorie = categoriesSummary[index];
                 return GestureDetector(
                   onTap: () {
                     // Redireccionar a productos filtrados por catalogo,
@@ -61,13 +62,13 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                       context,
                       MaterialPageRoute(
                         builder: (BuildContext context) => ProductsPage(
-                          listOfProducts: allProducts
-                              .where((element) =>
-                                  element.categorie == categorie.categorie)
-                              .toList(),
+                          productName: null,
+                          categorieName: categorie.toString(),
                         ),
                       ),
                     );
+                    print(
+                        'Redireccionar a lista de productos filtrada por esta categoria: $categorie');
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(10.0, 5.0, 5.0, 0),
@@ -83,7 +84,7 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(16),
                           child: Image.network(
-                            '${categorie.imageUrl}',
+                            'https://i.imgur.com/H9rVf4m.jpg',
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -92,7 +93,7 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                           child: Stack(
                             children: [
                               Text(
-                                '${categorie.categorie}',
+                                '$categorie',
                                 textAlign: TextAlign.center,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -106,7 +107,7 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                                       ..strokeWidth = 2),
                               ),
                               Text(
-                                '${categorie.categorie}',
+                                '$categorie',
                                 textAlign: TextAlign.center,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,

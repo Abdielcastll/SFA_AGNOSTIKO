@@ -9,5 +9,8 @@ class StockModel {
 }
 
 StockModel stockListfromSnapshot(doc) {
-  return StockModel((doc.get('valores')) ?? 'NaN');
+  return StockModel(
+    doc.data().toString().contains('valores') ? doc.get('valores') : 000,
+    // (doc.get('valores')) ?? 'NaN',
+  );
 }

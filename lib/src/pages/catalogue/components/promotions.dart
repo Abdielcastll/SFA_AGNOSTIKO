@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/product_details/product_details.dart';
@@ -12,10 +13,7 @@ import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 class PromotionsWidget extends StatefulWidget {
   const PromotionsWidget({
     Key? key,
-    required this.productsWithPromotion,
   }) : super(key: key);
-
-  final List productsWithPromotion;
 
   @override
   State<PromotionsWidget> createState() => _PromotionsWidgetState();
@@ -24,6 +22,11 @@ class PromotionsWidget extends StatefulWidget {
 class _PromotionsWidgetState extends State<PromotionsWidget> {
   @override
   Widget build(BuildContext context) {
+    final productsWithPromotions =
+        Provider.of<List<ProductsWithPromotions>?>(context) ?? [];
+    List<ProductsWithPromotions>? productsWithPromotionList =
+        productsWithPromotions;
+    // print(productsWithPromotionList);
     final linesSummary = Provider.of<LineSummary?>(context)?.summary ?? {};
     // print(linesSummary);
     final stockValues = Provider.of<StockModel?>(context)?.stock ?? {};
@@ -56,7 +59,7 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
               ),
             ],
           ),
-          widget.productsWithPromotion.isEmpty
+          productsWithPromotionList.isEmpty
               ? SizedBox(
                   height: 165,
                   width: double.infinity,
@@ -114,26 +117,28 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
                     child: ListView.builder(
                       physics: BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
-                      itemCount: widget.productsWithPromotion.length,
+                      itemCount: productsWithPromotionList.length,
                       itemBuilder: (BuildContext context, index) {
-                        final product = widget.productsWithPromotion[index];
+                        final product = productsWithPromotionList[index];
                         return GestureDetector(
                           onTap: () {
                             // Redireccionar a producto en promoción
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    ProductDetails(
-                                  code: product.code,
-                                  line: linesSummary[product.line],
-                                  imageUrl: 'https://i.imgur.com/BPbj6Gy.jpg',
-                                  isProductNew: false,
-                                  name: product.name,
-                                  stock: stockValues[product.code],
-                                ),
-                              ),
-                            );
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (BuildContext context) =>
+                            //         ProductDetails(
+                            //       code: product.code,
+                            //       line: linesSummary[product.line],
+                            //       imageUrl: 'https://i.imgur.com/BPbj6Gy.jpg',
+                            //       isProductNew: false,
+                            //       name: product.name,
+                            //       stock: stockValues[product.code],
+                            //     ),
+                            //   ),
+                            // );
+                            print(
+                                'Redireccionar a detalles del producto con promocion');
                           },
                           child: Column(
                             children: [
@@ -155,7 +160,7 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
                               SizedBox(height: 10),
                               Container(
                                 padding: EdgeInsets.only(left: 10),
-                                width: 260,
+                                width: 300,
                                 height: 20,
                                 child: Text(
                                   product.name,

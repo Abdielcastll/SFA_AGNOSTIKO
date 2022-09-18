@@ -27,8 +27,24 @@ class _CataloguePageState extends State<CataloguePage> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        StreamProvider<List<ProductModel>?>.value(
-          value: DatabaseService().products,
+        // StreamProvider<List<Products>?>.value(
+        //   value: DatabaseService().products,
+        //   initialData: const [],
+        //   catchError: (context, error) {
+        //     print(error);
+        //     return;
+        //   },
+        // ),
+        StreamProvider<List<ProductsWithPromotions>?>.value(
+          value: DatabaseService().productsWithPromotions,
+          initialData: const [],
+          catchError: (context, error) {
+            print(error);
+            return;
+          },
+        ),
+        StreamProvider<List<ProductsByDate>?>.value(
+          value: DatabaseService().productsByDate,
           initialData: const [],
           catchError: (context, error) {
             print(error);
@@ -38,14 +54,26 @@ class _CataloguePageState extends State<CataloguePage> {
         StreamProvider<CategorieSummary?>.value(
           value: DatabaseService().categorieSummary,
           initialData: null,
+          catchError: (context, error) {
+            print(error);
+            return;
+          },
         ),
         StreamProvider<LineSummary?>.value(
           value: DatabaseService().lineSummary,
           initialData: null,
+          catchError: (context, error) {
+            print(error);
+            return;
+          },
         ),
         StreamProvider<StockModel?>.value(
           value: DatabaseService().stockValues,
           initialData: null,
+          catchError: (context, error) {
+            print(error);
+            return;
+          },
         ),
       ],
       child: Scaffold(
@@ -67,51 +95,18 @@ class CatalogueBody extends StatefulWidget {
 }
 
 class _CatalogueBodyState extends State<CatalogueBody> {
-  List<ProductExample> productExampleList = allProducts;
-  List<CatalogueExample> catalogueExampleList = allCategories;
-
-  sortedProductsByDate(products) {
-    var test2 = products.sort(
-      (a, b) => a.lastModifiedDate
-          .toString()
-          .compareTo(b.lastModifiedDate.toString()),
-    );
-    return test2;
-  }
-
   @override
   Widget build(BuildContext context) {
-    // List<ProductExample> productsFilteredByPromotion = productExampleList
-    //     .where((element) => element.promotion == true)
-    //     .toList();
-    final products = Provider.of<List<ProductModel>?>(context) ?? [];
-    // print(products);
-    final productsWithPromotions =
-        products.where((element) => element.promotion != '').toList();
-    // print(productsWithPromotions);
-    // var sortedProductsByList = products.sort(
-    //   (a, b) => a.lastModifiedDate
-    //       .toString()
-    //       .compareTo(b.lastModifiedDate.toString()),
-    // );
-    // print(sortedProductsByList);
-    // final productsWithPromotions =
-    //     Provider.of<List<ProductsWithPromotion>?>(context) ?? [];
-    // final productsWithPromotionList = productsWithPromotions;
-    // print(productsWithPromotionList);
-
-    //TODO: CAMBIAR A STREAMS INDIVIDUALES Y DEJA EL STREAM DE
-    //PRODUCTOS ENTEROS A LA PAG DE PRODUCTOS DENTOR DEL BOTON
     return SingleChildScrollView(
       physics: BouncingScrollPhysics(),
       child: Column(
         // ignore: prefer_const_literals_to_create_immutables
         children: [
-          PromotionsWidget(productsWithPromotion: productsWithPromotions),
-          NewProductsWidget(listOfProducts: products),
-          // ListOfProductsButton(listOfProducts: productExampleList),
-          // ListOfCategories(categories: catalogueExampleList),
-          // MostSelledProducts(listOfProducts: productExampleList),
+          PromotionsWidget(),
+          NewProductsWidget(),
+          ListOfProductsButton(),
+          ListOfCategories(),
+          MostSelledProducts(),
         ],
       ),
     );

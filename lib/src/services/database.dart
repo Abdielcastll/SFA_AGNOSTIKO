@@ -1,25 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:pwa_sales2go_flutter/src/models/banks_model.dart';
-import 'package:pwa_sales2go_flutter/src/models/brands_model.dart';
-import 'package:pwa_sales2go_flutter/src/models/catalogue_model.dart';
-import 'package:pwa_sales2go_flutter/src/models/catalogue_products_model.dart';
-import 'package:pwa_sales2go_flutter/src/models/categories_model.dart';
-import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
-import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
-import 'package:pwa_sales2go_flutter/src/models/design_model.dart';
-import 'package:pwa_sales2go_flutter/src/models/devices_model.dart';
-import 'package:pwa_sales2go_flutter/src/models/idtype_model.dart';
-import 'package:pwa_sales2go_flutter/src/models/lines_model.dart';
-import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
-import 'package:pwa_sales2go_flutter/src/models/promotions_model.dart';
-import 'package:pwa_sales2go_flutter/src/models/quality_model.dart';
-import 'package:pwa_sales2go_flutter/src/models/sizes_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
-import 'package:pwa_sales2go_flutter/src/models/subcategories_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
-import 'package:pwa_sales2go_flutter/src/models/teams_model.dart';
-import 'package:pwa_sales2go_flutter/src/models/zones_model.dart';
 
 class DatabaseService {
   // Colecciones de informacion dentro de la DB
@@ -91,10 +73,33 @@ class DatabaseService {
 
   // Streams
 
-  // Stream de Productos
+  // Stream de Productos completos
 
-  Stream<List<ProductModel>> get products {
-    return productsCollection.snapshots().map(productListfromSnapshot);
+  Stream<List<Products>> get products {
+    return productsCollection
+        .orderBy('nombre')
+        .limit(50)
+        .snapshots()
+        .map(productsListFromSnapshot);
+  }
+
+  // Stream de Productos con promociones
+
+  Stream<List<ProductsWithPromotions>> get productsWithPromotions {
+    return productsCollection
+        .where('promocion', isNull: false)
+        .snapshots()
+        .map(productsWithPromotionListFromSnapshot);
+  }
+
+  // Stream de los ultimos diez productos modificados en la base de datos
+
+  Stream<List<ProductsByDate>> get productsByDate {
+    return productsCollection
+        .orderBy('modificado')
+        .limit(10)
+        .snapshots()
+        .map(productsByDateListFromSnapshot);
   }
 
   // Stream de Stock
@@ -136,7 +141,7 @@ class DatabaseService {
         .map(lineSummaryFromSnapshot);
   }
 
-  Stream<BrandSummary> get brandSymmary {
+  Stream<BrandSummary> get brandSummary {
     return brandsCollection
         .doc('resumen')
         .snapshots()
