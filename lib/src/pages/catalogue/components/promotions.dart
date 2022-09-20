@@ -31,6 +31,8 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
     // print(linesSummary);
     final stockValues = Provider.of<StockModel?>(context)?.stock ?? {};
     // print(stockValues);
+    final products = Provider.of<List<Products>?>(context) ?? [];
+    final productsList = products;
     return Container(
       padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
       margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
@@ -123,20 +125,24 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
                         return GestureDetector(
                           onTap: () {
                             // Redireccionar a producto en promoción
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (BuildContext context) =>
-                            //         ProductDetails(
-                            //       code: product.code,
-                            //       line: linesSummary[product.line],
-                            //       imageUrl: 'https://i.imgur.com/BPbj6Gy.jpg',
-                            //       isProductNew: false,
-                            //       name: product.name,
-                            //       stock: stockValues[product.code],
-                            //     ),
-                            //   ),
-                            // );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    ProductDetails(
+                                  code: product.code,
+                                  line: linesSummary[product.line],
+                                  imageUrl: 'https://i.imgur.com/BPbj6Gy.jpg',
+                                  isProductNew: true,
+                                  name: product.name,
+                                  stock: stockValues[product.code] ?? 000,
+                                  list: productsList
+                                      .where((element) =>
+                                          element.name == product.name)
+                                      .toList(),
+                                ),
+                              ),
+                            );
                             print(
                                 'Redireccionar a detalles del producto con promocion');
                           },

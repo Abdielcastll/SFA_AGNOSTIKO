@@ -78,7 +78,6 @@ class DatabaseService {
   Stream<List<Products>> get products {
     return productsCollection
         .orderBy('nombre')
-        .limit(50)
         .snapshots()
         .map(productsListFromSnapshot);
   }

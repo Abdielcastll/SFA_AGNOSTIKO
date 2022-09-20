@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:pwa_sales2go_flutter/examples/products_example.dart';
+import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -20,6 +20,9 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
     final categories = Provider.of<CategorieSummary?>(context)?.summary ?? {};
     List categoriesSummary = categories.values.toList();
     // print(categoriesSummary);
+    final products = Provider.of<List<Products>?>(context) ?? [];
+    final productsList = products;
+    // print(productsList);
     return Container(
       margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0),
       child: Column(
@@ -62,8 +65,10 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                       context,
                       MaterialPageRoute(
                         builder: (BuildContext context) => ProductsPage(
-                          productName: null,
-                          categorieName: categorie.toString(),
+                          listOfProducts: productsList
+                              .where((product) =>
+                                  categories[product.categorie] == categorie)
+                              .toList(),
                         ),
                       ),
                     );

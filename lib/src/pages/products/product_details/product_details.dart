@@ -20,6 +20,7 @@ class ProductDetails extends StatefulWidget {
     required this.imageUrl,
     required this.isProductNew,
     required this.stock,
+    this.list,
   }) : super(key: key);
 
   final String code;
@@ -28,6 +29,7 @@ class ProductDetails extends StatefulWidget {
   final String imageUrl;
   final bool isProductNew;
   final int stock;
+  final List<Products>? list;
 
   @override
   State<ProductDetails> createState() => _ProductDetailsState();
@@ -36,6 +38,7 @@ class ProductDetails extends StatefulWidget {
 class _ProductDetailsState extends State<ProductDetails> {
   @override
   Widget build(BuildContext context) {
+    // print(widget.list);
     return Scaffold(
       appBar: AppBar(elevation: 0, toolbarHeight: 40),
       bottomNavigationBar: BottomDecoration(),
@@ -47,6 +50,7 @@ class _ProductDetailsState extends State<ProductDetails> {
         isProductNew: widget.isProductNew,
         name: widget.name,
         stock: widget.stock,
+        list: widget.list,
       ),
     );
   }
@@ -61,6 +65,7 @@ class ProductDetailsBody extends StatelessWidget {
     required this.imageUrl,
     required this.isProductNew,
     required this.stock,
+    this.list,
   }) : super(key: key);
 
   final String code;
@@ -69,9 +74,11 @@ class ProductDetailsBody extends StatelessWidget {
   final String imageUrl;
   final bool isProductNew;
   final int stock;
+  final List<Products>? list;
 
   @override
   Widget build(BuildContext context) {
+    // print(list);
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -116,9 +123,10 @@ class ProductDetailsBody extends StatelessWidget {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                    fontFamily: 'Poppins-regular',
-                    fontSize: 24,
-                    color: myTheme.colorScheme.primary),
+                  fontFamily: 'Poppins-regular',
+                  fontSize: 24,
+                  color: myTheme.colorScheme.primary,
+                ),
               ),
             ),
           ),
@@ -159,7 +167,7 @@ class ProductDetailsBody extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                 builder: (BuildContext context) =>
-                                    ProductsPage(productName: name.toString()),
+                                    ProductsPage(listOfProducts: list),
                               ),
                             );
                             print(

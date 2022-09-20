@@ -27,14 +27,14 @@ class _CataloguePageState extends State<CataloguePage> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        // StreamProvider<List<Products>?>.value(
-        //   value: DatabaseService().products,
-        //   initialData: const [],
-        //   catchError: (context, error) {
-        //     print(error);
-        //     return;
-        //   },
-        // ),
+        StreamProvider<List<Products>?>.value(
+          value: DatabaseService().products,
+          initialData: const [],
+          catchError: (context, error) {
+            print(error);
+            return;
+          },
+        ),
         StreamProvider<List<ProductsWithPromotions>?>.value(
           value: DatabaseService().productsWithPromotions,
           initialData: const [],

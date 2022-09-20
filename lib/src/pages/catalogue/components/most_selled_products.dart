@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/product_details/product_details.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
@@ -21,6 +23,11 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
     final productsBySales = Provider.of<List<ProductsByDate>?>(context) ?? [];
     var productsBySalesList = productsBySales;
     // print(productsBySalesList);
+    final linesSummary = Provider.of<LineSummary?>(context)?.summary ?? {};
+    final stockValues = Provider.of<StockModel?>(context)?.stock ?? {};
+    final products = Provider.of<List<Products>?>(context) ?? [];
+    final productsList = products;
+    // print(productsList);
 
     return Container(
       margin: EdgeInsets.fromLTRB(0, 10.0, 0, 15.0),
@@ -60,18 +67,22 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                 return GestureDetector(
                   onTap: () {
                     // Redireccionar a detalles del producto
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (BuildContext context) => ProductDetails(
-                    //       code: productByDate.code,
-                    //       line: productByDate.line,
-                    //       imageUrl: productByDate.imageUrl,
-                    //       isProductNew: false,
-                    //       name: productByDate.name,
-                    //     ),
-                    //   ),
-                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => ProductDetails(
+                          code: product.code,
+                          line: linesSummary[product.line],
+                          imageUrl: 'https://i.imgur.com/BPbj6Gy.jpg',
+                          isProductNew: true,
+                          name: product.name,
+                          stock: stockValues[product.code] ?? 000,
+                          list: productsList
+                              .where((element) => element.name == product.name)
+                              .toList(),
+                        ),
+                      ),
+                    );
                     print('Redireccionar a este producto mas vendido');
                   },
                   child: Container(

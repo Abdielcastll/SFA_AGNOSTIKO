@@ -26,6 +26,9 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
     // print(productsByDateList);
     final linesSummary = Provider.of<LineSummary?>(context)?.summary ?? {};
     final stockValues = Provider.of<StockModel?>(context)?.stock ?? {};
+    final products = Provider.of<List<Products>?>(context) ?? [];
+    final productsList = products;
+    // print(productsList);
 
     return Container(
       margin: EdgeInsets.fromLTRB(0, 10.0, 0, 0),
@@ -62,6 +65,9 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
               itemCount: productsByDateList.length,
               itemBuilder: (BuildContext context, index) {
                 final product = productsByDateList[index];
+                // print(productsList
+                //     .where((element) => element.name == product.name)
+                //     .toList());
                 return GestureDetector(
                   onTap: () {
                     // Redireccionar a detalles del producto
@@ -75,6 +81,9 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                           isProductNew: true,
                           name: product.name,
                           stock: stockValues[product.code] ?? 000,
+                          list: productsList
+                              .where((element) => element.name == product.name)
+                              .toList(),
                         ),
                       ),
                     );
