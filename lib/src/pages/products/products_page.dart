@@ -118,7 +118,7 @@ class ProductsBody extends StatefulWidget {
     this.listOfProducts,
   }) : super(key: key);
 
-  final listOfProducts;
+  final List<Products>? listOfProducts;
 
   @override
   State<ProductsBody> createState() => _ProductsBodyState();
@@ -137,13 +137,20 @@ class _ProductsBodyState extends State<ProductsBody> {
     products = widget.listOfProducts;
   }
 
-  void searchProduct(String query) {
-    final suggestions = products?.where((element) {
-      final productName = element.name.toString().toLowerCase();
-      final input = query.toLowerCase();
-
-      return productName.contains(input);
-    }).toList();
+  // Esta funcion se llama cada vez que el text field cambia
+  void _searchProduct(String query) {
+    List<Products>? suggestions = [];
+    // si la barra de busqueda esta vacia o solo contiene espacios vacios,
+    // se hara display de todos los items
+    if (query.isEmpty) {
+      suggestions = widget.listOfProducts;
+    } else {
+      suggestions = widget.listOfProducts
+          ?.where((product) =>
+              product.name.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    }
+    // Refrescar la UI
     setState(() => products = suggestions);
   }
 
@@ -198,7 +205,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                   ),
                 ),
               ),
-              onChanged: searchProduct,
+              onChanged: _searchProduct,
             ),
           ),
           Container(
@@ -265,9 +272,11 @@ class _ProductsBodyState extends State<ProductsBody> {
               itemCount: products?.length,
               itemBuilder: (BuildContext context, index) {
                 // Valores dentro de los resumenes
+                //TODO: Revisar el cambio de orden para el filtro
                 final sortedProducts =
                     isDescending ? products?.reversed.toList() : products;
                 final product = sortedProducts![index];
+                // final product = products![index];
                 final productStock = stockValues[product.code] ?? 'NaN';
                 final productBrand = brandsSummary[product.brand] ?? 'NaN';
                 final productCategorie =

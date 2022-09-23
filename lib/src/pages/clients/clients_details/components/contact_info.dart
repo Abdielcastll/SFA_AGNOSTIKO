@@ -44,6 +44,7 @@ class ContactInfo extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Material(
+                      color: Colors.white,
                       child: IconButton(
                         onPressed: () {
                           // Boton de editar informacion

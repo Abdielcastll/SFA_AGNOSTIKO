@@ -114,21 +114,23 @@ class ClientDetailsBody extends StatelessWidget {
     required this.nameId,
     required this.typeId,
   }) : super(key: key);
-  final bool specialContribuyer;
-  final int masterDiscount;
-  final String fiscalAddress;
-  final String email;
-  final String listOfPrices;
-  final String name;
-  final String tlf1;
-  final String tlf2;
-  final String zone;
-  final int nameId;
-  final String typeId;
+
+  final specialContribuyer;
+  final masterDiscount;
+  final fiscalAddress;
+  final email;
+  final listOfPrices;
+  final name;
+  final tlf1;
+  final tlf2;
+  final zone;
+  final nameId;
+  final typeId;
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      physics: BouncingScrollPhysics(),
       child: Column(
         children: [
           ClientPicture(name: name),

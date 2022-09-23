@@ -144,6 +144,7 @@ class _ZonesDropDownMenuState extends State<ZonesDropDownMenu> {
                       ),
                     ),
                     Material(
+                      color: Colors.white,
                       child: Container(
                         margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
                         decoration: BoxDecoration(

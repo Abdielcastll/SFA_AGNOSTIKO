@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
@@ -69,15 +70,21 @@ class DatabaseService {
   //Coleccion de Calidades
   final qualityCollection = FirebaseFirestore.instance.collection('calidades');
 
+  //Coleccion de tipos de Id
+  final idTypeCollection = FirebaseFirestore.instance.collection('tipos_id');
+
   DatabaseService();
 
   // Streams
+
+  // Streams de productos
 
   // Stream de Productos completos
 
   Stream<List<Products>> get products {
     return productsCollection
-        .orderBy('nombre')
+        // .orderBy('nombre')
+        .limit(100)
         .snapshots()
         .map(productsListFromSnapshot);
   }
@@ -108,6 +115,17 @@ class DatabaseService {
         .doc('productos')
         .snapshots()
         .map(stockListfromSnapshot);
+  }
+
+  // Streams de Clientes
+
+  // Stream de Clientes completos
+
+  Stream<List<Clients>> get clients {
+    return clientsCollection
+        .orderBy('nombre')
+        .snapshots()
+        .map(clientListfromSnapshot);
   }
 
   // Streams de resumenes
@@ -159,5 +177,19 @@ class DatabaseService {
         .doc('resumen')
         .snapshots()
         .map(sizeSummaryFromSnapshot);
+  }
+
+  Stream<ZoneSummary> get zoneSummary {
+    return zonesCollection
+        .doc('resumen')
+        .snapshots()
+        .map(zoneSummaryFromSnapshot);
+  }
+
+  Stream<IdTypeSummary> get idTypeSummary {
+    return idTypeCollection
+        .doc('resumen')
+        .snapshots()
+        .map(idTypeSummaryFromSnapshot);
   }
 }

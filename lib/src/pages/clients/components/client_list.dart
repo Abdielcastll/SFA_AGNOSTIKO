@@ -2,35 +2,55 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:pwa_sales2go_flutter/examples/clients_example.dart';
+import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class ClientList extends StatefulWidget {
-  ClientList({Key? key}) : super(key: key);
+  ClientList({
+    Key? key,
+    this.listOfClients,
+  }) : super(key: key);
+
+  List<Clients>? listOfClients;
+  late List<Clients>? mutatedList = listOfClients;
 
   @override
   State<ClientList> createState() => _ClientListState();
 }
 
 class _ClientListState extends State<ClientList> {
-  final searchController = TextEditingController();
-  List<CLientsExample> clients = allClients;
+  final searchClientController = TextEditingController();
+  bool isDescending = false;
 
-  void searchClient(String query) {
-    final suggestions = allClients.where((element) {
-      final clientName = element.name.toLowerCase();
-      final input = query.toLowerCase();
-
-      return clientName.contains(input);
-    }).toList();
-    setState(() {
-      clients = suggestions;
-    });
+  // Esta funcion se llama cada vez que el text field cambia
+  void _searchClient(String query) {
+    List<Clients>? suggestions;
+    // si la barra de busqueda esta vacia o solo contiene espacios vacios,
+    // se hara display de todos los items
+    if (query.isEmpty) {
+      suggestions = widget.listOfClients;
+    } else {
+      suggestions = widget.listOfClients
+          ?.where((clients) =>
+              clients.name.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    }
+    // Refrescar la UI
+    setState(() => widget.mutatedList = suggestions);
   }
 
   @override
   Widget build(BuildContext context) {
+    final zonesSummary = Provider.of<ZoneSummary?>(context)?.summary ?? {};
+    final idTypeSummary = Provider.of<IdTypeSummary?>(context)?.summary ?? {};
+    // print(widget.mutatedList);
+    // print(clientsList);
+    // print(zonesSummary);
+    // print(idTypeSummary);
+
     return Column(
       children: [
         Container(
@@ -49,7 +69,7 @@ class _ClientListState extends State<ClientList> {
             maxLines: 1,
             maxLength: 200,
             textCapitalization: TextCapitalization.characters,
-            controller: searchController,
+            controller: searchClientController,
             decoration: InputDecoration(
               contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
               hintText: 'Buscar nombre',
@@ -65,35 +85,55 @@ class _ClientListState extends State<ClientList> {
                 ),
               ),
             ),
-            onChanged: searchClient,
+            onChanged: _searchClient,
           ),
         ),
         Container(
           margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
           child: Row(
             children: [
-              IconButton(
-                icon: Icon(
-                  MaterialCommunityIcons.order_alphabetical_ascending,
-                  color: Colors.grey.shade500,
-                  size: 25,
+              TextButton(
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
+                  ),
                 ),
-                splashRadius: 15,
+                child: Row(
+                  children: [
+                    Icon(
+                      MaterialCommunityIcons.order_alphabetical_ascending,
+                      color: Colors.grey.shade500,
+                      size: 25,
+                    ),
+                    SizedBox(width: 5),
+                    Text(
+                      isDescending ? 'Ascendente' : 'Descendente',
+                      style: TextStyle(
+                          fontFamily: 'Poppins-regular',
+                          color: Colors.grey.shade500,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
                 onPressed: () {
                   // Re ordenar el list view alfabeticamente
+                  setState(() => isDescending = !isDescending);
                 },
               ),
-              IconButton(
-                icon: Icon(
-                  MaterialCommunityIcons.filter_variant,
-                  color: Colors.grey.shade500,
-                  size: 25,
-                ),
-                splashRadius: 15,
-                onPressed: () {
-                  // Abrir si se quiere ver por prospecto o no
-                },
-              ),
+              // IconButton(
+              //   icon: Icon(
+              //     MaterialCommunityIcons.filter_variant,
+              //     color: Colors.grey.shade500,
+              //     size: 25,
+              //   ),
+              //   splashRadius: 15,
+              //   onPressed: () {
+              //     // Abrir si se quiere ver por prospecto o no
+              //   },
+              // ),
             ],
           ),
         ),
@@ -103,9 +143,18 @@ class _ClientListState extends State<ClientList> {
           height: MediaQuery.of(context).size.height,
           child: ListView.builder(
             physics: BouncingScrollPhysics(),
-            itemCount: clients.length,
+            itemCount: widget.mutatedList!.length,
             itemBuilder: (BuildContext context, index) {
-              final client = clients[index];
+              // final sortedProducts =
+              //     isDescending ? products?.reversed.toList() : products;
+              // final product = sortedProducts![index];
+              final sortedClients = isDescending
+                  ? widget.mutatedList?.reversed.toList()
+                  : widget.mutatedList;
+              final client = sortedClients?[index];
+              final clientName = client?.name ?? 'NaN';
+              final clientFiscalAddress = client?.fiscalAdress ?? 'NaN';
+              final clientEmail = client?.email ?? 'NaN';
               return Container(
                 margin: EdgeInsets.only(top: 10.0),
                 // height: 120,
@@ -121,20 +170,21 @@ class _ClientListState extends State<ClientList> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => ClientDetails(
-                          specialContribuyer: client.specialContribuyer,
+                          specialContribuyer: client!.specialContributor,
                           masterDiscount: client.masterDiscount,
-                          fiscalAddress: client.fiscalAddress,
+                          fiscalAddress: client.fiscalAdress,
                           email: client.email,
-                          listOfPrices: client.listOfPrices,
+                          listOfPrices: client.prices,
                           name: client.name,
-                          tlf1: client.tlf1,
-                          tlf2: client.tlf2,
-                          typeId: client.typeId,
-                          nameId: client.nameId,
-                          zone: client.zone,
+                          tlf1: client.phone1,
+                          tlf2: client.phone2,
+                          typeId: idTypeSummary[client.idType],
+                          nameId: client.id,
+                          zone: zonesSummary[client.zone],
                         ),
                       ),
                     );
+                    print('Redireccion a detalles del cliente');
                   },
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -143,7 +193,7 @@ class _ClientListState extends State<ClientList> {
                         margin: EdgeInsets.only(top: 5),
                         width: 200,
                         child: Text(
-                          client.name,
+                          clientName,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -166,7 +216,7 @@ class _ClientListState extends State<ClientList> {
                       Container(
                         width: 200,
                         child: Text(
-                          client.fiscalAddress.toLowerCase(),
+                          clientFiscalAddress.toString().toLowerCase(),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -176,17 +226,20 @@ class _ClientListState extends State<ClientList> {
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
-                        width: 120,
-                        height: 30,
-                        child: Text(
-                          client.email,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontFamily: 'Poppins-regular',
-                            fontSize: 10,
-                            color: Colors.purple.shade500,
+                        alignment: Alignment.bottomRight,
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
+                          width: 120,
+                          height: 30,
+                          child: Text(
+                            clientEmail,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontFamily: 'Poppins-regular',
+                              fontSize: 9,
+                              color: Colors.purple.shade500,
+                            ),
                           ),
                         ),
                       ),

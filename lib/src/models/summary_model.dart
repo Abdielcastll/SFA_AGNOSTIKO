@@ -107,3 +107,14 @@ class BankSummary {
 BankSummary bankSummaryFromSnapshot(snapshot) {
   return BankSummary(snapshot.get('nombres'));
 }
+
+// Get del provider de resumen de tipos de ID
+
+class IdTypeSummary {
+  final summary;
+  IdTypeSummary(this.summary);
+}
+
+IdTypeSummary idTypeSummaryFromSnapshot(snapshot) {
+  return IdTypeSummary(snapshot.get('nombres'));
+}
