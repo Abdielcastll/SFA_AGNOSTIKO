@@ -16,6 +16,7 @@ class Clients {
   final phone2;
   final idType;
   final zone;
+  final clientDocumentId;
 
   Clients({
     this.active,
@@ -33,6 +34,7 @@ class Clients {
     this.phone2,
     this.idType,
     this.zone,
+    this.clientDocumentId,
   });
 }
 
@@ -60,6 +62,7 @@ List<Clients> clientListfromSnapshot(QuerySnapshot snapshot) {
           ? doc.get('tipoId').id
           : 'NaN',
       zone: doc.get('zona').id,
+      clientDocumentId: doc.reference.id,
     );
   }).toList();
 }

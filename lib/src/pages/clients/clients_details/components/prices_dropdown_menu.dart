@@ -12,8 +12,8 @@ class PricesDropDownMenu extends StatefulWidget {
     required this.masterDiscount,
   }) : super(key: key);
 
-  final String listOfPrices;
-  final int masterDiscount;
+  final listOfPrices;
+  final masterDiscount;
 
   @override
   State<PricesDropDownMenu> createState() => _PricesDropDownMenuState();

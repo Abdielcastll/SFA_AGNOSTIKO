@@ -123,7 +123,8 @@ class DatabaseService {
 
   Stream<List<Clients>> get clients {
     return clientsCollection
-        .orderBy('nombre')
+        .limit(100)
+        // .orderBy('nombre')
         .snapshots()
         .map(clientListfromSnapshot);
   }

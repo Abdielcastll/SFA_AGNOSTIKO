@@ -9,9 +9,9 @@ class InvoiceInfo extends StatelessWidget {
     required this.nameId,
   }) : super(key: key);
 
-  final String tlf2;
-  final String typeId;
-  final int nameId;
+  final tlf2;
+  final typeId;
+  final nameId;
 
   @override
   Widget build(BuildContext context) {

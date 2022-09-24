@@ -137,119 +137,135 @@ class _ClientListState extends State<ClientList> {
             ],
           ),
         ),
-        Container(
-          // margin: EdgeInsets.only(top: 10.0),
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: ListView.builder(
-            physics: BouncingScrollPhysics(),
-            itemCount: widget.mutatedList!.length,
-            itemBuilder: (BuildContext context, index) {
-              // final sortedProducts =
-              //     isDescending ? products?.reversed.toList() : products;
-              // final product = sortedProducts![index];
-              final sortedClients = isDescending
-                  ? widget.mutatedList?.reversed.toList()
-                  : widget.mutatedList;
-              final client = sortedClients?[index];
-              final clientName = client?.name ?? 'NaN';
-              final clientFiscalAddress = client?.fiscalAdress ?? 'NaN';
-              final clientEmail = client?.email ?? 'NaN';
-              return Container(
-                margin: EdgeInsets.only(top: 10.0),
-                // height: 120,
+        widget.listOfClients!.isNotEmpty
+            ? Container(
+                // margin: EdgeInsets.only(top: 10.0),
                 width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: ListTile(
-                  onTap: () {
-                    // Redireccion a detalles de cliente
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ClientDetails(
-                          specialContribuyer: client!.specialContributor,
-                          masterDiscount: client.masterDiscount,
-                          fiscalAddress: client.fiscalAdress,
-                          email: client.email,
-                          listOfPrices: client.prices,
-                          name: client.name,
-                          tlf1: client.phone1,
-                          tlf2: client.phone2,
-                          typeId: idTypeSummary[client.idType],
-                          nameId: client.id,
-                          zone: zonesSummary[client.zone],
+                height: MediaQuery.of(context).size.height,
+                child: ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  itemCount: widget.mutatedList!.length,
+                  itemBuilder: (BuildContext context, index) {
+                    final sortedClients = isDescending
+                        ? widget.mutatedList?.reversed.toList()
+                        : widget.mutatedList;
+                    final client = sortedClients?[index];
+                    final clientSpecialContributor =
+                        client?.specialContributor ?? 'NaN';
+                    final clientMasterDiscount =
+                        client?.specialContributor ?? 'NaN';
+                    final clientFiscalAddress = client?.fiscalAdress ?? 'NaN';
+                    final clientEmail = client?.email ?? 'NaN';
+                    final clientPrices = client?.prices ?? 'NaN';
+                    final clientName = client?.name ?? 'NaN';
+                    final clientPhone1 = client?.phone1 ?? 'NaN';
+                    final clientPhone2 = client?.phone2 ?? 'NaN';
+                    final clientIdType = idTypeSummary[client?.idType] ?? 'NaN';
+                    final clientId = client?.id ?? 'NaN';
+                    final clientZone = zonesSummary[client?.zone] ?? 'NaN';
+                    final clientDocumentReferenceID =
+                        client?.clientDocumentId ?? 'NaN';
+
+                    return Container(
+                      margin: EdgeInsets.only(top: 10.0),
+                      // height: 120,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: ListTile(
+                        onTap: () {
+                          // Redireccion a detalles de cliente
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ClientDetails(
+                                specialContribuyer: clientSpecialContributor,
+                                masterDiscount: clientMasterDiscount,
+                                fiscalAddress: clientFiscalAddress,
+                                email: clientEmail,
+                                listOfPrices: clientPrices,
+                                name: clientName,
+                                tlf1: clientPhone1,
+                                tlf2: clientPhone2,
+                                typeId: clientIdType,
+                                nameId: clientId,
+                                zone: clientZone,
+                                clientDocumentReferenceID:
+                                    clientDocumentReferenceID,
+                              ),
+                            ),
+                          );
+                          print('Redireccion a detalles del cliente');
+                        },
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(top: 5),
+                              width: 200,
+                              child: Text(
+                                clientName,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontFamily: 'Poppins-regular',
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Icon(
+                              MaterialIcons.keyboard_arrow_right,
+                              color: myTheme.colorScheme.secondary,
+                              size: 18,
+                            ),
+                          ],
+                        ),
+                        subtitle: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 200,
+                              child: Text(
+                                clientFiscalAddress.toString().toLowerCase(),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontFamily: 'Poppins-regular',
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              alignment: Alignment.bottomRight,
+                              child: Container(
+                                margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
+                                width: 120,
+                                height: 30,
+                                child: Text(
+                                  clientEmail,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins-regular',
+                                    fontSize: 9,
+                                    color: Colors.purple.shade500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     );
-                    print('Redireccion a detalles del cliente');
                   },
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(top: 5),
-                        width: 200,
-                        child: Text(
-                          clientName,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontFamily: 'Poppins-regular',
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      Icon(
-                        MaterialIcons.keyboard_arrow_right,
-                        color: myTheme.colorScheme.secondary,
-                        size: 18,
-                      ),
-                    ],
-                  ),
-                  subtitle: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: 200,
-                        child: Text(
-                          clientFiscalAddress.toString().toLowerCase(),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontFamily: 'Poppins-regular',
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        alignment: Alignment.bottomRight,
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
-                          width: 120,
-                          height: 30,
-                          child: Text(
-                            clientEmail,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontFamily: 'Poppins-regular',
-                              fontSize: 9,
-                              color: Colors.purple.shade500,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
-              );
-            },
-          ),
-        ),
+              )
+            : Center(
+                child: Text('Cargando'),
+              )
       ],
     );
   }

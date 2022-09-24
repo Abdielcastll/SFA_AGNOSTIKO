@@ -15,32 +15,34 @@ import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/bottom_decoratior.dart/bottom_decoration.dart';
 
 class ClientDetails extends StatefulWidget {
-  const ClientDetails({
-    Key? key,
-    required this.specialContribuyer,
-    required this.masterDiscount,
-    required this.fiscalAddress,
-    required this.email,
-    required this.listOfPrices,
-    required this.name,
-    required this.tlf1,
-    required this.tlf2,
-    required this.zone,
-    required this.nameId,
-    required this.typeId,
-  }) : super(key: key);
+  const ClientDetails(
+      {Key? key,
+      this.specialContribuyer,
+      this.masterDiscount,
+      this.fiscalAddress,
+      this.email,
+      this.listOfPrices,
+      this.name,
+      this.tlf1,
+      this.tlf2,
+      this.zone,
+      this.nameId,
+      this.typeId,
+      this.clientDocumentReferenceID})
+      : super(key: key);
 
-  final bool specialContribuyer;
-  final int masterDiscount;
-  final String fiscalAddress;
-  final String email;
-  final String listOfPrices;
-  final String name;
-  final String tlf1;
-  final String tlf2;
-  final String zone;
-  final int nameId;
-  final String typeId;
+  final specialContribuyer;
+  final masterDiscount;
+  final fiscalAddress;
+  final email;
+  final listOfPrices;
+  final name;
+  final tlf1;
+  final tlf2;
+  final zone;
+  final nameId;
+  final typeId;
+  final clientDocumentReferenceID;
 
   @override
   State<ClientDetails> createState() => _ClientDetailsState();
@@ -63,7 +65,10 @@ class _ClientDetailsState extends State<ClientDetails> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => AccountBalancePage(),
+                    builder: (BuildContext context) => AccountBalancePage(
+                      clientDocument:
+                          widget.clientDocumentReferenceID.toString(),
+                    ),
                   ),
                 );
               },
