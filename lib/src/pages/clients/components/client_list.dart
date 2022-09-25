@@ -153,7 +153,7 @@ class _ClientListState extends State<ClientList> {
                     final clientSpecialContributor =
                         client?.specialContributor ?? 'NaN';
                     final clientMasterDiscount =
-                        client?.specialContributor ?? 'NaN';
+                        client?.masterDiscount ?? 'NaN';
                     final clientFiscalAddress = client?.fiscalAdress ?? 'NaN';
                     final clientEmail = client?.email ?? 'NaN';
                     final clientPrices = client?.prices ?? 'NaN';

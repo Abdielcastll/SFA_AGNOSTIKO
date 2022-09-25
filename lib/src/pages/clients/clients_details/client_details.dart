@@ -68,6 +68,7 @@ class _ClientDetailsState extends State<ClientDetails> {
                     builder: (BuildContext context) => AccountBalancePage(
                       clientDocument:
                           widget.clientDocumentReferenceID.toString(),
+                      clientName: widget.name,
                     ),
                   ),
                 );

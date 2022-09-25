@@ -4,6 +4,8 @@ import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 
+import '../models/visit_model.dart';
+
 class DatabaseService {
   // Colecciones de informacion dentro de la DB
 
@@ -72,6 +74,8 @@ class DatabaseService {
 
   //Coleccion de tipos de Id
   final idTypeCollection = FirebaseFirestore.instance.collection('tipos_id');
+
+  //Coleccion de visitas
 
   DatabaseService();
 

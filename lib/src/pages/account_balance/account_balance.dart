@@ -5,15 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/account_balance_model.dart';
+import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 
 class AccountBalancePage extends StatefulWidget {
   const AccountBalancePage({
     super.key,
     this.clientDocument,
+    this.clientName,
   });
 
   final clientDocument;
+  final clientName;
 
   @override
   State<AccountBalancePage> createState() => _AccountBalancePageState();
@@ -25,7 +28,8 @@ class _AccountBalancePageState extends State<AccountBalancePage> {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBarNavigation(message: 'Estado de cuenta'),
-      body: AccountBalanceBody(clientDocument: widget.clientDocument),
+      body: AccountBalanceBody(
+          clientDocument: widget.clientDocument, clientName: widget.clientName),
     );
   }
 }
@@ -34,8 +38,11 @@ class AccountBalanceBody extends StatefulWidget {
   AccountBalanceBody({
     Key? key,
     this.clientDocument,
+    this.clientName,
   }) : super(key: key);
+
   final clientDocument;
+  final clientName;
 
   @override
   State<AccountBalanceBody> createState() => _AccountBalanceBodyState();
@@ -84,7 +91,7 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            StatusBarResume(),
+            StatusBarResume(isCheckedFactures: isCheckedFactures),
             Container(
               margin: EdgeInsets.fromLTRB(10, 20, 10, 5),
               child: Row(
@@ -148,7 +155,15 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
                 ],
               ),
             ),
-            isCheckedFactures == true ? ShowInvoices() : ShowCreditNotes(),
+            isCheckedFactures == true
+                ? ShowInvoices(
+                    isCheckedOnProcess: isCheckedOnProcess,
+                    clientName: widget.clientName,
+                  )
+                : ShowCreditNotes(
+                    isCheckedOnProcess: isCheckedOnProcess,
+                    clientName: widget.clientName,
+                  ),
           ],
         ),
       ),
@@ -159,7 +174,10 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
 class StatusBarResume extends StatefulWidget {
   const StatusBarResume({
     Key? key,
+    this.isCheckedFactures,
   }) : super(key: key);
+
+  final isCheckedFactures;
 
   @override
   State<StatusBarResume> createState() => _StatusBarResumeState();
@@ -168,6 +186,35 @@ class StatusBarResume extends StatefulWidget {
 class _StatusBarResumeState extends State<StatusBarResume> {
   @override
   Widget build(BuildContext context) {
+    final invoices = Provider.of<List<AccountBalanceInvoices>?>(context) ?? [];
+    final creditNotes =
+        Provider.of<List<AccountBalanceCreditNotes>?>(context) ?? [];
+    final listOnProcess = widget.isCheckedFactures == true
+        ? invoices.where((element) => element.isPaid == false).toList()
+        : creditNotes
+            .where((element) =>
+                element.paymentsData['conciliado'] == false &&
+                element.paymentsData['anulado'] == false)
+            .toList();
+    final listOfCompleted = widget.isCheckedFactures == true
+        ? invoices.where((element) => element.isPaid == true).toList()
+        : creditNotes
+            .where((element) =>
+                element.paymentsData['conciliado'] == true &&
+                element.paymentsData['anulado'] == false)
+            .toList();
+    double totalAmount = 0.0;
+    if (widget.isCheckedFactures == true && invoices.isNotEmpty) {
+      for (int i = 0; i < invoices.length; i++) {
+        totalAmount += (invoices[i].totalAmount).toDouble();
+      }
+    } else if (widget.isCheckedFactures == false && creditNotes.isNotEmpty) {
+      for (int i = 0; i < creditNotes.length; i++) {
+        totalAmount += (creditNotes[i].paymentsData['montoOriginal']).toDouble() ?? 0;
+      }
+    }
+
+    print(totalAmount);
     return Container(
       margin: EdgeInsets.fromLTRB(10, 20, 10, 5),
       child: Row(
@@ -177,7 +224,7 @@ class _StatusBarResumeState extends State<StatusBarResume> {
             // ignore: prefer_const_literals_to_create_immutables
             children: [
               Text(
-                'F. Pendientes',
+                'Pendientes',
                 style: TextStyle(
                   fontFamily: 'Poppins-regular',
                   fontWeight: FontWeight.bold,
@@ -193,7 +240,7 @@ class _StatusBarResumeState extends State<StatusBarResume> {
                 ),
                 alignment: Alignment.center,
                 child: Text(
-                  '0',
+                  listOnProcess.length.toString(),
                   style: TextStyle(
                     fontFamily: 'Poppins-regular',
                     fontWeight: FontWeight.bold,
@@ -207,7 +254,7 @@ class _StatusBarResumeState extends State<StatusBarResume> {
             // ignore: prefer_const_literals_to_create_immutables
             children: [
               Text(
-                'F. Pagadas',
+                'Pagadas',
                 style: TextStyle(
                   fontFamily: 'Poppins-regular',
                   fontWeight: FontWeight.bold,
@@ -223,7 +270,7 @@ class _StatusBarResumeState extends State<StatusBarResume> {
                 ),
                 alignment: Alignment.center,
                 child: Text(
-                  '0',
+                  listOfCompleted.length.toString(),
                   style: TextStyle(
                     fontFamily: 'Poppins-regular',
                     fontWeight: FontWeight.bold,
@@ -253,7 +300,7 @@ class _StatusBarResumeState extends State<StatusBarResume> {
                 ),
                 alignment: Alignment.center,
                 child: Text(
-                  '0',
+                  totalAmount.toStringAsFixed(2),
                   style: TextStyle(
                     fontFamily: 'Poppins-regular',
                     fontWeight: FontWeight.bold,
@@ -302,20 +349,96 @@ class _StatusBarResumeState extends State<StatusBarResume> {
 class ShowInvoices extends StatefulWidget {
   const ShowInvoices({
     Key? key,
+    this.isCheckedOnProcess,
+    this.clientName,
   }) : super(key: key);
+
+  final isCheckedOnProcess;
+  final clientName;
 
   @override
   State<ShowInvoices> createState() => _ShowInvoicesState();
 }
 
 class _ShowInvoicesState extends State<ShowInvoices> {
+  leadingIcon(isConcilied) {
+    if (isConcilied == true) {
+      return Icon(
+        Icons.money_off_csred_outlined,
+        color: Colors.green,
+      );
+    } else if (isConcilied == false) {
+      return Icon(
+        Icons.money_off_csred_outlined,
+        color: Colors.amber,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final invoices = Provider.of<List<AccountBalanceInvoices>?>(context) ?? [];
-    // print(invoices);
     final invoicesList = invoices;
-    return Center(
-      child: Text('Facturas'),
+    var invoicesOnProcessList =
+        invoices.where((element) => element.isPaid == false).toList();
+    var dateFormatter = DateFormat('yyyy-MM-dd');
+    print(invoices);
+
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      margin: EdgeInsets.fromLTRB(10, 20, 10, 5),
+      child: ListView.builder(
+        physics: BouncingScrollPhysics(),
+        itemCount: widget.isCheckedOnProcess == true
+            ? invoicesOnProcessList.length
+            : invoicesList.length,
+        itemBuilder: (context, index) {
+          final note = widget.isCheckedOnProcess == true
+              ? invoicesOnProcessList[index]
+              : invoicesList[index];
+          final noteNumber = note.correlativeNumber ?? 'NaN';
+          final unFormattedDate =
+              note.orderDate ?? Timestamp.fromDate(DateTime.now());
+          final date = DateTime.parse(unFormattedDate.toDate().toString());
+          final noteDate = dateFormatter.format(date);
+          final noteOriginalAmount = note.totalAmount ?? 0;
+          //TODO: Ver de donde sale el saldo
+          final noteBalance = 00;
+
+          return ListTile(
+            leading: leadingIcon(note.isPaid),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Factura #$noteNumber',
+                  style: TextStyle(
+                    fontFamily: 'Poppins-regular',
+                    fontSize: 14,
+                  ),
+                ),
+                Text(
+                  noteDate,
+                  style: TextStyle(
+                    fontFamily: 'Poppins-regular',
+                    fontSize: 12,
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+            subtitle: Text(
+              'Monto original: \$ ${noteOriginalAmount.toStringAsFixed(2)} - Saldo: \$ $noteBalance',
+              style: TextStyle(
+                fontFamily: 'Poppins-regular',
+                fontSize: 12,
+                color: Colors.grey,
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }
@@ -323,7 +446,12 @@ class _ShowInvoicesState extends State<ShowInvoices> {
 class ShowCreditNotes extends StatefulWidget {
   const ShowCreditNotes({
     Key? key,
+    this.isCheckedOnProcess,
+    this.clientName,
   }) : super(key: key);
+
+  final isCheckedOnProcess;
+  final clientName;
 
   @override
   State<ShowCreditNotes> createState() => _ShowCreditNotesState();
@@ -354,6 +482,11 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
     final creditNotes =
         Provider.of<List<AccountBalanceCreditNotes>?>(context) ?? [];
     final creditNotesList = creditNotes;
+    var creditOnProcessList = creditNotes
+        .where((element) =>
+            element.paymentsData['conciliado'] == false &&
+            element.paymentsData['anulado'] == false)
+        .toList();
     // print(creditNotes);
     var dateFormatter = DateFormat('yyyy-MM-dd');
 
@@ -363,24 +496,194 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
       margin: EdgeInsets.fromLTRB(10, 20, 10, 5),
       child: ListView.builder(
         physics: BouncingScrollPhysics(),
-        itemCount: creditNotesList.length,
+        itemCount: widget.isCheckedOnProcess == true
+            ? creditOnProcessList.length
+            : creditNotesList.length,
         itemBuilder: (context, index) {
-          final note = creditNotesList[index];
+          final note = widget.isCheckedOnProcess == true
+              ? creditOnProcessList[index]
+              : creditNotesList[index];
           final noteNumber = note.correlativeNumber ?? 'NaN';
-          final date = DateTime.parse(note.date.toDate().toString());
+          final unFormattedDate =
+              note.date ?? Timestamp.fromDate(DateTime.now());
+          final date = DateTime.parse(unFormattedDate.toDate().toString());
           final noteDate = dateFormatter.format(date);
-          final noteOriginalAmount = note.totalAmount ?? 'NaN';
-          final noteBalance = note.paymentsData['monto'] ?? 'NaN';
+          final noteOriginalAmount = note.totalAmount ?? 0;
+          final noteBalance = note.paymentsData['monto'] ?? 0;
           final noteNuled = note.paymentsData['anulado'] ?? 'NaN';
           final noteConciled = note.paymentsData['conciliado'] ?? 'NaN';
+          final balanceNC = noteBalance + noteOriginalAmount;
           // print(noteDate);
+          // print(note);
           return ListTile(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return SingleChildScrollView(
+                    child: StatefulBuilder(
+                      builder: ((context, setState) {
+                        return AlertDialog(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          title: Text(
+                            'Nota de Credito #$noteNumber',
+                            style: TextStyle(
+                              fontFamily: 'Poppins-regular',
+                              color: myTheme.colorScheme.secondary,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          content: SingleChildScrollView(
+                            child: Column(
+                              // ignore: prefer_const_literals_to_create_immutables
+                              children: [
+                                Text(
+                                  'Cliente',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins-regular',
+                                    color: Colors.grey,
+                                    fontSize: 14,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Container(
+                                  width: 350,
+                                  height: 40,
+                                  alignment: Alignment.centerLeft,
+                                  margin: EdgeInsets.fromLTRB(10, 15, 0, 10),
+                                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(16),
+                                    color: Colors.white,
+                                    border: Border.all(
+                                      color: myTheme.colorScheme.primary
+                                          .withOpacity(0.5),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    widget.clientName,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins-regular',
+                                      fontSize: 14,
+                                      color: myTheme.colorScheme.primary
+                                          .withOpacity(0.5),
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  'Fecha',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins-regular',
+                                    color: Colors.grey,
+                                    fontSize: 14,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Container(
+                                  width: 350,
+                                  height: 40,
+                                  alignment: Alignment.centerLeft,
+                                  margin: EdgeInsets.fromLTRB(10, 15, 0, 10),
+                                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(16),
+                                    color: Colors.white,
+                                    border: Border.all(
+                                      color: myTheme.colorScheme.primary
+                                          .withOpacity(0.5),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Text(
+                                        noteDate,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins-regular',
+                                          fontSize: 14,
+                                          color: myTheme.colorScheme.primary
+                                              .withOpacity(0.5),
+                                        ),
+                                      ),
+                                      Icon(
+                                        Icons.calendar_month,
+                                        color: myTheme.colorScheme.primary
+                                            .withOpacity(0.5),
+                                        size: 20,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: 20),
+                                Text(
+                                  'Monto: \$${noteOriginalAmount.toStringAsFixed(2)}',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins-regular',
+                                    color: Colors.grey,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  'Usado: \$$noteBalance',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins-regular',
+                                    color: Colors.grey,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  'Saldo NC: \$$balanceNC',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins-regular',
+                                    color: Colors.grey,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.bottomRight,
+                                  child: TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      'Regresar',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins-regular',
+                                        color: myTheme.colorScheme.primary,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
+                    ),
+                  );
+                },
+              );
+            }, // AlertDialogPara mostrar informacion del invoice
+
             leading: leadingIcon(noteNuled, noteConciled),
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Factura #$noteNumber',
+                  'Nota de credito #$noteNumber',
                   style: TextStyle(
                     fontFamily: 'Poppins-regular',
                     fontSize: 14,
@@ -397,7 +700,7 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
               ],
             ),
             subtitle: Text(
-              'Monto original: \$ $noteOriginalAmount - Saldo: \$ $noteBalance',
+              'Monto original: \$ ${noteOriginalAmount.toStringAsFixed(2)} - Saldo: \$ $noteBalance',
               style: TextStyle(
                 fontFamily: 'Poppins-regular',
                 fontSize: 12,
@@ -410,98 +713,3 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
     );
   }
 }
-
-
-// Container(
-          //   margin: EdgeInsets.fromLTRB(10, 20, 10, 5),
-          //   // ignore: prefer_const_literals_to_create_immutables
-          //   child: Column(
-          //     // ignore: prefer_const_literals_to_create_immutables
-          //     children: [
-          //       ListTile(
-          //         leading: Icon(
-          //           Icons.money_off_csred_outlined,
-          //           color: Colors.green,
-          //         ),
-          //         title: Text(
-          //           'Factura #00',
-          //           style: TextStyle(
-          //             fontFamily: 'Poppins-regular',
-          //             fontSize: 14,
-          //           ),
-          //         ),
-          //         subtitle: Text(
-          //           'Monto original: \$ 00.00 - Saldo: \$ 00.00',
-          //           style: TextStyle(
-          //             fontFamily: 'Poppins-regular',
-          //             fontSize: 12,
-          //             color: Colors.grey,
-          //           ),
-          //         ),
-          //       ),
-          //       ListTile(
-          //         leading: Icon(
-          //           Icons.money_off_csred_outlined,
-          //           color: Colors.amber,
-          //         ),
-          //         title: Text(
-          //           'Factura #01',
-          //           style: TextStyle(
-          //             fontFamily: 'Poppins-regular',
-          //             fontSize: 14,
-          //           ),
-          //         ),
-          //         subtitle: Text(
-          //           'Monto original: \$ 00.00 - Saldo: \$ 00.00',
-          //           style: TextStyle(
-          //             fontFamily: 'Poppins-regular',
-          //             fontSize: 12,
-          //             color: Colors.grey,
-          //           ),
-          //         ),
-          //       ),
-          //       ListTile(
-          //         leading: Icon(
-          //           Icons.cancel_outlined,
-          //           color: Colors.red,
-          //         ),
-          //         title: Text(
-          //           'Factura #03',
-          //           style: TextStyle(
-          //             fontFamily: 'Poppins-regular',
-          //             fontSize: 14,
-          //           ),
-          //         ),
-          //         subtitle: Text(
-          //           'Monto original: \$ 00.00 - Saldo: \$ 00.00',
-          //           style: TextStyle(
-          //             fontFamily: 'Poppins-regular',
-          //             fontSize: 12,
-          //             color: Colors.grey,
-          //           ),
-          //         ),
-          //       ),
-          //       ListTile(
-          //         leading: Icon(
-          //           Icons.money_off_csred_outlined,
-          //           color: Colors.amber,
-          //         ),
-          //         title: Text(
-          //           'Nota #01',
-          //           style: TextStyle(
-          //             fontFamily: 'Poppins-regular',
-          //             fontSize: 14,
-          //           ),
-          //         ),
-          //         subtitle: Text(
-          //           'Monto original: \$ 00.00 - Saldo: \$ 00.00',
-          //           style: TextStyle(
-          //             fontFamily: 'Poppins-regular',
-          //             fontSize: 12,
-          //             color: Colors.grey,
-          //           ),
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),

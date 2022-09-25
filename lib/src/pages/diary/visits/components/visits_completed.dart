@@ -36,24 +36,24 @@ class VisitsList extends StatelessWidget {
           ],
         ),
         SizedBox(height: 10),
-        Container(
-          height: MediaQuery.of(context).size.height * 0.7,
-          child: ListView.builder(
-            physics: BouncingScrollPhysics(),
-            itemCount: completedList.length,
-            itemBuilder: (BuildContext context, int index) {
-              final client = completedList[index];
-              // print(client);
-              return VisitCard(
-                name: client['name'],
-                adress: client['address'],
-                hour: client['hour'],
-                date: client['date'],
-                status: client['status'],
-              );
-            },
-          ),
-        ),
+        // Container(
+        //   height: MediaQuery.of(context).size.height * 0.7,
+        //   child: ListView.builder(
+        //     physics: BouncingScrollPhysics(),
+        //     itemCount: completedList.length,
+        //     itemBuilder: (BuildContext context, int index) {
+        //       final client = completedList[index];
+        //       // print(client);
+        //       return VisitCard(
+        //         name: client['name'],
+        //         adress: client['address'],
+        //         hour: client['hour'],
+        //         date: client['date'],
+        //         status: client['status'],
+        //       );
+        //     },
+        //   ),
+        // ),
       ],
     );
   }

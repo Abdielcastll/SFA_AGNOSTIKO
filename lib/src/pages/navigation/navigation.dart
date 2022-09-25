@@ -107,10 +107,6 @@ class _NavigationPagesState extends State<NavigationPages> {
               ],
             ),
           ),
-          Container(
-            padding: const EdgeInsets.only(top: 56.0),
-            child: BottomDecoration(),
-          ),
         ],
       ),
     );

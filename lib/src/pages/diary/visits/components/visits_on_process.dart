@@ -1,19 +1,28 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/visit_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/visits/components/visit_card.dart';
 
 class VisitsOnProcess extends StatelessWidget {
   const VisitsOnProcess({
     Key? key,
-    required this.onProcessList,
   }) : super(key: key);
-
-  final List onProcessList;
 
   @override
   Widget build(BuildContext context) {
-    print('cantidad en proceso: ${onProcessList.length}');
+    final visits = Provider.of<List<Visits>?>(context) ?? [];
+    var dateFormatter = DateFormat('yyyy-MM-dd');
+
+    final visitsOnProcess = visits
+        .where((element) =>
+            element.isCancelled == false || element.isCompleted == false)
+        .toList();
+
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -43,16 +52,26 @@ class VisitsOnProcess extends StatelessWidget {
               child: Scrollbar(
                 child: ListView.builder(
                   // physics: BouncingScrollPhysics(),
-                  itemCount: onProcessList.length,
+                  itemCount: visitsOnProcess.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final client = onProcessList[index];
+                    final visit = visitsOnProcess[index];
+                    final visitClientDocumentId =
+                        visit.clientReferenceId ?? 'NaN';
+                    final unformattedDate = visit.date ?? 'NaN';
+                    final visitStatus = 'En proceso';
+                    final date =
+                        DateTime.parse(unformattedDate.toDate().toString());
+                    final visitDate = dateFormatter.format(date);
+                    final visitCommentary = visit.commentary;
+                    // print(unFormattedDate);
+                    // print(date);
+                    // print(visitDate);
                     // print(client);
                     return VisitCard(
-                      name: client['name'],
-                      adress: client['address'],
-                      hour: client['hour'],
-                      date: client['date'],
-                      status: client['status'],
+                      visitClientDocumentId: visitClientDocumentId,
+                      date: visitDate,
+                      status: visitStatus,
+                      commentary: visitCommentary,
                     );
                   },
                 ),
