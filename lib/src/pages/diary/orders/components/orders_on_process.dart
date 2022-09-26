@@ -1,19 +1,28 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/order_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/order_card.dart';
 
 class OrdersOnProcess extends StatelessWidget {
   const OrdersOnProcess({
     Key? key,
-    required this.onProcessList,
   }) : super(key: key);
-
-  final List onProcessList;
 
   @override
   Widget build(BuildContext context) {
-    print('ordenes en proceso: ${onProcessList.length}');
+    final orders = Provider.of<List<Orders>?>(context) ?? [];
+    var dateFormatter = DateFormat('yyyy-MM-dd');
+    final ordersOnProcess =
+        orders.where((element) => element.isInvoiced == false).toList();
+    // print(orders);
+    print('Ordenes en procesos: ${ordersOnProcess.length}');
+    final clientNames = Provider.of<List<ClientName>?>(context) ?? [];
+
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -41,18 +50,34 @@ class OrdersOnProcess extends StatelessWidget {
               height: 230,
               child: Scrollbar(
                 child: ListView.builder(
-                  itemCount: onProcessList.length,
+                  itemCount: ordersOnProcess.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final order = onProcessList[index];
-                    // print(order);
+                    final order = ordersOnProcess[index];
+                    final orderTotalAmount = order.totalAmount ?? 0;
+                    final unformattedDate = order.deliveryDate ??
+                        Timestamp.fromDate(DateTime.now());
+                    final orderStatus = 'En proceso';
+                    final date =
+                        DateTime.parse(unformattedDate.toDate().toString());
+                    final deliveryDate = dateFormatter.format(date);
+                    final orderCommentary = order.commentary;
+                    final orderClientRefID = order.clientDocumentRef;
+                    final orderRefID = order.orderDocumentRef;
+                    final orderIsFailed = order.isInvoiceFailed;
+                    final orderProducts = order.products;
+                    final orderTax = order.tax;
+                    final orderSubTotal = order.subTotal; // print(order);
                     return OrderCard(
-                      name: order['nameClient'],
-                      clientId: order['clientID'],
-                      orderId: order['orderID'],
-                      date: order['date'],
-                      total: order['total'],
-                      completed: order['completed'],
-                      failed: order['failed'],
+                      clientReferenceId: orderClientRefID,
+                      date: deliveryDate,
+                      total: orderTotalAmount,
+                      orderDocumentId: orderRefID,
+                      status: orderStatus,
+                      isInvoicesFailed: orderIsFailed,
+                      commentary: orderCommentary,
+                      products: orderProducts,
+                      tax: orderTax,
+                      subTotal: orderSubTotal,
                     );
                   },
                 ),

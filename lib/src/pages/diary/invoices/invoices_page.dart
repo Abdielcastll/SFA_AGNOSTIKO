@@ -1,7 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/examples/example_invoices_list.dart';
+import 'package:pwa_sales2go_flutter/src/models/account_balance_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/filter_invoices.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/invoice_completed.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/invoices_on_process.dart';
@@ -14,38 +17,59 @@ class InvoicesPage extends StatefulWidget {
 }
 
 class _InvoicesPageState extends State<InvoicesPage> {
+  bool isCheckedNotes = false;
+
   @override
   Widget build(BuildContext context) {
-    final listExample = invoicesList;
-    List onProcess = [];
-    List completed = [];
-    for (var i = 0; i < listExample.length; i++) {
-      if (listExample[i]['pagada'] == false) {
-        onProcess.add(listExample[i]);
-      } else if (listExample[i]['pagada'] == true) {
-        completed.add(listExample[i]);
-      }
-    }
-    print('pantalla facturas activa');
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.grey[200],
-        body: InvoicesBody(onProcess: onProcess, completed: completed),
+    return MultiProvider(
+      providers: [
+        isCheckedNotes == false
+            ? StreamProvider<List<AccountBalanceInvoices>?>.value(
+                value: FirebaseFirestore.instance
+                    .collectionGroup('facturas')
+                    .snapshots()
+                    .map(accountInvoicesFromSnapshot),
+                initialData: const [],
+                catchError: (context, error) {
+                  print(error);
+                  return;
+                },
+              )
+            : StreamProvider<List<AccountBalanceCreditNotes>?>.value(
+                value: FirebaseFirestore.instance
+                    .collectionGroup('notas_credito')
+                    .snapshots()
+                    .map(accountCreditNotesFromSnapshot),
+                initialData: const [],
+                catchError: (context, error) {
+                  print(error);
+                  return;
+                },
+              )
+      ],
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.grey[200],
+          body: InvoicesBody(isNotesChecked: isCheckedNotes),
+        ),
       ),
     );
   }
 }
 
-class InvoicesBody extends StatelessWidget {
-  const InvoicesBody({
+class InvoicesBody extends StatefulWidget {
+  InvoicesBody({
     Key? key,
-    required this.onProcess,
-    required this.completed,
+    this.isNotesChecked,
   }) : super(key: key);
 
-  final List onProcess;
-  final List completed;
+  bool? isNotesChecked;
 
+  @override
+  State<InvoicesBody> createState() => _InvoicesBodyState();
+}
+
+class _InvoicesBodyState extends State<InvoicesBody> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -54,9 +78,32 @@ class InvoicesBody extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         // ignore: prefer_const_literals_to_create_immutables
         children: [
-          SizedBox(height: 10),
-          InvoicesOnProcess(onProcessList: onProcess),
-          InvoicesList(completedList: completed),
+          Container(
+            margin: EdgeInsets.fromLTRB(10, 10, 10, 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Checkbox(
+                  checkColor: Colors.white,
+                  value: widget.isNotesChecked,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      widget.isNotesChecked = value!;
+                    });
+                  },
+                ),
+                Text(
+                  'Notas',
+                  style: TextStyle(
+                    fontFamily: 'Poppins-regular',
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // InvoicesOnProcess(),
+          // InvoicesList(),
         ],
       ),
     );

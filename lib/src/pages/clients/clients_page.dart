@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/components/client_list.dart';
-import 'package:pwa_sales2go_flutter/src/services/database.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 
 class ClientsPage extends StatefulWidget {
@@ -20,7 +20,7 @@ class _ClientsPageState extends State<ClientsPage> {
     return MultiProvider(
       providers: [
         StreamProvider<List<Clients>?>.value(
-          value: DatabaseService().clients,
+          value: DatabaseServiceStreams().clients,
           initialData: const [],
           catchError: (context, error) {
             print(error);
@@ -28,7 +28,7 @@ class _ClientsPageState extends State<ClientsPage> {
           },
         ),
         StreamProvider<IdTypeSummary?>.value(
-          value: DatabaseService().idTypeSummary,
+          value: DatabaseServiceStreams().idTypeSummary,
           initialData: null,
           catchError: (context, error) {
             print(error);
@@ -36,7 +36,7 @@ class _ClientsPageState extends State<ClientsPage> {
           },
         ),
         StreamProvider<ZoneSummary?>.value(
-          value: DatabaseService().zoneSummary,
+          value: DatabaseServiceStreams().zoneSummary,
           initialData: null,
           catchError: (context, error) {
             print(error);

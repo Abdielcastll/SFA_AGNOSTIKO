@@ -2,6 +2,8 @@
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_create.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 void modalBottomSheetForOnProcess(
@@ -18,6 +20,9 @@ void modalBottomSheetForOnProcess(
   currentClientZones,
   currentClientPrices,
   currentDiscountMaster,
+  clientReferenceId,
+  userUID,
+  visitDocumentId,
 ) {
   final List<String> items = [
     'Completada',
@@ -25,6 +30,7 @@ void modalBottomSheetForOnProcess(
   ];
 
   String? selectedValue;
+  String? commentaryValue;
 
   showModalBottomSheet(
     elevation: 0,
@@ -38,6 +44,7 @@ void modalBottomSheetForOnProcess(
       ),
     ),
     builder: (context) {
+      // print(visitDocumentId);
       return StatefulBuilder(
         builder: (context, setState) {
           return SafeArea(
@@ -85,6 +92,7 @@ void modalBottomSheetForOnProcess(
                       ),
                       onChanged: (value) {
                         // CAmbiar valor dentro del comentario
+                        commentaryValue = value;
                       },
                     ),
                   ),
@@ -326,6 +334,20 @@ void modalBottomSheetForOnProcess(
                                                   message: currentClientAddress,
                                                 ),
                                                 Text(
+                                                  'Direccion de despacho',
+                                                  style: TextStyle(
+                                                    fontFamily:
+                                                        'Poppins-regular',
+                                                    color: myTheme
+                                                        .colorScheme.primary,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                                TextBoxWidget(
+                                                  message:
+                                                      currentClientDispatchAdress,
+                                                ),
+                                                Text(
                                                   'Zona / Lista de Prcios',
                                                   style: TextStyle(
                                                     fontFamily:
@@ -350,7 +372,7 @@ void modalBottomSheetForOnProcess(
                                                   ],
                                                 ),
                                                 Text(
-                                                  'Descuento Maestro ',
+                                                  'Descuento Maestro (%)',
                                                   style: TextStyle(
                                                     fontFamily:
                                                         'Poppins-regular',
@@ -417,8 +439,24 @@ void modalBottomSheetForOnProcess(
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  onPressed: () {
-                                    // Guardar cambios hechos al estado de la visita
+                                  onPressed: () async {
+                                    print('Actualizar estado');
+
+                                    dynamic result = updateVisitData(
+                                      visitDocumentId,
+                                      selectedValue,
+                                      userUID,
+                                      commentaryValue,
+                                    );
+                                    if (result == null) {
+                                      Fluttertoast.showToast(
+                                          msg: 'Visita Modificada');
+                                    } else if (result != null) {
+                                      Fluttertoast.showToast(
+                                          msg:
+                                              'Le falta permisos o hubo un error al Modificar la visita');
+                                      Navigator.pop(context);
+                                    }
                                   },
                                 ),
                               ),
@@ -483,8 +521,14 @@ void modalBottomSheetForOnProcess(
                                                       color: myTheme
                                                           .colorScheme.primary),
                                                   child: TextButton(
-                                                    onPressed: () {
+                                                    onPressed: () async {
                                                       // Eliminar Visita en proceso de DB
+                                                      var result = deleteVisit(
+                                                        visitDocumentId,
+                                                        userUID,
+                                                      );
+                                                      Navigator.pop(context);
+                                                      Navigator.pop(context);
                                                     },
                                                     style: TextButton.styleFrom(
                                                       foregroundColor: myTheme
@@ -570,10 +614,10 @@ class TextBoxWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       // width: 350,
-      height: 40,
+      // height: 40,
       alignment: Alignment.centerLeft,
       margin: EdgeInsets.fromLTRB(10, 15, 0, 10),
-      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         color: Colors.white,
@@ -583,8 +627,8 @@ class TextBoxWidget extends StatelessWidget {
       ),
       child: Text(
         '$message',
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
+        // maxLines: 3,
+        // overflow: TextOverflow.ellipsis,
         style: TextStyle(
           fontFamily: 'Poppins-regular',
           fontSize: 14,

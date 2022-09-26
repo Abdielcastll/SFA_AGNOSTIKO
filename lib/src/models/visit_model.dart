@@ -13,6 +13,7 @@ class Visits {
   final timeStampRegister;
   final lastModified;
   final sellerReferenceId;
+  final documentRefId;
 
   Visits({
     this.isCancelled,
@@ -27,6 +28,7 @@ class Visits {
     this.timeStampRegister,
     this.lastModified,
     this.sellerReferenceId,
+    this.documentRefId,
   });
 }
 
@@ -35,13 +37,13 @@ List<Visits> visitsFromSnasphot(QuerySnapshot snapshot) {
     return Visits(
       isCancelled: doc.data().toString().contains('cancelada')
           ? doc.get('cancelada')
-          : 'NaN',
+          : false,
       clientReferenceId: doc.data().toString().contains('cliente')
           ? doc.get('cliente').id
           : 'NaN',
-      isCompleted: doc.data().toString().contains('completed')
-          ? doc.get('completed')
-          : 'NaN',
+      isCompleted: doc.data().toString().contains('completada')
+          ? doc.get('completada')
+          : false,
       commentary: doc.data().toString().contains('comentario')
           ? doc.get('comentario')
           : 'No hay comentario hecho',
@@ -67,6 +69,7 @@ List<Visits> visitsFromSnasphot(QuerySnapshot snapshot) {
       sellerReferenceId: doc.data().toString().contains('vendedor')
           ? doc.get('vendedor').id
           : 'NaN',
+      documentRefId: doc.reference.id,
     );
   }).toList();
 }

@@ -79,7 +79,6 @@ class Client {
   final masterDiscount;
   final fiscalAdress;
   final dispatchAdress;
-
   final email;
   final prices;
   final modified;
@@ -90,6 +89,7 @@ class Client {
   final phone2;
   final idType;
   final zone;
+  final clientDocumentId;
 
   Client({
     this.active,
@@ -108,6 +108,7 @@ class Client {
     this.phone2,
     this.idType,
     this.zone,
+    this.clientDocumentId,
   });
 }
 
@@ -137,5 +138,28 @@ Client clientFromDocumentID(snapshot) {
         ? snapshot.get('tipoId').id
         : 'NaN',
     zone: snapshot.get('zona').id,
+    clientDocumentId: snapshot.reference.id,
   );
+}
+
+class ClientName {
+  final name;
+  final clientDocumentId;
+  final zone;
+
+  ClientName({
+    this.name,
+    this.clientDocumentId,
+    this.zone,
+  });
+}
+
+List<ClientName> clientNameFromDocumentID(QuerySnapshot snapshot) {
+  return snapshot.docs.map((doc) {
+    return ClientName(
+      name: doc.get('nombre'),
+      clientDocumentId: doc.reference.id,
+      zone: doc.get('zona').id,
+    );
+  }).toList();
 }

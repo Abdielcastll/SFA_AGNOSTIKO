@@ -11,7 +11,7 @@ import 'package:pwa_sales2go_flutter/src/pages/profile/components/list_tile_opti
 import 'package:pwa_sales2go_flutter/src/pages/profile/components/logout_button.dart';
 import 'package:pwa_sales2go_flutter/src/pages/profile/components/user_info.dart';
 import 'package:pwa_sales2go_flutter/src/services/auth.dart';
-import 'package:pwa_sales2go_flutter/src/services/database.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/powered_by_agnostiko/powered_by_agnostiko.dart';

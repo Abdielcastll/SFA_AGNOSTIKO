@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
-import 'package:pwa_sales2go_flutter/src/services/database.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/bottom_decoratior.dart/bottom_decoration.dart';
@@ -42,7 +42,7 @@ class _ProductsPageState extends State<ProductsPage> {
           //   },
           // ),
           StreamProvider<QualitySummary?>.value(
-            value: DatabaseService().qualitySummary,
+            value: DatabaseServiceStreams().qualitySummary,
             initialData: null,
             catchError: (context, error) {
               print(error);
@@ -50,7 +50,7 @@ class _ProductsPageState extends State<ProductsPage> {
             },
           ),
           StreamProvider<CategorieSummary?>.value(
-            value: DatabaseService().categorieSummary,
+            value: DatabaseServiceStreams().categorieSummary,
             initialData: null,
             catchError: (context, error) {
               print(error);
@@ -58,7 +58,7 @@ class _ProductsPageState extends State<ProductsPage> {
             },
           ),
           StreamProvider<DesignSummary?>.value(
-            value: DatabaseService().designSummary,
+            value: DatabaseServiceStreams().designSummary,
             initialData: null,
             catchError: (context, error) {
               print(error);
@@ -66,7 +66,7 @@ class _ProductsPageState extends State<ProductsPage> {
             },
           ),
           StreamProvider<LineSummary?>.value(
-            value: DatabaseService().lineSummary,
+            value: DatabaseServiceStreams().lineSummary,
             initialData: null,
             catchError: (context, error) {
               print(error);
@@ -74,7 +74,7 @@ class _ProductsPageState extends State<ProductsPage> {
             },
           ),
           StreamProvider<BrandSummary?>.value(
-            value: DatabaseService().brandSummary,
+            value: DatabaseServiceStreams().brandSummary,
             initialData: null,
             catchError: (context, error) {
               print(error);
@@ -82,7 +82,7 @@ class _ProductsPageState extends State<ProductsPage> {
             },
           ),
           StreamProvider<SubCategorieSummary?>.value(
-            value: DatabaseService().subCategorieSummary,
+            value: DatabaseServiceStreams().subCategorieSummary,
             initialData: null,
             catchError: (context, error) {
               print(error);
@@ -90,7 +90,7 @@ class _ProductsPageState extends State<ProductsPage> {
             },
           ),
           StreamProvider<SizeSummary?>.value(
-            value: DatabaseService().sizeSummary,
+            value: DatabaseServiceStreams().sizeSummary,
             initialData: null,
             catchError: (context, error) {
               print(error);
@@ -98,7 +98,7 @@ class _ProductsPageState extends State<ProductsPage> {
             },
           ),
           StreamProvider<StockModel?>.value(
-            value: DatabaseService().stockValues,
+            value: DatabaseServiceStreams().stockValues,
             initialData: null,
             catchError: (context, error) {
               print(error);

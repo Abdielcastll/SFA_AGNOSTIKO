@@ -1,15 +1,14 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
-import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
+import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/visits_alerts_and_dialogs/completed_bottomsheet.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/visits_alerts_and_dialogs/onprocess_bottomsheet.dart';
-import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class VisitCard extends StatefulWidget {
   const VisitCard({
@@ -17,15 +16,17 @@ class VisitCard extends StatefulWidget {
     this.hour,
     this.date,
     this.status,
-    this.visitClientDocumentId,
+    this.visitDocumentId,
     this.commentary,
+    this.clientReferenceId,
   }) : super(key: key);
 
-  final visitClientDocumentId;
+  final visitDocumentId;
   final hour;
   final date;
   final status;
   final commentary;
+  final clientReferenceId;
 
   @override
   State<VisitCard> createState() => _VisitCardState();
@@ -34,13 +35,21 @@ class VisitCard extends StatefulWidget {
 class _VisitCardState extends State<VisitCard> {
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<Client?>.value(
-      initialData: null,
-      value: FirebaseFirestore.instance
-          .collection('clientes')
-          .doc(widget.visitClientDocumentId)
-          .snapshots()
-          .map(clientFromDocumentID),
+    return MultiProvider(
+      providers: [
+        StreamProvider<Client?>.value(
+          initialData: null,
+          value: FirebaseFirestore.instance
+              .collection('clientes')
+              .doc(widget.clientReferenceId)
+              .snapshots()
+              .map(clientFromDocumentID),
+        ),
+        StreamProvider<ZoneSummary?>.value(
+          initialData: null,
+          value: DatabaseServiceStreams().zoneSummary,
+        ),
+      ],
       child: VIsitCardBody(widget: widget),
     );
   }
@@ -62,9 +71,9 @@ class _VIsitCardBodyState extends State<VIsitCardBody> {
   identifyColor() {
     if (widget.widget.status == 'En proceso') {
       return Colors.amber.shade300;
-    } else if (widget.widget.status == 'Completed') {
+    } else if (widget.widget.status == 'Completada') {
       return Colors.green;
-    } else if (widget.widget.status == 'Cancelled') {
+    } else if (widget.widget.status == 'Cancelada') {
       return Colors.red;
     }
   }
@@ -86,6 +95,8 @@ class _VIsitCardBodyState extends State<VIsitCardBody> {
     final currentClientPrices = Provider.of<Client?>(context)?.prices ?? 'NaN';
     final currentDiscountMaster =
         Provider.of<Client?>(context)?.masterDiscount ?? {};
+    final zonesSummary = Provider.of<ZoneSummary?>(context)?.summary ?? 'NaN';
+    final userUID = Provider.of<UserModel>(context).uid;
 
     return GestureDetector(
       onTap: () {
@@ -102,17 +113,39 @@ class _VIsitCardBodyState extends State<VIsitCardBody> {
                 currentClientEmail,
                 currentClientAddress,
                 currentClientDispatchAdress,
-                currentClientZones,
+                zonesSummary[currentClientZones],
                 currentClientPrices,
                 currentDiscountMaster,
+                widget.widget.clientReferenceId,
+                userUID,
+                widget.widget.visitDocumentId,
               )
-            : modalBottomSheetForCompleted(context);
+            : modalBottomSheetForCompleted(
+                context,
+                widget.widget.commentary,
+                currentClientName,
+                currentClientIdType,
+                currentClientId,
+                currentClientSpecial,
+                currentClientPhone,
+                currentClientEmail,
+                currentClientAddress,
+                currentClientDispatchAdress,
+                zonesSummary[currentClientZones],
+                currentClientPrices,
+                currentDiscountMaster,
+                widget.widget.clientReferenceId,
+                userUID,
+                widget.widget.visitDocumentId,
+              );
       },
       child: Padding(
-        padding: EdgeInsets.only(top: 5, left: 16, right: 16, bottom: 5),
+        padding: EdgeInsets.only(top: 3, left: 16, right: 16, bottom: 0),
         child: Container(
+          margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+          // padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
           width: 360.0,
-          height: 70,
+          // height: 70,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10.0),
@@ -125,14 +158,17 @@ class _VIsitCardBodyState extends State<VIsitCardBody> {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(left: 14, top: 10),
-                    child: Text(
-                      '$currentClientName',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
+                    child: Container(
+                      width: 220,
+                      child: Text(
+                        '$currentClientName',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   Padding(
@@ -148,44 +184,49 @@ class _VIsitCardBodyState extends State<VIsitCardBody> {
                   ),
                 ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10, left: 14),
-                    child: Container(
-                      // height: 13,
-                      width: 250,
-                      child: Text(
-                        currentClientAddress,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.grey.shade400,
+              Container(
+                margin: EdgeInsets.only(bottom: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10, left: 14),
+                      child: Container(
+                        // margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                        // height: 13,
+                        width: 250,
+                        child: Text(
+                          currentClientAddress,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey.shade400,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Container(
-                      height: 13,
-                      width: 60,
-                      child: Text(
-                        widget.widget.status,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w400,
-                          color: identifyColor(),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Container(
+                        // margin: EdgeInsets.only(bottom: 10),
+                        height: 13,
+                        width: 60,
+                        child: Text(
+                          widget.widget.status,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w400,
+                            color: identifyColor(),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),

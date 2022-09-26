@@ -20,8 +20,11 @@ class VisitsOnProcess extends StatelessWidget {
 
     final visitsOnProcess = visits
         .where((element) =>
-            element.isCancelled == false || element.isCompleted == false)
+            element.isCancelled == false && element.isCompleted == false)
         .toList();
+    // print('Visitas totales: ${visits.length}');
+
+    print('Visitas en Proceso: ${visitsOnProcess.length}');
 
     return SingleChildScrollView(
       child: Column(
@@ -51,27 +54,30 @@ class VisitsOnProcess extends StatelessWidget {
               height: 230,
               child: Scrollbar(
                 child: ListView.builder(
-                  // physics: BouncingScrollPhysics(),
+                  physics: BouncingScrollPhysics(),
                   itemCount: visitsOnProcess.length,
                   itemBuilder: (BuildContext context, int index) {
                     final visit = visitsOnProcess[index];
-                    final visitClientDocumentId =
-                        visit.clientReferenceId ?? 'NaN';
-                    final unformattedDate = visit.date ?? 'NaN';
+                    final unformattedDate =
+                        visit.date ?? Timestamp.fromDate(DateTime.now());
                     final visitStatus = 'En proceso';
                     final date =
                         DateTime.parse(unformattedDate.toDate().toString());
                     final visitDate = dateFormatter.format(date);
-                    final visitCommentary = visit.commentary;
+                    final visitCommentary =
+                        visit.commentary ?? 'No hay Comentario disponible';
+                    final clientDocID = visit.clientReferenceId;
+                    final visitDocID = visit.documentRefId;
                     // print(unFormattedDate);
                     // print(date);
                     // print(visitDate);
                     // print(client);
                     return VisitCard(
-                      visitClientDocumentId: visitClientDocumentId,
+                      visitDocumentId: visitDocID,
                       date: visitDate,
                       status: visitStatus,
                       commentary: visitCommentary,
+                      clientReferenceId: clientDocID,
                     );
                   },
                 ),

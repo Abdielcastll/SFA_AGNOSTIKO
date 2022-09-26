@@ -11,7 +11,7 @@ import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/category_lis
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/most_selled_products.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/new_products.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/product_list_button.dart';
-import 'package:pwa_sales2go_flutter/src/services/database.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/promotions.dart';
 
@@ -28,7 +28,7 @@ class _CataloguePageState extends State<CataloguePage> {
     return MultiProvider(
       providers: [
         StreamProvider<List<Products>?>.value(
-          value: DatabaseService().products,
+          value: DatabaseServiceStreams().products,
           initialData: const [],
           catchError: (context, error) {
             print(error);
@@ -36,7 +36,7 @@ class _CataloguePageState extends State<CataloguePage> {
           },
         ),
         StreamProvider<List<ProductsWithPromotions>?>.value(
-          value: DatabaseService().productsWithPromotions,
+          value: DatabaseServiceStreams().productsWithPromotions,
           initialData: const [],
           catchError: (context, error) {
             print(error);
@@ -44,7 +44,7 @@ class _CataloguePageState extends State<CataloguePage> {
           },
         ),
         StreamProvider<List<ProductsByDate>?>.value(
-          value: DatabaseService().productsByDate,
+          value: DatabaseServiceStreams().productsByDate,
           initialData: const [],
           catchError: (context, error) {
             print(error);
@@ -52,7 +52,7 @@ class _CataloguePageState extends State<CataloguePage> {
           },
         ),
         StreamProvider<CategorieSummary?>.value(
-          value: DatabaseService().categorieSummary,
+          value: DatabaseServiceStreams().categorieSummary,
           initialData: null,
           catchError: (context, error) {
             print(error);
@@ -60,7 +60,7 @@ class _CataloguePageState extends State<CataloguePage> {
           },
         ),
         StreamProvider<LineSummary?>.value(
-          value: DatabaseService().lineSummary,
+          value: DatabaseServiceStreams().lineSummary,
           initialData: null,
           catchError: (context, error) {
             print(error);
@@ -68,7 +68,7 @@ class _CataloguePageState extends State<CataloguePage> {
           },
         ),
         StreamProvider<StockModel?>.value(
-          value: DatabaseService().stockValues,
+          value: DatabaseServiceStreams().stockValues,
           initialData: null,
           catchError: (context, error) {
             print(error);

@@ -6,6 +6,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/visit_model.dart';
+import 'package:pwa_sales2go_flutter/src/pages/diary/visits/components/visits_completed.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/visits/components/visits_on_process.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/visits_alerts_and_dialogs/create_client_dialog.dart';
@@ -46,7 +47,7 @@ class _VisitsPageState extends State<VisitsPage> {
                   backgroundColor: myTheme.colorScheme.primary,
                   onPressed: () {
                     // ShowDialog de a;adir visita
-                    showCreateClientDialog(context);
+                    showCreateClientDialog(context, user?.uid);
                   },
                   child: Icon(
                     MaterialCommunityIcons.calendar_plus,
@@ -77,7 +78,7 @@ class VisitsBody extends StatelessWidget {
         children: [
           SizedBox(height: 10),
           VisitsOnProcess(),
-          // VisitsList(completedList: completed),
+          VisitsCompleted(),
         ],
       ),
     );
