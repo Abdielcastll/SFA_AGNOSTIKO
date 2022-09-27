@@ -137,6 +137,8 @@ class OrderCardBody extends StatelessWidget {
                 widget.clientReferenceId,
                 userUID,
                 widget.orderDocumentId,
+                currentClientId,
+                currentClientIdType,
               )
             : modalBottomSheetForOrders(
                 true,
@@ -162,6 +164,8 @@ class OrderCardBody extends StatelessWidget {
                 widget.clientReferenceId,
                 userUID,
                 widget.orderDocumentId,
+                currentClientId,
+                currentClientIdType,
               );
       },
       child: Padding(

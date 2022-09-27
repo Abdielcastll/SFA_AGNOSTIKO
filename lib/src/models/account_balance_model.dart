@@ -101,6 +101,7 @@ class CreditNotes {
   final refCreatedBy;
   final refPayments;
   final isValid;
+  final isEliminated;
 
   CreditNotes({
     this.clientIdReference,
@@ -112,6 +113,7 @@ class CreditNotes {
     this.refCreatedBy,
     this.refPayments,
     this.isValid,
+    this.isEliminated,
   });
 }
 
@@ -134,6 +136,9 @@ List<CreditNotes> accountCreditNotesFromSnapshot(QuerySnapshot snapshot) {
       isValid: doc.data().toString().contains('vigente')
           ? doc.get('vigente')
           : 'NaN',
+      isEliminated: doc.data().toString().contains('eliminado')
+          ? doc.get('eliminado')
+          : false,
     );
   }).toList();
 }

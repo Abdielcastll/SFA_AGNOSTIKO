@@ -4,33 +4,32 @@ import 'dart:io';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/identify_payment_method.dart';
 
-void getFromGallery(context, setState, imageFile) async {
+getFromGallery(context) async {
   XFile? pickedFile =
       await ImagePicker().pickImage(source: ImageSource.gallery);
   if (pickedFile != null) {
-    cropImage(pickedFile.path, setState, imageFile);
+    return pickedFile;
   } else {
     return;
   }
-  Navigator.pop(context);
 }
 
-void cropImage(filePath, setState, imageFile) async {
+cropImage(filePath, imageFile) async {
   CroppedFile? croppedImage = await ImageCropper().cropImage(
     sourcePath: filePath,
     maxHeight: 1080,
     maxWidth: 1080,
   );
   if (croppedImage != null) {
-    setState(() {
-      imageFile = File(croppedImage.path);
-    });
+    return croppedImage;
   }
 }
 
@@ -59,7 +58,8 @@ void modalBottomSheetForInvoices(
   String? selectedValueA;
   File? imageFile;
   final paymentsValidPay = invoicePayments
-      .where((element) => element['conciliado'] == true)
+      .where((element) =>
+          element['conciliado'] == true && element['anulado'] == false)
       .toList();
   // print(paymentsValidPay);
   var sumOfValidPayments = paymentsValidPay.fold(0, (i, element) {
@@ -395,7 +395,6 @@ void modalBottomSheetForInvoices(
                                         ];
                                         return StatefulBuilder(
                                           builder: ((context, setState) {
-                                            var myTheme;
                                             return AlertDialog(
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
@@ -405,8 +404,8 @@ void modalBottomSheetForInvoices(
                                                 'Registrar pago',
                                                 style: TextStyle(
                                                   fontFamily: 'Poppins-regular',
-                                                  color: myTheme
-                                                      .colorScheme.secondary,
+                                                  color: Color.fromARGB(
+                                                      255, 0, 24, 143),
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.bold,
                                                 ),
@@ -421,9 +420,8 @@ void modalBottomSheetForInvoices(
                                                         style: TextStyle(
                                                           fontFamily:
                                                               'Poppins-regular',
-                                                          color: myTheme
-                                                              .colorScheme
-                                                              .secondary,
+                                                          color: Color.fromARGB(
+                                                              255, 0, 24, 143),
                                                           fontSize: 14,
                                                         ),
                                                       ),
@@ -450,9 +448,11 @@ void modalBottomSheetForInvoices(
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .bold,
-                                                                      color: myTheme
-                                                                          .colorScheme
-                                                                          .primary
+                                                                      color: Color.fromRGBO(
+                                                                              46,
+                                                                              62,
+                                                                              174,
+                                                                              1)
                                                                           .withOpacity(
                                                                               0.3),
                                                                     ),
@@ -776,10 +776,11 @@ void modalBottomSheetForInvoices(
                                                           // onChanged: searchClient,
                                                         ),
                                                       ),
-                                                      // Container(
-                                                      //   child:
-                                                      //       identifyPaymentMethod(),
-                                                      // ),
+                                                      Container(
+                                                        child:
+                                                            identifyPaymentMethod(
+                                                                selectedValueA),
+                                                      ),
                                                       Text(
                                                         'Seleccione un archivo',
                                                         style: TextStyle(
@@ -791,8 +792,37 @@ void modalBottomSheetForInvoices(
                                                         ),
                                                       ),
                                                       InkWell(
-                                                        onTap: () {
-                                                          // getFromGallery(context, setState, imageFile);
+                                                        onTap: () async {
+                                                          var pickedFile =
+                                                              await getFromGallery(
+                                                                  context);
+                                                          if (pickedFile !=
+                                                              null) {
+                                                            print(
+                                                                'Imagen seleccionada');
+                                                            var croppedImage =
+                                                                await cropImage(
+                                                                    pickedFile
+                                                                        .path,
+                                                                    imageFile);
+                                                            if (croppedImage !=
+                                                                null) {
+                                                              print(
+                                                                  'Imagen recortada');
+                                                              setState(() {
+                                                                imageFile = File(
+                                                                    croppedImage
+                                                                        .path);
+                                                              });
+                                                            } else {
+                                                              print(
+                                                                  'Error croppeando');
+                                                            }
+                                                          } else {
+                                                            print(
+                                                                'error seleccionando');
+                                                            return;
+                                                          }
                                                         },
                                                         child: Row(
                                                           // ignore: prefer_const_literals_to_create_immutables
@@ -824,11 +854,36 @@ void modalBottomSheetForInvoices(
                                                           ],
                                                         ),
                                                       ),
-                                                      // SizedBox(height: 100),
-                                                      Container(),
+                                                      imageFile == null
+                                                          ? Container()
+                                                          : Container(
+                                                              height: 300,
+                                                              width: 300,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                border:
+                                                                    Border.all(
+                                                                  color: myTheme
+                                                                      .colorScheme
+                                                                      .primary,
+                                                                ),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                              ),
+                                                              child: Image.file(
+                                                                imageFile!,
+                                                                height: 300,
+                                                                width: 300,
+                                                              ),
+                                                            ),
                                                       Container(
                                                         alignment: Alignment
                                                             .bottomCenter,
+                                                        margin:
+                                                            EdgeInsets.fromLTRB(
+                                                                0, 0, 0, 10),
                                                         child: Row(
                                                           mainAxisAlignment:
                                                               MainAxisAlignment
@@ -841,6 +896,9 @@ void modalBottomSheetForInvoices(
                                                               onPressed: () {
                                                                 Navigator.pop(
                                                                     context);
+                                                                setState(() =>
+                                                                    imageFile =
+                                                                        null);
                                                               },
                                                               child: Text(
                                                                 'Regresar',
@@ -872,6 +930,15 @@ void modalBottomSheetForInvoices(
                                                               child: TextButton(
                                                                 onPressed: () {
                                                                   // Crear en DB una visita
+                                                                  // TODO: Temporalmente regresara a antes
+                                                                  Fluttertoast
+                                                                      .showToast(
+                                                                          msg:
+                                                                              'Testeo de crear pago completado');
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                  Navigator.pop(
+                                                                      context);
                                                                 },
                                                                 style: TextButton
                                                                     .styleFrom(

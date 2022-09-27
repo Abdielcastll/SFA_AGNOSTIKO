@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 identifyPaymentMethod(
-  String selectedValueA,
+  String? selectedValueA,
 ) {
   final accountHolder = TextEditingController();
   final accoundNumber = TextEditingController();

@@ -3,6 +3,7 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_create.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
@@ -23,6 +24,8 @@ void modalBottomSheetForCompleted(
   clientReferenceId,
   userUID,
   visitDocumentId,
+  currentClientId,
+  currentClientIdType,
 ) {
   showModalBottomSheet(
     elevation: 0,
@@ -178,190 +181,213 @@ void modalBottomSheetForCompleted(
                               borderRadius: BorderRadius.circular(16),
                               color: myTheme.colorScheme.primary),
                           child: TextButton(
+                            // onPressed: () {
+                            //   showDialog(
+                            //     context: context,
+                            //     builder: (BuildContext context) {
+                            //       return AlertDialog(
+                            //         shape: RoundedRectangleBorder(
+                            //           borderRadius: BorderRadius.circular(20),
+                            //         ),
+                            //         title: Text(
+                            //           'Informacion',
+                            //           style: TextStyle(
+                            //             fontFamily: 'Poppins-regular',
+                            //             color: myTheme.colorScheme.secondary,
+                            //             fontSize: 14,
+                            //             fontWeight: FontWeight.bold,
+                            //           ),
+                            //         ),
+                            //         content: SingleChildScrollView(
+                            //           physics: BouncingScrollPhysics(),
+                            //           child: Column(
+                            //             mainAxisAlignment:
+                            //                 MainAxisAlignment.center,
+                            //             children: [
+                            //               Text(
+                            //                 'Nombre/Razon Social',
+                            //                 style: TextStyle(
+                            //                   fontFamily: 'Poppins-regular',
+                            //                   color:
+                            //                       myTheme.colorScheme.primary,
+                            //                   fontSize: 12,
+                            //                 ),
+                            //               ),
+                            //               TextBoxWidget(
+                            //                 message: currentClientName,
+                            //               ),
+                            //               Text(
+                            //                 'Documento de Identidad',
+                            //                 style: TextStyle(
+                            //                   fontFamily: 'Poppins-regular',
+                            //                   color:
+                            //                       myTheme.colorScheme.primary,
+                            //                   fontSize: 12,
+                            //                 ),
+                            //               ),
+                            //               Row(
+                            //                 mainAxisAlignment:
+                            //                     MainAxisAlignment.center,
+                            //                 children: [
+                            //                   TextBoxWidget(
+                            //                     message: idType,
+                            //                   ),
+                            //                   TextBoxWidget(
+                            //                     message: id,
+                            //                   ),
+                            //                 ],
+                            //               ),
+                            //               Row(
+                            //                 mainAxisAlignment:
+                            //                     MainAxisAlignment.center,
+                            //                 children: [
+                            //                   Checkbox(
+                            //                       value: specialContributor,
+                            //                       onChanged: null),
+                            //                   // SizedBox(width: 10),
+                            //                   Text(
+                            //                     'Contribuidor Especial',
+                            //                     style: TextStyle(
+                            //                       fontFamily: 'Poppins-regular',
+                            //                       color: myTheme
+                            //                           .colorScheme.primary,
+                            //                       fontSize: 12,
+                            //                     ),
+                            //                   ),
+                            //                 ],
+                            //               ),
+                            //               Text(
+                            //                 'Telefono',
+                            //                 style: TextStyle(
+                            //                   fontFamily: 'Poppins-regular',
+                            //                   color:
+                            //                       myTheme.colorScheme.primary,
+                            //                   fontSize: 12,
+                            //                 ),
+                            //               ),
+                            //               TextBoxWidget(
+                            //                 message: currentClientPhone,
+                            //               ),
+                            //               Text(
+                            //                 'Correo',
+                            //                 style: TextStyle(
+                            //                   fontFamily: 'Poppins-regular',
+                            //                   color:
+                            //                       myTheme.colorScheme.primary,
+                            //                   fontSize: 12,
+                            //                 ),
+                            //               ),
+                            //               TextBoxWidget(
+                            //                 message: currentClientEmail,
+                            //               ),
+                            //               Text(
+                            //                 'Direccion Fiscal',
+                            //                 style: TextStyle(
+                            //                   fontFamily: 'Poppins-regular',
+                            //                   color:
+                            //                       myTheme.colorScheme.primary,
+                            //                   fontSize: 12,
+                            //                 ),
+                            //               ),
+                            //               TextBoxWidget(
+                            //                 message: currentClientAddress,
+                            //               ),
+                            //               Text(
+                            //                 'Direccion de despacho',
+                            //                 style: TextStyle(
+                            //                   fontFamily: 'Poppins-regular',
+                            //                   color:
+                            //                       myTheme.colorScheme.primary,
+                            //                   fontSize: 12,
+                            //                 ),
+                            //               ),
+                            //               TextBoxWidget(
+                            //                 message:
+                            //                     currentClientDispatchAdress,
+                            //               ),
+                            //               Text(
+                            //                 'Zona / Lista de Prcios',
+                            //                 style: TextStyle(
+                            //                   fontFamily: 'Poppins-regular',
+                            //                   color:
+                            //                       myTheme.colorScheme.primary,
+                            //                   fontSize: 12,
+                            //                 ),
+                            //               ),
+                            //               Row(
+                            //                 mainAxisAlignment:
+                            //                     MainAxisAlignment.center,
+                            //                 children: [
+                            //                   TextBoxWidget(
+                            //                     message: currentClientZones,
+                            //                   ),
+                            //                   TextBoxWidget(
+                            //                     message: currentClientPrices,
+                            //                   ),
+                            //                 ],
+                            //               ),
+                            //               Text(
+                            //                 'Descuento Maestro (%)',
+                            //                 style: TextStyle(
+                            //                   fontFamily: 'Poppins-regular',
+                            //                   color:
+                            //                       myTheme.colorScheme.primary,
+                            //                   fontSize: 12,
+                            //                 ),
+                            //               ),
+                            //               TextBoxWidget(
+                            //                 message: currentDiscountMaster,
+                            //               ),
+                            //               Row(
+                            //                 mainAxisAlignment:
+                            //                     MainAxisAlignment.end,
+                            //                 children: [
+                            //                   TextButton(
+                            //                     onPressed: () {
+                            //                       Navigator.pop(context);
+                            //                     },
+                            //                     child: Text(
+                            //                       'Regresar',
+                            //                       style: TextStyle(
+                            //                         fontFamily:
+                            //                             'Poppins-regular',
+                            //                         color: myTheme
+                            //                             .colorScheme.primary,
+                            //                         fontSize: 14,
+                            //                         fontWeight: FontWeight.bold,
+                            //                       ),
+                            //                     ),
+                            //                   ),
+                            //                 ],
+                            //               ),
+                            //             ],
+                            //           ),
+                            //         ),
+                            //       );
+                            //     },
+                            //   );
+                            // },
                             onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    title: Text(
-                                      'Informacion',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins-regular',
-                                        color: myTheme.colorScheme.secondary,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    content: SingleChildScrollView(
-                                      physics: BouncingScrollPhysics(),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            'Nombre/Razon Social',
-                                            style: TextStyle(
-                                              fontFamily: 'Poppins-regular',
-                                              color:
-                                                  myTheme.colorScheme.primary,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                          TextBoxWidget(
-                                            message: currentClientName,
-                                          ),
-                                          Text(
-                                            'Documento de Identidad',
-                                            style: TextStyle(
-                                              fontFamily: 'Poppins-regular',
-                                              color:
-                                                  myTheme.colorScheme.primary,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              TextBoxWidget(
-                                                message: idType,
-                                              ),
-                                              TextBoxWidget(
-                                                message: id,
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Checkbox(
-                                                  value: specialContributor,
-                                                  onChanged: null),
-                                              // SizedBox(width: 10),
-                                              Text(
-                                                'Contribuidor Especial',
-                                                style: TextStyle(
-                                                  fontFamily: 'Poppins-regular',
-                                                  color: myTheme
-                                                      .colorScheme.primary,
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Text(
-                                            'Telefono',
-                                            style: TextStyle(
-                                              fontFamily: 'Poppins-regular',
-                                              color:
-                                                  myTheme.colorScheme.primary,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                          TextBoxWidget(
-                                            message: currentClientPhone,
-                                          ),
-                                          Text(
-                                            'Correo',
-                                            style: TextStyle(
-                                              fontFamily: 'Poppins-regular',
-                                              color:
-                                                  myTheme.colorScheme.primary,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                          TextBoxWidget(
-                                            message: currentClientEmail,
-                                          ),
-                                          Text(
-                                            'Direccion Fiscal',
-                                            style: TextStyle(
-                                              fontFamily: 'Poppins-regular',
-                                              color:
-                                                  myTheme.colorScheme.primary,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                          TextBoxWidget(
-                                            message: currentClientAddress,
-                                          ),
-                                          Text(
-                                            'Direccion de despacho',
-                                            style: TextStyle(
-                                              fontFamily: 'Poppins-regular',
-                                              color:
-                                                  myTheme.colorScheme.primary,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                          TextBoxWidget(
-                                            message:
-                                                currentClientDispatchAdress,
-                                          ),
-                                          Text(
-                                            'Zona / Lista de Prcios',
-                                            style: TextStyle(
-                                              fontFamily: 'Poppins-regular',
-                                              color:
-                                                  myTheme.colorScheme.primary,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              TextBoxWidget(
-                                                message: currentClientZones,
-                                              ),
-                                              TextBoxWidget(
-                                                message: currentClientPrices,
-                                              ),
-                                            ],
-                                          ),
-                                          Text(
-                                            'Descuento Maestro (%)',
-                                            style: TextStyle(
-                                              fontFamily: 'Poppins-regular',
-                                              color:
-                                                  myTheme.colorScheme.primary,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                          TextBoxWidget(
-                                            message: currentDiscountMaster,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            children: [
-                                              TextButton(
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                child: Text(
-                                                  'Regresar',
-                                                  style: TextStyle(
-                                                    fontFamily:
-                                                        'Poppins-regular',
-                                                    color: myTheme
-                                                        .colorScheme.primary,
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      ClientDetails(
+                                    specialContribuyer: specialContributor,
+                                    masterDiscount: currentDiscountMaster,
+                                    fiscalAddress: currentClientAddress,
+                                    email: currentClientEmail,
+                                    listOfPrices: currentClientPrices,
+                                    name: currentClientName,
+                                    tlf1: currentClientPhone,
+                                    tlf2: currentClientPhone,
+                                    zone: currentClientZones,
+                                    nameId: currentClientId,
+                                    typeId: currentClientIdType,
+                                    clientDocumentReferenceID:
+                                        clientReferenceId,
+                                  ),
+                                ),
                               );
                             },
                             style: TextButton.styleFrom(

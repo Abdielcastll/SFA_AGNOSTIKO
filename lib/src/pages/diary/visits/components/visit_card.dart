@@ -119,6 +119,8 @@ class _VIsitCardBodyState extends State<VIsitCardBody> {
                 widget.widget.clientReferenceId,
                 userUID,
                 widget.widget.visitDocumentId,
+                currentClientId,
+                currentClientIdType,
               )
             : modalBottomSheetForCompleted(
                 context,
@@ -137,6 +139,8 @@ class _VIsitCardBodyState extends State<VIsitCardBody> {
                 widget.widget.clientReferenceId,
                 userUID,
                 widget.widget.visitDocumentId,
+                currentClientId,
+                currentClientIdType,
               );
       },
       child: Padding(

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/examples/example_invoices_list.dart';
 import 'package:pwa_sales2go_flutter/src/models/account_balance_model.dart';
+import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/credit_on_process.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/filter_invoices.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/invoice_completed.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/invoices_on_process.dart';
@@ -79,30 +80,32 @@ class _InvoicesBodyState extends State<InvoicesBody> {
         // ignore: prefer_const_literals_to_create_immutables
         children: [
           Container(
-            margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+            margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Checkbox(
-                  checkColor: Colors.white,
-                  value: widget.isNotesChecked,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      widget.isNotesChecked = value!;
-                    });
-                  },
-                ),
-                Text(
-                  'Notas',
-                  style: TextStyle(
-                    fontFamily: 'Poppins-regular',
-                    fontSize: 14,
-                  ),
-                ),
+                // Checkbox(
+                //   checkColor: Colors.white,
+                //   value: widget.isNotesChecked,
+                //   onChanged: (bool? value) {
+                //     setState(() {
+                //       widget.isNotesChecked = value!;
+                //     });
+                //   },
+                // ),
+                // Text(
+                //   'Notas',
+                //   style: TextStyle(
+                //     fontFamily: 'Poppins-regular',
+                //     fontSize: 14,
+                //   ),
+                // ),
               ],
             ),
           ),
-          widget.isNotesChecked == false ? InvoicesOnProcess() : Container(),
+          widget.isNotesChecked == false
+              ? InvoicesOnProcess()
+              : CreditNotesOnProcess(),
           widget.isNotesChecked == false ? InvoicesList() : Container(),
           // InvoicesList(),
         ],
