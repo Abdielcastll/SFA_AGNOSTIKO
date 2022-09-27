@@ -1,24 +1,29 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/src/models/account_balance_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/invoice_card.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/loading/loading_widget.dart';
 
 class InvoicesOnProcess extends StatefulWidget {
-  InvoicesOnProcess({
-    Key? key,
-    required this.onProcessList,
-  }) : super(key: key);
-
-  final List onProcessList;
+  const InvoicesOnProcess({Key? key}) : super(key: key);
 
   @override
   State<InvoicesOnProcess> createState() => _InvoicesOnProcessState();
 }
 
 class _InvoicesOnProcessState extends State<InvoicesOnProcess> {
+  var dateFormatter = DateFormat('yyyy-MM-dd');
+
   @override
   Widget build(BuildContext context) {
-    print('cantidad en proceso: ${widget.onProcessList.length}');
+    final invoices = Provider.of<List<Invoices>?>(context) ?? [];
+    final invoicesList =
+        invoices.where((element) => element.isPaid == false).toList();
+    // print(invoicesList);
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -48,17 +53,31 @@ class _InvoicesOnProcessState extends State<InvoicesOnProcess> {
               child: Scrollbar(
                 child: ListView.builder(
                   // physics: BouncingScrollPhysics(),
-                  itemCount: widget.onProcessList.length,
+                  itemCount: invoicesList.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final invoice = widget.onProcessList[index];
+                    final invoice = invoicesList[index];
+                    final invoiceClient = invoice.clientIdReference;
+                    final invoiceOrder = invoice.orderDate;
+                    final unformattedDate =
+                        invoice.orderDate ?? Timestamp.fromDate(DateTime.now());
+                    final date =
+                        DateTime.parse(unformattedDate.toDate().toString());
+                    final invoiceDate = dateFormatter.format(date);
+                    final invoiceBalance = invoice.totalAmount;
+                    final invoicePayments = invoice.payments;
+                    const invoiceStatus = 'En proceso';
+                    final invoiceNumber = invoice.correlativeNumber;
+                    final invoiceTotal = invoice.totalAmount;
                     // print(invoice);
                     return InvoiceCard(
-                      name: invoice['nombre'] ?? 'No name',
-                      orderId: invoice['orderID'] ?? 'No id',
-                      date: invoice['date'] ?? 'No date',
-                      total: invoice['total'] ?? 'no total',
-                      completed: invoice['pagada'] ?? false,
-                      salesman: invoice['salesman'] ?? 'no salesman',
+                      invoiceClient: invoiceClient,
+                      invoiceOrder: invoiceOrder,
+                      invoiceDate: invoiceDate,
+                      invoiceBalance: invoiceBalance,
+                      invoiceStatus: invoiceStatus,
+                      invoicePayments: invoicePayments,
+                      invoiceNumber: invoiceNumber,
+                      invoiceTotal: invoiceTotal,
                     );
                   },
                 ),

@@ -21,7 +21,7 @@ class OrdersOnProcess extends StatelessWidget {
         orders.where((element) => element.isInvoiced == false).toList();
     // print(orders);
     print('Ordenes en procesos: ${ordersOnProcess.length}');
-    final clientNames = Provider.of<List<ClientName>?>(context) ?? [];
+    // final clientNames = Provider.of<List<ClientName>?>(context) ?? [];
 
     return SingleChildScrollView(
       child: Column(

@@ -59,7 +59,7 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
     return MultiProvider(
       providers: [
         isCheckedFactures == true
-            ? StreamProvider<List<AccountBalanceInvoices>?>.value(
+            ? StreamProvider<List<Invoices>?>.value(
                 value: FirebaseFirestore.instance
                     .collection('clientes')
                     .doc(widget.clientDocument.toString())
@@ -73,7 +73,7 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
                   return;
                 },
               )
-            : StreamProvider<List<AccountBalanceCreditNotes>?>.value(
+            : StreamProvider<List<CreditNotes>?>.value(
                 value: FirebaseFirestore.instance
                     .collection('clientes')
                     .doc(widget.clientDocument.toString())
@@ -186,9 +186,8 @@ class StatusBarResume extends StatefulWidget {
 class _StatusBarResumeState extends State<StatusBarResume> {
   @override
   Widget build(BuildContext context) {
-    final invoices = Provider.of<List<AccountBalanceInvoices>?>(context) ?? [];
-    final creditNotes =
-        Provider.of<List<AccountBalanceCreditNotes>?>(context) ?? [];
+    final invoices = Provider.of<List<Invoices>?>(context) ?? [];
+    final creditNotes = Provider.of<List<CreditNotes>?>(context) ?? [];
     final listOnProcess = widget.isCheckedFactures == true
         ? invoices.where((element) => element.isPaid == false).toList()
         : creditNotes
@@ -210,7 +209,8 @@ class _StatusBarResumeState extends State<StatusBarResume> {
       }
     } else if (widget.isCheckedFactures == false && creditNotes.isNotEmpty) {
       for (int i = 0; i < creditNotes.length; i++) {
-        totalAmount += (creditNotes[i].paymentsData['montoOriginal']).toDouble() ?? 0;
+        totalAmount +=
+            (creditNotes[i].paymentsData['montoOriginal']).toDouble() ?? 0;
       }
     }
 
@@ -377,7 +377,7 @@ class _ShowInvoicesState extends State<ShowInvoices> {
 
   @override
   Widget build(BuildContext context) {
-    final invoices = Provider.of<List<AccountBalanceInvoices>?>(context) ?? [];
+    final invoices = Provider.of<List<Invoices>?>(context) ?? [];
     final invoicesList = invoices;
     var invoicesOnProcessList =
         invoices.where((element) => element.isPaid == false).toList();
@@ -479,8 +479,7 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
 
   @override
   Widget build(BuildContext context) {
-    final creditNotes =
-        Provider.of<List<AccountBalanceCreditNotes>?>(context) ?? [];
+    final creditNotes = Provider.of<List<CreditNotes>?>(context) ?? [];
     final creditNotesList = creditNotes;
     var creditOnProcessList = creditNotes
         .where((element) =>

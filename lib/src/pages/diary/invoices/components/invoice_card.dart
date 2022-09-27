@@ -2,2172 +2,154 @@
 
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/invoice_modalbottomsheet.dart';
 
 class InvoiceCard extends StatefulWidget {
-  const InvoiceCard(
-      {Key? key,
-      this.name,
-      this.orderId,
-      this.date,
-      this.total,
-      this.salesman,
-      required this.completed})
-      : super(key: key);
+  const InvoiceCard({
+    Key? key,
+    this.invoiceClient,
+    this.invoiceOrder,
+    this.invoiceDate,
+    this.invoiceBalance,
+    this.invoiceStatus,
+    this.invoicePayments,
+    this.invoiceNumber,
+    this.invoiceTotal,
+  }) : super(key: key);
 
-  final name;
-  final orderId;
-  final date;
-  final total;
-  final bool completed;
-  final salesman;
+  final invoiceClient;
+  final invoiceOrder;
+  final invoiceDate;
+  final invoiceBalance;
+  final invoiceStatus;
+  final invoicePayments;
+  final invoiceNumber;
+  final invoiceTotal;
 
   @override
   State<InvoiceCard> createState() => _InvoiceCardState();
 }
 
 class _InvoiceCardState extends State<InvoiceCard> {
-  final accountHolder = TextEditingController();
-  final accoundNumber = TextEditingController();
-  final transactionId = TextEditingController();
-  final voucherNumber = TextEditingController();
-  final referenceId = TextEditingController();
-  final paidAmount = TextEditingController();
-
-  DateTime today = DateTime.now();
-  var dateFormatter = DateFormat('dd-MM-yyyy');
-  String? selectedValueA;
-  String? selectedBank;
-  String? selectedCoin;
-  File? imageFile;
-  List<String> itemsBank = [
-    'Banco central',
-    'Banco Bicentenario',
-    'Banco de venezuela',
-    'Banesco',
-    'BOD',
-    'BNC',
-  ];
-  List<String> itemsBankInter = [
-    'FaceBank',
-    'Bank of Panama',
-    'Banco de Peru',
-    'Bank of Panama',
-    'Central bank',
-    'Bank of America',
-  ];
-  List<String> itemsCoin = [
-    'USD',
-    'BTC',
-    'EUR',
-    'VED',
-  ];
-
-  identifyColor() {
-    if (widget.completed == false) {
-      return Colors.amber.shade300;
-    } else if (widget.completed == true) {
-      return Colors.green;
-    }
-  }
-
-  identifyStatus() {
-    if (widget.completed == false) {
-      return 'En proceso';
-    } else if (widget.completed == true) {
-      return 'Facturado';
-    }
-  }
-
-  void identifyFunction() {
-    if (widget.completed == true) {
-      return modalBottomSheetForInvoices(true);
-    } else if (widget.completed == false) {
-      return modalBottomSheetForInvoices(false);
-    }
-  }
-
-  void _getFromGallery() async {
-    XFile? pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      _cropImage(pickedFile.path);
-    } else {
-      return;
-    }
-    Navigator.pop(context);
-  }
-
-  void _cropImage(filePath) async {
-    CroppedFile? croppedImage = await ImageCropper().cropImage(
-      sourcePath: filePath,
-      maxHeight: 1080,
-      maxWidth: 1080,
-    );
-    if (croppedImage != null) {
-      setState(() {
-        imageFile = File(croppedImage.path);
-      });
-    }
-  }
-
-  identifyPaymentMethod() {
-    if (selectedValueA == 'Cheque') {
-      return StatefulBuilder(
-        builder: (context, setState) => Column(
-          children: [
-            Text(
-              'Banco *',
-              style: TextStyle(
-                fontFamily: 'Poppins-regular',
-                color: myTheme.colorScheme.secondary,
-                fontSize: 14,
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton2(
-                  isExpanded: true,
-                  // ignore: prefer_const_literals_to_create_immutables
-                  hint: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          selectedBank ?? '',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: myTheme.colorScheme.primary.withOpacity(0.7),
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                  items: itemsBank
-                      .map((item) => DropdownMenuItem<String>(
-                            value: item,
-                            child: Text(
-                              item,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: myTheme.colorScheme.primary,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ))
-                      .toList(),
-                  value: selectedBank,
-                  onChanged: (value) {
-                    setState(
-                      () {
-                        selectedBank = value as String;
-                      },
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.arrow_forward_ios_outlined,
-                  ),
-                  iconSize: 11,
-                  iconEnabledColor:
-                      myTheme.colorScheme.primary.withOpacity(0.5),
-                  iconDisabledColor: Colors.grey,
-                  buttonHeight: 50,
-                  // buttonWidth: 200,
-                  buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-                  buttonDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(
-                      color: myTheme.colorScheme.primary.withOpacity(0.3),
-                    ),
-                    color: Colors.white,
-                  ),
-                  buttonElevation: 0,
-                  itemHeight: 40,
-                  itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                  dropdownMaxHeight: 200,
-                  dropdownWidth: 200,
-                  dropdownPadding: null,
-                  dropdownDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                  ),
-                  dropdownElevation: 8,
-                  scrollbarRadius: const Radius.circular(10),
-                  scrollbarThickness: 6,
-                  scrollbarAlwaysShow: true,
-                  offset: const Offset(-20, 0),
-                ),
-              ),
-            ),
-            Text(
-              'Nro de Cuenta *',
-              style: TextStyle(
-                fontFamily: 'Poppins-regular',
-                color: myTheme.colorScheme.secondary,
-                fontSize: 14,
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-              height: 50,
-              // width: 200,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: myTheme.colorScheme.primary.withOpacity(0.3),
-                  // color: Colors.transparent,
-                ),
-              ),
-              child: TextField(
-                style: TextStyle(
-                  fontSize: 14,
-                  fontFamily: 'Poppins-regular',
-                  color: myTheme.colorScheme.primary,
-                ),
-                keyboardType: TextInputType.phone,
-                maxLines: 1,
-                maxLength: 50,
-                textCapitalization: TextCapitalization.characters,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
-                controller: accoundNumber,
-
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
-                  hintText: '00000000',
-                  hintStyle: TextStyle(
-                    fontFamily: 'Poppins-regular',
-                    fontSize: 14,
-                    color: myTheme.colorScheme.primary.withOpacity(0.2),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    borderSide: BorderSide(
-                      color: Colors.transparent,
-                    ),
-                  ),
-                  counterText: '',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    borderSide: BorderSide(
-                      color: Colors.transparent,
-                    ),
-                  ),
-                ),
-                // onChanged: searchClient,
-              ),
-            ),
-            Text(
-              'Titular de la cuenta *',
-              style: TextStyle(
-                fontFamily: 'Poppins-regular',
-                color: myTheme.colorScheme.secondary,
-                fontSize: 14,
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-              height: 50,
-              // width: 200,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: myTheme.colorScheme.primary.withOpacity(0.3),
-                  // color: Colors.transparent,
-                ),
-              ),
-              child: TextField(
-                style: TextStyle(
-                  fontSize: 14,
-                  fontFamily: 'Poppins-regular',
-                  color: myTheme.colorScheme.primary,
-                ),
-                keyboardType: TextInputType.phone,
-                maxLines: 1,
-                maxLength: 50,
-                textCapitalization: TextCapitalization.characters,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
-                controller: accountHolder,
-
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
-                  hintText: '',
-                  hintStyle: TextStyle(
-                    fontFamily: 'Poppins-regular',
-                    fontSize: 14,
-                    color: myTheme.colorScheme.primary.withOpacity(0.2),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    borderSide: BorderSide(
-                      color: Colors.transparent,
-                    ),
-                  ),
-                  counterText: '',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    borderSide: BorderSide(
-                      color: Colors.transparent,
-                    ),
-                  ),
-                ),
-                // onChanged: searchClient,
-              ),
-            ),
-            Text(
-              'Moneda *',
-              style: TextStyle(
-                fontFamily: 'Poppins-regular',
-                color: myTheme.colorScheme.secondary,
-                fontSize: 14,
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton2(
-                  isExpanded: true,
-                  // ignore: prefer_const_literals_to_create_immutables
-                  hint: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          selectedCoin ?? '',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: myTheme.colorScheme.primary.withOpacity(0.7),
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                  items: itemsCoin
-                      .map((item) => DropdownMenuItem<String>(
-                            value: item,
-                            child: Text(
-                              item,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: myTheme.colorScheme.primary,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ))
-                      .toList(),
-                  value: selectedCoin,
-                  onChanged: (value) {
-                    setState(
-                      () {
-                        selectedCoin = value as String;
-                      },
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.arrow_forward_ios_outlined,
-                  ),
-                  iconSize: 11,
-                  iconEnabledColor:
-                      myTheme.colorScheme.primary.withOpacity(0.5),
-                  iconDisabledColor: Colors.grey,
-                  buttonHeight: 50,
-                  // buttonWidth: 200,
-                  buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-                  buttonDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(
-                      color: myTheme.colorScheme.primary.withOpacity(0.3),
-                    ),
-                    color: Colors.white,
-                  ),
-                  buttonElevation: 0,
-                  itemHeight: 40,
-                  itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                  dropdownMaxHeight: 200,
-                  dropdownWidth: 200,
-                  dropdownPadding: null,
-                  dropdownDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                  ),
-                  dropdownElevation: 8,
-                  scrollbarRadius: const Radius.circular(10),
-                  scrollbarThickness: 6,
-                  scrollbarAlwaysShow: true,
-                  offset: const Offset(-20, 0),
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    } else if (selectedValueA == 'Criptomoneda') {
-      return Column(
-        children: [
-          Text(
-            'Id de la transaccion *',
-            style: TextStyle(
-              fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.secondary,
-              fontSize: 14,
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-            height: 50,
-            // width: 200,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: myTheme.colorScheme.primary.withOpacity(0.3),
-                // color: Colors.transparent,
-              ),
-            ),
-            child: TextField(
-              style: TextStyle(
-                fontSize: 14,
-                fontFamily: 'Poppins-regular',
-                color: myTheme.colorScheme.primary,
-              ),
-              keyboardType: TextInputType.phone,
-              maxLines: 1,
-              maxLength: 50,
-              textCapitalization: TextCapitalization.characters,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-              ],
-              controller: transactionId,
-
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
-                hintText: '00000000',
-                hintStyle: TextStyle(
-                  fontFamily: 'Poppins-regular',
-                  fontSize: 14,
-                  color: myTheme.colorScheme.primary.withOpacity(0.2),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
-                  ),
-                ),
-                counterText: '',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
-                  ),
-                ),
-              ),
-              // onChanged: searchClient,
-            ),
-          ),
-        ],
-      );
-    } else if (selectedValueA == 'Deposito') {
-      return StatefulBuilder(
-        builder: (context, setState) => Column(
-          children: [
-            Text(
-              'Banco *',
-              style: TextStyle(
-                fontFamily: 'Poppins-regular',
-                color: myTheme.colorScheme.secondary,
-                fontSize: 14,
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton2(
-                  isExpanded: true,
-                  // ignore: prefer_const_literals_to_create_immutables
-                  hint: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          selectedBank ?? '',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: myTheme.colorScheme.primary.withOpacity(0.7),
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                  items: itemsBank
-                      .map((item) => DropdownMenuItem<String>(
-                            value: item,
-                            child: Text(
-                              item,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: myTheme.colorScheme.primary,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ))
-                      .toList(),
-                  value: selectedBank,
-                  onChanged: (value) {
-                    setState(
-                      () {
-                        selectedBank = value as String;
-                      },
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.arrow_forward_ios_outlined,
-                  ),
-                  iconSize: 11,
-                  iconEnabledColor:
-                      myTheme.colorScheme.primary.withOpacity(0.5),
-                  iconDisabledColor: Colors.grey,
-                  buttonHeight: 50,
-                  // buttonWidth: 200,
-                  buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-                  buttonDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(
-                      color: myTheme.colorScheme.primary.withOpacity(0.3),
-                    ),
-                    color: Colors.white,
-                  ),
-                  buttonElevation: 0,
-                  itemHeight: 40,
-                  itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                  dropdownMaxHeight: 200,
-                  dropdownWidth: 200,
-                  dropdownPadding: null,
-                  dropdownDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                  ),
-                  dropdownElevation: 8,
-                  scrollbarRadius: const Radius.circular(10),
-                  scrollbarThickness: 6,
-                  scrollbarAlwaysShow: true,
-                  offset: const Offset(-20, 0),
-                ),
-              ),
-            ),
-            Text(
-              'Nro de Voucher *',
-              style: TextStyle(
-                fontFamily: 'Poppins-regular',
-                color: myTheme.colorScheme.secondary,
-                fontSize: 14,
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-              height: 50,
-              // width: 200,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: myTheme.colorScheme.primary.withOpacity(0.3),
-                  // color: Colors.transparent,
-                ),
-              ),
-              child: TextField(
-                style: TextStyle(
-                  fontSize: 14,
-                  fontFamily: 'Poppins-regular',
-                  color: myTheme.colorScheme.primary,
-                ),
-                keyboardType: TextInputType.phone,
-                maxLines: 1,
-                maxLength: 50,
-                textCapitalization: TextCapitalization.characters,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
-                controller: voucherNumber,
-
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
-                  hintText: '00000000',
-                  hintStyle: TextStyle(
-                    fontFamily: 'Poppins-regular',
-                    fontSize: 14,
-                    color: myTheme.colorScheme.primary.withOpacity(0.2),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    borderSide: BorderSide(
-                      color: Colors.transparent,
-                    ),
-                  ),
-                  counterText: '',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    borderSide: BorderSide(
-                      color: Colors.transparent,
-                    ),
-                  ),
-                ),
-                // onChanged: searchClient,
-              ),
-            ),
-            Text(
-              'Nro de Cuenta *',
-              style: TextStyle(
-                fontFamily: 'Poppins-regular',
-                color: myTheme.colorScheme.secondary,
-                fontSize: 14,
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-              height: 50,
-              // width: 200,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: myTheme.colorScheme.primary.withOpacity(0.3),
-                  // color: Colors.transparent,
-                ),
-              ),
-              child: TextField(
-                style: TextStyle(
-                  fontSize: 14,
-                  fontFamily: 'Poppins-regular',
-                  color: myTheme.colorScheme.primary,
-                ),
-                keyboardType: TextInputType.phone,
-                maxLines: 1,
-                maxLength: 50,
-                textCapitalization: TextCapitalization.characters,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
-                controller: accoundNumber,
-
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
-                  hintText: '00000000',
-                  hintStyle: TextStyle(
-                    fontFamily: 'Poppins-regular',
-                    fontSize: 14,
-                    color: myTheme.colorScheme.primary.withOpacity(0.2),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    borderSide: BorderSide(
-                      color: Colors.transparent,
-                    ),
-                  ),
-                  counterText: '',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    borderSide: BorderSide(
-                      color: Colors.transparent,
-                    ),
-                  ),
-                ),
-                // onChanged: searchClient,
-              ),
-            ),
-            Text(
-              'Moneda *',
-              style: TextStyle(
-                fontFamily: 'Poppins-regular',
-                color: myTheme.colorScheme.secondary,
-                fontSize: 14,
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton2(
-                  isExpanded: true,
-                  // ignore: prefer_const_literals_to_create_immutables
-                  hint: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          selectedCoin ?? '',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: myTheme.colorScheme.primary.withOpacity(0.7),
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                  items: itemsCoin
-                      .map((item) => DropdownMenuItem<String>(
-                            value: item,
-                            child: Text(
-                              item,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: myTheme.colorScheme.primary,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ))
-                      .toList(),
-                  value: selectedCoin,
-                  onChanged: (value) {
-                    setState(
-                      () {
-                        selectedCoin = value as String;
-                      },
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.arrow_forward_ios_outlined,
-                  ),
-                  iconSize: 11,
-                  iconEnabledColor:
-                      myTheme.colorScheme.primary.withOpacity(0.5),
-                  iconDisabledColor: Colors.grey,
-                  buttonHeight: 50,
-                  // buttonWidth: 200,
-                  buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-                  buttonDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(
-                      color: myTheme.colorScheme.primary.withOpacity(0.3),
-                    ),
-                    color: Colors.white,
-                  ),
-                  buttonElevation: 0,
-                  itemHeight: 40,
-                  itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                  dropdownMaxHeight: 200,
-                  dropdownWidth: 200,
-                  dropdownPadding: null,
-                  dropdownDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                  ),
-                  dropdownElevation: 8,
-                  scrollbarRadius: const Radius.circular(10),
-                  scrollbarThickness: 6,
-                  scrollbarAlwaysShow: true,
-                  offset: const Offset(-20, 0),
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    } else if (selectedValueA == 'Efectivo' ||
-        selectedValueA == 'Nota de credito') {
-      return StatefulBuilder(
-        builder: (context, setState) => Column(
-          children: [
-            Text(
-              'Moneda *',
-              style: TextStyle(
-                fontFamily: 'Poppins-regular',
-                color: myTheme.colorScheme.secondary,
-                fontSize: 14,
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton2(
-                  isExpanded: true,
-                  // ignore: prefer_const_literals_to_create_immutables
-                  hint: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          selectedCoin ?? '',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: myTheme.colorScheme.primary.withOpacity(0.7),
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                  items: itemsCoin
-                      .map((item) => DropdownMenuItem<String>(
-                            value: item,
-                            child: Text(
-                              item,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: myTheme.colorScheme.primary,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ))
-                      .toList(),
-                  value: selectedCoin,
-                  onChanged: (value) {
-                    setState(
-                      () {
-                        selectedCoin = value as String;
-                      },
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.arrow_forward_ios_outlined,
-                  ),
-                  iconSize: 11,
-                  iconEnabledColor:
-                      myTheme.colorScheme.primary.withOpacity(0.5),
-                  iconDisabledColor: Colors.grey,
-                  buttonHeight: 50,
-                  // buttonWidth: 200,
-                  buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-                  buttonDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(
-                      color: myTheme.colorScheme.primary.withOpacity(0.3),
-                    ),
-                    color: Colors.white,
-                  ),
-                  buttonElevation: 0,
-                  itemHeight: 40,
-                  itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                  dropdownMaxHeight: 200,
-                  dropdownWidth: 200,
-                  dropdownPadding: null,
-                  dropdownDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                  ),
-                  dropdownElevation: 8,
-                  scrollbarRadius: const Radius.circular(10),
-                  scrollbarThickness: 6,
-                  scrollbarAlwaysShow: true,
-                  offset: const Offset(-20, 0),
-                ),
-              ),
-            ),
-            selectedValueA == 'Nota de credito'
-                ? Container(
-                    child: Text(
-                      'Disponible en Nota de Credito: \$0.00',
-                      style: TextStyle(
-                        fontFamily: 'Poppins-regular',
-                        color: myTheme.colorScheme.secondary,
-                        fontSize: 14,
-                      ),
-                    ),
-                  )
-                : Container(),
-          ],
-        ),
-      );
-    } else if (selectedValueA == 'Transferencia' ||
-        selectedValueA == 'Transf-internacional') {
-      return StatefulBuilder(
-        builder: (context, setState) => Column(
-          children: [
-            Text(
-              'Banco *',
-              style: TextStyle(
-                fontFamily: 'Poppins-regular',
-                color: myTheme.colorScheme.secondary,
-                fontSize: 14,
-              ),
-            ),
-            selectedValueA == 'Transferencia'
-                ? Container(
-                    margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton2(
-                        isExpanded: true,
-                        // ignore: prefer_const_literals_to_create_immutables
-                        hint: Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                selectedBank ?? '',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  color: myTheme.colorScheme.primary
-                                      .withOpacity(0.7),
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                        items: itemsBank
-                            .map((item) => DropdownMenuItem<String>(
-                                  value: item,
-                                  child: Text(
-                                    item,
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: myTheme.colorScheme.primary,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ))
-                            .toList(),
-                        value: selectedBank,
-                        onChanged: (value) {
-                          setState(
-                            () {
-                              selectedBank = value as String;
-                            },
-                          );
-                        },
-                        icon: const Icon(
-                          Icons.arrow_forward_ios_outlined,
-                        ),
-                        iconSize: 11,
-                        iconEnabledColor:
-                            myTheme.colorScheme.primary.withOpacity(0.5),
-                        iconDisabledColor: Colors.grey,
-                        buttonHeight: 50,
-                        // buttonWidth: 200,
-                        buttonPadding:
-                            const EdgeInsets.only(left: 14, right: 14),
-                        buttonDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(
-                            color: myTheme.colorScheme.primary.withOpacity(0.3),
-                          ),
-                          color: Colors.white,
-                        ),
-                        buttonElevation: 0,
-                        itemHeight: 40,
-                        itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                        dropdownMaxHeight: 200,
-                        dropdownWidth: 200,
-                        dropdownPadding: null,
-                        dropdownDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
-                        ),
-                        dropdownElevation: 8,
-                        scrollbarRadius: const Radius.circular(10),
-                        scrollbarThickness: 6,
-                        scrollbarAlwaysShow: true,
-                        offset: const Offset(-20, 0),
-                      ),
-                    ),
-                  )
-                : Container(
-                    margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton2(
-                        isExpanded: true,
-                        // ignore: prefer_const_literals_to_create_immutables
-                        hint: Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                selectedBank ?? '',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  color: myTheme.colorScheme.primary
-                                      .withOpacity(0.7),
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                        items: itemsBankInter
-                            .map((item) => DropdownMenuItem<String>(
-                                  value: item,
-                                  child: Text(
-                                    item,
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: myTheme.colorScheme.primary,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ))
-                            .toList(),
-                        value: selectedBank,
-                        onChanged: (value) {
-                          setState(
-                            () {
-                              selectedBank = value as String;
-                            },
-                          );
-                        },
-                        icon: const Icon(
-                          Icons.arrow_forward_ios_outlined,
-                        ),
-                        iconSize: 11,
-                        iconEnabledColor:
-                            myTheme.colorScheme.primary.withOpacity(0.5),
-                        iconDisabledColor: Colors.grey,
-                        buttonHeight: 50,
-                        // buttonWidth: 200,
-                        buttonPadding:
-                            const EdgeInsets.only(left: 14, right: 14),
-                        buttonDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(
-                            color: myTheme.colorScheme.primary.withOpacity(0.3),
-                          ),
-                          color: Colors.white,
-                        ),
-                        buttonElevation: 0,
-                        itemHeight: 40,
-                        itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                        dropdownMaxHeight: 200,
-                        dropdownWidth: 200,
-                        dropdownPadding: null,
-                        dropdownDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
-                        ),
-                        dropdownElevation: 8,
-                        scrollbarRadius: const Radius.circular(10),
-                        scrollbarThickness: 6,
-                        scrollbarAlwaysShow: true,
-                        offset: const Offset(-20, 0),
-                      ),
-                    ),
-                  ),
-            Text(
-              'Nro de Referencia *',
-              style: TextStyle(
-                fontFamily: 'Poppins-regular',
-                color: myTheme.colorScheme.secondary,
-                fontSize: 14,
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-              height: 50,
-              // width: 200,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: myTheme.colorScheme.primary.withOpacity(0.3),
-                  // color: Colors.transparent,
-                ),
-              ),
-              child: TextField(
-                style: TextStyle(
-                  fontSize: 14,
-                  fontFamily: 'Poppins-regular',
-                  color: myTheme.colorScheme.primary,
-                ),
-                keyboardType: TextInputType.phone,
-                maxLines: 1,
-                maxLength: 50,
-                textCapitalization: TextCapitalization.characters,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
-                controller: referenceId,
-
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
-                  hintText: '00000000',
-                  hintStyle: TextStyle(
-                    fontFamily: 'Poppins-regular',
-                    fontSize: 14,
-                    color: myTheme.colorScheme.primary.withOpacity(0.2),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    borderSide: BorderSide(
-                      color: Colors.transparent,
-                    ),
-                  ),
-                  counterText: '',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    borderSide: BorderSide(
-                      color: Colors.transparent,
-                    ),
-                  ),
-                ),
-                // onChanged: searchClient,
-              ),
-            ),
-            Text(
-              'Moneda *',
-              style: TextStyle(
-                fontFamily: 'Poppins-regular',
-                color: myTheme.colorScheme.secondary,
-                fontSize: 14,
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton2(
-                  isExpanded: true,
-                  // ignore: prefer_const_literals_to_create_immutables
-                  hint: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          selectedCoin ?? '',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: myTheme.colorScheme.primary.withOpacity(0.7),
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                  items: itemsCoin
-                      .map((item) => DropdownMenuItem<String>(
-                            value: item,
-                            child: Text(
-                              item,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: myTheme.colorScheme.primary,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ))
-                      .toList(),
-                  value: selectedCoin,
-                  onChanged: (value) {
-                    setState(
-                      () {
-                        selectedCoin = value as String;
-                      },
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.arrow_forward_ios_outlined,
-                  ),
-                  iconSize: 11,
-                  iconEnabledColor:
-                      myTheme.colorScheme.primary.withOpacity(0.5),
-                  iconDisabledColor: Colors.grey,
-                  buttonHeight: 50,
-                  // buttonWidth: 200,
-                  buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-                  buttonDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(
-                      color: myTheme.colorScheme.primary.withOpacity(0.3),
-                    ),
-                    color: Colors.white,
-                  ),
-                  buttonElevation: 0,
-                  itemHeight: 40,
-                  itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                  dropdownMaxHeight: 200,
-                  dropdownWidth: 200,
-                  dropdownPadding: null,
-                  dropdownDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                  ),
-                  dropdownElevation: 8,
-                  scrollbarRadius: const Radius.circular(10),
-                  scrollbarThickness: 6,
-                  scrollbarAlwaysShow: true,
-                  offset: const Offset(-20, 0),
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-  }
-
-  void modalBottomSheetForInvoices(bool completed) {
-    showModalBottomSheet(
-      elevation: 0,
-      backgroundColor: Colors.white,
-      barrierColor: myTheme.colorScheme.secondary.withOpacity(0.5),
-      // isScrollControlled: true,
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
-        ),
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(providers: [
+      StreamProvider<Client?>.value(
+        initialData: null,
+        value: FirebaseFirestore.instance
+            .collection('clientes')
+            .doc(widget.invoiceClient)
+            .snapshots()
+            .map(clientFromDocumentID),
       ),
-      builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return SafeArea(
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        margin: EdgeInsets.fromLTRB(10, 20, 0, 0),
-                        child: Text(
-                          'Opciones',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: myTheme.colorScheme.primary,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 25),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                width: 150,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16),
-                                    color: myTheme.colorScheme.primary),
-                                child: TextButton(
-                                  onPressed: () {
-                                    // Ver resumen de Cliente
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            ClientDetails(
-                                                specialContribuyer: true,
-                                                masterDiscount: 10,
-                                                fiscalAddress: 'Example',
-                                                email: 'example@tech.com',
-                                                listOfPrices: 'GER-03',
-                                                name: 'Example',
-                                                tlf1: '0000000',
-                                                tlf2: '0000000000',
-                                                zone: 'Territorio example',
-                                                nameId: 555666,
-                                                typeId: 'J'),
-                                      ),
-                                    );
-                                  },
-                                  style: TextButton.styleFrom(
-                                    foregroundColor:
-                                        myTheme.colorScheme.primary,
-                                  ),
-                                  child: Text(
-                                    'Ver Cliente',
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins-regular',
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 15),
-                              Container(
-                                width: 150,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16),
-                                    color: myTheme.colorScheme.primary),
-                                child: TextButton(
-                                  onPressed: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return SingleChildScrollView(
-                                            child: StatefulBuilder(
-                                                builder: ((context, setState) {
-                                              return AlertDialog(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                ),
-                                                title: Text(
-                                                  'Pago de factura #000',
-                                                  style: TextStyle(
-                                                    fontFamily:
-                                                        'Poppins-regular',
-                                                    color: myTheme
-                                                        .colorScheme.secondary,
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                content: SingleChildScrollView(
-                                                  child: Column(
-                                                    children: [
-                                                      ListTile(
-                                                        leading: Icon(
-                                                          Icons.money_off_csred,
-                                                          color: Colors.green,
-                                                        ),
-                                                        title: Row(
-                                                          children: [
-                                                            Text(
-                                                              '\$ 1.20',
-                                                              style: TextStyle(
-                                                                fontFamily:
-                                                                    'Poppins-regular',
-                                                                color: Colors
-                                                                    .grey
-                                                                    .shade400,
-                                                                fontSize: 14,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                            ),
-                                                            Container(
-                                                              margin: EdgeInsets
-                                                                  .fromLTRB(20,
-                                                                      0, 0, 10),
-                                                              child: Text(
-                                                                '00/00/0000',
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontFamily:
-                                                                      'Poppins-regular',
-                                                                  color: Colors
-                                                                      .grey
-                                                                      .shade400,
-                                                                  fontSize: 10,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        subtitle: Text(
-                                                          'Efectivo',
-                                                          style: TextStyle(
-                                                            fontFamily:
-                                                                'Poppins-regular',
-                                                            color: Colors
-                                                                .grey.shade400,
-                                                            fontSize: 12,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      ListTile(
-                                                        leading: Icon(
-                                                          Icons
-                                                              .attach_money_rounded,
-                                                          color: Colors.amber,
-                                                        ),
-                                                        title: Row(
-                                                          children: [
-                                                            Text(
-                                                              '\$ 5.00',
-                                                              style: TextStyle(
-                                                                fontFamily:
-                                                                    'Poppins-regular',
-                                                                color: Colors
-                                                                    .grey
-                                                                    .shade400,
-                                                                fontSize: 14,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                            ),
-                                                            Container(
-                                                              margin: EdgeInsets
-                                                                  .fromLTRB(20,
-                                                                      0, 0, 10),
-                                                              child: Text(
-                                                                '00/00/0000',
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontFamily:
-                                                                      'Poppins-regular',
-                                                                  color: Colors
-                                                                      .grey
-                                                                      .shade400,
-                                                                  fontSize: 10,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        subtitle: Text(
-                                                          'Transferencia',
-                                                          style: TextStyle(
-                                                            fontFamily:
-                                                                'Poppins-regular',
-                                                            color: Colors
-                                                                .grey.shade400,
-                                                            fontSize: 12,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      ListTile(
-                                                        leading: Icon(
-                                                          Icons
-                                                              .attach_money_rounded,
-                                                          color: Colors.amber,
-                                                        ),
-                                                        title: Row(
-                                                          children: [
-                                                            Text(
-                                                              '\$ 5.00',
-                                                              style: TextStyle(
-                                                                fontFamily:
-                                                                    'Poppins-regular',
-                                                                color: Colors
-                                                                    .grey
-                                                                    .shade400,
-                                                                fontSize: 14,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                            ),
-                                                            Container(
-                                                              margin: EdgeInsets
-                                                                  .fromLTRB(20,
-                                                                      0, 0, 10),
-                                                              child: Text(
-                                                                '00/00/0000',
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontFamily:
-                                                                      'Poppins-regular',
-                                                                  color: Colors
-                                                                      .grey
-                                                                      .shade400,
-                                                                  fontSize: 10,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        subtitle: Text(
-                                                          'Credito',
-                                                          style: TextStyle(
-                                                            fontFamily:
-                                                                'Poppins-regular',
-                                                            color: Colors
-                                                                .grey.shade400,
-                                                            fontSize: 12,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      SizedBox(height: 30),
-                                                      Text(
-                                                        'Restante en USD: \$00.00',
-                                                        style: TextStyle(
-                                                          fontFamily:
-                                                              'Poppins-regular',
-                                                          color: Colors.black,
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        'Se genero NC: #25',
-                                                        style: TextStyle(
-                                                          fontFamily:
-                                                              'Poppins-regular',
-                                                          color: Colors.black,
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        'Saldo confimado: \$ 44.40',
-                                                        style: TextStyle(
-                                                          fontFamily:
-                                                              'Poppins-regular',
-                                                          color: Colors.green,
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        'Por conciliar: \$11.00',
-                                                        style: TextStyle(
-                                                          fontFamily:
-                                                              'Poppins-regular',
-                                                          color: Colors.amber,
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        alignment: Alignment
-                                                            .centerRight,
-                                                        child: TextButton(
-                                                          onPressed: () {
-                                                            Navigator.pop(
-                                                                context);
-                                                          },
-                                                          child: Text(
-                                                            'Regresar',
-                                                            style: TextStyle(
-                                                              fontFamily:
-                                                                  'Poppins-regular',
-                                                              color: myTheme
-                                                                  .colorScheme
-                                                                  .primary,
-                                                              fontSize: 14,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              );
-                                            })),
-                                          );
-                                        });
-                                  },
-                                  style: TextButton.styleFrom(
-                                    foregroundColor:
-                                        myTheme.colorScheme.primary,
-                                  ),
-                                  child: Text(
-                                    'Ver pagos',
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins-regular',
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          completed
-                              ? Container()
-                              : Container(
-                                  margin: EdgeInsets.fromLTRB(5, 5, 5, 0),
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(16),
-                                      color: myTheme.colorScheme.primary),
-                                  child: TextButton(
-                                    onPressed: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          String formattedDate =
-                                              dateFormatter.format(today);
-                                          final List<String> items = [
-                                            'Cheque',
-                                            'Criptomoneda',
-                                            'Deposito',
-                                            'Efectivo',
-                                            'Transferencia',
-                                            'Transf-internacional',
-                                            'Nota de credito',
-                                          ];
-                                          return StatefulBuilder(
-                                            builder: ((context, setState) {
-                                              return AlertDialog(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                ),
-                                                title: Text(
-                                                  'Registrar pago',
-                                                  style: TextStyle(
-                                                    fontFamily:
-                                                        'Poppins-regular',
-                                                    color: myTheme
-                                                        .colorScheme.secondary,
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                content: Container(
-                                                  // height: 150,
-                                                  child: SingleChildScrollView(
-                                                    child: Column(
-                                                      children: [
-                                                        Text(
-                                                          'Metodo de Pago',
-                                                          style: TextStyle(
-                                                            fontFamily:
-                                                                'Poppins-regular',
-                                                            color: myTheme
-                                                                .colorScheme
-                                                                .secondary,
-                                                            fontSize: 14,
-                                                          ),
-                                                        ),
-                                                        Container(
-                                                          margin: EdgeInsets
-                                                              .fromLTRB(10, 5,
-                                                                  10, 10),
-                                                          child:
-                                                              DropdownButtonHideUnderline(
-                                                            child:
-                                                                DropdownButton2(
-                                                              isExpanded: true,
-                                                              // ignore: prefer_const_literals_to_create_immutables
-                                                              hint: Row(
-                                                                children: [
-                                                                  Expanded(
-                                                                    child: Text(
-                                                                      selectedValueA ??
-                                                                          '',
-                                                                      style:
-                                                                          TextStyle(
-                                                                        fontSize:
-                                                                            12,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                        color: myTheme
-                                                                            .colorScheme
-                                                                            .primary
-                                                                            .withOpacity(0.3),
-                                                                      ),
-                                                                      overflow:
-                                                                          TextOverflow
-                                                                              .ellipsis,
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              items: items
-                                                                  .map((item) =>
-                                                                      DropdownMenuItem<
-                                                                          String>(
-                                                                        value:
-                                                                            item,
-                                                                        child:
-                                                                            Text(
-                                                                          item,
-                                                                          style:
-                                                                              TextStyle(
-                                                                            fontSize:
-                                                                                14,
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                            color:
-                                                                                myTheme.colorScheme.primary,
-                                                                          ),
-                                                                          overflow:
-                                                                              TextOverflow.ellipsis,
-                                                                        ),
-                                                                      ))
-                                                                  .toList(),
-                                                              value:
-                                                                  selectedValueA,
-                                                              onChanged:
-                                                                  (value) {
-                                                                setState(
-                                                                  () {
-                                                                    selectedValueA =
-                                                                        value
-                                                                            as String;
-                                                                  },
-                                                                );
-                                                              },
-                                                              icon: const Icon(
-                                                                Icons
-                                                                    .arrow_forward_ios_outlined,
-                                                              ),
-                                                              iconSize: 11,
-                                                              iconEnabledColor:
-                                                                  myTheme
-                                                                      .colorScheme
-                                                                      .primary
-                                                                      .withOpacity(
-                                                                          0.5),
-                                                              iconDisabledColor:
-                                                                  Colors.grey,
-                                                              buttonHeight: 50,
-                                                              buttonWidth: 200,
-                                                              buttonPadding:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      left: 14,
-                                                                      right:
-                                                                          14),
-                                                              buttonDecoration:
-                                                                  BoxDecoration(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            5),
-                                                                border:
-                                                                    Border.all(
-                                                                  color: myTheme
-                                                                      .colorScheme
-                                                                      .primary
-                                                                      .withOpacity(
-                                                                          0.3),
-                                                                ),
-                                                                color: Colors
-                                                                    .white,
-                                                              ),
-                                                              buttonElevation:
-                                                                  0,
-                                                              itemHeight: 40,
-                                                              itemPadding:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      left: 14,
-                                                                      right:
-                                                                          14),
-                                                              dropdownMaxHeight:
-                                                                  200,
-                                                              dropdownWidth:
-                                                                  200,
-                                                              dropdownPadding:
-                                                                  null,
-                                                              dropdownDecoration:
-                                                                  BoxDecoration(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10),
-                                                                color: Colors
-                                                                    .white,
-                                                              ),
-                                                              dropdownElevation:
-                                                                  8,
-                                                              scrollbarRadius:
-                                                                  const Radius
-                                                                      .circular(10),
-                                                              scrollbarThickness:
-                                                                  6,
-                                                              scrollbarAlwaysShow:
-                                                                  true,
-                                                              offset:
-                                                                  const Offset(
-                                                                      -20, 0),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Text(
-                                                          'Fecha',
-                                                          style: TextStyle(
-                                                            fontFamily:
-                                                                'Poppins-regular',
-                                                            color: myTheme
-                                                                .colorScheme
-                                                                .secondary,
-                                                            fontSize: 14,
-                                                          ),
-                                                        ),
-                                                        Container(
-                                                          margin: EdgeInsets
-                                                              .fromLTRB(10, 5,
-                                                                  10, 10),
-                                                          padding: EdgeInsets
-                                                              .fromLTRB(10, 10,
-                                                                  10, 10),
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        16),
-                                                            border: Border.all(
-                                                              color: myTheme
-                                                                  .colorScheme
-                                                                  .primary
-                                                                  .withOpacity(
-                                                                      0.3),
-                                                            ),
-                                                          ),
-                                                          alignment: Alignment
-                                                              .centerLeft,
-                                                          child: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            children: [
-                                                              Text(
-                                                                formattedDate,
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize: 14,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  color: myTheme
-                                                                      .colorScheme
-                                                                      .primary
-                                                                      .withOpacity(
-                                                                          0.7),
-                                                                ),
-                                                              ),
-                                                              Container(
-                                                                height: 30,
-                                                                width: 30,
-                                                                margin: EdgeInsets
-                                                                    .fromLTRB(
-                                                                        0,
-                                                                        0,
-                                                                        0,
-                                                                        5),
-                                                                child:
-                                                                    IconButton(
-                                                                  onPressed:
-                                                                      () async {
-                                                                    // Seleccionar fecha
-                                                                    DateTime?
-                                                                        newDate =
-                                                                        await showDatePicker(
-                                                                      context:
-                                                                          context,
-                                                                      initialDate:
-                                                                          today,
-                                                                      firstDate:
-                                                                          DateTime
-                                                                              .now(),
-                                                                      lastDate:
-                                                                          DateTime(
-                                                                              2023),
-                                                                    );
-                                                                    if (newDate ==
-                                                                        null) {
-                                                                      return;
-                                                                    }
-                                                                    setState(
-                                                                        () {
-                                                                      today =
-                                                                          newDate;
-                                                                    });
-                                                                  },
-                                                                  splashRadius:
-                                                                      5,
-                                                                  icon: Icon(
-                                                                    Icons
-                                                                        .calendar_month,
-                                                                    color: myTheme
-                                                                        .colorScheme
-                                                                        .primary,
-                                                                    size: 20,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        Text(
-                                                          'Monto *',
-                                                          style: TextStyle(
-                                                            fontFamily:
-                                                                'Poppins-regular',
-                                                            color: myTheme
-                                                                .colorScheme
-                                                                .secondary,
-                                                            fontSize: 14,
-                                                          ),
-                                                        ),
-                                                        Container(
-                                                          margin: EdgeInsets
-                                                              .fromLTRB(
-                                                                  10, 10, 0, 0),
-                                                          height: 50,
-                                                          // width: 200,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10),
-                                                            border: Border.all(
-                                                              color: myTheme
-                                                                  .colorScheme
-                                                                  .primary
-                                                                  .withOpacity(
-                                                                      0.3),
-                                                              // color: Colors.transparent,
-                                                            ),
-                                                          ),
-                                                          child: TextField(
-                                                            style: TextStyle(
-                                                              fontSize: 14,
-                                                              fontFamily:
-                                                                  'Poppins-regular',
-                                                              color: myTheme
-                                                                  .colorScheme
-                                                                  .primary,
-                                                            ),
-                                                            keyboardType:
-                                                                TextInputType
-                                                                    .phone,
-                                                            maxLines: 1,
-                                                            maxLength: 50,
-                                                            textCapitalization:
-                                                                TextCapitalization
-                                                                    .characters,
-                                                            inputFormatters: [
-                                                              FilteringTextInputFormatter
-                                                                  .digitsOnly,
-                                                            ],
-                                                            controller:
-                                                                paidAmount,
-
-                                                            decoration:
-                                                                InputDecoration(
-                                                              contentPadding:
-                                                                  EdgeInsets
-                                                                      .fromLTRB(
-                                                                          14,
-                                                                          0,
-                                                                          0,
-                                                                          0),
-                                                              hintText:
-                                                                  '00000000',
-                                                              hintStyle:
-                                                                  TextStyle(
-                                                                fontFamily:
-                                                                    'Poppins-regular',
-                                                                fontSize: 14,
-                                                                color: myTheme
-                                                                    .colorScheme
-                                                                    .primary
-                                                                    .withOpacity(
-                                                                        0.2),
-                                                              ),
-                                                              enabledBorder:
-                                                                  OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            5),
-                                                                borderSide:
-                                                                    BorderSide(
-                                                                  color: Colors
-                                                                      .transparent,
-                                                                ),
-                                                              ),
-                                                              counterText: '',
-                                                              border:
-                                                                  OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            5),
-                                                                borderSide:
-                                                                    BorderSide(
-                                                                  color: Colors
-                                                                      .transparent,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            // onChanged: searchClient,
-                                                          ),
-                                                        ),
-                                                        Container(
-                                                          child:
-                                                              identifyPaymentMethod(),
-                                                        ),
-                                                        Text(
-                                                          'Seleccione un archivo',
-                                                          style: TextStyle(
-                                                            fontFamily:
-                                                                'Poppins-regular',
-                                                            color: Colors
-                                                                .grey.shade400,
-                                                            fontSize: 14,
-                                                          ),
-                                                        ),
-                                                        InkWell(
-                                                          onTap: () {
-                                                            _getFromGallery();
-                                                          },
-                                                          child: Row(
-                                                            // ignore: prefer_const_literals_to_create_immutables
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Padding(
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(
-                                                                            4.0),
-                                                                child: Icon(
-                                                                  Icons.camera,
-                                                                  color: myTheme
-                                                                      .colorScheme
-                                                                      .secondary,
-                                                                ),
-                                                              ),
-                                                              Text(
-                                                                'Galeria',
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: myTheme
-                                                                      .colorScheme
-                                                                      .primary,
-                                                                  fontFamily:
-                                                                      'Poppins-regular',
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        // SizedBox(height: 100),
-                                                        Container(),
-                                                        Container(
-                                                          alignment: Alignment
-                                                              .bottomCenter,
-                                                          child: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .end,
-                                                            children: [
-                                                              TextButton(
-                                                                onPressed: () {
-                                                                  Navigator.pop(
-                                                                      context);
-                                                                },
-                                                                child: Text(
-                                                                  'Regresar',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    fontFamily:
-                                                                        'Poppins-regular',
-                                                                    color: myTheme
-                                                                        .colorScheme
-                                                                        .primary,
-                                                                    fontSize:
-                                                                        14,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Container(
-                                                                width: 100,
-                                                                height: 40,
-                                                                decoration: BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            16),
-                                                                    color: myTheme
-                                                                        .colorScheme
-                                                                        .primary),
-                                                                child:
-                                                                    TextButton(
-                                                                  onPressed:
-                                                                      () {
-                                                                    // Crear en DB una visita
-                                                                  },
-                                                                  style: TextButton
-                                                                      .styleFrom(
-                                                                    foregroundColor: myTheme
-                                                                        .colorScheme
-                                                                        .primary,
-                                                                  ),
-                                                                  child: Text(
-                                                                    'Aceptar',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontFamily:
-                                                                          'Poppins-regular',
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontSize:
-                                                                          14,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              );
-                                            }),
-                                          );
-                                        },
-                                      );
-                                    },
-                                    style: TextButton.styleFrom(
-                                      foregroundColor:
-                                          myTheme.colorScheme.primary,
-                                    ),
-                                    child: Text(
-                                      'Registrar pago',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins-regular',
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
+      StreamProvider<ZoneSummary?>.value(
+        initialData: null,
+        value: DatabaseServiceStreams().zoneSummary,
+      ),
+    ], child: InvoiceCardBody(widget: widget));
   }
+}
+
+class InvoiceCardBody extends StatelessWidget {
+  const InvoiceCardBody({
+    Key? key,
+    required this.widget,
+  }) : super(key: key);
+
+  final InvoiceCard widget;
 
   @override
   Widget build(BuildContext context) {
+    Color? identifyColor() {
+      if (widget.invoiceStatus == 'En proceso') {
+        return Colors.amber.shade300;
+      } else if (widget.invoiceStatus == 'Facturado') {
+        return Colors.green;
+      }
+    }
+
+    final currentClientName = Provider.of<Client?>(context)?.name ?? 'NaN';
+    final currentClientSpecialContributor =
+        Provider.of<Client?>(context)?.specialContributor ?? 'NaN';
+    final currentClientAddress =
+        Provider.of<Client?>(context)?.fiscalAdress ?? 'NaN';
+    final currentClientIdType = Provider.of<Client?>(context)?.idType ?? 'NaN';
+    final currentClientId = Provider.of<Client?>(context)?.id ?? 'NaN';
+    final currentClientPhone = Provider.of<Client?>(context)?.phone1 ?? 'NaN';
+    final currentClientPhone2 = Provider.of<Client?>(context)?.phone2 ?? 'NaN';
+    final currentClientEmail = Provider.of<Client?>(context)?.email ?? 'NaN';
+    final currentClientDispatchAdress =
+        Provider.of<Client?>(context)?.dispatchAdress ?? 'NaN';
+    final currentClientZones = Provider.of<Client?>(context)?.zone ?? 'NaN';
+    final currentClientPrices = Provider.of<Client?>(context)?.prices ?? 'NaN';
+    final currentClientRefID =
+        Provider.of<Client?>(context)?.clientDocumentId ?? 'NaN';
+    final zonesSummary = Provider.of<ZoneSummary?>(context)?.summary ?? 'NaN';
+
+    final currentDiscountMaster =
+        Provider.of<Client?>(context)?.masterDiscount ?? {};
+    final userUID = Provider.of<UserModel>(context).uid;
+
     return GestureDetector(
       onTap: () {
-        identifyFunction();
+        widget.invoiceStatus == 'En proceso'
+            ? modalBottomSheetForInvoices(
+                false,
+                context,
+                currentClientSpecialContributor,
+                currentDiscountMaster,
+                currentClientAddress,
+                currentClientEmail,
+                currentClientPrices,
+                currentClientName,
+                currentClientPhone,
+                currentClientPhone2,
+                zonesSummary[currentClientZones],
+                currentClientId,
+                currentClientIdType,
+                currentClientRefID,
+                widget.invoicePayments,
+                widget.invoiceNumber,
+                widget.invoiceTotal,
+              )
+            : modalBottomSheetForInvoices(
+                true,
+                context,
+                currentClientSpecialContributor,
+                currentDiscountMaster,
+                currentClientAddress,
+                currentClientEmail,
+                currentClientPrices,
+                currentClientName,
+                currentClientPhone,
+                currentClientPhone2,
+                zonesSummary[currentClientZones],
+                currentClientId,
+                currentClientIdType,
+                currentClientRefID,
+                widget.invoicePayments,
+                widget.invoiceNumber,
+                widget.invoiceTotal,
+              );
       },
       child: Padding(
         padding: EdgeInsets.only(top: 5, left: 16, right: 16, bottom: 5),
         child: Container(
           width: 360.0,
-          height: 63,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10.0),
@@ -2175,102 +157,99 @@ class _InvoiceCardState extends State<InvoiceCard> {
           child: Column(
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
                     padding: EdgeInsets.only(left: 14, top: 10),
-                    child: Text(
-                      widget.name,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
+                    child: Container(
+                      width: 200,
+                      child: Text(
+                        '$currentClientName',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 14, top: 10),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
                     child: Text(
-                      widget.salesman,
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.grey.shade400,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  SizedBox(width: 100),
-                  Padding(
-                    padding: EdgeInsets.only(top: 10),
-                    child: Text(
-                      widget.total,
+                      '\$${widget.invoiceBalance}',
                       style: TextStyle(
                         color: identifyColor(),
-                        fontSize: 15,
+                        fontSize: 16,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
                 ],
               ),
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10, left: 14),
-                    child: Container(
+              Container(
+                margin: EdgeInsets.fromLTRB(10, 5, 0, 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
                       height: 13,
-                      width: 150,
+                      // width: 150,
                       child: Text(
-                        widget.orderId,
+                        'ID: $currentClientIdType-$currentClientId',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: FontWeight.w400,
                           color: Colors.grey.shade400,
                         ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Container(
+                    Container(
                       height: 13,
-                      width: 95,
+                      // width: 95,
                       child: Text(
-                        'Fecha: ${widget.date}',
+                        '${widget.invoiceDate}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: FontWeight.w400,
                           color: Colors.grey.shade400,
                         ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Container(
+                    Container(
                       height: 13,
-                      width: 60,
+                      // width: 150,
                       child: Text(
-                        identifyStatus(),
+                        'F#${widget.invoiceNumber}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontSize: 10,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.grey.shade400,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 13,
+                      // width: 70,
+                      child: Text(
+                        '${widget.invoiceStatus}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 12,
                           fontWeight: FontWeight.w400,
                           color: identifyColor(),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),

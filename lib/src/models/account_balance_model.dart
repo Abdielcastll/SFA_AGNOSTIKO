@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class AccountBalanceInvoices {
+class Invoices {
   final clientIdReference;
   final masterDiscountAmount;
   final orderDate;
@@ -18,7 +18,7 @@ class AccountBalanceInvoices {
   final lastModified;
   final seller;
 
-  AccountBalanceInvoices({
+  Invoices({
     this.clientIdReference,
     this.masterDiscountAmount,
     this.orderDate,
@@ -38,10 +38,9 @@ class AccountBalanceInvoices {
   });
 }
 
-List<AccountBalanceInvoices> accountInvoicesFromSnapshot(
-    QuerySnapshot snapshot) {
+List<Invoices> accountInvoicesFromSnapshot(QuerySnapshot snapshot) {
   return snapshot.docs.map((doc) {
-    return AccountBalanceInvoices(
+    return Invoices(
       clientIdReference: doc.data().toString().contains('cliente')
           ? doc.get('cliente').id
           : 'NaN',
@@ -61,8 +60,7 @@ List<AccountBalanceInvoices> accountInvoicesFromSnapshot(
           : 'NaN',
       isPaid:
           doc.data().toString().contains('pagada') ? doc.get('pagada') : 'NaN',
-      payments:
-          doc.data().toString().contains('pagos') ? doc.get('pagos') : 'NaN',
+      payments: doc.data().toString().contains('pagos') ? doc.get('pagos') : [],
       orderIdReference: doc.data().toString().contains('pedido')
           ? doc.get('pedido').id
           : 'NaN',
@@ -93,7 +91,7 @@ List<AccountBalanceInvoices> accountInvoicesFromSnapshot(
   }).toList();
 }
 
-class AccountBalanceCreditNotes {
+class CreditNotes {
   final clientIdReference;
   final paymentsData;
   final date;
@@ -104,7 +102,7 @@ class AccountBalanceCreditNotes {
   final refPayments;
   final isValid;
 
-  AccountBalanceCreditNotes({
+  CreditNotes({
     this.clientIdReference,
     this.paymentsData,
     this.date,
@@ -117,10 +115,9 @@ class AccountBalanceCreditNotes {
   });
 }
 
-List<AccountBalanceCreditNotes> accountCreditNotesFromSnapshot(
-    QuerySnapshot snapshot) {
+List<CreditNotes> accountCreditNotesFromSnapshot(QuerySnapshot snapshot) {
   return snapshot.docs.map((doc) {
-    return AccountBalanceCreditNotes(
+    return CreditNotes(
       clientIdReference: doc.data().toString().contains('cliente')
           ? doc.get('cliente').id
           : 'NaN',

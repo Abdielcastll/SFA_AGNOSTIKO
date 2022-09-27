@@ -24,7 +24,7 @@ class _InvoicesPageState extends State<InvoicesPage> {
     return MultiProvider(
       providers: [
         isCheckedNotes == false
-            ? StreamProvider<List<AccountBalanceInvoices>?>.value(
+            ? StreamProvider<List<Invoices>?>.value(
                 value: FirebaseFirestore.instance
                     .collectionGroup('facturas')
                     .snapshots()
@@ -35,7 +35,7 @@ class _InvoicesPageState extends State<InvoicesPage> {
                   return;
                 },
               )
-            : StreamProvider<List<AccountBalanceCreditNotes>?>.value(
+            : StreamProvider<List<CreditNotes>?>.value(
                 value: FirebaseFirestore.instance
                     .collectionGroup('notas_credito')
                     .snapshots()
@@ -49,7 +49,7 @@ class _InvoicesPageState extends State<InvoicesPage> {
       ],
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: Colors.grey[200],
+          backgroundColor: Colors.grey[100],
           body: InvoicesBody(isNotesChecked: isCheckedNotes),
         ),
       ),
@@ -79,7 +79,7 @@ class _InvoicesBodyState extends State<InvoicesBody> {
         // ignore: prefer_const_literals_to_create_immutables
         children: [
           Container(
-            margin: EdgeInsets.fromLTRB(10, 10, 10, 5),
+            margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -102,7 +102,8 @@ class _InvoicesBodyState extends State<InvoicesBody> {
               ],
             ),
           ),
-          // InvoicesOnProcess(),
+          widget.isNotesChecked == false ? InvoicesOnProcess() : Container(),
+          widget.isNotesChecked == false ? InvoicesList() : Container(),
           // InvoicesList(),
         ],
       ),
