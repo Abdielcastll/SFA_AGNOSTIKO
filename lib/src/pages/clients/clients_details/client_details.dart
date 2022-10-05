@@ -12,7 +12,6 @@ import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/component
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/components/prices_dropdown_menu.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/components/zones_dropdown_menu.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/bottom_decoratior.dart/bottom_decoration.dart';
 
 class ClientDetails extends StatefulWidget {
   const ClientDetails(
@@ -87,7 +86,6 @@ class _ClientDetailsState extends State<ClientDetails> {
         elevation: 0,
         backgroundColor: myTheme.colorScheme.primary,
       ),
-      bottomNavigationBar: BottomDecoration(),
       body: ClientDetailsBody(
         specialContribuyer: widget.specialContribuyer,
         masterDiscount: widget.masterDiscount,

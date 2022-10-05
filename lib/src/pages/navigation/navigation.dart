@@ -6,7 +6,6 @@ import 'package:pwa_sales2go_flutter/src/pages/catalogue/catalogue_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/diary_tabs.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/bottom_decoratior.dart/bottom_decoration.dart';
 
 class NavigationPages extends StatefulWidget {
   const NavigationPages({Key? key}) : super(key: key);

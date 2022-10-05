@@ -7,7 +7,6 @@ import 'package:pwa_sales2go_flutter/src/pages/users_and_teams/users/users_page.
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_users_and_teams.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/bottom_decoratior.dart/bottom_decoration.dart';
 
 class UsersAndTeamsPage extends StatelessWidget {
   const UsersAndTeamsPage({Key? key}) : super(key: key);
@@ -19,7 +18,6 @@ class UsersAndTeamsPage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.grey.shade200,
         appBar: AppBarUsersAndTeams(),
-        bottomNavigationBar: BottomDecoration(),
         body: UsersAndTeamsBody(),
       ),
     );

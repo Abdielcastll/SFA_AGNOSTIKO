@@ -9,8 +9,6 @@ import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
-import 'package:pwa_sales2go_flutter/src/widgets/bottom_decoratior.dart/bottom_decoration.dart';
-
 class ProductDetails extends StatefulWidget {
   const ProductDetails({
     Key? key,
@@ -41,7 +39,6 @@ class _ProductDetailsState extends State<ProductDetails> {
     // print(widget.list);
     return Scaffold(
       appBar: AppBar(elevation: 0, toolbarHeight: 40),
-      bottomNavigationBar: BottomDecoration(),
       backgroundColor: Colors.grey.shade200,
       body: ProductDetailsBody(
         code: widget.code,

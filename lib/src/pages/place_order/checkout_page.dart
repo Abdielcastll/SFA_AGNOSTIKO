@@ -6,24 +6,23 @@ import 'package:intl/intl.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pwa_sales2go_flutter/examples/clients_example.dart';
 import 'package:pwa_sales2go_flutter/examples/products_example.dart';
+import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/completed_order.dart';
-import 'package:pwa_sales2go_flutter/src/pages/place_order/components/products.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/components/selected_client.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_checkout.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/bottom_decoratior.dart/bottom_decoration.dart';
 
 class CheckoutPage extends StatefulWidget {
   const CheckoutPage(
       {Key? key,
       required this.client,
-      required this.cart,
+      // required this.cart,
       required this.subTotalPrice})
       : super(key: key);
 
-  final CLientsExample client;
-  final List<Product> cart;
+  final Clients client;
+  // final List<Product> cart;
   final double subTotalPrice;
 
   @override
@@ -35,7 +34,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarCheckout(),
-      bottomNavigationBar: const BottomDecoration(),
       backgroundColor: Colors.grey.shade100,
       body: CheckoutBody(
         client: widget.client,
@@ -52,7 +50,7 @@ class CheckoutBody extends StatefulWidget {
     required this.subTotalPrice,
   }) : super(key: key);
 
-  final CLientsExample client;
+  final Clients? client;
   final double subTotalPrice;
 
   @override
@@ -60,7 +58,7 @@ class CheckoutBody extends StatefulWidget {
 }
 
 class _CheckoutBodyState extends State<CheckoutBody> {
-  List<Product> products = allProductInShoppingCart;
+  // List<Product> products = allProductInShoppingCart;
   String? selectedValue;
   String? selectedValue2;
   bool isFiscalSelected = true;
@@ -85,7 +83,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
   }
 
   double priceWithMasterDiscount() {
-    var total = (widget.subTotalPrice * widget.client.masterDiscount) / 100;
+    var total = (widget.subTotalPrice * widget.client?.masterDiscount) / 100;
     return total;
   }
 
@@ -97,7 +95,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
 
   @override
   Widget build(BuildContext context) {
-    String? fiscalAddress = widget.client.fiscalAddress;
+    String? fiscalAddress = widget.client?.fiscalAdress;
     String? dispatchAddress = 'No Hay direccion disponible';
     DateTime today = DateTime.now();
     var dateFormatter = DateFormat('dd-MM-yyyy');
@@ -166,7 +164,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       margin: EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerRight,
                       child: Text(
-                        '% ${widget.client.masterDiscount}',
+                        '% ${widget.client?.masterDiscount}',
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
@@ -358,7 +356,9 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                   ),
                   width: MediaQuery.of(context).size.width,
                   child: Text(
-                    isFiscalSelected ? fiscalAddress : dispatchAddress,
+                    isFiscalSelected
+                        ? widget.client?.fiscalAdress
+                        : widget.client?.dispatchAdress,
                     style: TextStyle(
                       fontFamily: 'Poppins-regular',
                       fontSize: 14,
@@ -644,7 +644,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => CompletedOrderPage(
-                        client: widget.client.name,
+                        client: widget.client?.name,
                         date: formattedDate,
                         method: selectedValue2,
                         total: totalPriceOfTheOrder(),

@@ -10,7 +10,6 @@ import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/bottom_decoratior.dart/bottom_decoration.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({
@@ -30,7 +29,6 @@ class _ProductsPageState extends State<ProductsPage> {
     return Scaffold(
       appBar: AppBarNavigation(message: 'Productos'),
       backgroundColor: Colors.grey[200],
-      bottomNavigationBar: BottomDecoration(),
       body: MultiProvider(
         providers: [
           // StreamProvider<List<Products>?>.value(

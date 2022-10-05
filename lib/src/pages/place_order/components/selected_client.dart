@@ -3,16 +3,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pwa_sales2go_flutter/examples/clients_example.dart';
-import 'package:pwa_sales2go_flutter/src/pages/place_order/components/products.dart';
-import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
+import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class SelectedClient extends StatelessWidget {
-  const SelectedClient(
-      {Key? key, required this.client, required this.isEditable})
-      : super(key: key);
+  const SelectedClient({
+    Key? key,
+    required this.client,
+    required this.isEditable,
+  }) : super(key: key);
 
-  final CLientsExample client;
+  final Clients? client;
   final bool isEditable;
 
   @override
@@ -20,7 +21,7 @@ class SelectedClient extends StatelessWidget {
     return Column(
       children: [
         Container(
-          margin: EdgeInsets.fromLTRB(16, 2, 16, 5),
+          margin: EdgeInsets.fromLTRB(16, 10, 16, 5),
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
             color: Colors.white,
@@ -39,7 +40,7 @@ class SelectedClient extends StatelessWidget {
                     width: 250,
                     margin: EdgeInsets.fromLTRB(14, 8, 0, 0),
                     child: Text(
-                      client.name,
+                      client?.name,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -54,7 +55,7 @@ class SelectedClient extends StatelessWidget {
                     height: 30,
                     width: 180,
                     child: Text(
-                      client.fiscalAddress,
+                      client?.fiscalAdress,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -72,7 +73,7 @@ class SelectedClient extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                       child: Material(
                         borderRadius: BorderRadius.circular(20),
-                        // color: Colors.grey.withOpacity(0.5),
+                        color: Colors.white,
                         child: IconButton(
                           splashRadius: 30,
                           splashColor:
@@ -80,7 +81,7 @@ class SelectedClient extends StatelessWidget {
                           highlightColor:
                               myTheme.colorScheme.secondary.withOpacity(0.3),
                           onPressed: () {
-                            // Press edit client button
+                            // Regresar y elegir otro cliente
                             Navigator.pop(context);
                           },
                           icon: Icon(

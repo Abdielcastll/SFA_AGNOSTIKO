@@ -6,7 +6,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pwa_sales2go_flutter/src/services/auth.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_login.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/bottom_decoratior.dart/bottom_decoration.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/loading/loading_widget.dart';
 
 class LoginPage extends StatefulWidget {
@@ -35,7 +34,6 @@ class _LoginPageState extends State<LoginPage> {
               backgroundColor: myTheme.colorScheme.primary,
             ),
             body: _loginBody(context),
-            bottomNavigationBar: const BottomDecoration(),
             backgroundColor: Colors.white,
           );
   }
