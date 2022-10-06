@@ -55,11 +55,16 @@ dependencies:
   image_cropper: ^3.0.0
   image_downloader: ^0.31.0
   intl: ^0.17.0
+  objectbox: ^1.6.2
+  objectbox_flutter_libs: any
   
 dev_dependencies:
+  build_runner: ^2.0.0
+  objectbox_generator: any
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: "^0.10.0"
+  
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

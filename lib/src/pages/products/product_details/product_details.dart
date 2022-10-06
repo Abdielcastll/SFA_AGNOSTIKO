@@ -13,6 +13,7 @@ class ProductDetails extends StatefulWidget {
   const ProductDetails({
     Key? key,
     required this.code,
+    this.price,
     required this.line,
     required this.name,
     required this.imageUrl,
@@ -22,6 +23,7 @@ class ProductDetails extends StatefulWidget {
   }) : super(key: key);
 
   final String code;
+  final double? price;
   final String line;
   final String name;
   final String imageUrl;
@@ -48,6 +50,7 @@ class _ProductDetailsState extends State<ProductDetails> {
         name: widget.name,
         stock: widget.stock,
         list: widget.list,
+        price: widget.price,
       ),
     );
   }
@@ -57,6 +60,7 @@ class ProductDetailsBody extends StatelessWidget {
   const ProductDetailsBody({
     Key? key,
     required this.code,
+    this.price,
     required this.line,
     required this.name,
     required this.imageUrl,
@@ -66,6 +70,7 @@ class ProductDetailsBody extends StatelessWidget {
   }) : super(key: key);
 
   final String code;
+  final double? price;
   final String line;
   final String name;
   final String imageUrl;
@@ -76,6 +81,7 @@ class ProductDetailsBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // print(list);
+    print(price);
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -256,7 +262,7 @@ class ProductDetailsBody extends StatelessWidget {
           Container(
             margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
             child: Text(
-              'ID: $code',
+              'ID: $code - Precio: $price',
               style: TextStyle(
                 color: Colors.grey.shade600,
                 fontFamily: 'Poppins-regular',

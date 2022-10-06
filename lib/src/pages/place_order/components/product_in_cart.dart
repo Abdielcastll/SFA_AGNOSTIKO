@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pwa_sales2go_flutter/examples/clients_example.dart';
+import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/details.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -15,7 +16,7 @@ class ProductsInCart extends StatefulWidget {
   }) : super(key: key);
 
   // final List<Product> products;
-  final CLientsExample client;
+  final Clients? client;
 
   @override
   State<ProductsInCart> createState() => _ProductsInCartState();
@@ -24,14 +25,6 @@ class ProductsInCart extends StatefulWidget {
 class _ProductsInCartState extends State<ProductsInCart> {
   @override
   Widget build(BuildContext context) {
-    isDiscountActive(promotionDiscount, promotion) {
-      if (promotion == true) {
-        return '- $promotionDiscount%';
-      } else {
-        return '';
-      }
-    }
-
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 325,

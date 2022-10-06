@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
@@ -18,6 +19,8 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
   @override
   Widget build(BuildContext context) {
     final categories = Provider.of<CategorieSummary?>(context)?.summary ?? {};
+    final prices = Provider.of<Prices?>(context)?.prices ?? {};
+
     List categoriesSummary = categories.values.toList();
     // print(categoriesSummary);
     final products = Provider.of<List<Products>?>(context) ?? [];
@@ -69,6 +72,7 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                               .where((product) =>
                                   categories[product.categorie] == categorie)
                               .toList(),
+                          listOfPrices: prices,
                         ),
                       ),
                     );

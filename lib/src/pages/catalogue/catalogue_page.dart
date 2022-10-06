@@ -1,9 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/examples/catalogue_example.dart';
 import 'package:pwa_sales2go_flutter/examples/products_example.dart';
+import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
@@ -16,7 +19,9 @@ import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/promotions.dart';
 
 class CataloguePage extends StatefulWidget {
-  const CataloguePage({Key? key}) : super(key: key);
+  const CataloguePage({Key? key, this.listOfPrices}) : super(key: key);
+
+  final String? listOfPrices;
 
   @override
   State<CataloguePage> createState() => _CataloguePageState();
@@ -69,6 +74,18 @@ class _CataloguePageState extends State<CataloguePage> {
         ),
         StreamProvider<StockModel?>.value(
           value: DatabaseServiceStreams().stockValues,
+          initialData: null,
+          catchError: (context, error) {
+            print(error);
+            return;
+          },
+        ),
+        StreamProvider<Prices?>.value(
+          value: FirebaseFirestore.instance
+              .collection('listas_de_precios')
+              .doc(widget.listOfPrices)
+              .snapshots()
+              .map(pricesfromSnapshot),
           initialData: null,
           catchError: (context, error) {
             print(error);

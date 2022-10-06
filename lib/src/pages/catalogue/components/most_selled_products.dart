@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
@@ -26,6 +27,8 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
     final linesSummary = Provider.of<LineSummary?>(context)?.summary ?? {};
     final stockValues = Provider.of<StockModel?>(context)?.stock ?? {};
     final products = Provider.of<List<Products>?>(context) ?? [];
+    final prices = Provider.of<Prices?>(context)?.prices ?? {};
+
     final productsList = products;
     // print(productsList);
 

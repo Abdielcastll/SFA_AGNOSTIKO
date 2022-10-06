@@ -3,6 +3,7 @@
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/helper/object_box.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/auth/wrapper/wrapper.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/catalogue_page.dart';
@@ -21,15 +22,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
+late ObjectBox objectBox;
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  // print('Firebase inicializado');
+  // Inicializar Object Box
+  objectBox = await ObjectBox.init();
+  // Inicializar Firebase
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // Inicializar SharedPreferences
   sharedPreferences = await SharedPreferences.getInstance();
+  // Inicializar App
   runApp(const SfaAgnostiko());
-  print('App inicializado');
+  print('Starting SFA Agnostiko');
 }
 
 class SfaAgnostiko extends StatelessWidget {

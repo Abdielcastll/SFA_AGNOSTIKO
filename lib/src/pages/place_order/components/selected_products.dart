@@ -3,7 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pwa_sales2go_flutter/examples/clients_example.dart';
+import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/components/product_in_cart.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
@@ -22,8 +24,16 @@ class SelectedProducts extends StatefulWidget {
 }
 
 class _SelectedProductsState extends State<SelectedProducts> {
-  // List<Product> products = allProductInShoppingCart;
+  late Stream<List<ShoppingCartProduct>> streamShoppingCartProducts;
   String moneySymbol = '\$';
+
+  @override
+  void initState() {
+    super.initState();
+    streamShoppingCartProducts = objectBox.getShoppingCartProducts();
+  }
+
+  // List<Product> products = allProductInShoppingCart;
 
   // cartStatus() {
   //   if (products.isEmpty) {
@@ -48,6 +58,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
   @override
   Widget build(BuildContext context) {
     // double subTotalPrice = totalPriceSum();
+    print(streamShoppingCartProducts);
     return Column(
       children: [
         Container(
@@ -60,6 +71,30 @@ class _SelectedProductsState extends State<SelectedProducts> {
         //   products: products,
         //   client: widget.client,
         // ),
+        StreamBuilder<List<ShoppingCartProduct>>(
+          stream: streamShoppingCartProducts,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
+              final products = snapshot.data!;
+              // Pendiente aqui
+              return ListView.builder(
+                itemCount: products.length,
+                itemBuilder: (context, index) {
+                  final product = products[index];
+                  return ListTile(
+                    leading: Icon(Icons.image_rounded),
+                    title: Text('${product.name}'),
+                    subtitle: Text('${product.code}'),
+                  );
+                },
+              );
+            }
+          },
+        ),
         Container(
           height: 133,
           width: MediaQuery.of(context).size.width,

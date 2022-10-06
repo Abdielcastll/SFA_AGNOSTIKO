@@ -1,0 +1,86 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:2370540632508623834",
+      "lastPropertyId": "18:7658718255536929420",
+      "name": "ShoppingCartProduct",
+      "properties": [
+        {
+          "id": "1:5100992528266329201",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "5:7596685542364787523",
+          "name": "code",
+          "type": 9
+        },
+        {
+          "id": "9:7716031979793786700",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "12:3468392308484009496",
+          "name": "promotion",
+          "type": 9
+        },
+        {
+          "id": "13:8132879460390261999",
+          "name": "productQuantity",
+          "type": 6
+        },
+        {
+          "id": "14:7459871899526244167",
+          "name": "productId",
+          "type": 9
+        },
+        {
+          "id": "15:5609711989173519954",
+          "name": "listOfPricesId",
+          "type": 9
+        },
+        {
+          "id": "16:8856257174391709692",
+          "name": "totalAmount",
+          "type": 8
+        },
+        {
+          "id": "17:3295886441137857912",
+          "name": "unitPrice",
+          "type": 8
+        },
+        {
+          "id": "18:7658718255536929420",
+          "name": "urlPicture",
+          "type": 9
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "1:2370540632508623834",
+  "lastIndexId": "0:0",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [
+    944593588666398817,
+    6127705484496877200,
+    1097045211292602017,
+    2860498095295675175,
+    8880770054613509846,
+    1670195316308917299,
+    7866849489047978592,
+    6305923191944941159
+  ],
+  "retiredRelationUids": [],
+  "version": 1
+}

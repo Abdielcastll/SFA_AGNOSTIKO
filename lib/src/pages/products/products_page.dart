@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
@@ -15,9 +16,11 @@ class ProductsPage extends StatefulWidget {
   const ProductsPage({
     Key? key,
     this.listOfProducts,
+    this.listOfPrices,
   }) : super(key: key);
 
   final listOfProducts;
+  final listOfPrices;
 
   @override
   State<ProductsPage> createState() => _ProductsPageState();
@@ -389,7 +392,8 @@ class _ProductsBodyState extends State<ProductsBody> {
                                 message: productStock,
                               ),
                               TextFieldForCard(
-                                message: '$moneySymbol 00.00',
+                                message:
+                                    '$moneySymbol ${widget.listOfProducts?[product.code]}',
                               ),
                               TextFieldForCard(
                                 message: productBrand,

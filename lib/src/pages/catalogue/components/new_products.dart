@@ -9,6 +9,8 @@ import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/product_details/product_details.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
+import '../../../models/prices_model.dart';
+
 class NewProductsWidget extends StatefulWidget {
   const NewProductsWidget({Key? key}) : super(key: key);
 
@@ -24,6 +26,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
     // print(productsByDateList);
     final linesSummary = Provider.of<LineSummary?>(context)?.summary ?? {};
     final stockValues = Provider.of<StockModel?>(context)?.stock ?? {};
+    final prices = Provider.of<Prices?>(context)?.prices ?? {};
     final products = Provider.of<List<Products>?>(context) ?? [];
     final productsList = products;
     // print(productsList);
@@ -74,6 +77,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                       MaterialPageRoute(
                         builder: (BuildContext context) => ProductDetails(
                           code: product.code,
+                          price: prices[product.code],
                           line: linesSummary[product.line],
                           imageUrl: 'https://i.imgur.com/BPbj6Gy.jpg',
                           isProductNew: true,
