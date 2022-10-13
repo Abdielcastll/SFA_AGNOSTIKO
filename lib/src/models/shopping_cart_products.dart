@@ -7,10 +7,10 @@ class ShoppingCartProduct {
   String? code;
   String? productId;
   String? listOfPricesId;
-  double? totalAmount;
+  String? totalAmount;
   String? name;
   String? promotion;
-  double? unitPrice;
+  String? unitPrice;
   String? urlPicture;
 
   ShoppingCartProduct({

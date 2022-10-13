@@ -11,7 +11,7 @@ import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_orderd.dart';
 class OrderPage extends StatefulWidget {
   const OrderPage({
     Key? key,
-    required this.client,
+    this.client,
   }) : super(key: key);
 
   final Clients? client;
@@ -26,11 +26,13 @@ class _OrderPageState extends State<OrderPage> {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBarOrder(),
-      body: Column(
-        children: [
-          SelectedClient(client: widget.client, isEditable: true),
-          SelectedProducts(client: widget.client),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SelectedClient(client: widget.client, isEditable: true),
+            SelectedProducts(client: widget.client),
+          ],
+        ),
       ),
     );
   }

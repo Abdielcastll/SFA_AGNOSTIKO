@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pwa_sales2go_flutter/examples/clients_example.dart';
+import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
@@ -82,7 +83,42 @@ class SelectedClient extends StatelessWidget {
                               myTheme.colorScheme.secondary.withOpacity(0.3),
                           onPressed: () {
                             // Regresar y elegir otro cliente
-                            Navigator.pop(context);
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false, // User must tap button
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text(
+                                    'Al cambiar el cliente la lista de precios estara cambiando, por lo que el carrito se reiniciara',
+                                  ),
+                                  content: SingleChildScrollView(
+                                    child: ListBody(
+                                      // ignore: prefer_const_literals_to_create_immutables
+                                      children: [
+                                        Text(
+                                            '¿Esta seguro que quiere regresar?'),
+                                      ],
+                                    ),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      child: const Text('Regresar'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: const Text('Aceptar'),
+                                      onPressed: () {
+                                        objectBox.delelteAllShoppingCart();
+                                        Navigator.of(context).pop();
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
                           },
                           icon: Icon(
                             Feather.edit,

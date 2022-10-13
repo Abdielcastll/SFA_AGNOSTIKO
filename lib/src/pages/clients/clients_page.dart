@@ -46,7 +46,10 @@ class _ClientsPageState extends State<ClientsPage> {
       ],
       child: Scaffold(
         backgroundColor: Colors.grey[200],
-        appBar: AppBarNavigation(message: 'Clientes'),
+        appBar: AppBarNavigation(
+          message: 'Clientes',
+          isOrderActive: false,
+        ),
         body: ClientsBody(),
       ),
     );

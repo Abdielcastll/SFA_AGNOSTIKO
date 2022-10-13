@@ -12,7 +12,10 @@ import 'package:pwa_sales2go_flutter/src/pages/products/product_details/product_
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class MostSelledProducts extends StatefulWidget {
-  const MostSelledProducts({Key? key}) : super(key: key);
+  const MostSelledProducts({Key? key, required this.isOrderActive})
+      : super(key: key);
+
+  final bool isOrderActive;
 
   @override
   State<MostSelledProducts> createState() => _MostSelledProductsState();
@@ -83,6 +86,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                           list: productsList
                               .where((element) => element.name == product.name)
                               .toList(),
+                          isOrderActive: widget.isOrderActive,
                         ),
                       ),
                     );

@@ -11,7 +11,10 @@ import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class ListOfProductsButton extends StatefulWidget {
-  const ListOfProductsButton({Key? key}) : super(key: key);
+  const ListOfProductsButton({Key? key, required this.isOrderActive})
+      : super(key: key);
+
+  final bool isOrderActive;
 
   @override
   State<ListOfProductsButton> createState() => _ListOfProductsButtonState();
@@ -37,6 +40,7 @@ class _ListOfProductsButtonState extends State<ListOfProductsButton> {
               builder: (BuildContext context) => ProductsPage(
                 listOfProducts: productsList,
                 listOfPrices: prices,
+                isOrderActive: widget.isOrderActive,
               ),
             ),
           );

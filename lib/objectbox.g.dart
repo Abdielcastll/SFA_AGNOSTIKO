@@ -22,7 +22,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(1, 2370540632508623834),
       name: 'ShoppingCartProduct',
-      lastPropertyId: const IdUid(18, 7658718255536929420),
+      lastPropertyId: const IdUid(20, 8910937102320734128),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -61,18 +61,18 @@ final _entities = <ModelEntity>[
             type: 9,
             flags: 0),
         ModelProperty(
-            id: const IdUid(16, 8856257174391709692),
-            name: 'totalAmount',
-            type: 8,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(17, 3295886441137857912),
-            name: 'unitPrice',
-            type: 8,
-            flags: 0),
-        ModelProperty(
             id: const IdUid(18, 7658718255536929420),
             name: 'urlPicture',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(19, 3528385858162352867),
+            name: 'totalAmount',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(20, 8910937102320734128),
+            name: 'unitPrice',
             type: 9,
             flags: 0)
       ],
@@ -114,7 +114,9 @@ ModelDefinition getObjectBoxModel() {
         8880770054613509846,
         1670195316308917299,
         7866849489047978592,
-        6305923191944941159
+        6305923191944941159,
+        8856257174391709692,
+        3295886441137857912
       ],
       retiredRelationUids: const [],
       modelVersion: 5,
@@ -147,7 +149,13 @@ ModelDefinition getObjectBoxModel() {
           final urlPictureOffset = object.urlPicture == null
               ? null
               : fbb.writeString(object.urlPicture!);
-          fbb.startTable(19);
+          final totalAmountOffset = object.totalAmount == null
+              ? null
+              : fbb.writeString(object.totalAmount!);
+          final unitPriceOffset = object.unitPrice == null
+              ? null
+              : fbb.writeString(object.unitPrice!);
+          fbb.startTable(21);
           fbb.addInt64(0, object.id);
           fbb.addOffset(4, codeOffset);
           fbb.addOffset(8, nameOffset);
@@ -155,9 +163,9 @@ ModelDefinition getObjectBoxModel() {
           fbb.addInt64(12, object.productQuantity);
           fbb.addOffset(13, productIdOffset);
           fbb.addOffset(14, listOfPricesIdOffset);
-          fbb.addFloat64(15, object.totalAmount);
-          fbb.addFloat64(16, object.unitPrice);
           fbb.addOffset(17, urlPictureOffset);
+          fbb.addOffset(18, totalAmountOffset);
+          fbb.addOffset(19, unitPriceOffset);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -175,14 +183,14 @@ ModelDefinition getObjectBoxModel() {
                   .vTableGetNullable(buffer, rootOffset, 30),
               listOfPricesId: const fb.StringReader(asciiOptimization: true)
                   .vTableGetNullable(buffer, rootOffset, 32),
-              totalAmount: const fb.Float64Reader()
-                  .vTableGetNullable(buffer, rootOffset, 34),
+              totalAmount: const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 40),
               name: const fb.StringReader(asciiOptimization: true)
                   .vTableGetNullable(buffer, rootOffset, 20),
               promotion: const fb.StringReader(asciiOptimization: true)
                   .vTableGetNullable(buffer, rootOffset, 26),
-              unitPrice: const fb.Float64Reader()
-                  .vTableGetNullable(buffer, rootOffset, 36),
+              unitPrice: const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 42),
               urlPicture: const fb.StringReader(asciiOptimization: true).vTableGetNullable(buffer, rootOffset, 38));
 
           return object;
@@ -222,15 +230,15 @@ class ShoppingCartProduct_ {
   static final listOfPricesId =
       QueryStringProperty<ShoppingCartProduct>(_entities[0].properties[6]);
 
+  /// see [ShoppingCartProduct.urlPicture]
+  static final urlPicture =
+      QueryStringProperty<ShoppingCartProduct>(_entities[0].properties[7]);
+
   /// see [ShoppingCartProduct.totalAmount]
   static final totalAmount =
-      QueryDoubleProperty<ShoppingCartProduct>(_entities[0].properties[7]);
+      QueryStringProperty<ShoppingCartProduct>(_entities[0].properties[8]);
 
   /// see [ShoppingCartProduct.unitPrice]
   static final unitPrice =
-      QueryDoubleProperty<ShoppingCartProduct>(_entities[0].properties[8]);
-
-  /// see [ShoppingCartProduct.urlPicture]
-  static final urlPicture =
       QueryStringProperty<ShoppingCartProduct>(_entities[0].properties[9]);
 }

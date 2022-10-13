@@ -233,7 +233,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                 Navigator.popUntil(context, (route) => route.isFirst);
               },
               style: ElevatedButton.styleFrom(
-                primary: myTheme.colorScheme.primary,
+                backgroundColor: myTheme.colorScheme.primary,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

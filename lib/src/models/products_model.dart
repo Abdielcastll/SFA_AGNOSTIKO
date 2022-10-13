@@ -13,6 +13,7 @@ class Products {
   final subCategorie;
   final size;
   final promotion;
+  bool selected;
 
   Products({
     required this.quality,
@@ -27,6 +28,7 @@ class Products {
     required this.subCategorie,
     required this.size,
     this.promotion,
+    required this.selected,
   });
 }
 
@@ -43,6 +45,7 @@ class ProductsWithPromotions {
   final subCategorie;
   final size;
   final promotion;
+  bool selected;
 
   ProductsWithPromotions({
     required this.quality,
@@ -57,6 +60,7 @@ class ProductsWithPromotions {
     required this.subCategorie,
     required this.size,
     this.promotion,
+    required this.selected,
   });
 }
 
@@ -73,6 +77,7 @@ class ProductsByDate {
   final subCategorie;
   final size;
   final promotion;
+  bool selected;
 
   ProductsByDate({
     required this.quality,
@@ -87,6 +92,7 @@ class ProductsByDate {
     required this.subCategorie,
     required this.size,
     this.promotion,
+    required this.selected,
   });
 }
 
@@ -107,6 +113,7 @@ List<Products> productsListFromSnapshot(QuerySnapshot snapshot) {
       promotion: doc.data().toString().contains('promocion')
           ? doc.get('promocion').id
           : 'No hay promocion activa',
+      selected: false,
     );
   }).toList();
 }
@@ -129,6 +136,7 @@ List<ProductsWithPromotions> productsWithPromotionListFromSnapshot(
       promotion: doc.data().toString().contains('promocion')
           ? doc.get('promocion').id
           : 'No hay promocion activa',
+      selected: false,
     );
   }).toList();
 }
@@ -150,6 +158,7 @@ List<ProductsByDate> productsByDateListFromSnapshot(QuerySnapshot snapshot) {
       promotion: doc.data().toString().contains('promocion')
           ? doc.get('promocion').id
           : null,
+      selected: false,
     );
   }).toList();
 }

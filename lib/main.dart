@@ -11,6 +11,7 @@ import 'package:pwa_sales2go_flutter/src/pages/clients/clients_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/diary_tabs.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation/navigation.dart';
 import 'package:pwa_sales2go_flutter/src/pages/notifications/notifications_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/place_oder_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/profile/profile_page.dart';
@@ -56,11 +57,12 @@ class SfaAgnostiko extends StatelessWidget {
           'navigation': (BuildContext context) => NavigationPages(),
           'notifications': (BuildContext context) => NotificationsPage(),
           'place_order': (BuildContext context) => PlaceOrderPage(),
-          'catalogue': (BuildContext context) => CataloguePage(),
-          'products': (BuildContext context) => ProductsPage(),
+          // 'catalogue': (BuildContext context) => CataloguePage(),
+          // 'products': (BuildContext context) => ProductsPage(),
           'clients': (BuildContext context) => ClientsPage(),
           'profile': (BuildContext context) => ProfilePage(),
           'diary': (BuildContext context) => DiaryTabs(),
+          'order': (BuildContext context) => OrderPage(),
         },
       ),
     );

@@ -9,7 +9,9 @@ import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class ListOfCategories extends StatefulWidget {
-  ListOfCategories({Key? key}) : super(key: key);
+  ListOfCategories({Key? key, required this.isOrderActive}) : super(key: key);
+
+  final bool isOrderActive;
 
   @override
   State<ListOfCategories> createState() => _ListOfCategoriesState();
@@ -73,6 +75,7 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                                   categories[product.categorie] == categorie)
                               .toList(),
                           listOfPrices: prices,
+                          isOrderActive: widget.isOrderActive,
                         ),
                       ),
                     );

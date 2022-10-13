@@ -27,5 +27,10 @@ class ObjectBox {
   int insertShoppingCartProduct(ShoppingCartProduct newProduct) =>
       _shoppingCartProductBox.put(newProduct);
 
+  insertManyShoppingCartProducts(List<ShoppingCartProduct> newProducts) =>
+      _shoppingCartProductBox.putMany(newProducts);
+
   bool deleteShoppingCartProduct(int id) => _shoppingCartProductBox.remove(id);
+
+  delelteAllShoppingCart() => _shoppingCartProductBox.removeAll();
 }

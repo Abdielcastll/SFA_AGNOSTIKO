@@ -19,6 +19,7 @@ class AppBarOrder extends StatelessWidget implements PreferredSizeWidget {
       //     bottom: Radius.circular(20),
       //   ),
       // ),
+      automaticallyImplyLeading: false,
       title: Text(
         'Pedido',
         style: TextStyle(

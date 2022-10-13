@@ -21,7 +21,10 @@ class _NewUserPageState extends State<NewUserPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarNavigation(message: 'Nuevo Usuario'),
+      appBar: AppBarNavigation(
+        message: 'Nuevo Usuario',
+        isOrderActive: false,
+      ),
       backgroundColor: Colors.white,
       body: NewUserBody(),
     );

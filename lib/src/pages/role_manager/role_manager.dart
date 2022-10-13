@@ -14,7 +14,10 @@ class _RolesManagerPageState extends State<RolesManagerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
-      appBar: AppBarNavigation(message: 'Roles de Usuario'),
+      appBar: AppBarNavigation(
+        message: 'Roles de Usuario',
+        isOrderActive: false,
+      ),
       body: RolesManagerBody(),
     );
   }

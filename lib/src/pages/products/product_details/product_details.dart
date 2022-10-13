@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/examples/products_example.dart';
+import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
@@ -20,16 +22,18 @@ class ProductDetails extends StatefulWidget {
     required this.isProductNew,
     required this.stock,
     this.list,
+    required this.isOrderActive,
   }) : super(key: key);
 
   final String code;
-  final double? price;
+  final String? price;
   final String line;
   final String name;
   final String imageUrl;
   final bool isProductNew;
   final int stock;
   final List<Products>? list;
+  final bool isOrderActive;
 
   @override
   State<ProductDetails> createState() => _ProductDetailsState();
@@ -51,6 +55,7 @@ class _ProductDetailsState extends State<ProductDetails> {
         stock: widget.stock,
         list: widget.list,
         price: widget.price,
+        isOrderActive: widget.isOrderActive,
       ),
     );
   }
@@ -67,21 +72,24 @@ class ProductDetailsBody extends StatelessWidget {
     required this.isProductNew,
     required this.stock,
     this.list,
+    required this.isOrderActive,
   }) : super(key: key);
 
   final String code;
-  final double? price;
+  final String? price;
   final String line;
   final String name;
   final String imageUrl;
   final bool isProductNew;
   final int stock;
   final List<Products>? list;
+  final bool isOrderActive;
 
   @override
   Widget build(BuildContext context) {
     // print(list);
-    print(price);
+    print(price ?? 000);
+    final String priceProduct = price ?? '0';
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -134,7 +142,7 @@ class ProductDetailsBody extends StatelessWidget {
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(10, 40, 10, 20),
+            margin: EdgeInsets.fromLTRB(10, 20, 10, 20),
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
@@ -169,12 +177,12 @@ class ProductDetailsBody extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    ProductsPage(listOfProducts: list),
+                                builder: (BuildContext context) => ProductsPage(
+                                  listOfProducts: list,
+                                  isOrderActive: isOrderActive,
+                                ),
                               ),
                             );
-                            print(
-                                'Detalles de este producto en la lista completa');
                           },
                           icon: Icon(
                             MaterialCommunityIcons.view_list,
@@ -204,6 +212,79 @@ class ProductDetailsBody extends StatelessWidget {
                   ),
                 ],
               ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  child: Text(
+                    'Precio: \$$priceProduct',
+                    style: TextStyle(
+                      color: Colors.grey.shade600,
+                      fontFamily: 'Poppins-regular',
+                    ),
+                  ),
+                ),
+                isOrderActive == false
+                    ? Container()
+                    : Container(
+                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        alignment: Alignment.centerLeft,
+                        child: Container(
+                          margin: EdgeInsets.only(left: 30.0),
+                          // width: 160,
+                          height: 38,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20)),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                // Anadir este producto al carrito
+                                final newProduct = ShoppingCartProduct(
+                                  productQuantity: 1,
+                                  code: code,
+                                  productId: code,
+                                  listOfPricesId: 'GENER-03',
+                                  totalAmount: priceProduct,
+                                  name: name,
+                                  unitPrice: priceProduct,
+                                );
+                                objectBox.insertShoppingCartProduct(newProduct);
+                              },
+                              icon: Icon(
+                                Icons.add_shopping_cart_rounded,
+                                color: myTheme.colorScheme.primary,
+                              ),
+                              style: ButtonStyle(
+                                shadowColor: MaterialStateProperty.all<Color>(
+                                    Colors.transparent),
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                  Color.fromARGB(255, 159, 165, 252)
+                                      .withOpacity(0.3),
+                                ),
+                                overlayColor: MaterialStateProperty.all<Color>(
+                                    myTheme.colorScheme.primary
+                                        .withOpacity(0.3)),
+                              ),
+                              label: Text(
+                                'Añadir al carrito',
+                                style: TextStyle(
+                                    color: myTheme.colorScheme.primary,
+                                    fontFamily: 'Poppins-regular',
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+              ],
             ),
           ),
           Container(
@@ -262,7 +343,7 @@ class ProductDetailsBody extends StatelessWidget {
           Container(
             margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
             child: Text(
-              'ID: $code - Precio: $price',
+              'ID: $code',
               style: TextStyle(
                 color: Colors.grey.shade600,
                 fontFamily: 'Poppins-regular',

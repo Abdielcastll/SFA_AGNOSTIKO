@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:pwa_sales2go_flutter/main.dart';
+import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/place_oder_page.dart';
 import 'package:pwa_sales2go_flutter/src/services/auth.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -10,10 +12,12 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
   AppBarNavigation({
     Key? key,
     required this.message,
+    required this.isOrderActive,
   }) : super(key: key);
 
   final _auth = AuthService();
   final String message;
+  final bool isOrderActive;
 
   @override
   Size get preferredSize => const Size.fromHeight(60);
@@ -52,23 +56,37 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
                 },
               ),
             ),
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 10, 7),
-              child: IconButton(
-                constraints: const BoxConstraints(),
-                splashRadius: 20.0,
-                icon: const Icon(MdiIcons.cartOutline, size: 25),
-                // Redireccion al flujo de realizar nuevos pedidos
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => PlaceOrderPage(),
+            isOrderActive
+                ? Container(
+                    margin: EdgeInsets.fromLTRB(0, 0, 10, 7),
+                    child: IconButton(
+                      constraints: const BoxConstraints(),
+                      splashRadius: 20.0,
+                      icon: const Icon(Icons.shopping_cart_rounded, size: 25),
+                      // Redireccion al flujo de realizar nuevos pedidos
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
                     ),
-                  );
-                },
-              ),
-            ),
+                  )
+                : Container(
+                    margin: EdgeInsets.fromLTRB(0, 0, 10, 7),
+                    child: IconButton(
+                      constraints: const BoxConstraints(),
+                      splashRadius: 20.0,
+                      icon: const Icon(MdiIcons.cartOutline, size: 25),
+                      // Redireccion al flujo de realizar nuevos pedidos
+                      onPressed: () {
+                        objectBox.delelteAllShoppingCart();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => PlaceOrderPage(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
           ],
         ),
       ],

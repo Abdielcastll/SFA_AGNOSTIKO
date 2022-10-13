@@ -14,7 +14,10 @@ import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 class PromotionsWidget extends StatefulWidget {
   const PromotionsWidget({
     Key? key,
+    required this.isOrderActive,
   }) : super(key: key);
+
+  final bool isOrderActive;
 
   @override
   State<PromotionsWidget> createState() => _PromotionsWidgetState();
@@ -144,6 +147,7 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
                                       .where((element) =>
                                           element.name == product.name)
                                       .toList(),
+                                  isOrderActive: widget.isOrderActive,
                                 ),
                               ),
                             );

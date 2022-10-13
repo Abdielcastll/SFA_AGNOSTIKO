@@ -27,7 +27,10 @@ class _AccountBalancePageState extends State<AccountBalancePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
-      appBar: AppBarNavigation(message: 'Estado de cuenta'),
+      appBar: AppBarNavigation(
+        message: 'Estado de cuenta',
+        isOrderActive: false,
+      ),
       body: AccountBalanceBody(
           clientDocument: widget.clientDocument, clientName: widget.clientName),
     );

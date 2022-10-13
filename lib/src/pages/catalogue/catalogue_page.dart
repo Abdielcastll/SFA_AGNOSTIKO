@@ -19,9 +19,12 @@ import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/promotions.dart';
 
 class CataloguePage extends StatefulWidget {
-  const CataloguePage({Key? key, this.listOfPrices}) : super(key: key);
+  const CataloguePage(
+      {Key? key, this.listOfPrices, required this.isOrderActive})
+      : super(key: key);
 
   final String? listOfPrices;
+  final bool isOrderActive;
 
   @override
   State<CataloguePage> createState() => _CataloguePageState();
@@ -30,6 +33,7 @@ class CataloguePage extends StatefulWidget {
 class _CataloguePageState extends State<CataloguePage> {
   @override
   Widget build(BuildContext context) {
+    final listOfPrices = widget.listOfPrices;
     return MultiProvider(
       providers: [
         StreamProvider<List<Products>?>.value(
@@ -83,7 +87,7 @@ class _CataloguePageState extends State<CataloguePage> {
         StreamProvider<Prices?>.value(
           value: FirebaseFirestore.instance
               .collection('listas_de_precios')
-              .doc(widget.listOfPrices)
+              .doc(listOfPrices)
               .snapshots()
               .map(pricesfromSnapshot),
           initialData: null,
@@ -94,9 +98,12 @@ class _CataloguePageState extends State<CataloguePage> {
         ),
       ],
       child: Scaffold(
-        appBar: AppBarNavigation(message: 'Apps2Go'),
+        appBar: AppBarNavigation(
+          message: 'Apps2Go',
+          isOrderActive: widget.isOrderActive,
+        ),
         backgroundColor: Colors.grey[200],
-        body: CatalogueBody(),
+        body: CatalogueBody(isOrderActive: widget.isOrderActive),
       ),
     );
   }
@@ -105,7 +112,10 @@ class _CataloguePageState extends State<CataloguePage> {
 class CatalogueBody extends StatefulWidget {
   const CatalogueBody({
     Key? key,
+    required this.isOrderActive,
   }) : super(key: key);
+
+  final bool isOrderActive;
 
   @override
   State<CatalogueBody> createState() => _CatalogueBodyState();
@@ -119,11 +129,11 @@ class _CatalogueBodyState extends State<CatalogueBody> {
       child: Column(
         // ignore: prefer_const_literals_to_create_immutables
         children: [
-          PromotionsWidget(),
-          NewProductsWidget(),
-          ListOfProductsButton(),
-          ListOfCategories(),
-          MostSelledProducts(),
+          PromotionsWidget(isOrderActive: widget.isOrderActive),
+          NewProductsWidget(isOrderActive: widget.isOrderActive),
+          ListOfProductsButton(isOrderActive: widget.isOrderActive),
+          ListOfCategories(isOrderActive: widget.isOrderActive),
+          MostSelledProducts(isOrderActive: widget.isOrderActive),
         ],
       ),
     );

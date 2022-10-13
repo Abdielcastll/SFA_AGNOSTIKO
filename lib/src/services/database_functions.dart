@@ -7,7 +7,10 @@ import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 // Funciones de Visitas
 
 Future createVisitData(
-    String userUid, String clientDocumentId, DateTime date) async {
+  String userUid,
+  String clientDocumentId,
+  DateTime date,
+) async {
   print('////// CREAR VISITA EN PROCESO /////');
   final lastModified = <String, dynamic>{
     'timestamp': Timestamp.fromDate(DateTime.now()),
@@ -36,7 +39,11 @@ Future createVisitData(
 }
 
 Future updateVisitData(
-    String docId, String? status, String uid, String? commentary) async {
+  String docId,
+  String? status,
+  String uid,
+  String? commentary,
+) async {
   print('// ACTUALIZAR ESTADO DE LA VISITA //');
   bool isCompleted = false;
   bool isCancelled = false;
@@ -63,7 +70,10 @@ Future updateVisitData(
   });
 }
 
-Future deleteVisit(String docId, String uid) async {
+Future deleteVisit(
+  String docId,
+  String uid,
+) async {
   print('Borrar Visita');
   return await FirebaseFirestore.instance
       .collection('usuarios')
@@ -75,7 +85,53 @@ Future deleteVisit(String docId, String uid) async {
 
 // Funciones de Pedidos
 
-Future deleteOrder(String docId, String clientId) async {
+// Future createOrder(
+//   String clientId,
+//   String userUid,
+//   String? commentary,
+//   int? masterDiscount,
+//TODO
+// ) async {
+//   print('/// CREAR PEDIDO ///');
+
+//   return await FirebaseFirestore.instance
+//       .collection('clientes')
+//       .doc(clientId)
+//       .collection('pedidos')
+//       .doc()
+//       .set({
+//         'cantidadesProductos': ,
+//         'cliente': FirebaseFirestore
+//                      .instance
+//                      .collection('clientes')
+//                      .doc(clientId),
+//         'comentario': ,
+//         'descuentoMaestro': ,
+//         'direccionEntrega': ,
+//         'facturacionFallida': ,
+//         'facturado': ,
+//         'fecha': ,
+//         'fechaEntrega': ,
+//         'idsProductos': ,
+//         'impuesto': ,
+//         'nroCorrelativo': ,
+//         'ordenDecOmpra': ,
+//         'porcentajeDescuentoMaestro': ,
+//         'productos': ,
+//         'subtotal': ,
+//         'tasasDeCambio': ,
+//         'timeStampRegistro': Timestamp.fromDate(DateTime.now()),
+//         'totalAPagar': ,
+//         'ultimaModificacion': Timestamp.fromDate(DateTime.now()),
+//         'vendedor': FirebaseFirestore.instance.collection('usuarios').doc(userUid),
+
+//       });
+// }
+
+Future deleteOrder(
+  String docId,
+  String clientId,
+) async {
   print('Borrar pedido');
   return await FirebaseFirestore.instance
       .collection('clientes')

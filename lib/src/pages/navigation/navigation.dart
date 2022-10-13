@@ -17,7 +17,10 @@ class NavigationPages extends StatefulWidget {
 class _NavigationPagesState extends State<NavigationPages> {
   int index = 0;
   final screens = [
-    CataloguePage(listOfPrices: 'GENER-03'),
+    CataloguePage(
+      listOfPrices: 'GENER-03',
+      isOrderActive: false,
+    ),
     DiaryTabs(),
     ClientsPage(),
     ProfilePage(),

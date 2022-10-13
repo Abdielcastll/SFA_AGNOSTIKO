@@ -27,7 +27,10 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarNavigation(message: 'Perfil'),
+      appBar: AppBarNavigation(
+        message: 'Perfil',
+        isOrderActive: false,
+      ),
       backgroundColor: Colors.grey.shade100,
       body: ProfileBody(),
     );

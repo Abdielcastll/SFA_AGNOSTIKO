@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
@@ -17,10 +19,12 @@ class ProductsPage extends StatefulWidget {
     Key? key,
     this.listOfProducts,
     this.listOfPrices,
+    required this.isOrderActive,
   }) : super(key: key);
 
-  final listOfProducts;
+  final List<Products>? listOfProducts;
   final listOfPrices;
+  final bool isOrderActive;
 
   @override
   State<ProductsPage> createState() => _ProductsPageState();
@@ -30,7 +34,10 @@ class _ProductsPageState extends State<ProductsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarNavigation(message: 'Productos'),
+      appBar: AppBarNavigation(
+        message: 'Productos',
+        isOrderActive: widget.isOrderActive,
+      ),
       backgroundColor: Colors.grey[200],
       body: MultiProvider(
         providers: [
@@ -107,7 +114,11 @@ class _ProductsPageState extends State<ProductsPage> {
             },
           ),
         ],
-        child: ProductsBody(listOfProducts: widget.listOfProducts),
+        child: ProductsBody(
+          listOfProducts: widget.listOfProducts,
+          listOfPrices: widget.listOfPrices,
+          isOrderActive: widget.isOrderActive,
+        ),
       ),
     );
   }
@@ -117,18 +128,23 @@ class ProductsBody extends StatefulWidget {
   const ProductsBody({
     Key? key,
     this.listOfProducts,
+    this.listOfPrices,
+    required this.isOrderActive,
   }) : super(key: key);
 
   final List<Products>? listOfProducts;
+  final listOfPrices;
+  final bool isOrderActive;
 
   @override
   State<ProductsBody> createState() => _ProductsBodyState();
 }
 
 class _ProductsBodyState extends State<ProductsBody> {
-  List<Products>? products;
   final searchController = TextEditingController();
   final moneySymbol = '\$';
+  List<ShoppingCartProduct> selectedProducts = [];
+  List<Products>? products;
   bool isChecked = false;
   bool isDescending = false;
 
@@ -157,7 +173,8 @@ class _ProductsBodyState extends State<ProductsBody> {
 
   @override
   Widget build(BuildContext context) {
-    // print(products);
+    // print(widget.listOfPrices);
+    print(selectedProducts);
     final qualitiesSummary =
         Provider.of<QualitySummary?>(context)?.summary ?? {};
     final categoriesSummary =
@@ -169,296 +186,346 @@ class _ProductsBodyState extends State<ProductsBody> {
         Provider.of<SubCategorieSummary?>(context)?.summary ?? {};
     final sizesSummary = Provider.of<SizeSummary?>(context)?.summary ?? {};
     final stockValues = Provider.of<StockModel?>(context)?.stock ?? {};
-    return SingleChildScrollView(
-      child: Column(
+    return Scaffold(
+      floatingActionButton: Wrap(
+        direction: Axis.vertical,
         children: [
-          Container(
-            margin: EdgeInsets.fromLTRB(16, 16, 16, 0),
-            height: 40,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: TextField(
-              style: TextStyle(
-                fontSize: 14,
-                fontFamily: 'Poppins-regular',
-              ),
-              keyboardType: TextInputType.text,
-              maxLines: 1,
-              maxLength: 200,
-              textCapitalization: TextCapitalization.characters,
-              controller: searchController,
-              decoration: InputDecoration(
-                fillColor: Colors.white,
-                focusColor: Colors.white,
-                contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
-                hintText: 'Buscar nombre',
-                hintStyle: TextStyle(
-                  fontFamily: 'Poppins-regular',
-                  fontSize: 14,
-                ),
-                counterText: '',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  borderSide: BorderSide(
-                    color: myTheme.colorScheme.primary.withOpacity(0.5),
-                  ),
-                ),
-              ),
-              onChanged: _searchProduct,
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(20.0, 5.0, 0, 0),
-            child: Row(
-              children: [
-                TextButton(
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        MaterialCommunityIcons.order_alphabetical_ascending,
-                        color: Colors.grey.shade500,
-                        size: 25,
-                      ),
-                      SizedBox(width: 5),
-                      Text(
-                        isDescending ? 'Ascendente' : 'Descendente',
-                        style: TextStyle(
-                            fontFamily: 'Poppins-regular',
-                            color: Colors.grey.shade500,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  onPressed: () {
-                    // Re ordenar el list view alfabeticamente
-                    setState(() => isDescending = !isDescending);
-                  },
-                ),
-                // IconButton(
-                //   icon: Icon(
-                //     MaterialCommunityIcons.filter_variant,
-                //     color: Colors.grey.shade500,
-                //     size: 25,
-                //   ),
-                //   splashRadius: 15,
-                //   onPressed: () {
-                //     // Abrir si se quiere ver por prospecto o no
-                //     Fluttertoast.showToast(
-                //       msg:
-                //           'Boton para re-ordenar la lista en orden ascendente y descendente',
-                //       textColor: Colors.white,
-                //       backgroundColor: myTheme.colorScheme.primary,
-                //     );
-                //   },
-                // ),
-              ],
-            ),
-          ),
-          Container(
-            // margin: EdgeInsets.fromLTRB(0, 0, 0, 40),
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.67,
-            child: ListView.builder(
-              physics: BouncingScrollPhysics(),
-              itemCount: products?.length,
-              itemBuilder: (BuildContext context, index) {
-                // Valores dentro de los resumenes
-                //TODO: Revisar el cambio de orden para el filtro
-                final sortedProducts =
-                    isDescending ? products?.reversed.toList() : products;
-                final product = sortedProducts![index];
-                // final product = products![index];
-                final productStock = stockValues[product.code] ?? 'NaN';
-                final productBrand = brandsSummary[product.brand] ?? 'NaN';
-                final productCategorie =
-                    categoriesSummary[product.categorie] ?? 'NaN';
-                final productSubCategorie =
-                    subCategoriesSummary[product.subCategorie] ?? 'NaN';
-                final productLine = linesSummary[product.line] ?? 'NaN';
-                final productQuality =
-                    qualitiesSummary[product.quality] ?? 'NaN';
-                final productSize = sizesSummary[product.size] ?? 'NaN';
-                final productDesign = designsSummary[product.design] ?? 'NaN';
+          if (selectedProducts.isEmpty)
+            Container()
+          else if (selectedProducts.isNotEmpty && widget.isOrderActive == true)
+            Container(
+              height: 70,
+              width: 70,
+              margin: const EdgeInsets.all(10.0),
+              child: FloatingActionButton(
+                elevation: 2,
+                backgroundColor: myTheme.colorScheme.primary,
+                onPressed: () {
+                  // Agregar productos al carrito
 
-                return Container(
-                  margin: EdgeInsets.only(bottom: 10.0),
-                  height: 120,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
+                  objectBox.insertManyShoppingCartProducts(selectedProducts);
+                  Fluttertoast.showToast(
+                      msg: 'Productos Añadidos exitosamente');
+                },
+                child: Icon(
+                  Icons.add_shopping_cart_rounded,
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+            ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.fromLTRB(16, 16, 16, 0),
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: TextField(
+                style: TextStyle(
+                  fontSize: 14,
+                  fontFamily: 'Poppins-regular',
+                ),
+                keyboardType: TextInputType.text,
+                maxLines: 1,
+                maxLength: 200,
+                textCapitalization: TextCapitalization.characters,
+                controller: searchController,
+                decoration: InputDecoration(
+                  fillColor: Colors.white,
+                  focusColor: Colors.white,
+                  contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
+                  hintText: 'Buscar nombre',
+                  hintStyle: TextStyle(
+                    fontFamily: 'Poppins-regular',
+                    fontSize: 14,
                   ),
-                  child: ListTile(
-                    onTap: () {
-                      // Activar check para abrir opciones
-                    },
-                    title: SingleChildScrollView(
-                      physics: BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                height: 17,
-                                width: 17,
-                                margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16),
-                                  color: Colors.grey.shade400,
-                                ),
-                                child: Checkbox(
-                                    side: MaterialStateBorderSide.resolveWith(
-                                        (states) => BorderSide(
-                                            width: 1.0,
-                                            color: Colors.transparent)),
-                                    shape: CircleBorder(),
-                                    activeColor: myTheme.colorScheme.primary,
-                                    value: isChecked,
-                                    onChanged: (value) {
-                                      setState(() => isChecked = value!);
-                                    }),
-                              ),
-                            ],
-                          ),
-                          SizedBox(width: 20),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: 70,
-                                height: 90,
-                                child: TextFieldForCard(
-                                  message: product.name,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(width: 10),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            // ignore: prefer_const_literals_to_create_immutables
-                            children: [
-                              TextFieldForCard(
-                                message: 'Codigo:',
-                                bold: FontWeight.bold,
-                              ),
-                              TextFieldForCard(
-                                message: 'Stock:',
-                                bold: FontWeight.bold,
-                              ),
-                              TextFieldForCard(
-                                message: 'Precio:',
-                                bold: FontWeight.bold,
-                              ),
-                              TextFieldForCard(
-                                message: 'Marca:',
-                                bold: FontWeight.bold,
-                              ),
-                              TextFieldForCard(
-                                message: 'Categoria:',
-                                bold: FontWeight.bold,
-                              ),
-                              TextFieldForCard(
-                                message: 'Sub-Categoria:',
-                                bold: FontWeight.bold,
-                              ),
-                            ],
-                          ),
-                          SizedBox(width: 10),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            // ignore: prefer_const_literals_to_create_immutables
-                            children: [
-                              TextFieldForCard(
-                                message: product.code,
-                              ),
-                              TextFieldForCard(
-                                message: productStock,
-                              ),
-                              TextFieldForCard(
-                                message:
-                                    '$moneySymbol ${widget.listOfProducts?[product.code]}',
-                              ),
-                              TextFieldForCard(
-                                message: productBrand,
-                              ),
-                              TextFieldForCard(
-                                message: productCategorie,
-                              ),
-                              TextFieldForCard(
-                                message: productSubCategorie,
-                              ),
-                            ],
-                          ),
-                          SizedBox(width: 10),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            // ignore: prefer_const_literals_to_create_immutables
-                            children: [
-                              TextFieldForCard(
-                                message: 'Linea:',
-                                bold: FontWeight.bold,
-                              ),
-                              TextFieldForCard(
-                                message: 'Calidad:',
-                                bold: FontWeight.bold,
-                              ),
-                              TextFieldForCard(
-                                message: 'Tamano:',
-                                bold: FontWeight.bold,
-                              ),
-                              TextFieldForCard(
-                                message: 'Diseno:',
-                                bold: FontWeight.bold,
-                              ),
-                            ],
-                          ),
-                          SizedBox(width: 10),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            // ignore: prefer_const_literals_to_create_immutables
-                            children: [
-                              TextFieldForCard(
-                                message: productLine,
-                              ),
-                              TextFieldForCard(
-                                message: productQuality,
-                              ),
-                              TextFieldForCard(
-                                message: productSize,
-                              ),
-                              TextFieldForCard(
-                                message: productDesign,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                  counterText: '',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                      color: myTheme.colorScheme.primary.withOpacity(0.5),
                     ),
                   ),
-                );
-              },
+                ),
+                onChanged: _searchProduct,
+              ),
             ),
-          ),
-        ],
+            Container(
+              margin: EdgeInsets.fromLTRB(20.0, 5.0, 0, 0),
+              child: Row(
+                children: [
+                  TextButton(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          MaterialCommunityIcons.order_alphabetical_ascending,
+                          color: Colors.grey.shade500,
+                          size: 25,
+                        ),
+                        SizedBox(width: 5),
+                        Text(
+                          isDescending ? 'Ascendente' : 'Descendente',
+                          style: TextStyle(
+                              fontFamily: 'Poppins-regular',
+                              color: Colors.grey.shade500,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    onPressed: () {
+                      // Re ordenar el list view alfabeticamente
+                      setState(() => isDescending = !isDescending);
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              // margin: EdgeInsets.fromLTRB(0, 0, 0, 40),
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height * 0.74,
+              child: ListView.builder(
+                physics: BouncingScrollPhysics(),
+                itemCount: products?.length,
+                itemBuilder: (BuildContext context, index) {
+                  // Valores dentro de los resumenes
+                  //TODO: Revisar el cambio de orden para el filtro
+                  final sortedProducts =
+                      isDescending ? products?.reversed.toList() : products;
+                  final product = sortedProducts![index];
+                  // final product = products![index];
+                  final productStock = stockValues[product.code] ?? '000';
+                  final productBrand = brandsSummary[product.brand] ?? '';
+                  final productCategorie =
+                      categoriesSummary[product.categorie] ?? '';
+                  final productSubCategorie =
+                      subCategoriesSummary[product.subCategorie] ?? '';
+                  final productLine = linesSummary[product.line] ?? '';
+                  final productQuality =
+                      qualitiesSummary[product.quality] ?? '';
+                  final productSize = sizesSummary[product.size] ?? '';
+                  final productDesign = designsSummary[product.design] ?? '';
+                  final productPrice = widget.listOfPrices[product.code] ?? 0;
+
+                  return Container(
+                    margin: EdgeInsets.only(bottom: 10.0),
+                    height: 120,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: ListTile(
+                      onTap: () {
+                        // Activar check para abrir opciones
+                      },
+                      title: SingleChildScrollView(
+                        physics: BouncingScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          // ignore: prefer_const_literals_to_create_immutables
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  height: 17,
+                                  width: 17,
+                                  margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(16),
+                                    color: Colors.grey.shade400,
+                                  ),
+                                  child: Checkbox(
+                                      side: MaterialStateBorderSide.resolveWith(
+                                          (states) => BorderSide(
+                                              width: 1.0,
+                                              color: Colors.transparent)),
+                                      shape: CircleBorder(),
+                                      activeColor: myTheme.colorScheme.primary,
+                                      value: product.selected,
+                                      onChanged: (value) {
+                                        if (product.selected == false) {
+                                          final newProduct =
+                                              ShoppingCartProduct(
+                                            productQuantity: 1,
+                                            code: product.code.toString(),
+                                            productId: product.code.toString(),
+                                            listOfPricesId: 'GENER-03',
+                                            // TODO
+                                            totalAmount:
+                                                productPrice.toString() ?? '0',
+                                            name: product.name,
+                                            unitPrice:
+                                                productPrice.toString() ?? '0',
+                                          );
+                                          print(newProduct.unitPrice);
+                                          // print(newProduct.totalAmount);
+                                          selectedProducts.add(newProduct);
+                                        } else if (product.selected == true) {
+                                          final newProduct =
+                                              ShoppingCartProduct(
+                                            productQuantity: 1,
+                                            code: product.code.toString(),
+                                            productId: product.code.toString(),
+                                            listOfPricesId: 'GENER-03',
+                                            // TODO
+                                            totalAmount:
+                                                productPrice.toString() ?? '0',
+                                            name: product.name,
+                                            unitPrice:
+                                                productPrice.toString() ?? '0',
+                                          );
+                                          selectedProducts.removeWhere((item) =>
+                                              item.code == product.code);
+                                        }
+                                        setState(
+                                            () => product.selected = value!);
+                                      }),
+                                ),
+                              ],
+                            ),
+                            SizedBox(width: 20),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: 70,
+                                  // height: 90,
+                                  child: TextFieldForCard(
+                                    message: product.name,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(width: 10),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              // ignore: prefer_const_literals_to_create_immutables
+                              children: [
+                                TextFieldForCard(
+                                  message: 'Codigo:',
+                                  bold: FontWeight.bold,
+                                ),
+                                TextFieldForCard(
+                                  message: 'Stock:',
+                                  bold: FontWeight.bold,
+                                ),
+                                TextFieldForCard(
+                                  message: 'Precio:',
+                                  bold: FontWeight.bold,
+                                ),
+                                TextFieldForCard(
+                                  message: 'Marca:',
+                                  bold: FontWeight.bold,
+                                ),
+                                TextFieldForCard(
+                                  message: 'Categoria:',
+                                  bold: FontWeight.bold,
+                                ),
+                                TextFieldForCard(
+                                  message: 'Sub-Categoria:',
+                                  bold: FontWeight.bold,
+                                ),
+                              ],
+                            ),
+                            SizedBox(width: 10),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              // ignore: prefer_const_literals_to_create_immutables
+                              children: [
+                                TextFieldForCard(
+                                  message: product.code,
+                                ),
+                                TextFieldForCard(
+                                  message: productStock,
+                                ),
+                                TextFieldForCard(
+                                  message: '$moneySymbol $productPrice',
+                                  // '',
+                                ),
+                                TextFieldForCard(
+                                  message: productBrand,
+                                ),
+                                TextFieldForCard(
+                                  message: productCategorie,
+                                ),
+                                TextFieldForCard(
+                                  message: productSubCategorie,
+                                ),
+                              ],
+                            ),
+                            SizedBox(width: 10),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              // ignore: prefer_const_literals_to_create_immutables
+                              children: [
+                                TextFieldForCard(
+                                  message: 'Linea:',
+                                  bold: FontWeight.bold,
+                                ),
+                                TextFieldForCard(
+                                  message: 'Calidad:',
+                                  bold: FontWeight.bold,
+                                ),
+                                TextFieldForCard(
+                                  message: 'Tamano:',
+                                  bold: FontWeight.bold,
+                                ),
+                                TextFieldForCard(
+                                  message: 'Diseno:',
+                                  bold: FontWeight.bold,
+                                ),
+                              ],
+                            ),
+                            SizedBox(width: 10),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              // ignore: prefer_const_literals_to_create_immutables
+                              children: [
+                                TextFieldForCard(
+                                  message: productLine,
+                                ),
+                                TextFieldForCard(
+                                  message: productQuality,
+                                ),
+                                TextFieldForCard(
+                                  message: productSize,
+                                ),
+                                TextFieldForCard(
+                                  message: productDesign,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
