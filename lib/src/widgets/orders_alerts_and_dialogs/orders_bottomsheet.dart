@@ -457,7 +457,7 @@ void modalBottomSheetForOrders(
                                                 ),
                                               ),
                                               Text(
-                                                'IVA: \$$tax',
+                                                'IVA: \$${tax.toStringAsFixed(2)}',
                                                 style: TextStyle(
                                                   fontFamily: 'Poppins-regular',
                                                   color: Colors.black,
@@ -466,7 +466,7 @@ void modalBottomSheetForOrders(
                                                 ),
                                               ),
                                               Text(
-                                                'Total a Pagar: \$$total',
+                                                'Total a Pagar: \$${total.toStringAsFixed(2)}',
                                                 style: TextStyle(
                                                   fontFamily: 'Poppins-regular',
                                                   color: Colors.green,
@@ -692,6 +692,7 @@ void modalBottomSheetForOrders(
                                                       orderDocumentId,
                                                       clientReferenceId,
                                                     );
+                                                    Navigator.pop(context);
                                                     Navigator.pop(context);
                                                   },
                                                   style: TextButton.styleFrom(

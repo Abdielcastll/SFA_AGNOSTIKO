@@ -35,7 +35,7 @@ class CompletedOrders extends StatelessWidget {
               padding: EdgeInsets.only(left: 16, top: 5),
               child: Text(
                 textAlign: TextAlign.start,
-                'Completado',
+                'Pasadas a Facturas',
                 style: TextStyle(
                   color: Colors.green,
                   fontSize: 15,

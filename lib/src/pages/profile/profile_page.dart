@@ -51,6 +51,7 @@ class _ProfileBodyState extends State<ProfileBody> {
   final String? charge = sharedPreferences!.getString('cargo');
   final String? uid = sharedPreferences!.getString('uid');
   final String? email = sharedPreferences!.getString('email');
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(

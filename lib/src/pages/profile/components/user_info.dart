@@ -1,9 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
-class UserInfo extends StatelessWidget {
+class UserInfo extends StatefulWidget {
   const UserInfo({
     Key? key,
     required this.userName,
@@ -13,6 +14,11 @@ class UserInfo extends StatelessWidget {
   final String? userName;
   final String? charge;
 
+  @override
+  State<UserInfo> createState() => _UserInfoState();
+}
+
+class _UserInfoState extends State<UserInfo> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,7 +37,7 @@ class UserInfo extends StatelessWidget {
             ),
           ),
           title: Text(
-            '$userName',
+            '${widget.userName}',
             style: TextStyle(
               fontFamily: 'Poppins-regular',
               color: myTheme.colorScheme.primary,
@@ -39,14 +45,28 @@ class UserInfo extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          subtitle: Text(
-            '$charge',
-            style: TextStyle(
-              fontFamily: 'Poppins-regular',
-              color: Color(0xFF7D5070),
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-            ),
+          subtitle: Row(
+            children: [
+              Text(
+                '${widget.charge}',
+                style: TextStyle(
+                  fontFamily: 'Poppins-regular',
+                  color: Color(0xFF7D5070),
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              // SizedBox(width: 5),
+              // Text(
+              //   'Moneda: $currentCoin',
+              //   style: TextStyle(
+              //     fontFamily: 'Poppins-regular',
+              //     color: Color(0xFF7D5070),
+              //     fontSize: 12,
+              //     fontWeight: FontWeight.bold,
+              //   ),
+              // ),
+            ],
           ),
         ),
       ),

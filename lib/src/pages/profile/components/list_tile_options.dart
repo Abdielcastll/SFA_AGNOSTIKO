@@ -3,6 +3,7 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/pages/users_and_teams/users_and_teams.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
@@ -23,17 +24,31 @@ class ListTileOptions extends StatefulWidget {
 }
 
 class _ListTileOptionsState extends State<ListTileOptions> {
+  final String? currentCoin = sharedPreferences!.getString('currentCoin');
+
   @override
   Widget build(BuildContext context) {
     String? selectedValue;
-
     bool isAdmin;
-    if (widget.charge == 'Cobrador' || widget.charge == 'Administrador') {
+
+    if (currentCoin == 'VED') {
+      selectedValue = 'Bolivares (VED - Bs)';
+    } else if (currentCoin == 'EUR') {
+      selectedValue = 'Euros (EUR - €)';
+    } else if (currentCoin == 'BTC') {
+      selectedValue = 'Bitcoin (BTC - ฿)';
+    } else if (currentCoin == 'USD') {
+      selectedValue = 'Dolares (USD - \$)';
+    }
+
+    if (widget.charge == 'Administrador') {
       isAdmin = true;
     } else {
       isAdmin = false;
     }
-    print(isAdmin);
+    print('Administrador: $isAdmin');
+    print('Moneda actual: $currentCoin');
+    print(selectedValue);
     return Column(
       children: [
         ListTileProfile(
@@ -194,9 +209,10 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                 builder: (BuildContext context) {
                   return StatefulBuilder(builder: (context, setState) {
                     List? items = [
-                      'Dolares (\$)',
-                      'Bolivares (Bs)',
-                      'Bitcoin (BTC)',
+                      'Dolares (USD - \$)',
+                      'Bolivares (VED - Bs)',
+                      'Euros (EUR - €)',
+                      'Bitcoin (BTC - ฿)',
                     ];
                     return AlertDialog(
                       shape: RoundedRectangleBorder(
@@ -224,12 +240,11 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                                     children: [
                                       Expanded(
                                         child: Text(
-                                          selectedValue ?? 'Dolares (\$)',
+                                          "$selectedValue",
                                           style: TextStyle(
-                                            fontSize: 12,
+                                            fontSize: 14,
                                             fontWeight: FontWeight.bold,
-                                            color: myTheme.colorScheme.primary
-                                                .withOpacity(0.7),
+                                            color: myTheme.colorScheme.primary,
                                           ),
                                           overflow: TextOverflow.ellipsis,
                                         ),
@@ -256,6 +271,30 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                                     setState(
                                       () {
                                         selectedValue = value as String;
+                                        // 'Dolares (USD - \$)',
+                                        // 'Bolivares (VED - Bs)',
+                                        // 'Euros (EUR - €)',
+                                        // 'Bitcoin (BTC - ฿)',
+                                        if (value.toString().contains('\$')) {
+                                          print('Cambio de moneda a: USD');
+                                          // selectedValue = 'USD';
+                                        } else if (value
+                                            .toString()
+                                            .contains('Bs')) {
+                                          print(
+                                              'Cambio de moneda a: Bolivares');
+                                          // selectedValue = 'VED';
+                                        } else if (value
+                                            .toString()
+                                            .contains('€')) {
+                                          print('Cambio de moneda a: Euro');
+                                          // selectedValue = 'EUR';
+                                        } else if (value
+                                            .toString()
+                                            .contains('฿')) {
+                                          print('Cambio de moneda a: Bitcoin');
+                                          // selectedValue = 'BTC';
+                                        }
                                       },
                                     );
                                     // Mover la funcion en la base de datos para cambiar la lista
@@ -301,6 +340,46 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                           ],
                         ),
                       ),
+                      actions: [
+                        TextButton(
+                          child: const Text('Regresar'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        TextButton(
+                          child: const Text('Aceptar'),
+                          onPressed: () {
+                            // 'Dolares (USD - \$)',
+                            // 'Bolivares (VED - Bs)',
+                            // 'Euros (EUR - €)',
+                            // 'Bitcoin (BTC - ฿)',
+                            if (selectedValue.toString().contains('\$')) {
+                              print('Cambio de moneda a: USD');
+                              sharedPreferences?.setString(
+                                  'currentCoin', 'USD');
+                              Navigator.pop(context);
+                            } else if (selectedValue
+                                .toString()
+                                .contains('Bs')) {
+                              print('Cambio de moneda a: Bolivares');
+                              sharedPreferences?.setString(
+                                  'currentCoin', 'VED');
+                              Navigator.pop(context);
+                            } else if (selectedValue.toString().contains('€')) {
+                              print('Cambio de moneda a: Euro');
+                              sharedPreferences?.setString(
+                                  'currentCoin', 'EUR');
+                              Navigator.pop(context);
+                            } else if (selectedValue.toString().contains('฿')) {
+                              print('Cambio de moneda a: Bitcoin');
+                              sharedPreferences?.setString(
+                                  'currentCoin', 'BTC');
+                              Navigator.pop(context);
+                            }
+                          },
+                        ),
+                      ],
                     );
                   });
                 });

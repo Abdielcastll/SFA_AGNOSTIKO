@@ -1,9 +1,11 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pwa_sales2go_flutter/examples/clients_example.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
+import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/catalogue_page.dart';
@@ -25,42 +27,63 @@ class SelectedProducts extends StatefulWidget {
 }
 
 class _SelectedProductsState extends State<SelectedProducts> {
+  final currentCoin = sharedPreferences!.getString('currentCoin');
   late String? clientPriceList = widget.client?.prices;
   late Stream<List<ShoppingCartProduct>> streamShoppingCartProducts;
-  String moneySymbol = '\$';
+  final List<double> coinsExchangeRates = [0.0, 0.0, 0.0];
+
+  getPricesExchangesRates() async {
+    await FirebaseFirestore.instance
+        .collection('monedas')
+        .get()
+        .then((document) {
+      // print('Cantidad de documentos en monedas: ${document.docs.length}');
+      document.docs.forEach((element) {
+        // print(element.data()['tasaDeCambio']);
+        coinsExchangeRates.remove(0.0);
+        coinsExchangeRates.add(element.data()['tasaDeCambio']);
+      });
+    });
+  }
+
+  identifyPrice(price) {
+    if (currentCoin == 'USD' || currentCoin == null) {
+      return price.toStringAsFixed(2);
+    } else if (currentCoin == 'VED') {
+      return (price * coinsExchangeRates[2]).toStringAsFixed(2);
+    } else if (currentCoin == 'EUR') {
+      return (price * coinsExchangeRates[1]).toStringAsFixed(2);
+    } else if (currentCoin == 'BTC') {
+      return (price * coinsExchangeRates[0]);
+    }
+  }
+
+  identifyCurrency() {
+    if (currentCoin == 'USD' || currentCoin == null) {
+      return '\$';
+    } else if (currentCoin == 'VED') {
+      return 'BS';
+    } else if (currentCoin == 'EUR') {
+      return '€';
+    } else if (currentCoin == 'BTC') {
+      return '฿';
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     streamShoppingCartProducts = objectBox.getShoppingCartProducts();
+    getPricesExchangesRates();
   }
-
-  // List<Product> products = allProductInShoppingCart;
-
-  // cartStatus() {
-  //   if (products.isEmpty) {
-  //     return Text(
-  //       'No hay productos seleccionados en su carrito',
-  //       style: TextStyle(
-  //         color: Colors.grey.shade500,
-  //         fontSize: 15,
-  //         fontWeight: FontWeight.w500,
-  //       ),
-  //     );
-  //   } else if (products.isNotEmpty) {
-  //     return;
-  //   }
-  // }
-
-  // double totalPriceSum() {
-  //   double total = products.fold(0.0, (sum, item) => (sum + item.totalPrice));
-  //   return total;
-  // }
 
   @override
   Widget build(BuildContext context) {
+    String moneySymbol = identifyCurrency();
     // double subTotalPrice = totalPriceSum();
     // print(streamShoppingCartProducts);
+    print(currentCoin);
+    print('Tasas: $coinsExchangeRates');
     return Column(
       children: [
         Container(
@@ -91,6 +114,8 @@ class _SelectedProductsState extends State<SelectedProducts> {
                 subTotal += myInt;
               });
               print('SubTotal del pedido: $subTotal');
+              var test = identifyPrice(subTotal);
+              print(test);
 
               return WillPopScope(
                 onWillPop: () async {
@@ -212,7 +237,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                     ),
                                   ),
                                   Text(
-                                    '$moneySymbol ${subTotal.toStringAsFixed(2)}',
+                                    '$moneySymbol ${identifyPrice(subTotal)}',
                                     style: TextStyle(
                                       fontFamily: 'Poppins-regular',
                                       fontSize: 14,
@@ -338,9 +363,12 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                             MaterialPageRoute(
                                               builder: (context) =>
                                                   CheckoutPage(
-                                                      client: widget.client,
-                                                      cart: products,
-                                                      subTotal: subTotal),
+                                                client: widget.client,
+                                                cart: products,
+                                                subTotal: subTotal,
+                                                coinsExchangeRates:
+                                                    coinsExchangeRates,
+                                              ),
                                             ),
                                           );
                                         },

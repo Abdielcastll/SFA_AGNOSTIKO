@@ -82,23 +82,23 @@ class InvoiceCardBody extends StatelessWidget {
       }
     }
 
-    final currentClientName = Provider.of<Client?>(context)?.name ?? 'NaN';
+    final currentClientName = Provider.of<Client?>(context)?.name ?? '';
     final currentClientSpecialContributor =
-        Provider.of<Client?>(context)?.specialContributor ?? 'NaN';
+        Provider.of<Client?>(context)?.specialContributor ?? '';
     final currentClientAddress =
-        Provider.of<Client?>(context)?.fiscalAdress ?? 'NaN';
-    final currentClientIdType = Provider.of<Client?>(context)?.idType ?? 'NaN';
-    final currentClientId = Provider.of<Client?>(context)?.id ?? 'NaN';
-    final currentClientPhone = Provider.of<Client?>(context)?.phone1 ?? 'NaN';
-    final currentClientPhone2 = Provider.of<Client?>(context)?.phone2 ?? 'NaN';
-    final currentClientEmail = Provider.of<Client?>(context)?.email ?? 'NaN';
+        Provider.of<Client?>(context)?.fiscalAdress ?? '';
+    final currentClientIdType = Provider.of<Client?>(context)?.idType ?? '';
+    final currentClientId = Provider.of<Client?>(context)?.id ?? '';
+    final currentClientPhone = Provider.of<Client?>(context)?.phone1 ?? '';
+    final currentClientPhone2 = Provider.of<Client?>(context)?.phone2 ?? '';
+    final currentClientEmail = Provider.of<Client?>(context)?.email ?? '';
     final currentClientDispatchAdress =
-        Provider.of<Client?>(context)?.dispatchAdress ?? 'NaN';
-    final currentClientZones = Provider.of<Client?>(context)?.zone ?? 'NaN';
-    final currentClientPrices = Provider.of<Client?>(context)?.prices ?? 'NaN';
+        Provider.of<Client?>(context)?.dispatchAdress ?? '';
+    final currentClientZones = Provider.of<Client?>(context)?.zone ?? '';
+    final currentClientPrices = Provider.of<Client?>(context)?.prices ?? '';
     final currentClientRefID =
-        Provider.of<Client?>(context)?.clientDocumentId ?? 'NaN';
-    final zonesSummary = Provider.of<ZoneSummary?>(context)?.summary ?? 'NaN';
+        Provider.of<Client?>(context)?.clientDocumentId ?? '';
+    final zonesSummary = Provider.of<ZoneSummary?>(context)?.summary ?? '';
 
     final currentDiscountMaster =
         Provider.of<Client?>(context)?.masterDiscount ?? {};

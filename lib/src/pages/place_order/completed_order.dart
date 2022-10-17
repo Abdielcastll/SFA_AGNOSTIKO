@@ -5,14 +5,22 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class CompletedOrderPage extends StatelessWidget {
-  const CompletedOrderPage(
-      {Key? key, this.client, this.total, this.method, this.date})
-      : super(key: key);
+  const CompletedOrderPage({
+    Key? key,
+    required this.client,
+    required this.total,
+    required this.method,
+    required this.date,
+    required this.address,
+    this.orderNumber,
+  }) : super(key: key);
 
   final client;
   final total;
   final method;
   final date;
+  final address;
+  final orderNumber;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +45,8 @@ class CompletedOrderPage extends StatelessWidget {
           total: total,
           method: method,
           date: date,
+          address: address,
+          orderNumber: orderNumber,
         ),
       ),
     );
@@ -46,15 +56,19 @@ class CompletedOrderPage extends StatelessWidget {
 class CompletedOrderBody extends StatefulWidget {
   const CompletedOrderBody({
     Key? key,
-    this.client,
-    this.total,
-    this.method,
-    this.date,
+    required this.client,
+    required this.total,
+    required this.method,
+    required this.date,
+    required this.address,
+    required this.orderNumber,
   }) : super(key: key);
   final client;
   final total;
   final method;
   final date;
+  final address;
+  final orderNumber;
 
   @override
   State<CompletedOrderBody> createState() => _CompletedOrderBody();
@@ -79,141 +93,185 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
           ),
         ),
         Container(
-          margin: EdgeInsets.fromLTRB(20, 40, 10, 0),
+          margin: EdgeInsets.fromLTRB(20, 10, 10, 20),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'CLIENTE',
-                    style: TextStyle(
-                      color: Colors.purple.shade600,
-                      fontFamily: 'Poppins-regular',
-                      fontSize: 16,
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'CLIENTE',
+                          style: TextStyle(
+                            color: Colors.purple.shade600,
+                            fontFamily: 'Poppins-regular',
+                            fontSize: 16,
+                          ),
+                        ),
+                        Container(
+                          // height: 60,
+                          width: 140,
+                          child: Text(
+                            widget.client,
+                            // 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+                            style: TextStyle(
+                              color: Colors.grey.shade500,
+                              fontFamily: 'Poppins-regular',
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   Container(
-                    width: 150,
-                    height: 50,
-                    child: Text(
-                      widget.client,
-                      style: TextStyle(
-                        color: Colors.grey.shade500,
-                        fontFamily: 'Poppins-regular',
-                        fontSize: 12,
+                    margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'FECHA DE PEDIDO',
+                          style: TextStyle(
+                            color: Colors.purple.shade600,
+                            fontFamily: 'Poppins-regular',
+                            fontSize: 16,
+                          ),
+                        ),
+                        Text(
+                          widget.date,
+                          style: TextStyle(
+                            color: Colors.grey.shade500,
+                            fontFamily: 'Poppins-regular',
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'PEDIDO',
+                          style: TextStyle(
+                            color: Colors.purple.shade600,
+                            fontFamily: 'Poppins-regular',
+                            fontSize: 16,
+                          ),
+                        ),
+                        Text(
+                          '# ${widget.orderNumber}',
+                          style: TextStyle(
+                            color: Colors.grey.shade500,
+                            fontFamily: 'Poppins-regular',
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(width: 20),
+              Container(
+                margin: EdgeInsets.only(top: 17),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'MÉTODO DE PAGO',
+                            style: TextStyle(
+                              color: Colors.purple.shade600,
+                              fontFamily: 'Poppins-regular',
+                              fontSize: 16,
+                            ),
+                          ),
+                          Text(
+                            '${widget.method}',
+                            style: TextStyle(
+                              color: Colors.grey.shade500,
+                              fontFamily: 'Poppins-regular',
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(width: 40),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'FECHA DE PEDIDO',
-                    style: TextStyle(
-                      color: Colors.purple.shade600,
-                      fontFamily: 'Poppins-regular',
-                      fontSize: 16,
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'MONTO A PAGAR',
+                            style: TextStyle(
+                              color: Colors.purple.shade600,
+                              fontFamily: 'Poppins-regular',
+                              fontSize: 16,
+                            ),
+                          ),
+                          Text(
+                            'USD\$ ${widget.total.toStringAsFixed(2)}',
+                            style: TextStyle(
+                              color: Colors.grey.shade500,
+                              fontFamily: 'Poppins-regular',
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Text(
-                    widget.date,
-                    style: TextStyle(
-                      color: Colors.grey.shade500,
-                      fontFamily: 'Poppins-regular',
-                      fontSize: 12,
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'DIRECCION',
+                            style: TextStyle(
+                              color: Colors.purple.shade600,
+                              fontFamily: 'Poppins-regular',
+                              fontSize: 16,
+                            ),
+                          ),
+                          Container(
+                            // height: 60,
+                            width: 150,
+                            child: Text(
+                              '${widget.address}',
+                              style: TextStyle(
+                                color: Colors.grey.shade500,
+                                fontFamily: 'Poppins-regular',
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        Container(
-          margin: EdgeInsets.fromLTRB(20, 40, 10, 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'PEDIDO',
-                    style: TextStyle(
-                      color: Colors.purple.shade600,
-                      fontFamily: 'Poppins-regular',
-                      fontSize: 16,
-                    ),
-                  ),
-                  Text(
-                    '#000571',
-                    style: TextStyle(
-                      color: Colors.grey.shade500,
-                      fontFamily: 'Poppins-regular',
-                      fontSize: 12,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(width: 50),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'MÉTODD DE PAGO',
-                    style: TextStyle(
-                      color: Colors.purple.shade600,
-                      fontFamily: 'Poppins-regular',
-                      fontSize: 16,
-                    ),
-                  ),
-                  Text(
-                    '${widget.method}',
-                    style: TextStyle(
-                      color: Colors.grey.shade500,
-                      fontFamily: 'Poppins-regular',
-                      fontSize: 12,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        Container(
-          margin: EdgeInsets.fromLTRB(20, 40, 10, 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'MONTO A PAGAR',
-                    style: TextStyle(
-                      color: Colors.purple.shade600,
-                      fontFamily: 'Poppins-regular',
-                      fontSize: 16,
-                    ),
-                  ),
-                  Text(
-                    'USD\$ ${widget.total}',
-                    style: TextStyle(
-                      color: Colors.grey.shade500,
-                      fontFamily: 'Poppins-regular',
-                      fontSize: 12,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),

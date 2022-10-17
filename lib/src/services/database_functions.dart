@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 
@@ -85,48 +87,98 @@ Future deleteVisit(
 
 // Funciones de Pedidos
 
-// Future createOrder(
-//   String clientId,
-//   String userUid,
-//   String? commentary,
-//   int? masterDiscount,
-//TODO
-// ) async {
-//   print('/// CREAR PEDIDO ///');
+Future createOrder(
+  Clients? client,
+  String? userUid,
+  String? commentary,
+  double? masterDiscount,
+  List<ShoppingCartProduct> shoppingCart,
+  String? negotiation,
+  String? deliveryAddress,
+  DateTime today,
+  double? taxTotal,
+  numberOrder,
+  double subTotal,
+  double totalOfTheOrder,
+) async {
+  print('/// CREAR PEDIDO ///');
 
-//   return await FirebaseFirestore.instance
-//       .collection('clientes')
-//       .doc(clientId)
-//       .collection('pedidos')
-//       .doc()
-//       .set({
-//         'cantidadesProductos': ,
-//         'cliente': FirebaseFirestore
-//                      .instance
-//                      .collection('clientes')
-//                      .doc(clientId),
-//         'comentario': ,
-//         'descuentoMaestro': ,
-//         'direccionEntrega': ,
-//         'facturacionFallida': ,
-//         'facturado': ,
-//         'fecha': ,
-//         'fechaEntrega': ,
-//         'idsProductos': ,
-//         'impuesto': ,
-//         'nroCorrelativo': ,
-//         'ordenDecOmpra': ,
-//         'porcentajeDescuentoMaestro': ,
-//         'productos': ,
-//         'subtotal': ,
-//         'tasasDeCambio': ,
-//         'timeStampRegistro': Timestamp.fromDate(DateTime.now()),
-//         'totalAPagar': ,
-//         'ultimaModificacion': Timestamp.fromDate(DateTime.now()),
-//         'vendedor': FirebaseFirestore.instance.collection('usuarios').doc(userUid),
+  final int correlativeNumber = FirebaseFirestore.instance
+      .collectionGroup('pedidos')
+      .snapshots()
+      .toString()
+      .length;
+  final List quantitiesList = [];
+  final List productsIds = [];
+  final List<Map<dynamic, dynamic>> products = [];
+  final coinsExchangeRates = [];
+  await FirebaseFirestore.instance.collection('monedas').get().then((document) {
+    // print('Cantidad de documentos en monedas: ${document.docs.length}');
+    document.docs.forEach((element) {
+      // print(element.data()['tasaDeCambio']);
+      coinsExchangeRates.add(element.data()['tasaDeCambio']);
+    });
+  });
+  final Map<String, double> exchangeRate = {
+    'BTC': coinsExchangeRates[0],
+    'EUR': coinsExchangeRates[1],
+    'VED': coinsExchangeRates[2],
+  };
+  shoppingCart.forEach((element) {
+    quantitiesList.add(element.productQuantity);
+    productsIds.add(element.code);
+    products.add({
+      'cantidad': element.productQuantity?.toInt() ?? 0,
+      'codigo': element.code?.toString() ?? 'NaN',
+      'id': element.code?.toString() ?? 'NaN',
+      'idListaDePrecios': client?.prices ?? 'NaN',
+      'monto': double.parse(element.totalAmount ?? '0'),
+      'nombre': element.name?.toString() ?? 'NaN',
+      'precioUnitario': double.parse(element.unitPrice ?? '0.0'),
+      'urlFoto': '',
+    });
+    print('Cantidad de producto: ${element.code}: ${element.productQuantity}');
+  });
+  print('Cantidades: $quantitiesList');
+  print('IDs: $productsIds');
+  print('Productos: $products');
+  print('Cantidad de pedidos en la DB: $correlativeNumber');
+  print('Monedas: $exchangeRate');
 
-//       });
-// }
+  return await FirebaseFirestore.instance
+      .collection('clientes')
+      .doc(client!.clientDocumentId)
+      .collection('pedidos')
+      .doc()
+      .set({
+    'cantidadesProductos': quantitiesList,
+    'cliente': FirebaseFirestore.instance
+        .collection('clientes')
+        .doc(client.clientDocumentId),
+    'comentario': commentary,
+    'descuentoMaestro': masterDiscount,
+    'tipoDeNegociacion': negotiation,
+    'direccionEntrega': deliveryAddress == 'Fiscal'
+        ? client.fiscalAdress
+        : client.dispatchAdress,
+    'facturacionFallida': false,
+    'facturado': false,
+    'fecha': Timestamp.fromDate(today),
+    'fechaEntrega': Timestamp.fromDate(today),
+    'idsProductos': productsIds,
+    'impuesto': taxTotal,
+    'nroCorrelativo': correlativeNumber + 1,
+    'ordenDeCompra': numberOrder ?? 0,
+    'porcentajeDescuentoMaestro': client.masterDiscount,
+    'productos': products,
+    'subtotal': subTotal,
+    'tasasDeCambio': exchangeRate,
+    'timeStampRegistro': Timestamp.fromDate(DateTime.now()),
+    'totalAPagar': totalOfTheOrder,
+    'ultimaModificacion': Timestamp.fromDate(DateTime.now()),
+    'vendedor': FirebaseFirestore.instance.collection('usuarios').doc(userUid),
+  });
+}
 
 Future deleteOrder(
   String docId,

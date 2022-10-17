@@ -60,21 +60,23 @@ class AuthService {
                 .setString('email', user.email ?? 'No hay email');
             await sharedPreferences!
                 .setString('nombre', record.data()!['nombre']);
-
             await sharedPreferences!
                 .setInt('nro_cedula', record.data()!['nro_cedula']);
-
             List<String> indice = record.data()!['indice'].cast<String>();
             await sharedPreferences!.setStringList('indice', indice);
-
-            if (record.data()!['esGerente'] == false) {
-              if (record.data()!['esVendedor'] == false) {
-                await sharedPreferences!.setString('cargo', 'Cobrador');
-              } else {
-                await sharedPreferences!.setString('cargo', 'Vendedor');
-              }
+            await sharedPreferences!.setString('currentCoin', 'USD');
+            if (record.data()!['rol'].id == 'S7iQ6hOGikhwrFUHmQtV') {
+              await sharedPreferences!.setString('cargo', 'Administrador');
             } else {
-              await sharedPreferences!.setString('cargo', 'Gerente');
+              if (record.data()!['esGerente'] == false) {
+                if (record.data()!['esVendedor'] == false) {
+                  await sharedPreferences!.setString('cargo', 'Cobrador');
+                } else {
+                  await sharedPreferences!.setString('cargo', 'Vendedor');
+                }
+              } else {
+                await sharedPreferences!.setString('cargo', 'Gerente');
+              }
             }
             print('/////////////////////////////////////////////////');
             print('Saving Data on shared preferences');

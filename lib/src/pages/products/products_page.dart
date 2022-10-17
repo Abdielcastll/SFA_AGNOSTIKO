@@ -1,10 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
+import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
@@ -141,17 +143,34 @@ class ProductsBody extends StatefulWidget {
 }
 
 class _ProductsBodyState extends State<ProductsBody> {
+  final currentCoin = sharedPreferences?.getString('currentCoin');
   final searchController = TextEditingController();
-  final moneySymbol = '\$';
+  final List<double> coinsExchangeRates = [0.0, 0.0, 0.0];
   List<ShoppingCartProduct> selectedProducts = [];
   List<Products>? products;
+
   bool isChecked = false;
   bool isDescending = false;
+
+  Future<void> getPricesExchangesRates() async {
+    await FirebaseFirestore.instance
+        .collection('monedas')
+        .get()
+        .then((document) {
+      // print('Cantidad de documentos en monedas: ${document.docs.length}');
+      document.docs.forEach((element) {
+        // print(element.data()['tasaDeCambio']);
+        coinsExchangeRates.remove(0.0);
+        coinsExchangeRates.add(element.data()['tasaDeCambio']);
+      });
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     products = widget.listOfProducts;
+    getPricesExchangesRates();
   }
 
   // Esta funcion se llama cada vez que el text field cambia
@@ -171,10 +190,36 @@ class _ProductsBodyState extends State<ProductsBody> {
     setState(() => products = suggestions);
   }
 
+  identifyPrice(price) {
+    if (currentCoin == 'USD' || currentCoin == null) {
+      return price.toString();
+    } else if (currentCoin == 'VED') {
+      return (price * coinsExchangeRates[2] ?? 0).toStringAsFixed(2) ?? '0';
+    } else if (currentCoin == 'EUR') {
+      return (price * coinsExchangeRates[1] ?? 0).toStringAsFixed(2) ?? '0';
+    } else if (currentCoin == 'BTC') {
+      return (price * coinsExchangeRates[0] ?? 0) ?? '0';
+    }
+  }
+
+  identifyCurrency() {
+    if (currentCoin == 'USD' || currentCoin == null) {
+      return '\$';
+    } else if (currentCoin == 'VED') {
+      return 'BS';
+    } else if (currentCoin == 'EUR') {
+      return '€';
+    } else if (currentCoin == 'BTC') {
+      return '฿';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final String? moneySymbol = identifyCurrency();
     // print(widget.listOfPrices);
     print(selectedProducts);
+    print('Tazas de cambio $coinsExchangeRates');
     final qualitiesSummary =
         Provider.of<QualitySummary?>(context)?.summary ?? {};
     final categoriesSummary =
@@ -369,10 +414,9 @@ class _ProductsBodyState extends State<ProductsBody> {
                                             listOfPricesId: 'GENER-03',
                                             // TODO
                                             totalAmount:
-                                                productPrice.toString() ?? '0',
+                                                productPrice.toString(),
                                             name: product.name,
-                                            unitPrice:
-                                                productPrice.toString() ?? '0',
+                                            unitPrice: productPrice.toString(),
                                           );
                                           print(newProduct.unitPrice);
                                           // print(newProduct.totalAmount);
@@ -386,10 +430,9 @@ class _ProductsBodyState extends State<ProductsBody> {
                                             listOfPricesId: 'GENER-03',
                                             // TODO
                                             totalAmount:
-                                                productPrice.toString() ?? '0',
+                                                productPrice.toString(),
                                             name: product.name,
-                                            unitPrice:
-                                                productPrice.toString() ?? '0',
+                                            unitPrice: productPrice.toString(),
                                           );
                                           selectedProducts.removeWhere((item) =>
                                               item.code == product.code);
@@ -458,7 +501,8 @@ class _ProductsBodyState extends State<ProductsBody> {
                                   message: productStock,
                                 ),
                                 TextFieldForCard(
-                                  message: '$moneySymbol $productPrice',
+                                  message:
+                                      '$moneySymbol ${identifyPrice(widget.listOfPrices[product.code] ?? 0)}',
                                   // '',
                                 ),
                                 TextFieldForCard(
