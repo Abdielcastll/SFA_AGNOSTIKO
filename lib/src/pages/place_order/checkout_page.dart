@@ -129,6 +129,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
           date: dateFormatter.format(today),
           method: selectedValue2,
           total: totalPriceOfTheOrder(),
+          coinsExchangeRates: widget.coinsExchangeRates,
         ),
       ),
     );

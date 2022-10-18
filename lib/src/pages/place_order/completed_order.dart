@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:pwa_sales2go_flutter/main.dart';
+import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class CompletedOrderPage extends StatelessWidget {
@@ -12,6 +14,7 @@ class CompletedOrderPage extends StatelessWidget {
     required this.method,
     required this.date,
     required this.address,
+    required this.coinsExchangeRates,
     this.orderNumber,
   }) : super(key: key);
 
@@ -21,6 +24,7 @@ class CompletedOrderPage extends StatelessWidget {
   final date;
   final address;
   final orderNumber;
+  final coinsExchangeRates;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +51,7 @@ class CompletedOrderPage extends StatelessWidget {
           date: date,
           address: address,
           orderNumber: orderNumber,
+          coinsExchangeRates: coinsExchangeRates,
         ),
       ),
     );
@@ -62,6 +67,7 @@ class CompletedOrderBody extends StatefulWidget {
     required this.date,
     required this.address,
     required this.orderNumber,
+    required this.coinsExchangeRates,
   }) : super(key: key);
   final client;
   final total;
@@ -69,12 +75,40 @@ class CompletedOrderBody extends StatefulWidget {
   final date;
   final address;
   final orderNumber;
+  final coinsExchangeRates;
 
   @override
   State<CompletedOrderBody> createState() => _CompletedOrderBody();
 }
 
 class _CompletedOrderBody extends State<CompletedOrderBody> {
+  late List<double> coinsExchangeRates = widget.coinsExchangeRates;
+  final currentCoin = sharedPreferences!.getString('currentCoin');
+
+  identifyPrice(price) {
+    if (currentCoin == 'USD' || currentCoin == null) {
+      return price.toStringAsFixed(2);
+    } else if (currentCoin == 'VED') {
+      return (price * coinsExchangeRates[2]).toStringAsFixed(2);
+    } else if (currentCoin == 'EUR') {
+      return (price * coinsExchangeRates[1]).toStringAsFixed(2);
+    } else if (currentCoin == 'BTC') {
+      return (price * coinsExchangeRates[0]).toStringAsFixed(8);
+    }
+  }
+
+  identifyCurrency() {
+    if (currentCoin == 'USD' || currentCoin == null) {
+      return '\$';
+    } else if (currentCoin == 'VED') {
+      return 'BS';
+    } else if (currentCoin == 'EUR') {
+      return '€';
+    } else if (currentCoin == 'BTC') {
+      return '฿';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -231,7 +265,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                             ),
                           ),
                           Text(
-                            'USD\$ ${widget.total.toStringAsFixed(2)}',
+                            '${identifyCurrency()} ${identifyPrice(widget.total)} = \$ ${widget.total.toStringAsFixed(2)}',
                             style: TextStyle(
                               color: Colors.grey.shade500,
                               fontFamily: 'Poppins-regular',
@@ -288,6 +322,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
             child: ElevatedButton(
               onPressed: () {
                 // Continuar con la compra
+                objectBox.delelteAllShoppingCart();
                 Navigator.popUntil(context, (route) => route.isFirst);
               },
               style: ElevatedButton.styleFrom(

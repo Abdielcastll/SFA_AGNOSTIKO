@@ -18,6 +18,29 @@ class OrdersPage extends StatefulWidget {
 }
 
 class _OrdersPageState extends State<OrdersPage> {
+  late List<double> coinsExchangeRates = [0, 0, 0];
+
+  Future<void> getPricesExchangesRates() async {
+    await FirebaseFirestore.instance
+        .collection('monedas')
+        .get()
+        .then((document) {
+      // print('Cantidad de documentos en monedas: ${document.docs.length}');
+      document.docs.forEach((element) {
+        // print(element.data()['tasaDeCambio']);
+        coinsExchangeRates.remove(0);
+        coinsExchangeRates.add(element.data()['tasaDeCambio']);
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getPricesExchangesRates();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -25,15 +48,19 @@ class _OrdersPageState extends State<OrdersPage> {
         StreamProvider<List<Orders>?>.value(
           value: FirebaseFirestore.instance
               .collectionGroup('pedidos')
+              .orderBy('nroCorrelativo', descending: true)
               .snapshots()
               .map(ordersFromSnapshot),
           initialData: const [],
+          catchError: (context, error) {
+            print(error);
+          },
         ),
       ],
       child: SafeArea(
         child: Scaffold(
           backgroundColor: Colors.grey[200],
-          body: OrdersBody(),
+          body: OrdersBody(coinsExchangeRates: coinsExchangeRates),
         ),
       ),
     );
@@ -43,7 +70,9 @@ class _OrdersPageState extends State<OrdersPage> {
 class OrdersBody extends StatelessWidget {
   const OrdersBody({
     Key? key,
+    this.coinsExchangeRates,
   }) : super(key: key);
+  final coinsExchangeRates;
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +84,8 @@ class OrdersBody extends StatelessWidget {
         // ignore: prefer_const_literals_to_create_immutables
         children: [
           SizedBox(height: 10),
-          OrdersOnProcess(),
-          CompletedOrders(),
+          OrdersOnProcess(coinsExchangeRates: coinsExchangeRates),
+          CompletedOrders(coinsExchangeRates: coinsExchangeRates),
         ],
       ),
     );

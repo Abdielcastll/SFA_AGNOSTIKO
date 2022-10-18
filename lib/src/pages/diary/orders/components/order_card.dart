@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
@@ -12,20 +13,21 @@ import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/orders_alerts_and_dialogs/orders_bottomsheet.dart';
 
 class OrderCard extends StatefulWidget {
-  const OrderCard({
-    Key? key,
-    this.clientReferenceId,
-    this.date,
-    this.total,
-    this.orderDocumentId,
-    this.status,
-    this.isInvoicesFailed,
-    this.commentary,
-    this.products,
-    this.subTotal,
-    this.discountMaster,
-    this.tax,
-  }) : super(key: key);
+  const OrderCard(
+      {Key? key,
+      this.clientReferenceId,
+      this.date,
+      this.total,
+      this.orderDocumentId,
+      this.status,
+      this.isInvoicesFailed,
+      this.commentary,
+      this.products,
+      this.subTotal,
+      this.discountMaster,
+      this.tax,
+      this.coinsExchangeRates})
+      : super(key: key);
 
   final clientReferenceId;
   final date;
@@ -38,6 +40,7 @@ class OrderCard extends StatefulWidget {
   final subTotal;
   final discountMaster;
   final tax;
+  final coinsExchangeRates;
 
   @override
   State<OrderCard> createState() => _OrderCardState();
@@ -66,7 +69,7 @@ class _OrderCardState extends State<OrderCard> {
   }
 }
 
-class OrderCardBody extends StatelessWidget {
+class OrderCardBody extends StatefulWidget {
   const OrderCardBody({
     Key? key,
     required this.widget,
@@ -75,7 +78,40 @@ class OrderCardBody extends StatelessWidget {
   final OrderCard widget;
 
   @override
+  State<OrderCardBody> createState() => _OrderCardBodyState();
+}
+
+class _OrderCardBodyState extends State<OrderCardBody> {
+  late List<double> coinsExchangeRates = widget.widget.coinsExchangeRates;
+  final currentCoin = sharedPreferences!.getString('currentCoin');
+
+  identifyPrice(price) {
+    if (currentCoin == 'USD' || currentCoin == null) {
+      return price.toStringAsFixed(2);
+    } else if (currentCoin == 'VED') {
+      return (price * coinsExchangeRates[2]).toStringAsFixed(2);
+    } else if (currentCoin == 'EUR') {
+      return (price * coinsExchangeRates[1]).toStringAsFixed(2);
+    } else if (currentCoin == 'BTC') {
+      return (price * coinsExchangeRates[0]).toStringAsFixed(5);
+    }
+  }
+
+  identifyCurrency() {
+    if (currentCoin == 'USD' || currentCoin == null) {
+      return '\$';
+    } else if (currentCoin == 'VED') {
+      return 'BS';
+    } else if (currentCoin == 'EUR') {
+      return '€';
+    } else if (currentCoin == 'BTC') {
+      return '฿';
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final currentClient = Provider.of<Client?>(context) ?? [];
     final currentClientName = Provider.of<Client?>(context)?.name ?? '';
     final currentClientAddress =
         Provider.of<Client?>(context)?.fiscalAdress ?? '';
@@ -98,31 +134,34 @@ class OrderCardBody extends StatelessWidget {
     final userUID = Provider.of<UserModel>(context).uid;
 
     identifyStatusColor() {
-      if (widget.status == 'En proceso' && widget.isInvoicesFailed == false) {
+      if (widget.widget.status == 'En proceso' &&
+          widget.widget.isInvoicesFailed == false) {
         return Colors.amber;
-      } else if (widget.status == 'Completada' &&
-          widget.isInvoicesFailed == true) {
+      } else if (widget.widget.status == 'Completada' &&
+          widget.widget.isInvoicesFailed == true) {
         return Colors.red;
-      } else if (widget.status == 'Completada' &&
-          widget.isInvoicesFailed == false) {
+      } else if (widget.widget.status == 'Completada' &&
+          widget.widget.isInvoicesFailed == false) {
         return Colors.green;
       }
     }
 
+    print('cambios: ${widget.widget.coinsExchangeRates}');
+
     return GestureDetector(
       onTap: () {
         // Redireccionar a detalles del pedido
-        widget.status == 'En proceso'
+        widget.widget.status == 'En proceso'
             ? modalBottomSheetForOrders(
                 false,
                 context,
-                widget.commentary,
-                widget.clientReferenceId,
-                widget.products,
-                widget.subTotal,
-                widget.discountMaster,
-                widget.tax,
-                widget.total,
+                widget.widget.commentary,
+                widget.widget.clientReferenceId,
+                widget.widget.products,
+                widget.widget.subTotal,
+                widget.widget.discountMaster,
+                widget.widget.tax,
+                widget.widget.total,
                 currentClientName,
                 currentClientIdType,
                 currentClientId,
@@ -134,22 +173,24 @@ class OrderCardBody extends StatelessWidget {
                 zonesSummary[currentClientZones],
                 currentClientPrices,
                 currentDiscountMaster,
-                widget.clientReferenceId,
+                widget.widget.clientReferenceId,
                 userUID,
-                widget.orderDocumentId,
+                widget.widget.orderDocumentId,
                 currentClientId,
                 currentClientIdType,
+                currentClient,
+                widget.widget.date,
               )
             : modalBottomSheetForOrders(
                 true,
                 context,
-                widget.commentary,
-                widget.clientReferenceId,
-                widget.products,
-                widget.subTotal,
-                widget.discountMaster,
-                widget.tax,
-                widget.total,
+                widget.widget.commentary,
+                widget.widget.clientReferenceId,
+                widget.widget.products,
+                widget.widget.subTotal,
+                widget.widget.discountMaster,
+                widget.widget.tax,
+                widget.widget.total,
                 currentClientName,
                 currentClientIdType,
                 currentClientId,
@@ -161,11 +202,13 @@ class OrderCardBody extends StatelessWidget {
                 zonesSummary[currentClientZones],
                 currentClientPrices,
                 currentDiscountMaster,
-                widget.clientReferenceId,
+                widget.widget.clientReferenceId,
                 userUID,
-                widget.orderDocumentId,
+                widget.widget.orderDocumentId,
                 currentClientId,
                 currentClientIdType,
+                currentClient,
+                widget.widget.date,
               );
       },
       child: Padding(
@@ -200,7 +243,7 @@ class OrderCardBody extends StatelessWidget {
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
                     child: Text(
-                      '\$${widget.total.toStringAsFixed(2)}',
+                      '${identifyCurrency()} ${identifyPrice(widget.widget.total)}',
                       style: TextStyle(
                         color: identifyStatusColor(),
                         fontSize: 16,
@@ -232,7 +275,7 @@ class OrderCardBody extends StatelessWidget {
                       height: 13,
                       width: 95,
                       child: Text(
-                        '${widget.date}',
+                        '${widget.widget.date}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -246,7 +289,7 @@ class OrderCardBody extends StatelessWidget {
                       height: 13,
                       width: 70,
                       child: Text(
-                        '${widget.status}',
+                        '${widget.widget.status}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(

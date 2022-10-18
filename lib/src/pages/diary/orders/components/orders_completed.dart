@@ -11,7 +11,10 @@ import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/order_car
 class CompletedOrders extends StatelessWidget {
   const CompletedOrders({
     Key? key,
+    this.coinsExchangeRates,
   }) : super(key: key);
+
+  final coinsExchangeRates;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +38,7 @@ class CompletedOrders extends StatelessWidget {
               padding: EdgeInsets.only(left: 16, top: 5),
               child: Text(
                 textAlign: TextAlign.start,
-                'Pasadas a Facturas',
+                'Pedidos completados (Ver Facturas)',
                 style: TextStyle(
                   color: Colors.green,
                   fontSize: 15,
@@ -80,6 +83,7 @@ class CompletedOrders extends StatelessWidget {
                 subTotal: orderSubTotal,
                 discountMaster: orderDiscountMaster,
                 tax: orderTax,
+                coinsExchangeRates: coinsExchangeRates,
               );
             },
           ),

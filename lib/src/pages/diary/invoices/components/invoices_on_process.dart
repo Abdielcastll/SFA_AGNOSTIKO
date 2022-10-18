@@ -60,8 +60,10 @@ class _InvoicesOnProcessState extends State<InvoicesOnProcess> {
                     final unformattedDate =
                         invoice.orderDate ?? Timestamp.fromDate(DateTime.now());
                     final date =
-                        DateTime.parse(unformattedDate.toDate().toString());
-                    final invoiceDate = dateFormatter.format(date);
+                        DateTime.tryParse(unformattedDate.toDate().toString());
+
+                    final invoiceDate =
+                        dateFormatter.format(date ?? DateTime.now());
                     final invoiceBalance = invoice.totalAmount;
                     final invoicePayments = invoice.payments;
                     const invoiceStatus = 'En proceso';

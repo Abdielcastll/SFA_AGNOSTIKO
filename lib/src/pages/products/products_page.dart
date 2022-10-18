@@ -145,7 +145,7 @@ class ProductsBody extends StatefulWidget {
 class _ProductsBodyState extends State<ProductsBody> {
   final currentCoin = sharedPreferences?.getString('currentCoin');
   final searchController = TextEditingController();
-  final List<double> coinsExchangeRates = [0.0, 0.0, 0.0];
+  final List<double> coinsExchangeRates = [0, 0, 0];
   List<ShoppingCartProduct> selectedProducts = [];
   List<Products>? products;
 
@@ -160,7 +160,7 @@ class _ProductsBodyState extends State<ProductsBody> {
       // print('Cantidad de documentos en monedas: ${document.docs.length}');
       document.docs.forEach((element) {
         // print(element.data()['tasaDeCambio']);
-        coinsExchangeRates.remove(0.0);
+        coinsExchangeRates.remove(0);
         coinsExchangeRates.add(element.data()['tasaDeCambio']);
       });
     });
@@ -194,11 +194,11 @@ class _ProductsBodyState extends State<ProductsBody> {
     if (currentCoin == 'USD' || currentCoin == null) {
       return price.toString();
     } else if (currentCoin == 'VED') {
-      return (price * coinsExchangeRates[2] ?? 0).toStringAsFixed(2) ?? '0';
+      return (price * coinsExchangeRates[2]).toStringAsFixed(2) ?? '0';
     } else if (currentCoin == 'EUR') {
-      return (price * coinsExchangeRates[1] ?? 0).toStringAsFixed(2) ?? '0';
+      return (price * coinsExchangeRates[1]).toStringAsFixed(2) ?? '0';
     } else if (currentCoin == 'BTC') {
-      return (price * coinsExchangeRates[0] ?? 0) ?? '0';
+      return (price * coinsExchangeRates[0]) ?? '0';
     }
   }
 
@@ -217,9 +217,7 @@ class _ProductsBodyState extends State<ProductsBody> {
   @override
   Widget build(BuildContext context) {
     final String? moneySymbol = identifyCurrency();
-    // print(widget.listOfPrices);
-    print(selectedProducts);
-    print('Tazas de cambio $coinsExchangeRates');
+    final userCharge = sharedPreferences!.getString('cargo');
     final qualitiesSummary =
         Provider.of<QualitySummary?>(context)?.summary ?? {};
     final categoriesSummary =
@@ -231,6 +229,13 @@ class _ProductsBodyState extends State<ProductsBody> {
         Provider.of<SubCategorieSummary?>(context)?.summary ?? {};
     final sizesSummary = Provider.of<SizeSummary?>(context)?.summary ?? {};
     final stockValues = Provider.of<StockModel?>(context)?.stock ?? {};
+
+    // print(widget.listOfPrices);
+    print(selectedProducts);
+    print('Tazas de cambio $coinsExchangeRates');
+    print(widget.isOrderActive);
+    print('cargo: $userCharge');
+
     return Scaffold(
       floatingActionButton: Wrap(
         direction: Axis.vertical,
@@ -377,6 +382,35 @@ class _ProductsBodyState extends State<ProductsBody> {
                     child: ListTile(
                       onTap: () {
                         // Activar check para abrir opciones
+                        if (product.selected == false) {
+                          final newProduct = ShoppingCartProduct(
+                            productQuantity: 1,
+                            code: product.code.toString(),
+                            productId: product.code.toString(),
+                            listOfPricesId: 'GENER-03',
+                            // TODO
+                            totalAmount: productPrice.toString(),
+                            name: product.name,
+                            unitPrice: productPrice.toString(),
+                          );
+                          print(newProduct.unitPrice);
+                          // print(newProduct.totalAmount);
+                          selectedProducts.add(newProduct);
+                        } else if (product.selected == true) {
+                          final newProduct = ShoppingCartProduct(
+                            productQuantity: 1,
+                            code: product.code.toString(),
+                            productId: product.code.toString(),
+                            listOfPricesId: 'GENER-03',
+                            // TODO
+                            totalAmount: productPrice.toString(),
+                            name: product.name,
+                            unitPrice: productPrice.toString(),
+                          );
+                          selectedProducts
+                              .removeWhere((item) => item.code == product.code);
+                        }
+                        setState(() => product.selected = !product.selected);
                       },
                       title: SingleChildScrollView(
                         physics: BouncingScrollPhysics(),
@@ -388,59 +422,69 @@ class _ProductsBodyState extends State<ProductsBody> {
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Container(
-                                  height: 17,
-                                  width: 17,
-                                  margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16),
-                                    color: Colors.grey.shade400,
+                                if (widget.isOrderActive == true ||
+                                    userCharge == 'Administrador' ||
+                                    userCharge == 'Gerente')
+                                  Container(
+                                    height: 17,
+                                    width: 17,
+                                    margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16),
+                                      color: Colors.grey.shade400,
+                                    ),
+                                    child: Checkbox(
+                                        side:
+                                            MaterialStateBorderSide.resolveWith(
+                                                (states) => BorderSide(
+                                                    width: 1.0,
+                                                    color: Colors.transparent)),
+                                        shape: CircleBorder(),
+                                        activeColor:
+                                            myTheme.colorScheme.primary,
+                                        value: product.selected,
+                                        onChanged: (value) {
+                                          if (product.selected == false) {
+                                            final newProduct =
+                                                ShoppingCartProduct(
+                                              productQuantity: 1,
+                                              code: product.code.toString(),
+                                              productId:
+                                                  product.code.toString(),
+                                              listOfPricesId: 'GENER-03',
+                                              // TODO
+                                              totalAmount:
+                                                  productPrice.toString(),
+                                              name: product.name,
+                                              unitPrice:
+                                                  productPrice.toString(),
+                                            );
+                                            print(newProduct.unitPrice);
+                                            // print(newProduct.totalAmount);
+                                            selectedProducts.add(newProduct);
+                                          } else if (product.selected == true) {
+                                            final newProduct =
+                                                ShoppingCartProduct(
+                                              productQuantity: 1,
+                                              code: product.code.toString(),
+                                              productId:
+                                                  product.code.toString(),
+                                              listOfPricesId: 'GENER-03',
+                                              // TODO
+                                              totalAmount:
+                                                  productPrice.toString(),
+                                              name: product.name,
+                                              unitPrice:
+                                                  productPrice.toString(),
+                                            );
+                                            selectedProducts.removeWhere(
+                                                (item) =>
+                                                    item.code == product.code);
+                                          }
+                                          setState(
+                                              () => product.selected = value!);
+                                        }),
                                   ),
-                                  child: Checkbox(
-                                      side: MaterialStateBorderSide.resolveWith(
-                                          (states) => BorderSide(
-                                              width: 1.0,
-                                              color: Colors.transparent)),
-                                      shape: CircleBorder(),
-                                      activeColor: myTheme.colorScheme.primary,
-                                      value: product.selected,
-                                      onChanged: (value) {
-                                        if (product.selected == false) {
-                                          final newProduct =
-                                              ShoppingCartProduct(
-                                            productQuantity: 1,
-                                            code: product.code.toString(),
-                                            productId: product.code.toString(),
-                                            listOfPricesId: 'GENER-03',
-                                            // TODO
-                                            totalAmount:
-                                                productPrice.toString(),
-                                            name: product.name,
-                                            unitPrice: productPrice.toString(),
-                                          );
-                                          print(newProduct.unitPrice);
-                                          // print(newProduct.totalAmount);
-                                          selectedProducts.add(newProduct);
-                                        } else if (product.selected == true) {
-                                          final newProduct =
-                                              ShoppingCartProduct(
-                                            productQuantity: 1,
-                                            code: product.code.toString(),
-                                            productId: product.code.toString(),
-                                            listOfPricesId: 'GENER-03',
-                                            // TODO
-                                            totalAmount:
-                                                productPrice.toString(),
-                                            name: product.name,
-                                            unitPrice: productPrice.toString(),
-                                          );
-                                          selectedProducts.removeWhere((item) =>
-                                              item.code == product.code);
-                                        }
-                                        setState(
-                                            () => product.selected = value!);
-                                      }),
-                                ),
                               ],
                             ),
                             SizedBox(width: 20),

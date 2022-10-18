@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors
+import 'dart:math' as math;
 
 import 'dart:io';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -194,86 +195,69 @@ void modalBottomSheetForInvoices(
                                                       child: Container(
                                                         width: 300,
                                                         height: 300,
-                                                        child: Scrollbar(
-                                                          child:
-                                                              ListView.builder(
-                                                                  itemCount:
-                                                                      invoicePayments
-                                                                          .length,
-                                                                  itemBuilder:
-                                                                      (context,
-                                                                          index) {
-                                                                    final payment =
-                                                                        invoicePayments[
-                                                                            index];
-                                                                    final date =
-                                                                        payment[
-                                                                            'fecha'];
-                                                                    final unformattedDate =
-                                                                        DateTime.parse(date
-                                                                            .toDate()
-                                                                            .toString());
-                                                                    final paymentDate =
-                                                                        dateFormatter
-                                                                            .format(unformattedDate);
-                                                                    return ListTile(
-                                                                      leading:
-                                                                          Icon(
-                                                                        Icons
-                                                                            .money_off_csred,
-                                                                        color: payment['anulado'] ==
-                                                                                false
-                                                                            ? Colors.green
-                                                                            : Colors.red,
-                                                                      ),
-                                                                      title:
-                                                                          Row(
-                                                                        children: [
-                                                                          Text(
-                                                                            '\$ ${payment['monto']}',
-                                                                            style:
-                                                                                TextStyle(
-                                                                              fontFamily: 'Poppins-regular',
-                                                                              color: Colors.grey.shade400,
-                                                                              fontSize: 14,
-                                                                              fontWeight: FontWeight.bold,
-                                                                            ),
-                                                                          ),
-                                                                          Container(
-                                                                            margin: EdgeInsets.fromLTRB(
-                                                                                20,
-                                                                                0,
-                                                                                0,
-                                                                                10),
-                                                                            child:
-                                                                                Text(
-                                                                              paymentDate,
-                                                                              style: TextStyle(
-                                                                                fontFamily: 'Poppins-regular',
-                                                                                color: Colors.grey.shade400,
-                                                                                fontSize: 10,
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                      subtitle:
-                                                                          Text(
-                                                                        '${payment['metodo']}',
-                                                                        style:
-                                                                            TextStyle(
-                                                                          fontFamily:
-                                                                              'Poppins-regular',
-                                                                          color: Colors
-                                                                              .grey
-                                                                              .shade400,
-                                                                          fontSize:
-                                                                              12,
-                                                                        ),
-                                                                      ),
-                                                                    );
-                                                                  }),
-                                                        ),
+                                                        child:
+                                                            invoicePayments
+                                                                    .isEmpty
+                                                                ? Container(
+                                                                    width: 300,
+                                                                    height: 300,
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .center,
+                                                                    child: Text(
+                                                                      'No hay pagos registrados',
+                                                                    ),
+                                                                  )
+                                                                : Scrollbar(
+                                                                    child: ListView
+                                                                        .builder(
+                                                                            itemCount:
+                                                                                invoicePayments.length,
+                                                                            itemBuilder: (context, index) {
+                                                                              final payment = invoicePayments[index];
+                                                                              final date = payment['fecha'];
+                                                                              final unformattedDate = DateTime.parse(date.toDate().toString());
+                                                                              final paymentDate = dateFormatter.format(unformattedDate);
+                                                                              return ListTile(
+                                                                                leading: Icon(
+                                                                                  Icons.money_off_csred,
+                                                                                  color: payment['anulado'] == false ? Colors.green : Colors.red,
+                                                                                ),
+                                                                                title: Row(
+                                                                                  children: [
+                                                                                    Text(
+                                                                                      '\$ ${payment['monto']}',
+                                                                                      style: TextStyle(
+                                                                                        fontFamily: 'Poppins-regular',
+                                                                                        color: Colors.grey.shade400,
+                                                                                        fontSize: 14,
+                                                                                        fontWeight: FontWeight.bold,
+                                                                                      ),
+                                                                                    ),
+                                                                                    Container(
+                                                                                      margin: EdgeInsets.fromLTRB(20, 0, 0, 10),
+                                                                                      child: Text(
+                                                                                        paymentDate,
+                                                                                        style: TextStyle(
+                                                                                          fontFamily: 'Poppins-regular',
+                                                                                          color: Colors.grey.shade400,
+                                                                                          fontSize: 10,
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                                subtitle: Text(
+                                                                                  '${payment['metodo']}',
+                                                                                  style: TextStyle(
+                                                                                    fontFamily: 'Poppins-regular',
+                                                                                    color: Colors.grey.shade400,
+                                                                                    fontSize: 12,
+                                                                                  ),
+                                                                                ),
+                                                                              );
+                                                                            }),
+                                                                  ),
                                                       ),
                                                     ),
                                                     SizedBox(height: 30),
@@ -288,17 +272,17 @@ void modalBottomSheetForInvoices(
                                                             FontWeight.bold,
                                                       ),
                                                     ),
-                                                    Text(
-                                                      'Se genero NC: #25',
-                                                      style: TextStyle(
-                                                        fontFamily:
-                                                            'Poppins-regular',
-                                                        color: Colors.black,
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
+                                                    // Text(
+                                                    //   'Se genero NC: #25',
+                                                    //   style: TextStyle(
+                                                    //     fontFamily:
+                                                    //         'Poppins-regular',
+                                                    //     color: Colors.black,
+                                                    //     fontSize: 12,
+                                                    //     fontWeight:
+                                                    //         FontWeight.bold,
+                                                    //   ),
+                                                    // ),
                                                     Text(
                                                       'Saldo confimado: \$$sumOfValidPayments',
                                                       style: TextStyle(
@@ -710,18 +694,35 @@ void modalBottomSheetForInvoices(
                                                                 .colorScheme
                                                                 .primary,
                                                           ),
+                                                          //TODO:
+                                                          inputFormatters: <
+                                                              TextInputFormatter>[
+                                                            FilteringTextInputFormatter
+                                                                .allow(RegExp(
+                                                                    r'[0-9]+[,.]{0,1}[0-9]*')),
+                                                            TextInputFormatter
+                                                                .withFunction(
+                                                              (oldValue,
+                                                                      newValue) =>
+                                                                  newValue
+                                                                      .copyWith(
+                                                                text: newValue
+                                                                    .text
+                                                                    .replaceAll(
+                                                                        '.',
+                                                                        ','),
+                                                              ),
+                                                            ),
+                                                          ],
                                                           keyboardType:
                                                               TextInputType
                                                                   .phone,
+
                                                           maxLines: 1,
                                                           maxLength: 50,
                                                           textCapitalization:
                                                               TextCapitalization
                                                                   .characters,
-                                                          inputFormatters: [
-                                                            FilteringTextInputFormatter
-                                                                .digitsOnly,
-                                                          ],
                                                           controller:
                                                               paidAmount,
 
@@ -730,10 +731,11 @@ void modalBottomSheetForInvoices(
                                                             contentPadding:
                                                                 EdgeInsets
                                                                     .fromLTRB(
-                                                                        14,
-                                                                        0,
-                                                                        0,
-                                                                        0),
+                                                              14,
+                                                              0,
+                                                              0,
+                                                              0,
+                                                            ),
                                                             hintText:
                                                                 '00000000',
                                                             hintStyle:
@@ -1003,4 +1005,44 @@ void modalBottomSheetForInvoices(
       );
     },
   );
+}
+
+class DecimalTextInputFormatter extends TextInputFormatter {
+  DecimalTextInputFormatter({required this.decimalRange})
+      : assert(decimalRange == null || decimalRange > 0);
+
+  final int decimalRange;
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue, // unused.
+    TextEditingValue newValue,
+  ) {
+    TextSelection newSelection = newValue.selection;
+    String truncated = newValue.text;
+
+    if (decimalRange != null) {
+      String value = newValue.text;
+
+      if (value.contains(".") &&
+          value.substring(value.indexOf(".") + 1).length > decimalRange) {
+        truncated = oldValue.text;
+        newSelection = oldValue.selection;
+      } else if (value == ".") {
+        truncated = "0.";
+
+        newSelection = newValue.selection.copyWith(
+          baseOffset: math.min(truncated.length, truncated.length + 1),
+          extentOffset: math.min(truncated.length, truncated.length + 1),
+        );
+      }
+
+      return TextEditingValue(
+        text: truncated,
+        selection: newSelection,
+        composing: TextRange.empty,
+      );
+    }
+    return newValue;
+  }
 }

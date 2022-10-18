@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
@@ -103,6 +104,7 @@ Future createOrder(
 ) async {
   print('/// CREAR PEDIDO ///');
 
+  final String totalAsString = totalOfTheOrder.toStringAsFixed(2);
   final int correlativeNumber = FirebaseFirestore.instance
       .collectionGroup('pedidos')
       .snapshots()
@@ -173,8 +175,8 @@ Future createOrder(
     'productos': products,
     'subtotal': subTotal,
     'tasasDeCambio': exchangeRate,
-    'timeStampRegistro': Timestamp.fromDate(DateTime.now()),
-    'totalAPagar': totalOfTheOrder,
+    'timestampRegistro': Timestamp.fromDate(DateTime.now()),
+    'totalAPagar': double.parse(totalAsString),
     'ultimaModificacion': Timestamp.fromDate(DateTime.now()),
     'vendedor': FirebaseFirestore.instance.collection('usuarios').doc(userUid),
   });
@@ -191,4 +193,80 @@ Future deleteOrder(
       .collection('pedidos')
       .doc(docId)
       .delete();
+}
+
+// Funciones de Facturas
+
+Future createInvoice(
+  Client client,
+  double? masterDiscount,
+  orderDate,
+  double? taxTotal,
+  double totalOfTheOrder,
+  String? orderDocumentID,
+  subTotalOfTheOrder,
+  userID,
+) async {
+  print('/// CREAR FACTURA ///');
+
+  final clientID = FirebaseFirestore.instance
+      .collection('clientes')
+      .doc(client.clientDocumentId);
+  final discount = masterDiscount;
+  final date = orderDate;
+  final tax = taxTotal;
+  final String totalAsString = totalOfTheOrder.toStringAsFixed(2);
+  final int correlativeNumber = FirebaseFirestore.instance
+      .collectionGroup('facturas')
+      .snapshots()
+      .toString()
+      .length;
+  const isPaid = false;
+  final payments = [];
+  final order = FirebaseFirestore.instance
+      .collection('clientes')
+      .doc(client.clientDocumentId)
+      .collection('pedidos')
+      .doc(orderDocumentID);
+  final discountPercentage = client.masterDiscount;
+  final referenceCreditNote = [];
+  final subTotal = subTotalOfTheOrder;
+  final register = Timestamp.fromDate(DateTime.now());
+  final lastModification = <String, dynamic>{
+    'timestamp': register,
+    'usuario': FirebaseFirestore.instance.collection('usuarios').doc(userID),
+  };
+  final seller = FirebaseFirestore.instance.collection('usuarios').doc(userID);
+
+  await FirebaseFirestore.instance
+      .collection('clientes')
+      .doc(client.clientDocumentId)
+      .collection('pedidos')
+      .doc(orderDocumentID)
+      .update({
+    'facturado': true,
+  });
+  Fluttertoast.showToast(msg: 'Factura ${correlativeNumber + 1}');
+  return await FirebaseFirestore.instance
+      .collection('clientes')
+      .doc(client.clientDocumentId)
+      .collection('facturas')
+      .doc()
+      .set({
+    'cliente': clientID,
+    'descuentoMaestro': discount,
+    'fecha': Timestamp.fromDate(DateTime.parse(date)),
+    'impuesto': tax,
+    'montoTotal': double.parse(totalAsString),
+    'nroCorrelativo': 118,
+    'pagada': isPaid,
+    'pagos': payments,
+    'pedido': order,
+    'porcentajeDescuentoMaestro': discountPercentage,
+    'referenciaNotasCredito': referenceCreditNote,
+    'subtotal': subTotal,
+    'timestampRegistro': register,
+    'ultimaModificacion': lastModification,
+    'vendedor': seller,
+  });
 }

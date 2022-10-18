@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -31,6 +32,8 @@ void modalBottomSheetForOrders(
   orderDocumentId,
   currentClientId,
   currentClientIdType,
+  client,
+  orderDate,
 ) {
   showModalBottomSheet(
     elevation: 0,
@@ -78,7 +81,9 @@ void modalBottomSheetForOrders(
                         ),
                       ),
                       child: Text(
-                        '$commentary',
+                        commentary.toString().isNotEmpty
+                            ? commentary.toString()
+                            : 'No hay comentario hecho en este pedido',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -438,7 +443,7 @@ void modalBottomSheetForOrders(
                                               ),
                                               SizedBox(height: 30),
                                               Text(
-                                                'Sub-Total: \$$subTotal',
+                                                'Sub-Total: \$${subTotal.toStringAsFixed(2)}',
                                                 // ignore: prefer_const_constructors
                                                 style: TextStyle(
                                                   fontFamily: 'Poppins-regular',
@@ -448,7 +453,7 @@ void modalBottomSheetForOrders(
                                                 ),
                                               ),
                                               Text(
-                                                'Descuento Maestro: \$$currentDiscountMaster',
+                                                'Descuento Maestro: \$$discountMaster',
                                                 style: TextStyle(
                                                   fontFamily: 'Poppins-regular',
                                                   color: Colors.black,
@@ -588,8 +593,22 @@ void modalBottomSheetForOrders(
                                                               .colorScheme
                                                               .primary),
                                                       child: TextButton(
-                                                        onPressed: () {
+                                                        onPressed: () async {
                                                           // Mandar pedido a Facturar
+                                                          await createInvoice(
+                                                              client,
+                                                              discountMaster,
+                                                              orderDate,
+                                                              tax,
+                                                              total,
+                                                              orderDocumentId,
+                                                              subTotal,
+                                                              userUID);
+
+                                                          Navigator.pop(
+                                                              context);
+                                                          Navigator.pop(
+                                                              context);
                                                         },
                                                         style: TextButton
                                                             .styleFrom(

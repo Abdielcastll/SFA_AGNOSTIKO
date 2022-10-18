@@ -74,6 +74,7 @@ class InvoiceCardBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // print(Timestamp.fromDate(DateTime.parse(widget.invoiceDate)));
     Color? identifyColor() {
       if (widget.invoiceStatus == 'En proceso') {
         return Colors.amber.shade300;
