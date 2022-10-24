@@ -29,6 +29,7 @@ class InvoiceCard extends StatefulWidget {
     this.invoicePayments,
     this.invoiceNumber,
     this.invoiceTotal,
+    this.invoiceDocumentID,
   }) : super(key: key);
 
   final invoiceClient;
@@ -39,6 +40,7 @@ class InvoiceCard extends StatefulWidget {
   final invoicePayments;
   final invoiceNumber;
   final invoiceTotal;
+  final invoiceDocumentID;
 
   @override
   State<InvoiceCard> createState() => _InvoiceCardState();
@@ -83,6 +85,7 @@ class InvoiceCardBody extends StatelessWidget {
       }
     }
 
+    final currentClient = Provider.of<Client?>(context) ?? {};
     final currentClientName = Provider.of<Client?>(context)?.name ?? '';
     final currentClientSpecialContributor =
         Provider.of<Client?>(context)?.specialContributor ?? '';
@@ -126,6 +129,8 @@ class InvoiceCardBody extends StatelessWidget {
                 widget.invoicePayments,
                 widget.invoiceNumber,
                 widget.invoiceTotal,
+                currentClient,
+                widget.invoiceDocumentID,
               )
             : modalBottomSheetForInvoices(
                 true,
@@ -145,6 +150,8 @@ class InvoiceCardBody extends StatelessWidget {
                 widget.invoicePayments,
                 widget.invoiceNumber,
                 widget.invoiceTotal,
+                currentClient,
+                widget.invoiceDocumentID,
               );
       },
       child: Padding(

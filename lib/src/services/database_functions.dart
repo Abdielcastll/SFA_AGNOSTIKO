@@ -199,7 +199,7 @@ Future deleteOrder(
 
 Future createInvoice(
   Client client,
-  double? masterDiscount,
+  masterDiscount,
   orderDate,
   double? taxTotal,
   double totalOfTheOrder,
@@ -238,6 +238,8 @@ Future createInvoice(
   };
   final seller = FirebaseFirestore.instance.collection('usuarios').doc(userID);
 
+  print(correlativeNumber + 35);
+
   await FirebaseFirestore.instance
       .collection('clientes')
       .doc(client.clientDocumentId)
@@ -258,7 +260,7 @@ Future createInvoice(
     'fecha': Timestamp.fromDate(DateTime.parse(date)),
     'impuesto': tax,
     'montoTotal': double.parse(totalAsString),
-    'nroCorrelativo': 118,
+    'nroCorrelativo': correlativeNumber + 35,
     'pagada': isPaid,
     'pagos': payments,
     'pedido': order,
@@ -268,5 +270,516 @@ Future createInvoice(
     'timestampRegistro': register,
     'ultimaModificacion': lastModification,
     'vendedor': seller,
+  });
+}
+
+//Registrar pagos de cheques
+
+Future registerBankCheckPayment(
+  Client client,
+  invoiceDocumentID,
+  currency,
+  amount,
+  totalOfTheOrder,
+  currentCoin,
+  bank,
+  accountNumber,
+  accountHolder,
+  imageFile,
+  date,
+) async {
+  print('/// Registrar cheque en factura: $invoiceDocumentID ///');
+
+  final coinsExchangeRates = [];
+  await FirebaseFirestore.instance.collection('monedas').get().then((document) {
+    document.docs.forEach((element) {
+      coinsExchangeRates.add(element.data()['tasaDeCambio']);
+    });
+  });
+  final Map<String, double> exchangeRate = {
+    'BTC': coinsExchangeRates[0],
+    'EUR': coinsExchangeRates[1],
+    'VED': coinsExchangeRates[2],
+  };
+
+  String? banksDocumentsID;
+  await FirebaseFirestore.instance
+      .collection('bancos')
+      .where('nombre', isEqualTo: bank)
+      .get()
+      .then((document) {
+    document.docs.forEach((element) {
+      banksDocumentsID = element.reference.id;
+    });
+  });
+
+  late var selectedCoinExchangeRate;
+
+  if (currency == 'USD') {
+    selectedCoinExchangeRate = 1;
+  } else if (currency == 'VED') {
+    selectedCoinExchangeRate = coinsExchangeRates[2];
+  } else if (currency == 'EUR') {
+    selectedCoinExchangeRate = coinsExchangeRates[1];
+  } else if (currency == 'BTC') {
+    selectedCoinExchangeRate = coinsExchangeRates[0];
+  }
+  final doubleAmount = double.parse(amount);
+  final convertedAmount =
+      (doubleAmount / selectedCoinExchangeRate).toStringAsFixed(2);
+
+  print('Tasa de cambio a usar: $selectedCoinExchangeRate');
+  print('banco: $bank');
+  print('bancoID: $banksDocumentsID');
+  print('Total en BS: $amount');
+  print('Total en USD: $convertedAmount');
+  print('Usuario: $accountHolder');
+  print('Numero de cuenta: $accountNumber');
+  print('fecha de registro: $date');
+
+  return await FirebaseFirestore.instance
+      .collection('clientes')
+      .doc(client.clientDocumentId)
+      .collection('facturas')
+      .doc(invoiceDocumentID)
+      .update({
+    'pagos': FieldValue.arrayUnion(
+      [
+        <String, dynamic>{
+          'anulado': false,
+          'codigoMoneda': currency.toString(),
+          'conciliado': false,
+          'fecha': Timestamp.fromDate(date),
+          'metodo': 'Cheque',
+          'monto': double.parse(convertedAmount),
+          'montoOriginal': totalOfTheOrder,
+          'banco': FirebaseFirestore.instance
+              .collection('bancos')
+              .doc(banksDocumentsID),
+          'nroCuenta': int.parse(accountNumber),
+          'Titular': accountHolder,
+          'nroNotaCredito': 0,
+          'tasaDeCambio': selectedCoinExchangeRate,
+        },
+      ],
+    ),
+  });
+}
+
+//Registrar pagos de cripto
+
+Future registerCriptoPayment(
+  Client client,
+  invoiceDocumentID,
+  currency,
+  amount,
+  totalOfTheOrder,
+  transactionId,
+  imageFile,
+  date,
+) async {
+  print('/// Registrar pago en BTC en factura: $invoiceDocumentID ///');
+
+  final coinsExchangeRates = [];
+  await FirebaseFirestore.instance.collection('monedas').get().then((document) {
+    document.docs.forEach((element) {
+      coinsExchangeRates.add(element.data()['tasaDeCambio']);
+    });
+  });
+  final Map<String, double> exchangeRate = {
+    'BTC': coinsExchangeRates[0],
+    'EUR': coinsExchangeRates[1],
+    'VED': coinsExchangeRates[2],
+  };
+
+  late var selectedCoinExchangeRate;
+
+  if (currency == 'USD') {
+    selectedCoinExchangeRate = 1;
+  } else if (currency == 'VED') {
+    selectedCoinExchangeRate = coinsExchangeRates[2];
+  } else if (currency == 'EUR') {
+    selectedCoinExchangeRate = coinsExchangeRates[1];
+  } else if (currency == 'BTC') {
+    selectedCoinExchangeRate = coinsExchangeRates[0];
+  }
+  final doubleAmount = double.parse(amount);
+  final convertedAmount =
+      (doubleAmount / selectedCoinExchangeRate).toStringAsFixed(8);
+
+  print('Tasa de cambio a usar: $selectedCoinExchangeRate');
+
+  print('Total en BTC: $amount');
+  print('Total en USD: $convertedAmount');
+  print('transaccion: $transactionId');
+  print('fecha de registro: $date');
+
+  if (double.parse(convertedAmount) < totalOfTheOrder) {
+    return await FirebaseFirestore.instance
+        .collection('clientes')
+        .doc(client.clientDocumentId)
+        .collection('facturas')
+        .doc(invoiceDocumentID)
+        .update({
+      'pagos': FieldValue.arrayUnion(
+        [
+          <String, dynamic>{
+            'anulado': false,
+            'codigoMoneda': currency.toString(),
+            'conciliado': false,
+            'fecha': Timestamp.fromDate(date),
+            'metodo': 'Criptomoneda',
+            'monto': double.parse(convertedAmount),
+            'montoOriginal': totalOfTheOrder,
+            'idTransaccion': transactionId,
+            'nroNotaCredito': 0,
+            'tasaDeCambio': selectedCoinExchangeRate,
+          },
+        ],
+      ),
+    });
+  } else if (double.parse(convertedAmount) > totalOfTheOrder) {
+    Fluttertoast.showToast(msg: 'El monto a pagar es mayor que el de la orden');
+  }
+}
+
+//Registro de deposito
+Future registerDepositPayment(
+  Client client,
+  invoiceDocumentID,
+  currency,
+  amount,
+  totalOfTheOrder,
+  currentCoin,
+  bank,
+  accountNumber,
+  voucherNumber,
+  imageFile,
+  date,
+) async {
+  print('/// Registrar deposito en factura: $invoiceDocumentID ///');
+
+  final coinsExchangeRates = [];
+  await FirebaseFirestore.instance.collection('monedas').get().then((document) {
+    document.docs.forEach((element) {
+      coinsExchangeRates.add(element.data()['tasaDeCambio']);
+    });
+  });
+  final Map<String, double> exchangeRate = {
+    'BTC': coinsExchangeRates[0],
+    'EUR': coinsExchangeRates[1],
+    'VED': coinsExchangeRates[2],
+  };
+
+  String? banksDocumentsID;
+  await FirebaseFirestore.instance
+      .collection('bancos')
+      .where('nombre', isEqualTo: bank)
+      .get()
+      .then((document) {
+    document.docs.forEach((element) {
+      banksDocumentsID = element.reference.id;
+    });
+  });
+
+  late var selectedCoinExchangeRate;
+
+  if (currency == 'USD') {
+    selectedCoinExchangeRate = 1;
+  } else if (currency == 'VED') {
+    selectedCoinExchangeRate = coinsExchangeRates[2];
+  } else if (currency == 'EUR') {
+    selectedCoinExchangeRate = coinsExchangeRates[1];
+  } else if (currency == 'BTC') {
+    selectedCoinExchangeRate = coinsExchangeRates[0];
+  }
+  final doubleAmount = double.parse(amount);
+  final convertedAmount =
+      (doubleAmount / selectedCoinExchangeRate).toStringAsFixed(2);
+
+  print('Tasa de cambio a usar: $selectedCoinExchangeRate');
+  print('banco: $bank');
+  print('bancoID: $banksDocumentsID');
+  print('Total en BS: $amount');
+  print('Total en USD: $convertedAmount');
+  print('voucher: $voucherNumber');
+  print('Numero de cuenta: $accountNumber');
+  print('fecha de registro: $date');
+
+  return await FirebaseFirestore.instance
+      .collection('clientes')
+      .doc(client.clientDocumentId)
+      .collection('facturas')
+      .doc(invoiceDocumentID)
+      .update({
+    'pagos': FieldValue.arrayUnion(
+      [
+        <String, dynamic>{
+          'anulado': false,
+          'codigoMoneda': currency.toString(),
+          'conciliado': false,
+          'fecha': Timestamp.fromDate(date),
+          'metodo': 'Deposito',
+          'monto': double.parse(convertedAmount),
+          'montoOriginal': totalOfTheOrder,
+          'banco': FirebaseFirestore.instance
+              .collection('bancos')
+              .doc(banksDocumentsID),
+          'nroCuenta': int.parse(accountNumber),
+          'nroVoucher': voucherNumber,
+          'nroNotaCredito': 0,
+          'tasaDeCambio': selectedCoinExchangeRate,
+        },
+      ],
+    ),
+  });
+}
+
+//Registrar pagos de efectivo
+
+Future registerMoneyPayment(client, invoiceDocumentID, currency, amount,
+    totalOfTheOrder, imageFile, date) async {
+  print('/// Registrar pago en efectivo en factura: $invoiceDocumentID ///');
+
+  final coinsExchangeRates = [];
+  await FirebaseFirestore.instance.collection('monedas').get().then((document) {
+    document.docs.forEach((element) {
+      coinsExchangeRates.add(element.data()['tasaDeCambio']);
+    });
+  });
+  final Map<String, double> exchangeRate = {
+    'BTC': coinsExchangeRates[0],
+    'EUR': coinsExchangeRates[1],
+    'VED': coinsExchangeRates[2],
+  };
+
+  late var selectedCoinExchangeRate;
+
+  if (currency == 'USD') {
+    selectedCoinExchangeRate = 1;
+  } else if (currency == 'VED') {
+    selectedCoinExchangeRate = coinsExchangeRates[2];
+  } else if (currency == 'EUR') {
+    selectedCoinExchangeRate = coinsExchangeRates[1];
+  } else if (currency == 'BTC') {
+    selectedCoinExchangeRate = coinsExchangeRates[0];
+  }
+  final doubleAmount = double.parse(amount);
+  final convertedAmount =
+      (doubleAmount / selectedCoinExchangeRate).toStringAsFixed(8);
+
+  print('Tasa de cambio a usar: $selectedCoinExchangeRate');
+
+  print('Total en BTC: $amount');
+  print('Total en USD: $convertedAmount');
+  print('fecha de registro: $date');
+
+  if (double.parse(convertedAmount) < totalOfTheOrder) {
+    return await FirebaseFirestore.instance
+        .collection('clientes')
+        .doc(client.clientDocumentId)
+        .collection('facturas')
+        .doc(invoiceDocumentID)
+        .update({
+      'pagos': FieldValue.arrayUnion(
+        [
+          <String, dynamic>{
+            'anulado': false,
+            'codigoMoneda': currency.toString(),
+            'conciliado': false,
+            'fecha': Timestamp.fromDate(date),
+            'metodo': 'Efectivo',
+            'monto': double.parse(convertedAmount),
+            'montoOriginal': totalOfTheOrder,
+            'nroNotaCredito': 0,
+            'tasaDeCambio': selectedCoinExchangeRate,
+          },
+        ],
+      ),
+    });
+  } else if (double.parse(convertedAmount) > totalOfTheOrder) {
+    Fluttertoast.showToast(msg: 'El monto a pagar es mayor que el de la orden');
+  }
+}
+
+//Registrar pagos de trasnferencias nacionales
+
+Future registerTransferPayment(
+  client,
+  invoiceDocumentID,
+  currency,
+  amount,
+  totalOfTheOrder,
+  currentCoin,
+  bank,
+  referenceId,
+  imageFile,
+  date,
+) async {
+  print('/// Registrar Trasnferencia en factura: $invoiceDocumentID ///');
+
+  final coinsExchangeRates = [];
+  await FirebaseFirestore.instance.collection('monedas').get().then((document) {
+    document.docs.forEach((element) {
+      coinsExchangeRates.add(element.data()['tasaDeCambio']);
+    });
+  });
+  final Map<String, double> exchangeRate = {
+    'BTC': coinsExchangeRates[0],
+    'EUR': coinsExchangeRates[1],
+    'VED': coinsExchangeRates[2],
+  };
+
+  String? banksDocumentsID;
+  await FirebaseFirestore.instance
+      .collection('bancos')
+      .where('nombre', isEqualTo: bank)
+      .get()
+      .then((document) {
+    document.docs.forEach((element) {
+      banksDocumentsID = element.reference.id;
+    });
+  });
+
+  late var selectedCoinExchangeRate;
+
+  if (currency == 'USD') {
+    selectedCoinExchangeRate = 1;
+  } else if (currency == 'VED') {
+    selectedCoinExchangeRate = coinsExchangeRates[2];
+  } else if (currency == 'EUR') {
+    selectedCoinExchangeRate = coinsExchangeRates[1];
+  } else if (currency == 'BTC') {
+    selectedCoinExchangeRate = coinsExchangeRates[0];
+  }
+  final doubleAmount = double.parse(amount);
+  final convertedAmount =
+      (doubleAmount / selectedCoinExchangeRate).toStringAsFixed(2);
+
+  print('Tasa de cambio a usar: $selectedCoinExchangeRate');
+  print('banco: $bank');
+  print('bancoID: $banksDocumentsID');
+  print('Total en BS: $amount');
+  print('Total en USD: $convertedAmount');
+  print('Ref: $referenceId');
+
+  print('fecha de registro: $date');
+
+  return await FirebaseFirestore.instance
+      .collection('clientes')
+      .doc(client.clientDocumentId)
+      .collection('facturas')
+      .doc(invoiceDocumentID)
+      .update({
+    'pagos': FieldValue.arrayUnion(
+      [
+        <String, dynamic>{
+          'anulado': false,
+          'codigoMoneda': currency.toString(),
+          'conciliado': false,
+          'fecha': Timestamp.fromDate(date),
+          'metodo': 'Transferencia',
+          'monto': double.parse(convertedAmount),
+          'montoOriginal': totalOfTheOrder,
+          'banco': FirebaseFirestore.instance
+              .collection('bancos')
+              .doc(banksDocumentsID),
+          'nroReferencia': int.parse(referenceId),
+          'nroNotaCredito': 0,
+          'tasaDeCambio': selectedCoinExchangeRate,
+        },
+      ],
+    ),
+  });
+}
+
+//Registrar pagos de trasnferencias internacionales
+
+Future registerTransferInterPayment(
+  client,
+  invoiceDocumentID,
+  currency,
+  amount,
+  totalOfTheOrder,
+  currentCoin,
+  bank,
+  referenceId,
+  imageFile,
+  date,
+) async {
+  print('/// Registrar transferencia inter en factura: $invoiceDocumentID ///');
+
+  final coinsExchangeRates = [];
+  await FirebaseFirestore.instance.collection('monedas').get().then((document) {
+    document.docs.forEach((element) {
+      coinsExchangeRates.add(element.data()['tasaDeCambio']);
+    });
+  });
+  final Map<String, double> exchangeRate = {
+    'BTC': coinsExchangeRates[0],
+    'EUR': coinsExchangeRates[1],
+    'VED': coinsExchangeRates[2],
+  };
+
+  String? banksDocumentsID;
+  await FirebaseFirestore.instance
+      .collection('bancos')
+      .where('nombre', isEqualTo: bank)
+      .get()
+      .then((document) {
+    document.docs.forEach((element) {
+      banksDocumentsID = element.reference.id;
+    });
+  });
+
+  late var selectedCoinExchangeRate;
+
+  if (currency == 'USD') {
+    selectedCoinExchangeRate = 1;
+  } else if (currency == 'VED') {
+    selectedCoinExchangeRate = coinsExchangeRates[2];
+  } else if (currency == 'EUR') {
+    selectedCoinExchangeRate = coinsExchangeRates[1];
+  } else if (currency == 'BTC') {
+    selectedCoinExchangeRate = coinsExchangeRates[0];
+  }
+  final doubleAmount = double.parse(amount);
+  final convertedAmount =
+      (doubleAmount / selectedCoinExchangeRate).toStringAsFixed(2);
+
+  print('Tasa de cambio a usar: $selectedCoinExchangeRate');
+  print('banco: $bank');
+  print('bancoID: $banksDocumentsID');
+  print('Total en BS: $amount');
+  print('Total en USD: $convertedAmount');
+  print('Ref: $referenceId');
+
+  print('fecha de registro: $date');
+
+  return await FirebaseFirestore.instance
+      .collection('clientes')
+      .doc(client.clientDocumentId)
+      .collection('facturas')
+      .doc(invoiceDocumentID)
+      .update({
+    'pagos': FieldValue.arrayUnion(
+      [
+        <String, dynamic>{
+          'anulado': false,
+          'codigoMoneda': currency.toString(),
+          'conciliado': false,
+          'fecha': Timestamp.fromDate(date),
+          'metodo': 'Transferencia-internacional',
+          'monto': double.parse(convertedAmount),
+          'montoOriginal': totalOfTheOrder,
+          'banco': FirebaseFirestore.instance
+              .collection('bancos')
+              .doc(banksDocumentsID),
+          'nroReferencia': int.parse(referenceId),
+          'nroNotaCredito': 0,
+          'tasaDeCambio': selectedCoinExchangeRate,
+        },
+      ],
+    ),
   });
 }

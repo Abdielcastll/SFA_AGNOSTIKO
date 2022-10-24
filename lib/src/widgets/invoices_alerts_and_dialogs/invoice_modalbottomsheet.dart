@@ -9,30 +9,31 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/identify_payment_method.dart';
 
-getFromGallery(context) async {
-  XFile? pickedFile =
-      await ImagePicker().pickImage(source: ImageSource.gallery);
-  if (pickedFile != null) {
-    return pickedFile;
-  } else {
-    return;
-  }
-}
+// getFromGallery(context) async {
+//   XFile? pickedFile =
+//       await ImagePicker().pickImage(source: ImageSource.gallery);
+//   if (pickedFile != null) {
+//     return pickedFile;
+//   } else {
+//     return;
+//   }
+// }
 
-cropImage(filePath, imageFile) async {
-  CroppedFile? croppedImage = await ImageCropper().cropImage(
-    sourcePath: filePath,
-    maxHeight: 1080,
-    maxWidth: 1080,
-  );
-  if (croppedImage != null) {
-    return croppedImage;
-  }
-}
+// cropImage(filePath, imageFile) async {
+//   CroppedFile? croppedImage = await ImageCropper().cropImage(
+//     sourcePath: filePath,
+//     maxHeight: 1080,
+//     maxWidth: 1080,
+//   );
+//   if (croppedImage != null) {
+//     return croppedImage;
+//   }
+// }
 
 void modalBottomSheetForInvoices(
   bool completed,
@@ -52,12 +53,14 @@ void modalBottomSheetForInvoices(
   invoicePayments,
   invoiceNumber,
   invoiceTotal,
+  client,
+  invoiceDocumentID,
 ) {
-  final paidAmount = TextEditingController();
+  String paidAmount = '00.00';
   var dateFormatter = DateFormat('dd-MM-yyyy');
   DateTime today = DateTime.now();
   String? selectedValueA;
-  File? imageFile;
+
   final paymentsValidPay = invoicePayments
       .where((element) =>
           element['conciliado'] == true && element['anulado'] == false)
@@ -221,7 +224,11 @@ void modalBottomSheetForInvoices(
                                                                               return ListTile(
                                                                                 leading: Icon(
                                                                                   Icons.money_off_csred,
-                                                                                  color: payment['anulado'] == false ? Colors.green : Colors.red,
+                                                                                  color: payment['anulado'] == false
+                                                                                      ? payment['conciliado'] == false
+                                                                                          ? Colors.amber
+                                                                                          : Colors.green
+                                                                                      : Colors.red,
                                                                                 ),
                                                                                 title: Row(
                                                                                   children: [
@@ -686,6 +693,13 @@ void modalBottomSheetForInvoices(
                                                           ),
                                                         ),
                                                         child: TextField(
+                                                          onChanged: (value) {
+                                                            setState(() {
+                                                              paidAmount =
+                                                                  value;
+                                                              print(paidAmount);
+                                                            });
+                                                          },
                                                           style: TextStyle(
                                                             fontSize: 14,
                                                             fontFamily:
@@ -698,8 +712,10 @@ void modalBottomSheetForInvoices(
                                                           inputFormatters: <
                                                               TextInputFormatter>[
                                                             FilteringTextInputFormatter
-                                                                .allow(RegExp(
-                                                                    r'[0-9]+[,.]{0,1}[0-9]*')),
+                                                                .allow(
+                                                              RegExp(
+                                                                  r'[0-9]+[,.]{0,1}[0-9]*'),
+                                                            ),
                                                             TextInputFormatter
                                                                 .withFunction(
                                                               (oldValue,
@@ -709,8 +725,8 @@ void modalBottomSheetForInvoices(
                                                                 text: newValue
                                                                     .text
                                                                     .replaceAll(
-                                                                        '.',
-                                                                        ','),
+                                                                        ',',
+                                                                        '.'),
                                                               ),
                                                             ),
                                                           ],
@@ -723,8 +739,6 @@ void modalBottomSheetForInvoices(
                                                           textCapitalization:
                                                               TextCapitalization
                                                                   .characters,
-                                                          controller:
-                                                              paidAmount,
 
                                                           decoration:
                                                               InputDecoration(
@@ -778,197 +792,204 @@ void modalBottomSheetForInvoices(
                                                           // onChanged: searchClient,
                                                         ),
                                                       ),
+
                                                       Container(
                                                         child:
                                                             identifyPaymentMethod(
-                                                                selectedValueA),
-                                                      ),
-                                                      Text(
-                                                        'Seleccione un archivo',
-                                                        style: TextStyle(
-                                                          fontFamily:
-                                                              'Poppins-regular',
-                                                          color: Colors
-                                                              .grey.shade400,
-                                                          fontSize: 14,
+                                                          selectedValueA,
+                                                          client,
+                                                          invoiceDocumentID,
+                                                          paidAmount,
+                                                          invoiceTotal,
+                                                          today,
                                                         ),
-                                                      ),
-                                                      InkWell(
-                                                        onTap: () async {
-                                                          var pickedFile =
-                                                              await getFromGallery(
-                                                                  context);
-                                                          if (pickedFile !=
-                                                              null) {
-                                                            print(
-                                                                'Imagen seleccionada');
-                                                            var croppedImage =
-                                                                await cropImage(
-                                                                    pickedFile
-                                                                        .path,
-                                                                    imageFile);
-                                                            if (croppedImage !=
-                                                                null) {
-                                                              print(
-                                                                  'Imagen recortada');
-                                                              setState(() {
-                                                                imageFile = File(
-                                                                    croppedImage
-                                                                        .path);
-                                                              });
-                                                            } else {
-                                                              print(
-                                                                  'Error croppeando');
-                                                            }
-                                                          } else {
-                                                            print(
-                                                                'error seleccionando');
-                                                            return;
-                                                          }
-                                                        },
-                                                        child: Row(
-                                                          // ignore: prefer_const_literals_to_create_immutables
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Padding(
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .all(4.0),
-                                                              child: Icon(
-                                                                Icons.camera,
-                                                                color: myTheme
-                                                                    .colorScheme
-                                                                    .secondary,
-                                                              ),
-                                                            ),
-                                                            Text(
-                                                              'Galeria',
-                                                              style: TextStyle(
-                                                                color: myTheme
-                                                                    .colorScheme
-                                                                    .primary,
-                                                                fontFamily:
-                                                                    'Poppins-regular',
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      imageFile == null
-                                                          ? Container()
-                                                          : Container(
-                                                              height: 300,
-                                                              width: 300,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                border:
-                                                                    Border.all(
-                                                                  color: myTheme
-                                                                      .colorScheme
-                                                                      .primary,
-                                                                ),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10),
-                                                              ),
-                                                              child: Image.file(
-                                                                imageFile!,
-                                                                height: 300,
-                                                                width: 300,
-                                                              ),
-                                                            ),
-                                                      Container(
-                                                        alignment: Alignment
-                                                            .bottomCenter,
-                                                        margin:
-                                                            EdgeInsets.fromLTRB(
-                                                                0, 0, 0, 10),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .end,
-                                                          children: [
-                                                            TextButton(
-                                                              onPressed: () {
-                                                                Navigator.pop(
-                                                                    context);
-                                                                setState(() =>
-                                                                    imageFile =
-                                                                        null);
-                                                              },
-                                                              child: Text(
-                                                                'Regresar',
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontFamily:
-                                                                      'Poppins-regular',
-                                                                  color: myTheme
-                                                                      .colorScheme
-                                                                      .primary,
-                                                                  fontSize: 14,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            Container(
-                                                              width: 100,
-                                                              height: 40,
-                                                              decoration: BoxDecoration(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              16),
-                                                                  color: myTheme
-                                                                      .colorScheme
-                                                                      .primary),
-                                                              child: TextButton(
-                                                                onPressed: () {
-                                                                  // Crear en DB una visita
-                                                                  // TODO: Temporalmente regresara a antes
-                                                                  Fluttertoast
-                                                                      .showToast(
-                                                                          msg:
-                                                                              'Testeo de crear pago completado');
-                                                                  Navigator.pop(
-                                                                      context);
-                                                                  Navigator.pop(
-                                                                      context);
-                                                                },
-                                                                style: TextButton
-                                                                    .styleFrom(
-                                                                  foregroundColor:
-                                                                      myTheme
-                                                                          .colorScheme
-                                                                          .primary,
-                                                                ),
-                                                                child: Text(
-                                                                  'Aceptar',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    fontFamily:
-                                                                        'Poppins-regular',
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        14,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
+                                                      )
+                                                      // Text(
+                                                      //   'Seleccione un archivo',
+                                                      //   style: TextStyle(
+                                                      //     fontFamily:
+                                                      //         'Poppins-regular',
+                                                      //     color: Colors
+                                                      //         .grey.shade400,
+                                                      //     fontSize: 14,
+                                                      //   ),
+                                                      // ),
+                                                      // InkWell(
+                                                      //   onTap: () async {
+                                                      //     var pickedFile =
+                                                      //         await getFromGallery(
+                                                      //             context);
+                                                      //     if (pickedFile !=
+                                                      //         null) {
+                                                      //       print(
+                                                      //           'Imagen seleccionada');
+                                                      //       var croppedImage =
+                                                      //           await cropImage(
+                                                      //               pickedFile
+                                                      //                   .path,
+                                                      //               imageFile);
+                                                      //       if (croppedImage !=
+                                                      //           null) {
+                                                      //         print(
+                                                      //             'Imagen recortada');
+                                                      //         setState(() {
+                                                      //           imageFile = File(
+                                                      //               croppedImage
+                                                      //                   .path);
+                                                      //         });
+                                                      //       } else {
+                                                      //         print(
+                                                      //             'Error croppeando');
+                                                      //       }
+                                                      //     } else {
+                                                      //       print(
+                                                      //           'error seleccionando');
+                                                      //       return;
+                                                      //     }
+                                                      //   },
+                                                      //   child: Row(
+                                                      //     // ignore: prefer_const_literals_to_create_immutables
+                                                      //     mainAxisAlignment:
+                                                      //         MainAxisAlignment
+                                                      //             .center,
+                                                      //     children: [
+                                                      //       Padding(
+                                                      //         padding:
+                                                      //             EdgeInsets
+                                                      //                 .all(4.0),
+                                                      //         child: Icon(
+                                                      //           Icons.camera,
+                                                      //           color: myTheme
+                                                      //               .colorScheme
+                                                      //               .secondary,
+                                                      //         ),
+                                                      //       ),
+                                                      //       Text(
+                                                      //         'Galeria',
+                                                      //         style: TextStyle(
+                                                      //           color: myTheme
+                                                      //               .colorScheme
+                                                      //               .primary,
+                                                      //           fontFamily:
+                                                      //               'Poppins-regular',
+                                                      //         ),
+                                                      //       ),
+                                                      //     ],
+                                                      //   ),
+                                                      // ),
+                                                      // imageFile == null
+                                                      //     ? Container()
+                                                      //     : Container(
+                                                      //         height: 300,
+                                                      //         width: 300,
+                                                      //         decoration:
+                                                      //             BoxDecoration(
+                                                      //           border:
+                                                      //               Border.all(
+                                                      //             color: myTheme
+                                                      //                 .colorScheme
+                                                      //                 .primary,
+                                                      //           ),
+                                                      //           borderRadius:
+                                                      //               BorderRadius
+                                                      //                   .circular(
+                                                      //                       10),
+                                                      //         ),
+                                                      //         child: Image.file(
+                                                      //           imageFile!,
+                                                      //           height: 300,
+                                                      //           width: 300,
+                                                      //         ),
+                                                      //       ),
+                                                      // Container(
+                                                      //   alignment: Alignment
+                                                      //       .bottomCenter,
+                                                      //   margin:
+                                                      //       EdgeInsets.fromLTRB(
+                                                      //           0, 0, 0, 10),
+                                                      //   child: Row(
+                                                      //     mainAxisAlignment:
+                                                      //         MainAxisAlignment
+                                                      //             .center,
+                                                      //     crossAxisAlignment:
+                                                      //         CrossAxisAlignment
+                                                      //             .end,
+                                                      //     children: [
+                                                      //       TextButton(
+                                                      //         onPressed: () {
+                                                      //           Navigator.pop(
+                                                      //               context);
+                                                      //           setState(() =>
+                                                      //               imageFile =
+                                                      //                   null);
+                                                      //         },
+                                                      //         child: Text(
+                                                      //           'Regresar',
+                                                      //           style:
+                                                      //               TextStyle(
+                                                      //             fontFamily:
+                                                      //                 'Poppins-regular',
+                                                      //             color: myTheme
+                                                      //                 .colorScheme
+                                                      //                 .primary,
+                                                      //             fontSize: 14,
+                                                      //             fontWeight:
+                                                      //                 FontWeight
+                                                      //                     .bold,
+                                                      //           ),
+                                                      //         ),
+                                                      //       ),
+                                                      //       Container(
+                                                      //         width: 100,
+                                                      //         height: 40,
+                                                      //         decoration: BoxDecoration(
+                                                      //             borderRadius:
+                                                      //                 BorderRadius
+                                                      //                     .circular(
+                                                      //                         16),
+                                                      //             color: myTheme
+                                                      //                 .colorScheme
+                                                      //                 .primary),
+                                                      //         child: TextButton(
+                                                      //           onPressed: () {
+                                                      //             // Crear en DB una visita
+                                                      //             // TODO: Temporalmente regresara a antes
+                                                      //             Fluttertoast
+                                                      //                 .showToast(
+                                                      //                     msg:
+                                                      //                         'Testeo de crear pago completado');
+                                                      //             Navigator.pop(
+                                                      //                 context);
+                                                      //             Navigator.pop(
+                                                      //                 context);
+                                                      //           },
+                                                      //           style: TextButton
+                                                      //               .styleFrom(
+                                                      //             foregroundColor:
+                                                      //                 myTheme
+                                                      //                     .colorScheme
+                                                      //                     .primary,
+                                                      //           ),
+                                                      //           child: Text(
+                                                      //             'Aceptar',
+                                                      //             style:
+                                                      //                 TextStyle(
+                                                      //               fontFamily:
+                                                      //                   'Poppins-regular',
+                                                      //               color: Colors
+                                                      //                   .white,
+                                                      //               fontSize:
+                                                      //                   14,
+                                                      //               fontWeight:
+                                                      //                   FontWeight
+                                                      //                       .bold,
+                                                      //             ),
+                                                      //           ),
+                                                      //         ),
+                                                      //       ),
+                                                      //     ],
+                                                      //   ),
+                                                      // ),
                                                     ],
                                                   ),
                                                 ),

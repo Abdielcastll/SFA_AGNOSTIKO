@@ -59,6 +59,7 @@ class InvoicesList extends StatelessWidget {
                   const invoiceStatus = 'Facturado';
                   final invoiceNumber = invoice.correlativeNumber;
                   final invoiceTotal = invoice.totalAmount;
+                  final invoiceDocumentID = invoice.invoiceDocumentID;
 
                   // print(invoice);
                   return InvoiceCard(
@@ -70,6 +71,7 @@ class InvoicesList extends StatelessWidget {
                     invoicePayments: invoicePayments,
                     invoiceNumber: invoiceNumber,
                     invoiceTotal: invoiceTotal,
+                    invoiceDocumentID: invoiceDocumentID,
                   );
                 },
               ),

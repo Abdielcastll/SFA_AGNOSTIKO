@@ -69,6 +69,7 @@ class _InvoicesOnProcessState extends State<InvoicesOnProcess> {
                     const invoiceStatus = 'En proceso';
                     final invoiceNumber = invoice.correlativeNumber;
                     final invoiceTotal = invoice.totalAmount;
+                    final invoiceDocumentID = invoice.invoiceDocumentID;
                     // print(invoice);
                     return InvoiceCard(
                       invoiceClient: invoiceClient,
@@ -78,6 +79,7 @@ class _InvoicesOnProcessState extends State<InvoicesOnProcess> {
                       invoicePayments: invoicePayments,
                       invoiceNumber: invoiceNumber,
                       invoiceTotal: invoiceTotal,
+                      invoiceDocumentID: invoiceDocumentID,
                     );
                   },
                 ),

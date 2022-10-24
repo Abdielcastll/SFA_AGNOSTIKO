@@ -17,6 +17,7 @@ class Invoices {
   final registerDate;
   final lastModified;
   final seller;
+  final invoiceDocumentID;
 
   Invoices({
     this.clientIdReference,
@@ -35,6 +36,7 @@ class Invoices {
     this.registerDate,
     this.lastModified,
     this.seller,
+    this.invoiceDocumentID,
   });
 }
 
@@ -87,6 +89,7 @@ List<Invoices> accountInvoicesFromSnapshot(QuerySnapshot snapshot) {
       seller: doc.data().toString().contains('vendedor')
           ? doc.get('vendedor').id
           : 'NaN',
+      invoiceDocumentID: doc.reference.id,
     );
   }).toList();
 }
