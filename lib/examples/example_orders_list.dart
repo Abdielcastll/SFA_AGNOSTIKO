@@ -1,0 +1,58 @@
+import 'package:flutter/material.dart';
+
+final List<Map<String, dynamic>> ordersList = [
+  {
+    'nameClient': 'Cliente 1',
+    'clientID': 'A0001',
+    'orderID': '5412',
+    'date': '30/07/2022',
+    'total': '325.00',
+    'completed': 'true',
+    'failed': 'false',
+  },
+  {
+    'nameClient': 'Cliente 2',
+    'clientID': 'A0002',
+    'orderID': '5413',
+    'date': '30/07/2022',
+    'total': '12.05',
+    'completed': 'true',
+    'failed': 'true',
+  },
+  {
+    'nameClient': 'Cliente 3',
+    'clientID': 'A0003',
+    'orderID': '5414',
+    'date': '30/07/2022',
+    'total': '51.19',
+    'completed': 'false',
+    'failed': 'false',
+  },
+  {
+    'nameClient': 'Cliente 4',
+    'clientID': 'A0004',
+    'orderID': '5415',
+    'date': '30/07/2022',
+    'total': '700.99',
+    'completed': 'true',
+    'failed': 'false',
+  },
+  {
+    'nameClient': 'Cliente 6',
+    'clientID': 'A0006',
+    'orderID': '5416',
+    'date': '30/07/2022',
+    'total': '49.00',
+    'completed': 'false',
+    'failed': 'false',
+  },
+  {
+    'nameClient': 'Cliente 7',
+    'clientID': 'A0007',
+    'orderID': '5417',
+    'date': '30/07/2022',
+    'total': '44.77',
+    'completed': 'true',
+    'failed': 'true',
+  },
+];

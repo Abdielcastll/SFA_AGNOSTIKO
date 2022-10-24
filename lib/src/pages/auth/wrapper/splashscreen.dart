@@ -1,4 +1,6 @@
 //Flutter
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 //Firebase
@@ -15,7 +17,7 @@ class SplashScreenWidget extends StatefulWidget {
 
 class _SplashScreenWidgetState extends State<SplashScreenWidget> {
   splashScreenTimer() {
-    Timer(const Duration(seconds: 2), () {
+    Timer(const Duration(seconds: 3), () {
       Navigator.pushReplacementNamed(context, 'wrapper');
     });
   }
@@ -38,17 +40,18 @@ class _SplashScreenWidgetState extends State<SplashScreenWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.all(12.0),
+                padding: EdgeInsets.all(12.0),
                 child: Image.asset('assets/images/logo.png'),
               ),
-              const SizedBox(height: 20),
-              const Text(
+              SizedBox(height: 20),
+              Text(
                 'SFA Agnostiko',
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
                   letterSpacing: 3,
                   color: Colors.white,
+                  fontFamily: 'Poppins-bold',
                 ),
               )
             ],

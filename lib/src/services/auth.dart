@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
+import 'package:flutter/material.dart';
+import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -24,18 +26,20 @@ class AuthService {
 
   Future signInWithEmailAndPassword(String email, String password) async {
     try {
-      print('Sign in with email and password pressed');
       UserCredential result = await _auth.signInWithEmailAndPassword(
         email: email.trim().toLowerCase(),
         password: password.trim(),
       );
       User? user = result.user;
-      // return _userFromFirebaseUser(user);
       if (user != null) {
         checkIfUserRecordExist(user);
       }
     } catch (e) {
-      print(e.toString());
+      Fluttertoast.showToast(
+        msg: 'Los datos proporcionados son invalidos',
+        backgroundColor: myTheme.colorScheme.secondary,
+        textColor: Colors.white,
+      );
       return null;
     }
   }
@@ -56,21 +60,23 @@ class AuthService {
                 .setString('email', user.email ?? 'No hay email');
             await sharedPreferences!
                 .setString('nombre', record.data()!['nombre']);
-
             await sharedPreferences!
                 .setInt('nro_cedula', record.data()!['nro_cedula']);
-
             List<String> indice = record.data()!['indice'].cast<String>();
             await sharedPreferences!.setStringList('indice', indice);
-
-            if (record.data()!['esGerente'] == false) {
-              if (record.data()!['esVendedor'] == false) {
-                await sharedPreferences!.setString('cargo', 'Cobrador');
-              } else {
-                await sharedPreferences!.setString('cargo', 'Vendedor');
-              }
+            await sharedPreferences!.setString('currentCoin', 'USD');
+            if (record.data()!['rol'].id == 'S7iQ6hOGikhwrFUHmQtV') {
+              await sharedPreferences!.setString('cargo', 'Administrador');
             } else {
-              await sharedPreferences!.setString('cargo', 'Gerente');
+              if (record.data()!['esGerente'] == false) {
+                if (record.data()!['esVendedor'] == false) {
+                  await sharedPreferences!.setString('cargo', 'Cobrador');
+                } else {
+                  await sharedPreferences!.setString('cargo', 'Vendedor');
+                }
+              } else {
+                await sharedPreferences!.setString('cargo', 'Gerente');
+              }
             }
             print('/////////////////////////////////////////////////');
             print('Saving Data on shared preferences');
@@ -84,13 +90,25 @@ class AuthService {
 
             return _userFromFirebaseUser(user);
           } else {
-            Fluttertoast.showToast(msg: 'Usuario no activo o bloqueado');
+            Fluttertoast.showToast(
+              msg: 'Usuario no activo o bloqueado',
+              backgroundColor: myTheme.colorScheme.secondary,
+              textColor: Colors.white,
+            );
           }
         } catch (e) {
-          Fluttertoast.showToast(msg: 'Error en la petición');
+          Fluttertoast.showToast(
+            msg: 'Error en la petición',
+            backgroundColor: myTheme.colorScheme.secondary,
+            textColor: Colors.white,
+          );
         }
       } else {
-        Fluttertoast.showToast(msg: 'Este usuario no existe');
+        Fluttertoast.showToast(
+          msg: 'Este usuario no existe',
+          backgroundColor: myTheme.colorScheme.secondary,
+          textColor: Colors.white,
+        );
       }
     });
   }
@@ -107,6 +125,16 @@ class AuthService {
       await sharedPreferences!.setStringList('indice', []);
       await sharedPreferences!.setString('cargo', '');
       await sharedPreferences!.setString('cargo', '');
+      print('/////////////////////////////////////////////////');
+      print('Saving Data on shared preferences');
+      print(sharedPreferences!.getString('uid'));
+      print(sharedPreferences!.getString('email'));
+      print(sharedPreferences!.getString('nombre'));
+      print(sharedPreferences!.getInt('nro_cedula'));
+      print(sharedPreferences!.getStringList('indice'));
+      print(sharedPreferences!.getString('cargo'));
+      print('/////////////////////////////////////////////////');
+
       return await _auth.signOut();
     } catch (e) {
       print(e.toString());

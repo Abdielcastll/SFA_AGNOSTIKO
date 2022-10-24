@@ -21,7 +21,13 @@ class LoadingWidget extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 40),
-          Text('$message, por favor espere...'),
+          Text(
+            '$message, por favor espere...',
+            style: const TextStyle(
+              fontSize: 14,
+              fontFamily: 'Poppins-regular',
+            ),
+          ),
         ],
       ),
     );
