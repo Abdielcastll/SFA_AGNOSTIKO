@@ -8,7 +8,7 @@ import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/product_details/product_details.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../models/prices_model.dart';
 
 class NewProductsWidget extends StatefulWidget {
@@ -50,7 +50,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
               ),
               SizedBox(width: 5.0),
               Text(
-                'Nuevos Productos',
+                AppLocalizations.of(context)!.newProducts,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: myTheme.colorScheme.secondary,

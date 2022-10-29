@@ -7,6 +7,7 @@ import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ListOfCategories extends StatefulWidget {
   ListOfCategories({Key? key, required this.isOrderActive}) : super(key: key);
@@ -44,7 +45,7 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
               ),
               SizedBox(width: 5.0),
               Text(
-                'Catálogo',
+                AppLocalizations.of(context)!.catalogue,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: myTheme.colorScheme.secondary,

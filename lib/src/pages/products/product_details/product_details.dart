@@ -10,6 +10,7 @@ import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProductDetails extends StatefulWidget {
   const ProductDetails({
@@ -155,7 +156,7 @@ class ProductDetailsBody extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'Stock: $stock',
+                    '${AppLocalizations.of(context)!.stock}: $stock',
                     style: TextStyle(
                       color: Colors.grey.shade600,
                       fontFamily: 'Poppins-regular',
@@ -199,7 +200,7 @@ class ProductDetailsBody extends StatelessWidget {
                                 myTheme.colorScheme.primary.withOpacity(0.3)),
                           ),
                           label: Text(
-                            'Ver en Lista',
+                            AppLocalizations.of(context)!.seeInList,
                             style: TextStyle(
                                 color: myTheme.colorScheme.primary,
                                 fontFamily: 'Poppins-regular',
@@ -222,7 +223,7 @@ class ProductDetailsBody extends StatelessWidget {
                 Container(
                   margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: Text(
-                    'Precio: \$$priceProduct',
+                    '${AppLocalizations.of(context)!.price}: \$$priceProduct',
                     style: TextStyle(
                       color: Colors.grey.shade600,
                       fontFamily: 'Poppins-regular',
@@ -290,7 +291,7 @@ class ProductDetailsBody extends StatelessWidget {
           Container(
             margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
             child: Text(
-              'Colores',
+              AppLocalizations.of(context)!.colors,
               style: TextStyle(
                 color: Colors.grey.shade600,
                 fontFamily: 'Poppins-regular',

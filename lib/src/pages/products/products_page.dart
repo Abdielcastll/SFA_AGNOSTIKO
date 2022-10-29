@@ -15,6 +15,7 @@ import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({
@@ -37,7 +38,7 @@ class _ProductsPageState extends State<ProductsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarNavigation(
-        message: 'Productos',
+        message: AppLocalizations.of(context)!.products,
         isOrderActive: widget.isOrderActive,
       ),
       backgroundColor: Colors.grey[200],
@@ -290,7 +291,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                   fillColor: Colors.white,
                   focusColor: Colors.white,
                   contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
-                  hintText: 'Buscar nombre',
+                  hintText: AppLocalizations.of(context)!.searchProductName,
                   hintStyle: TextStyle(
                     fontFamily: 'Poppins-regular',
                     fontSize: 14,
@@ -327,7 +328,9 @@ class _ProductsBodyState extends State<ProductsBody> {
                         ),
                         SizedBox(width: 5),
                         Text(
-                          isDescending ? 'Ascendente' : 'Descendente',
+                          isDescending
+                              ? AppLocalizations.of(context)!.ascendingFilter
+                              : AppLocalizations.of(context)!.descendingFilter,
                           style: TextStyle(
                               fontFamily: 'Poppins-regular',
                               color: Colors.grey.shade500,
@@ -507,27 +510,33 @@ class _ProductsBodyState extends State<ProductsBody> {
                               // ignore: prefer_const_literals_to_create_immutables
                               children: [
                                 TextFieldForCard(
-                                  message: 'Codigo:',
+                                  message:
+                                      '${AppLocalizations.of(context)!.productCode}:',
                                   bold: FontWeight.bold,
                                 ),
                                 TextFieldForCard(
-                                  message: 'Stock:',
+                                  message:
+                                      '${AppLocalizations.of(context)!.stock}:',
                                   bold: FontWeight.bold,
                                 ),
                                 TextFieldForCard(
-                                  message: 'Precio:',
+                                  message:
+                                      '${AppLocalizations.of(context)!.price}:',
                                   bold: FontWeight.bold,
                                 ),
                                 TextFieldForCard(
-                                  message: 'Marca:',
+                                  message:
+                                      '${AppLocalizations.of(context)!.productBrand}:',
                                   bold: FontWeight.bold,
                                 ),
                                 TextFieldForCard(
-                                  message: 'Categoria:',
+                                  message:
+                                      '${AppLocalizations.of(context)!.productCategorie}:',
                                   bold: FontWeight.bold,
                                 ),
                                 TextFieldForCard(
-                                  message: 'Sub-Categoria:',
+                                  message:
+                                      '${AppLocalizations.of(context)!.productSubCategorie}:',
                                   bold: FontWeight.bold,
                                 ),
                               ],
@@ -567,19 +576,23 @@ class _ProductsBodyState extends State<ProductsBody> {
                               // ignore: prefer_const_literals_to_create_immutables
                               children: [
                                 TextFieldForCard(
-                                  message: 'Linea:',
+                                  message:
+                                      '${AppLocalizations.of(context)!.productLine}:',
                                   bold: FontWeight.bold,
                                 ),
                                 TextFieldForCard(
-                                  message: 'Calidad:',
+                                  message:
+                                      '${AppLocalizations.of(context)!.productQuality}:',
                                   bold: FontWeight.bold,
                                 ),
                                 TextFieldForCard(
-                                  message: 'Tamano:',
+                                  message:
+                                      '${AppLocalizations.of(context)!.productSize}:',
                                   bold: FontWeight.bold,
                                 ),
                                 TextFieldForCard(
-                                  message: 'Diseno:',
+                                  message:
+                                      '${AppLocalizations.of(context)!.productDesign}:',
                                   bold: FontWeight.bold,
                                 ),
                               ],

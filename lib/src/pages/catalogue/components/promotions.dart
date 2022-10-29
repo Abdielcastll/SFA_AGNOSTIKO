@@ -10,6 +10,7 @@ import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/product_details/product_details.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PromotionsWidget extends StatefulWidget {
   const PromotionsWidget({
@@ -58,7 +59,7 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
               ),
               SizedBox(width: 5.0),
               Text(
-                'Promociones',
+                AppLocalizations.of(context)!.promotions,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: myTheme.colorScheme.secondary,
@@ -99,7 +100,7 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
                           width: 260,
                           height: 20,
                           child: Text(
-                            'No hay promociones disponibles',
+                            AppLocalizations.of(context)!.promotionsUnavaliable,
                             maxLines: 1,
                             textAlign: TextAlign.start,
                             overflow: TextOverflow.ellipsis,

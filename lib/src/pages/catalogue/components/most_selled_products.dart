@@ -10,6 +10,7 @@ import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/product_details/product_details.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MostSelledProducts extends StatefulWidget {
   const MostSelledProducts({Key? key, required this.isOrderActive})
@@ -51,7 +52,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
               ),
               SizedBox(width: 5.0),
               Text(
-                'Más Vendidos',
+                AppLocalizations.of(context)!.mostSelled,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: myTheme.colorScheme.secondary,

@@ -9,6 +9,7 @@ import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ListOfProductsButton extends StatefulWidget {
   const ListOfProductsButton({Key? key, required this.isOrderActive})
@@ -61,7 +62,7 @@ class _ListOfProductsButtonState extends State<ListOfProductsButton> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Lista de productos',
+              AppLocalizations.of(context)!.listOfProducts,
               style: TextStyle(
                 color: myTheme.colorScheme.secondary,
                 fontFamily: 'Poppins-regular',

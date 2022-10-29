@@ -19,6 +19,7 @@ import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/product_list
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/promotions.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CataloguePage extends StatefulWidget {
   const CataloguePage(
@@ -128,6 +129,7 @@ class _CatalogueBodyState extends State<CatalogueBody> {
 
   @override
   Widget build(BuildContext context) {
+    print('Idioma: ${AppLocalizations.of(context)!.language}');
     print('Moneda Activa: $currentCoin');
 
     return SingleChildScrollView(

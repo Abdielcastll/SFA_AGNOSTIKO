@@ -1,0 +1,100 @@
+{   
+    "language": "Español",
+    "@language": {
+        "description": "El idioma actual"
+    },
+    "helloWorld": "Hola mundo!",
+    "@helloWorld": {
+        "description": "Un saludo comun de programadors"
+    },
+    "promotions": "Promociones",
+    "@promotions": {
+        "description": "Titulo de las promociones"
+    },
+    "promotionsUnavaliable": "No hay promociones disponibles",
+    "@promotionsUnavaliable": {
+        "description": "Subtitulo para el anuncio de que no hay promociones"
+    },
+    "newProducts": "Nuevos Productos",
+    "@newProducts": {
+        "description": "Titulo para nuevos productos"
+    },
+    "listOfProducts": "Lista de productos",
+    "@listOfProducts": {
+        "description": "Titulo para el boton de lista de productos"
+    },
+    "catalogue": "Catálogo",
+    "@catalogue": {
+        "description": "Titulo para el catálogo"
+    },
+    "mostSelled": "Más vendido",
+    "@mostSelled":{
+        "description": "Titulo para los mas vendidos"
+    },
+    "stock": "Stock",
+    "@stock": {
+        "description": "Stock de productos"
+    },
+    "price": "Precio",
+    "@price":{
+        "description": "Precio del producto"
+    },
+    "colors": "Colores",
+    "@colors": {
+        "description": "Colores del producto"
+    },
+    "seeInList": "Ver en lista",
+    "@seeIsList": {
+        "description": "Titulo para el boton de ver en lista"
+    },
+    "products": "Productos",
+    "@products": {
+        "description": "Titulo para lista de productos"
+    },
+    "productCode": "Codigo",
+    "@productCode":{
+        "description": "Codigo del producto"
+    },
+    "productBrand": "Marca",
+    "@productBrand": {
+        "description": "Marca del producto"
+    },
+    "productCategorie": "Categoria",
+    "@productCategorie": {
+        "description": "Categoria del producto"
+    },
+    "productSubCategorie": "Sub-Categoria",
+    "@productSubCategorie":{
+        "description": "Sub categoria del producto"
+    },
+    "productLine": "Linea",
+    "@productLine": {
+        "description": "Linea del producto"
+    },
+    "productQuality": "Calidad",
+    "@productQuality": {
+        "description": "Calidad del producto"
+    },
+    "productSize": "Tamaño",
+    "@productSize": {
+        "description": "Tamaño del producto"
+    },
+    "productDesign": "Diseño",
+    "@productDesign": {
+        "description": "Diseño del producto"
+    },
+    "searchProductName": "Buscar nombre",
+    "@searchProduct Name": {
+        "description": "Titulo para la barra de busqueda de productos"
+    },
+    "ascendingFilter": "Ascendente",
+    "@ascendingFilter": {
+        "description": "Boton de filtrado de busqueda en modo ascendente"
+    },
+    "descendingFilter": "Descendente",
+    "@descendingFilter": {
+        "description": "Boton de filtrado de busqueda en modo descendente"
+    }
+    
+
+}

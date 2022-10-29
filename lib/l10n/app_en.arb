@@ -1,0 +1,32 @@
+{
+    "language": "English",
+    "helloWorld": "Hello world!",
+    "promotions": "Promotions",
+    "promotionsUnavaliable": "There are no promotions avaliable",
+    "newProducts": "New Products",
+    "listOfProducts": "List of Products",
+    "catalogue": "Catalogue",
+    "mostSelled": "Most Selled",
+    "stock": "Stock",
+    "price": "Price",
+    "colors": "Colors",
+    "seeInList": "Product on list",
+    "products": "Products",
+    "productCode": "Code",
+    "productBrand": "Brand",
+    "productCategorie": "Categorie",
+    "productSubCategorie": "Sub-Categorie",  
+    "productLine": "Line",
+    "productQuality": "Quality",
+    "productSize": "Size",
+    "searchProductName": "Search name",
+    "ascendingFilter": "Ascending",
+    "descendingFilter": "Descending"
+
+  
+
+
+
+
+
+}
