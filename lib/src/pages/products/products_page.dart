@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
@@ -145,6 +146,7 @@ class ProductsBody extends StatefulWidget {
 
 class _ProductsBodyState extends State<ProductsBody> {
   final currentCoin = sharedPreferences?.getString('currentCoin');
+
   final searchController = TextEditingController();
   final List<double> coinsExchangeRates = [0, 0, 0];
   List<ShoppingCartProduct> selectedProducts = [];
@@ -215,8 +217,33 @@ class _ProductsBodyState extends State<ProductsBody> {
     }
   }
 
+  priceFormat(productPrice) {
+    if (currentCoin == 'USD' || currentCoin == null) {
+      return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
+          .format(productPrice);
+    } else if (currentCoin == 'VED') {
+      return NumberFormat.currency(
+        locale: 'es_VE',
+        decimalDigits: 2,
+        symbol: "Bs.",
+        // customPattern: '\u00a4 #.##,#',
+      ).format(productPrice * coinsExchangeRates[2]);
+    } else if (currentCoin == 'EUR') {
+      return NumberFormat.currency(
+        locale: 'es_ES',
+        decimalDigits: 2,
+        symbol: '€',
+        customPattern: '\u00a4 #,##.#',
+      ).format(productPrice * coinsExchangeRates[1]);
+    } else if (currentCoin == 'BTC') {
+      return '฿ ${(productPrice * coinsExchangeRates[0])}';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    print(currentCoin);
+
     final String? moneySymbol = identifyCurrency();
     final userCharge = sharedPreferences!.getString('cargo');
     final qualitiesSummary =
@@ -356,7 +383,6 @@ class _ProductsBodyState extends State<ProductsBody> {
                 itemCount: products?.length,
                 itemBuilder: (BuildContext context, index) {
                   // Valores dentro de los resumenes
-                  //TODO: Revisar el cambio de orden para el filtro
                   final sortedProducts =
                       isDescending ? products?.reversed.toList() : products;
                   final product = sortedProducts![index];
@@ -373,6 +399,9 @@ class _ProductsBodyState extends State<ProductsBody> {
                   final productSize = sizesSummary[product.size] ?? '';
                   final productDesign = designsSummary[product.design] ?? '';
                   final productPrice = widget.listOfPrices[product.code] ?? 0;
+                  final productPriceFormatted = priceFormat(productPrice);
+
+                  // print("YIIIIIIIIIIIIIIIIIIIIIIIKES $productPriceFormatted");
 
                   return Container(
                     margin: EdgeInsets.only(bottom: 10.0),
@@ -554,8 +583,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                   message: productStock,
                                 ),
                                 TextFieldForCard(
-                                  message:
-                                      '$moneySymbol ${identifyPrice(widget.listOfPrices[product.code] ?? 0)}',
+                                  message: '$productPriceFormatted',
                                   // '',
                                 ),
                                 TextFieldForCard(

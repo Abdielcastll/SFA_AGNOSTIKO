@@ -3,6 +3,7 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ZonesDropDownMenu extends StatefulWidget {
   const ZonesDropDownMenu({
@@ -49,7 +50,7 @@ class _ZonesDropDownMenuState extends State<ZonesDropDownMenu> {
                 Container(
                   margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                   child: Text(
-                    'Zona de Ventas',
+                    AppLocalizations.of(context)!.salesArea,
                     style: TextStyle(
                       color: myTheme.colorScheme.primary,
                       fontFamily: 'Poppins-regular',

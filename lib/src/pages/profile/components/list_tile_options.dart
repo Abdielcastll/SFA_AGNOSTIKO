@@ -6,6 +6,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/pages/users_and_teams/users_and_teams.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ListTileOptions extends StatefulWidget {
   const ListTileOptions({
@@ -46,14 +47,11 @@ class _ListTileOptionsState extends State<ListTileOptions> {
     } else {
       isAdmin = false;
     }
-    print('Administrador: $isAdmin');
-    print('Moneda actual: $currentCoin');
-    print(selectedValue);
     return Column(
       children: [
         ListTileProfile(
-          title: 'Zona de Ventas',
-          sub: 'Zona de ventas asignada y gerentes',
+          title: AppLocalizations.of(context)!.salesArea,
+          sub: AppLocalizations.of(context)!.salesAreaDesc,
           function: () {
             //Funcion para abrir dialog que muere zona de ventas y gerente
             showDialog(
@@ -117,8 +115,8 @@ class _ListTileOptionsState extends State<ListTileOptions> {
         ),
         isAdmin
             ? ListTileProfile(
-                title: 'Usuarios y Equipos',
-                sub: 'Administra a tus equipos y sus integrantes',
+                title: AppLocalizations.of(context)!.usersAndTeams,
+                sub: AppLocalizations.of(context)!.usersAndTeamsDesc,
                 function: () {
                   // Redireccion a Usuarios y equipos
                   Navigator.push(
@@ -132,8 +130,8 @@ class _ListTileOptionsState extends State<ListTileOptions> {
               )
             : Container(),
         ListTileProfile(
-          title: 'Cuenta',
-          sub: 'Correo, contraseñas y ajustes de perfil',
+          title: AppLocalizations.of(context)!.account,
+          sub: AppLocalizations.of(context)!.accountDesc,
           function: () {
             //Funcion para bottom Sheet menu para cambiar nombr
             showDialog(
@@ -191,8 +189,8 @@ class _ListTileOptionsState extends State<ListTileOptions> {
           icon: MaterialIcons.mail_outline,
         ),
         ListTileProfile(
-          title: 'Notificaciones',
-          sub: 'Notificaciones de la aplicación y sus movimientos',
+          title: AppLocalizations.of(context)!.notifications,
+          sub: AppLocalizations.of(context)!.notificationsDesc,
           function: () {
             // Funcion que redigire a las notificaciones del usuario
             Navigator.pushNamed(context, 'notifications');
@@ -200,8 +198,8 @@ class _ListTileOptionsState extends State<ListTileOptions> {
           icon: MaterialCommunityIcons.bell_outline,
         ),
         ListTileProfile(
-          title: 'Cambiar Moneda',
-          sub: 'Notificaciones de la aplicación y sus movimientos',
+          title: AppLocalizations.of(context)!.changeCurrency,
+          sub: AppLocalizations.of(context)!.changeCurrencyDesc,
           function: () {
             // Funcion que redigire a las notificaciones del usuario
             showDialog(
@@ -281,18 +279,17 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                                         } else if (value
                                             .toString()
                                             .contains('Bs')) {
-                                          print(
-                                              'Cambio de moneda a: Bolivares');
+                                          print('Cambio de moneda a: BS');
                                           // selectedValue = 'VED';
                                         } else if (value
                                             .toString()
                                             .contains('€')) {
-                                          print('Cambio de moneda a: Euro');
+                                          print('Cambio de moneda a: EUR');
                                           // selectedValue = 'EUR';
                                         } else if (value
                                             .toString()
                                             .contains('฿')) {
-                                          print('Cambio de moneda a: Bitcoin');
+                                          print('Cambio de moneda a: BTC');
                                           // selectedValue = 'BTC';
                                         }
                                       },
@@ -387,8 +384,8 @@ class _ListTileOptionsState extends State<ListTileOptions> {
           icon: Icons.monetization_on,
         ),
         ListTileProfile(
-          title: 'Ayuda',
-          sub: 'Tips de Uso y centro de contacto',
+          title: AppLocalizations.of(context)!.help,
+          sub: AppLocalizations.of(context)!.helpDesc,
           function: () {
             showDialog(
                 context: context,

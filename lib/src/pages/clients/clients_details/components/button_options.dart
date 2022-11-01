@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ButtonOptions extends StatelessWidget {
   const ButtonOptions({
@@ -37,7 +38,7 @@ class ButtonOptions extends StatelessWidget {
                   size: 18,
                 ),
                 label: Text(
-                  'Historial',
+                  AppLocalizations.of(context)!.clientRecord,
                   style: TextStyle(
                     color: myTheme.colorScheme.primary,
                     fontFamily: 'Poppins-regular',
@@ -70,7 +71,7 @@ class ButtonOptions extends StatelessWidget {
                   size: 18,
                 ),
                 label: Text(
-                  'Crear Pedido',
+                  AppLocalizations.of(context)!.makeOrder,
                   style: TextStyle(
                     color: myTheme.colorScheme.tertiary,
                     fontFamily: 'Poppins-regular',

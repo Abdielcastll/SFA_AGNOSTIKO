@@ -25,27 +25,23 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      // shape: RoundedRectangleBorder(
-      //   borderRadius: BorderRadius.vertical(
-      //     bottom: Radius.circular(20),
-      //   ),
-      // ),
       title: Text(
         message,
-        style: const TextStyle(
-          fontSize: 21,
-          fontWeight: FontWeight.w300,
+        style: TextStyle(
+          letterSpacing: 0,
+          fontSize: 22,
           fontFamily: 'Poppins-regular',
         ),
       ),
       elevation: 0,
+      leadingWidth: 24.0,
       backgroundColor: myTheme.colorScheme.primary,
       actions: [
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 10, 7),
+              margin: EdgeInsets.fromLTRB(0, 0, 16, 8),
               child: IconButton(
                 constraints: const BoxConstraints(),
                 splashRadius: 20.0,
@@ -58,11 +54,11 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
             ),
             isOrderActive
                 ? Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 10, 7),
+                    margin: EdgeInsets.fromLTRB(0, 0, 16, 8),
                     child: IconButton(
                       constraints: const BoxConstraints(),
                       splashRadius: 20.0,
-                      icon: const Icon(Icons.shopping_cart_rounded, size: 25),
+                      icon: const Icon(Icons.shopping_cart_rounded, size: 24),
                       // Redireccion al flujo de realizar nuevos pedidos
                       onPressed: () {
                         Navigator.pop(context);
@@ -70,11 +66,11 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
                     ),
                   )
                 : Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 10, 7),
+                    margin: EdgeInsets.fromLTRB(0, 0, 16, 8),
                     child: IconButton(
                       constraints: const BoxConstraints(),
                       splashRadius: 20.0,
-                      icon: const Icon(MdiIcons.cartOutline, size: 25),
+                      icon: const Icon(MdiIcons.cartOutline, size: 24),
                       // Redireccion al flujo de realizar nuevos pedidos
                       onPressed: () {
                         objectBox.delelteAllShoppingCart();

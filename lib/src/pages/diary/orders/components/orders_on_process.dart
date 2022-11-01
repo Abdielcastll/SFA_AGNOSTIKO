@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/order_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/order_card.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OrdersOnProcess extends StatelessWidget {
   const OrdersOnProcess({
@@ -38,7 +39,7 @@ class OrdersOnProcess extends StatelessWidget {
                 padding: EdgeInsets.only(left: 16),
                 child: Text(
                   textAlign: TextAlign.start,
-                  'Por Procesar',
+                  AppLocalizations.of(context)!.onProcess,
                   style: TextStyle(
                     color: Colors.amber,
                     fontSize: 15,

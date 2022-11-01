@@ -7,6 +7,7 @@ import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ClientList extends StatefulWidget {
   ClientList({
@@ -72,7 +73,7 @@ class _ClientListState extends State<ClientList> {
             controller: searchClientController,
             decoration: InputDecoration(
               contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
-              hintText: 'Buscar nombre',
+              hintText: AppLocalizations.of(context)!.searchProductName,
               hintStyle: TextStyle(
                 fontFamily: 'Poppins-regular',
                 fontSize: 14,
@@ -109,7 +110,9 @@ class _ClientListState extends State<ClientList> {
                     ),
                     SizedBox(width: 5),
                     Text(
-                      isDescending ? 'Ascendente' : 'Descendente',
+                      isDescending
+                          ? AppLocalizations.of(context)!.ascendingFilter
+                          : AppLocalizations.of(context)!.descendingFilter,
                       style: TextStyle(
                           fontFamily: 'Poppins-regular',
                           color: Colors.grey.shade500,

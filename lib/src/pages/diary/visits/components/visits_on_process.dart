@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/visit_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/visits/components/visit_card.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VisitsOnProcess extends StatelessWidget {
   const VisitsOnProcess({
@@ -24,7 +25,7 @@ class VisitsOnProcess extends StatelessWidget {
         .toList();
     // print('Visitas totales: ${visits.length}');
 
-    print('Visitas en Proceso: ${visitsOnProcess.length}');
+    // print('Visitas en Proceso: ${visitsOnProcess.length}');
 
     return SingleChildScrollView(
       child: Column(
@@ -39,7 +40,7 @@ class VisitsOnProcess extends StatelessWidget {
                 padding: EdgeInsets.only(left: 16),
                 child: Text(
                   textAlign: TextAlign.start,
-                  'Por Realizar',
+                  AppLocalizations.of(context)!.onProcess,
                   style: TextStyle(
                     color: Colors.amber,
                     fontSize: 15,
@@ -60,7 +61,7 @@ class VisitsOnProcess extends StatelessWidget {
                     final visit = visitsOnProcess[index];
                     final unformattedDate =
                         visit.date ?? Timestamp.fromDate(DateTime.now());
-                    final visitStatus = 'En proceso';
+                    const visitStatus = 'En proceso';
                     final date =
                         DateTime.parse(unformattedDate.toDate().toString());
                     final visitDate = dateFormatter.format(date);

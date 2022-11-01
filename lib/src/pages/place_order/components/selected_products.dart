@@ -13,6 +13,7 @@ import 'package:pwa_sales2go_flutter/src/pages/place_order/components/product_in
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/checkout_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SelectedProducts extends StatefulWidget {
   const SelectedProducts({
@@ -180,11 +181,12 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                   ),
                                   Container(
                                     margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                    child: Text('Tu pedido esta vacío'),
+                                    child: Text(AppLocalizations.of(context)!
+                                        .orderEmtpy),
                                   ),
                                   Container(
-                                    child: Text(
-                                        'Parece que no has añadido nada a tu carrito aun.'),
+                                    child: Text(AppLocalizations.of(context)!
+                                        .orderEmptyDesc),
                                   )
                                 ],
                               ),
@@ -228,7 +230,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    'Sub-total del pedido:',
+                                    AppLocalizations.of(context)!.orderSubTotal,
                                     style: TextStyle(
                                       fontFamily: 'Poppins-regular',
                                       fontSize: 14,
@@ -274,7 +276,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                     size: 17,
                                   ),
                                   label: Text(
-                                    'Agregar productos',
+                                    AppLocalizations.of(context)!.addProducts,
                                     style: TextStyle(
                                       fontFamily: 'Poppins-regular',
                                       fontSize: 14,
@@ -318,7 +320,8 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              'CONTINUAR',
+                                              AppLocalizations.of(context)!
+                                                  .orderContinue,
                                               style: TextStyle(
                                                 fontFamily: 'Poppins-regular',
                                                 fontSize: 14,

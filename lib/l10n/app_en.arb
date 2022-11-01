@@ -11,6 +11,9 @@
     "price": "Price",
     "colors": "Colors",
     "seeInList": "Product on list",
+
+
+
     "products": "Products",
     "productCode": "Code",
     "productBrand": "Brand",
@@ -19,9 +22,90 @@
     "productLine": "Line",
     "productQuality": "Quality",
     "productSize": "Size",
+    "productDesign": "Design",
     "searchProductName": "Search name",
     "ascendingFilter": "Ascending",
-    "descendingFilter": "Descending"
+    "descendingFilter": "Descending",
+
+
+
+    "clients": "Clients",
+    "clientRecord": "Record",
+    "makeOrder": "Make Order",
+    "clientFiscalAddress": "Fiscal Address",
+    "clientContactInfo": "Contact Info.",
+    "clientInvoiceInfo": "Invoice Info.",
+    "clientDispatchAddress": "Dispatch Address",
+    "salesArea": "Sales Area",
+    "listOfPrices": "Price List",
+    "masterDiscount": "Master Discount",
+
+
+
+    "accountBalance": "Account Balance",
+    "issues": "Issues",
+    "paidUp": "Paid up",
+    "accountTotalAmount": "Total Amount",
+    "accountTotalBalance": "Total Balance",
+    "notes": "Notes",
+    "invoices": "Invoices",
+
+
+
+    "profile": "Profile",
+    "usersAndTeams": "Users and Teams",
+    "account": "Account",
+    "notifications": "Notifications",
+    "changeCurrency": "Change currency",
+    "help": "Help",
+    "logOut": "Logout",
+    "salesAreaDesc": "Assigned sales area and managers",
+    "usersAndTeamsDesc": "Manage the teams and members",
+    "accountDesc": "Email, password, and profile settings",
+    "notificationsDesc": "Notifications and Movements",
+    "changeCurrencyDesc": "Change the current currency, prices will change",
+    "helpDesc": "Uses tips and contact info.",
+
+    
+
+    "diary": "Diary",
+    "visits": "Visits",
+    "onProcess": "On Process",
+    "completed": "Completed",
+    "commentary": "Commentary",
+    "seeClient": "See Client",
+    "visitDeleteConfirmation": "Are you sure to delete this visit?",
+    "goBack": "Go Back",
+    "visitDelete": "Delete visit",
+    "visitStatus": "Visit's Status",
+    "selectStatus": "Select state of the visit",
+    "orders": "Orders",
+    "home": "Home",
+
+
+
+    "newOrder": "New Order",
+    "selectClient": "Select a Client",
+    "searchClient": "Search a Client...",
+    "order": "Order",
+    "orderEmtpy": "Your shopping cart is empty",
+    "orderEmptyDesc": "It looks like you need to add items here",
+    "orderSubTotal": "Order Subtotal",
+    "addProducts": "Add products",
+    "orderContinue": "Continue",
+    "orderTotal": "Order total amount",
+    "orderDeliveryAddress": "Delivery Address",
+    "fiscal": "Fiscal",
+    "dispatch": "Dispatch",
+    "orderNumber": "Orden number"
+
+
+
+
+
+
+
+
 
   
 

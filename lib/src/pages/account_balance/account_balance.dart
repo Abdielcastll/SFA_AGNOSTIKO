@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/account_balance_model.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AccountBalancePage extends StatefulWidget {
   const AccountBalancePage({
@@ -28,7 +29,7 @@ class _AccountBalancePageState extends State<AccountBalancePage> {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBarNavigation(
-        message: 'Estado de cuenta',
+        message: AppLocalizations.of(context)!.accountBalance,
         isOrderActive: false,
       ),
       body: AccountBalanceBody(
@@ -109,7 +110,7 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
                     },
                   ),
                   Text(
-                    'Pendientes',
+                    AppLocalizations.of(context)!.issues,
                     style: TextStyle(
                       fontFamily: 'Poppins-regular',
                       fontSize: 14,
@@ -129,7 +130,7 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
                     },
                   ),
                   Text(
-                    'Notas',
+                    AppLocalizations.of(context)!.notes,
                     style: TextStyle(
                       fontFamily: 'Poppins-regular',
                       fontSize: 14,
@@ -149,7 +150,7 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
                     },
                   ),
                   Text(
-                    'Facturas',
+                    AppLocalizations.of(context)!.invoices,
                     style: TextStyle(
                       fontFamily: 'Poppins-regular',
                       fontSize: 14,
@@ -227,7 +228,7 @@ class _StatusBarResumeState extends State<StatusBarResume> {
             // ignore: prefer_const_literals_to_create_immutables
             children: [
               Text(
-                'Pendientes',
+                AppLocalizations.of(context)!.issues,
                 style: TextStyle(
                   fontFamily: 'Poppins-regular',
                   fontWeight: FontWeight.bold,
@@ -257,7 +258,7 @@ class _StatusBarResumeState extends State<StatusBarResume> {
             // ignore: prefer_const_literals_to_create_immutables
             children: [
               Text(
-                'Pagadas',
+                AppLocalizations.of(context)!.paidUp,
                 style: TextStyle(
                   fontFamily: 'Poppins-regular',
                   fontWeight: FontWeight.bold,
@@ -287,7 +288,7 @@ class _StatusBarResumeState extends State<StatusBarResume> {
             // ignore: prefer_const_literals_to_create_immutables
             children: [
               Text(
-                'Monto Total',
+                AppLocalizations.of(context)!.accountTotalAmount,
                 style: TextStyle(
                   fontFamily: 'Poppins-regular',
                   fontWeight: FontWeight.bold,
@@ -317,7 +318,7 @@ class _StatusBarResumeState extends State<StatusBarResume> {
             // ignore: prefer_const_literals_to_create_immutables
             children: [
               Text(
-                'Saldo Total',
+                AppLocalizations.of(context)!.accountTotalBalance,
                 style: TextStyle(
                   fontFamily: 'Poppins-regular',
                   fontWeight: FontWeight.bold,

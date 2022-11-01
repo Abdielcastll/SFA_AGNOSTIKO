@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/order_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/order_card.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CompletedOrders extends StatelessWidget {
   const CompletedOrders({
@@ -38,7 +39,7 @@ class CompletedOrders extends StatelessWidget {
               padding: EdgeInsets.only(left: 16, top: 5),
               child: Text(
                 textAlign: TextAlign.start,
-                'Pedidos completados (Ver Facturas)',
+                AppLocalizations.of(context)!.completed,
                 style: TextStyle(
                   color: Colors.green,
                   fontSize: 15,

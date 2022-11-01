@@ -7,6 +7,8 @@ import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SelectClient extends StatefulWidget {
   SelectClient({
@@ -60,7 +62,7 @@ class _SelectClientState extends State<SelectClient> {
             child: Column(
               children: [
                 Text(
-                  'Selecciona un Cliente',
+                  AppLocalizations.of(context)!.selectClient,
                   style: TextStyle(
                     fontFamily: 'Poppins-regular',
                     color: Colors.white,
@@ -78,7 +80,7 @@ class _SelectClientState extends State<SelectClient> {
                       color: myTheme.colorScheme.primary,
                       fontFamily: 'Poppins-regular',
                     ),
-                    hintText: 'Busca un Cliente...',
+                    hintText: AppLocalizations.of(context)!.searchClient,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
                       borderSide:

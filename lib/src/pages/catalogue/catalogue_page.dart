@@ -1,13 +1,7 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:pwa_sales2go_flutter/examples/catalogue_example.dart';
-import 'package:pwa_sales2go_flutter/examples/products_example.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
-import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
@@ -17,6 +11,7 @@ import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/most_selled_
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/new_products.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/product_list_button.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
+import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/promotions.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -105,7 +100,7 @@ class _CataloguePageState extends State<CataloguePage> {
           message: 'Apps2Go',
           isOrderActive: widget.isOrderActive,
         ),
-        backgroundColor: Colors.grey[200],
+        backgroundColor: myTheme.colorScheme.surface,
         body: CatalogueBody(isOrderActive: widget.isOrderActive),
       ),
     );
@@ -129,19 +124,18 @@ class _CatalogueBodyState extends State<CatalogueBody> {
 
   @override
   Widget build(BuildContext context) {
-    print('Idioma: ${AppLocalizations.of(context)!.language}');
+    print('Idioma Activo: ${AppLocalizations.of(context)!.language}');
     print('Moneda Activa: $currentCoin');
 
     return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       child: Column(
-        // ignore: prefer_const_literals_to_create_immutables
         children: [
           PromotionsWidget(isOrderActive: widget.isOrderActive),
-          NewProductsWidget(isOrderActive: widget.isOrderActive),
+          // NewProductsWidget(isOrderActive: widget.isOrderActive),
           ListOfProductsButton(isOrderActive: widget.isOrderActive),
-          ListOfCategories(isOrderActive: widget.isOrderActive),
-          MostSelledProducts(isOrderActive: widget.isOrderActive),
+          // ListOfCategories(isOrderActive: widget.isOrderActive),
+          // MostSelledProducts(isOrderActive: widget.isOrderActive),
         ],
       ),
     );

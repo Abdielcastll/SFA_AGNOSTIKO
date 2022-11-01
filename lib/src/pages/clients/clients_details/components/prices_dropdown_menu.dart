@@ -4,6 +4,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PricesDropDownMenu extends StatefulWidget {
   const PricesDropDownMenu({
@@ -54,7 +55,7 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
                 Container(
                   margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
                   child: Text(
-                    'List de Precios',
+                    AppLocalizations.of(context)!.listOfPrices,
                     style: TextStyle(
                       color: myTheme.colorScheme.primary,
                       fontFamily: 'Poppins-regular',
@@ -151,7 +152,7 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
                 Container(
                   margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
                   child: Text(
-                    'Descuento Maestro',
+                    AppLocalizations.of(context)!.masterDiscount,
                     style: TextStyle(
                       color: myTheme.colorScheme.primary,
                       fontFamily: 'Poppins-regular',

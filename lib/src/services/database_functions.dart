@@ -238,39 +238,39 @@ Future createInvoice(
   };
   final seller = FirebaseFirestore.instance.collection('usuarios').doc(userID);
 
-  print(correlativeNumber + 35);
+  print(correlativeNumber);
 
-  await FirebaseFirestore.instance
-      .collection('clientes')
-      .doc(client.clientDocumentId)
-      .collection('pedidos')
-      .doc(orderDocumentID)
-      .update({
-    'facturado': true,
-  });
-  Fluttertoast.showToast(msg: 'Factura ${correlativeNumber + 1}');
-  return await FirebaseFirestore.instance
-      .collection('clientes')
-      .doc(client.clientDocumentId)
-      .collection('facturas')
-      .doc()
-      .set({
-    'cliente': clientID,
-    'descuentoMaestro': discount,
-    'fecha': Timestamp.fromDate(DateTime.parse(date)),
-    'impuesto': tax,
-    'montoTotal': double.parse(totalAsString),
-    'nroCorrelativo': correlativeNumber + 35,
-    'pagada': isPaid,
-    'pagos': payments,
-    'pedido': order,
-    'porcentajeDescuentoMaestro': discountPercentage,
-    'referenciaNotasCredito': referenceCreditNote,
-    'subtotal': subTotal,
-    'timestampRegistro': register,
-    'ultimaModificacion': lastModification,
-    'vendedor': seller,
-  });
+  // await FirebaseFirestore.instance
+  //     .collection('clientes')
+  //     .doc(client.clientDocumentId)
+  //     .collection('pedidos')
+  //     .doc(orderDocumentID)
+  //     .update({
+  //   'facturado': true,
+  // });
+  // Fluttertoast.showToast(msg: 'Factura ${correlativeNumber + 1}');
+  // return await FirebaseFirestore.instance
+  //     .collection('clientes')
+  //     .doc(client.clientDocumentId)
+  //     .collection('facturas')
+  //     .doc()
+  //     .set({
+  //   'cliente': clientID,
+  //   'descuentoMaestro': discount,
+  //   'fecha': Timestamp.fromDate(DateTime.parse(date)),
+  //   'impuesto': tax,
+  //   'montoTotal': double.parse(totalAsString),
+  //   'nroCorrelativo': correlativeNumber + 35,
+  //   'pagada': isPaid,
+  //   'pagos': payments,
+  //   'pedido': order,
+  //   'porcentajeDescuentoMaestro': discountPercentage,
+  //   'referenciaNotasCredito': referenceCreditNote,
+  //   'subtotal': subTotal,
+  //   'timestampRegistro': register,
+  //   'ultimaModificacion': lastModification,
+  //   'vendedor': seller,
+  // });
 }
 
 //Registrar pagos de cheques

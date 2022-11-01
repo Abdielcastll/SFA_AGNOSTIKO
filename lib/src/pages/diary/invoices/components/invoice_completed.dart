@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/account_balance_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/invoice_card.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InvoicesList extends StatelessWidget {
   const InvoicesList({Key? key}) : super(key: key);
@@ -28,7 +29,7 @@ class InvoicesList extends StatelessWidget {
               padding: EdgeInsets.only(left: 16, top: 5),
               child: Text(
                 textAlign: TextAlign.start,
-                'Completado',
+                AppLocalizations.of(context)!.completed,
                 style: TextStyle(
                   color: Colors.green,
                   fontSize: 15,

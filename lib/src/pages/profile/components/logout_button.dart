@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pwa_sales2go_flutter/src/services/auth.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LogoutButton extends StatefulWidget {
   const LogoutButton({
@@ -44,7 +45,7 @@ class _LogoutButtonState extends State<LogoutButton> {
                   MaterialStateProperty.all<Color>(Colors.red.withOpacity(0.3)),
             ),
             label: Text(
-              'Cerrar Sesión',
+              AppLocalizations.of(context)!.logOut,
               style: TextStyle(
                 color: Colors.red,
                 fontFamily: 'Poppins-regular',

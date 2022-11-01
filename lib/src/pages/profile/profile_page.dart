@@ -16,6 +16,7 @@ import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/powered_by_agnostiko/powered_by_agnostiko.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({Key? key}) : super(key: key);
@@ -29,7 +30,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarNavigation(
-        message: 'Perfil',
+        message: AppLocalizations.of(context)!.profile,
         isOrderActive: false,
       ),
       backgroundColor: Colors.grey.shade100,

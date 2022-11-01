@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/visit_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/visits/components/visit_card.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VisitsCompleted extends StatelessWidget {
   const VisitsCompleted({
@@ -21,7 +22,7 @@ class VisitsCompleted extends StatelessWidget {
         .where((element) =>
             element.isCancelled == true || element.isCompleted == true)
         .toList();
-    print('Visitas completadas o canceladas: ${visitsCompleted.length}');
+    // print('Visitas completadas o canceladas: ${visitsCompleted.length}');
 
     return SingleChildScrollView(
       child: Column(
@@ -36,7 +37,7 @@ class VisitsCompleted extends StatelessWidget {
                 padding: EdgeInsets.only(left: 16, top: 5),
                 child: Text(
                   textAlign: TextAlign.start,
-                  'Completado',
+                  AppLocalizations.of(context)!.completed,
                   style: TextStyle(
                     color: Colors.green,
                     fontSize: 15,
