@@ -67,8 +67,7 @@ final myTheme = ThemeData.light().copyWith(
   //       fontFamily: 'Poppins-regular'),
   //   titleMedium: TextStyle(
   //       letterSpacing: 0.15,
-  //       fontSize: 20,
-  //       height: 26,
+  //       fontSize: 16,
   //       fontFamily: 'Poppins-regular'),
   //   titleSmall: TextStyle(
   //       letterSpacing: 0.1,
@@ -79,7 +78,6 @@ final myTheme = ThemeData.light().copyWith(
   //   bodyLarge: TextStyle(
   //       letterSpacing: 0.5,
   //       fontSize: 16,
-  //       height: 24,
   //       fontFamily: 'Poppins-regular'),
   //   bodyMedium: TextStyle(
   //       letterSpacing: 0.15,

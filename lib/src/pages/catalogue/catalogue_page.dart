@@ -34,14 +34,14 @@ class _CataloguePageState extends State<CataloguePage> {
     final listOfPrices = widget.listOfPrices;
     return MultiProvider(
       providers: [
-        StreamProvider<List<Products>?>.value(
-          value: DatabaseServiceStreams().products,
-          initialData: const [],
-          catchError: (context, error) {
-            print(error);
-            return;
-          },
-        ),
+        // StreamProvider<List<Products>?>.value(
+        //   value: DatabaseServiceStreams().products,
+        //   initialData: const [],
+        //   catchError: (context, error) {
+        //     print(error);
+        //     return;
+        //   },
+        // ),
         StreamProvider<List<ProductsWithPromotions>?>.value(
           value: DatabaseServiceStreams().productsWithPromotions,
           initialData: const [],
@@ -132,9 +132,9 @@ class _CatalogueBodyState extends State<CatalogueBody> {
       child: Column(
         children: [
           PromotionsWidget(isOrderActive: widget.isOrderActive),
-          // NewProductsWidget(isOrderActive: widget.isOrderActive),
+          NewProductsWidget(isOrderActive: widget.isOrderActive),
           ListOfProductsButton(isOrderActive: widget.isOrderActive),
-          // ListOfCategories(isOrderActive: widget.isOrderActive),
+          ListOfCategories(isOrderActive: widget.isOrderActive),
           // MostSelledProducts(isOrderActive: widget.isOrderActive),
         ],
       ),

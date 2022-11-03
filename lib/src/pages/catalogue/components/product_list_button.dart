@@ -29,9 +29,9 @@ class _ListOfProductsButtonState extends State<ListOfProductsButton> {
 
     final productsList = products;
     return Container(
-      margin: EdgeInsets.fromLTRB(10, 15, 10, 0),
+      margin: EdgeInsets.fromLTRB(16, 10, 16, 0),
       width: MediaQuery.of(context).size.width,
-      height: 38,
+      height: 45,
       child: ElevatedButton.icon(
         onPressed: () {
           // Redireccionar a lista completa de productos
@@ -48,30 +48,37 @@ class _ListOfProductsButtonState extends State<ListOfProductsButton> {
           print('Redireccionar a la lista de productos entera');
         },
         style: ButtonStyle(
+          elevation: MaterialStateProperty.all<double>(0),
           backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
           overlayColor: MaterialStateProperty.all<Color>(
               myTheme.colorScheme.primary.withOpacity(0.5)),
         ),
-        icon: Icon(
-          MaterialCommunityIcons.tag_outline,
-          color: myTheme.colorScheme.secondary,
-          size: 20,
+        icon: Container(
+          margin: EdgeInsets.only(bottom: 3),
+          child: Icon(
+            MaterialCommunityIcons.tag_outline,
+            color: myTheme.colorScheme.onPrimaryContainer,
+            size: 20,
+          ),
         ),
         label: Row(
           // ignore: prefer_const_literals_to_create_immutables
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              AppLocalizations.of(context)!.listOfProducts,
-              style: TextStyle(
-                color: myTheme.colorScheme.secondary,
-                fontFamily: 'Poppins-regular',
-                fontWeight: FontWeight.bold,
+            Container(
+              margin: EdgeInsets.only(left: 16),
+              child: Text(
+                AppLocalizations.of(context)!.listOfProducts,
+                style: TextStyle(
+                  color: myTheme.colorScheme.onPrimaryContainer,
+                  fontFamily: 'Poppins-regular',
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             Icon(
               MaterialIcons.keyboard_arrow_right,
-              color: myTheme.colorScheme.secondary,
+              color: myTheme.colorScheme.onPrimaryContainer,
               size: 16,
             ),
           ],

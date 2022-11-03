@@ -30,32 +30,31 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
     final productsList = products;
     // print(productsList);
     return Container(
-      margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0),
+      margin: EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 0),
       child: Column(
         children: [
           Row(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Icon(
-                  Icons.category_outlined,
-                  color: myTheme.colorScheme.primary,
-                  size: 20.0,
-                ),
+              Icon(
+                Icons.category_outlined,
+                color: myTheme.colorScheme.onPrimaryContainer,
+                size: 20.0,
               ),
               SizedBox(width: 5.0),
               Text(
                 AppLocalizations.of(context)!.catalogue,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: myTheme.colorScheme.secondary,
+                  color: myTheme.colorScheme.onPrimaryContainer,
                   fontSize: 16.0,
                   fontFamily: 'Poppins-regular',
+                  letterSpacing: 0.15,
                 ),
               ),
             ],
           ),
           Container(
+            margin: const EdgeInsets.fromLTRB(0, 8, 0, 0),
             height: 165,
             width: double.infinity,
             child: ListView.builder(
@@ -84,12 +83,12 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                         'Redireccionar a lista de productos filtrada por esta categoria: $categorie');
                   },
                   child: Container(
-                    margin: EdgeInsets.fromLTRB(10.0, 5.0, 5.0, 0),
-                    height: 110,
+                    margin: EdgeInsets.fromLTRB(0.0, 0.0, 16.0, 0),
+                    height: 100,
                     width: 120,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
-                      color: Colors.white,
+                      color: Colors.transparent,
                     ),
                     child: Stack(
                       alignment: AlignmentDirectional.bottomStart,

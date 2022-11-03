@@ -39,10 +39,11 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
     final prices = Provider.of<Prices?>(context)?.prices ?? {};
     // print(prices);
     return Container(
+      height: 240,
       padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 10.0),
       // margin: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
         color: myTheme.colorScheme.background,
       ),
       child: Column(
@@ -50,7 +51,7 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
           Row(
             children: [
               Icon(
-                MaterialIcons.star_outline,
+                MaterialIcons.grade,
                 color: myTheme.colorScheme.primary,
                 size: 25.0,
               ),
@@ -60,7 +61,8 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: myTheme.colorScheme.onPrimaryContainer,
-                  fontSize: 16.0,
+                  letterSpacing: 0.15,
+                  fontSize: 16,
                   fontFamily: 'Poppins-regular',
                 ),
               ),
@@ -114,8 +116,8 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
                   ),
                 )
               : Container(
-                  margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                  height: 165,
+                  margin: const EdgeInsets.fromLTRB(0, 12, 0, 0),
+                  height: 175,
                   width: double.infinity,
                   child: RawScrollbar(
                     thumbColor: myTheme.colorScheme.primary.withOpacity(0.3),
@@ -151,26 +153,27 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
                             );
                           },
                           child: Column(
+                            // mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                margin:
-                                    const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                                height: 120,
-                                width: 260,
+                                margin: const EdgeInsets.fromLTRB(0, 0, 16, 0),
+                                height: 140,
+                                width: 300,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16),
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(16),
+                                  borderRadius: BorderRadius.circular(8),
                                   child: Image.asset(
                                     'assets/images/promotions.jpg',
                                     fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
-                              const SizedBox(height: 10),
+                              const SizedBox(height: 12),
                               Container(
-                                padding: const EdgeInsets.only(left: 10),
+                                margin: const EdgeInsets.only(left: 12),
                                 width: 280,
                                 height: 20,
                                 child: Text(
@@ -182,7 +185,8 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
                                     fontFamily: 'Poppins-regular',
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
-                                    color: myTheme.colorScheme.secondary,
+                                    color:
+                                        myTheme.colorScheme.onPrimaryContainer,
                                   ),
                                 ),
                               ),

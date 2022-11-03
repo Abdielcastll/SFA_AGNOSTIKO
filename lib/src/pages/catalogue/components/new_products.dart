@@ -35,33 +35,37 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
     // print(productsList);
 
     return Container(
-      margin: EdgeInsets.fromLTRB(0, 10.0, 0, 0),
+      margin: EdgeInsets.fromLTRB(16, 12.0, 16, 0),
       child: Column(
         children: [
           Row(
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 10.0),
+                padding: const EdgeInsets.only(left: 0.0),
                 child: Icon(
                   CupertinoIcons.sparkles,
-                  color: myTheme.colorScheme.primary,
+                  color: myTheme.colorScheme.onPrimaryContainer,
                   size: 25.0,
                 ),
               ),
               SizedBox(width: 5.0),
-              Text(
-                AppLocalizations.of(context)!.newProducts,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: myTheme.colorScheme.secondary,
-                  fontSize: 16.0,
-                  fontFamily: 'Poppins-regular',
+              Container(
+                // margin: const EdgeInsets.only(bottom: 5),
+                child: Text(
+                  AppLocalizations.of(context)!.newProducts,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: myTheme.colorScheme.onPrimaryContainer,
+                    fontSize: 16.0,
+                    fontFamily: 'Poppins-regular',
+                    letterSpacing: 0.15,
+                  ),
                 ),
               ),
             ],
           ),
           Container(
-            height: 165,
+            height: 215,
             width: double.infinity,
             child: ListView.builder(
               physics: BouncingScrollPhysics(),
@@ -96,38 +100,35 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                     print('Redireccionar a detalles de producto reciente');
                   },
                   child: Container(
-                    margin: EdgeInsets.fromLTRB(10.0, 8.0, 5.0, 0),
-                    height: 100,
-                    width: 120,
+                    margin: EdgeInsets.fromLTRB(0.0, 12.0, 16.0, 8),
+                    // height: 100,
+                    width: 140,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(0),
+                      color: Colors.transparent,
                     ),
                     child: Column(
                       children: [
                         ClipRRect(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(16),
-                            topRight: Radius.circular(16),
-                          ),
+                          borderRadius: BorderRadius.circular(8),
                           child: Container(
-                            height: 120,
-                            width: 120,
+                            height: 150,
+                            width: 160,
                             child: Image.network(
                               'https://i.imgur.com/BPbj6Gy.jpg',
-                              fit: BoxFit.fill,
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.fromLTRB(5.0, 5.0, 0, 0),
+                          margin: EdgeInsets.fromLTRB(5, 8.0, 0, 8),
                           child: Text(
                             '${product.name}',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             // textAlign: TextAlign.start,
                             style: TextStyle(
-                              color: myTheme.colorScheme.primary,
+                              color: myTheme.colorScheme.onPrimaryContainer,
                               fontFamily: 'Poppins-regular',
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
@@ -135,7 +136,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.fromLTRB(8.0, 1.0, 0, 0),
+                          margin: EdgeInsets.fromLTRB(5.0, 0.0, 0, 0),
                           child: Row(
                             children: [
                               Container(
@@ -143,7 +144,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                 height: 10,
                                 width: 10,
                                 decoration: BoxDecoration(
-                                  color: Colors.yellow,
+                                  color: Colors.amber,
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                               ),
@@ -152,7 +153,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                 height: 10,
                                 width: 10,
                                 decoration: BoxDecoration(
-                                  color: Colors.blue,
+                                  color: myTheme.colorScheme.onPrimaryContainer,
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                               ),
@@ -161,7 +162,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                 height: 10,
                                 width: 10,
                                 decoration: BoxDecoration(
-                                  color: Colors.green,
+                                  color: Colors.green.shade900,
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                               ),
