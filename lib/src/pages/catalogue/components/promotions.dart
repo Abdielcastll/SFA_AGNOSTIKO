@@ -136,19 +136,20 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
                               MaterialPageRoute(
                                 builder: (BuildContext context) =>
                                     ProductDetails(
-                                  code: product.code,
-                                  price: prices[product.code].toString(),
-                                  line: linesSummary[product.line],
-                                  imageUrl: 'https://i.imgur.com/BPbj6Gy.jpg',
-                                  isProductNew: true,
-                                  name: product.name,
-                                  stock: stockValues[product.code] ?? 000,
-                                  list: productsList
-                                      .where((element) =>
-                                          element.name == product.name)
-                                      .toList(),
-                                  isOrderActive: widget.isOrderActive,
-                                ),
+                                        code: product.code,
+                                        price: prices[product.code].toString(),
+                                        line: linesSummary[product.line],
+                                        imageUrl:
+                                            'https://i.imgur.com/BPbj6Gy.jpg',
+                                        isProductNew: false,
+                                        name: product.name,
+                                        stock: stockValues[product.code] ?? 000,
+                                        list: productsList
+                                            .where((element) =>
+                                                element.name == product.name)
+                                            .toList(),
+                                        isOrderActive: widget.isOrderActive,
+                                        isProductInAPromotion: true),
                               ),
                             );
                           },

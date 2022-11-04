@@ -37,25 +37,22 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
     // print(productsList);
 
     return Container(
-      margin: EdgeInsets.fromLTRB(0, 10.0, 0, 15.0),
+      margin: EdgeInsets.fromLTRB(16, 12.0, 16.0, 15.0),
       child: Column(
         children: [
           Row(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Icon(
-                  AntDesign.dotchart,
-                  color: myTheme.colorScheme.primary,
-                  size: 20.0,
-                ),
+              Icon(
+                AntDesign.dotchart,
+                color: myTheme.colorScheme.onPrimaryContainer,
+                size: 20.0,
               ),
-              SizedBox(width: 5.0),
+              SizedBox(width: 8.0),
               Text(
                 AppLocalizations.of(context)!.mostSelled,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: myTheme.colorScheme.secondary,
+                  color: myTheme.colorScheme.onPrimaryContainer,
                   fontSize: 16.0,
                   fontFamily: 'Poppins-regular',
                 ),
@@ -63,7 +60,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
             ],
           ),
           Container(
-            height: 165,
+            height: 215,
             width: double.infinity,
             child: ListView.builder(
               physics: BouncingScrollPhysics(),
@@ -81,51 +78,49 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                           code: product.code,
                           line: linesSummary[product.line],
                           imageUrl: 'https://i.imgur.com/BPbj6Gy.jpg',
-                          isProductNew: true,
+                          isProductNew: false,
                           name: product.name,
                           stock: stockValues[product.code] ?? 000,
                           list: productsList
                               .where((element) => element.name == product.name)
                               .toList(),
                           isOrderActive: widget.isOrderActive,
+                          isProductInAPromotion: false,
                         ),
                       ),
                     );
                     print('Redireccionar a este producto mas vendido');
                   },
                   child: Container(
-                    margin: EdgeInsets.fromLTRB(10.0, 8.0, 5.0, 0),
-                    height: 100,
-                    width: 120,
+                    margin: EdgeInsets.fromLTRB(0.0, 8.0, 16.0, 0),
+                    // height: 100,
+                    width: 140,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
-                      color: Colors.white,
+                      color: Colors.transparent,
                     ),
                     child: Column(
                       children: [
                         ClipRRect(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(16),
-                            topRight: Radius.circular(16),
-                          ),
+                          borderRadius: BorderRadius.circular(12),
                           child: Container(
-                            height: 120,
-                            width: 120,
+                            height: 150,
+                            width: 160,
                             child: Image.network(
                               'https://i.imgur.com/BPbj6Gy.jpg',
-                              fit: BoxFit.fill,
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.fromLTRB(5.0, 5.0, 0, 0),
+                          margin: EdgeInsets.fromLTRB(5.0, 8.0, 0, 8),
                           child: Text(
                             '${product.name}',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             // textAlign: TextAlign.start,
                             style: TextStyle(
-                              color: myTheme.colorScheme.primary,
+                              color: myTheme.colorScheme.onPrimaryContainer,
                               fontFamily: 'Poppins-regular',
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
@@ -133,7 +128,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.fromLTRB(8.0, 1.0, 0, 0),
+                          margin: EdgeInsets.fromLTRB(5.0, 0.0, 0, 0),
                           child: Row(
                             children: [
                               Container(
@@ -141,7 +136,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                 height: 10,
                                 width: 10,
                                 decoration: BoxDecoration(
-                                  color: Colors.yellow,
+                                  color: Colors.amber,
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                               ),
@@ -150,7 +145,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                 height: 10,
                                 width: 10,
                                 decoration: BoxDecoration(
-                                  color: Colors.blue,
+                                  color: myTheme.colorScheme.onPrimaryContainer,
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                               ),
@@ -159,7 +154,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                 height: 10,
                                 width: 10,
                                 decoration: BoxDecoration(
-                                  color: Colors.green,
+                                  color: Colors.green.shade900,
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                               ),

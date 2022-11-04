@@ -23,12 +23,12 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
   Widget build(BuildContext context) {
     final categories = Provider.of<CategorieSummary?>(context)?.summary ?? {};
     final prices = Provider.of<Prices?>(context)?.prices ?? {};
-
-    List categoriesSummary = categories.values.toList();
-    // print(categoriesSummary);
     final products = Provider.of<List<Products>?>(context) ?? [];
     final productsList = products;
+    List categoriesSummary = categories.values.toList();
+    // print(categoriesSummary);
     // print(productsList);
+
     return Container(
       margin: EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 0),
       child: Column(
@@ -40,7 +40,7 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                 color: myTheme.colorScheme.onPrimaryContainer,
                 size: 20.0,
               ),
-              SizedBox(width: 5.0),
+              SizedBox(width: 8.0),
               Text(
                 AppLocalizations.of(context)!.catalogue,
                 style: TextStyle(
@@ -55,7 +55,7 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
           ),
           Container(
             margin: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-            height: 165,
+            height: 200,
             width: double.infinity,
             child: ListView.builder(
               physics: BouncingScrollPhysics(),
@@ -79,57 +79,63 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                         ),
                       ),
                     );
-                    print(
-                        'Redireccionar a lista de productos filtrada por esta categoria: $categorie');
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(0.0, 0.0, 16.0, 0),
-                    height: 100,
+                    height: 240,
                     width: 120,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(8),
                       color: Colors.transparent,
                     ),
                     child: Stack(
                       alignment: AlignmentDirectional.bottomStart,
                       children: [
                         ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: Image.network(
-                            'https://i.imgur.com/H9rVf4m.jpg',
-                            fit: BoxFit.cover,
+                          borderRadius: BorderRadius.circular(8),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8)),
+                            height: 240,
+                            width: 120,
+                            child: Image.network(
+                              'https://i.imgur.com/H9rVf4m.jpg',
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Container(
+                            height: 120,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              gradient: LinearGradient(
+                                end: const Alignment(0.0, -1),
+                                begin: const Alignment(0.0, 0.4),
+                                colors: <Color>[
+                                  const Color(0x8A000000),
+                                  Colors.black12.withOpacity(0.0)
+                                ],
+                              ),
+                            ),
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.fromLTRB(10, 0, 0, 2),
-                          child: Stack(
-                            children: [
-                              Text(
-                                '$categorie',
-                                textAlign: TextAlign.center,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    fontFamily: 'Poppins-regular',
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.bold,
-                                    foreground: Paint()
-                                      ..style = PaintingStyle.stroke
-                                      ..color = myTheme.colorScheme.primary
-                                      ..strokeWidth = 2),
-                              ),
-                              Text(
-                                '$categorie',
-                                textAlign: TextAlign.center,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    fontFamily: 'Poppins-regular',
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
-                              ),
-                            ],
+                          margin: EdgeInsets.fromLTRB(8, 0, 0, 8),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8)),
+                          child: Text(
+                            '$categorie',
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontFamily: 'Poppins-regular',
+                              fontSize: 13,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ],

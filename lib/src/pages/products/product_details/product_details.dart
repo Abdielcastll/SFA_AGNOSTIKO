@@ -24,6 +24,7 @@ class ProductDetails extends StatefulWidget {
     required this.stock,
     this.list,
     required this.isOrderActive,
+    required this.isProductInAPromotion,
   }) : super(key: key);
 
   final String code;
@@ -35,6 +36,7 @@ class ProductDetails extends StatefulWidget {
   final int stock;
   final List<Products>? list;
   final bool isOrderActive;
+  final bool isProductInAPromotion;
 
   @override
   State<ProductDetails> createState() => _ProductDetailsState();
@@ -46,7 +48,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     // print(widget.list);
     return Scaffold(
       appBar: AppBar(elevation: 0, toolbarHeight: 40),
-      backgroundColor: Colors.grey.shade200,
+      backgroundColor: myTheme.colorScheme.surface,
       body: ProductDetailsBody(
         code: widget.code,
         line: widget.line,
@@ -57,6 +59,7 @@ class _ProductDetailsState extends State<ProductDetails> {
         list: widget.list,
         price: widget.price,
         isOrderActive: widget.isOrderActive,
+        isProductInAPromotion: widget.isProductInAPromotion,
       ),
     );
   }
@@ -74,6 +77,7 @@ class ProductDetailsBody extends StatelessWidget {
     required this.stock,
     this.list,
     required this.isOrderActive,
+    required this.isProductInAPromotion,
   }) : super(key: key);
 
   final String code;
@@ -85,273 +89,328 @@ class ProductDetailsBody extends StatelessWidget {
   final int stock;
   final List<Products>? list;
   final bool isOrderActive;
+  final bool isProductInAPromotion;
 
   @override
   Widget build(BuildContext context) {
-    // print(list);
-    print(price ?? 000);
     final String priceProduct = price ?? '0';
+
+    // print(list);
+    print('Precio: ${price ?? 000}');
+
     return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Stack(
-            alignment: Alignment.topRight,
-            children: [
-              SizedBox(
-                height: 275,
-                width: MediaQuery.of(context).size.width,
-                child: Image.network(
-                  imageUrl,
-                  fit: BoxFit.cover,
+      physics: const BouncingScrollPhysics(),
+      child: Container(
+        margin: EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Stack(
+              alignment: Alignment.topRight,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.transparent,
+                  ),
+                  height: 380,
+                  width: MediaQuery.of(context).size.width * 0.90,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.network(
+                      imageUrl,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
-              ),
-              isProductNew
-                  ? Container(
-                      height: 25,
-                      width: 25,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade200,
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(15),
+                isProductNew
+                    ? Container(
+                        height: 70,
+                        width: 70,
+                        decoration: BoxDecoration(
+                          color: myTheme.colorScheme.onPrimaryContainer,
+                          borderRadius: BorderRadius.circular(8),
+                          gradient: LinearGradient(
+                            stops: const [.5, .5],
+                            begin: Alignment.bottomLeft,
+                            end: Alignment.topRight,
+                            colors: [
+                              Colors.transparent,
+                              myTheme.colorScheme.onPrimaryContainer
+                                  .withOpacity(0.8), // top Right part
+                            ],
+                          ),
                         ),
-                      ),
-                      child: Icon(
-                        CupertinoIcons.sparkles,
-                        color: myTheme.colorScheme.primary,
-                      ),
-                    )
-                  : Container(),
-            ],
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(10, 0, 0, 10),
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: Text(
-                name,
-                textAlign: TextAlign.left,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontFamily: 'Poppins-regular',
-                  fontSize: 24,
-                  color: myTheme.colorScheme.primary,
+                        child: Container(
+                          margin: const EdgeInsets.fromLTRB(30, 0, 0, 20),
+                          child: Icon(
+                            CupertinoIcons.sparkles,
+                            color: myTheme.colorScheme.background,
+                            size: 30,
+                          ),
+                        ),
+                      )
+                    : Container(),
+                isProductInAPromotion
+                    ? Container(
+                        height: 68,
+                        width: 68,
+                        decoration: BoxDecoration(
+                          color: myTheme.colorScheme.onPrimaryContainer,
+                          borderRadius: BorderRadius.circular(8),
+                          gradient: LinearGradient(
+                            stops: const [.5, .5],
+                            begin: Alignment.bottomLeft,
+                            end: Alignment.topRight,
+                            colors: [
+                              Colors.transparent,
+                              myTheme.colorScheme.onPrimaryContainer
+                                  .withOpacity(0.8), // top Right part
+                            ],
+                          ),
+                        ),
+                        child: Container(
+                          margin: const EdgeInsets.fromLTRB(25, 0, 0, 25),
+                          child: Icon(
+                            Icons.grade_outlined,
+                            color: myTheme.colorScheme.background,
+                            size: 26,
+                          ),
+                        ),
+                      )
+                    : Container(),
+              ],
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Text(
+                  name,
+                  textAlign: TextAlign.left,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontFamily: 'Poppins-regular',
+                    fontSize: 26,
+                    color: myTheme.colorScheme.onBackground,
+                  ),
                 ),
               ),
             ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(10, 20, 10, 20),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    Text(
+                      '$line - ',
+                      style: TextStyle(
+                        color: Colors.grey.shade600,
+                        fontFamily: 'Poppins-regular',
+                      ),
+                    ),
+                    Text(
+                      '${AppLocalizations.of(context)!.stock}: $stock',
+                      style: TextStyle(
+                        color: Colors.grey.shade600,
+                        fontFamily: 'Poppins-regular',
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        margin: EdgeInsets.only(left: 30.0),
+                        // width: 160,
+                        height: 38,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20)),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: ElevatedButton.icon(
+                            onPressed: () {
+                              // Redirigir a lista producto completas filtrada
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      ProductsPage(
+                                    listOfProducts: list,
+                                    isOrderActive: isOrderActive,
+                                  ),
+                                ),
+                              );
+                            },
+                            icon: Icon(
+                              MaterialCommunityIcons.view_list,
+                              color: myTheme.colorScheme.primary,
+                            ),
+                            style: ButtonStyle(
+                              shadowColor: MaterialStateProperty.all<Color>(
+                                  Colors.transparent),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                Color.fromARGB(255, 159, 165, 252)
+                                    .withOpacity(0.3),
+                              ),
+                              overlayColor: MaterialStateProperty.all<Color>(
+                                  myTheme.colorScheme.primary.withOpacity(0.3)),
+                            ),
+                            label: Text(
+                              AppLocalizations.of(context)!.seeInList,
+                              style: TextStyle(
+                                  color: myTheme.colorScheme.primary,
+                                  fontFamily: 'Poppins-regular',
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 10),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    '$line - ',
-                    style: TextStyle(
-                      color: Colors.grey.shade600,
-                      fontFamily: 'Poppins-regular',
+                  Container(
+                    margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: Text(
+                      '${AppLocalizations.of(context)!.price}: \$$priceProduct',
+                      style: TextStyle(
+                        color: Colors.grey.shade600,
+                        fontFamily: 'Poppins-regular',
+                      ),
                     ),
                   ),
-                  Text(
-                    '${AppLocalizations.of(context)!.stock}: $stock',
-                    style: TextStyle(
-                      color: Colors.grey.shade600,
-                      fontFamily: 'Poppins-regular',
+                  isOrderActive == false
+                      ? Container()
+                      : Container(
+                          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          alignment: Alignment.centerLeft,
+                          child: Container(
+                            margin: EdgeInsets.only(left: 30.0),
+                            // width: 160,
+                            height: 38,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20)),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: ElevatedButton.icon(
+                                onPressed: () {
+                                  // Anadir este producto al carrito
+                                  final newProduct = ShoppingCartProduct(
+                                    productQuantity: 1,
+                                    code: code,
+                                    productId: code,
+                                    listOfPricesId: 'GENER-03',
+                                    totalAmount: priceProduct,
+                                    name: name,
+                                    unitPrice: priceProduct,
+                                  );
+                                  objectBox
+                                      .insertShoppingCartProduct(newProduct);
+                                },
+                                icon: Icon(
+                                  Icons.add_shopping_cart_rounded,
+                                  color: myTheme.colorScheme.primary,
+                                ),
+                                style: ButtonStyle(
+                                  shadowColor: MaterialStateProperty.all<Color>(
+                                      Colors.transparent),
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                    Color.fromARGB(255, 159, 165, 252)
+                                        .withOpacity(0.3),
+                                  ),
+                                  overlayColor:
+                                      MaterialStateProperty.all<Color>(myTheme
+                                          .colorScheme.primary
+                                          .withOpacity(0.3)),
+                                ),
+                                label: Text(
+                                  'Añadir al carrito',
+                                  style: TextStyle(
+                                      color: myTheme.colorScheme.primary,
+                                      fontFamily: 'Poppins-regular',
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              child: Text(
+                AppLocalizations.of(context)!.colors,
+                style: TextStyle(
+                  color: Colors.grey.shade600,
+                  fontFamily: 'Poppins-regular',
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(10, 10, 0, 20),
+              child: Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(right: 5.0),
+                    height: 30,
+                    width: 30,
+                    decoration: BoxDecoration(
+                      color: Colors.yellow,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: myTheme.colorScheme.primary,
+                      ),
                     ),
                   ),
                   Container(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      margin: EdgeInsets.only(left: 30.0),
-                      // width: 160,
-                      height: 38,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20)),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: ElevatedButton.icon(
-                          onPressed: () {
-                            // Redirigir a lista producto completas filtrada
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) => ProductsPage(
-                                  listOfProducts: list,
-                                  isOrderActive: isOrderActive,
-                                ),
-                              ),
-                            );
-                          },
-                          icon: Icon(
-                            MaterialCommunityIcons.view_list,
-                            color: myTheme.colorScheme.primary,
-                          ),
-                          style: ButtonStyle(
-                            shadowColor: MaterialStateProperty.all<Color>(
-                                Colors.transparent),
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                              Color.fromARGB(255, 159, 165, 252)
-                                  .withOpacity(0.3),
-                            ),
-                            overlayColor: MaterialStateProperty.all<Color>(
-                                myTheme.colorScheme.primary.withOpacity(0.3)),
-                          ),
-                          label: Text(
-                            AppLocalizations.of(context)!.seeInList,
-                            style: TextStyle(
-                                color: myTheme.colorScheme.primary,
-                                fontFamily: 'Poppins-regular',
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
+                    margin: EdgeInsets.only(right: 5.0),
+                    height: 30,
+                    width: 30,
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: myTheme.colorScheme.primary,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(right: 5.0),
+                    height: 30,
+                    width: 30,
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: myTheme.colorScheme.primary,
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-          ),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: Text(
-                    '${AppLocalizations.of(context)!.price}: \$$priceProduct',
-                    style: TextStyle(
-                      color: Colors.grey.shade600,
-                      fontFamily: 'Poppins-regular',
-                    ),
-                  ),
+            Container(
+              margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+              child: Text(
+                'ID: $code',
+                style: TextStyle(
+                  color: Colors.grey.shade600,
+                  fontFamily: 'Poppins-regular',
                 ),
-                isOrderActive == false
-                    ? Container()
-                    : Container(
-                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                        alignment: Alignment.centerLeft,
-                        child: Container(
-                          margin: EdgeInsets.only(left: 30.0),
-                          // width: 160,
-                          height: 38,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20)),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: ElevatedButton.icon(
-                              onPressed: () {
-                                // Anadir este producto al carrito
-                                final newProduct = ShoppingCartProduct(
-                                  productQuantity: 1,
-                                  code: code,
-                                  productId: code,
-                                  listOfPricesId: 'GENER-03',
-                                  totalAmount: priceProduct,
-                                  name: name,
-                                  unitPrice: priceProduct,
-                                );
-                                objectBox.insertShoppingCartProduct(newProduct);
-                              },
-                              icon: Icon(
-                                Icons.add_shopping_cart_rounded,
-                                color: myTheme.colorScheme.primary,
-                              ),
-                              style: ButtonStyle(
-                                shadowColor: MaterialStateProperty.all<Color>(
-                                    Colors.transparent),
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                  Color.fromARGB(255, 159, 165, 252)
-                                      .withOpacity(0.3),
-                                ),
-                                overlayColor: MaterialStateProperty.all<Color>(
-                                    myTheme.colorScheme.primary
-                                        .withOpacity(0.3)),
-                              ),
-                              label: Text(
-                                'Añadir al carrito',
-                                style: TextStyle(
-                                    color: myTheme.colorScheme.primary,
-                                    fontFamily: 'Poppins-regular',
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-            child: Text(
-              AppLocalizations.of(context)!.colors,
-              style: TextStyle(
-                color: Colors.grey.shade600,
-                fontFamily: 'Poppins-regular',
               ),
             ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(10, 10, 0, 20),
-            child: Row(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(right: 5.0),
-                  height: 30,
-                  width: 30,
-                  decoration: BoxDecoration(
-                    color: Colors.yellow,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: myTheme.colorScheme.primary,
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(right: 5.0),
-                  height: 30,
-                  width: 30,
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: myTheme.colorScheme.primary,
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(right: 5.0),
-                  height: 30,
-                  width: 30,
-                  decoration: BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: myTheme.colorScheme.primary,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-            child: Text(
-              'ID: $code',
-              style: TextStyle(
-                color: Colors.grey.shade600,
-                fontFamily: 'Poppins-regular',
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

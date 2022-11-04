@@ -94,6 +94,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                               .where((element) => element.name == product.name)
                               .toList(),
                           isOrderActive: widget.isOrderActive,
+                          isProductInAPromotion: false,
                         ),
                       ),
                     );
