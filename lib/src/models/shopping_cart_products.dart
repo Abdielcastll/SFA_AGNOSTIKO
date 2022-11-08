@@ -4,6 +4,7 @@ import 'package:objectbox/objectbox.dart';
 class ShoppingCartProduct {
   int id;
   int? productQuantity;
+  int? availableStock;
   String? code;
   String? productId;
   String? listOfPricesId;
@@ -16,6 +17,7 @@ class ShoppingCartProduct {
   ShoppingCartProduct({
     this.id = 0,
     this.productQuantity,
+    this.availableStock,
     this.code,
     this.productId,
     this.listOfPricesId,

@@ -87,7 +87,6 @@ final myTheme = ThemeData.light().copyWith(
   //   bodySmall: TextStyle(
   //       letterSpacing: 0.4,
   //       fontSize: 12,
-  //       height: 16,
   //       fontFamily: 'Poppins-regular'),
   //   // Labels
   //   labelLarge: TextStyle(

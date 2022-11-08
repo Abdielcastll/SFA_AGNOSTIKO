@@ -146,7 +146,7 @@ class _OrderCardBodyState extends State<OrderCardBody> {
       }
     }
 
-    print('cambios: ${widget.widget.coinsExchangeRates}');
+    // print('cambios: ${widget.widget.coinsExchangeRates}');
 
     return GestureDetector(
       onTap: () {
@@ -261,7 +261,7 @@ class _OrderCardBodyState extends State<OrderCardBody> {
                       height: 13,
                       width: 150,
                       child: Text(
-                        'ID: $currentClientIdType-$currentClientId',
+                        'ID: ${currentClientIdType.toString()}-${currentClientId.toString()}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(

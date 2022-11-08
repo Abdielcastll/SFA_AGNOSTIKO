@@ -41,33 +41,58 @@ class Clients {
 }
 
 List<Clients> clientListfromSnapshot(QuerySnapshot snapshot) {
-  return snapshot.docs.map((doc) {
+  return snapshot.docs.map((snapshot) {
     return Clients(
-      active: doc.get('activo'),
-      specialContributor: doc.get('contribuyenteEspecial'),
-      madeBy: doc.get('creadoPor').id,
-      masterDiscount: doc.get('descuentoMaestro'),
-      fiscalAdress: doc.get('direccionFiscal'),
-      dispatchAdress: doc.data().toString().contains('direccionDespacho')
-          ? doc.get('direccionDespacho')
+      active: snapshot.data().toString().contains('activo')
+          ? snapshot.get('activo')
+          : 'NaN',
+      specialContributor:
+          snapshot.data().toString().contains('contribuyenteEspecial')
+              ? snapshot.get('contribuyenteEspecial')
+              : false,
+      madeBy: snapshot.data().toString().contains('creadoPor')
+          ? snapshot.get('creadoPor').id
+          : 'NaN',
+      masterDiscount: snapshot.data().toString().contains('descuentoMaestro')
+          ? snapshot.get('descuentoMaestro')
+          : 'NaN',
+      fiscalAdress: snapshot.data().toString().contains('direccionFiscal')
+          ? snapshot.get('direccionFiscal')
+          : 'NaN',
+      dispatchAdress: snapshot.data().toString().contains('direccionDespacho')
+          ? snapshot.get('direccionDespacho')
           : 'No hay direccion de despacho',
-      email: doc.get('email'),
-      prices: doc.get('listaDePrecios').id,
-      modified: doc.data().toString().contains('modificado')
-          ? doc.get('modificado')
+      email: snapshot.data().toString().contains('email')
+          ? snapshot.get('email')
           : 'NaN',
-      name: doc.get('nombre'),
-      id: doc.get('numeroId'),
-      prospect: doc.get('prospecto'),
-      phone1: doc.get('telefono'),
-      phone2: doc.data().toString().contains('telefono2')
-          ? doc.get('telefono2')
+      prices: snapshot.data().toString().contains('listaDePrecios')
+          ? snapshot.get('listaDePrecios').id
           : 'NaN',
-      idType: doc.data().toString().contains('tipoId')
-          ? doc.get('tipoId').id
+      modified: snapshot.data().toString().contains('modificado')
+          ? snapshot.get('modificado')
           : 'NaN',
-      zone: doc.get('zona').id,
-      clientDocumentId: doc.reference.id,
+      name: snapshot.data().toString().contains('nombre')
+          ? snapshot.get('nombre')
+          : 'NaN',
+      id: snapshot.data().toString().contains('numeroId')
+          ? snapshot.get('numeroId')
+          : 'NaN',
+      prospect: snapshot.data().toString().contains('prospecto')
+          ? snapshot.get('prospecto')
+          : false,
+      phone1: snapshot.data().toString().contains('telefono')
+          ? snapshot.get('telefono')
+          : 'NaN',
+      phone2: snapshot.data().toString().contains('telefono2')
+          ? snapshot.get('telefono2')
+          : 'NaN',
+      idType: snapshot.data().toString().contains('tipoId')
+          ? snapshot.get('tipoId').id
+          : 'NaN',
+      zone: snapshot.data().toString().contains('zona')
+          ? snapshot.get('zona').id
+          : 'NaN',
+      clientDocumentId: snapshot.reference.id,
     );
   }).toList();
 }
@@ -114,30 +139,55 @@ class Client {
 
 Client clientFromDocumentID(snapshot) {
   return Client(
-    active: snapshot.get('activo'),
-    specialContributor: snapshot.get('contribuyenteEspecial'),
-    madeBy: snapshot.get('creadoPor').id,
-    masterDiscount: snapshot.get('descuentoMaestro'),
-    fiscalAdress: snapshot.get('direccionFiscal'),
+    active: snapshot.data().toString().contains('activo')
+        ? snapshot.get('activo')
+        : 'NaN',
+    specialContributor:
+        snapshot.data().toString().contains('contribuyenteEspecial')
+            ? snapshot.get('contribuyenteEspecial')
+            : false,
+    madeBy: snapshot.data().toString().contains('creadoPor')
+        ? snapshot.get('creadoPor').id
+        : 'NaN',
+    masterDiscount: snapshot.data().toString().contains('descuentoMaestro')
+        ? snapshot.get('descuentoMaestro')
+        : 'NaN',
+    fiscalAdress: snapshot.data().toString().contains('direccionFiscal')
+        ? snapshot.get('direccionFiscal')
+        : 'NaN',
     dispatchAdress: snapshot.data().toString().contains('direccionDespacho')
         ? snapshot.get('direccionDespacho')
         : 'No hay direccion de despacho',
-    email: snapshot.get('email'),
-    prices: snapshot.get('listaDePrecios').id,
+    email: snapshot.data().toString().contains('email')
+        ? snapshot.get('email')
+        : 'NaN',
+    prices: snapshot.data().toString().contains('listaDePrecios')
+        ? snapshot.get('listaDePrecios').id
+        : 'NaN',
     modified: snapshot.data().toString().contains('modificado')
         ? snapshot.get('modificado')
         : 'NaN',
-    name: snapshot.get('nombre'),
-    id: snapshot.get('numeroId'),
-    prospect: snapshot.get('prospecto'),
-    phone1: snapshot.get('telefono'),
+    name: snapshot.data().toString().contains('nombre')
+        ? snapshot.get('nombre')
+        : 'NaN',
+    id: snapshot.data().toString().contains('numeroId')
+        ? snapshot.get('numeroId')
+        : 'NaN',
+    prospect: snapshot.data().toString().contains('prospecto')
+        ? snapshot.get('prospecto')
+        : false,
+    phone1: snapshot.data().toString().contains('telefono')
+        ? snapshot.get('telefono')
+        : 'NaN',
     phone2: snapshot.data().toString().contains('telefono2')
         ? snapshot.get('telefono2')
         : 'NaN',
     idType: snapshot.data().toString().contains('tipoId')
         ? snapshot.get('tipoId').id
         : 'NaN',
-    zone: snapshot.get('zona').id,
+    zone: snapshot.data().toString().contains('zona')
+        ? snapshot.get('zona').id
+        : 'NaN',
     clientDocumentId: snapshot.reference.id,
   );
 }

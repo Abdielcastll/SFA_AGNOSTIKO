@@ -453,7 +453,7 @@ void modalBottomSheetForOrders(
                                                 ),
                                               ),
                                               Text(
-                                                'Descuento Maestro: \$$discountMaster',
+                                                'Descuento Maestro: \$${discountMaster.toStringAsFixed(2)}',
                                                 style: TextStyle(
                                                   fontFamily: 'Poppins-regular',
                                                   color: Colors.black,

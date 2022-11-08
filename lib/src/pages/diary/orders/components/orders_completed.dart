@@ -36,7 +36,7 @@ class CompletedOrders extends StatelessWidget {
           // ignore: prefer_const_literals_to_create_immutables
           children: [
             Padding(
-              padding: EdgeInsets.only(left: 16, top: 5),
+              padding: EdgeInsets.only(left: 16, top: 30),
               child: Text(
                 textAlign: TextAlign.start,
                 AppLocalizations.of(context)!.completed,

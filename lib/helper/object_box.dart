@@ -33,4 +33,6 @@ class ObjectBox {
   bool deleteShoppingCartProduct(int id) => _shoppingCartProductBox.remove(id);
 
   delelteAllShoppingCart() => _shoppingCartProductBox.removeAll();
+
+  // updateShoppingCartProduct() => _shoppingCartProductBox.
 }

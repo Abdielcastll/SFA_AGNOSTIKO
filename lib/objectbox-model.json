@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:2370540632508623834",
-      "lastPropertyId": "20:8910937102320734128",
+      "lastPropertyId": "21:3727172841384829065",
       "name": "ShoppingCartProduct",
       "properties": [
         {
@@ -58,6 +58,11 @@
           "id": "20:8910937102320734128",
           "name": "unitPrice",
           "type": 9
+        },
+        {
+          "id": "21:3727172841384829065",
+          "name": "availableStock",
+          "type": 6
         }
       ],
       "relations": []

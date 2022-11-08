@@ -167,6 +167,7 @@ class _ProductsBodyState extends State<ProductsBody> {
         coinsExchangeRates.add(element.data()['tasaDeCambio']);
       });
     });
+    setState(() {});
   }
 
   @override
@@ -387,7 +388,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                       isDescending ? products?.reversed.toList() : products;
                   final product = sortedProducts![index];
                   // final product = products![index];
-                  final productStock = stockValues[product.code] ?? '000';
+                  final productStock = stockValues[product.code] ?? 000;
                   final productBrand = brandsSummary[product.brand] ?? '';
                   final productCategorie =
                       categoriesSummary[product.categorie] ?? '';
@@ -401,8 +402,6 @@ class _ProductsBodyState extends State<ProductsBody> {
                   final productPrice = widget.listOfPrices[product.code] ?? 0;
                   final productPriceFormatted = priceFormat(productPrice);
 
-                  // print("YIIIIIIIIIIIIIIIIIIIIIIIKES $productPriceFormatted");
-
                   return Container(
                     margin: EdgeInsets.only(bottom: 10.0),
                     height: 120,
@@ -413,32 +412,26 @@ class _ProductsBodyState extends State<ProductsBody> {
                     ),
                     child: ListTile(
                       onTap: () {
-                        // Activar check para abrir opciones
+                        // Añadir producto de la seleccion
+
                         if (product.selected == false) {
                           final newProduct = ShoppingCartProduct(
                             productQuantity: 1,
                             code: product.code.toString(),
                             productId: product.code.toString(),
-                            listOfPricesId: 'GENER-03',
-                            // TODO
+                            listOfPricesId: widget.listOfPrices.toString(),
                             totalAmount: productPrice.toString(),
                             name: product.name,
                             unitPrice: productPrice.toString(),
+                            availableStock: productStock,
                           );
+
                           print(newProduct.unitPrice);
-                          // print(newProduct.totalAmount);
                           selectedProducts.add(newProduct);
+
+                          // Quitar producto de la seleccion
+
                         } else if (product.selected == true) {
-                          final newProduct = ShoppingCartProduct(
-                            productQuantity: 1,
-                            code: product.code.toString(),
-                            productId: product.code.toString(),
-                            listOfPricesId: 'GENER-03',
-                            // TODO
-                            totalAmount: productPrice.toString(),
-                            name: product.name,
-                            unitPrice: productPrice.toString(),
-                          );
                           selectedProducts
                               .removeWhere((item) => item.code == product.code);
                         }
@@ -483,32 +476,21 @@ class _ProductsBodyState extends State<ProductsBody> {
                                               code: product.code.toString(),
                                               productId:
                                                   product.code.toString(),
-                                              listOfPricesId: 'GENER-03',
+                                              listOfPricesId: widget
+                                                  .listOfPrices
+                                                  .toString(),
                                               // TODO
                                               totalAmount:
                                                   productPrice.toString(),
                                               name: product.name,
                                               unitPrice:
                                                   productPrice.toString(),
+                                              availableStock: productStock,
                                             );
                                             print(newProduct.unitPrice);
                                             // print(newProduct.totalAmount);
                                             selectedProducts.add(newProduct);
                                           } else if (product.selected == true) {
-                                            final newProduct =
-                                                ShoppingCartProduct(
-                                              productQuantity: 1,
-                                              code: product.code.toString(),
-                                              productId:
-                                                  product.code.toString(),
-                                              listOfPricesId: 'GENER-03',
-                                              // TODO
-                                              totalAmount:
-                                                  productPrice.toString(),
-                                              name: product.name,
-                                              unitPrice:
-                                                  productPrice.toString(),
-                                            );
                                             selectedProducts.removeWhere(
                                                 (item) =>
                                                     item.code == product.code);

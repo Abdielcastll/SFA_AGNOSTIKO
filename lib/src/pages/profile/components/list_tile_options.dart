@@ -3,7 +3,11 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
+import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/teams_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/users_and_teams/users_and_teams.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -29,6 +33,22 @@ class _ListTileOptionsState extends State<ListTileOptions> {
 
   @override
   Widget build(BuildContext context) {
+    final zoneSummary = Provider.of<ZoneSummary?>(context)!.summary ?? [];
+    final userDoc = Provider.of<CurrentUserInfo?>(context);
+    // final currentUserTeam = Provider.of<TeamsModel?>(context) ?? {};
+    // print(currentUserTeam);
+    // print(userDoc!.zone);
+    // print(zoneSummary);
+
+    identifyZone() {
+      if (userDoc!.zone == null) {
+        return "No hay zona disponible";
+      } else {
+        print(zoneSummary[userDoc.zone]);
+        return zoneSummary[userDoc.zone];
+      }
+    }
+
     String? selectedValue;
     bool isAdmin;
 
@@ -77,7 +97,7 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'TERRITORIO 1',
+                            identifyZone(),
                             style: TextStyle(
                               fontFamily: 'Poppins-regular',
                               color: myTheme.colorScheme.secondary,
@@ -96,7 +116,7 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                                 ),
                               ),
                               Text(
-                                'Ana Avila 01',
+                                'Ana Avila',
                                 style: TextStyle(
                                   fontFamily: 'Poppins-regular',
                                   color: myTheme.colorScheme.secondary,

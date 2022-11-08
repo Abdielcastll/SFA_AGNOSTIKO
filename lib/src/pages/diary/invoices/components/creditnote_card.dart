@@ -57,6 +57,10 @@ class _CreditNoteCardState extends State<CreditNoteCard> {
             .doc(widget.creditNoteClient)
             .snapshots()
             .map(clientFromDocumentID),
+        catchError: (context, error) {
+          print(error);
+          return;
+        },
       ),
       StreamProvider<ZoneSummary?>.value(
         initialData: null,

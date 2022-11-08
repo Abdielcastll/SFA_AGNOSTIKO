@@ -134,7 +134,8 @@ Future createOrder(
       'codigo': element.code?.toString() ?? 'NaN',
       'id': element.code?.toString() ?? 'NaN',
       'idListaDePrecios': client?.prices ?? 'NaN',
-      'monto': double.parse(element.totalAmount ?? '0'),
+      'monto': double.parse(element.totalAmount ?? '0') *
+          int.parse(element.productQuantity.toString()),
       'nombre': element.name?.toString() ?? 'NaN',
       'precioUnitario': double.parse(element.unitPrice ?? '0.0'),
       'urlFoto': '',

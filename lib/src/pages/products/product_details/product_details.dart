@@ -198,98 +198,109 @@ class ProductDetailsBody extends StatelessWidget {
               ),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
+              margin: EdgeInsets.fromLTRB(10, 10, 0, 20),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '$line - ',
-                      style: TextStyle(
-                        color: Colors.grey.shade600,
-                        fontFamily: 'Poppins-regular',
-                      ),
-                    ),
-                    Text(
-                      '${AppLocalizations.of(context)!.stock}: $stock',
-                      style: TextStyle(
-                        color: Colors.grey.shade600,
-                        fontFamily: 'Poppins-regular',
-                      ),
-                    ),
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      child: Container(
-                        margin: EdgeInsets.only(left: 30.0),
-                        // width: 160,
-                        height: 38,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20)),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: ElevatedButton.icon(
-                            onPressed: () {
-                              // Redirigir a lista producto completas filtrada
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      ProductsPage(
-                                    listOfProducts: list,
-                                    isOrderActive: isOrderActive,
-                                  ),
-                                ),
-                              );
-                            },
-                            icon: Icon(
-                              MaterialCommunityIcons.view_list,
-                              color: myTheme.colorScheme.primary,
-                            ),
-                            style: ButtonStyle(
-                              shadowColor: MaterialStateProperty.all<Color>(
-                                  Colors.transparent),
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                Color.fromARGB(255, 159, 165, 252)
-                                    .withOpacity(0.3),
-                              ),
-                              overlayColor: MaterialStateProperty.all<Color>(
-                                  myTheme.colorScheme.primary.withOpacity(0.3)),
-                            ),
-                            label: Text(
-                              AppLocalizations.of(context)!.seeInList,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              '$line • ',
                               style: TextStyle(
-                                  color: myTheme.colorScheme.primary,
-                                  fontFamily: 'Poppins-regular',
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold),
+                                color: Colors.grey.shade700,
+                                fontFamily: 'Poppins-regular',
+                                fontSize: 16,
+                              ),
+                            ),
+                            Text(
+                              '${AppLocalizations.of(context)!.stock}: $stock',
+                              style: TextStyle(
+                                color: Colors.grey.shade700,
+                                fontFamily: 'Poppins-regular',
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(0, 5, 10, 0),
+                          child: Text(
+                            '${AppLocalizations.of(context)!.price}: \$$priceProduct',
+                            style: TextStyle(
+                              color: Colors.grey.shade700,
+                              fontFamily: 'Poppins-regular',
+                              fontSize: 16,
                             ),
                           ),
                         ),
-                      ),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(0, 5, 10, 0),
+                          child: Text(
+                            AppLocalizations.of(context)!.colors,
+                            style: TextStyle(
+                              color: Colors.grey.shade700,
+                              fontFamily: 'Poppins-regular',
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                          child: Row(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(right: 5.0),
+                                height: 30,
+                                width: 30,
+                                decoration: BoxDecoration(
+                                  color: Colors.amber,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(right: 5.0),
+                                height: 30,
+                                width: 30,
+                                decoration: BoxDecoration(
+                                  color: myTheme.colorScheme.onPrimaryContainer,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(right: 5.0),
+                                height: 30,
+                                width: 30,
+                                decoration: BoxDecoration(
+                                  color: Colors.green.shade900,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(0, 5, 10, 0),
+                          child: Text(
+                            'ID: $code',
+                            style: TextStyle(
+                              color: Colors.grey.shade700,
+                              fontFamily: 'Poppins-regular',
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: Text(
-                      '${AppLocalizations.of(context)!.price}: \$$priceProduct',
-                      style: TextStyle(
-                        color: Colors.grey.shade600,
-                        fontFamily: 'Poppins-regular',
-                      ),
-                    ),
-                  ),
-                  isOrderActive == false
-                      ? Container()
-                      : Container(
-                          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
                           alignment: Alignment.centerLeft,
                           child: Container(
                             margin: EdgeInsets.only(left: 30.0),
@@ -301,22 +312,21 @@ class ProductDetailsBody extends StatelessWidget {
                               borderRadius: BorderRadius.circular(20),
                               child: ElevatedButton.icon(
                                 onPressed: () {
-                                  // Anadir este producto al carrito
-                                  final newProduct = ShoppingCartProduct(
-                                    productQuantity: 1,
-                                    code: code,
-                                    productId: code,
-                                    listOfPricesId: 'GENER-03',
-                                    totalAmount: priceProduct,
-                                    name: name,
-                                    unitPrice: priceProduct,
+                                  // Redirigir a lista producto completas filtrada
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          ProductsPage(
+                                        listOfProducts: list,
+                                        isOrderActive: isOrderActive,
+                                      ),
+                                    ),
                                   );
-                                  objectBox
-                                      .insertShoppingCartProduct(newProduct);
                                 },
                                 icon: Icon(
-                                  Icons.add_shopping_cart_rounded,
-                                  color: myTheme.colorScheme.primary,
+                                  MaterialCommunityIcons.view_list,
+                                  color: myTheme.colorScheme.onPrimaryContainer,
                                 ),
                                 style: ButtonStyle(
                                   shadowColor: MaterialStateProperty.all<Color>(
@@ -332,9 +342,10 @@ class ProductDetailsBody extends StatelessWidget {
                                           .withOpacity(0.3)),
                                 ),
                                 label: Text(
-                                  'Añadir al carrito',
+                                  AppLocalizations.of(context)!.seeInList,
                                   style: TextStyle(
-                                      color: myTheme.colorScheme.primary,
+                                      color: myTheme
+                                          .colorScheme.onPrimaryContainer,
                                       fontFamily: 'Poppins-regular',
                                       fontSize: 13,
                                       fontWeight: FontWeight.bold),
@@ -343,69 +354,83 @@ class ProductDetailsBody extends StatelessWidget {
                             ),
                           ),
                         ),
-                ],
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-              child: Text(
-                AppLocalizations.of(context)!.colors,
-                style: TextStyle(
-                  color: Colors.grey.shade600,
-                  fontFamily: 'Poppins-regular',
-                ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(10, 10, 0, 20),
-              child: Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(right: 5.0),
-                    height: 30,
-                    width: 30,
-                    decoration: BoxDecoration(
-                      color: Colors.yellow,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: myTheme.colorScheme.primary,
-                      ),
+                        Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              isOrderActive == false
+                                  ? Container()
+                                  : Container(
+                                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                      alignment: Alignment.center,
+                                      child: Container(
+                                        margin: EdgeInsets.only(left: 30.0),
+                                        // width: 160,
+                                        height: 38,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20)),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          child: ElevatedButton.icon(
+                                            onPressed: () {
+                                              // Anadir este producto al carrito
+                                              final newProduct =
+                                                  ShoppingCartProduct(
+                                                productQuantity: 1,
+                                                code: code,
+                                                productId: code,
+                                                listOfPricesId: 'GENER-03',
+                                                totalAmount: priceProduct,
+                                                name: name,
+                                                unitPrice: priceProduct,
+                                              );
+                                              objectBox
+                                                  .insertShoppingCartProduct(
+                                                      newProduct);
+                                            },
+                                            icon: Icon(
+                                              Icons.add_shopping_cart_rounded,
+                                              color: myTheme.colorScheme
+                                                  .onPrimaryContainer,
+                                            ),
+                                            style: ButtonStyle(
+                                              shadowColor: MaterialStateProperty
+                                                  .all<Color>(
+                                                      Colors.transparent),
+                                              backgroundColor:
+                                                  MaterialStateProperty.all<
+                                                      Color>(
+                                                Color.fromARGB(
+                                                        255, 159, 165, 252)
+                                                    .withOpacity(0.3),
+                                              ),
+                                              overlayColor:
+                                                  MaterialStateProperty
+                                                      .all<Color>(myTheme
+                                                          .colorScheme.primary
+                                                          .withOpacity(0.3)),
+                                            ),
+                                            label: Text(
+                                              'Añadir',
+                                              style: TextStyle(
+                                                  color: myTheme.colorScheme
+                                                      .onPrimaryContainer,
+                                                  fontFamily: 'Poppins-regular',
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(right: 5.0),
-                    height: 30,
-                    width: 30,
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: myTheme.colorScheme.primary,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(right: 5.0),
-                    height: 30,
-                    width: 30,
-                    decoration: BoxDecoration(
-                      color: Colors.green,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: myTheme.colorScheme.primary,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-              child: Text(
-                'ID: $code',
-                style: TextStyle(
-                  color: Colors.grey.shade600,
-                  fontFamily: 'Poppins-regular',
+                  ],
                 ),
               ),
             ),

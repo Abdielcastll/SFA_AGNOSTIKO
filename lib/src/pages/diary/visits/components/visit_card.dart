@@ -44,6 +44,10 @@ class _VisitCardState extends State<VisitCard> {
               .doc(widget.clientReferenceId)
               .snapshots()
               .map(clientFromDocumentID),
+          catchError: (context, error) {
+            print(error);
+            return;
+          },
         ),
         StreamProvider<ZoneSummary?>.value(
           initialData: null,
@@ -97,6 +101,7 @@ class _VIsitCardBodyState extends State<VIsitCardBody> {
         Provider.of<Client?>(context)?.masterDiscount ?? {};
     final zonesSummary = Provider.of<ZoneSummary?>(context)?.summary ?? '';
     final userUID = Provider.of<UserModel>(context).uid;
+    // print('CLiente en proceso: $currentClientName');
 
     return GestureDetector(
       onTap: () {

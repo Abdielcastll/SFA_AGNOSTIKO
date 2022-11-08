@@ -57,6 +57,10 @@ class _InvoiceCardState extends State<InvoiceCard> {
             .doc(widget.invoiceClient)
             .snapshots()
             .map(clientFromDocumentID),
+        catchError: (context, error) {
+          print(error);
+          return;
+        },
       ),
       StreamProvider<ZoneSummary?>.value(
         initialData: null,
