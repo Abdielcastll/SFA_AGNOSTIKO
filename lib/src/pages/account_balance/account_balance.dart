@@ -59,7 +59,7 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.clientDocument);
+    // print(widget.clientDocument);
     return MultiProvider(
       providers: [
         isCheckedFactures == true
@@ -73,7 +73,7 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
                     .map(accountInvoicesFromSnapshot),
                 initialData: const [],
                 catchError: (context, error) {
-                  print(error);
+                  // print(error);
                   return;
                 },
               )
@@ -87,7 +87,7 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
                     .map(accountCreditNotesFromSnapshot),
                 initialData: const [],
                 catchError: (context, error) {
-                  print(error);
+                  // print(error);
                   return;
                 },
               )
@@ -218,7 +218,7 @@ class _StatusBarResumeState extends State<StatusBarResume> {
       }
     }
 
-    print(totalAmount);
+    // print(totalAmount);
     return Container(
       margin: EdgeInsets.fromLTRB(10, 20, 10, 5),
       child: Row(
@@ -386,7 +386,7 @@ class _ShowInvoicesState extends State<ShowInvoices> {
     var invoicesOnProcessList =
         invoices.where((element) => element.isPaid == false).toList();
     var dateFormatter = DateFormat('yyyy-MM-dd');
-    print(invoices);
+    // print(invoices);
 
     return Container(
       width: MediaQuery.of(context).size.width,

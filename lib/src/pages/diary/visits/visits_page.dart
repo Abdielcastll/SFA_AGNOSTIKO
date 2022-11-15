@@ -31,12 +31,12 @@ class _VisitsPageState extends State<VisitsPage> {
           .map(visitsFromSnasphot),
       initialData: const [],
       catchError: (context, error) {
-        print(error);
+        // print(error);
         return [];
       },
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: Colors.grey[200],
+          backgroundColor: myTheme.colorScheme.surface,
           floatingActionButton: Wrap(
             direction: Axis.vertical,
             children: [

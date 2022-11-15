@@ -9,6 +9,7 @@ import 'package:pwa_sales2go_flutter/src/models/order_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/filter_orders..dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/orders_completed.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/orders_on_process.dart';
+import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class OrdersPage extends StatefulWidget {
   const OrdersPage({Key? key}) : super(key: key);
@@ -36,7 +37,6 @@ class _OrdersPageState extends State<OrdersPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getPricesExchangesRates();
   }
@@ -53,13 +53,13 @@ class _OrdersPageState extends State<OrdersPage> {
               .map(ordersFromSnapshot),
           initialData: const [],
           catchError: (context, error) {
-            print(error);
+            // print(error);
           },
         ),
       ],
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: Colors.grey[200],
+          backgroundColor: myTheme.colorScheme.surface,
           body: OrdersBody(coinsExchangeRates: coinsExchangeRates),
         ),
       ),

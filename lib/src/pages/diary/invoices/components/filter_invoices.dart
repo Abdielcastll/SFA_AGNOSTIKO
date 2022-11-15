@@ -27,7 +27,6 @@ class FilterInvoicesState extends State<FilterInvoices> {
         children: [
           GestureDetector(
             onTap: () {
-              print('redireccion a search delegate de facturas');
               // Redireccionar a search delegate de facturas
             },
             child: Padding(

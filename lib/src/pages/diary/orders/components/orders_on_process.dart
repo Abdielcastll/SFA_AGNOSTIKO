@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -23,9 +21,6 @@ class OrdersOnProcess extends StatelessWidget {
     var dateFormatter = DateFormat('yyyy-MM-dd');
     final ordersOnProcess =
         orders.where((element) => element.isInvoiced == false).toList();
-    // print(orders);
-    print('Ordenes en procesos: ${ordersOnProcess.length}');
-    // final clientNames = Provider.of<List<ClientName>?>(context) ?? [];
 
     return SingleChildScrollView(
       child: Column(
@@ -33,23 +28,24 @@ class OrdersOnProcess extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            // ignore: prefer_const_literals_to_create_immutables
             children: [
-              Padding(
-                padding: EdgeInsets.only(left: 16),
+              Container(
+                margin: const EdgeInsets.fromLTRB(16, 0, 0, 10),
                 child: Text(
                   textAlign: TextAlign.start,
                   AppLocalizations.of(context)!.onProcess,
                   style: TextStyle(
-                    color: Colors.amber,
+                    color: Colors.amber.shade600,
+                    fontFamily: 'Poppins-regular',
                     fontSize: 15,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
             ],
           ),
-          SizedBox(height: 10),
           SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
             child: Container(
               height: 230,
               child: Scrollbar(
@@ -60,7 +56,7 @@ class OrdersOnProcess extends StatelessWidget {
                     final orderTotalAmount = order.totalAmount ?? 0;
                     final unformattedDate = order.deliveryDate ??
                         Timestamp.fromDate(DateTime.now());
-                    final orderStatus = 'En proceso';
+                    final orderStatus = AppLocalizations.of(context)!.onProcess;
                     final date =
                         DateTime.parse(unformattedDate.toDate().toString());
                     final deliveryDate = dateFormatter.format(date);
@@ -70,7 +66,7 @@ class OrdersOnProcess extends StatelessWidget {
                     final orderIsFailed = order.isInvoiceFailed;
                     final orderProducts = order.products;
                     final orderTax = order.tax;
-                    final orderSubTotal = order.subTotal; // print(order);
+                    final orderSubTotal = order.subTotal;
                     final orderDiscountMaster = order.masterDiscount;
                     return OrderCard(
                       clientReferenceId: orderClientRefID,

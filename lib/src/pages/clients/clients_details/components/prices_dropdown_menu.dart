@@ -37,7 +37,7 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
   @override
   Widget build(BuildContext context) {
     String? selectedDiscount = widget.masterDiscount.toString();
-    print(widget.masterDiscount);
+    // print(widget.masterDiscount);
     return SingleChildScrollView(
       child: Container(
         margin: EdgeInsets.only(top: 10, bottom: 20),

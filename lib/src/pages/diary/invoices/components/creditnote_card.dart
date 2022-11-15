@@ -158,7 +158,7 @@ class _CreditCardBodyState extends State<CreditCardBody> {
 
     return GestureDetector(
       onTap: () {
-        print(creditNoteStatus);
+        // print(creditNoteStatus);
         // widget.widget.creditNoteIsEliminated == false
         //     ? modalBottomSheetForCreditNotes(
         //         false,

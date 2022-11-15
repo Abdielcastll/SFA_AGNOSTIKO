@@ -23,70 +23,69 @@ class CompletedOrders extends StatelessWidget {
     var dateFormatter = DateFormat('yyyy-MM-dd');
     final ordersCompleted =
         orders.where((element) => element.isInvoiced == true).toList();
-    // print(orders);
-    print('Ordenes completadas: ${ordersCompleted.length}');
     final clientNames = Provider.of<List<ClientName>?>(context) ?? [];
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
-      // ignore: prefer_const_literals_to_create_immutables
       children: [
         Row(
-          // ignore: prefer_const_literals_to_create_immutables
           children: [
-            Padding(
-              padding: EdgeInsets.only(left: 16, top: 30),
+            Container(
+              margin: const EdgeInsets.fromLTRB(14, 0, 0, 10),
               child: Text(
                 textAlign: TextAlign.start,
                 AppLocalizations.of(context)!.completed,
                 style: TextStyle(
                   color: Colors.green,
                   fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Poppins-regular',
                 ),
               ),
             ),
           ],
         ),
-        SizedBox(height: 10),
-        Container(
-          height: MediaQuery.of(context).size.height * 0.7,
-          child: ListView.builder(
-            physics: ClampingScrollPhysics(),
-            itemCount: ordersCompleted.length,
-            itemBuilder: (BuildContext context, int index) {
-              final order = ordersCompleted[index];
-              final orderTotalAmount = order.totalAmount ?? 0;
-              final unformattedDate =
-                  order.deliveryDate ?? Timestamp.fromDate(DateTime.now());
-
-              final date = DateTime.parse(unformattedDate.toDate().toString());
-              final deliveryDate = dateFormatter.format(date);
-              final orderCommentary = order.commentary;
-              final orderClientRefID = order.clientDocumentRef;
-              final orderRefID = order.orderDocumentRef;
-              final orderIsFailed = order.isInvoiceFailed;
-              final orderStatus = 'Completada';
-              final orderProducts = order.products;
-              final orderSubTotal = order.subTotal;
-              final orderDiscountMaster = order.masterDiscount;
-              final orderTax = order.tax;
-              // print(order);
-              return OrderCard(
-                clientReferenceId: orderClientRefID,
-                date: deliveryDate,
-                total: orderTotalAmount,
-                orderDocumentId: orderRefID,
-                status: orderStatus,
-                isInvoicesFailed: orderIsFailed,
-                commentary: orderCommentary,
-                products: orderProducts,
-                subTotal: orderSubTotal,
-                discountMaster: orderDiscountMaster,
-                tax: orderTax,
-                coinsExchangeRates: coinsExchangeRates,
-              );
-            },
+        SingleChildScrollView(
+          child: SizedBox(
+            height: 230,
+            child: ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              itemCount: ordersCompleted.length,
+              itemBuilder: (BuildContext context, int index) {
+                final order = ordersCompleted[index];
+                final orderTotalAmount = order.totalAmount ?? 0;
+                final unformattedDate =
+                    order.deliveryDate ?? Timestamp.fromDate(DateTime.now());
+                final date =
+                    DateTime.parse(unformattedDate.toDate().toString());
+                final deliveryDate = dateFormatter.format(date);
+                final orderCommentary = order.commentary;
+                final orderClientRefID = order.clientDocumentRef;
+                final orderRefID = order.orderDocumentRef;
+                final orderIsFailed = order.isInvoiceFailed;
+                final orderStatus = AppLocalizations.of(context)!.completed;
+                final orderProducts = order.products;
+                final orderSubTotal = order.subTotal;
+                final orderDiscountMaster = order.masterDiscount;
+                final orderTax = order.tax;
+                // print(order);
+                return OrderCard(
+                  clientReferenceId: orderClientRefID,
+                  date: deliveryDate,
+                  total: orderTotalAmount,
+                  orderDocumentId: orderRefID,
+                  status: orderStatus,
+                  isInvoicesFailed: orderIsFailed,
+                  commentary: orderCommentary,
+                  products: orderProducts,
+                  subTotal: orderSubTotal,
+                  discountMaster: orderDiscountMaster,
+                  tax: orderTax,
+                  coinsExchangeRates: coinsExchangeRates,
+                );
+              },
+            ),
           ),
         ),
       ],

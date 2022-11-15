@@ -246,9 +246,17 @@
     "@completed": {
         "description": "Completados del diario"
     },
+    "canceled": "Cancelado",
+    "@canceled": {
+        "description": "Cancelados del diario"
+    },
     "commentary": "Comentario",
     "@commentary": {
         "description": "Comentario del diario"
+    },
+    "commentaryUnavaliable": "No hay comentario disponible",
+    "@commentaryUnavaliable": {
+        "description": "Descripcion para visitas, ordenes o facturas sin comentarios"
     },
     "seeClient": "Ver Cliente",
     "@seeClient": {
@@ -282,7 +290,19 @@
     "@home": {
         "description": "Titulo de Inicio"
     },
-
+    "saveChanges": "Guardar cambios",
+    "@saveChanges": {
+        "description": "Boton de guardar cambios"
+    },
+    "modifiedVisit": "Visita modificada",
+    "@modifiedVisit": {
+        "description": "Anuncio de visita mofidicada"
+    },
+    "modifiedVisitError": "Le falta permisos o hubo un error al modificar la visita",
+    "@modifiedVisitError": {
+        "description": "Anuncio de error de visita moficada"
+    },
+    
 
 
     "newOrder": "Nuevo Pedido",
@@ -340,6 +360,77 @@
     "orderNumber": "Orden de la compra",
     "@orderNumber": {
         "description": "Numero de orden del pedido"
-    }
+    },
 
+
+
+    "noClientsAvaliable": "No hay clientes disponibles",
+    "@noClientsAvailable": {
+        "description": "Anuncio de clientes no disponibles"
+    },
+    "newVisit": "Nueva Visita",
+    "@newVisit": {
+        "description": "Titulo de nueva visita"
+    },
+    "date": "Fecha",
+    "@date": {
+        "description": "Titulo de fecha"
+    },
+    "createVisit": "Crear Visita",
+    "@createVisit": {
+        "description": "Titulo de boton de crear visita"
+    },
+    "creatingVisit": "Creando visita",
+    "seller": "Vendedor",
+    "visitCreated": "Visita Creada",
+    "createVisitError": "Le falta permisos o hubo un error al crear la visita",
+
+
+
+    "payable": "A pagar",
+    "subtotal": "Subtotal",
+    "totalToPay": "Total a pagar",
+    "tax": "IVA",
+    "seeProducts": "Ver productos",
+    "createInvoice": "¿Quiere pasar a facturas este pedido?",
+    "createInvoiceConfirmation": "Facturar",
+    "orderDelete": "¿Quiere Eliminar este pedido en proceso?",
+    "invoiced": "Facturado",
+    "options": "Opciones",
+    "seePayments": "Ver Pagos",
+    "registerPayment": "Registrar pago",
+    "noPayments": "No hay pagos registrados",
+    "invoiceNumber": "Pagamento da fatura",
+    "upToPay": "Resto a Pagar",
+    "balanceConfirmed": "Saldo confirmado",
+    "balanceLeft": "Por Conciliar",
+
+
+
+    "paymentMethod": "Metodo de Pago",
+    "amount": "Monto",
+
+
+
+    "bank": "Banco",
+    "accountNumber": "Nro de Cuenta",
+    "accountHolder": "Titular de la cuenta",
+    "currency": "Moneda",
+    "selectFile": "Selecione un archivo",
+    "gallery": "Galeria",
+
+
+
+    "transactionID": "Id de la transaccion",
+    "voucherNumber": "Nro de Voucher",
+    "referenceNumber": "Nro de Referencia"
+
+
+
+
+
+
+    
 }
+
+

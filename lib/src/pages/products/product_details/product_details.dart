@@ -6,6 +6,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/examples/products_example.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
+import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
@@ -25,6 +26,7 @@ class ProductDetails extends StatefulWidget {
     this.list,
     required this.isOrderActive,
     required this.isProductInAPromotion,
+    this.prices,
   }) : super(key: key);
 
   final String code;
@@ -37,6 +39,7 @@ class ProductDetails extends StatefulWidget {
   final List<Products>? list;
   final bool isOrderActive;
   final bool isProductInAPromotion;
+  final prices;
 
   @override
   State<ProductDetails> createState() => _ProductDetailsState();
@@ -45,7 +48,6 @@ class ProductDetails extends StatefulWidget {
 class _ProductDetailsState extends State<ProductDetails> {
   @override
   Widget build(BuildContext context) {
-    // print(widget.list);
     return Scaffold(
       appBar: AppBar(elevation: 0, toolbarHeight: 40),
       backgroundColor: myTheme.colorScheme.surface,
@@ -60,6 +62,7 @@ class _ProductDetailsState extends State<ProductDetails> {
         price: widget.price,
         isOrderActive: widget.isOrderActive,
         isProductInAPromotion: widget.isProductInAPromotion,
+        prices: widget.prices,
       ),
     );
   }
@@ -78,6 +81,7 @@ class ProductDetailsBody extends StatelessWidget {
     this.list,
     required this.isOrderActive,
     required this.isProductInAPromotion,
+    this.prices,
   }) : super(key: key);
 
   final String code;
@@ -90,12 +94,13 @@ class ProductDetailsBody extends StatelessWidget {
   final List<Products>? list;
   final bool isOrderActive;
   final bool isProductInAPromotion;
+  final prices;
 
   @override
   Widget build(BuildContext context) {
     final String priceProduct = price ?? '0';
 
-    // print(list);
+    print(prices);
     print('Precio: ${price ?? 000}');
 
     return SingleChildScrollView(
@@ -320,6 +325,7 @@ class ProductDetailsBody extends StatelessWidget {
                                           ProductsPage(
                                         listOfProducts: list,
                                         isOrderActive: isOrderActive,
+                                        listOfPrices: prices,
                                       ),
                                     ),
                                   );

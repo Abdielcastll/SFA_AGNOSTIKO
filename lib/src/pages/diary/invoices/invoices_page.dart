@@ -9,6 +9,7 @@ import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/credit_
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/filter_invoices.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/invoice_completed.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/invoices_on_process.dart';
+import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class InvoicesPage extends StatefulWidget {
   const InvoicesPage({Key? key}) : super(key: key);
@@ -33,7 +34,6 @@ class _InvoicesPageState extends State<InvoicesPage> {
                     .map(accountInvoicesFromSnapshot),
                 initialData: const [],
                 catchError: (context, error) {
-                  print(error);
                   return;
                 },
               )
@@ -44,14 +44,13 @@ class _InvoicesPageState extends State<InvoicesPage> {
                     .map(accountCreditNotesFromSnapshot),
                 initialData: const [],
                 catchError: (context, error) {
-                  print(error);
                   return;
                 },
               )
       ],
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: Colors.grey[100],
+          backgroundColor: myTheme.colorScheme.surface,
           body: InvoicesBody(isNotesChecked: isCheckedNotes),
         ),
       ),
@@ -84,6 +83,7 @@ class _InvoicesBodyState extends State<InvoicesBody> {
             margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
+              // ignore: prefer_const_literals_to_create_immutables
               children: [
                 // Checkbox(
                 //   checkColor: Colors.white,

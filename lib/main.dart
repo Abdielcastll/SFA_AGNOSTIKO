@@ -33,16 +33,16 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Inicializar Object Box
   objectBox = await ObjectBox.init();
-  print('ObjectBox: all green');
+  // print('ObjectBox: all green');
   // Inicializar Firebase
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  print('Firebase: all green');
+  // print('Firebase: all green');
   // Inicializar SharedPreferences
   sharedPreferences = await SharedPreferences.getInstance();
-  print('SharedPreferences: all green');
+  // print('SharedPreferences: all green');
   // Inicializar App
   runApp(const SfaAgnostiko());
-  print('Starting SFA Agnostiko');
+  // print('Starting SFA Agnostiko');
 }
 
 class SfaAgnostiko extends StatelessWidget {

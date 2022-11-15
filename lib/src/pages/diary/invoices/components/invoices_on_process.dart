@@ -24,37 +24,34 @@ class _InvoicesOnProcessState extends State<InvoicesOnProcess> {
     final invoices = Provider.of<List<Invoices>?>(context) ?? [];
     final invoicesList =
         invoices.where((element) => element.isPaid == false).toList();
-    // print(invoicesList);
-    print('Facturas totales: ${invoices.length}');
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
-        // ignore: prefer_const_literals_to_create_immutables
         children: [
           Row(
-            // ignore: prefer_const_literals_to_create_immutables
             children: [
-              Padding(
-                padding: EdgeInsets.only(left: 16),
+              Container(
+                margin: EdgeInsets.only(left: 16, bottom: 10),
                 child: Text(
                   textAlign: TextAlign.start,
                   AppLocalizations.of(context)!.onProcess,
                   style: TextStyle(
-                    color: Colors.amber,
+                    color: Colors.amber.shade600,
                     fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins-regular',
                   ),
                 ),
               ),
             ],
           ),
-          SizedBox(height: 10),
           SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
             child: Container(
               height: 230,
               child: Scrollbar(
                 child: ListView.builder(
-                  // physics: BouncingScrollPhysics(),
                   itemCount: invoicesList.length,
                   itemBuilder: (BuildContext context, int index) {
                     final invoice = invoicesList[index];
@@ -68,11 +65,12 @@ class _InvoicesOnProcessState extends State<InvoicesOnProcess> {
                         dateFormatter.format(date ?? DateTime.now());
                     final invoiceBalance = invoice.totalAmount;
                     final invoicePayments = invoice.payments;
-                    const invoiceStatus = 'En proceso';
+                    final invoiceStatus =
+                        AppLocalizations.of(context)!.onProcess;
                     final invoiceNumber = invoice.correlativeNumber;
                     final invoiceTotal = invoice.totalAmount;
                     final invoiceDocumentID = invoice.invoiceDocumentID;
-                    // print(invoice);
+
                     return InvoiceCard(
                       invoiceClient: invoiceClient,
                       invoiceDate: invoiceDate,

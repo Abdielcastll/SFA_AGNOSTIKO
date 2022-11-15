@@ -63,9 +63,9 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
               itemCount: categoriesSummary.length,
               itemBuilder: (BuildContext context, index) {
                 final categorie = categoriesSummary[index];
+
                 return GestureDetector(
                   onTap: () {
-                    // Redireccionar a productos filtrados por catalogo,
                     Navigator.push(
                       context,
                       MaterialPageRoute(

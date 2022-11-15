@@ -167,7 +167,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
 
     // print(today);
     // print(userUid);
-    print(coinsExchangeRates);
+    // print(coinsExchangeRates);
 
     return SingleChildScrollView(
       physics: BouncingScrollPhysics(),
@@ -377,10 +377,10 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                             } else if (value == 'Despacho') {
                               isFiscalSelected = false;
                             }
-                            print(selectedValue);
-                            print(selectedValue == 'Fiscal'
-                                ? widget.client?.fiscalAdress
-                                : widget.client?.dispatchAdress);
+                            // print(selectedValue);
+                            // print(selectedValue == 'Fiscal'
+                            //     ? widget.client?.fiscalAdress
+                            //     : widget.client?.dispatchAdress);
                           },
                         );
                       },
@@ -535,7 +535,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                             setState(() {
                               numberOrder = value;
                             });
-                            print(numberOrder);
+                            // print(numberOrder);
                           },
                         ),
                       ),
@@ -583,7 +583,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                 if (newDate == null) return;
                                 setState(() {
                                   today = newDate;
-                                  print(today);
+                                  (today);
                                 });
                               },
                               splashRadius: 5,
@@ -665,7 +665,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       onChanged: (value) {
                         setState(() {
                           selectedValue2 = value as String;
-                          print(selectedValue2);
+                          (selectedValue2);
                         });
                       },
                       icon: const Icon(
@@ -757,7 +757,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                     onChanged: (value) {
                       setState(() {
                         commentary = value;
-                        print(commentary);
+                        // print(commentary);
                       });
                     },
                   ),

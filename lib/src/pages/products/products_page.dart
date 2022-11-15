@@ -42,7 +42,7 @@ class _ProductsPageState extends State<ProductsPage> {
         message: AppLocalizations.of(context)!.products,
         isOrderActive: widget.isOrderActive,
       ),
-      backgroundColor: Colors.grey[200],
+      backgroundColor: myTheme.colorScheme.surface,
       body: MultiProvider(
         providers: [
           // StreamProvider<List<Products>?>.value(
@@ -57,7 +57,7 @@ class _ProductsPageState extends State<ProductsPage> {
             value: DatabaseServiceStreams().qualitySummary,
             initialData: null,
             catchError: (context, error) {
-              print(error);
+              // print(error);
               return;
             },
           ),
@@ -65,7 +65,7 @@ class _ProductsPageState extends State<ProductsPage> {
             value: DatabaseServiceStreams().categorieSummary,
             initialData: null,
             catchError: (context, error) {
-              print(error);
+              // print(error);
               return;
             },
           ),
@@ -73,7 +73,7 @@ class _ProductsPageState extends State<ProductsPage> {
             value: DatabaseServiceStreams().designSummary,
             initialData: null,
             catchError: (context, error) {
-              print(error);
+              // print(error);
               return;
             },
           ),
@@ -81,7 +81,7 @@ class _ProductsPageState extends State<ProductsPage> {
             value: DatabaseServiceStreams().lineSummary,
             initialData: null,
             catchError: (context, error) {
-              print(error);
+              // print(error);
               return;
             },
           ),
@@ -89,7 +89,7 @@ class _ProductsPageState extends State<ProductsPage> {
             value: DatabaseServiceStreams().brandSummary,
             initialData: null,
             catchError: (context, error) {
-              print(error);
+              // print(error);
               return;
             },
           ),
@@ -97,7 +97,7 @@ class _ProductsPageState extends State<ProductsPage> {
             value: DatabaseServiceStreams().subCategorieSummary,
             initialData: null,
             catchError: (context, error) {
-              print(error);
+              // print(error);
               return;
             },
           ),
@@ -105,7 +105,7 @@ class _ProductsPageState extends State<ProductsPage> {
             value: DatabaseServiceStreams().sizeSummary,
             initialData: null,
             catchError: (context, error) {
-              print(error);
+              // print(error);
               return;
             },
           ),
@@ -113,7 +113,7 @@ class _ProductsPageState extends State<ProductsPage> {
             value: DatabaseServiceStreams().stockValues,
             initialData: null,
             catchError: (context, error) {
-              print(error);
+              // print(error);
               return;
             },
           ),
@@ -167,7 +167,6 @@ class _ProductsBodyState extends State<ProductsBody> {
         coinsExchangeRates.add(element.data()['tasaDeCambio']);
       });
     });
-    setState(() {});
   }
 
   @override
@@ -227,7 +226,6 @@ class _ProductsBodyState extends State<ProductsBody> {
         locale: 'es_VE',
         decimalDigits: 2,
         symbol: "Bs.",
-        // customPattern: '\u00a4 #.##,#',
       ).format(productPrice * coinsExchangeRates[2]);
     } else if (currentCoin == 'EUR') {
       return NumberFormat.currency(
@@ -243,8 +241,7 @@ class _ProductsBodyState extends State<ProductsBody> {
 
   @override
   Widget build(BuildContext context) {
-    print(currentCoin);
-
+    setState(() {});
     final String? moneySymbol = identifyCurrency();
     final userCharge = sharedPreferences!.getString('cargo');
     final qualitiesSummary =
@@ -259,13 +256,8 @@ class _ProductsBodyState extends State<ProductsBody> {
     final sizesSummary = Provider.of<SizeSummary?>(context)?.summary ?? {};
     final stockValues = Provider.of<StockModel?>(context)?.stock ?? {};
 
-    // print(widget.listOfPrices);
-    print(selectedProducts);
-    print('Tazas de cambio $coinsExchangeRates');
-    print(widget.isOrderActive);
-    print('cargo: $userCharge');
-
     return Scaffold(
+      backgroundColor: myTheme.colorScheme.surface,
       floatingActionButton: Wrap(
         direction: Axis.vertical,
         children: [
@@ -313,7 +305,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                 keyboardType: TextInputType.text,
                 maxLines: 1,
                 maxLength: 200,
-                textCapitalization: TextCapitalization.characters,
+                textCapitalization: TextCapitalization.sentences,
                 controller: searchController,
                 decoration: InputDecoration(
                   fillColor: Colors.white,

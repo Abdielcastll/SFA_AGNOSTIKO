@@ -44,7 +44,7 @@ class _ListTileOptionsState extends State<ListTileOptions> {
       if (userDoc!.zone == null) {
         return "No hay zona disponible";
       } else {
-        print(zoneSummary[userDoc.zone]);
+        // print(zoneSummary[userDoc.zone]);
         return zoneSummary[userDoc.zone];
       }
     }
@@ -294,22 +294,22 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                                         // 'Euros (EUR - €)',
                                         // 'Bitcoin (BTC - ฿)',
                                         if (value.toString().contains('\$')) {
-                                          print('Cambio de moneda a: USD');
+                                          // print('Cambio de moneda a: USD');
                                           // selectedValue = 'USD';
                                         } else if (value
                                             .toString()
                                             .contains('Bs')) {
-                                          print('Cambio de moneda a: BS');
+                                          // print('Cambio de moneda a: BS');
                                           // selectedValue = 'VED';
                                         } else if (value
                                             .toString()
                                             .contains('€')) {
-                                          print('Cambio de moneda a: EUR');
+                                          // print('Cambio de moneda a: EUR');
                                           // selectedValue = 'EUR';
                                         } else if (value
                                             .toString()
                                             .contains('฿')) {
-                                          print('Cambio de moneda a: BTC');
+                                          // print('Cambio de moneda a: BTC');
                                           // selectedValue = 'BTC';
                                         }
                                       },
@@ -372,24 +372,24 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                             // 'Euros (EUR - €)',
                             // 'Bitcoin (BTC - ฿)',
                             if (selectedValue.toString().contains('\$')) {
-                              print('Cambio de moneda a: USD');
+                              // print('Cambio de moneda a: USD');
                               sharedPreferences?.setString(
                                   'currentCoin', 'USD');
                               Navigator.pop(context);
                             } else if (selectedValue
                                 .toString()
                                 .contains('Bs')) {
-                              print('Cambio de moneda a: Bolivares');
+                              // print('Cambio de moneda a: Bolivares');
                               sharedPreferences?.setString(
                                   'currentCoin', 'VED');
                               Navigator.pop(context);
                             } else if (selectedValue.toString().contains('€')) {
-                              print('Cambio de moneda a: Euro');
+                              // print('Cambio de moneda a: Euro');
                               sharedPreferences?.setString(
                                   'currentCoin', 'EUR');
                               Navigator.pop(context);
                             } else if (selectedValue.toString().contains('฿')) {
-                              print('Cambio de moneda a: Bitcoin');
+                              // print('Cambio de moneda a: Bitcoin');
                               sharedPreferences?.setString(
                                   'currentCoin', 'BTC');
                               Navigator.pop(context);

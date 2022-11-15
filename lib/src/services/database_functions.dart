@@ -6,6 +6,7 @@ import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Funciones de Visitas
 
@@ -46,14 +47,15 @@ Future updateVisitData(
   String? status,
   String uid,
   String? commentary,
+  context,
 ) async {
   print('// ACTUALIZAR ESTADO DE LA VISITA //');
   bool isCompleted = false;
   bool isCancelled = false;
   if (status != null) {
-    if (status == 'Completada') {
+    if (status == AppLocalizations.of(context)!.completed) {
       isCompleted = true;
-    } else if (status == 'Cancelada') {
+    } else if (status == AppLocalizations.of(context)!.canceled) {
       isCancelled = true;
     }
   } else if (status == null) {

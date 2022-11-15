@@ -86,6 +86,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                               .toList(),
                           isOrderActive: widget.isOrderActive,
                           isProductInAPromotion: false,
+                          prices: prices,
                         ),
                       ),
                     );

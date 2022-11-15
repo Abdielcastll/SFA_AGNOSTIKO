@@ -38,7 +38,7 @@ class _CataloguePageState extends State<CataloguePage> {
           value: DatabaseServiceStreams().products,
           initialData: const [],
           catchError: (context, error) {
-            print(error);
+            // print(error);
             return;
           },
         ),
@@ -46,7 +46,7 @@ class _CataloguePageState extends State<CataloguePage> {
           value: DatabaseServiceStreams().productsWithPromotions,
           initialData: const [],
           catchError: (context, error) {
-            print(error);
+            // print(error);
             return;
           },
         ),
@@ -54,7 +54,7 @@ class _CataloguePageState extends State<CataloguePage> {
           value: DatabaseServiceStreams().productsByDate,
           initialData: const [],
           catchError: (context, error) {
-            print(error);
+            // print(error);
             return;
           },
         ),
@@ -62,7 +62,7 @@ class _CataloguePageState extends State<CataloguePage> {
           value: DatabaseServiceStreams().categorieSummary,
           initialData: null,
           catchError: (context, error) {
-            print(error);
+            // print(error);
             return;
           },
         ),
@@ -70,7 +70,7 @@ class _CataloguePageState extends State<CataloguePage> {
           value: DatabaseServiceStreams().lineSummary,
           initialData: null,
           catchError: (context, error) {
-            print(error);
+            // print(error);
             return;
           },
         ),
@@ -78,7 +78,7 @@ class _CataloguePageState extends State<CataloguePage> {
           value: DatabaseServiceStreams().stockValues,
           initialData: null,
           catchError: (context, error) {
-            print(error);
+            // print(error);
             return;
           },
         ),
@@ -90,7 +90,7 @@ class _CataloguePageState extends State<CataloguePage> {
               .map(pricesfromSnapshot),
           initialData: null,
           catchError: (context, error) {
-            print(error);
+            // print(error);
             return;
           },
         ),
@@ -124,8 +124,8 @@ class _CatalogueBodyState extends State<CatalogueBody> {
 
   @override
   Widget build(BuildContext context) {
-    print('Idioma Activo: ${AppLocalizations.of(context)!.language}');
-    print('Moneda Activa: $currentCoin');
+    // print('Idioma Activo: ${AppLocalizations.of(context)!.language}');
+    // print('Moneda Activa: $currentCoin');
 
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),

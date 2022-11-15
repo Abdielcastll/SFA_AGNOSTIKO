@@ -83,8 +83,8 @@ class _SelectedProductsState extends State<SelectedProducts> {
     String moneySymbol = identifyCurrency();
     // double subTotalPrice = totalPriceSum();
     // print(streamShoppingCartProducts);
-    print(currentCoin);
-    print('Tasas: $coinsExchangeRates');
+    // print(currentCoin);
+    // print('Tasas: $coinsExchangeRates');
     return Column(
       children: [
         Container(
@@ -113,19 +113,19 @@ class _SelectedProductsState extends State<SelectedProducts> {
                         product.productQuantity!)
                     .toString();
                 var myInt = double.parse(totalAmount);
-                print('Precio de producto ${product.code}: $myInt');
+                // print('Precio de producto ${product.code}: $myInt');
                 subTotal += myInt;
               });
 
               var test = identifyPrice(subTotal);
 
-              print('Lista de precios activa: $clientPriceList');
-              print('Cantidad de objetos en carrito: ${products.length}');
-              print('SubTotal del pedido: $subTotal');
-              print(test);
+              // print('Lista de precios activa: $clientPriceList');
+              // print('Cantidad de objetos en carrito: ${products.length}');
+              // print('SubTotal del pedido: $subTotal');
+              // print(test);
               return WillPopScope(
                 onWillPop: () async {
-                  print('Retroceder');
+                  // print('Retroceder');
                   products.isEmpty
                       ? Navigator.pop(context)
                       : showDialog(
@@ -675,13 +675,13 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                       child: ElevatedButton(
                                         onPressed: () {
                                           // Continuar con la compra
-                                          print('Confirmacion de info enviada');
-                                          print(
-                                              'Objetos en carrito: ${products.length}');
-                                          print(
-                                              'Cliente activo: ${widget.client!.name}');
-                                          print(
-                                              'Sub total del pedido: ${subTotal.toStringAsFixed(2)}');
+                                          // print('Confirmacion de info enviada');
+                                          // print(
+                                          //     'Objetos en carrito: ${products.length}');
+                                          // print(
+                                          //     'Cliente activo: ${widget.client!.name}');
+                                          // print(
+                                          //     'Sub total del pedido: ${subTotal.toStringAsFixed(2)}');
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(

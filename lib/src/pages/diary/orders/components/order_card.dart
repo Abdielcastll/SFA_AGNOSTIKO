@@ -11,6 +11,7 @@ import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_de
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/orders_alerts_and_dialogs/orders_bottomsheet.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OrderCard extends StatefulWidget {
   const OrderCard(
@@ -134,24 +135,23 @@ class _OrderCardBodyState extends State<OrderCardBody> {
     final userUID = Provider.of<UserModel>(context).uid;
 
     identifyStatusColor() {
-      if (widget.widget.status == 'En proceso' &&
+      if (widget.widget.status == AppLocalizations.of(context)!.onProcess &&
           widget.widget.isInvoicesFailed == false) {
-        return Colors.amber;
-      } else if (widget.widget.status == 'Completada' &&
+        return Colors.amber.shade600;
+      } else if (widget.widget.status ==
+              AppLocalizations.of(context)!.completed &&
           widget.widget.isInvoicesFailed == true) {
         return Colors.red;
-      } else if (widget.widget.status == 'Completada' &&
+      } else if (widget.widget.status ==
+              AppLocalizations.of(context)!.completed &&
           widget.widget.isInvoicesFailed == false) {
-        return Colors.green;
+        return Colors.green.shade600;
       }
     }
 
-    // print('cambios: ${widget.widget.coinsExchangeRates}');
-
     return GestureDetector(
       onTap: () {
-        // Redireccionar a detalles del pedido
-        widget.widget.status == 'En proceso'
+        widget.widget.status == AppLocalizations.of(context)!.onProcess
             ? modalBottomSheetForOrders(
                 false,
                 context,
@@ -211,99 +211,94 @@ class _OrderCardBodyState extends State<OrderCardBody> {
                 widget.widget.date,
               );
       },
-      child: Padding(
-        padding: EdgeInsets.only(top: 5, left: 16, right: 16, bottom: 5),
-        child: Container(
-          // margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-          width: 360.0,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Container(
+        margin: EdgeInsets.only(top: 5, left: 14, right: 14, bottom: 5),
+        padding: EdgeInsets.fromLTRB(14, 5, 0, 5),
+        width: 360.0,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: 200,
+                  child: Text(
+                    '$currentClientName',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontFamily: 'Poppins-regular',
+                    ),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                  child: Text(
+                    '${identifyCurrency()} ${identifyPrice(widget.widget.total)}',
+                    style: TextStyle(
+                      color: identifyStatusColor(),
+                      fontSize: 16,
+                      fontFamily: 'Poppins-regular',
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 10, 0, 3),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: 14, top: 10),
-                    child: Container(
-                      width: 200,
-                      child: Text(
-                        '$currentClientName',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                  SizedBox(
+                    height: 13,
+                    width: 150,
+                    child: Text(
+                      'ID: ${currentClientIdType.toString()}-${currentClientId.toString()}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey.shade500,
+                        fontFamily: 'Poppins-regular',
                       ),
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                    height: 13,
+                    width: 95,
                     child: Text(
-                      '${identifyCurrency()} ${identifyPrice(widget.widget.total)}',
+                      '${widget.widget.date}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey.shade500,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: 13,
+                    width: 70,
+                    child: Text(
+                      '${widget.widget.status}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          fontSize: 10,
                         color: identifyStatusColor(),
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
                 ],
               ),
-              Container(
-                margin: EdgeInsets.fromLTRB(10, 5, 0, 10),
-                child: Row(
-                  children: [
-                    Container(
-                      height: 13,
-                      width: 150,
-                      child: Text(
-                        'ID: ${currentClientIdType.toString()}-${currentClientId.toString()}',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.grey.shade400,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 13,
-                      width: 95,
-                      child: Text(
-                        '${widget.widget.date}',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.grey.shade400,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 13,
-                      width: 70,
-                      child: Text(
-                        '${widget.widget.status}',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: identifyStatusColor(),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

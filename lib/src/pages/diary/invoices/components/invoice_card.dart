@@ -17,6 +17,7 @@ import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_de
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/invoice_modalbottomsheet.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InvoiceCard extends StatefulWidget {
   const InvoiceCard({
@@ -58,7 +59,6 @@ class _InvoiceCardState extends State<InvoiceCard> {
             .snapshots()
             .map(clientFromDocumentID),
         catchError: (context, error) {
-          print(error);
           return;
         },
       ),
@@ -80,12 +80,12 @@ class InvoiceCardBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // print(Timestamp.fromDate(DateTime.parse(widget.invoiceDate)));
     Color? identifyColor() {
-      if (widget.invoiceStatus == 'En proceso') {
-        return Colors.amber.shade300;
-      } else if (widget.invoiceStatus == 'Facturado') {
-        return Colors.green;
+      if (widget.invoiceStatus == AppLocalizations.of(context)!.onProcess) {
+        return Colors.amber.shade600;
+      } else if (widget.invoiceStatus ==
+          AppLocalizations.of(context)!.invoiced) {
+        return Colors.green.shade600;
       }
     }
 
@@ -114,7 +114,7 @@ class InvoiceCardBody extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        widget.invoiceStatus == 'En proceso'
+        widget.invoiceStatus == AppLocalizations.of(context)!.onProcess
             ? modalBottomSheetForInvoices(
                 false,
                 context,
@@ -179,7 +179,7 @@ class InvoiceCardBody extends StatelessWidget {
                         '$currentClientName',
                         style: TextStyle(
                           fontSize: 15,
-                          fontWeight: FontWeight.w500,
+                          fontFamily: "Poppins-regular",
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -192,17 +192,17 @@ class InvoiceCardBody extends StatelessWidget {
                       '\$${widget.invoiceBalance}',
                       style: TextStyle(
                         color: identifyColor(),
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                        fontSize: 15,
+                        fontFamily: "Poppins-regular",
                       ),
                     ),
                   ),
                 ],
               ),
               Container(
-                margin: EdgeInsets.fromLTRB(10, 5, 0, 10),
+                margin: EdgeInsets.fromLTRB(5, 5, 0, 10),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Container(
                       height: 13,
@@ -213,36 +213,34 @@ class InvoiceCardBody extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.grey.shade400,
+                          fontFamily: "Poppins-regular",
+                          color: Colors.grey.shade500,
                         ),
                       ),
                     ),
                     Container(
                       height: 13,
-                      // width: 95,
                       child: Text(
                         '${widget.invoiceDate}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.grey.shade400,
+                          fontFamily: "Poppins-regular",
+                          color: Colors.grey.shade500,
                         ),
                       ),
                     ),
                     Container(
                       height: 13,
-                      // width: 150,
                       child: Text(
                         'F#${widget.invoiceNumber}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.grey.shade400,
+                          fontFamily: "Poppins-regular",
+                          color: Colors.grey.shade500,
                         ),
                       ),
                     ),
@@ -254,8 +252,8 @@ class InvoiceCardBody extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
+                          fontSize: 10,
+                          fontFamily: "Poppins-regular",
                           color: identifyColor(),
                         ),
                       ),

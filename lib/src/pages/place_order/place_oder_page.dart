@@ -38,7 +38,7 @@ class PlaceOrderPage extends StatelessWidget {
             value: DatabaseServiceStreams().clients,
             initialData: const [],
             catchError: (context, error) {
-              print(error);
+              // print(error);
               return;
             },
           ),
@@ -46,7 +46,7 @@ class PlaceOrderPage extends StatelessWidget {
             value: DatabaseServiceStreams().idTypeSummary,
             initialData: null,
             catchError: (context, error) {
-              print(error);
+              // print(error);
               return;
             },
           ),
@@ -54,7 +54,7 @@ class PlaceOrderPage extends StatelessWidget {
             value: DatabaseServiceStreams().zoneSummary,
             initialData: null,
             catchError: (context, error) {
-              print(error);
+              // print(error);
               return;
             },
           ),

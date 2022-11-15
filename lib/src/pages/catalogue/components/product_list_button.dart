@@ -45,7 +45,6 @@ class _ListOfProductsButtonState extends State<ListOfProductsButton> {
               ),
             ),
           );
-          print('Redireccionar a la lista de productos entera');
         },
         style: ButtonStyle(
           elevation: MaterialStateProperty.all<double>(0),

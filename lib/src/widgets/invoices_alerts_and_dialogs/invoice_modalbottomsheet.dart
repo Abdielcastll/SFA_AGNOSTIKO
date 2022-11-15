@@ -13,27 +13,7 @@ import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/identify_payment_method.dart';
-
-// getFromGallery(context) async {
-//   XFile? pickedFile =
-//       await ImagePicker().pickImage(source: ImageSource.gallery);
-//   if (pickedFile != null) {
-//     return pickedFile;
-//   } else {
-//     return;
-//   }
-// }
-
-// cropImage(filePath, imageFile) async {
-//   CroppedFile? croppedImage = await ImageCropper().cropImage(
-//     sourcePath: filePath,
-//     maxHeight: 1080,
-//     maxWidth: 1080,
-//   );
-//   if (croppedImage != null) {
-//     return croppedImage;
-//   }
-// }
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void modalBottomSheetForInvoices(
   bool completed,
@@ -102,7 +82,7 @@ void modalBottomSheetForInvoices(
                       alignment: Alignment.centerLeft,
                       margin: EdgeInsets.fromLTRB(10, 20, 0, 0),
                       child: Text(
-                        'Opciones',
+                        AppLocalizations.of(context)!.options,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -151,7 +131,7 @@ void modalBottomSheetForInvoices(
                                   foregroundColor: myTheme.colorScheme.primary,
                                 ),
                                 child: Text(
-                                  'Ver Cliente',
+                                  AppLocalizations.of(context)!.seeClient,
                                   style: TextStyle(
                                     fontFamily: 'Poppins-regular',
                                     color: Colors.white,
@@ -182,7 +162,7 @@ void modalBottomSheetForInvoices(
                                                     BorderRadius.circular(20),
                                               ),
                                               title: Text(
-                                                'Pago de factura #$invoiceNumber',
+                                                '${AppLocalizations.of(context)!.invoiceNumber} #$invoiceNumber',
                                                 style: TextStyle(
                                                   fontFamily: 'Poppins-regular',
                                                   color: myTheme
@@ -208,7 +188,16 @@ void modalBottomSheetForInvoices(
                                                                         Alignment
                                                                             .center,
                                                                     child: Text(
-                                                                      'No hay pagos registrados',
+                                                                      AppLocalizations.of(
+                                                                              context)!
+                                                                          .noPayments,
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontSize:
+                                                                            13,
+                                                                        fontFamily:
+                                                                            'Poppins-regular',
+                                                                      ),
                                                                     ),
                                                                   )
                                                                 : Scrollbar(
@@ -269,7 +258,7 @@ void modalBottomSheetForInvoices(
                                                     ),
                                                     SizedBox(height: 30),
                                                     Text(
-                                                      'Restante en USD: \$${remaining.toStringAsFixed(2)}',
+                                                      '${AppLocalizations.of(context)!.upToPay}: \$${remaining.toStringAsFixed(2)}',
                                                       style: TextStyle(
                                                         fontFamily:
                                                             'Poppins-regular',
@@ -280,18 +269,9 @@ void modalBottomSheetForInvoices(
                                                       ),
                                                     ),
                                                     // Text(
-                                                    //   'Se genero NC: #25',
-                                                    //   style: TextStyle(
-                                                    //     fontFamily:
-                                                    //         'Poppins-regular',
-                                                    //     color: Colors.black,
-                                                    //     fontSize: 12,
-                                                    //     fontWeight:
-                                                    //         FontWeight.bold,
-                                                    //   ),
-                                                    // ),
+
                                                     Text(
-                                                      'Saldo confimado: \$$sumOfValidPayments',
+                                                      '${AppLocalizations.of(context)!.balanceConfirmed}: \$$sumOfValidPayments',
                                                       style: TextStyle(
                                                         fontFamily:
                                                             'Poppins-regular',
@@ -302,7 +282,7 @@ void modalBottomSheetForInvoices(
                                                       ),
                                                     ),
                                                     Text(
-                                                      'Por conciliar: \$$leftoverAmount',
+                                                      '${AppLocalizations.of(context)!.balanceLeft}: \$$leftoverAmount',
                                                       style: TextStyle(
                                                         fontFamily:
                                                             'Poppins-regular',
@@ -321,7 +301,9 @@ void modalBottomSheetForInvoices(
                                                               context);
                                                         },
                                                         child: Text(
-                                                          'Regresar',
+                                                          AppLocalizations.of(
+                                                                  context)!
+                                                              .goBack,
                                                           style: TextStyle(
                                                             fontFamily:
                                                                 'Poppins-regular',
@@ -347,7 +329,7 @@ void modalBottomSheetForInvoices(
                                   foregroundColor: myTheme.colorScheme.primary,
                                 ),
                                 child: Text(
-                                  'Ver pagos',
+                                  AppLocalizations.of(context)!.seePayments,
                                   style: TextStyle(
                                     fontFamily: 'Poppins-regular',
                                     color: Colors.white,
@@ -392,7 +374,8 @@ void modalBottomSheetForInvoices(
                                                     BorderRadius.circular(20),
                                               ),
                                               title: Text(
-                                                'Registrar pago',
+                                                AppLocalizations.of(context)!
+                                                    .registerPayment,
                                                 style: TextStyle(
                                                   fontFamily: 'Poppins-regular',
                                                   color: Color.fromARGB(
@@ -407,7 +390,9 @@ void modalBottomSheetForInvoices(
                                                   child: Column(
                                                     children: [
                                                       Text(
-                                                        'Metodo de Pago',
+                                                        AppLocalizations.of(
+                                                                context)!
+                                                            .paymentMethod,
                                                         style: TextStyle(
                                                           fontFamily:
                                                               'Poppins-regular',
@@ -558,12 +543,14 @@ void modalBottomSheetForInvoices(
                                                                 true,
                                                             offset:
                                                                 const Offset(
-                                                                    -20, 0),
+                                                                    0, 0),
                                                           ),
                                                         ),
                                                       ),
                                                       Text(
-                                                        'Fecha',
+                                                        AppLocalizations.of(
+                                                                context)!
+                                                            .date,
                                                         style: TextStyle(
                                                           fontFamily:
                                                               'Poppins-regular',
@@ -623,7 +610,6 @@ void modalBottomSheetForInvoices(
                                                               child: IconButton(
                                                                 onPressed:
                                                                     () async {
-                                                                  // Seleccionar fecha
                                                                   DateTime?
                                                                       newDate =
                                                                       await showDatePicker(
@@ -662,7 +648,7 @@ void modalBottomSheetForInvoices(
                                                         ),
                                                       ),
                                                       Text(
-                                                        'Monto *',
+                                                        '${AppLocalizations.of(context)!.amount}*',
                                                         style: TextStyle(
                                                           fontFamily:
                                                               'Poppins-regular',
@@ -789,10 +775,8 @@ void modalBottomSheetForInvoices(
                                                               ),
                                                             ),
                                                           ),
-                                                          // onChanged: searchClient,
                                                         ),
                                                       ),
-
                                                       Container(
                                                         child:
                                                             identifyPaymentMethod(
@@ -802,194 +786,9 @@ void modalBottomSheetForInvoices(
                                                           paidAmount,
                                                           invoiceTotal,
                                                           today,
+                                                          context,
                                                         ),
                                                       )
-                                                      // Text(
-                                                      //   'Seleccione un archivo',
-                                                      //   style: TextStyle(
-                                                      //     fontFamily:
-                                                      //         'Poppins-regular',
-                                                      //     color: Colors
-                                                      //         .grey.shade400,
-                                                      //     fontSize: 14,
-                                                      //   ),
-                                                      // ),
-                                                      // InkWell(
-                                                      //   onTap: () async {
-                                                      //     var pickedFile =
-                                                      //         await getFromGallery(
-                                                      //             context);
-                                                      //     if (pickedFile !=
-                                                      //         null) {
-                                                      //       print(
-                                                      //           'Imagen seleccionada');
-                                                      //       var croppedImage =
-                                                      //           await cropImage(
-                                                      //               pickedFile
-                                                      //                   .path,
-                                                      //               imageFile);
-                                                      //       if (croppedImage !=
-                                                      //           null) {
-                                                      //         print(
-                                                      //             'Imagen recortada');
-                                                      //         setState(() {
-                                                      //           imageFile = File(
-                                                      //               croppedImage
-                                                      //                   .path);
-                                                      //         });
-                                                      //       } else {
-                                                      //         print(
-                                                      //             'Error croppeando');
-                                                      //       }
-                                                      //     } else {
-                                                      //       print(
-                                                      //           'error seleccionando');
-                                                      //       return;
-                                                      //     }
-                                                      //   },
-                                                      //   child: Row(
-                                                      //     // ignore: prefer_const_literals_to_create_immutables
-                                                      //     mainAxisAlignment:
-                                                      //         MainAxisAlignment
-                                                      //             .center,
-                                                      //     children: [
-                                                      //       Padding(
-                                                      //         padding:
-                                                      //             EdgeInsets
-                                                      //                 .all(4.0),
-                                                      //         child: Icon(
-                                                      //           Icons.camera,
-                                                      //           color: myTheme
-                                                      //               .colorScheme
-                                                      //               .secondary,
-                                                      //         ),
-                                                      //       ),
-                                                      //       Text(
-                                                      //         'Galeria',
-                                                      //         style: TextStyle(
-                                                      //           color: myTheme
-                                                      //               .colorScheme
-                                                      //               .primary,
-                                                      //           fontFamily:
-                                                      //               'Poppins-regular',
-                                                      //         ),
-                                                      //       ),
-                                                      //     ],
-                                                      //   ),
-                                                      // ),
-                                                      // imageFile == null
-                                                      //     ? Container()
-                                                      //     : Container(
-                                                      //         height: 300,
-                                                      //         width: 300,
-                                                      //         decoration:
-                                                      //             BoxDecoration(
-                                                      //           border:
-                                                      //               Border.all(
-                                                      //             color: myTheme
-                                                      //                 .colorScheme
-                                                      //                 .primary,
-                                                      //           ),
-                                                      //           borderRadius:
-                                                      //               BorderRadius
-                                                      //                   .circular(
-                                                      //                       10),
-                                                      //         ),
-                                                      //         child: Image.file(
-                                                      //           imageFile!,
-                                                      //           height: 300,
-                                                      //           width: 300,
-                                                      //         ),
-                                                      //       ),
-                                                      // Container(
-                                                      //   alignment: Alignment
-                                                      //       .bottomCenter,
-                                                      //   margin:
-                                                      //       EdgeInsets.fromLTRB(
-                                                      //           0, 0, 0, 10),
-                                                      //   child: Row(
-                                                      //     mainAxisAlignment:
-                                                      //         MainAxisAlignment
-                                                      //             .center,
-                                                      //     crossAxisAlignment:
-                                                      //         CrossAxisAlignment
-                                                      //             .end,
-                                                      //     children: [
-                                                      //       TextButton(
-                                                      //         onPressed: () {
-                                                      //           Navigator.pop(
-                                                      //               context);
-                                                      //           setState(() =>
-                                                      //               imageFile =
-                                                      //                   null);
-                                                      //         },
-                                                      //         child: Text(
-                                                      //           'Regresar',
-                                                      //           style:
-                                                      //               TextStyle(
-                                                      //             fontFamily:
-                                                      //                 'Poppins-regular',
-                                                      //             color: myTheme
-                                                      //                 .colorScheme
-                                                      //                 .primary,
-                                                      //             fontSize: 14,
-                                                      //             fontWeight:
-                                                      //                 FontWeight
-                                                      //                     .bold,
-                                                      //           ),
-                                                      //         ),
-                                                      //       ),
-                                                      //       Container(
-                                                      //         width: 100,
-                                                      //         height: 40,
-                                                      //         decoration: BoxDecoration(
-                                                      //             borderRadius:
-                                                      //                 BorderRadius
-                                                      //                     .circular(
-                                                      //                         16),
-                                                      //             color: myTheme
-                                                      //                 .colorScheme
-                                                      //                 .primary),
-                                                      //         child: TextButton(
-                                                      //           onPressed: () {
-                                                      //             // Crear en DB una visita
-                                                      //             // TODO: Temporalmente regresara a antes
-                                                      //             Fluttertoast
-                                                      //                 .showToast(
-                                                      //                     msg:
-                                                      //                         'Testeo de crear pago completado');
-                                                      //             Navigator.pop(
-                                                      //                 context);
-                                                      //             Navigator.pop(
-                                                      //                 context);
-                                                      //           },
-                                                      //           style: TextButton
-                                                      //               .styleFrom(
-                                                      //             foregroundColor:
-                                                      //                 myTheme
-                                                      //                     .colorScheme
-                                                      //                     .primary,
-                                                      //           ),
-                                                      //           child: Text(
-                                                      //             'Aceptar',
-                                                      //             style:
-                                                      //                 TextStyle(
-                                                      //               fontFamily:
-                                                      //                   'Poppins-regular',
-                                                      //               color: Colors
-                                                      //                   .white,
-                                                      //               fontSize:
-                                                      //                   14,
-                                                      //               fontWeight:
-                                                      //                   FontWeight
-                                                      //                       .bold,
-                                                      //             ),
-                                                      //           ),
-                                                      //         ),
-                                                      //       ),
-                                                      //     ],
-                                                      //   ),
-                                                      // ),
                                                     ],
                                                   ),
                                                 ),
@@ -1005,7 +804,8 @@ void modalBottomSheetForInvoices(
                                         myTheme.colorScheme.primary,
                                   ),
                                   child: Text(
-                                    'Registrar pago',
+                                    AppLocalizations.of(context)!
+                                        .registerPayment,
                                     style: TextStyle(
                                       fontFamily: 'Poppins-regular',
                                       color: Colors.white,

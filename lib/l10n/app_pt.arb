@@ -51,6 +51,7 @@
     "invoices": "Contas",
 
 
+
     "profile": "Perfil",
     "usersAndTeams": "Usuários e equipes",
     "account": "Conta",
@@ -71,6 +72,7 @@
     "visits": "Visitas",
     "onProcess": "Em processo",
     "completed": "Preenchidas",
+    "canceled": "Cancelado",
     "commentary": "Comentario",
     "seeClient": "Ver Cliente",
     "visitDeleteConfirmation": "Deseja excluir esta visita em andamento?",
@@ -80,6 +82,10 @@
     "selectStatus": "Selecione um Estado",
     "orders": "Ordens",
     "home": "Começar",
+    "commentaryUnavaliable": "Nenhum comentário disponível",
+    "saveChanges": "guardar mudanças",
+    "modifiedVisitError":"Faltam permissões ou ocorreu um erro ao modificar a visita",
+    "modifiedVisit": "Visita modificada",
 
 
 
@@ -93,11 +99,66 @@
     "addProducts":"Adicionar produtos",
     "orderContinue": "Continuar",
     "orderTotal": "Total de pedidos",
-
     "orderDeliveryAddress": "Endereço de entrega",
     "fiscal": "Fiscal",
     "dispatch": "Despacho",
-    "orderNumber": "Ordem de compra"
+    "orderNumber": "Ordem de compra",
+
+
+
+    "noClientsAvaliable": "Nenhum cliente disponível",
+    "newVisit": "Nova Visita",
+    "date": "Encontro",
+    "createVisit": "Criar Visita",
+    "creatingVisit": "Criando visita",
+    "seller": "Vendedor",
+    "visitCreated": "Visita Criada",
+    "createVisitError":  "Faltam permissões ou ocorreu um erro ao criar a visita",
+
+
+
+    "payable": "A pagar",
+    "subtotal": "Subtotal",
+    "totalToPay": "Total a pagar",
+    "tax": "IVA",
+    "seeProducts": "Ver produtos",
+    "createInvoice": "Deseja faturar este pedido?",
+    "createInvoiceConfirmation": "Check-in",
+    "orderDelete": "Deseja excluir este pedido em andamento?",
+    "invoiced": "Facturado",
+    "options": "Opciones",
+    "seePayments": "Ver Pagos",
+    "registerPayment": "Registrar pagamento",
+    "noPayments": "Não há pagamentos cadastrados",
+    "invoiceNumber": "Pagamento da fatura",
+    "upToPay": "Resta pagar",
+    "balanceConfirmed": "Saldo confirmado",
+    "balanceLeft": "Reconciliar",
+
+    
+    "paymentMethod": "Metodo de Pago",
+    "amount": "Monto",
+
+
+    "bank": "Banco",
+    "accountNumber": "Nro de Conta",
+    "accountHolder": "Titular da conta",
+    "coin": "Moneda",
+    "selectFile": "Selecione um arquivo",
+    "gallery": "Galeria",
+
+
+    "transactionID": "Transação ID",
+    "voucherNumber": "Nro de Voucher",
+    "referenceNumber": "Nro de Referencia"
+
+
+
+    
+
+
+
+
 
 
 

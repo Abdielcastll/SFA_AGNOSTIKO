@@ -24,7 +24,7 @@ class _ClientsPageState extends State<ClientsPage> {
           value: DatabaseServiceStreams().clients,
           initialData: const [],
           catchError: (context, error) {
-            print(error);
+            // print(error);
             return;
           },
         ),
@@ -32,7 +32,7 @@ class _ClientsPageState extends State<ClientsPage> {
           value: DatabaseServiceStreams().idTypeSummary,
           initialData: null,
           catchError: (context, error) {
-            print(error);
+            // print(error);
             return;
           },
         ),
@@ -40,7 +40,7 @@ class _ClientsPageState extends State<ClientsPage> {
           value: DatabaseServiceStreams().zoneSummary,
           initialData: null,
           catchError: (context, error) {
-            print(error);
+            // print(error);
             return;
           },
         ),

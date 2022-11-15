@@ -20,10 +20,8 @@ class InvoicesList extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
-      // ignore: prefer_const_literals_to_create_immutables
       children: [
         Row(
-          // ignore: prefer_const_literals_to_create_immutables
           children: [
             Padding(
               padding: EdgeInsets.only(left: 16, top: 5),
@@ -31,8 +29,10 @@ class InvoicesList extends StatelessWidget {
                 textAlign: TextAlign.start,
                 AppLocalizations.of(context)!.completed,
                 style: TextStyle(
-                  color: Colors.green,
+                  color: Colors.green.shade600,
                   fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Poppins-regular',
                 ),
               ),
             ),
@@ -57,12 +57,11 @@ class InvoicesList extends StatelessWidget {
                   final invoiceDate = dateFormatter.format(date);
                   final invoiceBalance = invoice.totalAmount;
                   final invoicePayments = invoice.payments;
-                  const invoiceStatus = 'Facturado';
+                  final invoiceStatus = AppLocalizations.of(context)!.invoiced;
                   final invoiceNumber = invoice.correlativeNumber;
                   final invoiceTotal = invoice.totalAmount;
                   final invoiceDocumentID = invoice.invoiceDocumentID;
 
-                  // print(invoice);
                   return InvoiceCard(
                     invoiceClient: invoiceClient,
                     invoiceOrder: invoiceOrder,

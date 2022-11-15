@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Visits {
   final isCancelled;
@@ -40,35 +41,33 @@ List<Visits> visitsFromSnasphot(QuerySnapshot snapshot) {
           : false,
       clientReferenceId: doc.data().toString().contains('cliente')
           ? doc.get('cliente').id
-          : 'NaN',
+          : '',
       isCompleted: doc.data().toString().contains('completada')
           ? doc.get('completada')
           : false,
       commentary: doc.data().toString().contains('comentario')
           ? doc.get('comentario')
-          : 'No hay comentario hecho',
+          : '',
       madeByReferenceId: doc.data().toString().contains('creadoPor')
           ? doc.get('creadoPor').id
-          : 'NaN',
-      date: doc.data().toString().contains('fecha') ? doc.get('fecha') : 'NaN',
+          : '',
+      date: doc.data().toString().contains('fecha') ? doc.get('fecha') : '',
       noCobranza: doc.data().toString().contains('noCobranza')
           ? doc.get('noCobranza')
-          : 'NaN',
-      noPedido: doc.data().toString().contains('noPedido')
-          ? doc.get('noPedido')
-          : 'NaN',
-      noVisita: doc.data().toString().contains('noVisita')
-          ? doc.get('noVisita')
-          : 'NaN',
+          : '',
+      noPedido:
+          doc.data().toString().contains('noPedido') ? doc.get('noPedido') : '',
+      noVisita:
+          doc.data().toString().contains('noVisita') ? doc.get('noVisita') : '',
       timeStampRegister: doc.data().toString().contains('timestampRegistro')
           ? doc.get('timestampRegistro')
-          : 'NaN',
+          : '',
       lastModified: doc.data().toString().contains('ultimaModificacion')
           ? doc.get('ultimaModificacion')
-          : 'NaN',
+          : '',
       sellerReferenceId: doc.data().toString().contains('vendedor')
           ? doc.get('vendedor').id
-          : 'NaN',
+          : '',
       documentRefId: doc.reference.id,
     );
   }).toList();
