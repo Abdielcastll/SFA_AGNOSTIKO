@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/account_balance_model.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
@@ -188,6 +189,45 @@ class StatusBarResume extends StatefulWidget {
 }
 
 class _StatusBarResumeState extends State<StatusBarResume> {
+  final String? currentCoin =
+      sharedPreferences!.getString('currentCoin') ?? 'Dolares - USD';
+
+  priceFormat(productPrice) {
+    if (currentCoin!.contains('USD') || currentCoin == null) {
+      return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
+          .format(productPrice)
+          .toString();
+    } else if (currentCoin!.contains('VED')) {
+      return NumberFormat.currency(
+        locale: 'es_VE',
+        decimalDigits: 2,
+        symbol: "Bs.",
+      ).format(productPrice * 4.58).toString();
+    } else if (currentCoin!.contains('EUR')) {
+      return NumberFormat.currency(
+        locale: 'es_ES',
+        decimalDigits: 2,
+        symbol: '€',
+        customPattern: '\u00a4 #,##.#',
+      ).format(productPrice * 0.89).toString();
+    } else if (currentCoin!.contains('MXN')) {
+      return NumberFormat.currency(
+        locale: 'es_MX',
+        decimalDigits: 2,
+        symbol: '\$',
+        customPattern: '\u00a4 #,##.#',
+      ).format(productPrice * 0.89);
+    } else if (currentCoin!.contains('BTC')) {
+      return '฿ ${(productPrice * 0.00011).toString()}';
+    } else {
+      return NumberFormat.currency(
+        locale: 'es_VE',
+        decimalDigits: 2,
+        symbol: "PPR.",
+      ).format(productPrice * 4.58).toString();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final invoices = Provider.of<List<Invoices>?>(context) ?? [];
@@ -304,7 +344,7 @@ class _StatusBarResumeState extends State<StatusBarResume> {
                 ),
                 alignment: Alignment.center,
                 child: Text(
-                  totalAmount.toStringAsFixed(2),
+                  '${priceFormat(totalAmount)}',
                   style: TextStyle(
                     fontFamily: 'Poppins-regular',
                     fontWeight: FontWeight.bold,
@@ -334,7 +374,7 @@ class _StatusBarResumeState extends State<StatusBarResume> {
                 ),
                 alignment: Alignment.center,
                 child: Text(
-                  '0',
+                  priceFormat(0),
                   style: TextStyle(
                     fontFamily: 'Poppins-regular',
                     fontWeight: FontWeight.bold,
@@ -379,6 +419,45 @@ class _ShowInvoicesState extends State<ShowInvoices> {
     }
   }
 
+  final String? currentCoin =
+      sharedPreferences!.getString('currentCoin') ?? 'Dolares - USD';
+
+  priceFormat(productPrice) {
+    if (currentCoin!.contains('USD') || currentCoin == null) {
+      return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
+          .format(productPrice)
+          .toString();
+    } else if (currentCoin!.contains('VED')) {
+      return NumberFormat.currency(
+        locale: 'es_VE',
+        decimalDigits: 2,
+        symbol: "Bs.",
+      ).format(productPrice * 4.58).toString();
+    } else if (currentCoin!.contains('EUR')) {
+      return NumberFormat.currency(
+        locale: 'es_ES',
+        decimalDigits: 2,
+        symbol: '€',
+        customPattern: '\u00a4 #,##.#',
+      ).format(productPrice * 0.89).toString();
+    } else if (currentCoin!.contains('MXN')) {
+      return NumberFormat.currency(
+        locale: 'es_MX',
+        decimalDigits: 2,
+        symbol: '\$',
+        customPattern: '\u00a4 #,##.#',
+      ).format(productPrice * 0.89);
+    } else if (currentCoin!.contains('BTC')) {
+      return '฿ ${(productPrice * 0.00011).toString()}';
+    } else {
+      return NumberFormat.currency(
+        locale: 'es_VE',
+        decimalDigits: 2,
+        symbol: "PPR.",
+      ).format(productPrice * 4.58).toString();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final invoices = Provider.of<List<Invoices>?>(context) ?? [];
@@ -407,7 +486,6 @@ class _ShowInvoicesState extends State<ShowInvoices> {
           final date = DateTime.parse(unFormattedDate.toDate().toString());
           final noteDate = dateFormatter.format(date);
           final noteOriginalAmount = note.totalAmount ?? 0;
-          //TODO: Ver de donde sale el saldo
           final noteBalance = 00;
 
           return ListTile(
@@ -433,7 +511,7 @@ class _ShowInvoicesState extends State<ShowInvoices> {
               ],
             ),
             subtitle: Text(
-              'Monto original: \$ ${noteOriginalAmount.toStringAsFixed(2)} - Saldo: \$ $noteBalance',
+              'Monto original: ${priceFormat(noteOriginalAmount)} - Saldo: ${priceFormat(noteBalance)}',
               style: TextStyle(
                 fontFamily: 'Poppins-regular',
                 fontSize: 12,
@@ -478,6 +556,45 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
         Icons.money_off_csred_outlined,
         color: Colors.amber,
       );
+    }
+  }
+
+  final String? currentCoin =
+      sharedPreferences!.getString('currentCoin') ?? 'Dolares - USD';
+
+  priceFormat(productPrice) {
+    if (currentCoin!.contains('USD') || currentCoin == null) {
+      return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
+          .format(productPrice)
+          .toString();
+    } else if (currentCoin!.contains('VED')) {
+      return NumberFormat.currency(
+        locale: 'es_VE',
+        decimalDigits: 2,
+        symbol: "Bs.",
+      ).format(productPrice * 4.58).toString();
+    } else if (currentCoin!.contains('EUR')) {
+      return NumberFormat.currency(
+        locale: 'es_ES',
+        decimalDigits: 2,
+        symbol: '€',
+        customPattern: '\u00a4 #,##.#',
+      ).format(productPrice * 0.89).toString();
+    } else if (currentCoin!.contains('MXN')) {
+      return NumberFormat.currency(
+        locale: 'es_MX',
+        decimalDigits: 2,
+        symbol: '\$',
+        customPattern: '\u00a4 #,##.#',
+      ).format(productPrice * 0.89);
+    } else if (currentCoin!.contains('BTC')) {
+      return '฿ ${(productPrice * 0.00011).toString()}';
+    } else {
+      return NumberFormat.currency(
+        locale: 'es_VE',
+        decimalDigits: 2,
+        symbol: "PPR.",
+      ).format(productPrice * 4.58).toString();
     }
   }
 
@@ -627,7 +744,7 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
                                 ),
                                 SizedBox(height: 20),
                                 Text(
-                                  'Monto: \$${noteOriginalAmount.toStringAsFixed(2)}',
+                                  'Monto: ${priceFormat(noteOriginalAmount)}',
                                   style: TextStyle(
                                     fontFamily: 'Poppins-regular',
                                     color: Colors.grey,
@@ -636,7 +753,7 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
                                   ),
                                 ),
                                 Text(
-                                  'Usado: \$$noteBalance',
+                                  'Usado: ${priceFormat(noteBalance)}',
                                   style: TextStyle(
                                     fontFamily: 'Poppins-regular',
                                     color: Colors.grey,
@@ -645,7 +762,7 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
                                   ),
                                 ),
                                 Text(
-                                  'Saldo NC: \$$balanceNC',
+                                  'Saldo NC: ${priceFormat(balanceNC)}',
                                   style: TextStyle(
                                     fontFamily: 'Poppins-regular',
                                     color: Colors.grey,
@@ -703,7 +820,7 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
               ],
             ),
             subtitle: Text(
-              'Monto original: \$ ${noteOriginalAmount.toStringAsFixed(2)} - Saldo: \$ $noteBalance',
+              'Monto original: \$ ${priceFormat(noteOriginalAmount)} - Saldo: \$ ${priceFormat(noteBalance)}',
               style: TextStyle(
                 fontFamily: 'Poppins-regular',
                 fontSize: 12,

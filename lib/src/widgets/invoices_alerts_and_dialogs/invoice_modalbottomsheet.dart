@@ -9,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -70,6 +71,45 @@ void modalBottomSheetForInvoices(
       ),
     ),
     builder: (context) {
+      final String? currentCoin =
+          sharedPreferences!.getString('currentCoin') ?? 'Dolares - USD';
+
+      priceFormat(productPrice) {
+        if (currentCoin!.contains('USD') || currentCoin == null) {
+          return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
+              .format(productPrice)
+              .toString();
+        } else if (currentCoin!.contains('VED')) {
+          return NumberFormat.currency(
+            locale: 'es_VE',
+            decimalDigits: 2,
+            symbol: "Bs.",
+          ).format(productPrice * 4.58).toString();
+        } else if (currentCoin!.contains('EUR')) {
+          return NumberFormat.currency(
+            locale: 'es_ES',
+            decimalDigits: 2,
+            symbol: '€',
+            customPattern: '\u00a4 #,##.#',
+          ).format(productPrice * 0.89).toString();
+        } else if (currentCoin!.contains('MXN')) {
+          return NumberFormat.currency(
+            locale: 'es_MX',
+            decimalDigits: 2,
+            symbol: '\$',
+            customPattern: '\u00a4 #,##.#',
+          ).format(productPrice * 0.89);
+        } else if (currentCoin!.contains('BTC')) {
+          return '฿ ${(productPrice * 0.00011).toString()}';
+        } else {
+          return NumberFormat.currency(
+            locale: 'es_VE',
+            decimalDigits: 2,
+            symbol: "PPR.",
+          ).format(productPrice * 4.58).toString();
+        }
+      }
+
       return StatefulBuilder(
         builder: (context, setState) {
           return SafeArea(
@@ -222,7 +262,7 @@ void modalBottomSheetForInvoices(
                                                                                 title: Row(
                                                                                   children: [
                                                                                     Text(
-                                                                                      '\$ ${payment['monto']}',
+                                                                                      priceFormat(payment['monto']),
                                                                                       style: TextStyle(
                                                                                         fontFamily: 'Poppins-regular',
                                                                                         color: Colors.grey.shade400,
@@ -258,7 +298,7 @@ void modalBottomSheetForInvoices(
                                                     ),
                                                     SizedBox(height: 30),
                                                     Text(
-                                                      '${AppLocalizations.of(context)!.upToPay}: \$${remaining.toStringAsFixed(2)}',
+                                                      '${AppLocalizations.of(context)!.upToPay}: ${priceFormat(remaining)}',
                                                       style: TextStyle(
                                                         fontFamily:
                                                             'Poppins-regular',
@@ -271,7 +311,7 @@ void modalBottomSheetForInvoices(
                                                     // Text(
 
                                                     Text(
-                                                      '${AppLocalizations.of(context)!.balanceConfirmed}: \$$sumOfValidPayments',
+                                                      '${AppLocalizations.of(context)!.balanceConfirmed}: ${priceFormat(sumOfValidPayments)}',
                                                       style: TextStyle(
                                                         fontFamily:
                                                             'Poppins-regular',
@@ -282,7 +322,7 @@ void modalBottomSheetForInvoices(
                                                       ),
                                                     ),
                                                     Text(
-                                                      '${AppLocalizations.of(context)!.balanceLeft}: \$$leftoverAmount',
+                                                      '${AppLocalizations.of(context)!.balanceLeft}: ${priceFormat(leftoverAmount)}',
                                                       style: TextStyle(
                                                         fontFamily:
                                                             'Poppins-regular',

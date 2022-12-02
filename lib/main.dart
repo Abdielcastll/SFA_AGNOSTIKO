@@ -31,18 +31,12 @@ late ObjectBox objectBox;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Inicializar Object Box
   objectBox = await ObjectBox.init();
-  // print('ObjectBox: all green');
-  // Inicializar Firebase
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  // print('Firebase: all green');
-  // Inicializar SharedPreferences
+
   sharedPreferences = await SharedPreferences.getInstance();
-  // print('SharedPreferences: all green');
-  // Inicializar App
   runApp(const SfaAgnostiko());
-  // print('Starting SFA Agnostiko');
 }
 
 class SfaAgnostiko extends StatelessWidget {
@@ -78,7 +72,7 @@ class SfaAgnostiko extends StatelessWidget {
               'place_order': (BuildContext context) => PlaceOrderPage(),
               'catalogue': (BuildContext context) =>
                   CataloguePage(isOrderActive: false),
-              // 'products': (BuildContext context) => ProductsPage(),
+              'products': (BuildContext context) => ProductsPage(),
               'clients': (BuildContext context) => ClientsPage(),
               'profile': (BuildContext context) => ProfilePage(),
               'diary': (BuildContext context) => DiaryTabs(),

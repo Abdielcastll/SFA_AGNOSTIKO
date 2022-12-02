@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/promotions_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/category_list.dart';
@@ -46,7 +47,15 @@ class _CataloguePageState extends State<CataloguePage> {
           value: DatabaseServiceStreams().productsWithPromotions,
           initialData: const [],
           catchError: (context, error) {
-            // print(error);
+            print(error);
+            return;
+          },
+        ),
+        StreamProvider<List<Promotions>?>.value(
+          value: DatabaseServiceStreams().promotions,
+          initialData: const [],
+          catchError: (context, error) {
+            print(error);
             return;
           },
         ),
@@ -120,13 +129,8 @@ class CatalogueBody extends StatefulWidget {
 }
 
 class _CatalogueBodyState extends State<CatalogueBody> {
-  final currentCoin = sharedPreferences!.getString('currentCoin');
-
   @override
   Widget build(BuildContext context) {
-    // print('Idioma Activo: ${AppLocalizations.of(context)!.language}');
-    // print('Moneda Activa: $currentCoin');
-
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       child: Column(

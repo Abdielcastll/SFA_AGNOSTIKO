@@ -12,10 +12,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class CompletedOrders extends StatelessWidget {
   const CompletedOrders({
     Key? key,
-    this.coinsExchangeRates,
   }) : super(key: key);
-
-  final coinsExchangeRates;
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +79,6 @@ class CompletedOrders extends StatelessWidget {
                   subTotal: orderSubTotal,
                   discountMaster: orderDiscountMaster,
                   tax: orderTax,
-                  coinsExchangeRates: coinsExchangeRates,
                 );
               },
             ),

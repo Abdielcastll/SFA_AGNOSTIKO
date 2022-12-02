@@ -1,15 +1,22 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/examples/products_example.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
+import 'package:pwa_sales2go_flutter/src/global/global.dart';
+import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
+import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -27,6 +34,7 @@ class ProductDetails extends StatefulWidget {
     required this.isOrderActive,
     required this.isProductInAPromotion,
     this.prices,
+    this.pricesName,
   }) : super(key: key);
 
   final String code;
@@ -40,13 +48,13 @@ class ProductDetails extends StatefulWidget {
   final bool isOrderActive;
   final bool isProductInAPromotion;
   final prices;
+  final pricesName;
 
   @override
   State<ProductDetails> createState() => _ProductDetailsState();
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(elevation: 0, toolbarHeight: 40),
@@ -63,13 +71,14 @@ class _ProductDetailsState extends State<ProductDetails> {
         isOrderActive: widget.isOrderActive,
         isProductInAPromotion: widget.isProductInAPromotion,
         prices: widget.prices,
+        pricesName: widget.pricesName,
       ),
     );
   }
 }
 
 class ProductDetailsBody extends StatelessWidget {
-  const ProductDetailsBody({
+  ProductDetailsBody({
     Key? key,
     required this.code,
     this.price,
@@ -82,6 +91,7 @@ class ProductDetailsBody extends StatelessWidget {
     required this.isOrderActive,
     required this.isProductInAPromotion,
     this.prices,
+    this.pricesName,
   }) : super(key: key);
 
   final String code;
@@ -95,13 +105,54 @@ class ProductDetailsBody extends StatelessWidget {
   final bool isOrderActive;
   final bool isProductInAPromotion;
   final prices;
+  final pricesName;
+
+  final String? currentCoin =
+      sharedPreferences!.getString('currentCoin') ?? 'Dolares - USD';
+
+  priceFormat(productPrice) {
+    if (currentCoin!.contains('USD') || currentCoin == null) {
+      return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
+          .format(productPrice)
+          .toString();
+    } else if (currentCoin!.contains('VED')) {
+      return NumberFormat.currency(
+        locale: 'es_VE',
+        decimalDigits: 2,
+        symbol: "Bs.",
+      ).format(productPrice * 4.58).toString();
+    } else if (currentCoin!.contains('EUR')) {
+      return NumberFormat.currency(
+        locale: 'es_ES',
+        decimalDigits: 2,
+        symbol: '€',
+        customPattern: '\u00a4 #,##.#',
+      ).format(productPrice * 0.89).toString();
+    } else if (currentCoin!.contains('MXN')) {
+      return NumberFormat.currency(
+        locale: 'es_MX',
+        decimalDigits: 2,
+        symbol: '\$',
+        customPattern: '\u00a4 #,##.#',
+      ).format(productPrice * 0.89);
+    } else if (currentCoin!.contains('BTC')) {
+      return '฿ ${(productPrice * 0.00011).toString()}';
+    } else {
+      return NumberFormat.currency(
+        locale: 'es_VE',
+        decimalDigits: 2,
+        symbol: "PPR.",
+      ).format(productPrice * 4.58).toString();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final String priceProduct = price ?? '0';
+    final priceProduct = priceFormat(double.parse(price ?? '0')).toString();
 
-    print(prices);
-    print('Precio: ${price ?? 000}');
+    // String test2 = 'USD';
+    // String test = 'Dolares - USD';
+    // print(test.contains(test2));
 
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
@@ -121,9 +172,18 @@ class ProductDetailsBody extends StatelessWidget {
                   width: MediaQuery.of(context).size.width * 0.90,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: Image.network(
-                      imageUrl,
+                    child: CachedNetworkImage(
                       fit: BoxFit.cover,
+                      imageUrl: imageUrl,
+                      placeholder: (context, url) => Container(
+                          alignment: Alignment.center,
+                          width: 300,
+                          child:
+                              const Center(child: CircularProgressIndicator())),
+                      errorWidget: (context, url, error) => Image.asset(
+                        'assets/images/noproduct.jpg',
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
@@ -235,7 +295,7 @@ class ProductDetailsBody extends StatelessWidget {
                         Container(
                           margin: EdgeInsets.fromLTRB(0, 5, 10, 0),
                           child: Text(
-                            '${AppLocalizations.of(context)!.price}: \$$priceProduct',
+                            '${AppLocalizations.of(context)!.price}: $priceProduct',
                             style: TextStyle(
                               color: Colors.grey.shade700,
                               fontFamily: 'Poppins-regular',
@@ -381,20 +441,34 @@ class ProductDetailsBody extends StatelessWidget {
                                               BorderRadius.circular(20),
                                           child: ElevatedButton.icon(
                                             onPressed: () {
-                                              // Anadir este producto al carrito
-                                              final newProduct =
-                                                  ShoppingCartProduct(
-                                                productQuantity: 1,
-                                                code: code,
-                                                productId: code,
-                                                listOfPricesId: 'GENER-03',
-                                                totalAmount: priceProduct,
-                                                name: name,
-                                                unitPrice: priceProduct,
-                                              );
-                                              objectBox
-                                                  .insertShoppingCartProduct(
-                                                      newProduct);
+                                              if (stock > 0) {
+                                                final newProduct =
+                                                    ShoppingCartProduct(
+                                                  id: 1,
+                                                  productQuantity: 1,
+                                                  code: code,
+                                                  productId: code,
+                                                  listOfPricesId:
+                                                      pricesName.toString(),
+                                                  totalAmount: price.toString(),
+                                                  name: name,
+                                                  unitPrice: price.toString(),
+                                                  availableStock: stock,
+                                                );
+                                                objectBox
+                                                    .insertShoppingCartProduct(
+                                                        newProduct);
+                                                Fluttertoast.showToast(
+                                                    msg:
+                                                        'Producto añadido correctamente');
+                                              } else {
+                                                Fluttertoast.showToast(
+                                                    msg:
+                                                        'No hay stock disponible para este producto');
+                                              }
+                                              Fluttertoast.showToast(
+                                                  msg:
+                                                      'Producto añadido correctamente');
                                             },
                                             icon: Icon(
                                               Icons.add_shopping_cart_rounded,

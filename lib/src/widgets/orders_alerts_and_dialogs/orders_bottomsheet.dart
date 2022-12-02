@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
@@ -47,6 +49,45 @@ void modalBottomSheetForOrders(
       ),
     ),
     builder: (context) {
+      final String? currentCoin =
+          sharedPreferences!.getString('currentCoin') ?? 'Dolares - USD';
+
+      priceFormat(productPrice) {
+        if (currentCoin!.contains('USD') || currentCoin == null) {
+          return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
+              .format(productPrice)
+              .toString();
+        } else if (currentCoin!.contains('VED')) {
+          return NumberFormat.currency(
+            locale: 'es_VE',
+            decimalDigits: 2,
+            symbol: "Bs.",
+          ).format(productPrice * 4.58).toString();
+        } else if (currentCoin!.contains('EUR')) {
+          return NumberFormat.currency(
+            locale: 'es_ES',
+            decimalDigits: 2,
+            symbol: '€',
+            customPattern: '\u00a4 #,##.#',
+          ).format(productPrice * 0.89).toString();
+        } else if (currentCoin!.contains('MXN')) {
+          return NumberFormat.currency(
+            locale: 'es_MX',
+            decimalDigits: 2,
+            symbol: '\$',
+            customPattern: '\u00a4 #,##.#',
+          ).format(productPrice * 0.89);
+        } else if (currentCoin!.contains('BTC')) {
+          return '฿ ${(productPrice * 0.00011).toString()}';
+        } else {
+          return NumberFormat.currency(
+            locale: 'es_VE',
+            decimalDigits: 2,
+            symbol: "PPR.",
+          ).format(productPrice * 4.58).toString();
+        }
+      }
+
       return StatefulBuilder(
         builder: (context, setState) {
           return SafeArea(
@@ -226,7 +267,7 @@ void modalBottomSheetForOrders(
                                                                       ),
                                                                     ),
                                                                     Text(
-                                                                      '${AppLocalizations.of(context)!.payable}: ${product['monto'].toStringAsFixed(2)}',
+                                                                      '${AppLocalizations.of(context)!.payable}: ${priceFormat(product['monto'])}',
                                                                       style:
                                                                           TextStyle(
                                                                         fontFamily:
@@ -251,7 +292,7 @@ void modalBottomSheetForOrders(
                                               ),
                                               SizedBox(height: 30),
                                               Text(
-                                                '${AppLocalizations.of(context)!.subtotal}: \$${subTotal.toStringAsFixed(2)}',
+                                                '${AppLocalizations.of(context)!.subtotal}: ${priceFormat(subTotal)}',
                                                 style: TextStyle(
                                                   fontFamily: 'Poppins-regular',
                                                   color: Colors.black,
@@ -260,7 +301,7 @@ void modalBottomSheetForOrders(
                                                 ),
                                               ),
                                               Text(
-                                                '${AppLocalizations.of(context)!.masterDiscount}: \$${discountMaster.toStringAsFixed(2)}',
+                                                '${AppLocalizations.of(context)!.masterDiscount}: ${priceFormat(discountMaster)}',
                                                 style: TextStyle(
                                                   fontFamily: 'Poppins-regular',
                                                   color: Colors.black,
@@ -269,7 +310,7 @@ void modalBottomSheetForOrders(
                                                 ),
                                               ),
                                               Text(
-                                                '${AppLocalizations.of(context)!.tax}: \$${tax.toStringAsFixed(2)}',
+                                                '${AppLocalizations.of(context)!.tax}: ${priceFormat(tax)}',
                                                 style: TextStyle(
                                                   fontFamily: 'Poppins-regular',
                                                   color: Colors.black,
@@ -278,7 +319,7 @@ void modalBottomSheetForOrders(
                                                 ),
                                               ),
                                               Text(
-                                                '${AppLocalizations.of(context)!.totalToPay}: \$${total.toStringAsFixed(2)}',
+                                                '${AppLocalizations.of(context)!.totalToPay}: ${priceFormat(total)}',
                                                 style: TextStyle(
                                                   fontFamily: 'Poppins-regular',
                                                   color: Colors.green,

@@ -34,7 +34,6 @@ class _ListOfProductsButtonState extends State<ListOfProductsButton> {
       height: 45,
       child: ElevatedButton.icon(
         onPressed: () {
-          // Redireccionar a lista completa de productos
           Navigator.push(
             context,
             MaterialPageRoute(

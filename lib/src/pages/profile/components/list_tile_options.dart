@@ -3,14 +3,18 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
+import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/teams_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/users_and_teams/users_and_teams.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../../../services/firebase_collections.dart';
 
 class ListTileOptions extends StatefulWidget {
   const ListTileOptions({
@@ -49,18 +53,7 @@ class _ListTileOptionsState extends State<ListTileOptions> {
       }
     }
 
-    String? selectedValue;
     bool isAdmin;
-
-    if (currentCoin == 'VED') {
-      selectedValue = 'Bolivares (VED - Bs)';
-    } else if (currentCoin == 'EUR') {
-      selectedValue = 'Euros (EUR - €)';
-    } else if (currentCoin == 'BTC') {
-      selectedValue = 'Bitcoin (BTC - ฿)';
-    } else if (currentCoin == 'USD') {
-      selectedValue = 'Dolares (USD - \$)';
-    }
 
     if (widget.charge == 'Administrador') {
       isAdmin = true;
@@ -222,183 +215,184 @@ class _ListTileOptionsState extends State<ListTileOptions> {
           sub: AppLocalizations.of(context)!.changeCurrencyDesc,
           function: () {
             // Funcion que redigire a las notificaciones del usuario
+
             showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return StatefulBuilder(builder: (context, setState) {
-                    List? items = [
-                      'Dolares (USD - \$)',
-                      'Bolivares (VED - Bs)',
-                      'Euros (EUR - €)',
-                      'Bitcoin (BTC - ฿)',
-                    ];
-                    return AlertDialog(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      title: Text(
-                        'Cambiar Moneda',
-                        style: TextStyle(
-                          fontFamily: 'Poppins-regular',
-                          color: myTheme.colorScheme.secondary,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      content: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            Container(
-                              margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton2(
-                                  isExpanded: true,
-                                  // ignore: prefer_const_literals_to_create_immutables
-                                  hint: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          "$selectedValue",
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                            color: myTheme.colorScheme.primary,
-                                          ),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  items: items
-                                      .map((item) => DropdownMenuItem<String>(
-                                            value: item,
-                                            child: Text(
-                                              item,
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.bold,
-                                                color:
-                                                    myTheme.colorScheme.primary,
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ))
-                                      .toList(),
-                                  value: selectedValue,
-                                  onChanged: (value) {
-                                    setState(
-                                      () {
-                                        selectedValue = value as String;
-                                        // 'Dolares (USD - \$)',
-                                        // 'Bolivares (VED - Bs)',
-                                        // 'Euros (EUR - €)',
-                                        // 'Bitcoin (BTC - ฿)',
-                                        if (value.toString().contains('\$')) {
-                                          // print('Cambio de moneda a: USD');
-                                          // selectedValue = 'USD';
-                                        } else if (value
-                                            .toString()
-                                            .contains('Bs')) {
-                                          // print('Cambio de moneda a: BS');
-                                          // selectedValue = 'VED';
-                                        } else if (value
-                                            .toString()
-                                            .contains('€')) {
-                                          // print('Cambio de moneda a: EUR');
-                                          // selectedValue = 'EUR';
-                                        } else if (value
-                                            .toString()
-                                            .contains('฿')) {
-                                          // print('Cambio de moneda a: BTC');
-                                          // selectedValue = 'BTC';
-                                        }
-                                      },
-                                    );
-                                    // Mover la funcion en la base de datos para cambiar la lista
-                                  },
-                                  icon: const Icon(
-                                    Icons.arrow_forward_ios_outlined,
-                                  ),
-                                  iconSize: 11,
-                                  iconEnabledColor: myTheme.colorScheme.primary
-                                      .withOpacity(0.5),
-                                  iconDisabledColor: Colors.grey,
-                                  buttonHeight: 50,
-                                  buttonWidth: 200,
-                                  buttonPadding: const EdgeInsets.only(
-                                      left: 14, right: 14),
-                                  buttonDecoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(
-                                      color: myTheme.colorScheme.primary
-                                          .withOpacity(0.3),
-                                    ),
-                                    color: Colors.white,
-                                  ),
-                                  buttonElevation: 0,
-                                  itemHeight: 40,
-                                  itemPadding: const EdgeInsets.only(
-                                      left: 14, right: 14),
-                                  dropdownMaxHeight: 200,
-                                  dropdownWidth: 200,
-                                  dropdownPadding: null,
-                                  dropdownDecoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.white,
-                                  ),
-                                  dropdownElevation: 8,
-                                  scrollbarRadius: const Radius.circular(10),
-                                  scrollbarThickness: 6,
-                                  scrollbarAlwaysShow: true,
-                                  offset: const Offset(-20, 0),
-                                ),
+                  return StreamProvider<List<Coin>?>.value(
+                      value:
+                          coinCollection.snapshots().map(coinListfromSnapshot),
+                      initialData: const [],
+                      catchError: (context, error) {
+                        print(error);
+                        return;
+                      },
+                      builder: (context, snapshot) {
+                        String? selectedValue;
+                        final currentCoin =
+                            sharedPreferences!.getString('currentCoin') ??
+                                'Dolares - USD';
+                        print('moneda actual: $currentCoin');
+
+                        final coins = Provider.of<List<Coin>?>(context) ?? [];
+                        List? coinList = [];
+                        coinList.add('Dolares - USD');
+                        coins
+                            .map((coin) => coinList.add(
+                                '${coin.name} - ${coin.code} (${coin.symbol})'))
+                            .toList();
+                        List? coinListSymbols = [];
+                        coinListSymbols.add('USD');
+                        coins
+                            .map((coin) => coinListSymbols.add(coin.symbol))
+                            .toList();
+
+                        print(coinList);
+                        print(coinListSymbols);
+                        return StatefulBuilder(builder: (context, setState) {
+                          List? items = coinList;
+                          return AlertDialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            title: Text(
+                              'Cambiar Moneda',
+                              style: TextStyle(
+                                fontFamily: 'Poppins-regular',
+                                color: myTheme.colorScheme.secondary,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                      actions: [
-                        TextButton(
-                          child: const Text('Regresar'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        TextButton(
-                          child: const Text('Aceptar'),
-                          onPressed: () {
-                            // 'Dolares (USD - \$)',
-                            // 'Bolivares (VED - Bs)',
-                            // 'Euros (EUR - €)',
-                            // 'Bitcoin (BTC - ฿)',
-                            if (selectedValue.toString().contains('\$')) {
-                              // print('Cambio de moneda a: USD');
-                              sharedPreferences?.setString(
-                                  'currentCoin', 'USD');
-                              Navigator.pop(context);
-                            } else if (selectedValue
-                                .toString()
-                                .contains('Bs')) {
-                              // print('Cambio de moneda a: Bolivares');
-                              sharedPreferences?.setString(
-                                  'currentCoin', 'VED');
-                              Navigator.pop(context);
-                            } else if (selectedValue.toString().contains('€')) {
-                              // print('Cambio de moneda a: Euro');
-                              sharedPreferences?.setString(
-                                  'currentCoin', 'EUR');
-                              Navigator.pop(context);
-                            } else if (selectedValue.toString().contains('฿')) {
-                              // print('Cambio de moneda a: Bitcoin');
-                              sharedPreferences?.setString(
-                                  'currentCoin', 'BTC');
-                              Navigator.pop(context);
-                            }
-                          },
-                        ),
-                      ],
-                    );
-                  });
+                            content: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
+                                    child: DropdownButtonHideUnderline(
+                                      child: DropdownButton2(
+                                        isExpanded: true,
+                                        // ignore: prefer_const_literals_to_create_immutables
+                                        hint: Row(
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                selectedValue ??
+                                                    'Escoga una moneda',
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: myTheme
+                                                      .colorScheme.primary,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        items: items
+                                            .map((item) =>
+                                                DropdownMenuItem<String>(
+                                                  value: item,
+                                                  child: Text(
+                                                    item,
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: myTheme
+                                                          .colorScheme.primary,
+                                                    ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ))
+                                            .toList(),
+                                        value: selectedValue,
+                                        onChanged: (value) {
+                                          setState(
+                                            () {
+                                              selectedValue = value as String;
+                                            },
+                                          );
+                                        },
+                                        icon: const Icon(
+                                          Icons.arrow_forward_ios_outlined,
+                                        ),
+                                        iconSize: 11,
+                                        iconEnabledColor: myTheme
+                                            .colorScheme.primary
+                                            .withOpacity(0.5),
+                                        iconDisabledColor: Colors.grey,
+                                        buttonHeight: 50,
+                                        buttonWidth: 200,
+                                        buttonPadding: const EdgeInsets.only(
+                                            left: 14, right: 14),
+                                        buttonDecoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          border: Border.all(
+                                            color: myTheme.colorScheme.primary
+                                                .withOpacity(0.3),
+                                          ),
+                                          color: Colors.white,
+                                        ),
+                                        buttonElevation: 0,
+                                        itemHeight: 40,
+                                        itemPadding: const EdgeInsets.only(
+                                            left: 14, right: 14),
+                                        dropdownMaxHeight: 200,
+                                        dropdownWidth: 200,
+                                        dropdownPadding: null,
+                                        dropdownDecoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Colors.white,
+                                        ),
+                                        dropdownElevation: 8,
+                                        scrollbarRadius:
+                                            const Radius.circular(10),
+                                        scrollbarThickness: 6,
+                                        scrollbarAlwaysShow: true,
+                                        offset: const Offset(-20, 0),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                child: const Text('Regresar'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              TextButton(
+                                child: const Text('Aceptar'),
+                                onPressed: () {
+                                  if (selectedValue == null) {
+                                    sharedPreferences!.setString(
+                                        'currentCoin', 'Dolares - USD');
+                                    print('Moneda reestablecida a dolares');
+                                    Navigator.pop(context);
+                                    Fluttertoast.showToast(
+                                        msg: 'Moneda reestablecida a dolares');
+                                  } else {
+                                    sharedPreferences!.setString('currentCoin',
+                                        selectedValue.toString());
+                                    print('Moneda cambiada a: $selectedValue');
+                                    Navigator.pop(context);
+                                    Fluttertoast.showToast(
+                                        msg:
+                                            'Moneda cambiada a $selectedValue');
+                                  }
+                                },
+                              ),
+                            ],
+                          );
+                        });
+                      });
                 });
           },
           icon: Icons.monetization_on,

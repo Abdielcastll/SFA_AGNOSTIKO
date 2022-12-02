@@ -16,7 +16,6 @@ class NavigationPages extends StatefulWidget {
 }
 
 class _NavigationPagesState extends State<NavigationPages> {
-  final ValueNotifier<String> currentCoin = ValueNotifier<String>('VED');
   int index = 0;
   final screens = [
     CataloguePage(

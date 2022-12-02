@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
@@ -83,30 +84,42 @@ class OrderCardBody extends StatefulWidget {
 }
 
 class _OrderCardBodyState extends State<OrderCardBody> {
-  late List<double> coinsExchangeRates = widget.widget.coinsExchangeRates;
-  final currentCoin = sharedPreferences!.getString('currentCoin');
+  final String? currentCoin =
+      sharedPreferences!.getString('currentCoin') ?? 'Dolares - USD';
 
-  identifyPrice(price) {
-    if (currentCoin == 'USD' || currentCoin == null) {
-      return price.toStringAsFixed(2);
-    } else if (currentCoin == 'VED') {
-      return (price * coinsExchangeRates[2]).toStringAsFixed(2);
-    } else if (currentCoin == 'EUR') {
-      return (price * coinsExchangeRates[1]).toStringAsFixed(2);
-    } else if (currentCoin == 'BTC') {
-      return (price * coinsExchangeRates[0]).toStringAsFixed(5);
-    }
-  }
-
-  identifyCurrency() {
-    if (currentCoin == 'USD' || currentCoin == null) {
-      return '\$';
-    } else if (currentCoin == 'VED') {
-      return 'BS';
-    } else if (currentCoin == 'EUR') {
-      return '€';
-    } else if (currentCoin == 'BTC') {
-      return '฿';
+  priceFormat(productPrice) {
+    if (currentCoin!.contains('USD') || currentCoin == null) {
+      return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
+          .format(productPrice)
+          .toString();
+    } else if (currentCoin!.contains('VED')) {
+      return NumberFormat.currency(
+        locale: 'es_VE',
+        decimalDigits: 2,
+        symbol: "Bs.",
+      ).format(productPrice * 4.58).toString();
+    } else if (currentCoin!.contains('EUR')) {
+      return NumberFormat.currency(
+        locale: 'es_ES',
+        decimalDigits: 2,
+        symbol: '€',
+        customPattern: '\u00a4 #,##.#',
+      ).format(productPrice * 0.89).toString();
+    } else if (currentCoin!.contains('MXN')) {
+      return NumberFormat.currency(
+        locale: 'es_MX',
+        decimalDigits: 2,
+        symbol: '\$',
+        customPattern: '\u00a4 #,##.#',
+      ).format(productPrice * 0.89);
+    } else if (currentCoin!.contains('BTC')) {
+      return '฿ ${(productPrice * 0.00011).toString()}';
+    } else {
+      return NumberFormat.currency(
+        locale: 'es_VE',
+        decimalDigits: 2,
+        symbol: "PPR.",
+      ).format(productPrice * 4.58).toString();
     }
   }
 
@@ -239,7 +252,7 @@ class _OrderCardBodyState extends State<OrderCardBody> {
                 Container(
                   margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
                   child: Text(
-                    '${identifyCurrency()} ${identifyPrice(widget.widget.total)}',
+                    '${priceFormat(widget.widget.total)}',
                     style: TextStyle(
                       color: identifyStatusColor(),
                       fontSize: 16,
@@ -290,7 +303,7 @@ class _OrderCardBodyState extends State<OrderCardBody> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                          fontSize: 10,
+                        fontSize: 10,
                         color: identifyStatusColor(),
                       ),
                     ),

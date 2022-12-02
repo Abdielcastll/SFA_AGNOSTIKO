@@ -19,6 +19,7 @@ import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_checkout.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CheckoutPage extends StatefulWidget {
   const CheckoutPage({
@@ -76,7 +77,6 @@ class _CheckoutBodyState extends State<CheckoutBody> {
   String? selectedValue = 'Fiscal';
   String? selectedValue2;
   String commentary = '';
-  String moneySymbol = '\$';
   bool isFiscalSelected = true;
   var numberOrder;
   DateTime today = DateTime.now();
@@ -88,18 +88,6 @@ class _CheckoutBodyState extends State<CheckoutBody> {
   final List<String> items2 = ['Consignacion', 'Factura', 'Nota de entrega'];
 
   late List<double> coinsExchangeRates = widget.coinsExchangeRates;
-
-  identifyPrice(price) {
-    if (currentCoin == 'USD' || currentCoin == null) {
-      return price.toStringAsFixed(2);
-    } else if (currentCoin == 'VED') {
-      return (price * coinsExchangeRates[2]).toStringAsFixed(2);
-    } else if (currentCoin == 'EUR') {
-      return (price * coinsExchangeRates[1]).toStringAsFixed(2);
-    } else if (currentCoin == 'BTC') {
-      return (price * coinsExchangeRates[0]).toStringAsFixed(8);
-    }
-  }
 
   double priceWithIVA() {
     var total = (widget.subTotal * 16) / 100;
@@ -135,15 +123,39 @@ class _CheckoutBodyState extends State<CheckoutBody> {
     );
   }
 
-  identifyCurrency() {
-    if (currentCoin == 'USD' || currentCoin == null) {
-      return '\$';
-    } else if (currentCoin == 'VED') {
-      return 'BS';
-    } else if (currentCoin == 'EUR') {
-      return '€';
-    } else if (currentCoin == 'BTC') {
-      return '฿';
+  priceFormat(productPrice) {
+    if (currentCoin!.contains('USD') || currentCoin == null) {
+      return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
+          .format(productPrice)
+          .toString();
+    } else if (currentCoin!.contains('VED')) {
+      return NumberFormat.currency(
+        locale: 'es_VE',
+        decimalDigits: 2,
+        symbol: "Bs.",
+      ).format(productPrice * 4.58).toString();
+    } else if (currentCoin!.contains('EUR')) {
+      return NumberFormat.currency(
+        locale: 'es_ES',
+        decimalDigits: 2,
+        symbol: '€',
+        customPattern: '\u00a4 #,##.#',
+      ).format(productPrice * 0.89).toString();
+    } else if (currentCoin!.contains('MXN')) {
+      return NumberFormat.currency(
+        locale: 'es_MX',
+        decimalDigits: 2,
+        symbol: '\$',
+        customPattern: '\u00a4 #,##.#',
+      ).format(productPrice * 0.89);
+    } else if (currentCoin!.contains('BTC')) {
+      return '฿ ${(productPrice * 0.00011).toString()}';
+    } else {
+      return NumberFormat.currency(
+        locale: 'es_VE',
+        decimalDigits: 2,
+        symbol: "PPR.",
+      ).format(productPrice * 4.58).toString();
     }
   }
 
@@ -162,12 +174,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
     String? fiscalAddress = widget.client?.fiscalAdress;
     String? dispatchAddress =
         widget.client?.dispatchAdress ?? 'No Hay direccion disponible';
-    String moneySymbol = identifyCurrency();
     String formattedDate = dateFormatter.format(today);
-
-    // print(today);
-    // print(userUid);
-    // print(coinsExchangeRates);
 
     return SingleChildScrollView(
       physics: BouncingScrollPhysics(),
@@ -189,7 +196,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       margin: EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Subtotal',
+                        AppLocalizations.of(context)!.subtotal,
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
@@ -202,7 +209,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       margin: EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerRight,
                       child: Text(
-                        '$moneySymbol ${identifyPrice(widget.subTotal)}',
+                        '${priceFormat(widget.subTotal)}',
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
@@ -220,7 +227,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       margin: EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Descuento Maestro ($clientMasterDiscount%)',
+                        '${AppLocalizations.of(context)!.masterDiscount} ($clientMasterDiscount%)',
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
@@ -233,7 +240,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       margin: EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerRight,
                       child: Text(
-                        '$moneySymbol ${identifyPrice(masterDiscountTotal)}',
+                        '${priceFormat(masterDiscountTotal)}',
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
@@ -251,7 +258,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       margin: EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'IVA (16%)',
+                        '${AppLocalizations.of(context)!.tax} (16%)',
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
@@ -264,7 +271,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       margin: EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerRight,
                       child: Text(
-                        '$moneySymbol ${identifyPrice(taxTotal)}',
+                        '${priceFormat(taxTotal)}',
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
@@ -281,7 +288,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                     Container(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Total del pedido',
+                        AppLocalizations.of(context)!.orderTotal,
                         style: TextStyle(
                           color: myTheme.colorScheme.secondary,
                           fontFamily: 'Poppins-regular',
@@ -293,7 +300,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                     Container(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        '$moneySymbol ${identifyPrice(totalOfTheOrder)}',
+                        '${priceFormat(totalOfTheOrder)}',
                         style: TextStyle(
                           color: myTheme.colorScheme.secondary,
                           fontFamily: 'Poppins-regular',
@@ -321,7 +328,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                 Container(
                   margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
                   child: Text(
-                    'Dirección de entrega',
+                    AppLocalizations.of(context)!.orderDeliveryAddress,
                     style: TextStyle(
                       color: myTheme.colorScheme.primary,
                       fontFamily: 'Poppins-regular',
@@ -377,10 +384,6 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                             } else if (value == 'Despacho') {
                               isFiscalSelected = false;
                             }
-                            // print(selectedValue);
-                            // print(selectedValue == 'Fiscal'
-                            //     ? widget.client?.fiscalAdress
-                            //     : widget.client?.dispatchAdress);
                           },
                         );
                       },
@@ -460,7 +463,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       Container(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          'Orden de la compra',
+                          AppLocalizations.of(context)!.orderNumber,
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
@@ -757,7 +760,6 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                     onChanged: (value) {
                       setState(() {
                         commentary = value;
-                        // print(commentary);
                       });
                     },
                   ),

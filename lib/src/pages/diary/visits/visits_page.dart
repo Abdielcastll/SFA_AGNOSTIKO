@@ -10,6 +10,7 @@ import 'package:pwa_sales2go_flutter/src/pages/diary/visits/components/visits_co
 import 'package:pwa_sales2go_flutter/src/pages/diary/visits/components/visits_on_process.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/visits_alerts_and_dialogs/create_client_dialog.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VisitsPage extends StatefulWidget {
   const VisitsPage({Key? key}) : super(key: key);
@@ -27,6 +28,7 @@ class _VisitsPageState extends State<VisitsPage> {
           .collection('usuarios')
           .doc(user?.uid)
           .collection('visitas')
+          .orderBy('fecha', descending: true)
           .snapshots()
           .map(visitsFromSnasphot),
       initialData: const [],
@@ -64,10 +66,17 @@ class _VisitsPageState extends State<VisitsPage> {
   }
 }
 
-class VisitsBody extends StatelessWidget {
+class VisitsBody extends StatefulWidget {
   const VisitsBody({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<VisitsBody> createState() => _VisitsBodyState();
+}
+
+class _VisitsBodyState extends State<VisitsBody> {
+  bool seeCompleted = true;
 
   @override
   Widget build(BuildContext context) {
@@ -76,9 +85,50 @@ class VisitsBody extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 10),
-          VisitsOnProcess(),
-          VisitsCompleted(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Container(
+                width: 120,
+                margin: const EdgeInsets.fromLTRB(16, 10, 0, 10),
+                child: Text(
+                  seeCompleted == true
+                      ? AppLocalizations.of(context)!.completed
+                      : AppLocalizations.of(context)!.onProcess,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    color: seeCompleted == true
+                        ? Colors.green.shade600
+                        : Colors.amber.shade600,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins-regular',
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+                child: Text(
+                  'Ver completados',
+                  style: TextStyle(
+                    fontSize: 15,
+                    // fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins-regular',
+                  ),
+                ),
+              ),
+              Checkbox(
+                activeColor: myTheme.colorScheme.primary,
+                value: seeCompleted,
+                onChanged: (value) {
+                  setState(() {
+                    seeCompleted = !seeCompleted;
+                  });
+                },
+              ),
+            ],
+          ),
+          seeCompleted == false ? VisitsOnProcess() : VisitsCompleted(),
         ],
       ),
     );

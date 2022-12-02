@@ -19,26 +19,9 @@ class OrdersPage extends StatefulWidget {
 }
 
 class _OrdersPageState extends State<OrdersPage> {
-  late List<double> coinsExchangeRates = [0, 0, 0];
-
-  Future<void> getPricesExchangesRates() async {
-    await FirebaseFirestore.instance
-        .collection('monedas')
-        .get()
-        .then((document) {
-      // print('Cantidad de documentos en monedas: ${document.docs.length}');
-      document.docs.forEach((element) {
-        // print(element.data()['tasaDeCambio']);
-        coinsExchangeRates.remove(0);
-        coinsExchangeRates.add(element.data()['tasaDeCambio']);
-      });
-    });
-  }
-
   @override
   void initState() {
     super.initState();
-    getPricesExchangesRates();
   }
 
   @override
@@ -60,7 +43,7 @@ class _OrdersPageState extends State<OrdersPage> {
       child: SafeArea(
         child: Scaffold(
           backgroundColor: myTheme.colorScheme.surface,
-          body: OrdersBody(coinsExchangeRates: coinsExchangeRates),
+          body: OrdersBody(),
         ),
       ),
     );
@@ -70,9 +53,7 @@ class _OrdersPageState extends State<OrdersPage> {
 class OrdersBody extends StatelessWidget {
   const OrdersBody({
     Key? key,
-    this.coinsExchangeRates,
   }) : super(key: key);
-  final coinsExchangeRates;
 
   @override
   Widget build(BuildContext context) {
@@ -84,8 +65,8 @@ class OrdersBody extends StatelessWidget {
         // ignore: prefer_const_literals_to_create_immutables
         children: [
           SizedBox(height: 10),
-          OrdersOnProcess(coinsExchangeRates: coinsExchangeRates),
-          CompletedOrders(coinsExchangeRates: coinsExchangeRates),
+          OrdersOnProcess(),
+          CompletedOrders(),
         ],
       ),
     );

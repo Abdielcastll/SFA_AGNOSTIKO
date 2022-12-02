@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -23,12 +24,12 @@ class ProductsPage extends StatefulWidget {
     Key? key,
     this.listOfProducts,
     this.listOfPrices,
-    required this.isOrderActive,
+    this.isOrderActive,
   }) : super(key: key);
 
   final List<Products>? listOfProducts;
   final listOfPrices;
-  final bool isOrderActive;
+  final isOrderActive;
 
   @override
   State<ProductsPage> createState() => _ProductsPageState();
@@ -45,14 +46,6 @@ class _ProductsPageState extends State<ProductsPage> {
       backgroundColor: myTheme.colorScheme.surface,
       body: MultiProvider(
         providers: [
-          // StreamProvider<List<Products>?>.value(
-          //   value: DatabaseService().products,
-          //   initialData: const [],
-          //   catchError: (context, error) {
-          //     print(error);
-          //     return;
-          //   },
-          // ),
           StreamProvider<QualitySummary?>.value(
             value: DatabaseServiceStreams().qualitySummary,
             initialData: null,
@@ -145,35 +138,17 @@ class ProductsBody extends StatefulWidget {
 }
 
 class _ProductsBodyState extends State<ProductsBody> {
-  final currentCoin = sharedPreferences?.getString('currentCoin');
-
   final searchController = TextEditingController();
-  final List<double> coinsExchangeRates = [0, 0, 0];
   List<ShoppingCartProduct> selectedProducts = [];
   List<Products>? products;
 
   bool isChecked = false;
   bool isDescending = false;
 
-  Future<void> getPricesExchangesRates() async {
-    await FirebaseFirestore.instance
-        .collection('monedas')
-        .get()
-        .then((document) {
-      // print('Cantidad de documentos en monedas: ${document.docs.length}');
-      document.docs.forEach((element) {
-        // print(element.data()['tasaDeCambio']);
-        coinsExchangeRates.remove(0);
-        coinsExchangeRates.add(element.data()['tasaDeCambio']);
-      });
-    });
-  }
-
   @override
   void initState() {
     super.initState();
     products = widget.listOfProducts;
-    getPricesExchangesRates();
   }
 
   // Esta funcion se llama cada vez que el text field cambia
@@ -193,56 +168,49 @@ class _ProductsBodyState extends State<ProductsBody> {
     setState(() => products = suggestions);
   }
 
-  identifyPrice(price) {
-    if (currentCoin == 'USD' || currentCoin == null) {
-      return price.toString();
-    } else if (currentCoin == 'VED') {
-      return (price * coinsExchangeRates[2]).toStringAsFixed(2) ?? '0';
-    } else if (currentCoin == 'EUR') {
-      return (price * coinsExchangeRates[1]).toStringAsFixed(2) ?? '0';
-    } else if (currentCoin == 'BTC') {
-      return (price * coinsExchangeRates[0]) ?? '0';
-    }
-  }
-
-  identifyCurrency() {
-    if (currentCoin == 'USD' || currentCoin == null) {
-      return '\$';
-    } else if (currentCoin == 'VED') {
-      return 'BS';
-    } else if (currentCoin == 'EUR') {
-      return '€';
-    } else if (currentCoin == 'BTC') {
-      return '฿';
-    }
-  }
+  final String? currentCoin =
+      sharedPreferences!.getString('currentCoin') ?? 'Dolares - USD';
 
   priceFormat(productPrice) {
-    if (currentCoin == 'USD' || currentCoin == null) {
+    if (currentCoin!.contains('USD') || currentCoin == null) {
       return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
-          .format(productPrice);
-    } else if (currentCoin == 'VED') {
+          .format(productPrice)
+          .toString();
+    } else if (currentCoin!.contains('VED')) {
       return NumberFormat.currency(
         locale: 'es_VE',
         decimalDigits: 2,
         symbol: "Bs.",
-      ).format(productPrice * coinsExchangeRates[2]);
-    } else if (currentCoin == 'EUR') {
+      ).format(productPrice * 4.58).toString();
+    } else if (currentCoin!.contains('EUR')) {
       return NumberFormat.currency(
         locale: 'es_ES',
         decimalDigits: 2,
         symbol: '€',
         customPattern: '\u00a4 #,##.#',
-      ).format(productPrice * coinsExchangeRates[1]);
-    } else if (currentCoin == 'BTC') {
-      return '฿ ${(productPrice * coinsExchangeRates[0])}';
+      ).format(productPrice * 0.89).toString();
+    } else if (currentCoin!.contains('MXN')) {
+      return NumberFormat.currency(
+        locale: 'es_MX',
+        decimalDigits: 2,
+        symbol: '\$',
+        customPattern: '\u00a4 #,##.#',
+      ).format(productPrice * 0.89);
+    } else if (currentCoin!.contains('BTC')) {
+      return '฿ ${(productPrice * 0.00011).toString()}';
+    } else {
+      return NumberFormat.currency(
+        locale: 'es_VE',
+        decimalDigits: 2,
+        symbol: "PPR.",
+      ).format(productPrice * 4.58).toString();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     setState(() {});
-    final String? moneySymbol = identifyCurrency();
+
     final userCharge = sharedPreferences!.getString('cargo');
     final qualitiesSummary =
         Provider.of<QualitySummary?>(context)?.summary ?? {};
@@ -330,6 +298,7 @@ class _ProductsBodyState extends State<ProductsBody> {
             Container(
               margin: EdgeInsets.fromLTRB(20.0, 5.0, 0, 0),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   TextButton(
                     style: ButtonStyle(
@@ -392,7 +361,9 @@ class _ProductsBodyState extends State<ProductsBody> {
                   final productSize = sizesSummary[product.size] ?? '';
                   final productDesign = designsSummary[product.design] ?? '';
                   final productPrice = widget.listOfPrices[product.code] ?? 0;
-                  final productPriceFormatted = priceFormat(productPrice);
+                  final priceProduct = priceFormat(productPrice);
+
+                  // final productPriceFormatted = priceFormat(productPrice);
 
                   return Container(
                     margin: EdgeInsets.only(bottom: 10.0),
@@ -404,30 +375,33 @@ class _ProductsBodyState extends State<ProductsBody> {
                     ),
                     child: ListTile(
                       onTap: () {
-                        // Añadir producto de la seleccion
-
                         if (product.selected == false) {
-                          final newProduct = ShoppingCartProduct(
-                            productQuantity: 1,
-                            code: product.code.toString(),
-                            productId: product.code.toString(),
-                            listOfPricesId: widget.listOfPrices.toString(),
-                            totalAmount: productPrice.toString(),
-                            name: product.name,
-                            unitPrice: productPrice.toString(),
-                            availableStock: productStock,
-                          );
+                          if (productStock > 0) {
+                            final newProduct = ShoppingCartProduct(
+                              productQuantity: 1,
+                              code: product.code.toString(),
+                              productId: product.code.toString(),
+                              listOfPricesId: widget.listOfPrices.toString(),
+                              totalAmount: productPrice.toString(),
+                              name: product.name,
+                              unitPrice: productPrice.toString(),
+                              availableStock: productStock,
+                            );
 
-                          print(newProduct.unitPrice);
-                          selectedProducts.add(newProduct);
-
-                          // Quitar producto de la seleccion
-
+                            print(newProduct.unitPrice);
+                            setState(
+                                () => product.selected = !product.selected);
+                            selectedProducts.add(newProduct);
+                          } else {
+                            Fluttertoast.showToast(
+                                msg:
+                                    'No hay stock disponible de este producto');
+                          }
                         } else if (product.selected == true) {
+                          setState(() => product.selected = !product.selected);
                           selectedProducts
                               .removeWhere((item) => item.code == product.code);
                         }
-                        setState(() => product.selected = !product.selected);
                       },
                       title: SingleChildScrollView(
                         physics: BouncingScrollPhysics(),
@@ -471,7 +445,6 @@ class _ProductsBodyState extends State<ProductsBody> {
                                               listOfPricesId: widget
                                                   .listOfPrices
                                                   .toString(),
-                                              // TODO
                                               totalAmount:
                                                   productPrice.toString(),
                                               name: product.name,
@@ -498,8 +471,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Container(
-                                  width: 70,
-                                  // height: 90,
+                                  width: 90,
                                   child: TextFieldForCard(
                                     message: product.name,
                                   ),
@@ -557,7 +529,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                   message: productStock,
                                 ),
                                 TextFieldForCard(
-                                  message: '$productPriceFormatted',
+                                  message: priceProduct,
                                   // '',
                                 ),
                                 TextFieldForCard(
