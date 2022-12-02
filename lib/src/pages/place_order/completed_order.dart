@@ -102,15 +102,13 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
         locale: 'es_ES',
         decimalDigits: 2,
         symbol: '€',
-        customPattern: '\u00a4 #,##.#',
       ).format(productPrice * 0.89).toString();
     } else if (currentCoin!.contains('MXN')) {
       return NumberFormat.currency(
         locale: 'es_MX',
         decimalDigits: 2,
         symbol: '\$',
-        customPattern: '\u00a4 #,##.#',
-      ).format(productPrice * 0.89);
+      ).format(productPrice * 19.43);
     } else if (currentCoin!.contains('BTC')) {
       return '฿ ${(productPrice * 0.00011).toString()}';
     } else {
@@ -278,7 +276,9 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                             ),
                           ),
                           Text(
-                            '${priceFormat(widget.total)} = \$ ${widget.total.toStringAsFixed(2)}',
+                            currentCoin != 'Dolares - USD'
+                                ? '${priceFormat(widget.total)} = \$ ${widget.total.toStringAsFixed(2)}'
+                                : '${priceFormat(widget.total)}',
                             style: TextStyle(
                               color: Colors.grey.shade500,
                               fontFamily: 'Poppins-regular',

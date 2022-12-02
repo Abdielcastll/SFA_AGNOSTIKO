@@ -107,26 +107,20 @@ Future createOrder(
   print('/// CREAR PEDIDO ///');
 
   final String totalAsString = totalOfTheOrder.toStringAsFixed(2);
-  final int correlativeNumber = FirebaseFirestore.instance
-      .collectionGroup('pedidos')
-      .snapshots()
-      .toString()
-      .length;
+  int? ordersQuantity = FirebaseFirestore.instance
+          .collectionGroup('pedidos')
+          .snapshots()
+          .toString()
+          .length +
+      1;
   final List quantitiesList = [];
   final List productsIds = [];
   final List<Map<dynamic, dynamic>> products = [];
-  final coinsExchangeRates = [];
-  await FirebaseFirestore.instance.collection('monedas').get().then((document) {
-    // print('Cantidad de documentos en monedas: ${document.docs.length}');
-    document.docs.forEach((element) {
-      // print(element.data()['tasaDeCambio']);
-      coinsExchangeRates.add(element.data()['tasaDeCambio']);
-    });
-  });
   final Map<String, double> exchangeRate = {
-    'BTC': coinsExchangeRates[0],
-    'EUR': coinsExchangeRates[1],
-    'VED': coinsExchangeRates[2],
+    'BTC': 0.00011,
+    'EUR': 0.89,
+    'VED': 4.58,
+    'MXN': 19.43
   };
   shoppingCart.forEach((element) {
     quantitiesList.add(element.productQuantity);
@@ -145,10 +139,11 @@ Future createOrder(
     print('Cantidad de producto: ${element.code}: ${element.productQuantity}');
   });
   print('Cantidades: $quantitiesList');
+  print(
+      'Cliente: ${FirebaseFirestore.instance.collection('clientes').doc(client!.clientDocumentId)}');
   print('IDs: $productsIds');
   print('Productos: $products');
-  print('Cantidad de pedidos en la DB: $correlativeNumber');
-  print('Monedas: $exchangeRate');
+  print('Cantidad de pedidos en la DB: ${ordersQuantity! + 1}');
 
   return await FirebaseFirestore.instance
       .collection('clientes')
@@ -172,7 +167,7 @@ Future createOrder(
     'fechaEntrega': Timestamp.fromDate(today),
     'idsProductos': productsIds,
     'impuesto': taxTotal,
-    'nroCorrelativo': correlativeNumber + 1,
+    'nroCorrelativo': ordersQuantity + 1,
     'ordenDeCompra': numberOrder ?? 0,
     'porcentajeDescuentoMaestro': client.masterDiscount,
     'productos': products,
@@ -220,10 +215,11 @@ Future createInvoice(
   final tax = taxTotal;
   final String totalAsString = totalOfTheOrder.toStringAsFixed(2);
   final int correlativeNumber = FirebaseFirestore.instance
-      .collectionGroup('facturas')
-      .snapshots()
-      .toString()
-      .length;
+          .collectionGroup('facturas')
+          .snapshots()
+          .toString()
+          .length +
+      35;
   const isPaid = false;
   final payments = [];
   final order = FirebaseFirestore.instance
@@ -243,37 +239,37 @@ Future createInvoice(
 
   print(correlativeNumber);
 
-  // await FirebaseFirestore.instance
-  //     .collection('clientes')
-  //     .doc(client.clientDocumentId)
-  //     .collection('pedidos')
-  //     .doc(orderDocumentID)
-  //     .update({
-  //   'facturado': true,
-  // });
-  // Fluttertoast.showToast(msg: 'Factura ${correlativeNumber + 1}');
-  // return await FirebaseFirestore.instance
-  //     .collection('clientes')
-  //     .doc(client.clientDocumentId)
-  //     .collection('facturas')
-  //     .doc()
-  //     .set({
-  //   'cliente': clientID,
-  //   'descuentoMaestro': discount,
-  //   'fecha': Timestamp.fromDate(DateTime.parse(date)),
-  //   'impuesto': tax,
-  //   'montoTotal': double.parse(totalAsString),
-  //   'nroCorrelativo': correlativeNumber + 35,
-  //   'pagada': isPaid,
-  //   'pagos': payments,
-  //   'pedido': order,
-  //   'porcentajeDescuentoMaestro': discountPercentage,
-  //   'referenciaNotasCredito': referenceCreditNote,
-  //   'subtotal': subTotal,
-  //   'timestampRegistro': register,
-  //   'ultimaModificacion': lastModification,
-  //   'vendedor': seller,
-  // });
+  await FirebaseFirestore.instance
+      .collection('clientes')
+      .doc(client.clientDocumentId)
+      .collection('pedidos')
+      .doc(orderDocumentID)
+      .update({
+    'facturado': true,
+  });
+  Fluttertoast.showToast(msg: 'Factura ${correlativeNumber + 1}');
+  return await FirebaseFirestore.instance
+      .collection('clientes')
+      .doc(client.clientDocumentId)
+      .collection('facturas')
+      .doc()
+      .set({
+    'cliente': clientID,
+    'descuentoMaestro': discount,
+    'fecha': Timestamp.fromDate(DateTime.parse(date)),
+    'impuesto': tax,
+    'montoTotal': double.parse(totalAsString),
+    'nroCorrelativo': correlativeNumber,
+    'pagada': isPaid,
+    'pagos': payments,
+    'pedido': order,
+    'porcentajeDescuentoMaestro': discountPercentage,
+    'referenciaNotasCredito': referenceCreditNote,
+    'subtotal': subTotal,
+    'timestampRegistro': register,
+    'ultimaModificacion': lastModification,
+    'vendedor': seller,
+  });
 }
 
 //Registrar pagos de cheques
@@ -293,16 +289,11 @@ Future registerBankCheckPayment(
 ) async {
   print('/// Registrar cheque en factura: $invoiceDocumentID ///');
 
-  final coinsExchangeRates = [];
-  await FirebaseFirestore.instance.collection('monedas').get().then((document) {
-    document.docs.forEach((element) {
-      coinsExchangeRates.add(element.data()['tasaDeCambio']);
-    });
-  });
   final Map<String, double> exchangeRate = {
-    'BTC': coinsExchangeRates[0],
-    'EUR': coinsExchangeRates[1],
-    'VED': coinsExchangeRates[2],
+    'BTC': 0.00011,
+    'EUR': 0.89,
+    'VED': 4.58,
+    'MXN': 19.43
   };
 
   String? banksDocumentsID;
@@ -318,15 +309,18 @@ Future registerBankCheckPayment(
 
   late var selectedCoinExchangeRate;
 
-  if (currency == 'USD') {
+  if (currency.toString().contains('USD')) {
     selectedCoinExchangeRate = 1;
-  } else if (currency == 'VED') {
-    selectedCoinExchangeRate = coinsExchangeRates[2];
-  } else if (currency == 'EUR') {
-    selectedCoinExchangeRate = coinsExchangeRates[1];
-  } else if (currency == 'BTC') {
-    selectedCoinExchangeRate = coinsExchangeRates[0];
+  } else if (currency.toString().contains('VED')) {
+    selectedCoinExchangeRate = exchangeRate['VED'];
+  } else if (currency.toString().contains('EUR')) {
+    selectedCoinExchangeRate = exchangeRate['EUR'];
+  } else if (currency.toString().contains('BTC')) {
+    selectedCoinExchangeRate = exchangeRate['BTC'];
+  } else if (currency.toString().contains('MXN')) {
+    selectedCoinExchangeRate = exchangeRate['MXN'];
   }
+
   final doubleAmount = double.parse(amount);
   final convertedAmount =
       (doubleAmount / selectedCoinExchangeRate).toStringAsFixed(2);
@@ -383,28 +377,25 @@ Future registerCriptoPayment(
 ) async {
   print('/// Registrar pago en BTC en factura: $invoiceDocumentID ///');
 
-  final coinsExchangeRates = [];
-  await FirebaseFirestore.instance.collection('monedas').get().then((document) {
-    document.docs.forEach((element) {
-      coinsExchangeRates.add(element.data()['tasaDeCambio']);
-    });
-  });
   final Map<String, double> exchangeRate = {
-    'BTC': coinsExchangeRates[0],
-    'EUR': coinsExchangeRates[1],
-    'VED': coinsExchangeRates[2],
+    'BTC': 0.00011,
+    'EUR': 0.89,
+    'VED': 4.58,
+    'MXN': 19.43
   };
 
   late var selectedCoinExchangeRate;
 
-  if (currency == 'USD') {
+  if (currency.toString().contains('USD')) {
     selectedCoinExchangeRate = 1;
-  } else if (currency == 'VED') {
-    selectedCoinExchangeRate = coinsExchangeRates[2];
-  } else if (currency == 'EUR') {
-    selectedCoinExchangeRate = coinsExchangeRates[1];
-  } else if (currency == 'BTC') {
-    selectedCoinExchangeRate = coinsExchangeRates[0];
+  } else if (currency.toString().contains('VED')) {
+    selectedCoinExchangeRate = exchangeRate['VED'];
+  } else if (currency.toString().contains('EUR')) {
+    selectedCoinExchangeRate = exchangeRate['EUR'];
+  } else if (currency.toString().contains('BTC')) {
+    selectedCoinExchangeRate = exchangeRate['BTC'];
+  } else if (currency.toString().contains('MXN')) {
+    selectedCoinExchangeRate = exchangeRate['MXN'];
   }
   final doubleAmount = double.parse(amount);
   final convertedAmount =
@@ -462,16 +453,11 @@ Future registerDepositPayment(
 ) async {
   print('/// Registrar deposito en factura: $invoiceDocumentID ///');
 
-  final coinsExchangeRates = [];
-  await FirebaseFirestore.instance.collection('monedas').get().then((document) {
-    document.docs.forEach((element) {
-      coinsExchangeRates.add(element.data()['tasaDeCambio']);
-    });
-  });
   final Map<String, double> exchangeRate = {
-    'BTC': coinsExchangeRates[0],
-    'EUR': coinsExchangeRates[1],
-    'VED': coinsExchangeRates[2],
+    'BTC': 0.00011,
+    'EUR': 0.89,
+    'VED': 4.58,
+    'MXN': 19.43
   };
 
   String? banksDocumentsID;
@@ -487,14 +473,16 @@ Future registerDepositPayment(
 
   late var selectedCoinExchangeRate;
 
-  if (currency == 'USD') {
+  if (currency.toString().contains('USD')) {
     selectedCoinExchangeRate = 1;
-  } else if (currency == 'VED') {
-    selectedCoinExchangeRate = coinsExchangeRates[2];
-  } else if (currency == 'EUR') {
-    selectedCoinExchangeRate = coinsExchangeRates[1];
-  } else if (currency == 'BTC') {
-    selectedCoinExchangeRate = coinsExchangeRates[0];
+  } else if (currency.toString().contains('VED')) {
+    selectedCoinExchangeRate = exchangeRate['VED'];
+  } else if (currency.toString().contains('EUR')) {
+    selectedCoinExchangeRate = exchangeRate['EUR'];
+  } else if (currency.toString().contains('BTC')) {
+    selectedCoinExchangeRate = exchangeRate['BTC'];
+  } else if (currency.toString().contains('MXN')) {
+    selectedCoinExchangeRate = exchangeRate['MXN'];
   }
   final doubleAmount = double.parse(amount);
   final convertedAmount =
@@ -544,28 +532,25 @@ Future registerMoneyPayment(client, invoiceDocumentID, currency, amount,
     totalOfTheOrder, imageFile, date) async {
   print('/// Registrar pago en efectivo en factura: $invoiceDocumentID ///');
 
-  final coinsExchangeRates = [];
-  await FirebaseFirestore.instance.collection('monedas').get().then((document) {
-    document.docs.forEach((element) {
-      coinsExchangeRates.add(element.data()['tasaDeCambio']);
-    });
-  });
   final Map<String, double> exchangeRate = {
-    'BTC': coinsExchangeRates[0],
-    'EUR': coinsExchangeRates[1],
-    'VED': coinsExchangeRates[2],
+    'BTC': 0.00011,
+    'EUR': 0.89,
+    'VED': 4.58,
+    'MXN': 19.43
   };
 
   late var selectedCoinExchangeRate;
 
-  if (currency == 'USD') {
+  if (currency.toString().contains('USD')) {
     selectedCoinExchangeRate = 1;
-  } else if (currency == 'VED') {
-    selectedCoinExchangeRate = coinsExchangeRates[2];
-  } else if (currency == 'EUR') {
-    selectedCoinExchangeRate = coinsExchangeRates[1];
-  } else if (currency == 'BTC') {
-    selectedCoinExchangeRate = coinsExchangeRates[0];
+  } else if (currency.toString().contains('VED')) {
+    selectedCoinExchangeRate = exchangeRate['VED'];
+  } else if (currency.toString().contains('EUR')) {
+    selectedCoinExchangeRate = exchangeRate['EUR'];
+  } else if (currency.toString().contains('BTC')) {
+    selectedCoinExchangeRate = exchangeRate['BTC'];
+  } else if (currency.toString().contains('MXN')) {
+    selectedCoinExchangeRate = exchangeRate['MXN'];
   }
   final doubleAmount = double.parse(amount);
   final convertedAmount =
@@ -621,16 +606,11 @@ Future registerTransferPayment(
 ) async {
   print('/// Registrar Trasnferencia en factura: $invoiceDocumentID ///');
 
-  final coinsExchangeRates = [];
-  await FirebaseFirestore.instance.collection('monedas').get().then((document) {
-    document.docs.forEach((element) {
-      coinsExchangeRates.add(element.data()['tasaDeCambio']);
-    });
-  });
   final Map<String, double> exchangeRate = {
-    'BTC': coinsExchangeRates[0],
-    'EUR': coinsExchangeRates[1],
-    'VED': coinsExchangeRates[2],
+    'BTC': 0.00011,
+    'EUR': 0.89,
+    'VED': 4.58,
+    'MXN': 19.43
   };
 
   String? banksDocumentsID;
@@ -646,14 +626,16 @@ Future registerTransferPayment(
 
   late var selectedCoinExchangeRate;
 
-  if (currency == 'USD') {
+  if (currency.toString().contains('USD')) {
     selectedCoinExchangeRate = 1;
-  } else if (currency == 'VED') {
-    selectedCoinExchangeRate = coinsExchangeRates[2];
-  } else if (currency == 'EUR') {
-    selectedCoinExchangeRate = coinsExchangeRates[1];
-  } else if (currency == 'BTC') {
-    selectedCoinExchangeRate = coinsExchangeRates[0];
+  } else if (currency.toString().contains('VED')) {
+    selectedCoinExchangeRate = exchangeRate['VED'];
+  } else if (currency.toString().contains('EUR')) {
+    selectedCoinExchangeRate = exchangeRate['EUR'];
+  } else if (currency.toString().contains('BTC')) {
+    selectedCoinExchangeRate = exchangeRate['BTC'];
+  } else if (currency.toString().contains('MXN')) {
+    selectedCoinExchangeRate = exchangeRate['MXN'];
   }
   final doubleAmount = double.parse(amount);
   final convertedAmount =
@@ -712,16 +694,11 @@ Future registerTransferInterPayment(
 ) async {
   print('/// Registrar transferencia inter en factura: $invoiceDocumentID ///');
 
-  final coinsExchangeRates = [];
-  await FirebaseFirestore.instance.collection('monedas').get().then((document) {
-    document.docs.forEach((element) {
-      coinsExchangeRates.add(element.data()['tasaDeCambio']);
-    });
-  });
   final Map<String, double> exchangeRate = {
-    'BTC': coinsExchangeRates[0],
-    'EUR': coinsExchangeRates[1],
-    'VED': coinsExchangeRates[2],
+    'BTC': 0.00011,
+    'EUR': 0.89,
+    'VED': 4.58,
+    'MXN': 19.43
   };
 
   String? banksDocumentsID;
@@ -736,15 +713,16 @@ Future registerTransferInterPayment(
   });
 
   late var selectedCoinExchangeRate;
-
-  if (currency == 'USD') {
+  if (currency.toString().contains('USD')) {
     selectedCoinExchangeRate = 1;
-  } else if (currency == 'VED') {
-    selectedCoinExchangeRate = coinsExchangeRates[2];
-  } else if (currency == 'EUR') {
-    selectedCoinExchangeRate = coinsExchangeRates[1];
-  } else if (currency == 'BTC') {
-    selectedCoinExchangeRate = coinsExchangeRates[0];
+  } else if (currency.toString().contains('VED')) {
+    selectedCoinExchangeRate = exchangeRate['VED'];
+  } else if (currency.toString().contains('EUR')) {
+    selectedCoinExchangeRate = exchangeRate['EUR'];
+  } else if (currency.toString().contains('BTC')) {
+    selectedCoinExchangeRate = exchangeRate['BTC'];
+  } else if (currency.toString().contains('MXN')) {
+    selectedCoinExchangeRate = exchangeRate['MXN'];
   }
   final doubleAmount = double.parse(amount);
   final convertedAmount =

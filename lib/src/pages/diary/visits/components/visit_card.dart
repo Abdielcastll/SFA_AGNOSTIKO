@@ -196,7 +196,7 @@ class _VIsitCardBodyState extends State<VIsitCardBody> {
                 ],
               ),
               Container(
-                margin: const EdgeInsets.fromLTRB(14, 5, 14, 5),
+                margin: const EdgeInsets.fromLTRB(14, 5, 14, 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.end,

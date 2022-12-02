@@ -139,15 +139,13 @@ class _CheckoutBodyState extends State<CheckoutBody> {
         locale: 'es_ES',
         decimalDigits: 2,
         symbol: '€',
-        customPattern: '\u00a4 #,##.#',
       ).format(productPrice * 0.89).toString();
     } else if (currentCoin!.contains('MXN')) {
       return NumberFormat.currency(
         locale: 'es_MX',
         decimalDigits: 2,
         symbol: '\$',
-        customPattern: '\u00a4 #,##.#',
-      ).format(productPrice * 0.89);
+      ).format(productPrice * 19.43);
     } else if (currentCoin!.contains('BTC')) {
       return '฿ ${(productPrice * 0.00011).toString()}';
     } else {

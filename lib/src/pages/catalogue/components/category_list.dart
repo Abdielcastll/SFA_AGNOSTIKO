@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
@@ -98,10 +99,22 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                                 borderRadius: BorderRadius.circular(8)),
                             height: 240,
                             width: 120,
-                            child: Image.network(
-                              'https://i.imgur.com/H9rVf4m.jpg',
+                            child: CachedNetworkImage(
                               fit: BoxFit.cover,
+                              imageUrl: 'https://i.imgur.com/H9rVf4m.jpg',
+                              placeholder: (context, url) => Container(
+                                  width: 300,
+                                  child: const Center(
+                                      child: CircularProgressIndicator())),
+                              errorWidget: (context, url, error) => Image.asset(
+                                'assets/images/nocategorie.jpg',
+                                fit: BoxFit.cover,
+                              ),
                             ),
+                            // child: Image.network(
+                            //   'https://i.imgur.com/H9rVf4m.jpg',
+                            //   fit: BoxFit.cover,
+                            // ),
                           ),
                         ),
                         Align(
