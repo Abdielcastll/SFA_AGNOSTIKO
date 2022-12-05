@@ -64,11 +64,7 @@ class DatabaseServiceStreams {
   // Stream de Clientes completos
 
   Stream<List<Clients>> get clients {
-    return clientsCollection
-        .limit(100)
-        // .orderBy('nombre')
-        .snapshots()
-        .map(clientListfromSnapshot);
+    return clientsCollection.snapshots().map(clientListfromSnapshot);
   }
 
   // Streams de resumenes

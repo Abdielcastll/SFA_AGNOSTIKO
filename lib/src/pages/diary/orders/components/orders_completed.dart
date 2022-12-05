@@ -26,26 +26,9 @@ class CompletedOrders extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Container(
-              margin: const EdgeInsets.fromLTRB(14, 0, 0, 10),
-              child: Text(
-                textAlign: TextAlign.start,
-                AppLocalizations.of(context)!.completed,
-                style: TextStyle(
-                  color: Colors.green,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Poppins-regular',
-                ),
-              ),
-            ),
-          ],
-        ),
         SingleChildScrollView(
           child: SizedBox(
-            height: 230,
+            height: MediaQuery.of(context).size.height * 0.65,
             child: ListView.builder(
               physics: const BouncingScrollPhysics(),
               itemCount: ordersCompleted.length,

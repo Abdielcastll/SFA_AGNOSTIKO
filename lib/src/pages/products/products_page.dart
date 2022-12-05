@@ -385,9 +385,11 @@ class _ProductsBodyState extends State<ProductsBody> {
                                 name: product.name,
                                 unitPrice: productPrice.toString(),
                                 availableStock: productStock,
+                                urlPicture: product.catalogue.toString(),
                               );
 
                               print(newProduct.unitPrice);
+                              print(product.catalogue.toString());
                               setState(
                                   () => product.selected = !product.selected);
                               selectedProducts.add(newProduct);
@@ -452,8 +454,12 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                 unitPrice:
                                                     productPrice.toString(),
                                                 availableStock: productStock,
+                                                urlPicture: product.catalogue,
                                               );
                                               print(newProduct.unitPrice);
+                                              print(
+                                                  product.catalogue.toString());
+
                                               // print(newProduct.totalAmount);
                                               selectedProducts.add(newProduct);
                                             } else if (product.selected ==

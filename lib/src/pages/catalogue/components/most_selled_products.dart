@@ -105,6 +105,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                   isOrderActive: widget.isOrderActive,
                                   isProductInAPromotion: false,
                                   prices: prices,
+                                  catalogueID: product.catalogue,
                                 ),
                               ),
                             );

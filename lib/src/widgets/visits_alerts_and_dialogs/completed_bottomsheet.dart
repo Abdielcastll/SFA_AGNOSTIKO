@@ -207,6 +207,8 @@ void modalBottomSheetForCompleted(
                                     typeId: currentClientIdType,
                                     clientDocumentReferenceID:
                                         clientReferenceId,
+                                    dispatchAddress:
+                                        currentClientDispatchAdress,
                                   ),
                                 ),
                               );

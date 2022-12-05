@@ -236,6 +236,8 @@ void modalBottomSheetForOnProcess(
                                           typeId: currentClientIdType,
                                           clientDocumentReferenceID:
                                               clientReferenceId,
+                                          dispatchAddress:
+                                              currentClientDispatchAdress,
                                         ),
                                       ),
                                     );

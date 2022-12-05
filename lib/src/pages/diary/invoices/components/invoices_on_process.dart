@@ -29,27 +29,10 @@ class _InvoicesOnProcessState extends State<InvoicesOnProcess> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Container(
-                margin: EdgeInsets.only(left: 16, bottom: 10),
-                child: Text(
-                  textAlign: TextAlign.start,
-                  AppLocalizations.of(context)!.onProcess,
-                  style: TextStyle(
-                    color: Colors.amber.shade600,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Poppins-regular',
-                  ),
-                ),
-              ),
-            ],
-          ),
           SingleChildScrollView(
             physics: BouncingScrollPhysics(),
             child: Container(
-              height: 230,
+              height: MediaQuery.of(context).size.height * 0.65,
               child: Scrollbar(
                 child: ListView.builder(
                   itemCount: invoicesList.length,

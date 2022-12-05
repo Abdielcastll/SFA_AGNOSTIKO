@@ -74,9 +74,9 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
               itemCount: productsByDateList.length,
               itemBuilder: (BuildContext context, index) {
                 final product = productsByDateList[index];
-                print(
-                  stockValues[product.code] ?? 000,
-                );
+                // print(
+                //   stockValues[product.code] ?? 000,
+                // );
                 if ((stockValues[product.code] ?? 000) > 0) {
                   return FutureBuilder<String?>(
                     future: FirebaseStorage.instance
@@ -114,6 +114,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                   isProductInAPromotion: false,
                                   prices: prices,
                                   pricesName: pricesName,
+                                  catalogueID: product.catalogue,
                                 ),
                               ),
                             );

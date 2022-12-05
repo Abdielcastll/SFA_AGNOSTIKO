@@ -76,7 +76,7 @@ class VisitsBody extends StatefulWidget {
 }
 
 class _VisitsBodyState extends State<VisitsBody> {
-  bool seeCompleted = true;
+  bool seeCompleted = false;
 
   @override
   Widget build(BuildContext context) {

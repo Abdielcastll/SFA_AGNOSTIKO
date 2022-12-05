@@ -36,6 +36,7 @@ void modalBottomSheetForInvoices(
   invoiceTotal,
   client,
   invoiceDocumentID,
+  currentClientDispatchAdress,
 ) {
   String paidAmount = '00.00';
   var dateFormatter = DateFormat('dd-MM-yyyy');
@@ -161,6 +162,8 @@ void modalBottomSheetForInvoices(
                                         typeId: typeId,
                                         clientDocumentReferenceID:
                                             clientDocumentReferenceID,
+                                        dispatchAddress:
+                                            currentClientDispatchAdress,
                                       ),
                                     ),
                                   );

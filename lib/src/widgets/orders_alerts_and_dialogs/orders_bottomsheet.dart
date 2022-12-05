@@ -88,6 +88,11 @@ void modalBottomSheetForOrders(
 
       return StatefulBuilder(
         builder: (context, setState) {
+          doublePop() {
+            Navigator.pop(context);
+            Navigator.pop(context);
+          }
+
           return SafeArea(
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
@@ -165,6 +170,8 @@ void modalBottomSheetForOrders(
                                         typeId: currentClientIdType,
                                         clientDocumentReferenceID:
                                             clientReferenceId,
+                                        dispatchAddress:
+                                            currentClientDispatchAdress,
                                       ),
                                     ),
                                   );
@@ -455,8 +462,7 @@ void modalBottomSheetForOrders(
                                                             subTotal,
                                                             userUID);
 
-                                                        Navigator.pop(context);
-                                                        Navigator.pop(context);
+                                                        doublePop();
                                                       },
                                                       style:
                                                           TextButton.styleFrom(

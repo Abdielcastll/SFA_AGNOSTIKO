@@ -21,27 +21,9 @@ class InvoicesList extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(left: 16, top: 5),
-              child: Text(
-                textAlign: TextAlign.start,
-                AppLocalizations.of(context)!.completed,
-                style: TextStyle(
-                  color: Colors.green.shade600,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Poppins-regular',
-                ),
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: 10),
         SingleChildScrollView(
           child: Container(
-            height: 230,
+            height: MediaQuery.of(context).size.height * 0.65,
             child: Scrollbar(
               child: ListView.builder(
                 physics: ClampingScrollPhysics(),

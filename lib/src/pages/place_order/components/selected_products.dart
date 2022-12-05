@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
@@ -219,24 +221,102 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Container(
-                                          height: 95,
-                                          width: 80,
-                                          decoration: BoxDecoration(
-                                            color: Colors.transparent,
-                                            borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(8),
-                                                bottomLeft: Radius.circular(8)),
-                                          ),
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(8),
-                                                bottomLeft: Radius.circular(8)),
-                                            child: Image.network(
-                                              'https://i.imgur.com/BPbj6Gy.jpg',
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
+                                        FutureBuilder(
+                                          future: FirebaseStorage.instance
+                                              .ref()
+                                              .child('imagenes')
+                                              .child('catalogos')
+                                              .child(
+                                                  product.urlPicture.toString())
+                                              .child('1')
+                                              .getDownloadURL()
+                                              .catchError((e) {
+                                            print(e);
+                                          }),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.hasData) {
+                                              final url =
+                                                  snapshot.data!.toString();
+                                              return Container(
+                                                height: 95,
+                                                width: 80,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.transparent,
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                          topLeft: Radius
+                                                              .circular(8),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  8)),
+                                                ),
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                          topLeft: Radius
+                                                              .circular(8),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  8)),
+                                                  child: CachedNetworkImage(
+                                                    fit: BoxFit.cover,
+                                                    imageUrl: url,
+                                                    placeholder: (context,
+                                                            url) =>
+                                                        Container(
+                                                            alignment: Alignment
+                                                                .center,
+                                                            width: 300,
+                                                            child: const Center(
+                                                                child:
+                                                                    CircularProgressIndicator())),
+                                                    errorWidget:
+                                                        (context, url, error) =>
+                                                            Image.asset(
+                                                      'assets/images/noproduct.jpg',
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            } else if (snapshot.hasError) {
+                                              return Container(
+                                                height: 95,
+                                                width: 80,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.transparent,
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                          topLeft: Radius
+                                                              .circular(8),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  8)),
+                                                ),
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                          topLeft: Radius
+                                                              .circular(8),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  8)),
+                                                  child: Image.asset(
+                                                    'assets/images/noproduct.jpg',
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                              );
+                                            } else {
+                                              return Container(
+                                                width: 140,
+                                                child: const Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                ),
+                                              );
+                                            }
+                                          },
                                         ),
                                         Column(
                                           mainAxisAlignment:

@@ -168,6 +168,8 @@ class _ClientListState extends State<ClientList> {
                     final clientZone = zonesSummary[client?.zone] ?? 'NaN';
                     final clientDocumentReferenceID =
                         client?.clientDocumentId ?? 'NaN';
+                    final clientDispatchAddress =
+                        client?.dispatchAdress ?? 'NaN';
 
                     return Container(
                       margin: EdgeInsets.only(top: 10.0),
@@ -197,6 +199,7 @@ class _ClientListState extends State<ClientList> {
                                 zone: clientZone,
                                 clientDocumentReferenceID:
                                     clientDocumentReferenceID,
+                                dispatchAddress: clientDispatchAddress,
                               ),
                             ),
                           );

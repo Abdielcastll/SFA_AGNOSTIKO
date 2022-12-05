@@ -35,6 +35,7 @@ class ProductDetails extends StatefulWidget {
     required this.isProductInAPromotion,
     this.prices,
     this.pricesName,
+    this.catalogueID,
   }) : super(key: key);
 
   final String code;
@@ -49,6 +50,7 @@ class ProductDetails extends StatefulWidget {
   final bool isProductInAPromotion;
   final prices;
   final pricesName;
+  final catalogueID;
 
   @override
   State<ProductDetails> createState() => _ProductDetailsState();
@@ -72,6 +74,7 @@ class _ProductDetailsState extends State<ProductDetails> {
         isProductInAPromotion: widget.isProductInAPromotion,
         prices: widget.prices,
         pricesName: widget.pricesName,
+        catalogueID: widget.catalogueID,
       ),
     );
   }
@@ -92,6 +95,7 @@ class ProductDetailsBody extends StatelessWidget {
     required this.isProductInAPromotion,
     this.prices,
     this.pricesName,
+    this.catalogueID,
   }) : super(key: key);
 
   final String code;
@@ -106,6 +110,7 @@ class ProductDetailsBody extends StatelessWidget {
   final bool isProductInAPromotion;
   final prices;
   final pricesName;
+  final catalogueID;
 
   final String? currentCoin =
       sharedPreferences!.getString('currentCoin') ?? 'Dolares - USD';
@@ -451,7 +456,10 @@ class ProductDetailsBody extends StatelessWidget {
                                                   name: name,
                                                   unitPrice: price.toString(),
                                                   availableStock: stock,
+                                                  urlPicture:
+                                                      catalogueID.toString(),
                                                 );
+
                                                 objectBox
                                                     .insertShoppingCartProduct(
                                                         newProduct);

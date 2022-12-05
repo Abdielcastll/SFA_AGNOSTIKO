@@ -7,6 +7,7 @@ import 'package:pwa_sales2go_flutter/src/models/visit_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/visits/components/visit_card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class VisitsOnProcess extends StatelessWidget {
   const VisitsOnProcess({
@@ -27,36 +28,54 @@ class VisitsOnProcess extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          height: MediaQuery.of(context).size.height * 0.65,
-          child: Scrollbar(
-            child: ListView.builder(
-              // physics: const BouncingScrollPhysics(),
-              itemCount: visitsOnProcess.length,
-              itemBuilder: (BuildContext context, int index) {
-                final visit = visitsOnProcess[index];
-                final unformattedDate =
-                    visit.date ?? Timestamp.fromDate(DateTime.now());
-                final visitStatus = AppLocalizations.of(context)!.onProcess;
-                final date =
-                    DateTime.parse(unformattedDate.toDate().toString());
-                final visitDate = dateFormatter.format(date);
-                final visitCommentary = visit.commentary ??
-                    AppLocalizations.of(context)!.commentaryUnavaliable;
-                final clientDocID = visit.clientReferenceId;
-                final visitDocID = visit.documentRefId;
+        visitsOnProcess.isNotEmpty
+            ? Container(
+                height: MediaQuery.of(context).size.height * 0.65,
+                child: Scrollbar(
+                  child: ListView.builder(
+                    // physics: const BouncingScrollPhysics(),
+                    itemCount: visitsOnProcess.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final visit = visitsOnProcess[index];
+                      final unformattedDate =
+                          visit.date ?? Timestamp.fromDate(DateTime.now());
+                      final visitStatus =
+                          AppLocalizations.of(context)!.onProcess;
+                      final date =
+                          DateTime.parse(unformattedDate.toDate().toString());
+                      final visitDate = dateFormatter.format(date);
+                      final visitCommentary = visit.commentary ??
+                          AppLocalizations.of(context)!.commentaryUnavaliable;
+                      final clientDocID = visit.clientReferenceId;
+                      final visitDocID = visit.documentRefId;
 
-                return VisitCard(
-                  visitDocumentId: visitDocID,
-                  date: visitDate,
-                  status: visitStatus,
-                  commentary: visitCommentary,
-                  clientReferenceId: clientDocID,
-                );
-              },
-            ),
-          ),
-        ),
+                      return VisitCard(
+                        visitDocumentId: visitDocID,
+                        date: visitDate,
+                        status: visitStatus,
+                        commentary: visitCommentary,
+                        clientReferenceId: clientDocID,
+                      );
+                    },
+                  ),
+                ),
+              )
+            : Container(
+                margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                alignment: Alignment.center,
+                child: Center(
+                  child: Text(
+                    'No hay Visitas pendientes',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: 'Poppins-regular',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: myTheme.colorScheme.primary,
+                    ),
+                  ),
+                ),
+              ),
       ],
     );
   }

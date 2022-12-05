@@ -173,6 +173,7 @@ class InvoiceCardBody extends StatelessWidget {
                 widget.invoiceTotal,
                 currentClient,
                 widget.invoiceDocumentID,
+                currentClientDispatchAdress,
               )
             : modalBottomSheetForInvoices(
                 true,
@@ -194,7 +195,7 @@ class InvoiceCardBody extends StatelessWidget {
                 widget.invoiceTotal,
                 currentClient,
                 widget.invoiceDocumentID,
-              );
+                currentClientDispatchAdress);
       },
       child: Padding(
         padding: EdgeInsets.only(top: 5, left: 16, right: 16, bottom: 5),

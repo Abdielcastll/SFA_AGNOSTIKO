@@ -10,6 +10,7 @@ import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/filter_or
 import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/orders_completed.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/orders_on_process.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OrdersPage extends StatefulWidget {
   const OrdersPage({Key? key}) : super(key: key);
@@ -31,12 +32,12 @@ class _OrdersPageState extends State<OrdersPage> {
         StreamProvider<List<Orders>?>.value(
           value: FirebaseFirestore.instance
               .collectionGroup('pedidos')
-              .orderBy('nroCorrelativo', descending: true)
+              // .orderBy('fechaEntrega', descending: true)
               .snapshots()
               .map(ordersFromSnapshot),
           initialData: const [],
           catchError: (context, error) {
-            // print(error);
+            print(error);
           },
         ),
       ],
@@ -50,23 +51,70 @@ class _OrdersPageState extends State<OrdersPage> {
   }
 }
 
-class OrdersBody extends StatelessWidget {
+class OrdersBody extends StatefulWidget {
   const OrdersBody({
     Key? key,
   }) : super(key: key);
 
   @override
+  State<OrdersBody> createState() => _OrdersBodyState();
+}
+
+class _OrdersBodyState extends State<OrdersBody> {
+  bool seeCompleted = false;
+
+  @override
   Widget build(BuildContext context) {
-    // print(orders);
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         // ignore: prefer_const_literals_to_create_immutables
         children: [
-          SizedBox(height: 10),
-          OrdersOnProcess(),
-          CompletedOrders(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Container(
+                width: 120,
+                margin: const EdgeInsets.fromLTRB(16, 10, 0, 10),
+                child: Text(
+                  seeCompleted == true
+                      ? AppLocalizations.of(context)!.completed
+                      : AppLocalizations.of(context)!.onProcess,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    color: seeCompleted == true
+                        ? Colors.green.shade600
+                        : Colors.amber.shade600,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins-regular',
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+                child: Text(
+                  'Ver completados',
+                  style: TextStyle(
+                    fontSize: 15,
+                    // fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins-regular',
+                  ),
+                ),
+              ),
+              Checkbox(
+                activeColor: myTheme.colorScheme.primary,
+                value: seeCompleted,
+                onChanged: (value) {
+                  setState(() {
+                    seeCompleted = !seeCompleted;
+                  });
+                },
+              ),
+            ],
+          ),
+          seeCompleted == false ? OrdersOnProcess() : CompletedOrders(),
         ],
       ),
     );

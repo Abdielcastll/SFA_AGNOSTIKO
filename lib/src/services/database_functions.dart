@@ -163,7 +163,7 @@ Future createOrder(
         : client.dispatchAdress,
     'facturacionFallida': false,
     'facturado': false,
-    'fecha': Timestamp.fromDate(today),
+    'fecha': Timestamp.fromDate(DateTime.now()),
     'fechaEntrega': Timestamp.fromDate(today),
     'idsProductos': productsIds,
     'impuesto': taxTotal,
@@ -214,7 +214,7 @@ Future createInvoice(
   final date = orderDate;
   final tax = taxTotal;
   final String totalAsString = totalOfTheOrder.toStringAsFixed(2);
-  final int correlativeNumber = FirebaseFirestore.instance
+  final correlativeNumber = FirebaseFirestore.instance
           .collectionGroup('facturas')
           .snapshots()
           .toString()
@@ -237,7 +237,20 @@ Future createInvoice(
   };
   final seller = FirebaseFirestore.instance.collection('usuarios').doc(userID);
 
-  print(correlativeNumber);
+  print(clientID);
+  print(discount);
+  print(date);
+  print(tax);
+  print(totalAsString);
+  print(isPaid);
+  print(payments);
+  print(order);
+  print(discountPercentage);
+  print(referenceCreditNote);
+  print(subTotal);
+  print(register);
+  print(lastModification);
+  print(seller);
 
   await FirebaseFirestore.instance
       .collection('clientes')
