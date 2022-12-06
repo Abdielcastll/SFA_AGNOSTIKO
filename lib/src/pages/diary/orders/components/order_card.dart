@@ -15,21 +15,22 @@ import 'package:pwa_sales2go_flutter/src/widgets/orders_alerts_and_dialogs/order
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OrderCard extends StatefulWidget {
-  const OrderCard(
-      {Key? key,
-      this.clientReferenceId,
-      this.date,
-      this.total,
-      this.orderDocumentId,
-      this.status,
-      this.isInvoicesFailed,
-      this.commentary,
-      this.products,
-      this.subTotal,
-      this.discountMaster,
-      this.tax,
-      this.coinsExchangeRates})
-      : super(key: key);
+  const OrderCard({
+    Key? key,
+    this.clientReferenceId,
+    this.date,
+    this.total,
+    this.orderDocumentId,
+    this.status,
+    this.isInvoicesFailed,
+    this.commentary,
+    this.products,
+    this.subTotal,
+    this.discountMaster,
+    this.tax,
+    this.coinsExchangeRates,
+    this.correlativeNumber,
+  }) : super(key: key);
 
   final clientReferenceId;
   final date;
@@ -43,6 +44,7 @@ class OrderCard extends StatefulWidget {
   final discountMaster;
   final tax;
   final coinsExchangeRates;
+  final correlativeNumber;
 
   @override
   State<OrderCard> createState() => _OrderCardState();
@@ -191,6 +193,7 @@ class _OrderCardBodyState extends State<OrderCardBody> {
                 currentClientIdType,
                 currentClient,
                 widget.widget.date,
+                widget.widget.correlativeNumber,
               )
             : modalBottomSheetForOrders(
                 true,
@@ -220,6 +223,7 @@ class _OrderCardBodyState extends State<OrderCardBody> {
                 currentClientIdType,
                 currentClient,
                 widget.widget.date,
+                widget.widget.correlativeNumber,
               );
       },
       child: Container(

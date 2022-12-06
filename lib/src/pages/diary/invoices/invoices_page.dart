@@ -30,7 +30,7 @@ class _InvoicesPageState extends State<InvoicesPage> {
             ? StreamProvider<List<Invoices>?>.value(
                 value: FirebaseFirestore.instance
                     .collectionGroup('facturas')
-                    .orderBy('fecha', descending: true)
+                    .orderBy('nroCorrelativo', descending: true)
                     .snapshots()
                     .map(accountInvoicesFromSnapshot),
                 initialData: const [],

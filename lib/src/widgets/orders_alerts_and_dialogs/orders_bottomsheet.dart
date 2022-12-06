@@ -37,6 +37,7 @@ void modalBottomSheetForOrders(
   currentClientIdType,
   client,
   orderDate,
+  correlativeNumber,
 ) {
   showModalBottomSheet(
     elevation: 0,
@@ -89,8 +90,7 @@ void modalBottomSheetForOrders(
       return StatefulBuilder(
         builder: (context, setState) {
           doublePop() {
-            Navigator.pop(context);
-            Navigator.pop(context);
+            Navigator.of(context).popUntil((route) => route.isFirst);
           }
 
           return SafeArea(
@@ -453,14 +453,16 @@ void modalBottomSheetForOrders(
                                                       onPressed: () async {
                                                         // Mandar pedido a Facturar
                                                         await createInvoice(
-                                                            client,
-                                                            discountMaster,
-                                                            orderDate,
-                                                            tax,
-                                                            total,
-                                                            orderDocumentId,
-                                                            subTotal,
-                                                            userUID);
+                                                          client,
+                                                          discountMaster,
+                                                          orderDate,
+                                                          tax,
+                                                          total,
+                                                          orderDocumentId,
+                                                          subTotal,
+                                                          userUID,
+                                                          correlativeNumber,
+                                                        );
 
                                                         doublePop();
                                                       },

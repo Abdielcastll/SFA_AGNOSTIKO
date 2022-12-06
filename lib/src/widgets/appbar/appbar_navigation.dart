@@ -61,7 +61,8 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
                       icon: const Icon(Icons.shopping_cart_rounded, size: 24),
                       // Redireccion al flujo de realizar nuevos pedidos
                       onPressed: () {
-                        Navigator.pop(context);
+                        Navigator.popUntil(
+                            context, ModalRoute.withName("ORDER"));
                       },
                     ),
                   )

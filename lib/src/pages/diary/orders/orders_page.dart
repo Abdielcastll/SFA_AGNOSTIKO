@@ -32,7 +32,7 @@ class _OrdersPageState extends State<OrdersPage> {
         StreamProvider<List<Orders>?>.value(
           value: FirebaseFirestore.instance
               .collectionGroup('pedidos')
-              // .orderBy('fechaEntrega', descending: true)
+              .orderBy('fecha')
               .snapshots()
               .map(ordersFromSnapshot),
           initialData: const [],

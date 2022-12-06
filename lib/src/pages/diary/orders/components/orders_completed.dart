@@ -17,9 +17,15 @@ class CompletedOrders extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final orders = Provider.of<List<Orders>?>(context) ?? [];
+    print('ordenes: ${orders.length}');
+
     var dateFormatter = DateFormat('yyyy-MM-dd');
-    final ordersCompleted =
-        orders.where((element) => element.isInvoiced == true).toList();
+    final ordersCompleted = orders
+        .where((element) => element.isInvoiced == true)
+        .toList()
+        .reversed
+        .toList();
+
     final clientNames = Provider.of<List<ClientName>?>(context) ?? [];
 
     return Column(
@@ -62,6 +68,7 @@ class CompletedOrders extends StatelessWidget {
                   subTotal: orderSubTotal,
                   discountMaster: orderDiscountMaster,
                   tax: orderTax,
+                  correlativeNumber: order.correlativeNumber,
                 );
               },
             ),

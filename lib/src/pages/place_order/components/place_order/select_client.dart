@@ -133,6 +133,7 @@ class _SelectClientState extends State<SelectClient> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
+                          settings: RouteSettings(name: "ORDER"),
                           builder: (context) => OrderPage(
                             client: client,
                           ),

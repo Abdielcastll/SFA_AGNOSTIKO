@@ -16,10 +16,13 @@ class OrdersOnProcess extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final orders = Provider.of<List<Orders>?>(context) ?? [];
+    print('ordenes: ${orders.length}');
     var dateFormatter = DateFormat('yyyy-MM-dd');
-    final ordersOnProcess =
-        orders.where((element) => element.isInvoiced == false).toList();
-
+    final ordersOnProcess = orders
+        .where((element) => element.isInvoiced == false)
+        .toList()
+        .reversed
+        .toList();
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -63,6 +66,7 @@ class OrdersOnProcess extends StatelessWidget {
                             tax: orderTax,
                             subTotal: orderSubTotal,
                             discountMaster: orderDiscountMaster,
+                            correlativeNumber: order.correlativeNumber,
                           );
                         },
                       ),

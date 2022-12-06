@@ -439,6 +439,8 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                                               productPrice.toString(),
                                                                           availableStock:
                                                                               product.availableStock,
+                                                                          urlPicture:
+                                                                              product.urlPicture,
                                                                         );
                                                                         updatedList
                                                                             .add(updatedProduct);
@@ -530,6 +532,8 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                                               productPrice.toString(),
                                                                           availableStock:
                                                                               product.availableStock,
+                                                                          urlPicture:
+                                                                              product.urlPicture,
                                                                         );
                                                                         updatedList
                                                                             .add(updatedProduct);
