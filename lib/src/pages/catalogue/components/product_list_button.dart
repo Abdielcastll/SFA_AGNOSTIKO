@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -29,7 +27,7 @@ class _ListOfProductsButtonState extends State<ListOfProductsButton> {
 
     final productsList = products;
     return Container(
-      margin: EdgeInsets.fromLTRB(16, 10, 16, 0),
+      margin: const EdgeInsets.fromLTRB(16, 10, 16, 0),
       width: MediaQuery.of(context).size.width,
       height: 45,
       child: ElevatedButton.icon(
@@ -52,7 +50,7 @@ class _ListOfProductsButtonState extends State<ListOfProductsButton> {
               myTheme.colorScheme.primary.withOpacity(0.5)),
         ),
         icon: Container(
-          margin: EdgeInsets.only(bottom: 3),
+          margin: const EdgeInsets.only(bottom: 3),
           child: Icon(
             MaterialCommunityIcons.tag_outline,
             color: myTheme.colorScheme.onPrimaryContainer,
@@ -60,11 +58,10 @@ class _ListOfProductsButtonState extends State<ListOfProductsButton> {
           ),
         ),
         label: Row(
-          // ignore: prefer_const_literals_to_create_immutables
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              margin: EdgeInsets.only(left: 16),
+              margin: const EdgeInsets.only(left: 16),
               child: Text(
                 AppLocalizations.of(context)!.listOfProducts,
                 style: TextStyle(

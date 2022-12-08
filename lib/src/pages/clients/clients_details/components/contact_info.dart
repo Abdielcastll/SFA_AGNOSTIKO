@@ -17,19 +17,17 @@ class ContactInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.only(top: 10),
+        margin: const EdgeInsets.only(top: 10),
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
         ),
-        // ignore: prefer_const_literals_to_create_immutables
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          // ignore: prefer_const_literals_to_create_immutables
           children: [
             Container(
-              margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+              margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -47,9 +45,7 @@ class ContactInfo extends StatelessWidget {
                     child: Material(
                       color: Colors.white,
                       child: IconButton(
-                        onPressed: () {
-                          // Boton de editar informacion
-                        },
+                        onPressed: () {},
                         splashColor:
                             myTheme.colorScheme.secondary.withOpacity(0.5),
                         icon: Icon(
@@ -65,10 +61,10 @@ class ContactInfo extends StatelessWidget {
             ),
             Container(
               width: MediaQuery.of(context).size.width,
-              margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+              margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
               child: Text(
                 tlf1,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins-regular',
                   fontSize: 11,
                 ),
@@ -76,10 +72,10 @@ class ContactInfo extends StatelessWidget {
             ),
             Container(
               width: MediaQuery.of(context).size.width,
-              margin: EdgeInsets.fromLTRB(10, 5, 0, 10),
+              margin: const EdgeInsets.fromLTRB(10, 5, 0, 10),
               child: Text(
                 email.toLowerCase(),
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins-regular',
                   fontSize: 11,
                 ),

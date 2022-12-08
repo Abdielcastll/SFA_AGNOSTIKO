@@ -39,16 +39,11 @@ class _ListTileOptionsState extends State<ListTileOptions> {
   Widget build(BuildContext context) {
     final zoneSummary = Provider.of<ZoneSummary?>(context)!.summary ?? [];
     final userDoc = Provider.of<CurrentUserInfo?>(context);
-    // final currentUserTeam = Provider.of<TeamsModel?>(context) ?? {};
-    // print(currentUserTeam);
-    // print(userDoc!.zone);
-    // print(zoneSummary);
 
     identifyZone() {
       if (userDoc!.zone == null) {
         return "No hay zona disponible";
       } else {
-        // print(zoneSummary[userDoc.zone]);
         return zoneSummary[userDoc.zone];
       }
     }
@@ -66,7 +61,6 @@ class _ListTileOptionsState extends State<ListTileOptions> {
           title: AppLocalizations.of(context)!.salesArea,
           sub: AppLocalizations.of(context)!.salesAreaDesc,
           function: () {
-            //Funcion para abrir dialog que muere zona de ventas y gerente
             showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -83,7 +77,7 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    content: Container(
+                    content: SizedBox(
                       height: 50,
                       width: 100,
                       child: Column(
@@ -131,7 +125,6 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                 title: AppLocalizations.of(context)!.usersAndTeams,
                 sub: AppLocalizations.of(context)!.usersAndTeamsDesc,
                 function: () {
-                  // Redireccion a Usuarios y equipos
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -146,7 +139,6 @@ class _ListTileOptionsState extends State<ListTileOptions> {
           title: AppLocalizations.of(context)!.account,
           sub: AppLocalizations.of(context)!.accountDesc,
           function: () {
-            //Funcion para bottom Sheet menu para cambiar nombr
             showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -163,7 +155,7 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    content: Container(
+                    content: SizedBox(
                       height: 100,
                       width: 100,
                       child: Column(
@@ -205,7 +197,6 @@ class _ListTileOptionsState extends State<ListTileOptions> {
           title: AppLocalizations.of(context)!.notifications,
           sub: AppLocalizations.of(context)!.notificationsDesc,
           function: () {
-            // Funcion que redigire a las notificaciones del usuario
             Navigator.pushNamed(context, 'notifications');
           },
           icon: MaterialCommunityIcons.bell_outline,
@@ -214,8 +205,6 @@ class _ListTileOptionsState extends State<ListTileOptions> {
           title: AppLocalizations.of(context)!.changeCurrency,
           sub: AppLocalizations.of(context)!.changeCurrencyDesc,
           function: () {
-            // Funcion que redigire a las notificaciones del usuario
-
             showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -224,7 +213,6 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                           coinCollection.snapshots().map(coinListfromSnapshot),
                       initialData: const [],
                       catchError: (context, error) {
-                        print(error);
                         return;
                       },
                       builder: (context, snapshot) {
@@ -232,7 +220,6 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                         final currentCoin =
                             sharedPreferences!.getString('currentCoin') ??
                                 'Dolares - USD';
-                        print('moneda actual: $currentCoin');
 
                         final coins = Provider.of<List<Coin>?>(context) ?? [];
                         List? coinList = [];
@@ -247,8 +234,6 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                             .map((coin) => coinListSymbols.add(coin.symbol))
                             .toList();
 
-                        print(coinList);
-                        print(coinListSymbols);
                         return StatefulBuilder(builder: (context, setState) {
                           List? items = coinList;
                           return AlertDialog(
@@ -272,7 +257,6 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                                     child: DropdownButtonHideUnderline(
                                       child: DropdownButton2(
                                         isExpanded: true,
-                                        // ignore: prefer_const_literals_to_create_immutables
                                         hint: Row(
                                           children: [
                                             Expanded(
@@ -374,14 +358,12 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                                   if (selectedValue == null) {
                                     sharedPreferences!.setString(
                                         'currentCoin', 'Dolares - USD');
-                                    print('Moneda reestablecida a dolares');
                                     Navigator.pop(context);
                                     Fluttertoast.showToast(
                                         msg: 'Moneda reestablecida a dolares');
                                   } else {
                                     sharedPreferences!.setString('currentCoin',
                                         selectedValue.toString());
-                                    print('Moneda cambiada a: $selectedValue');
                                     Navigator.pop(context);
                                     Fluttertoast.showToast(
                                         msg:
@@ -417,7 +399,7 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    content: Container(
+                    content: SizedBox(
                       height: 150,
                       width: 100,
                       child: Column(

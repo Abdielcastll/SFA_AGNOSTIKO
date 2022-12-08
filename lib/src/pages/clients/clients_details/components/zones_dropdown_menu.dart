@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -34,21 +32,19 @@ class _ZonesDropDownMenuState extends State<ZonesDropDownMenu> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.only(top: 10),
+        margin: const EdgeInsets.only(top: 10),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
         ),
-        // ignore: prefer_const_literals_to_create_immutables
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
-              // ignore: prefer_const_literals_to_create_immutables
               children: [
                 Container(
-                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                   child: Text(
                     AppLocalizations.of(context)!.salesArea,
                     style: TextStyle(
@@ -62,7 +58,7 @@ class _ZonesDropDownMenuState extends State<ZonesDropDownMenu> {
                 Row(
                   children: [
                     Container(
-                      margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
+                      margin: const EdgeInsets.fromLTRB(10, 5, 10, 10),
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton2(
                           isExpanded: true,
@@ -104,7 +100,6 @@ class _ZonesDropDownMenuState extends State<ZonesDropDownMenu> {
                                 selectedValue = value as String;
                               },
                             );
-                            // Mover la funcion en la base de datos para cambiar la lista
                           },
                           icon: const Icon(
                             Icons.arrow_forward_ios_outlined,
@@ -147,7 +142,7 @@ class _ZonesDropDownMenuState extends State<ZonesDropDownMenu> {
                     Material(
                       color: Colors.white,
                       child: Container(
-                        margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
+                        margin: const EdgeInsets.fromLTRB(10, 5, 10, 10),
                         decoration: BoxDecoration(
                           color: Colors.grey.shade300,
                           borderRadius: BorderRadius.circular(16),
@@ -156,10 +151,8 @@ class _ZonesDropDownMenuState extends State<ZonesDropDownMenu> {
                           ),
                         ),
                         child: IconButton(
-                          onPressed: () {
-                            // Abrir zona para crear nuevos territorios
-                          },
-                          icon: Icon(Icons.add),
+                          onPressed: () {},
+                          icon: const Icon(Icons.add),
                           color: Colors.grey.shade500,
                           splashRadius: 15,
                           splashColor: myTheme.colorScheme.primary,

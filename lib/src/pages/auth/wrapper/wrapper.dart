@@ -21,17 +21,6 @@ class _WrapperState extends State<Wrapper> {
     if (user == null) {
       return LoginPage();
     } else {
-      // print('instancia de user detectada');
-      // print(user);
-      // print('/////////////////////////////////////////////////');
-      // print('Data in shared preferences');
-      // print(sharedPreferences!.getString('uid'));
-      // print(sharedPreferences!.getString('email'));
-      // print(sharedPreferences!.getString('nombre'));
-      // print(sharedPreferences!.getInt('nro_cedula'));
-      // print(sharedPreferences!.getStringList('indice'));
-      // print(sharedPreferences!.getString('cargo'));
-      // print('/////////////////////////////////////////////////');
       return NavigationPages();
     }
   }

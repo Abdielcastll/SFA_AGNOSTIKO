@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,23 +35,20 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
   @override
   Widget build(BuildContext context) {
     String? selectedDiscount = widget.masterDiscount.toString();
-    // print(widget.masterDiscount);
     return SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.only(top: 10, bottom: 20),
+        margin: const EdgeInsets.only(top: 10, bottom: 20),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
         ),
-        // ignore: prefer_const_literals_to_create_immutables
         child: Row(
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              // ignore: prefer_const_literals_to_create_immutables
               children: [
                 Container(
-                  margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                  margin: const EdgeInsets.fromLTRB(10, 10, 0, 0),
                   child: Text(
                     AppLocalizations.of(context)!.listOfPrices,
                     style: TextStyle(
@@ -65,11 +60,10 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
+                  margin: const EdgeInsets.fromLTRB(10, 5, 10, 10),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton2(
                       isExpanded: true,
-                      // ignore: prefer_const_literals_to_create_immutables
                       hint: Row(
                         children: [
                           Expanded(
@@ -105,7 +99,6 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
                         setState(() {
                           selectedValue = value as String;
                         });
-                        // Mover la funcion en la base de datos para cambiar la lista
                       },
                       icon: const Icon(
                         Icons.arrow_forward_ios_outlined,
@@ -147,10 +140,9 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
-              // ignore: prefer_const_literals_to_create_immutables
               children: [
                 Container(
-                  margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                  margin: const EdgeInsets.fromLTRB(10, 10, 0, 0),
                   child: Text(
                     AppLocalizations.of(context)!.masterDiscount,
                     style: TextStyle(
@@ -162,7 +154,7 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
+                  margin: const EdgeInsets.fromLTRB(10, 5, 10, 10),
                   height: 50,
                   width: 100,
                   decoration: BoxDecoration(
@@ -186,7 +178,7 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
                     controller: discountController,
 
                     decoration: InputDecoration(
-                      contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
+                      contentPadding: const EdgeInsets.fromLTRB(14, 0, 0, 0),
                       hintText: '${widget.masterDiscount}%',
                       hintStyle: TextStyle(
                         fontFamily: 'Poppins-regular',
@@ -195,14 +187,14 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: Colors.transparent,
                         ),
                       ),
                       counterText: '',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: Colors.transparent,
                         ),
                       ),

@@ -152,26 +152,18 @@ class _LoginPageState extends State<LoginPage> {
               width: 300.0,
               child: ElevatedButton(
                 onPressed: () async {
-                  // Login
-                  // print('Loggin button pressed');
-                  // print('email: ${emailController.text}');
-                  // print('password: ${passwordController.text}');
                   if (formKey.currentState!.validate()) {
-                    setState(
-                      () {
-                        loading = true;
-                      },
-                    );
+                    setState(() {
+                      loading = true;
+                    });
                     final user = await _auth.signInWithEmailAndPassword(
                       emailController.text.toString(),
                       passwordController.text.toString(),
                     );
                     if (user == null) {
-                      setState(
-                        () {
-                          loading = false;
-                        },
-                      );
+                      setState(() {
+                        loading = false;
+                      });
                     }
                   }
                 },

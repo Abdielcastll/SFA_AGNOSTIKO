@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
@@ -47,22 +45,18 @@ class _ClientListState extends State<ClientList> {
   Widget build(BuildContext context) {
     final zonesSummary = Provider.of<ZoneSummary?>(context)?.summary ?? {};
     final idTypeSummary = Provider.of<IdTypeSummary?>(context)?.summary ?? {};
-    // print(widget.mutatedList);
-    // print(clientsList);
-    // print(zonesSummary);
-    // print(idTypeSummary);
 
     return Column(
       children: [
         Container(
-          margin: EdgeInsets.fromLTRB(16, 16, 16, 0),
+          margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
           height: 40,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
           ),
           child: TextField(
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 14,
               fontFamily: 'Poppins-regular',
             ),
@@ -72,9 +66,9 @@ class _ClientListState extends State<ClientList> {
             textCapitalization: TextCapitalization.characters,
             controller: searchClientController,
             decoration: InputDecoration(
-              contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
+              contentPadding: const EdgeInsets.fromLTRB(14, 0, 0, 0),
               hintText: AppLocalizations.of(context)!.searchProductName,
-              hintStyle: TextStyle(
+              hintStyle: const TextStyle(
                 fontFamily: 'Poppins-regular',
                 fontSize: 14,
               ),
@@ -90,7 +84,7 @@ class _ClientListState extends State<ClientList> {
           ),
         ),
         Container(
-          margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+          margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
           child: Row(
             children: [
               TextButton(
@@ -108,7 +102,7 @@ class _ClientListState extends State<ClientList> {
                       color: Colors.grey.shade500,
                       size: 25,
                     ),
-                    SizedBox(width: 5),
+                    const SizedBox(width: 5),
                     Text(
                       isDescending
                           ? AppLocalizations.of(context)!.ascendingFilter
@@ -126,27 +120,15 @@ class _ClientListState extends State<ClientList> {
                   setState(() => isDescending = !isDescending);
                 },
               ),
-              // IconButton(
-              //   icon: Icon(
-              //     MaterialCommunityIcons.filter_variant,
-              //     color: Colors.grey.shade500,
-              //     size: 25,
-              //   ),
-              //   splashRadius: 15,
-              //   onPressed: () {
-              //     // Abrir si se quiere ver por prospecto o no
-              //   },
-              // ),
             ],
           ),
         ),
         widget.listOfClients!.isNotEmpty
-            ? Container(
-                // margin: EdgeInsets.only(top: 10.0),
+            ? SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 child: ListView.builder(
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   itemCount: widget.mutatedList!.length,
                   itemBuilder: (BuildContext context, index) {
                     final sortedClients = isDescending
@@ -172,8 +154,7 @@ class _ClientListState extends State<ClientList> {
                         client?.dispatchAdress ?? 'NaN';
 
                     return Container(
-                      margin: EdgeInsets.only(top: 10.0),
-                      // height: 120,
+                      margin: const EdgeInsets.only(top: 10.0),
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -203,19 +184,18 @@ class _ClientListState extends State<ClientList> {
                               ),
                             ),
                           );
-                          print('Redireccion a detalles del cliente');
                         },
                         title: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
-                              margin: EdgeInsets.only(top: 5),
+                              margin: const EdgeInsets.only(top: 5),
                               width: 200,
                               child: Text(
                                 clientName,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontFamily: 'Poppins-regular',
                                   fontSize: 13,
                                   fontWeight: FontWeight.bold,
@@ -232,13 +212,13 @@ class _ClientListState extends State<ClientList> {
                         subtitle: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Container(
+                            SizedBox(
                               width: 200,
                               child: Text(
                                 clientFiscalAddress.toString().toLowerCase(),
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontFamily: 'Poppins-regular',
                                   fontSize: 12,
                                 ),
@@ -247,7 +227,7 @@ class _ClientListState extends State<ClientList> {
                             Container(
                               alignment: Alignment.bottomRight,
                               child: Container(
-                                margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
+                                margin: const EdgeInsets.fromLTRB(5, 10, 0, 0),
                                 width: 120,
                                 height: 30,
                                 child: Text(
@@ -269,7 +249,7 @@ class _ClientListState extends State<ClientList> {
                   },
                 ),
               )
-            : Center(
+            : const Center(
                 child: Text('Cargando'),
               )
       ],

@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pwa_sales2go_flutter/examples/teams_example.dart';
@@ -15,7 +13,7 @@ class TeamsPage extends StatelessWidget {
         direction: Axis.horizontal,
         children: [
           Container(
-            margin: EdgeInsets.all(10.0),
+            margin: const EdgeInsets.all(10.0),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: FloatingActionButton(
@@ -23,10 +21,8 @@ class TeamsPage extends StatelessWidget {
                 shape: BeveledRectangleBorder(
                     borderRadius: BorderRadius.circular(0)),
                 backgroundColor: myTheme.colorScheme.primary,
-                onPressed: () {
-                  // BottomSheetMenu para crear equipos
-                },
-                child: Icon(
+                onPressed: () {},
+                child: const Icon(
                   AntDesign.addusergroup,
                   color: Colors.white,
                 ),
@@ -36,7 +32,7 @@ class TeamsPage extends StatelessWidget {
         ],
       ),
       backgroundColor: Colors.grey.shade200,
-      body: TeamsBody(),
+      body: const TeamsBody(),
     );
   }
 }
@@ -55,7 +51,7 @@ class _TeamsBodyState extends State<TeamsBody> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -63,14 +59,14 @@ class _TeamsBodyState extends State<TeamsBody> {
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height * 0.77,
             alignment: Alignment.center,
-            margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
+            margin: const EdgeInsets.fromLTRB(10, 20, 10, 0),
             child: ListView.builder(
               itemCount: listOfTeams.length,
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               itemBuilder: (BuildContext context, index) {
                 final team = listOfTeams[index];
                 return Container(
-                  margin: EdgeInsets.only(bottom: 10),
+                  margin: const EdgeInsets.only(bottom: 10),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     border: Border.all(
@@ -81,7 +77,7 @@ class _TeamsBodyState extends State<TeamsBody> {
                   child: ListTile(
                     title: Text(
                       team.name,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.black,
                         fontFamily: 'Poppins-regular',
                         fontSize: 16,
@@ -93,11 +89,11 @@ class _TeamsBodyState extends State<TeamsBody> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container(
+                          SizedBox(
                             width: 100,
                             child: Text(
                               team.zone,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: 'Poppins-regular',
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
@@ -121,7 +117,6 @@ class _TeamsBodyState extends State<TeamsBody> {
                       ),
                     ),
                     onTap: () {
-                      // Dialog para ver los teams
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
@@ -151,7 +146,8 @@ class _TeamsBodyState extends State<TeamsBody> {
                                     ),
                                   ),
                                   Container(
-                                    margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                    margin:
+                                        const EdgeInsets.fromLTRB(0, 10, 0, 10),
                                     child: Text(
                                       'Integrantes',
                                       style: TextStyle(
@@ -163,7 +159,8 @@ class _TeamsBodyState extends State<TeamsBody> {
                                     ),
                                   ),
                                   Container(
-                                    margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                                    margin:
+                                        const EdgeInsets.fromLTRB(0, 5, 0, 0),
                                     height: 200,
                                     width: 200,
                                     child: ListView.builder(

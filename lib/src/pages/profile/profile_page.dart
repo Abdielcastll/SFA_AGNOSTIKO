@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -23,7 +21,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProfilePage extends StatefulWidget {
-  ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({Key? key}) : super(key: key);
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -38,7 +36,7 @@ class _ProfilePageState extends State<ProfilePage> {
         isOrderActive: false,
       ),
       backgroundColor: Colors.grey.shade100,
-      body: ProfileBody(),
+      body: const ProfileBody(),
     );
   }
 }
@@ -61,9 +59,6 @@ class _ProfileBodyState extends State<ProfileBody> {
   @override
   Widget build(BuildContext context) {
     final userUID = Provider.of<UserModel>(context).uid;
-
-    print('Idioma: ${AppLocalizations.of(context)!.language}');
-
     return MultiProvider(
       providers: [
         StreamProvider<CurrentUserInfo?>.value(
@@ -78,36 +73,21 @@ class _ProfileBodyState extends State<ProfileBody> {
           value: DatabaseServiceStreams().zoneSummary,
           initialData: ZoneSummary([]),
         ),
-        // StreamProvider<TeamsModel?>.value(
-        //   value: FirebaseFirestore.instance
-        //       .collection('equipos')
-        //       .where('vendedores',
-        //           arrayContains: FirebaseFirestore.instance
-        //               .collection('usuarios')
-        //               .doc(userUID))
-        //       .snapshots()
-        //       .map((teamfromSnapshot)),
-        //   initialData: null,
-        //   catchError: (context, error) {
-        //     print(error);
-        //     return;
-        //   },
-        // ),
       ],
       child: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             UserInfo(userName: userName, charge: charge),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             ListTileOptions(charge: charge, name: userName, email: email),
-            SizedBox(height: 15),
-            LogoutButton(),
-            SizedBox(height: 15),
-            PoweredByAgnostiko(),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
+            const LogoutButton(),
+            const SizedBox(height: 15),
+            const PoweredByAgnostiko(),
+            const SizedBox(height: 15),
           ],
         ),
       ),

@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/examples/notificacions_example.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -16,12 +14,12 @@ class _NotificationsPageState extends State<NotificationsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(20),
           ),
         ),
-        title: Text(
+        title: const Text(
           'Notificaciones',
           style: TextStyle(
             fontFamily: 'Poppins-regular',
@@ -34,7 +32,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
         elevation: 0,
       ),
       backgroundColor: Colors.grey.shade200,
-      body: NotificationsBody(),
+      body: const NotificationsBody(),
     );
   }
 }
@@ -82,19 +80,19 @@ class _NotificationsBodyState extends State<NotificationsBody> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       child: Column(
         children: [
-          Container(
+          SizedBox(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: ListView.builder(
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               itemCount: notifications.length,
               itemBuilder: (BuildContext context, index) {
                 final notification = notifications[index];
                 return Container(
-                  margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                   child: ListTile(
                     leading: Container(
                       height: 30,
@@ -116,7 +114,7 @@ class _NotificationsBodyState extends State<NotificationsBody> {
                       children: [
                         Text(notification.brand),
                         notification.place == null
-                            ? Text('')
+                            ? const Text('')
                             : Text('- ${notification.place}'),
                       ],
                     ),

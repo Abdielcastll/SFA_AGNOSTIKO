@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,7 +24,7 @@ class _NewUserPageState extends State<NewUserPage> {
         isOrderActive: false,
       ),
       backgroundColor: Colors.white,
-      body: NewUserBody(),
+      body: const NewUserBody(),
     );
   }
 }
@@ -70,7 +68,7 @@ class _NewUserBodyState extends State<NewUserBody> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    margin: EdgeInsets.fromLTRB(20, 20, 0, 0),
+                    margin: const EdgeInsets.fromLTRB(20, 20, 0, 0),
                     child: const Text(
                       'Nombre y Apellido',
                       style: TextStyle(
@@ -81,7 +79,7 @@ class _NewUserBodyState extends State<NewUserBody> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.fromLTRB(20, 10, 0, 0),
+                    margin: const EdgeInsets.fromLTRB(20, 10, 0, 0),
                     height: 50,
                     width: 170,
                     decoration: BoxDecoration(
@@ -107,7 +105,7 @@ class _NewUserBodyState extends State<NewUserBody> {
                       controller: nameController,
 
                       decoration: InputDecoration(
-                        contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
+                        contentPadding: const EdgeInsets.fromLTRB(14, 0, 0, 0),
                         hintText: 'Victor Velasquez',
                         hintStyle: TextStyle(
                           fontFamily: 'Poppins-regular',
@@ -116,14 +114,14 @@ class _NewUserBodyState extends State<NewUserBody> {
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                             color: Colors.transparent,
                           ),
                         ),
                         counterText: '',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                             color: Colors.transparent,
                           ),
                         ),
@@ -138,7 +136,7 @@ class _NewUserBodyState extends State<NewUserBody> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    margin: EdgeInsets.fromLTRB(10, 20, 0, 0),
+                    margin: const EdgeInsets.fromLTRB(10, 20, 0, 0),
                     child: const Text(
                       'Cedula de Identidad',
                       style: TextStyle(
@@ -149,14 +147,13 @@ class _NewUserBodyState extends State<NewUserBody> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                    margin: const EdgeInsets.fromLTRB(10, 10, 0, 0),
                     height: 50,
                     width: 140,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
                         color: myTheme.colorScheme.primary.withOpacity(0.2),
-                        // color: Colors.transparent,
                       ),
                     ),
                     child: TextField(
@@ -171,9 +168,8 @@ class _NewUserBodyState extends State<NewUserBody> {
                       textCapitalization: TextCapitalization.characters,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       controller: docController,
-
                       decoration: InputDecoration(
-                        contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
+                        contentPadding: const EdgeInsets.fromLTRB(14, 0, 0, 0),
                         hintText: 'XX.XXX.XXX',
                         hintStyle: TextStyle(
                           fontFamily: 'Poppins-regular',
@@ -182,14 +178,14 @@ class _NewUserBodyState extends State<NewUserBody> {
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                             color: Colors.transparent,
                           ),
                         ),
                         counterText: '',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                             color: Colors.transparent,
                           ),
                         ),
@@ -203,7 +199,7 @@ class _NewUserBodyState extends State<NewUserBody> {
           ),
           Container(
             alignment: Alignment.centerLeft,
-            margin: EdgeInsets.fromLTRB(20, 20, 0, 0),
+            margin: const EdgeInsets.fromLTRB(20, 20, 0, 0),
             child: const Text(
               'E-mail',
               style: TextStyle(
@@ -214,14 +210,13 @@ class _NewUserBodyState extends State<NewUserBody> {
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
+            margin: const EdgeInsets.fromLTRB(20, 10, 20, 0),
             height: 50,
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
                 color: myTheme.colorScheme.primary.withOpacity(0.2),
-                // color: Colors.transparent,
               ),
             ),
             child: TextField(
@@ -238,9 +233,8 @@ class _NewUserBodyState extends State<NewUserBody> {
                 FilteringTextInputFormatter.singleLineFormatter
               ],
               controller: emailController,
-
               decoration: InputDecoration(
-                contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
+                contentPadding: const EdgeInsets.fromLTRB(14, 0, 0, 0),
                 hintText: 'example@gmail.com',
                 hintStyle: TextStyle(
                   fontFamily: 'Poppins-regular',
@@ -249,14 +243,14 @@ class _NewUserBodyState extends State<NewUserBody> {
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(
+                  borderSide: const BorderSide(
                     color: Colors.transparent,
                   ),
                 ),
                 counterText: '',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(
+                  borderSide: const BorderSide(
                     color: Colors.transparent,
                   ),
                 ),
@@ -271,7 +265,7 @@ class _NewUserBodyState extends State<NewUserBody> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    margin: EdgeInsets.fromLTRB(20, 20, 0, 0),
+                    margin: const EdgeInsets.fromLTRB(20, 20, 0, 0),
                     child: const Text(
                       'Contraseña',
                       style: TextStyle(
@@ -282,14 +276,13 @@ class _NewUserBodyState extends State<NewUserBody> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.fromLTRB(20, 10, 0, 0),
+                    margin: const EdgeInsets.fromLTRB(20, 10, 0, 0),
                     height: 50,
                     width: 150,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
                         color: myTheme.colorScheme.primary.withOpacity(0.2),
-                        // color: Colors.transparent,
                       ),
                     ),
                     child: TextField(
@@ -307,9 +300,8 @@ class _NewUserBodyState extends State<NewUserBody> {
                         FilteringTextInputFormatter.singleLineFormatter
                       ],
                       controller: passwordController,
-
                       decoration: InputDecoration(
-                        contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
+                        contentPadding: const EdgeInsets.fromLTRB(14, 0, 0, 0),
                         hintText: 'Contraseña',
                         hintStyle: TextStyle(
                           fontFamily: 'Poppins-regular',
@@ -318,14 +310,14 @@ class _NewUserBodyState extends State<NewUserBody> {
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                             color: Colors.transparent,
                           ),
                         ),
                         counterText: '',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                             color: Colors.transparent,
                           ),
                         ),
@@ -340,7 +332,7 @@ class _NewUserBodyState extends State<NewUserBody> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    margin: EdgeInsets.fromLTRB(10, 20, 0, 0),
+                    margin: const EdgeInsets.fromLTRB(10, 20, 0, 0),
                     child: const Text(
                       'Validar Contraseña',
                       style: TextStyle(
@@ -351,14 +343,13 @@ class _NewUserBodyState extends State<NewUserBody> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                    margin: const EdgeInsets.fromLTRB(10, 10, 0, 0),
                     height: 50,
                     width: 150,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
                         color: myTheme.colorScheme.primary.withOpacity(0.2),
-                        // color: Colors.transparent,
                       ),
                     ),
                     child: TextField(
@@ -376,9 +367,8 @@ class _NewUserBodyState extends State<NewUserBody> {
                         FilteringTextInputFormatter.singleLineFormatter
                       ],
                       controller: validatePasswordController,
-
                       decoration: InputDecoration(
-                        contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
+                        contentPadding: const EdgeInsets.fromLTRB(14, 0, 0, 0),
                         hintText: 'Contraseña',
                         hintStyle: TextStyle(
                           fontFamily: 'Poppins-regular',
@@ -387,14 +377,14 @@ class _NewUserBodyState extends State<NewUserBody> {
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                             color: Colors.transparent,
                           ),
                         ),
                         counterText: '',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                             color: Colors.transparent,
                           ),
                         ),
@@ -408,7 +398,7 @@ class _NewUserBodyState extends State<NewUserBody> {
           ),
           Container(
             alignment: Alignment.centerLeft,
-            margin: EdgeInsets.fromLTRB(20, 20, 0, 10),
+            margin: const EdgeInsets.fromLTRB(20, 20, 0, 10),
             child: const Text(
               'Validar Contraseña',
               style: TextStyle(
@@ -421,7 +411,6 @@ class _NewUserBodyState extends State<NewUserBody> {
           DropdownButtonHideUnderline(
             child: DropdownButton2(
               isExpanded: true,
-              // ignore: prefer_const_literals_to_create_immutables
               hint: Row(
                 children: [
                   Expanded(
@@ -456,7 +445,6 @@ class _NewUserBodyState extends State<NewUserBody> {
                 setState(() {
                   roleController = value as String;
                 });
-                // Mover la funcion en la base de datos para cambiar la lista
               },
               icon: const Icon(
                 Icons.arrow_forward_ios_outlined,
@@ -492,7 +480,7 @@ class _NewUserBodyState extends State<NewUserBody> {
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
+            margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: Colors.grey.shade300),
@@ -520,7 +508,7 @@ class _NewUserBodyState extends State<NewUserBody> {
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(20, 20, 20, 5),
+            margin: const EdgeInsets.fromLTRB(20, 20, 20, 5),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
             ),
@@ -536,7 +524,7 @@ class _NewUserBodyState extends State<NewUserBody> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       'CONTINUAR',
                       style: TextStyle(
                         fontFamily: 'Poppins-regular',
@@ -544,7 +532,7 @@ class _NewUserBodyState extends State<NewUserBody> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 0, 4),
+                      margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
                       child: Icon(
                         SimpleLineIcons.arrow_right,
                         size: 14,

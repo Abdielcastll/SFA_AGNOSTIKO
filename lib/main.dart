@@ -1,6 +1,3 @@
-//Firebase
-// ignore_for_file: prefer_const_constructors
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/helper/object_box.dart';
@@ -66,17 +63,18 @@ class SfaAgnostiko extends StatelessWidget {
             initialRoute: 'wrapper',
             routes: {
               'wrapper': (BuildContext context) => Wrapper(),
-              'login': (BuildContext context) => LoginPage(),
-              'navigation': (BuildContext context) => NavigationPages(),
-              'notifications': (BuildContext context) => NotificationsPage(),
-              'place_order': (BuildContext context) => PlaceOrderPage(),
+              'login': (BuildContext context) => const LoginPage(),
+              'navigation': (BuildContext context) => const NavigationPages(),
+              'notifications': (BuildContext context) =>
+                  const NotificationsPage(),
+              'place_order': (BuildContext context) => const PlaceOrderPage(),
               'catalogue': (BuildContext context) =>
-                  CataloguePage(isOrderActive: false),
-              'products': (BuildContext context) => ProductsPage(),
-              'clients': (BuildContext context) => ClientsPage(),
+                  const CataloguePage(isOrderActive: false),
+              'products': (BuildContext context) => const ProductsPage(),
+              'clients': (BuildContext context) => const ClientsPage(),
               'profile': (BuildContext context) => ProfilePage(),
-              'diary': (BuildContext context) => DiaryTabs(),
-              'order': (BuildContext context) => OrderPage(),
+              'diary': (BuildContext context) => const DiaryTabs(),
+              'order': (BuildContext context) => const OrderPage(),
             },
           );
         },

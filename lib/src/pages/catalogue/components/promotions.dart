@@ -179,19 +179,15 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
                                       ),
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(8),
-                                        child:
-                                            //  Image.network(
-                                            //     '$url',
-                                            //     fit: BoxFit.cover,
-                                            //   )
-                                            CachedNetworkImage(
+                                        child: CachedNetworkImage(
                                           fit: BoxFit.cover,
                                           imageUrl: url,
-                                          placeholder: (context, url) => Container(
-                                              width: 300,
-                                              child: const Center(
-                                                  child:
-                                                      CircularProgressIndicator())),
+                                          placeholder: (context, url) =>
+                                              const SizedBox(
+                                                  width: 300,
+                                                  child: Center(
+                                                      child:
+                                                          CircularProgressIndicator())),
                                           errorWidget: (context, url, error) =>
                                               Image.asset(
                                             'assets/images/promotions.jpg',
@@ -284,9 +280,9 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
                                 ),
                               );
                             } else {
-                              return Container(
+                              return const SizedBox(
                                 width: 300,
-                                child: const Center(
+                                child: Center(
                                   child: CircularProgressIndicator(),
                                 ),
                               );

@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
@@ -42,7 +40,7 @@ class ButtonOptions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+      margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -84,7 +82,7 @@ class ButtonOptions extends StatelessWidget {
               ),
             ),
           ),
-          Container(
+          SizedBox(
             width: 170,
             height: 35,
             child: ClipRRect(
@@ -112,7 +110,7 @@ class ButtonOptions extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      settings: RouteSettings(name: "ORDER"),
+                      settings: const RouteSettings(name: "ORDER"),
                       builder: (context) => OrderPage(
                         client: client,
                       ),

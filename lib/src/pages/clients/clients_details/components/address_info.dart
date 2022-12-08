@@ -19,13 +19,11 @@ class AddressInfo extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
         ),
-        // ignore: prefer_const_literals_to_create_immutables
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          // ignore: prefer_const_literals_to_create_immutables
           children: [
             Container(
-              margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+              margin: const EdgeInsets.fromLTRB(10, 10, 0, 0),
               child: Text(
                 AppLocalizations.of(context)!.clientFiscalAddress,
                 style: TextStyle(
@@ -38,10 +36,10 @@ class AddressInfo extends StatelessWidget {
             ),
             Container(
               width: MediaQuery.of(context).size.width,
-              margin: EdgeInsets.fromLTRB(10, 5, 0, 10),
+              margin: const EdgeInsets.fromLTRB(10, 5, 0, 10),
               child: Text(
                 fiscalAddress.toLowerCase(),
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins-regular',
                   fontSize: 11,
                 ),

@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -34,13 +32,15 @@ class _AccountBalancePageState extends State<AccountBalancePage> {
         isOrderActive: false,
       ),
       body: AccountBalanceBody(
-          clientDocument: widget.clientDocument, clientName: widget.clientName),
+        clientDocument: widget.clientDocument,
+        clientName: widget.clientName,
+      ),
     );
   }
 }
 
 class AccountBalanceBody extends StatefulWidget {
-  AccountBalanceBody({
+  const AccountBalanceBody({
     Key? key,
     this.clientDocument,
     this.clientName,
@@ -60,7 +60,6 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
 
   @override
   Widget build(BuildContext context) {
-    // print(widget.clientDocument);
     return MultiProvider(
       providers: [
         isCheckedFactures == true
@@ -74,7 +73,6 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
                     .map(accountInvoicesFromSnapshot),
                 initialData: const [],
                 catchError: (context, error) {
-                  // print(error);
                   return;
                 },
               )
@@ -98,7 +96,7 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
           children: [
             StatusBarResume(isCheckedFactures: isCheckedFactures),
             Container(
-              margin: EdgeInsets.fromLTRB(10, 20, 10, 5),
+              margin: const EdgeInsets.fromLTRB(10, 20, 10, 5),
               child: Row(
                 children: [
                   Checkbox(
@@ -112,7 +110,7 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
                   ),
                   Text(
                     AppLocalizations.of(context)!.issues,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins-regular',
                       fontSize: 14,
                     ),
@@ -132,7 +130,7 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
                   ),
                   Text(
                     AppLocalizations.of(context)!.notes,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins-regular',
                       fontSize: 14,
                     ),
@@ -152,7 +150,7 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
                   ),
                   Text(
                     AppLocalizations.of(context)!.invoices,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins-regular',
                       fontSize: 14,
                     ),
@@ -256,18 +254,16 @@ class _StatusBarResumeState extends State<StatusBarResume> {
       }
     }
 
-    // print(totalAmount);
     return Container(
-      margin: EdgeInsets.fromLTRB(10, 20, 10, 5),
+      margin: const EdgeInsets.fromLTRB(10, 20, 10, 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(
-            // ignore: prefer_const_literals_to_create_immutables
             children: [
               Text(
                 AppLocalizations.of(context)!.issues,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins-regular',
                   fontWeight: FontWeight.bold,
                   fontSize: 12,
@@ -283,7 +279,7 @@ class _StatusBarResumeState extends State<StatusBarResume> {
                 alignment: Alignment.center,
                 child: Text(
                   listOnProcess.length.toString(),
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins-regular',
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
@@ -293,11 +289,10 @@ class _StatusBarResumeState extends State<StatusBarResume> {
             ],
           ),
           Column(
-            // ignore: prefer_const_literals_to_create_immutables
             children: [
               Text(
                 AppLocalizations.of(context)!.paidUp,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins-regular',
                   fontWeight: FontWeight.bold,
                   fontSize: 12,
@@ -313,7 +308,7 @@ class _StatusBarResumeState extends State<StatusBarResume> {
                 alignment: Alignment.center,
                 child: Text(
                   listOfCompleted.length.toString(),
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins-regular',
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
@@ -323,11 +318,10 @@ class _StatusBarResumeState extends State<StatusBarResume> {
             ],
           ),
           Column(
-            // ignore: prefer_const_literals_to_create_immutables
             children: [
               Text(
                 AppLocalizations.of(context)!.accountTotalAmount,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins-regular',
                   fontWeight: FontWeight.bold,
                   fontSize: 12,
@@ -343,7 +337,7 @@ class _StatusBarResumeState extends State<StatusBarResume> {
                 alignment: Alignment.center,
                 child: Text(
                   '${priceFormat(totalAmount)}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins-regular',
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
@@ -353,11 +347,10 @@ class _StatusBarResumeState extends State<StatusBarResume> {
             ],
           ),
           Column(
-            // ignore: prefer_const_literals_to_create_immutables
             children: [
               Text(
                 AppLocalizations.of(context)!.accountTotalBalance,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins-regular',
                   fontWeight: FontWeight.bold,
                   fontSize: 12,
@@ -373,7 +366,7 @@ class _StatusBarResumeState extends State<StatusBarResume> {
                 alignment: Alignment.center,
                 child: Text(
                   priceFormat(0),
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins-regular',
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
@@ -405,12 +398,12 @@ class ShowInvoices extends StatefulWidget {
 class _ShowInvoicesState extends State<ShowInvoices> {
   leadingIcon(isConcilied) {
     if (isConcilied == true) {
-      return Icon(
+      return const Icon(
         Icons.money_off_csred_outlined,
         color: Colors.green,
       );
     } else if (isConcilied == false) {
-      return Icon(
+      return const Icon(
         Icons.money_off_csred_outlined,
         color: Colors.amber,
       );
@@ -461,14 +454,13 @@ class _ShowInvoicesState extends State<ShowInvoices> {
     var invoicesOnProcessList =
         invoices.where((element) => element.isPaid == false).toList();
     var dateFormatter = DateFormat('yyyy-MM-dd');
-    // print(invoices);
 
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
-      margin: EdgeInsets.fromLTRB(10, 20, 10, 5),
+      margin: const EdgeInsets.fromLTRB(10, 20, 10, 5),
       child: ListView.builder(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         itemCount: widget.isCheckedOnProcess == true
             ? invoicesOnProcessList.length
             : invoicesList.length,
@@ -491,14 +483,14 @@ class _ShowInvoicesState extends State<ShowInvoices> {
               children: [
                 Text(
                   'Factura #$noteNumber',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins-regular',
                     fontSize: 14,
                   ),
                 ),
                 Text(
                   noteDate,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins-regular',
                     fontSize: 12,
                     color: Colors.grey,
@@ -508,7 +500,7 @@ class _ShowInvoicesState extends State<ShowInvoices> {
             ),
             subtitle: Text(
               'Monto original: ${priceFormat(noteOriginalAmount)} - Saldo: ${priceFormat(noteBalance)}',
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins-regular',
                 fontSize: 12,
                 color: Colors.grey,
@@ -538,17 +530,17 @@ class ShowCreditNotes extends StatefulWidget {
 class _ShowCreditNotesState extends State<ShowCreditNotes> {
   leadingIcon(isCancelled, isConcilied) {
     if (isCancelled == true) {
-      return Icon(
+      return const Icon(
         Icons.cancel_outlined,
         color: Colors.red,
       );
     } else if (isConcilied == true) {
-      return Icon(
+      return const Icon(
         Icons.money_off_csred_outlined,
         color: Colors.green,
       );
     } else if (isCancelled == false && isConcilied == false) {
-      return Icon(
+      return const Icon(
         Icons.money_off_csred_outlined,
         color: Colors.amber,
       );
@@ -601,15 +593,14 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
             element.paymentsData['conciliado'] == false &&
             element.paymentsData['anulado'] == false)
         .toList();
-    // print(creditNotes);
     var dateFormatter = DateFormat('yyyy-MM-dd');
 
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
-      margin: EdgeInsets.fromLTRB(10, 20, 10, 5),
+      margin: const EdgeInsets.fromLTRB(10, 20, 10, 5),
       child: ListView.builder(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         itemCount: widget.isCheckedOnProcess == true
             ? creditOnProcessList.length
             : creditNotesList.length,
@@ -627,8 +618,7 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
           final noteNuled = note.paymentsData['anulado'] ?? 'NaN';
           final noteConciled = note.paymentsData['conciliado'] ?? 'NaN';
           final balanceNC = noteBalance + noteOriginalAmount;
-          // print(noteDate);
-          // print(note);
+
           return ListTile(
             onTap: () {
               showDialog(
@@ -652,23 +642,23 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
                           ),
                           content: SingleChildScrollView(
                             child: Column(
-                              // ignore: prefer_const_literals_to_create_immutables
                               children: [
-                                Text(
+                                const Text(
                                   'Cliente',
                                   style: TextStyle(
                                     fontFamily: 'Poppins-regular',
                                     color: Colors.grey,
                                     fontSize: 14,
-                                    // fontWeight: FontWeight.bold,
                                   ),
                                 ),
                                 Container(
                                   width: 350,
                                   height: 40,
                                   alignment: Alignment.centerLeft,
-                                  margin: EdgeInsets.fromLTRB(10, 15, 0, 10),
-                                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  margin:
+                                      const EdgeInsets.fromLTRB(10, 15, 0, 10),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(10, 0, 0, 0),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(16),
                                     color: Colors.white,
@@ -689,21 +679,22 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
                                     ),
                                   ),
                                 ),
-                                Text(
+                                const Text(
                                   'Fecha',
                                   style: TextStyle(
                                     fontFamily: 'Poppins-regular',
                                     color: Colors.grey,
                                     fontSize: 14,
-                                    // fontWeight: FontWeight.bold,
                                   ),
                                 ),
                                 Container(
                                   width: 350,
                                   height: 40,
                                   alignment: Alignment.centerLeft,
-                                  margin: EdgeInsets.fromLTRB(10, 15, 0, 10),
-                                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  margin:
+                                      const EdgeInsets.fromLTRB(10, 15, 0, 10),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(10, 0, 0, 0),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(16),
                                     color: Colors.white,
@@ -736,10 +727,10 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
                                     ],
                                   ),
                                 ),
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                                 Text(
                                   'Monto: ${priceFormat(noteOriginalAmount)}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontFamily: 'Poppins-regular',
                                     color: Colors.grey,
                                     fontSize: 14,
@@ -748,7 +739,7 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
                                 ),
                                 Text(
                                   'Usado: ${priceFormat(noteBalance)}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontFamily: 'Poppins-regular',
                                     color: Colors.grey,
                                     fontSize: 14,
@@ -757,7 +748,7 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
                                 ),
                                 Text(
                                   'Saldo NC: ${priceFormat(balanceNC)}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontFamily: 'Poppins-regular',
                                     color: Colors.grey,
                                     fontSize: 14,
@@ -790,22 +781,21 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
                   );
                 },
               );
-            }, // AlertDialogPara mostrar informacion del invoice
-
+            },
             leading: leadingIcon(noteNuled, noteConciled),
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   'Nota de credito #$noteNumber',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins-regular',
                     fontSize: 14,
                   ),
                 ),
                 Text(
                   noteDate,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins-regular',
                     fontSize: 12,
                     color: Colors.grey,
@@ -815,7 +805,7 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
             ),
             subtitle: Text(
               'Monto original: \$ ${priceFormat(noteOriginalAmount)} - Saldo: \$ ${priceFormat(noteBalance)}',
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins-regular',
                 fontSize: 12,
                 color: Colors.grey,

@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
@@ -32,13 +30,8 @@ class CompletedOrderPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(20),
+        preferredSize: const Size.fromHeight(20),
         child: AppBar(
-          // shape: RoundedRectangleBorder(
-          //   borderRadius: BorderRadius.vertical(
-          //     bottom: Radius.circular(20),
-          //   ),
-          // ),
           automaticallyImplyLeading: false,
           elevation: 0,
           backgroundColor: myTheme.colorScheme.primary,
@@ -126,7 +119,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
       children: [
         Container(
           color: Colors.transparent,
-          margin: EdgeInsets.fromLTRB(15, 40, 20, 0),
+          margin: const EdgeInsets.fromLTRB(15, 40, 20, 0),
           child: Text(
             '¡Pedido Completado!',
             textAlign: TextAlign.center,
@@ -138,7 +131,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
           ),
         ),
         Container(
-          margin: EdgeInsets.fromLTRB(20, 10, 10, 20),
+          margin: const EdgeInsets.fromLTRB(20, 10, 10, 20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -148,7 +141,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -161,12 +154,11 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                             fontSize: 16,
                           ),
                         ),
-                        Container(
+                        SizedBox(
                           // height: 60,
                           width: 140,
                           child: Text(
                             widget.client,
-                            // 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
                             style: TextStyle(
                               color: Colors.grey.shade500,
                               fontFamily: 'Poppins-regular',
@@ -178,7 +170,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -203,7 +195,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -229,15 +221,15 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                   ),
                 ],
               ),
-              SizedBox(width: 20),
+              const SizedBox(width: 20),
               Container(
-                margin: EdgeInsets.only(top: 17),
+                margin: const EdgeInsets.only(top: 17),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                      margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -262,7 +254,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                      margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -289,7 +281,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                      margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -302,7 +294,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                               fontSize: 16,
                             ),
                           ),
-                          Container(
+                          SizedBox(
                             // height: 60,
                             width: 150,
                             child: Text(
@@ -323,7 +315,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
             ],
           ),
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
@@ -334,7 +326,6 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
             borderRadius: BorderRadius.circular(16),
             child: ElevatedButton(
               onPressed: () {
-                // Continuar con la compra
                 objectBox.delelteAllShoppingCart();
                 Navigator.popUntil(context, (route) => route.isFirst);
               },
@@ -344,7 +335,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     'Regresar al Inicio',
                     style: TextStyle(
                       fontFamily: 'Poppins-regular',
@@ -352,8 +343,8 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 0, 4),
-                    child: Icon(
+                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+                    child: const Icon(
                       SimpleLineIcons.check,
                       size: 14,
                     ),

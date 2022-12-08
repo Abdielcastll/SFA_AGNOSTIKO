@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -80,15 +78,11 @@ class _SelectedProductsState extends State<SelectedProducts> {
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.fromLTRB(16, 0, 0, 0),
+          padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
           alignment: Alignment.topLeft,
           color: Colors.transparent,
           // child: cartStatus(),
         ),
-        // ProductsInCart(
-        //   products: products,
-        //   client: widget.client,
-        // ),
         StreamBuilder<List<ShoppingCartProduct>?>(
           stream: streamShoppingCartProducts,
           builder: (context, snapshot) {
@@ -105,19 +99,11 @@ class _SelectedProductsState extends State<SelectedProducts> {
                         product.productQuantity!)
                     .toString();
                 var myInt = double.parse(totalAmount);
-                // print('Precio de producto ${product.code}: $myInt');
                 subTotal += myInt;
               });
 
-              var test = priceFormat(subTotal);
-
-              // print('Lista de precios activa: $clientPriceList');
-              // print('Cantidad de objetos en carrito: ${products.length}');
-              // print('SubTotal del pedido: $subTotal');
-              // print(test);
               return WillPopScope(
                 onWillPop: () async {
-                  // print('Retroceder');
                   products!.isEmpty
                       ? Navigator.pop(context)
                       : showDialog(
@@ -125,12 +111,12 @@ class _SelectedProductsState extends State<SelectedProducts> {
                           barrierDismissible: false, // User must tap button
                           builder: (context) {
                             return AlertDialog(
-                              title: Text(
+                              title: const Text(
                                 'Al cambiar el cliente la lista de precios estara cambiando, por lo que el carrito se reiniciara',
                               ),
                               content: SingleChildScrollView(
                                 child: ListBody(
-                                  children: [
+                                  children: const [
                                     Text('¿Esta seguro que quiere regresar?'),
                                   ],
                                 ),
@@ -161,14 +147,14 @@ class _SelectedProductsState extends State<SelectedProducts> {
                   child: Column(
                     children: [
                       products!.isEmpty
-                          ? Container(
+                          ? SizedBox(
                               height: 340,
                               width: MediaQuery.of(context).size.width,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Container(
+                                  SizedBox(
                                     height: 200,
                                     width: 200,
                                     child: Image.asset(
@@ -177,7 +163,8 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                     ),
                                   ),
                                   Container(
-                                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                    margin:
+                                        const EdgeInsets.fromLTRB(0, 10, 0, 0),
                                     child: Text(AppLocalizations.of(context)!
                                         .orderEmtpy),
                                   ),
@@ -188,13 +175,12 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                 ],
                               ),
                             )
-                          ///////////////////////////////////////////////////////////////
                           : Container(
                               color: Colors.grey.shade100,
                               height: MediaQuery.of(context).size.height * 0.5,
                               width: MediaQuery.of(context).size.width,
                               child: ListView.builder(
-                                physics: BouncingScrollPhysics(),
+                                physics: const BouncingScrollPhysics(),
                                 itemCount: products.length,
                                 itemBuilder: (context, index) {
                                   final product = products[index];
@@ -205,7 +191,6 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                   final productPrice = double.parse(
                                       product.unitPrice.toString());
 
-                                  // print(product);
                                   return Container(
                                     margin: const EdgeInsets.fromLTRB(
                                         16, 10, 16, 0),
@@ -230,9 +215,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                   product.urlPicture.toString())
                                               .child('1')
                                               .getDownloadURL()
-                                              .catchError((e) {
-                                            print(e);
-                                          }),
+                                              .catchError((e) {}),
                                           builder: (context, snapshot) {
                                             if (snapshot.hasData) {
                                               final url =
@@ -240,36 +223,36 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                               return Container(
                                                 height: 95,
                                                 width: 80,
-                                                decoration: BoxDecoration(
+                                                decoration: const BoxDecoration(
                                                   color: Colors.transparent,
                                                   borderRadius:
                                                       BorderRadius.only(
-                                                          topLeft: Radius
-                                                              .circular(8),
-                                                          bottomLeft:
-                                                              Radius.circular(
-                                                                  8)),
+                                                    topLeft: Radius.circular(8),
+                                                    bottomLeft:
+                                                        Radius.circular(8),
+                                                  ),
                                                 ),
                                                 child: ClipRRect(
                                                   borderRadius:
-                                                      BorderRadius.only(
-                                                          topLeft: Radius
-                                                              .circular(8),
-                                                          bottomLeft:
-                                                              Radius.circular(
-                                                                  8)),
+                                                      const BorderRadius.only(
+                                                    topLeft: Radius.circular(8),
+                                                    bottomLeft:
+                                                        Radius.circular(8),
+                                                  ),
                                                   child: CachedNetworkImage(
                                                     fit: BoxFit.cover,
                                                     imageUrl: url,
-                                                    placeholder: (context,
-                                                            url) =>
-                                                        Container(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            width: 300,
-                                                            child: const Center(
-                                                                child:
-                                                                    CircularProgressIndicator())),
+                                                    placeholder:
+                                                        (context, url) =>
+                                                            Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      width: 300,
+                                                      child: const Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      ),
+                                                    ),
                                                     errorWidget:
                                                         (context, url, error) =>
                                                             Image.asset(
@@ -283,21 +266,21 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                               return Container(
                                                 height: 95,
                                                 width: 80,
-                                                decoration: BoxDecoration(
+                                                decoration: const BoxDecoration(
                                                   color: Colors.transparent,
                                                   borderRadius:
                                                       BorderRadius.only(
-                                                          topLeft: Radius
-                                                              .circular(8),
-                                                          bottomLeft:
-                                                              Radius.circular(
-                                                                  8)),
+                                                    topLeft: Radius.circular(8),
+                                                    bottomLeft:
+                                                        Radius.circular(8),
+                                                  ),
                                                 ),
                                                 child: ClipRRect(
                                                   borderRadius:
-                                                      BorderRadius.only(
-                                                          topLeft: Radius
-                                                              .circular(8),
+                                                      const BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  8),
                                                           bottomLeft:
                                                               Radius.circular(
                                                                   8)),
@@ -308,9 +291,9 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                 ),
                                               );
                                             } else {
-                                              return Container(
+                                              return const SizedBox(
                                                 width: 140,
-                                                child: const Center(
+                                                child: Center(
                                                   child:
                                                       CircularProgressIndicator(),
                                                 ),
@@ -339,7 +322,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                   width: 180,
                                                   child: Text(
                                                     '${product.name}',
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                       letterSpacing: 0.4,
                                                       fontSize: 12,
                                                       fontFamily:
@@ -350,7 +333,6 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                   ),
                                                 ),
                                                 Container(
-                                                  // alignment: Alignment.center,
                                                   margin:
                                                       const EdgeInsets.fromLTRB(
                                                           15, 0, 0, 0),
@@ -394,7 +376,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                         children: [
                                                           product.productQuantity! >
                                                                   1
-                                                              ? Container(
+                                                              ? SizedBox(
                                                                   width: 30,
                                                                   child:
                                                                       IconButton(
@@ -450,33 +432,30 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                                     },
                                                                   ),
                                                                 )
-                                                              : Container(
+                                                              : SizedBox(
                                                                   width: 30,
-                                                                  child:
-                                                                      IconButton(
-                                                                    iconSize:
-                                                                        20,
-                                                                    splashRadius:
-                                                                        1,
-                                                                    icon: Icon(
-                                                                      Icons
-                                                                          .remove,
-                                                                      color: Colors
-                                                                          .grey,
-                                                                    ),
-                                                                    onPressed:
-                                                                        () {
-                                                                      return;
-                                                                    },
-                                                                  ),
+                                                                  child: IconButton(
+                                                                      iconSize: 20,
+                                                                      splashRadius: 1,
+                                                                      icon: const Icon(
+                                                                        Icons
+                                                                            .remove,
+                                                                        color: Colors
+                                                                            .grey,
+                                                                      ),
+                                                                      onPressed: () {
+                                                                        return;
+                                                                      }),
                                                                 ),
                                                           Container(
-                                                            margin: EdgeInsets
-                                                                .fromLTRB(
+                                                            margin:
+                                                                const EdgeInsets
+                                                                        .fromLTRB(
                                                                     0, 5, 0, 0),
                                                             child: Text(
                                                               'U: ${product.productQuantity}',
-                                                              style: TextStyle(
+                                                              style:
+                                                                  const TextStyle(
                                                                 letterSpacing:
                                                                     0.4,
                                                                 fontSize: 14,
@@ -488,7 +467,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                           product.productQuantity! <
                                                                   product
                                                                       .availableStock!
-                                                              ? Container(
+                                                              ? SizedBox(
                                                                   width: 30,
                                                                   child:
                                                                       IconButton(
@@ -543,7 +522,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                                     },
                                                                   ),
                                                                 )
-                                                              : Container(
+                                                              : SizedBox(
                                                                   width: 30,
                                                                   child:
                                                                       IconButton(
@@ -551,7 +530,8 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                                         20,
                                                                     splashRadius:
                                                                         1,
-                                                                    icon: Icon(
+                                                                    icon:
+                                                                        const Icon(
                                                                       Icons.add,
                                                                       color: Colors
                                                                           .grey,
@@ -571,7 +551,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                         .fromLTRB(2, 5, 0, 0),
                                                     child: Text(
                                                       'U/P: ${priceFormat(productPrice)}',
-                                                      style: TextStyle(
+                                                      style: const TextStyle(
                                                         letterSpacing: 0.4,
                                                         fontSize: 12,
                                                         fontFamily:
@@ -587,7 +567,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                         .fromLTRB(10, 0, 0, 0),
                                                     child: Text(
                                                       '${priceFormat(productTotalByQuantity)}',
-                                                      style: TextStyle(
+                                                      style: const TextStyle(
                                                           letterSpacing: 0.4,
                                                           fontSize: 12,
                                                           fontFamily:
@@ -607,26 +587,24 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                 },
                               ),
                             ),
-                      ///////////////////////////////////////////////////////////////
-
                       Container(
                         height: 133,
                         width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.transparent,
                         ),
                         child: Column(
                           children: [
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             Container(
-                              margin: EdgeInsets.fromLTRB(20, 0, 20, 10),
+                              margin: const EdgeInsets.fromLTRB(20, 0, 20, 10),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     AppLocalizations.of(context)!.orderSubTotal,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontFamily: 'Poppins-regular',
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
@@ -634,8 +612,8 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                     ),
                                   ),
                                   Text(
-                                    ' ${priceFormat(subTotal)}',
-                                    style: TextStyle(
+                                    '${priceFormat(subTotal)}',
+                                    style: const TextStyle(
                                       fontFamily: 'Poppins-regular',
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
@@ -655,7 +633,6 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                 borderRadius: BorderRadius.circular(16),
                                 child: ElevatedButton.icon(
                                   onPressed: () {
-                                    // Agregar Productos
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -666,21 +643,18 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                       ),
                                     );
                                   },
-                                  icon: Icon(
+                                  icon: const Icon(
                                     MaterialCommunityIcons.tag_plus,
                                     size: 17,
                                   ),
                                   label: Text(
                                     AppLocalizations.of(context)!.addProducts,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontFamily: 'Poppins-regular',
                                       fontSize: 14,
                                     ),
                                   ),
                                   style: ButtonStyle(
-                                    // overlayColor: MaterialStateProperty.all(
-                                    //   Colors.transparent,
-                                    // ),
                                     backgroundColor: MaterialStateProperty.all(
                                       myTheme.colorScheme.primary,
                                     ),
@@ -688,8 +662,8 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: 10),
-                            products!.isEmpty
+                            const SizedBox(height: 10),
+                            products.isEmpty
                                 ? Container(
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
@@ -724,7 +698,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                               ),
                                             ),
                                             Container(
-                                              margin: EdgeInsets.fromLTRB(
+                                              margin: const EdgeInsets.fromLTRB(
                                                   0, 0, 0, 4),
                                               child: Icon(
                                                 SimpleLineIcons.arrow_right,
@@ -738,7 +712,8 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                     ),
                                   )
                                 : Container(
-                                    margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                    margin:
+                                        const EdgeInsets.fromLTRB(10, 0, 10, 0),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
                                     ),
@@ -761,9 +736,6 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                           );
                                         },
                                         style: ButtonStyle(
-                                          // overlayColor: MaterialStateProperty.all(
-                                          //   Colors.transparent,
-                                          // ),
                                           backgroundColor:
                                               MaterialStateProperty.all(
                                             myTheme.colorScheme.primary,
@@ -773,7 +745,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(
+                                            const Text(
                                               'CONTINUAR',
                                               style: TextStyle(
                                                 fontFamily: 'Poppins-regular',
@@ -781,7 +753,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                               ),
                                             ),
                                             Container(
-                                              margin: EdgeInsets.fromLTRB(
+                                              margin: const EdgeInsets.fromLTRB(
                                                   0, 0, 0, 4),
                                               child: Icon(
                                                 SimpleLineIcons.arrow_right,

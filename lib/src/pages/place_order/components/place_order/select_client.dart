@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
@@ -52,7 +50,7 @@ class _SelectClientState extends State<SelectClient> {
         Container(
           decoration: BoxDecoration(
             color: myTheme.colorScheme.primary,
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
               bottomLeft: Radius.circular(20),
               bottomRight: Radius.circular(20),
             ),
@@ -63,13 +61,13 @@ class _SelectClientState extends State<SelectClient> {
               children: [
                 Text(
                   AppLocalizations.of(context)!.selectClient,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins-regular',
                     color: Colors.white,
                     fontSize: 15,
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 TextField(
                   controller: clientController,
                   decoration: InputDecoration(
@@ -95,19 +93,19 @@ class _SelectClientState extends State<SelectClient> {
         ),
         SingleChildScrollView(
           child: Container(
-            margin: EdgeInsets.only(top: 16, left: 16, right: 16),
+            margin: const EdgeInsets.only(top: 16, left: 16, right: 16),
             height: MediaQuery.of(context).size.height * 0.7,
             width: MediaQuery.of(context).size.width,
             color: Colors.transparent,
             child: ListView.builder(
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               itemCount: widget.mutatedList!.length,
               itemBuilder: (context, index) {
                 final client = widget.mutatedList?[index];
                 final clientName = client?.name;
                 final clientFiscalAddress = client?.fiscalAdress;
                 return Container(
-                  padding: EdgeInsets.only(bottom: 5),
+                  padding: const EdgeInsets.only(bottom: 5),
                   height: 80,
                   child: ListTile(
                     tileColor: Colors.white,
@@ -120,7 +118,7 @@ class _SelectClientState extends State<SelectClient> {
                     ),
                     title: Text(
                       clientName,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins-regular',
                       ),
                     ),
@@ -133,7 +131,7 @@ class _SelectClientState extends State<SelectClient> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          settings: RouteSettings(name: "ORDER"),
+                          settings: const RouteSettings(name: "ORDER"),
                           builder: (context) => OrderPage(
                             client: client,
                           ),

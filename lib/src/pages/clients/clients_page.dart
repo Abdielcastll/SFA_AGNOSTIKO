@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
@@ -24,7 +23,6 @@ class _ClientsPageState extends State<ClientsPage> {
           value: DatabaseServiceStreams().clients,
           initialData: const [],
           catchError: (context, error) {
-            // print(error);
             return;
           },
         ),
@@ -32,7 +30,6 @@ class _ClientsPageState extends State<ClientsPage> {
           value: DatabaseServiceStreams().idTypeSummary,
           initialData: null,
           catchError: (context, error) {
-            // print(error);
             return;
           },
         ),
@@ -40,7 +37,6 @@ class _ClientsPageState extends State<ClientsPage> {
           value: DatabaseServiceStreams().zoneSummary,
           initialData: null,
           catchError: (context, error) {
-            // print(error);
             return;
           },
         ),
@@ -51,7 +47,7 @@ class _ClientsPageState extends State<ClientsPage> {
           message: AppLocalizations.of(context)!.clients,
           isOrderActive: false,
         ),
-        body: ClientsBody(),
+        body: const ClientsBody(),
       ),
     );
   }
@@ -66,12 +62,10 @@ class ClientsBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final clients = Provider.of<List<Clients>?>(context) ?? [];
     List<Clients>? clientsList = clients;
-    // print(clientsList);
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
-        // ignore: prefer_const_literals_to_create_immutables
         children: [
           ClientList(listOfClients: clientsList),
         ],

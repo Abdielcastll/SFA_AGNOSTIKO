@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -22,7 +20,7 @@ class PlaceOrderPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           AppLocalizations.of(context)!.newOrder,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins-regular',
             fontSize: 21,
             fontWeight: FontWeight.w300,
@@ -38,7 +36,6 @@ class PlaceOrderPage extends StatelessWidget {
             value: DatabaseServiceStreams().clients,
             initialData: const [],
             catchError: (context, error) {
-              // print(error);
               return;
             },
           ),
@@ -46,7 +43,6 @@ class PlaceOrderPage extends StatelessWidget {
             value: DatabaseServiceStreams().idTypeSummary,
             initialData: null,
             catchError: (context, error) {
-              // print(error);
               return;
             },
           ),
@@ -54,12 +50,11 @@ class PlaceOrderPage extends StatelessWidget {
             value: DatabaseServiceStreams().zoneSummary,
             initialData: null,
             catchError: (context, error) {
-              // print(error);
               return;
             },
           ),
         ],
-        child: PlacerOrderBody(),
+        child: const PlacerOrderBody(),
       ),
     );
   }

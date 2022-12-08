@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, sort_child_properties_last
-
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pwa_sales2go_flutter/src/pages/account_balance/account_balance.dart';
@@ -57,7 +55,7 @@ class _ClientDetailsState extends State<ClientDetails> {
         direction: Axis.horizontal,
         children: [
           Container(
-            margin: EdgeInsets.all(10.0),
+            margin: const EdgeInsets.all(10.0),
             child: FloatingActionButton(
               elevation: 0,
               backgroundColor: myTheme.colorScheme.primary,
@@ -74,7 +72,7 @@ class _ClientDetailsState extends State<ClientDetails> {
                   ),
                 );
               },
-              child: Icon(
+              child: const Icon(
                 Icons.account_balance,
                 color: Colors.white,
               ),
@@ -142,7 +140,7 @@ class ClientDetailsBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       child: Column(
         children: [
           ClientPicture(name: name),
@@ -162,7 +160,7 @@ class ClientDetailsBody extends StatelessWidget {
             dispactAddress: dispatchAddress,
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(10, 15, 10, 0),
+            margin: const EdgeInsets.fromLTRB(10, 15, 10, 0),
             child: Column(
               children: [
                 AddressInfo(fiscalAddress: fiscalAddress),

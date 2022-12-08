@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -43,7 +41,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarCheckout(),
+      appBar: const AppBarCheckout(),
       backgroundColor: Colors.grey.shade100,
       body: CheckoutBody(
         client: widget.client,
@@ -175,7 +173,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
     String formattedDate = dateFormatter.format(today);
 
     return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       child: Column(
         children: [
           SelectedClient(
@@ -183,7 +181,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
             isEditable: false,
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(15, 10, 15, 0),
+            margin: const EdgeInsets.fromLTRB(15, 10, 15, 0),
             width: MediaQuery.of(context).size.width,
             child: Column(
               children: [
@@ -191,7 +189,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(bottom: 5),
+                      margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerLeft,
                       child: Text(
                         AppLocalizations.of(context)!.subtotal,
@@ -204,7 +202,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(bottom: 5),
+                      margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerRight,
                       child: Text(
                         '${priceFormat(widget.subTotal)}',
@@ -222,7 +220,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(bottom: 5),
+                      margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerLeft,
                       child: Text(
                         '${AppLocalizations.of(context)!.masterDiscount} ($clientMasterDiscount%)',
@@ -235,7 +233,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(bottom: 5),
+                      margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerRight,
                       child: Text(
                         '${priceFormat(masterDiscountTotal)}',
@@ -253,7 +251,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(bottom: 5),
+                      margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerLeft,
                       child: Text(
                         '${AppLocalizations.of(context)!.tax} (16%)',
@@ -266,7 +264,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(bottom: 5),
+                      margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerRight,
                       child: Text(
                         '${priceFormat(taxTotal)}',
@@ -313,7 +311,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+            margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
               color: Colors.white,
@@ -324,7 +322,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                   child: Text(
                     AppLocalizations.of(context)!.orderDeliveryAddress,
                     style: TextStyle(
@@ -336,11 +334,10 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
+                  margin: const EdgeInsets.fromLTRB(10, 5, 10, 10),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton2(
                       isExpanded: true,
-                      // ignore: prefer_const_literals_to_create_immutables
                       hint: Row(
                         children: [
                           Expanded(
@@ -421,8 +418,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
-                  padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
@@ -434,7 +431,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                     isFiscalSelected
                         ? widget.client?.fiscalAdress
                         : widget.client?.dispatchAdress,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins-regular',
                       fontSize: 14,
                     ),
@@ -444,8 +441,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+            margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
               color: Colors.white,
@@ -454,7 +451,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
             child: Column(
               children: [
                 Container(
-                  margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -487,9 +484,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                      // padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                      // height: 100,
+                      margin: const EdgeInsets.fromLTRB(10, 5, 0, 0),
                       width: 120,
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -499,7 +494,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         ),
                       ),
                       child: Container(
-                        margin: EdgeInsets.fromLTRB(10, 5, 0, 10),
+                        margin: const EdgeInsets.fromLTRB(10, 5, 0, 10),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
@@ -516,7 +511,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                           maxLength: 10,
                           textCapitalization: TextCapitalization.none,
                           decoration: InputDecoration(
-                            contentPadding: EdgeInsets.fromLTRB(14, 0, 14, 0),
+                            contentPadding:
+                                const EdgeInsets.fromLTRB(14, 0, 14, 0),
                             hintText: '0000',
                             counterText: "",
                             hintStyle: TextStyle(
@@ -536,7 +532,6 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                             setState(() {
                               numberOrder = value;
                             });
-                            // print(numberOrder);
                           },
                         ),
                       ),
@@ -546,7 +541,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       color: myTheme.colorScheme.primary,
                       size: 20,
                     ),
-                    SizedBox(width: 50),
+                    const SizedBox(width: 50),
                     Container(
                       height: 47,
                       decoration: BoxDecoration(
@@ -559,7 +554,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       child: Row(
                         children: [
                           Container(
-                            padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                            padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
                             child: Text(
                               formattedDate,
                               style: TextStyle(
@@ -570,7 +565,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                               ),
                             ),
                           ),
-                          Container(
+                          SizedBox(
                             width: 30,
                             child: IconButton(
                               onPressed: () async {
@@ -604,8 +599,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+            margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
               color: Colors.white,
@@ -616,7 +611,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                  margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                   child: Text(
                     'Tipo de negociacion',
                     style: TextStyle(
@@ -627,12 +622,11 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
+                  margin: const EdgeInsets.fromLTRB(10, 5, 10, 10),
                   width: 300,
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton2(
                       isExpanded: true,
-                      // ignore: prefer_const_literals_to_create_immutables
                       hint: Row(
                         children: [
                           Expanded(
@@ -708,8 +702,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+            margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
               color: Colors.white,
@@ -720,7 +714,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  margin: EdgeInsets.fromLTRB(10, 0, 0, 5),
+                  margin: const EdgeInsets.fromLTRB(10, 0, 0, 5),
                   child: Text(
                     'Comentario',
                     style: TextStyle(
@@ -731,7 +725,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
+                  margin: const EdgeInsets.fromLTRB(10, 5, 10, 10),
                   child: TextField(
                     style: TextStyle(
                       fontSize: 14,
@@ -742,7 +736,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                     maxLength: 200,
                     textCapitalization: TextCapitalization.characters,
                     decoration: InputDecoration(
-                      contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
+                      contentPadding: const EdgeInsets.fromLTRB(14, 0, 0, 0),
                       hintText: 'Comentario sobre la entrega',
                       hintStyle: TextStyle(
                         fontSize: 14,
@@ -766,7 +760,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(20, 0, 20, 30),
+            margin: const EdgeInsets.fromLTRB(20, 0, 20, 30),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
             ),
@@ -776,7 +770,6 @@ class _CheckoutBodyState extends State<CheckoutBody> {
               borderRadius: BorderRadius.circular(16),
               child: ElevatedButton(
                 onPressed: () async {
-                  // Procesar pedido a la DB
                   if (selectedValue2 != null) {
                     var result = await createOrder(
                       widget.client,
@@ -805,7 +798,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       'CONTINUAR',
                       style: TextStyle(
                         fontFamily: 'Poppins-regular',
@@ -813,7 +806,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 0, 4),
+                      margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
                       child: Icon(
                         SimpleLineIcons.arrow_right,
                         size: 14,

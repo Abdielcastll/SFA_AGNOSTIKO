@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers
-
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pwa_sales2go_flutter/src/pages/users_and_teams/teams/teams_page.dart';
@@ -17,8 +15,8 @@ class UsersAndTeamsPage extends StatelessWidget {
       length: 2,
       child: Scaffold(
         backgroundColor: Colors.grey.shade200,
-        appBar: AppBarUsersAndTeams(),
-        body: UsersAndTeamsBody(),
+        appBar: const AppBarUsersAndTeams(),
+        body: const UsersAndTeamsBody(),
       ),
     );
   }
@@ -32,8 +30,7 @@ class UsersAndTeamsBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: TabBarView(
-        // ignore: prefer_const_literals_to_create_immutables
+      child: const TabBarView(
         children: [
           TeamsPage(),
           UsersPage(),

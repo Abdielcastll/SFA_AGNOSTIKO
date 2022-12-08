@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -57,6 +55,7 @@ class ProductDetails extends StatefulWidget {
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(elevation: 0, toolbarHeight: 40),
@@ -153,14 +152,10 @@ class ProductDetailsBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final priceProduct = priceFormat(double.parse(price ?? '0')).toString();
 
-    // String test2 = 'USD';
-    // String test = 'Dolares - USD';
-    // print(test.contains(test2));
-
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       child: Container(
-        margin: EdgeInsets.all(16),
+        margin: const EdgeInsets.all(16),
         child: Column(
           children: [
             Stack(
@@ -249,7 +244,7 @@ class ProductDetailsBody extends StatelessWidget {
               ],
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+              margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: Text(
@@ -266,7 +261,7 @@ class ProductDetailsBody extends StatelessWidget {
               ),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(10, 10, 0, 20),
+              margin: const EdgeInsets.fromLTRB(10, 10, 0, 20),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -296,7 +291,7 @@ class ProductDetailsBody extends StatelessWidget {
                           ],
                         ),
                         Container(
-                          margin: EdgeInsets.fromLTRB(0, 5, 10, 0),
+                          margin: const EdgeInsets.fromLTRB(0, 5, 10, 0),
                           child: Text(
                             '${AppLocalizations.of(context)!.price}: $priceProduct',
                             style: TextStyle(
@@ -307,7 +302,7 @@ class ProductDetailsBody extends StatelessWidget {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.fromLTRB(0, 5, 10, 0),
+                          margin: const EdgeInsets.fromLTRB(0, 5, 10, 0),
                           child: Text(
                             AppLocalizations.of(context)!.colors,
                             style: TextStyle(
@@ -318,11 +313,11 @@ class ProductDetailsBody extends StatelessWidget {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                          margin: const EdgeInsets.fromLTRB(0, 5, 0, 0),
                           child: Row(
                             children: [
                               Container(
-                                margin: EdgeInsets.only(right: 5.0),
+                                margin: const EdgeInsets.only(right: 5.0),
                                 height: 30,
                                 width: 30,
                                 decoration: BoxDecoration(
@@ -331,7 +326,7 @@ class ProductDetailsBody extends StatelessWidget {
                                 ),
                               ),
                               Container(
-                                margin: EdgeInsets.only(right: 5.0),
+                                margin: const EdgeInsets.only(right: 5.0),
                                 height: 30,
                                 width: 30,
                                 decoration: BoxDecoration(
@@ -340,7 +335,7 @@ class ProductDetailsBody extends StatelessWidget {
                                 ),
                               ),
                               Container(
-                                margin: EdgeInsets.only(right: 5.0),
+                                margin: const EdgeInsets.only(right: 5.0),
                                 height: 30,
                                 width: 30,
                                 decoration: BoxDecoration(
@@ -352,7 +347,7 @@ class ProductDetailsBody extends StatelessWidget {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.fromLTRB(0, 5, 10, 0),
+                          margin: const EdgeInsets.fromLTRB(0, 5, 10, 0),
                           child: Text(
                             'ID: $code',
                             style: TextStyle(
@@ -371,7 +366,7 @@ class ProductDetailsBody extends StatelessWidget {
                         Container(
                           alignment: Alignment.centerLeft,
                           child: Container(
-                            margin: EdgeInsets.only(left: 30.0),
+                            margin: const EdgeInsets.only(left: 30.0),
                             // width: 160,
                             height: 38,
                             decoration: BoxDecoration(
@@ -380,7 +375,6 @@ class ProductDetailsBody extends StatelessWidget {
                               borderRadius: BorderRadius.circular(20),
                               child: ElevatedButton.icon(
                                 onPressed: () {
-                                  // Redirigir a lista producto completas filtrada
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -402,7 +396,7 @@ class ProductDetailsBody extends StatelessWidget {
                                       Colors.transparent),
                                   backgroundColor:
                                       MaterialStateProperty.all<Color>(
-                                    Color.fromARGB(255, 159, 165, 252)
+                                    const Color.fromARGB(255, 159, 165, 252)
                                         .withOpacity(0.3),
                                   ),
                                   overlayColor:
@@ -430,11 +424,12 @@ class ProductDetailsBody extends StatelessWidget {
                               isOrderActive == false
                                   ? Container()
                                   : Container(
-                                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                      margin: const EdgeInsets.fromLTRB(
+                                          0, 10, 0, 0),
                                       alignment: Alignment.center,
                                       child: Container(
-                                        margin: EdgeInsets.only(left: 30.0),
-                                        // width: 160,
+                                        margin:
+                                            const EdgeInsets.only(left: 30.0),
                                         height: 38,
                                         decoration: BoxDecoration(
                                             borderRadius:
@@ -487,7 +482,7 @@ class ProductDetailsBody extends StatelessWidget {
                                               backgroundColor:
                                                   MaterialStateProperty.all<
                                                       Color>(
-                                                Color.fromARGB(
+                                                const Color.fromARGB(
                                                         255, 159, 165, 252)
                                                     .withOpacity(0.3),
                                               ),
@@ -500,11 +495,12 @@ class ProductDetailsBody extends StatelessWidget {
                                             label: Text(
                                               'Añadir',
                                               style: TextStyle(
-                                                  color: myTheme.colorScheme
-                                                      .onPrimaryContainer,
-                                                  fontFamily: 'Poppins-regular',
-                                                  fontSize: 13,
-                                                  fontWeight: FontWeight.bold),
+                                                color: myTheme.colorScheme
+                                                    .onPrimaryContainer,
+                                                fontFamily: 'Poppins-regular',
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
                                           ),
                                         ),

@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +48,6 @@ class _ProductsPageState extends State<ProductsPage> {
             value: DatabaseServiceStreams().qualitySummary,
             initialData: null,
             catchError: (context, error) {
-              // print(error);
               return;
             },
           ),
@@ -58,7 +55,6 @@ class _ProductsPageState extends State<ProductsPage> {
             value: DatabaseServiceStreams().categorieSummary,
             initialData: null,
             catchError: (context, error) {
-              // print(error);
               return;
             },
           ),
@@ -66,7 +62,6 @@ class _ProductsPageState extends State<ProductsPage> {
             value: DatabaseServiceStreams().designSummary,
             initialData: null,
             catchError: (context, error) {
-              // print(error);
               return;
             },
           ),
@@ -74,7 +69,6 @@ class _ProductsPageState extends State<ProductsPage> {
             value: DatabaseServiceStreams().lineSummary,
             initialData: null,
             catchError: (context, error) {
-              // print(error);
               return;
             },
           ),
@@ -82,7 +76,6 @@ class _ProductsPageState extends State<ProductsPage> {
             value: DatabaseServiceStreams().brandSummary,
             initialData: null,
             catchError: (context, error) {
-              // print(error);
               return;
             },
           ),
@@ -90,7 +83,6 @@ class _ProductsPageState extends State<ProductsPage> {
             value: DatabaseServiceStreams().subCategorieSummary,
             initialData: null,
             catchError: (context, error) {
-              // print(error);
               return;
             },
           ),
@@ -98,7 +90,6 @@ class _ProductsPageState extends State<ProductsPage> {
             value: DatabaseServiceStreams().sizeSummary,
             initialData: null,
             catchError: (context, error) {
-              // print(error);
               return;
             },
           ),
@@ -106,7 +97,6 @@ class _ProductsPageState extends State<ProductsPage> {
             value: DatabaseServiceStreams().stockValues,
             initialData: null,
             catchError: (context, error) {
-              // print(error);
               return;
             },
           ),
@@ -246,7 +236,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                   Fluttertoast.showToast(
                       msg: 'Productos Añadidos exitosamente');
                 },
-                child: Icon(
+                child: const Icon(
                   Icons.add_shopping_cart_rounded,
                   color: Colors.white,
                   size: 30,
@@ -259,14 +249,14 @@ class _ProductsBodyState extends State<ProductsBody> {
         child: Column(
           children: [
             Container(
-              margin: EdgeInsets.fromLTRB(16, 16, 16, 0),
+              margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
               height: 40,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: TextField(
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 14,
                   fontFamily: 'Poppins-regular',
                 ),
@@ -278,9 +268,9 @@ class _ProductsBodyState extends State<ProductsBody> {
                 decoration: InputDecoration(
                   fillColor: Colors.white,
                   focusColor: Colors.white,
-                  contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
+                  contentPadding: const EdgeInsets.fromLTRB(14, 0, 0, 0),
                   hintText: AppLocalizations.of(context)!.searchProductName,
-                  hintStyle: TextStyle(
+                  hintStyle: const TextStyle(
                     fontFamily: 'Poppins-regular',
                     fontSize: 14,
                   ),
@@ -296,7 +286,7 @@ class _ProductsBodyState extends State<ProductsBody> {
               ),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(20.0, 5.0, 0, 0),
+              margin: const EdgeInsets.fromLTRB(20.0, 5.0, 0, 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -315,7 +305,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                           color: Colors.grey.shade500,
                           size: 25,
                         ),
-                        SizedBox(width: 5),
+                        const SizedBox(width: 5),
                         Text(
                           isDescending
                               ? AppLocalizations.of(context)!.ascendingFilter
@@ -336,19 +326,16 @@ class _ProductsBodyState extends State<ProductsBody> {
                 ],
               ),
             ),
-            Container(
-              // margin: EdgeInsets.fromLTRB(0, 0, 0, 40),
+            SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height * 0.74,
               child: ListView.builder(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 itemCount: products?.length,
                 itemBuilder: (BuildContext context, index) {
-                  // Valores dentro de los resumenes
                   final sortedProducts =
                       isDescending ? products?.reversed.toList() : products;
                   final product = sortedProducts![index];
-                  // final product = products![index];
                   final productStock = stockValues[product.code] ?? 000;
                   final productBrand = brandsSummary[product.brand] ?? '';
                   final productCategorie =
@@ -365,7 +352,7 @@ class _ProductsBodyState extends State<ProductsBody> {
 
                   if (productStock > 0) {
                     return Container(
-                      margin: EdgeInsets.only(bottom: 10.0),
+                      margin: const EdgeInsets.only(bottom: 10.0),
                       height: 120,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
@@ -387,9 +374,6 @@ class _ProductsBodyState extends State<ProductsBody> {
                                 availableStock: productStock,
                                 urlPicture: product.catalogue.toString(),
                               );
-
-                              print(newProduct.unitPrice);
-                              print(product.catalogue.toString());
                               setState(
                                   () => product.selected = !product.selected);
                               selectedProducts.add(newProduct);
@@ -406,11 +390,10 @@ class _ProductsBodyState extends State<ProductsBody> {
                           }
                         },
                         title: SingleChildScrollView(
-                          physics: BouncingScrollPhysics(),
+                          physics: const BouncingScrollPhysics(),
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
-                            // ignore: prefer_const_literals_to_create_immutables
                             children: [
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -421,7 +404,8 @@ class _ProductsBodyState extends State<ProductsBody> {
                                     Container(
                                       height: 17,
                                       width: 17,
-                                      margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                      margin:
+                                          const EdgeInsets.fromLTRB(5, 0, 0, 0),
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(16),
                                         color: Colors.grey.shade400,
@@ -429,11 +413,11 @@ class _ProductsBodyState extends State<ProductsBody> {
                                       child: Checkbox(
                                           side: MaterialStateBorderSide
                                               .resolveWith((states) =>
-                                                  BorderSide(
+                                                  const BorderSide(
                                                       width: 1.0,
                                                       color:
                                                           Colors.transparent)),
-                                          shape: CircleBorder(),
+                                          shape: const CircleBorder(),
                                           activeColor:
                                               myTheme.colorScheme.primary,
                                           value: product.selected,
@@ -456,11 +440,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                 availableStock: productStock,
                                                 urlPicture: product.catalogue,
                                               );
-                                              print(newProduct.unitPrice);
-                                              print(
-                                                  product.catalogue.toString());
 
-                                              // print(newProduct.totalAmount);
                                               selectedProducts.add(newProduct);
                                             } else if (product.selected ==
                                                 true) {
@@ -475,11 +455,11 @@ class _ProductsBodyState extends State<ProductsBody> {
                                     ),
                                 ],
                               ),
-                              SizedBox(width: 20),
+                              const SizedBox(width: 20),
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Container(
+                                  SizedBox(
                                     width: 90,
                                     child: TextFieldForCard(
                                       message: product.name,
@@ -487,11 +467,10 @@ class _ProductsBodyState extends State<ProductsBody> {
                                   ),
                                 ],
                               ),
-                              SizedBox(width: 10),
+                              const SizedBox(width: 10),
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                // ignore: prefer_const_literals_to_create_immutables
                                 children: [
                                   TextFieldForCard(
                                     message:
@@ -525,11 +504,10 @@ class _ProductsBodyState extends State<ProductsBody> {
                                   ),
                                 ],
                               ),
-                              SizedBox(width: 10),
+                              const SizedBox(width: 10),
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                // ignore: prefer_const_literals_to_create_immutables
                                 children: [
                                   TextFieldForCard(
                                     message: product.code,
@@ -539,7 +517,6 @@ class _ProductsBodyState extends State<ProductsBody> {
                                   ),
                                   TextFieldForCard(
                                     message: priceProduct,
-                                    // '',
                                   ),
                                   TextFieldForCard(
                                     message: productBrand,
@@ -552,11 +529,10 @@ class _ProductsBodyState extends State<ProductsBody> {
                                   ),
                                 ],
                               ),
-                              SizedBox(width: 10),
+                              const SizedBox(width: 10),
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                // ignore: prefer_const_literals_to_create_immutables
                                 children: [
                                   TextFieldForCard(
                                     message:
@@ -580,11 +556,10 @@ class _ProductsBodyState extends State<ProductsBody> {
                                   ),
                                 ],
                               ),
-                              SizedBox(width: 10),
+                              const SizedBox(width: 10),
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                // ignore: prefer_const_literals_to_create_immutables
                                 children: [
                                   TextFieldForCard(
                                     message: productLine,

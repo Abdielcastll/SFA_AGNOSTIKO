@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/examples/usesrs_example.dart';
 import 'package:pwa_sales2go_flutter/src/pages/role_manager/role_manager.dart';
@@ -22,18 +20,18 @@ class UsersPage extends StatelessWidget {
               child: FloatingActionButton(
                 elevation: 2,
                 shape: BeveledRectangleBorder(
-                    borderRadius: BorderRadius.circular(0)),
+                  borderRadius: BorderRadius.circular(0),
+                ),
                 backgroundColor: myTheme.colorScheme.primary,
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => NewUserPage(),
+                      builder: (BuildContext context) => const NewUserPage(),
                     ),
                   );
                 },
-                // ignore: prefer_const_constructors
-                child: Icon(
+                child: const Icon(
                   Icons.person_add,
                   color: Colors.white,
                 ),
@@ -41,24 +39,26 @@ class UsersPage extends StatelessWidget {
             ),
           ),
           Container(
-            margin: EdgeInsets.all(10.0),
+            margin: const EdgeInsets.all(10.0),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: FloatingActionButton(
                 heroTag: '2',
                 elevation: 0,
                 shape: BeveledRectangleBorder(
-                    borderRadius: BorderRadius.circular(0)),
+                  borderRadius: BorderRadius.circular(0),
+                ),
                 backgroundColor: myTheme.colorScheme.secondary,
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => RolesManagerPage(),
+                      builder: (BuildContext context) =>
+                          const RolesManagerPage(),
                     ),
                   );
                 },
-                child: Icon(
+                child: const Icon(
                   Icons.manage_accounts,
                   color: Colors.white,
                 ),
@@ -68,7 +68,7 @@ class UsersPage extends StatelessWidget {
         ],
       ),
       backgroundColor: Colors.grey.shade200,
-      body: UserBody(),
+      body: const UserBody(),
     );
   }
 }
@@ -100,7 +100,7 @@ class _UserBodyState extends State<UserBody> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -110,11 +110,11 @@ class _UserBodyState extends State<UserBody> {
             alignment: Alignment.center,
             child: ListView.builder(
               itemCount: listOfUsers.length,
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               itemBuilder: (BuildContext context, index) {
                 final user = listOfUsers[index];
                 return Container(
-                  margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
+                  margin: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     border: Border.all(
@@ -128,7 +128,7 @@ class _UserBodyState extends State<UserBody> {
                       children: [
                         Text(
                           user.name,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.black,
                             fontFamily: 'Poppins-regular',
                             fontSize: 16,
@@ -150,11 +150,11 @@ class _UserBodyState extends State<UserBody> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container(
+                          SizedBox(
                             width: 200,
                             child: Text(
                               user.email,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: 'Poppins-regular',
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
@@ -178,15 +178,13 @@ class _UserBodyState extends State<UserBody> {
                         ],
                       ),
                     ),
-                    onTap: () {
-                      // Dialog para ver los teams
-                    },
+                    onTap: () {},
                   ),
                 );
               },
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
         ],
       ),
     );

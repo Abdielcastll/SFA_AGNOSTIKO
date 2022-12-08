@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -25,7 +23,7 @@ class _UserInfoState extends State<UserInfo> {
       alignment: Alignment.center,
       child: Container(
         width: 350,
-        margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+        margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
         child: ListTile(
           leading: CircleAvatar(
             radius: 30,
@@ -49,23 +47,13 @@ class _UserInfoState extends State<UserInfo> {
             children: [
               Text(
                 '${widget.charge}',
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins-regular',
                   color: Color(0xFF7D5070),
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              // SizedBox(width: 5),
-              // Text(
-              //   'Moneda: $currentCoin',
-              //   style: TextStyle(
-              //     fontFamily: 'Poppins-regular',
-              //     color: Color(0xFF7D5070),
-              //     fontSize: 12,
-              //     fontWeight: FontWeight.bold,
-              //   ),
-              // ),
             ],
           ),
         ),

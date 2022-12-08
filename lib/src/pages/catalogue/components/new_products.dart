@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -36,7 +34,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
     final productsList = products;
 
     return Container(
-      margin: EdgeInsets.fromLTRB(16, 12.0, 16, 0),
+      margin: const EdgeInsets.fromLTRB(16, 12.0, 16, 0),
       child: Column(
         children: [
           Row(
@@ -49,9 +47,8 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                   size: 25.0,
                 ),
               ),
-              SizedBox(width: 5.0),
+              const SizedBox(width: 5.0),
               Container(
-                // margin: const EdgeInsets.only(bottom: 5),
                 child: Text(
                   AppLocalizations.of(context)!.newProducts,
                   style: TextStyle(
@@ -65,18 +62,15 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
               ),
             ],
           ),
-          Container(
+          SizedBox(
             height: 230,
             width: double.infinity,
             child: ListView.builder(
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               scrollDirection: Axis.horizontal,
               itemCount: productsByDateList.length,
               itemBuilder: (BuildContext context, index) {
                 final product = productsByDateList[index];
-                // print(
-                //   stockValues[product.code] ?? 000,
-                // );
                 if ((stockValues[product.code] ?? 000) > 0) {
                   return FutureBuilder<String?>(
                     future: FirebaseStorage.instance
@@ -120,7 +114,8 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                             );
                           },
                           child: Container(
-                            margin: EdgeInsets.fromLTRB(0.0, 12.0, 16.0, 8),
+                            margin:
+                                const EdgeInsets.fromLTRB(0.0, 12.0, 16.0, 8),
                             width: 140,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(0),
@@ -131,7 +126,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                               children: [
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
-                                  child: Container(
+                                  child: SizedBox(
                                     height: 150,
                                     width: 160,
                                     child: CachedNetworkImage(
@@ -152,13 +147,12 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                   ),
                                 ),
                                 Container(
-                                  margin: EdgeInsets.fromLTRB(5, 0, 0, 4),
+                                  margin: const EdgeInsets.fromLTRB(5, 0, 0, 4),
                                   child: Text(
                                     '${product.name}',
                                     textAlign: TextAlign.start,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
-                                    // textAlign: TextAlign.start,
                                     style: TextStyle(
                                       color: myTheme
                                           .colorScheme.onPrimaryContainer,
@@ -169,11 +163,13 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                   ),
                                 ),
                                 Container(
-                                  margin: EdgeInsets.fromLTRB(5.0, 0.0, 0, 0),
+                                  margin:
+                                      const EdgeInsets.fromLTRB(5.0, 0.0, 0, 0),
                                   child: Row(
                                     children: [
                                       Container(
-                                        margin: EdgeInsets.only(right: 3.0),
+                                        margin:
+                                            const EdgeInsets.only(right: 3.0),
                                         height: 10,
                                         width: 10,
                                         decoration: BoxDecoration(
@@ -183,7 +179,8 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                         ),
                                       ),
                                       Container(
-                                        margin: EdgeInsets.only(right: 3.0),
+                                        margin:
+                                            const EdgeInsets.only(right: 3.0),
                                         height: 10,
                                         width: 10,
                                         decoration: BoxDecoration(
@@ -194,7 +191,8 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                         ),
                                       ),
                                       Container(
-                                        margin: EdgeInsets.only(right: 3.0),
+                                        margin:
+                                            const EdgeInsets.only(right: 3.0),
                                         height: 10,
                                         width: 10,
                                         decoration: BoxDecoration(
@@ -237,7 +235,8 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                             );
                           },
                           child: Container(
-                            margin: EdgeInsets.fromLTRB(0.0, 12.0, 16.0, 8),
+                            margin:
+                                const EdgeInsets.fromLTRB(0.0, 12.0, 16.0, 8),
                             width: 140,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(0),
@@ -248,7 +247,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                               children: [
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
-                                  child: Container(
+                                  child: SizedBox(
                                     height: 150,
                                     width: 160,
                                     child: Image.network(
@@ -258,13 +257,12 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                   ),
                                 ),
                                 Container(
-                                  margin: EdgeInsets.fromLTRB(5, 0, 0, 4),
+                                  margin: const EdgeInsets.fromLTRB(5, 0, 0, 4),
                                   child: Text(
                                     '${product.name}',
                                     textAlign: TextAlign.start,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
-                                    // textAlign: TextAlign.start,
                                     style: TextStyle(
                                       color: myTheme
                                           .colorScheme.onPrimaryContainer,
@@ -275,11 +273,13 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                   ),
                                 ),
                                 Container(
-                                  margin: EdgeInsets.fromLTRB(5.0, 0.0, 0, 0),
+                                  margin:
+                                      const EdgeInsets.fromLTRB(5.0, 0.0, 0, 0),
                                   child: Row(
                                     children: [
                                       Container(
-                                        margin: EdgeInsets.only(right: 3.0),
+                                        margin:
+                                            const EdgeInsets.only(right: 3.0),
                                         height: 10,
                                         width: 10,
                                         decoration: BoxDecoration(
@@ -289,7 +289,8 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                         ),
                                       ),
                                       Container(
-                                        margin: EdgeInsets.only(right: 3.0),
+                                        margin:
+                                            const EdgeInsets.only(right: 3.0),
                                         height: 10,
                                         width: 10,
                                         decoration: BoxDecoration(
@@ -300,7 +301,8 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                         ),
                                       ),
                                       Container(
-                                        margin: EdgeInsets.only(right: 3.0),
+                                        margin:
+                                            const EdgeInsets.only(right: 3.0),
                                         height: 10,
                                         width: 10,
                                         decoration: BoxDecoration(
@@ -317,9 +319,9 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                           ),
                         );
                       } else {
-                        return Container(
+                        return const SizedBox(
                           width: 140,
-                          child: const Center(
+                          child: Center(
                             child: CircularProgressIndicator(),
                           ),
                         );
