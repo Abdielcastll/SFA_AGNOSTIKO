@@ -26,29 +26,30 @@ class _InvoicesPageState extends State<InvoicesPage> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        isCheckedNotes == false
-            ? StreamProvider<List<Invoices>?>.value(
-                value: FirebaseFirestore.instance
-                    .collectionGroup('facturas')
-                    .orderBy('nroCorrelativo', descending: true)
-                    .snapshots()
-                    .map(accountInvoicesFromSnapshot),
-                initialData: const [],
-                catchError: (context, error) {
-                  return;
-                },
-              )
-            : StreamProvider<List<CreditNotes>?>.value(
-                value: FirebaseFirestore.instance
-                    .collectionGroup('notas_credito')
-                    .orderBy('fecha', descending: true)
-                    .snapshots()
-                    .map(accountCreditNotesFromSnapshot),
-                initialData: const [],
-                catchError: (context, error) {
-                  return;
-                },
-              )
+        // isCheckedNotes == false
+        // ?
+        StreamProvider<List<Invoices>?>.value(
+          value: FirebaseFirestore.instance
+              .collectionGroup('facturas')
+              .orderBy('nroCorrelativo', descending: true)
+              .snapshots()
+              .map(accountInvoicesFromSnapshot),
+          initialData: const [],
+          catchError: (context, error) {
+            return;
+          },
+        )
+        // : StreamProvider<List<CreditNotes>?>.value(
+        //     value: FirebaseFirestore.instance
+        //         .collectionGroup('notas_credito')
+        //         .orderBy('fecha', descending: true)
+        //         .snapshots()
+        //         .map(accountCreditNotesFromSnapshot),
+        //     initialData: const [],
+        //     catchError: (context, error) {
+        //       return;
+        //     },
+        //   )
       ],
       child: SafeArea(
         child: Scaffold(

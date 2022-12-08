@@ -242,6 +242,7 @@ class _OrderCardBodyState extends State<OrderCardBody> {
                 SizedBox(
                   width: 200,
                   child: Text(
+                    // '$currentClientName #${widget.widget.correlativeNumber}',
                     '$currentClientName',
                     style: TextStyle(
                       fontSize: 15,

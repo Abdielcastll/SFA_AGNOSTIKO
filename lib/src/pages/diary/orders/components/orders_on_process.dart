@@ -39,8 +39,8 @@ class OrdersOnProcess extends StatelessWidget {
                         itemBuilder: (BuildContext context, int index) {
                           final order = ordersOnProcess[index];
                           final orderTotalAmount = order.totalAmount ?? 0;
-                          final unformattedDate = order.deliveryDate ??
-                              Timestamp.fromDate(DateTime.now());
+                          final unformattedDate =
+                              order.date ?? Timestamp.fromDate(DateTime.now());
                           final orderStatus =
                               AppLocalizations.of(context)!.onProcess;
                           final date = DateTime.parse(

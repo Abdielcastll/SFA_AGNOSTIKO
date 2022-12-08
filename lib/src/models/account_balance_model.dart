@@ -59,7 +59,7 @@ List<Invoices> accountInvoicesFromSnapshot(QuerySnapshot snapshot) {
           : 'NaN',
       correlativeNumber: doc.data().toString().contains('nroCorrelativo')
           ? doc.get('nroCorrelativo')
-          : 'NaN',
+          : 0,
       isPaid:
           doc.data().toString().contains('pagada') ? doc.get('pagada') : 'NaN',
       payments: doc.data().toString().contains('pagos') ? doc.get('pagos') : [],
@@ -135,7 +135,7 @@ List<CreditNotes> accountCreditNotesFromSnapshot(QuerySnapshot snapshot) {
           : 'NaN',
       correlativeNumber: doc.data().toString().contains('nroCorrelativo')
           ? doc.get('nroCorrelativo')
-          : 'NaN',
+          : 0,
       isValid: doc.data().toString().contains('vigente')
           ? doc.get('vigente')
           : 'NaN',

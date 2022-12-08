@@ -318,7 +318,7 @@ Future createInvoice(
         .set({
       'cliente': clientID,
       'descuentoMaestro': discount,
-      'fecha': Timestamp.fromDate(DateTime.parse(date)),
+      'fecha': Timestamp.fromDate(DateTime.now()),
       'impuesto': tax,
       'montoTotal': double.parse(totalAsString),
       'nroCorrelativo': correlativeNumber,
@@ -331,8 +331,10 @@ Future createInvoice(
       'timestampRegistro': register,
       'ultimaModificacion': lastModification,
       'vendedor': seller,
-    });
+    }).whenComplete(
+            () => Fluttertoast.showToast(msg: 'Factura ${correlativeNumber}'));
   });
+  ////////////////////////
   // // Fluttertoast.showToast(msg: 'Factura ${correlativeNumber}');
   // return await FirebaseFirestore.instance
   //     .collection('clientes')

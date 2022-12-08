@@ -42,7 +42,7 @@ class CompletedOrders extends StatelessWidget {
                 final order = ordersCompleted[index];
                 final orderTotalAmount = order.totalAmount ?? 0;
                 final unformattedDate =
-                    order.deliveryDate ?? Timestamp.fromDate(DateTime.now());
+                    order.date ?? Timestamp.fromDate(DateTime.now());
                 final date =
                     DateTime.parse(unformattedDate.toDate().toString());
                 final deliveryDate = dateFormatter.format(date);
