@@ -22,7 +22,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(1, 2370540632508623834),
       name: 'ShoppingCartProduct',
-      lastPropertyId: const IdUid(20, 8910937102320734128),
+      lastPropertyId: const IdUid(21, 3727172841384829065),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -74,6 +74,11 @@ final _entities = <ModelEntity>[
             id: const IdUid(20, 8910937102320734128),
             name: 'unitPrice',
             type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(21, 3727172841384829065),
+            name: 'availableStock',
+            type: 6,
             flags: 0)
       ],
       relations: <ModelRelation>[],
@@ -155,7 +160,7 @@ ModelDefinition getObjectBoxModel() {
           final unitPriceOffset = object.unitPrice == null
               ? null
               : fbb.writeString(object.unitPrice!);
-          fbb.startTable(21);
+          fbb.startTable(22);
           fbb.addInt64(0, object.id);
           fbb.addOffset(4, codeOffset);
           fbb.addOffset(8, nameOffset);
@@ -166,6 +171,7 @@ ModelDefinition getObjectBoxModel() {
           fbb.addOffset(17, urlPictureOffset);
           fbb.addOffset(18, totalAmountOffset);
           fbb.addOffset(19, unitPriceOffset);
+          fbb.addInt64(20, object.availableStock);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -177,6 +183,8 @@ ModelDefinition getObjectBoxModel() {
               id: const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0),
               productQuantity: const fb.Int64Reader()
                   .vTableGetNullable(buffer, rootOffset, 28),
+              availableStock: const fb.Int64Reader()
+                  .vTableGetNullable(buffer, rootOffset, 44),
               code: const fb.StringReader(asciiOptimization: true)
                   .vTableGetNullable(buffer, rootOffset, 12),
               productId: const fb.StringReader(asciiOptimization: true)
@@ -189,8 +197,8 @@ ModelDefinition getObjectBoxModel() {
                   .vTableGetNullable(buffer, rootOffset, 20),
               promotion: const fb.StringReader(asciiOptimization: true)
                   .vTableGetNullable(buffer, rootOffset, 26),
-              unitPrice: const fb.StringReader(asciiOptimization: true)
-                  .vTableGetNullable(buffer, rootOffset, 42),
+              unitPrice:
+                  const fb.StringReader(asciiOptimization: true).vTableGetNullable(buffer, rootOffset, 42),
               urlPicture: const fb.StringReader(asciiOptimization: true).vTableGetNullable(buffer, rootOffset, 38));
 
           return object;
@@ -241,4 +249,8 @@ class ShoppingCartProduct_ {
   /// see [ShoppingCartProduct.unitPrice]
   static final unitPrice =
       QueryStringProperty<ShoppingCartProduct>(_entities[0].properties[9]);
+
+  /// see [ShoppingCartProduct.availableStock]
+  static final availableStock =
+      QueryIntegerProperty<ShoppingCartProduct>(_entities[0].properties[10]);
 }

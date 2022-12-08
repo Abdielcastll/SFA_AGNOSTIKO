@@ -1,0 +1,180 @@
+{
+    "language": "English",
+    "helloWorld": "Hello world!",
+    "promotions": "Promotions",
+    "promotionsUnavaliable": "There are no promotions avaliable",
+    "newProducts": "New Products",
+    "listOfProducts": "List of Products",
+    "catalogue": "Catalogue",
+    "mostSelled": "Most Selled",
+    "stock": "Stock",
+    "price": "Price",
+    "colors": "Colors",
+    "seeInList": "Product on list",
+
+
+
+    "products": "Products",
+    "productCode": "Code",
+    "productBrand": "Brand",
+    "productCategorie": "Categorie",
+    "productSubCategorie": "Sub-Categorie",  
+    "productLine": "Line",
+    "productQuality": "Quality",
+    "productSize": "Size",
+    "productDesign": "Design",
+    "searchProductName": "Search name",
+    "ascendingFilter": "Ascending",
+    "descendingFilter": "Descending",
+
+
+
+    "clients": "Clients",
+    "clientRecord": "Record",
+    "makeOrder": "Make Order",
+    "clientFiscalAddress": "Fiscal Address",
+    "clientContactInfo": "Contact Info.",
+    "clientInvoiceInfo": "Invoice Info.",
+    "clientDispatchAddress": "Dispatch Address",
+    "salesArea": "Sales Area",
+    "listOfPrices": "Price List",
+    "masterDiscount": "Master Discount",
+
+
+
+    "accountBalance": "Account Balance",
+    "issues": "Issues",
+    "paidUp": "Paid up",
+    "accountTotalAmount": "Total Amount",
+    "accountTotalBalance": "Total Balance",
+    "notes": "Notes",
+    "invoices": "Invoices",
+
+
+
+    "profile": "Profile",
+    "usersAndTeams": "Users and Teams",
+    "account": "Account",
+    "notifications": "Notifications",
+    "changeCurrency": "Change currency",
+    "help": "Help",
+    "logOut": "Logout",
+    "salesAreaDesc": "Assigned sales area and managers",
+    "usersAndTeamsDesc": "Manage the teams and members",
+    "accountDesc": "Email, password, and profile settings",
+    "notificationsDesc": "Notifications and Movements",
+    "changeCurrencyDesc": "Change the current currency, prices will change",
+    "helpDesc": "Uses tips and contact info.",
+
+    
+
+    "diary": "Diary",
+    "visits": "Visits",
+    "onProcess": "On Process",
+    "completed": "Completed",
+    "canceled": "Canceled",
+    "commentary": "Commentary",
+    "seeClient": "See Client",
+    "visitDeleteConfirmation": "Are you sure to delete this visit?",
+    "goBack": "Go Back",
+    "visitDelete": "Delete visit",
+    "visitStatus": "Visit Status",
+    "selectStatus": "Select state of the visit",
+    "orders": "Orders",
+    "home": "Home",
+    "commentaryUnavaliable": "There is no commentary avaliable",
+    "saveChanges": "Save changes",
+    "modifiedVisit": "Visit modified",
+    "modifiedVisitError": "There was a error while modifying the visit",
+
+
+
+    "noClientsAvaliable": "There are no clients avaliable",
+    "newVisit": "New Visit",
+    "date": "Date",
+    "createVisit": "Create Visit",
+    "creatingVisit": "Creating visit",
+    "seller": "Salesman",
+    "visitCreated": "Visit created successfully",
+    "createVisitError":"There was a error while creating the visit",
+
+
+
+
+    "newOrder": "New Order",
+    "selectClient": "Select a Client",
+    "searchClient": "Search a Client...",
+    "order": "Order",
+    "orderEmtpy": "Your shopping cart is empty",
+    "orderEmptyDesc": "It looks like you need to add items here",
+    "orderSubTotal": "Order Subtotal",
+    "addProducts": "Add products",
+    "orderContinue": "Continue",
+    "orderTotal": "Order total amount",
+    "orderDeliveryAddress": "Delivery Address",
+    "fiscal": "Fiscal",
+    "dispatch": "Dispatch",
+    "orderNumber": "Orden number",
+
+
+
+    "payable": "Payable",
+    "subtotal": "Subtotal",
+    "totalToPay": "Total to pay",
+    "tax": "Tax",
+    "seeProducts": "See Products",
+    "createInvoice": "Do you want to create an invoice for this order?",
+    "createInvoiceConfirmation": "Create Invoice",
+    "orderDelete": "Do you want to delete this order in process?",
+    "invoiced": "Invoiced",
+    "options": "Options",
+    "seePayments": "See Payments",
+    "noPayments": "There are no Payments",
+    "registerPayment": "Register Payment",
+    "invoiceNumber": "Invoice number",
+    "upToPay": "Up to Pay",
+    "balanceConfirmed": "Confirmed Balance",
+    "balanceLeft": "Balance left",
+
+
+    "paymentMethod": "Payment Method",
+    "amount": "Monto",
+
+    "bank": "Bank",
+    "accountNumber": "Account Number",
+    "accountHolder": "Account Holder",
+    "currency": "Currency",
+    "selectFile": "Select a file",
+    "gallery": "Gallery",
+
+
+    "transactionID": "Transaction ID",
+    "voucherNumber": "Voucher number",
+    "referenceNumber": "Reference number"
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+}

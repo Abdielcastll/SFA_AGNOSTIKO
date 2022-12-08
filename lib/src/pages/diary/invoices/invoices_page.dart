@@ -9,6 +9,8 @@ import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/credit_
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/filter_invoices.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/invoice_completed.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/invoices_on_process.dart';
+import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InvoicesPage extends StatefulWidget {
   const InvoicesPage({Key? key}) : super(key: key);
@@ -24,34 +26,34 @@ class _InvoicesPageState extends State<InvoicesPage> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        isCheckedNotes == false
-            ? StreamProvider<List<Invoices>?>.value(
-                value: FirebaseFirestore.instance
-                    .collectionGroup('facturas')
-                    .orderBy('nroCorrelativo', descending: true)
-                    .snapshots()
-                    .map(accountInvoicesFromSnapshot),
-                initialData: const [],
-                catchError: (context, error) {
-                  print(error);
-                  return;
-                },
-              )
-            : StreamProvider<List<CreditNotes>?>.value(
-                value: FirebaseFirestore.instance
-                    .collectionGroup('notas_credito')
-                    .snapshots()
-                    .map(accountCreditNotesFromSnapshot),
-                initialData: const [],
-                catchError: (context, error) {
-                  print(error);
-                  return;
-                },
-              )
+        // isCheckedNotes == false
+        // ?
+        StreamProvider<List<Invoices>?>.value(
+          value: FirebaseFirestore.instance
+              .collectionGroup('facturas')
+              .orderBy('nroCorrelativo', descending: true)
+              .snapshots()
+              .map(accountInvoicesFromSnapshot),
+          initialData: const [],
+          catchError: (context, error) {
+            return;
+          },
+        )
+        // : StreamProvider<List<CreditNotes>?>.value(
+        //     value: FirebaseFirestore.instance
+        //         .collectionGroup('notas_credito')
+        //         .orderBy('fecha', descending: true)
+        //         .snapshots()
+        //         .map(accountCreditNotesFromSnapshot),
+        //     initialData: const [],
+        //     catchError: (context, error) {
+        //       return;
+        //     },
+        //   )
       ],
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: Colors.grey[100],
+          backgroundColor: myTheme.colorScheme.surface,
           body: InvoicesBody(isNotesChecked: isCheckedNotes),
         ),
       ),
@@ -72,6 +74,8 @@ class InvoicesBody extends StatefulWidget {
 }
 
 class _InvoicesBodyState extends State<InvoicesBody> {
+  bool seeCompleted = false;
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -80,35 +84,80 @@ class _InvoicesBodyState extends State<InvoicesBody> {
         crossAxisAlignment: CrossAxisAlignment.start,
         // ignore: prefer_const_literals_to_create_immutables
         children: [
-          Container(
-            margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                // Checkbox(
-                //   checkColor: Colors.white,
-                //   value: widget.isNotesChecked,
-                //   onChanged: (bool? value) {
-                //     setState(() {
-                //       widget.isNotesChecked = value!;
-                //     });
-                //   },
-                // ),
-                // Text(
-                //   'Notas',
-                //   style: TextStyle(
-                //     fontFamily: 'Poppins-regular',
-                //     fontSize: 14,
-                //   ),
-                // ),
-              ],
-            ),
+          // Container(
+          //   margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.start,
+          //     // ignore: prefer_const_literals_to_create_immutables
+          //     children: [
+          //       // Checkbox(
+          //       //   checkColor: Colors.white,
+          //       //   value: widget.isNotesChecked,
+          //       //   onChanged: (bool? value) {
+          //       //     setState(() {
+          //       //       widget.isNotesChecked = value!;
+          //       //     });
+          //       //   },
+          //       // ),
+          //       // Text(
+          //       //   'Notas',
+          //       //   style: TextStyle(
+          //       //     fontFamily: 'Poppins-regular',
+          //       //     fontSize: 14,
+          //       //   ),
+          //       // ),
+          //     ],
+          //   ),
+          // ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Container(
+                width: 120,
+                margin: const EdgeInsets.fromLTRB(16, 10, 0, 10),
+                child: Text(
+                  seeCompleted == true
+                      ? AppLocalizations.of(context)!.completed
+                      : AppLocalizations.of(context)!.onProcess,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    color: seeCompleted == true
+                        ? Colors.green.shade600
+                        : Colors.amber.shade600,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins-regular',
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+                child: Text(
+                  'Ver completados',
+                  style: TextStyle(
+                    fontSize: 15,
+                    // fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins-regular',
+                  ),
+                ),
+              ),
+              Checkbox(
+                activeColor: myTheme.colorScheme.primary,
+                value: seeCompleted,
+                onChanged: (value) {
+                  setState(() {
+                    seeCompleted = !seeCompleted;
+                  });
+                },
+              ),
+            ],
           ),
-          widget.isNotesChecked == false
-              ? InvoicesOnProcess()
-              : CreditNotesOnProcess(),
-          widget.isNotesChecked == false ? InvoicesList() : Container(),
+          // widget.isNotesChecked == false
+          //     ? InvoicesOnProcess()
+          //     : CreditNotesOnProcess(),
+          // widget.isNotesChecked == false ? InvoicesList() : Container(),
           // InvoicesList(),
+          seeCompleted == true ? InvoicesList() : InvoicesOnProcess(),
         ],
       ),
     );

@@ -9,6 +9,8 @@ import 'package:pwa_sales2go_flutter/src/models/order_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/filter_orders..dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/orders_completed.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/orders_on_process.dart';
+import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OrdersPage extends StatefulWidget {
   const OrdersPage({Key? key}) : super(key: key);
@@ -18,27 +20,9 @@ class OrdersPage extends StatefulWidget {
 }
 
 class _OrdersPageState extends State<OrdersPage> {
-  late List<double> coinsExchangeRates = [0, 0, 0];
-
-  Future<void> getPricesExchangesRates() async {
-    await FirebaseFirestore.instance
-        .collection('monedas')
-        .get()
-        .then((document) {
-      // print('Cantidad de documentos en monedas: ${document.docs.length}');
-      document.docs.forEach((element) {
-        // print(element.data()['tasaDeCambio']);
-        coinsExchangeRates.remove(0);
-        coinsExchangeRates.add(element.data()['tasaDeCambio']);
-      });
-    });
-  }
-
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    getPricesExchangesRates();
   }
 
   @override
@@ -48,7 +32,7 @@ class _OrdersPageState extends State<OrdersPage> {
         StreamProvider<List<Orders>?>.value(
           value: FirebaseFirestore.instance
               .collectionGroup('pedidos')
-              .orderBy('nroCorrelativo', descending: true)
+              .orderBy('fecha')
               .snapshots()
               .map(ordersFromSnapshot),
           initialData: const [],
@@ -59,33 +43,78 @@ class _OrdersPageState extends State<OrdersPage> {
       ],
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: Colors.grey[200],
-          body: OrdersBody(coinsExchangeRates: coinsExchangeRates),
+          backgroundColor: myTheme.colorScheme.surface,
+          body: OrdersBody(),
         ),
       ),
     );
   }
 }
 
-class OrdersBody extends StatelessWidget {
+class OrdersBody extends StatefulWidget {
   const OrdersBody({
     Key? key,
-    this.coinsExchangeRates,
   }) : super(key: key);
-  final coinsExchangeRates;
+
+  @override
+  State<OrdersBody> createState() => _OrdersBodyState();
+}
+
+class _OrdersBodyState extends State<OrdersBody> {
+  bool seeCompleted = false;
 
   @override
   Widget build(BuildContext context) {
-    // print(orders);
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         // ignore: prefer_const_literals_to_create_immutables
         children: [
-          SizedBox(height: 10),
-          OrdersOnProcess(coinsExchangeRates: coinsExchangeRates),
-          CompletedOrders(coinsExchangeRates: coinsExchangeRates),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Container(
+                width: 120,
+                margin: const EdgeInsets.fromLTRB(16, 10, 0, 10),
+                child: Text(
+                  seeCompleted == true
+                      ? AppLocalizations.of(context)!.completed
+                      : AppLocalizations.of(context)!.onProcess,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    color: seeCompleted == true
+                        ? Colors.green.shade600
+                        : Colors.amber.shade600,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins-regular',
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+                child: Text(
+                  'Ver completados',
+                  style: TextStyle(
+                    fontSize: 15,
+                    // fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins-regular',
+                  ),
+                ),
+              ),
+              Checkbox(
+                activeColor: myTheme.colorScheme.primary,
+                value: seeCompleted,
+                onChanged: (value) {
+                  setState(() {
+                    seeCompleted = !seeCompleted;
+                  });
+                },
+              ),
+            ],
+          ),
+          seeCompleted == false ? OrdersOnProcess() : CompletedOrders(),
         ],
       ),
     );

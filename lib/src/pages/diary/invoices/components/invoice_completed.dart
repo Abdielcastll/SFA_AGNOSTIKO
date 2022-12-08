@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/account_balance_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/invoice_card.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InvoicesList extends StatelessWidget {
   const InvoicesList({Key? key}) : super(key: key);
@@ -19,28 +20,10 @@ class InvoicesList extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
-      // ignore: prefer_const_literals_to_create_immutables
       children: [
-        Row(
-          // ignore: prefer_const_literals_to_create_immutables
-          children: [
-            Padding(
-              padding: EdgeInsets.only(left: 16, top: 5),
-              child: Text(
-                textAlign: TextAlign.start,
-                'Completado',
-                style: TextStyle(
-                  color: Colors.green,
-                  fontSize: 15,
-                ),
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: 10),
         SingleChildScrollView(
           child: Container(
-            height: 230,
+            height: MediaQuery.of(context).size.height * 0.65,
             child: Scrollbar(
               child: ListView.builder(
                 physics: ClampingScrollPhysics(),
@@ -56,12 +39,11 @@ class InvoicesList extends StatelessWidget {
                   final invoiceDate = dateFormatter.format(date);
                   final invoiceBalance = invoice.totalAmount;
                   final invoicePayments = invoice.payments;
-                  const invoiceStatus = 'Facturado';
+                  final invoiceStatus = AppLocalizations.of(context)!.invoiced;
                   final invoiceNumber = invoice.correlativeNumber;
                   final invoiceTotal = invoice.totalAmount;
                   final invoiceDocumentID = invoice.invoiceDocumentID;
 
-                  // print(invoice);
                   return InvoiceCard(
                     invoiceClient: invoiceClient,
                     invoiceOrder: invoiceOrder,

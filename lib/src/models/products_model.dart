@@ -112,7 +112,7 @@ List<Products> productsListFromSnapshot(QuerySnapshot snapshot) {
       size: doc.get('tamano').id,
       promotion: doc.data().toString().contains('promocion')
           ? doc.get('promocion').id
-          : 'No hay promocion activa',
+          : '',
       selected: false,
     );
   }).toList();
@@ -135,7 +135,7 @@ List<ProductsWithPromotions> productsWithPromotionListFromSnapshot(
       size: doc.get('tamano').id,
       promotion: doc.data().toString().contains('promocion')
           ? doc.get('promocion').id
-          : 'No hay promocion activa',
+          : null,
       selected: false,
     );
   }).toList();

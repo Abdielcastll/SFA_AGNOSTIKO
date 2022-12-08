@@ -22,17 +22,21 @@ class DiaryTabs extends StatelessWidget {
   }
 }
 
-class DiaryBody extends StatelessWidget {
+class DiaryBody extends StatefulWidget {
   const DiaryBody({
     Key? key,
   }) : super(key: key);
 
   @override
+  State<DiaryBody> createState() => _DiaryBodyState();
+}
+
+class _DiaryBodyState extends State<DiaryBody> {
+  @override
   Widget build(BuildContext context) {
     return Container(
       child: TabBarView(
-        // ignore: prefer_const_literals_to_create_immutables
-        children: [
+        children: const [
           VisitsPage(),
           OrdersPage(),
           InvoicesPage(),

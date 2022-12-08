@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/promotions_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 
 class DatabaseServiceStreams {
@@ -13,7 +15,7 @@ class DatabaseServiceStreams {
   Stream<List<Products>> get products {
     return productsCollection
         // .orderBy('nombre')
-        .limit(200)
+        // .limit(200)
         .snapshots()
         .map(productsListFromSnapshot);
   }
@@ -27,11 +29,22 @@ class DatabaseServiceStreams {
         .map(productsWithPromotionListFromSnapshot);
   }
 
+  // Stream de promociones
+
+  Stream<List<Promotions>> get promotions {
+    return promotionsCollection
+        .where('fecha_vencimiento',
+            isGreaterThanOrEqualTo: Timestamp.fromDate(DateTime.now()))
+        .orderBy('fecha_vencimiento', descending: true)
+        .snapshots()
+        .map(promotionListfromSnapshot);
+  }
+
   // Stream de los ultimos diez productos modificados en la base de datos
 
   Stream<List<ProductsByDate>> get productsByDate {
     return productsCollection
-        .orderBy('modificado')
+        .orderBy('modificado', descending: true)
         .limit(10)
         .snapshots()
         .map(productsByDateListFromSnapshot);
@@ -51,11 +64,7 @@ class DatabaseServiceStreams {
   // Stream de Clientes completos
 
   Stream<List<Clients>> get clients {
-    return clientsCollection
-        .limit(100)
-        // .orderBy('nombre')
-        .snapshots()
-        .map(clientListfromSnapshot);
+    return clientsCollection.snapshots().map(clientListfromSnapshot);
   }
 
   // Streams de resumenes

@@ -5,6 +5,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/place_oder_page.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
   const AppBarDiary({
@@ -25,7 +26,7 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
       title: Padding(
         padding: EdgeInsets.only(top: 20),
         child: Text(
-          'Agenda',
+          AppLocalizations.of(context)!.diary,
           style: const TextStyle(
             fontSize: 21,
             fontWeight: FontWeight.w300,
@@ -100,9 +101,9 @@ class DiaryTabBar extends StatelessWidget implements PreferredSizeWidget {
       // isScrollable: true,
       // ignore: prefer_const_literals_to_create_immutables
       tabs: [
-        Tab(text: 'Visitas'),
-        Tab(text: 'Pedidos'),
-        Tab(text: 'Facturas'),
+        Tab(text: AppLocalizations.of(context)!.visits),
+        Tab(text: AppLocalizations.of(context)!.orders),
+        Tab(text: AppLocalizations.of(context)!.invoices),
       ],
     );
   }

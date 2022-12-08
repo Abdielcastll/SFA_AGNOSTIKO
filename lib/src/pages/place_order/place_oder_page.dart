@@ -11,6 +11,7 @@ import 'package:pwa_sales2go_flutter/src/pages/place_order/components/place_orde
 import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PlaceOrderPage extends StatelessWidget {
   const PlaceOrderPage({Key? key}) : super(key: key);
@@ -20,7 +21,7 @@ class PlaceOrderPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Nuevo Pedido',
+          AppLocalizations.of(context)!.newOrder,
           style: TextStyle(
             fontFamily: 'Poppins-regular',
             fontSize: 21,
@@ -37,7 +38,7 @@ class PlaceOrderPage extends StatelessWidget {
             value: DatabaseServiceStreams().clients,
             initialData: const [],
             catchError: (context, error) {
-              print(error);
+              // print(error);
               return;
             },
           ),
@@ -45,7 +46,7 @@ class PlaceOrderPage extends StatelessWidget {
             value: DatabaseServiceStreams().idTypeSummary,
             initialData: null,
             catchError: (context, error) {
-              print(error);
+              // print(error);
               return;
             },
           ),
@@ -53,7 +54,7 @@ class PlaceOrderPage extends StatelessWidget {
             value: DatabaseServiceStreams().zoneSummary,
             initialData: null,
             catchError: (context, error) {
-              print(error);
+              // print(error);
               return;
             },
           ),

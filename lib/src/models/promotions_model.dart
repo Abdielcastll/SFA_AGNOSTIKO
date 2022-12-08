@@ -1,26 +1,40 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
-class PromotionModel {
-  final String? description;
-  final bool? active;
-  final dynamic expireDate;
+class Promotions {
+  final active;
+  final description;
+  final expireDate;
+  final lastModification;
+  final firebaseDocumentID;
 
-  PromotionModel({
+  Promotions({
     this.description,
     this.active,
     this.expireDate,
+    this.lastModification,
+    this.firebaseDocumentID,
   });
 }
 
-class PromotionfromSnapshot {
-  // Promotion list from snapshot
-  List<PromotionModel> promotionListfromSnapshot(QuerySnapshot snapshot) {
-    return snapshot.docs.map((doc) {
-      return PromotionModel(
-        description: doc.get('descripcion'),
-        active: doc.get('activo'),
-        expireDate: doc.get('fecha_vencimiento'),
-      );
-    }).toList();
-  }
+List<Promotions> promotionListfromSnapshot(QuerySnapshot snapshot) {
+  return snapshot.docs.map((doc) {
+    return Promotions(
+      active:
+          doc.data().toString().contains('activo') ? doc.get('activo') : false,
+      description: doc.data().toString().contains('descripcion')
+          ? doc.get('descripcion')
+          : '',
+      expireDate: doc.data().toString().contains('fecha_vencimiento')
+          ? doc.get('fecha_vencimiento')
+          : Timestamp.fromDate(DateTime.now()),
+      lastModification: doc.data().toString().contains('ultimaModificacion')
+          ? doc.get('ultimaModificacion')
+          : Map<String, dynamic>.of({
+              'timestamp': '',
+              'usuario': '',
+            }),
+      firebaseDocumentID: doc.reference.id,
+    );
+  }).toList();
 }

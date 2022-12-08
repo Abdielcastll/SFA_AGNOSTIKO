@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
@@ -7,6 +8,7 @@ import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ListOfCategories extends StatefulWidget {
   ListOfCategories({Key? key, required this.isOrderActive}) : super(key: key);
@@ -22,40 +24,39 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
   Widget build(BuildContext context) {
     final categories = Provider.of<CategorieSummary?>(context)?.summary ?? {};
     final prices = Provider.of<Prices?>(context)?.prices ?? {};
-
-    List categoriesSummary = categories.values.toList();
-    // print(categoriesSummary);
     final products = Provider.of<List<Products>?>(context) ?? [];
     final productsList = products;
+    List categoriesSummary = categories.values.toList();
+    // print(categoriesSummary);
     // print(productsList);
+
     return Container(
-      margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0),
+      margin: EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 0),
       child: Column(
         children: [
           Row(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Icon(
-                  Icons.category_outlined,
-                  color: myTheme.colorScheme.primary,
-                  size: 20.0,
-                ),
+              Icon(
+                Icons.category_outlined,
+                color: myTheme.colorScheme.onPrimaryContainer,
+                size: 20.0,
               ),
-              SizedBox(width: 5.0),
+              SizedBox(width: 8.0),
               Text(
-                'Catálogo',
+                AppLocalizations.of(context)!.catalogue,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: myTheme.colorScheme.secondary,
+                  color: myTheme.colorScheme.onPrimaryContainer,
                   fontSize: 16.0,
                   fontFamily: 'Poppins-regular',
+                  letterSpacing: 0.15,
                 ),
               ),
             ],
           ),
           Container(
-            height: 165,
+            margin: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+            height: 200,
             width: double.infinity,
             child: ListView.builder(
               physics: BouncingScrollPhysics(),
@@ -63,9 +64,9 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
               itemCount: categoriesSummary.length,
               itemBuilder: (BuildContext context, index) {
                 final categorie = categoriesSummary[index];
+
                 return GestureDetector(
                   onTap: () {
-                    // Redireccionar a productos filtrados por catalogo,
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -79,57 +80,75 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                         ),
                       ),
                     );
-                    print(
-                        'Redireccionar a lista de productos filtrada por esta categoria: $categorie');
                   },
                   child: Container(
-                    margin: EdgeInsets.fromLTRB(10.0, 5.0, 5.0, 0),
-                    height: 110,
+                    margin: EdgeInsets.fromLTRB(0.0, 0.0, 16.0, 0),
+                    height: 240,
                     width: 120,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.transparent,
                     ),
                     child: Stack(
                       alignment: AlignmentDirectional.bottomStart,
                       children: [
                         ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: Image.network(
-                            'https://i.imgur.com/H9rVf4m.jpg',
-                            fit: BoxFit.cover,
+                          borderRadius: BorderRadius.circular(8),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8)),
+                            height: 240,
+                            width: 120,
+                            child: CachedNetworkImage(
+                              fit: BoxFit.cover,
+                              imageUrl: 'https://i.imgur.com/H9rVf4m.jpg',
+                              placeholder: (context, url) => Container(
+                                  width: 300,
+                                  child: const Center(
+                                      child: CircularProgressIndicator())),
+                              errorWidget: (context, url, error) => Image.asset(
+                                'assets/images/nocategorie.jpg',
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            // child: Image.network(
+                            //   'https://i.imgur.com/H9rVf4m.jpg',
+                            //   fit: BoxFit.cover,
+                            // ),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Container(
+                            height: 120,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              gradient: LinearGradient(
+                                end: const Alignment(0.0, -1),
+                                begin: const Alignment(0.0, 0.4),
+                                colors: <Color>[
+                                  const Color(0x8A000000),
+                                  Colors.black12.withOpacity(0.0)
+                                ],
+                              ),
+                            ),
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.fromLTRB(10, 0, 0, 2),
-                          child: Stack(
-                            children: [
-                              Text(
-                                '$categorie',
-                                textAlign: TextAlign.center,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    fontFamily: 'Poppins-regular',
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.bold,
-                                    foreground: Paint()
-                                      ..style = PaintingStyle.stroke
-                                      ..color = myTheme.colorScheme.primary
-                                      ..strokeWidth = 2),
-                              ),
-                              Text(
-                                '$categorie',
-                                textAlign: TextAlign.center,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    fontFamily: 'Poppins-regular',
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
-                              ),
-                            ],
+                          margin: EdgeInsets.fromLTRB(8, 0, 0, 8),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8)),
+                          child: Text(
+                            '$categorie',
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontFamily: 'Poppins-regular',
+                              fontSize: 13,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ],

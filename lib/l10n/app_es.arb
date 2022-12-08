@@ -1,0 +1,436 @@
+{   
+    "language": "Español",
+    "@language": {
+        "description": "El idioma actual"
+    },
+    "helloWorld": "Hola mundo!",
+    "@helloWorld": {
+        "description": "Un saludo comun de programadors"
+    },
+    "promotions": "Promociones",
+    "@promotions": {
+        "description": "Titulo de las promociones"
+    },
+    "promotionsUnavaliable": "No hay promociones disponibles",
+    "@promotionsUnavaliable": {
+        "description": "Subtitulo para el anuncio de que no hay promociones"
+    },
+    "newProducts": "Nuevos Productos",
+    "@newProducts": {
+        "description": "Titulo para nuevos productos"
+    },
+    "listOfProducts": "Lista de productos",
+    "@listOfProducts": {
+        "description": "Titulo para el boton de lista de productos"
+    },
+    "catalogue": "Catálogo",
+    "@catalogue": {
+        "description": "Titulo para el catálogo"
+    },
+    "mostSelled": "Más vendido",
+    "@mostSelled":{
+        "description": "Titulo para los mas vendidos"
+    },
+    "stock": "Stock",
+    "@stock": {
+        "description": "Stock de productos"
+    },
+    "price": "Precio",
+    "@price":{
+        "description": "Precio del producto"
+    },
+    "colors": "Colores",
+    "@colors": {
+        "description": "Colores del producto"
+    },
+    "seeInList": "Ver en lista",
+    "@seeIsList": {
+        "description": "Titulo para el boton de ver en lista"
+    },
+
+
+
+    "products": "Productos",
+    "@products": {
+        "description": "Titulo para lista de productos"
+    },
+    "productCode": "Codigo",
+    "@productCode":{
+        "description": "Codigo del producto"
+    },
+    "productBrand": "Marca",
+    "@productBrand": {
+        "description": "Marca del producto"
+    },
+    "productCategorie": "Categoria",
+    "@productCategorie": {
+        "description": "Categoria del producto"
+    },
+    "productSubCategorie": "Sub-Categoria",
+    "@productSubCategorie":{
+        "description": "Sub categoria del producto"
+    },
+    "productLine": "Linea",
+    "@productLine": {
+        "description": "Linea del producto"
+    },
+    "productQuality": "Calidad",
+    "@productQuality": {
+        "description": "Calidad del producto"
+    },
+    "productSize": "Tamaño",
+    "@productSize": {
+        "description": "Tamaño del producto"
+    },
+    "productDesign": "Diseño",
+    "@productDesign": {
+        "description": "Diseño del producto"
+    },
+    "searchProductName": "Buscar nombre",
+    "@searchProduct Name": {
+        "description": "Titulo para la barra de busqueda de productos"
+    },
+    "ascendingFilter": "Ascendente",
+    "@ascendingFilter": {
+        "description": "Boton de filtrado de busqueda en modo ascendente"
+    },
+    "descendingFilter": "Descendente",
+    "@descendingFilter": {
+        "description": "Boton de filtrado de busqueda en modo descendente"
+    },
+
+
+
+    "clients": "Clientes",
+    "@clients": {
+        "description": "Titulo para lista de clientes"
+    },
+    "clientRecord": "Historial",
+    "@clientRecord": {
+        "description": "Historial de cliente"
+    },
+    "makeOrder": "Crear pedido",
+    "@makeOrder": {
+        "description": "Titulo para boton dentro de detalles del cliente"
+    },
+    "clientFiscalAddress": "Dirección Fiscal",
+    "@clientFiscalAddress": {
+        "description": "Direccion fiscal de un cliente"
+    },
+    "clientContactInfo": "Persona de contacto",
+    "@clientContactInfo": {
+        "description": "Informacion de contacto de cliente"
+    },
+    "clientInvoiceInfo": "Información de Facturación",
+    "@clientInvoiceInfo": {
+        "description": "Informacion de facturacion del cliente"
+    },
+    "clientDispatchAddress": "Direccion de Despacho",
+    "@clientDispatchAddress": {
+        "description": "Direccion de despacho de un cliente"
+    },
+    "salesArea": "Zona de Ventas",
+    "@salesArea": {
+        "description": "Zona de ventas de los clientes"
+    },
+    "listOfPrices": "Lista de Precios",
+    "@listOfPrices": {
+        "description": "Lista de precios de los clientes"
+    },
+    "masterDiscount": "Descuento Maestro",
+    "@masterDiscount": {
+        "description": "Descuento maestro de los cleintes"
+    },
+    
+
+
+    "accountBalance": "Estado de Cuenta",
+    "@accountBalance": {
+        "description": "Titulo del estado de cuenta del cliente"
+    },
+    "issues": "Pendientes",
+    "@issues": {
+        "description": "Facturas pendientes"
+    },
+    "paidUp": "Pagadas",
+    "@paidUp": {
+        "description": "Facturas pagadas"
+    },
+    "accountTotalAmount": "Monto Total",
+    "@accountTotalAmount": {
+        "description": "Monto total de facturas en el balance"
+    },
+    "accountTotalBalance": "Saldo Total",
+    "@accountTotalBalance": {
+        "description": "Monto total de saldo en el balance"
+    },
+    "notes": "Notas",
+    "@notes": {
+        "description": "Check de las notas de credito del balance"
+    },
+    "invoices": "Facturas",
+    "@invoices": {
+        "description": "Check de las facturas de credito del balance"
+    },
+
+
+
+    "profile": "Perfil",
+    "@profile":{
+        "description": "Titulo para el perfil"
+    },
+    "usersAndTeams": "Usuarios y Equipos",
+    "@usersAndTeams":{
+        "description": "Titulo para la list tile de usuarios y equipos"
+    },
+    "account": "Cuenta",
+    "@account": {
+        "description": "List tile de cuenta"
+    },
+    "notifications": "Notificaciones",
+    "@notificacions": {
+        "description": "Titulo notificaciones"
+    },
+    "changeCurrency": "Cambiar Moneda",
+    "@changeCurrency": {
+        "description": "Titulo de cambiar moneda"
+    },
+    "help": "Ayuda",
+    "@help": {
+        "description": "Titulo ayuda"
+    },
+    "logOut": "Cerrar Sesión",
+    "@logOut": {
+        "description": "Titulo para cerrar sesion"
+    },
+    "salesAreaDesc": "Zona de ventas asignada y gerentes",
+    "@salesAreaDesc": {
+        "description": "Descripcion de list tile"
+    },
+    "usersAndTeamsDesc": "Administra tus equipos y sus integrantes",
+    "@usersAndTeamsDesc":{
+        "description": "Descripcion de list tile"
+    },
+    "accountDesc": "Correo, contraseña y ajustes de perfil",
+    "@accountDesc": {
+        "description": "Descripcion de list tile"
+    },
+    "notificationsDesc": "Notificaciones y movimientos",
+    "@notificationsDesc": {
+        "description": "Descripcion de list tile"
+    },
+    "changeCurrencyDesc": "Cambiar la moneda utilizada, los precios variaran a su taza de cambio",
+    "@changeCurrencyDesc": {
+        "description": "Descripcion de list tile"
+    },
+    "helpDesc": "Tips de uso y centro de contacto",
+    "@helpDesc": {
+        "description": "Descripcion de list tile"
+    },
+
+
+
+    "diary": "Agenda",
+    "@diary": {
+        "description": "Titulo de Agenda"
+    },
+    "visits": "Visitas",
+    "@visits": {
+        "description": "Titulo visitas"
+    },
+    "onProcess": "En Proceso",
+    "@onProcess": {
+        "description": "Pendientes del diario"
+    },
+    "completed": "Completado",
+    "@completed": {
+        "description": "Completados del diario"
+    },
+    "canceled": "Cancelado",
+    "@canceled": {
+        "description": "Cancelados del diario"
+    },
+    "commentary": "Comentario",
+    "@commentary": {
+        "description": "Comentario del diario"
+    },
+    "commentaryUnavaliable": "No hay comentario disponible",
+    "@commentaryUnavaliable": {
+        "description": "Descripcion para visitas, ordenes o facturas sin comentarios"
+    },
+    "seeClient": "Ver Cliente",
+    "@seeClient": {
+        "description": "Boton de ver cliente"
+    },
+    "visitDeleteConfirmation": "¿Quiere eliminar esta visita en proceso?",
+    "@visitDeleteConfirmation": {
+        "@description": "Confirmacion de borrar visita"
+    },
+    "goBack": "Regresar",
+    "@goBack": {
+        "description": "Boton de regresar"
+    },
+    "visitDelete": "Eliminar visita",
+    "@visitDelete": {
+        "description": "Boton de confirmacion de borrar visita"
+    },
+    "visitStatus": "Estado de la visita",
+    "@visitStatus": {
+        "description": "Pesta;a de estado de la visita"
+    },
+    "selectStatus": "Seleccione un estado",
+    "@selectStatus": {
+        "description": "Ventaana de estado de visita"
+    },
+    "orders": "Pedidos",
+    "@orders": {
+        "description": "Titulo de pedidos"
+    },
+    "home": "Inicio",
+    "@home": {
+        "description": "Titulo de Inicio"
+    },
+    "saveChanges": "Guardar cambios",
+    "@saveChanges": {
+        "description": "Boton de guardar cambios"
+    },
+    "modifiedVisit": "Visita modificada",
+    "@modifiedVisit": {
+        "description": "Anuncio de visita mofidicada"
+    },
+    "modifiedVisitError": "Le falta permisos o hubo un error al modificar la visita",
+    "@modifiedVisitError": {
+        "description": "Anuncio de error de visita moficada"
+    },
+    
+
+
+    "newOrder": "Nuevo Pedido",
+    "@newOrder": {
+        "description": "titulo de nuevo pedido"
+    },
+    "selectClient": "Selecciona un Cliente",
+    "@selectClient": {
+        "description": "Titulo selecciona cliente"
+    },
+    "searchClient": "Busca un Cliente...",
+    "@searchClient": {
+        "description": "Barra de busqueda de pedido"
+    },
+    "order": "Pedido",
+    "@order": {
+        "description": "Titulo de nuevo pedido"   
+    },
+    "orderEmtpy": "Tu pedido esta vacio",
+    "@orderEmtpy": {
+        "description": "Texto para cuando el carrito este vacio"
+    },
+    "orderEmptyDesc": "Parece que no has añadido nada a tu carrito aún",
+    "@orderEmptyDesc": {
+        "description": "Descripcion del carrito vacio"
+    },
+    "orderSubTotal": "Subtotal del pedido",
+    "@orderSubTotal": {
+        "description": "subtotal del carrito"
+    },
+    "addProducts": "Agregar productos",
+    "@addProducts": {
+        "description": "Boton de agregar productos"
+    }, 
+    "orderContinue": "Continuar",
+    "@orderContinue": {
+        "description": "Boton de continuar compra"
+    },
+    "orderTotal": "Total del pedido",
+    "@orderTotal": {
+        "description": "Total del pedido calculado"
+    },
+    "orderDeliveryAddress": "Dirección de entrega",
+    "@orderDeliveryAddress": {
+        "description": "Direccion de entrega, puede ser fiscal o de despacho"
+    },
+    "fiscal": "Fiscal",
+    "@fiscal": {
+        "description": "Direccion fiscal"
+    },
+    "dispatch": "Despacho",
+    "@dispach": {
+        "description": "Direccion de despacho"
+    },
+    "orderNumber": "Orden de la compra",
+    "@orderNumber": {
+        "description": "Numero de orden del pedido"
+    },
+
+
+
+    "noClientsAvaliable": "No hay clientes disponibles",
+    "@noClientsAvailable": {
+        "description": "Anuncio de clientes no disponibles"
+    },
+    "newVisit": "Nueva Visita",
+    "@newVisit": {
+        "description": "Titulo de nueva visita"
+    },
+    "date": "Fecha",
+    "@date": {
+        "description": "Titulo de fecha"
+    },
+    "createVisit": "Crear Visita",
+    "@createVisit": {
+        "description": "Titulo de boton de crear visita"
+    },
+    "creatingVisit": "Creando visita",
+    "seller": "Vendedor",
+    "visitCreated": "Visita Creada",
+    "createVisitError": "Le falta permisos o hubo un error al crear la visita",
+
+
+
+    "payable": "A pagar",
+    "subtotal": "Subtotal",
+    "totalToPay": "Total a pagar",
+    "tax": "IVA",
+    "seeProducts": "Ver productos",
+    "createInvoice": "¿Quiere pasar a facturas este pedido?",
+    "createInvoiceConfirmation": "Facturar",
+    "orderDelete": "¿Quiere Eliminar este pedido en proceso?",
+    "invoiced": "Facturado",
+    "options": "Opciones",
+    "seePayments": "Ver Pagos",
+    "registerPayment": "Registrar pago",
+    "noPayments": "No hay pagos registrados",
+    "invoiceNumber": "Pagamento da fatura",
+    "upToPay": "Resto a Pagar",
+    "balanceConfirmed": "Saldo confirmado",
+    "balanceLeft": "Por Conciliar",
+
+
+
+    "paymentMethod": "Metodo de Pago",
+    "amount": "Monto",
+
+
+
+    "bank": "Banco",
+    "accountNumber": "Nro de Cuenta",
+    "accountHolder": "Titular de la cuenta",
+    "currency": "Moneda",
+    "selectFile": "Selecione un archivo",
+    "gallery": "Galeria",
+
+
+
+    "transactionID": "Id de la transaccion",
+    "voucherNumber": "Nro de Voucher",
+    "referenceNumber": "Nro de Referencia"
+
+
+
+
+
+
+    
+}
+
+

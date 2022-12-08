@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Coin {
-  final String? code;
-  final int? decimals;
-  final String? name;
-  final String? symbol;
-  final double? exchangeRatio;
+  final code;
+  final decimals;
+  final name;
+  final symbol;
+  final exchangeRatio;
 
   Coin({
     this.code,
@@ -27,11 +27,19 @@ class CoinExchangeRates {
 List<Coin> coinListfromSnapshot(QuerySnapshot snapshot) {
   return snapshot.docs.map((doc) {
     return Coin(
-      code: doc.get('codigo'),
-      decimals: doc.get('decimales'),
-      name: doc.get('nombre'),
-      symbol: doc.get('simbolo'),
-      exchangeRatio: doc.get('tasaDeCambio'),
+      code:
+          doc.data().toString().contains('codigo') ? doc.get('codigo') : 'N/A',
+      decimals: doc.data().toString().contains('decimales')
+          ? doc.get('decimales')
+          : 0,
+      name:
+          doc.data().toString().contains('nombre') ? doc.get('nombre') : 'N/A',
+      symbol: doc.data().toString().contains('simbolo')
+          ? doc.get('simbolo')
+          : 'N/A',
+      exchangeRatio: doc.data().toString().contains('tasaDeCambio')
+          ? doc.get('tasaDeCambio')
+          : 0,
     );
   }).toList();
 }
@@ -42,4 +50,18 @@ List<CoinExchangeRates> coinRatesListfromSnapshot(QuerySnapshot snapshot) {
       exchangeRatio: doc.get('tasaDeCambio'),
     );
   }).toList();
+}
+
+Coin coinFromSnapshot(doc) {
+  return Coin(
+    code: doc.data().toString().contains('codigo') ? doc.get('codigo') : 'N/A',
+    decimals:
+        doc.data().toString().contains('decimales') ? doc.get('decimales') : 0,
+    name: doc.data().toString().contains('nombre') ? doc.get('nombre') : 'N/A',
+    symbol:
+        doc.data().toString().contains('simbolo') ? doc.get('simbolo') : 'N/A',
+    exchangeRatio: doc.data().toString().contains('tasaDeCambio')
+        ? doc.get('tasaDeCambio')
+        : 0,
+  );
 }

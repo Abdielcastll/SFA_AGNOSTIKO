@@ -25,7 +25,6 @@ class FilterSectionState extends State<FilterSection> {
         children: [
           GestureDetector(
             onTap: () {
-              print('redireccion a search delegate de visitas');
               // Redireccionar a search delegate de visitas
             },
             child: Padding(

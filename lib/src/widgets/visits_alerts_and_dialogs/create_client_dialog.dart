@@ -14,6 +14,7 @@ import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/loading/loading_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void showCreateClientDialog(context, uid) {
   DateTime today = DateTime.now();
@@ -61,7 +62,6 @@ void showCreateClientDialog(context, uid) {
                     (element) => zonesSummary[element.zone] == selectedValueA)
                 .toList();
             final List clientsFilteredNames = [];
-            // print('Clientes: $clientsFiltered');
             var clientDocID;
 
             if (clientsFiltered.isNotEmpty) {
@@ -82,15 +82,15 @@ void showCreateClientDialog(context, uid) {
             // print('Nombres de los clientes: $names');
 
             final clientHint = items2.isEmpty
-                ? 'No hay Clientes disponibles'
-                : 'Seleccione un cliente';
+                ? AppLocalizations.of(context)!.noClientsAvaliable
+                : AppLocalizations.of(context)!.selectClient;
 
             return AlertDialog(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
               title: Text(
-                'Nueva Visita',
+                AppLocalizations.of(context)!.newVisit,
                 style: TextStyle(
                   fontFamily: 'Poppins-regular',
                   color: myTheme.colorScheme.secondary,
@@ -102,9 +102,9 @@ void showCreateClientDialog(context, uid) {
                 child: Container(
                   height: 400,
                   width: 300,
-                  // color: Colors.amber,
                   child: isLoading == true
-                      ? LoadingWidget(message: 'Creando Visita')
+                      ? LoadingWidget(
+                          message: AppLocalizations.of(context)!.creatingVisit)
                       : SingleChildScrollView(
                           child: Column(
                             children: [
@@ -112,11 +112,12 @@ void showCreateClientDialog(context, uid) {
                                 alignment: Alignment.centerLeft,
                                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                                 child: Text(
-                                  'Fecha',
+                                  AppLocalizations.of(context)!.date,
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                     color: myTheme.colorScheme.primary,
+                                    fontFamily: 'Poppins-regular',
                                   ),
                                 ),
                               ),
@@ -178,7 +179,7 @@ void showCreateClientDialog(context, uid) {
                                 alignment: Alignment.centerLeft,
                                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                                 child: Text(
-                                  'Vendedor (Usuario actual)',
+                                  AppLocalizations.of(context)!.seller,
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
@@ -217,11 +218,12 @@ void showCreateClientDialog(context, uid) {
                                 alignment: Alignment.centerLeft,
                                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                                 child: Text(
-                                  'Zona',
+                                  AppLocalizations.of(context)!.salesArea,
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                     color: myTheme.colorScheme.primary,
+                                    fontFamily: 'Poppins-regular',
                                   ),
                                 ),
                               ),
@@ -319,12 +321,14 @@ void showCreateClientDialog(context, uid) {
                                           margin:
                                               EdgeInsets.fromLTRB(10, 5, 0, 0),
                                           child: Text(
-                                            'Cliente',
+                                            AppLocalizations.of(context)!
+                                                .clients,
                                             style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
                                               color:
                                                   myTheme.colorScheme.primary,
+                                              fontFamily: "Poppins-regular",
                                             ),
                                           ),
                                         ),
@@ -429,7 +433,7 @@ void showCreateClientDialog(context, uid) {
                                             ),
                                           ),
                                         ),
-                                        SizedBox(height: 20),
+                                        // SizedBox(height: 10),
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.end,
@@ -439,7 +443,8 @@ void showCreateClientDialog(context, uid) {
                                                 Navigator.pop(context);
                                               },
                                               child: Text(
-                                                'Regresar',
+                                                AppLocalizations.of(context)!
+                                                    .goBack,
                                                 style: TextStyle(
                                                   fontFamily: 'Poppins-regular',
                                                   color: myTheme
@@ -482,14 +487,20 @@ void showCreateClientDialog(context, uid) {
                                                               Navigator.pop(
                                                                   context);
                                                             });
-                                                            Fluttertoast.showToast(
-                                                                msg:
-                                                                    'Visita creada');
+                                                            Fluttertoast
+                                                                .showToast(
+                                                              msg: AppLocalizations
+                                                                      .of(context)!
+                                                                  .visitCreated,
+                                                            );
                                                           } else if (result !=
                                                               null) {
-                                                            Fluttertoast.showToast(
-                                                                msg:
-                                                                    'Le falta permisos o hubo un error al crear la visita');
+                                                            Fluttertoast
+                                                                .showToast(
+                                                              msg: AppLocalizations
+                                                                      .of(context)!
+                                                                  .createVisitError,
+                                                            );
                                                             Navigator.pop(
                                                                 context);
                                                           }
@@ -502,7 +513,9 @@ void showCreateClientDialog(context, uid) {
                                                             .primary,
                                                       ),
                                                       child: Text(
-                                                        'Crear Visita',
+                                                        AppLocalizations.of(
+                                                                context)!
+                                                            .createVisit,
                                                         style: TextStyle(
                                                           fontFamily:
                                                               'Poppins-regular',

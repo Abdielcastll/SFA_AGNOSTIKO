@@ -22,7 +22,6 @@ class _FilterOrdersState extends State<FilterOrders> {
         children: [
           GestureDetector(
             onTap: () {
-              print('redireccion a search delegate de pedidos');
               // Redireccionar a search delegate de pedidos
             },
             child: Padding(

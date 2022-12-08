@@ -57,6 +57,10 @@ class _CreditNoteCardState extends State<CreditNoteCard> {
             .doc(widget.creditNoteClient)
             .snapshots()
             .map(clientFromDocumentID),
+        catchError: (context, error) {
+          print(error);
+          return;
+        },
       ),
       StreamProvider<ZoneSummary?>.value(
         initialData: null,
@@ -154,7 +158,7 @@ class _CreditCardBodyState extends State<CreditCardBody> {
 
     return GestureDetector(
       onTap: () {
-        print(creditNoteStatus);
+        // print(creditNoteStatus);
         // widget.widget.creditNoteIsEliminated == false
         //     ? modalBottomSheetForCreditNotes(
         //         false,

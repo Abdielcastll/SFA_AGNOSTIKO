@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +7,7 @@ import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/visits_alerts_and_dialogs/completed_bottomsheet.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/visits_alerts_and_dialogs/onprocess_bottomsheet.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VisitCard extends StatefulWidget {
   const VisitCard({
@@ -44,6 +43,10 @@ class _VisitCardState extends State<VisitCard> {
               .doc(widget.clientReferenceId)
               .snapshots()
               .map(clientFromDocumentID),
+          catchError: (context, error) {
+            // print(error);
+            return;
+          },
         ),
         StreamProvider<ZoneSummary?>.value(
           initialData: null,
@@ -69,11 +72,12 @@ class VIsitCardBody extends StatefulWidget {
 
 class _VIsitCardBodyState extends State<VIsitCardBody> {
   identifyColor() {
-    if (widget.widget.status == 'En proceso') {
-      return Colors.amber.shade300;
-    } else if (widget.widget.status == 'Completada') {
-      return Colors.green;
-    } else if (widget.widget.status == 'Cancelada') {
+    if (widget.widget.status == AppLocalizations.of(context)!.onProcess) {
+      return Colors.amber.shade600;
+    } else if (widget.widget.status ==
+        AppLocalizations.of(context)!.completed) {
+      return Colors.green.shade600;
+    } else if (widget.widget.status == AppLocalizations.of(context)!.canceled) {
       return Colors.red;
     }
   }
@@ -100,8 +104,7 @@ class _VIsitCardBodyState extends State<VIsitCardBody> {
 
     return GestureDetector(
       onTap: () {
-        // Redireccionar a la funcion de los detalles de la visitas
-        widget.widget.status == 'En proceso'
+        widget.widget.status == AppLocalizations.of(context)!.onProcess
             ? modalBottomSheetForOnProcess(
                 context,
                 widget.widget.commentary,
@@ -144,12 +147,10 @@ class _VIsitCardBodyState extends State<VIsitCardBody> {
               );
       },
       child: Padding(
-        padding: EdgeInsets.only(top: 3, left: 16, right: 16, bottom: 0),
+        padding: const EdgeInsets.only(top: 3, left: 14, right: 14, bottom: 0),
         child: Container(
-          margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-          // padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+          margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
           width: 360.0,
-          // height: 70,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10.0),
@@ -161,71 +162,70 @@ class _VIsitCardBodyState extends State<VIsitCardBody> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(left: 14, top: 10),
-                    child: Container(
-                      width: 220,
+                    padding: const EdgeInsets.only(left: 14, top: 10),
+                    child: SizedBox(
+                      width: 200,
                       child: Text(
                         '$currentClientName',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 15,
-                          fontWeight: FontWeight.w500,
+                          fontFamily: 'Poppins-regular',
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 10, right: 14),
-                    child: Text(
-                      widget.widget.date,
-                      style: TextStyle(
-                        color: identifyColor(),
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(0, 10, 14, 0),
+                        child: Text(
+                          widget.widget.date,
+                          style: TextStyle(
+                            color: identifyColor(),
+                            fontSize: 15,
+                            fontFamily: 'Poppins-regular',
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ],
               ),
               Container(
-                margin: EdgeInsets.only(bottom: 5),
+                margin: const EdgeInsets.fromLTRB(14, 5, 14, 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10, left: 14),
-                      child: Container(
-                        // margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                        // height: 13,
-                        width: 250,
-                        child: Text(
-                          currentClientAddress,
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.grey.shade400,
-                          ),
+                    Container(
+                      width: 200,
+                      child: Text(
+                        currentClientAddress,
+                        maxLines: 3,
+                        textAlign: TextAlign.left,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.grey.shade500,
+                          fontFamily: 'Poppins-regular',
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: Container(
-                        // margin: EdgeInsets.only(bottom: 10),
-                        height: 13,
-                        width: 60,
-                        child: Text(
-                          widget.widget.status,
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w400,
-                            color: identifyColor(),
-                          ),
+                    Container(
+                      child: Text(
+                        widget.widget.status,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w400,
+                          color: identifyColor(),
+                          fontFamily: 'Poppins-regular',
                         ),
                       ),
                     ),

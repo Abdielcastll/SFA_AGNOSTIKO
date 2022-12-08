@@ -1,11 +1,10 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void modalBottomSheetForOnProcess(
   context,
@@ -28,8 +27,8 @@ void modalBottomSheetForOnProcess(
   currentClientIdType,
 ) {
   final List<String> items = [
-    'Completada',
-    'Cancelada',
+    AppLocalizations.of(context)!.completed,
+    AppLocalizations.of(context)!.canceled,
   ];
 
   String? selectedValue;
@@ -41,7 +40,7 @@ void modalBottomSheetForOnProcess(
     barrierColor: myTheme.colorScheme.secondary.withOpacity(0.5),
     // isScrollControlled: true,
     context: context,
-    shape: RoundedRectangleBorder(
+    shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(
         top: Radius.circular(20),
       ),
@@ -52,24 +51,25 @@ void modalBottomSheetForOnProcess(
         builder: (context, setState) {
           return SafeArea(
             child: Container(
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
               child: Column(
                 children: [
                   Container(
                     alignment: Alignment.centerLeft,
-                    margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                     child: Text(
-                      'Comentario',
+                      AppLocalizations.of(context)!.commentary,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: myTheme.colorScheme.primary,
+                        color: myTheme.colorScheme.onPrimaryContainer,
+                        fontFamily: 'Poppins-regular',
                       ),
                     ),
                   ),
                   Container(
                     alignment: Alignment.centerLeft,
-                    margin: EdgeInsets.fromLTRB(10, 30, 0, 0),
+                    margin: const EdgeInsets.fromLTRB(10, 30, 0, 0),
                     child: TextField(
                       style: TextStyle(
                         fontSize: 14,
@@ -80,7 +80,7 @@ void modalBottomSheetForOnProcess(
                       maxLength: 200,
                       textCapitalization: TextCapitalization.characters,
                       decoration: InputDecoration(
-                        contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
+                        contentPadding: const EdgeInsets.fromLTRB(14, 0, 0, 0),
                         hintText: commentary.toString(),
                         hintStyle: TextStyle(
                           fontSize: 14,
@@ -101,30 +101,32 @@ void modalBottomSheetForOnProcess(
                   ),
                   Container(
                     alignment: Alignment.centerLeft,
-                    margin: EdgeInsets.fromLTRB(10, 0, 0, 15),
+                    margin: const EdgeInsets.fromLTRB(10, 0, 0, 15),
                     child: Text(
-                      'Estato de la visita',
+                      AppLocalizations.of(context)!.visitStatus,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: myTheme.colorScheme.primary,
+                        color: myTheme.colorScheme.onPrimaryContainer,
+                        fontFamily: 'Poppins-regular',
                       ),
                     ),
                   ),
                   DropdownButtonHideUnderline(
                     child: DropdownButton2(
                       isExpanded: true,
-                      // ignore: prefer_const_literals_to_create_immutables
                       hint: Row(
                         children: [
                           Expanded(
                             child: Text(
-                              selectedValue ?? 'Seleccione un estado',
+                              selectedValue ??
+                                  AppLocalizations.of(context)!.selectStatus,
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
-                                color: myTheme.colorScheme.primary
-                                    .withOpacity(0.7),
+                                color: myTheme.colorScheme.onPrimaryContainer
+                                    .withOpacity(0.5),
+                                fontFamily: 'Poppins-regular',
                               ),
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -150,7 +152,6 @@ void modalBottomSheetForOnProcess(
                         setState(() {
                           selectedValue = value as String;
                         });
-                        // Mover la funcion en la base de datos para cambiar la lista
                       },
                       icon: const Icon(
                         Icons.arrow_forward_ios_outlined,
@@ -174,7 +175,7 @@ void modalBottomSheetForOnProcess(
                       itemPadding: const EdgeInsets.only(left: 14, right: 14),
                       dropdownMaxHeight: 200,
                       dropdownWidth: 200,
-                      dropdownPadding: null,
+                      dropdownPadding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                       dropdownDecoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         color: Colors.white,
@@ -183,10 +184,10 @@ void modalBottomSheetForOnProcess(
                       scrollbarRadius: const Radius.circular(10),
                       scrollbarThickness: 6,
                       scrollbarAlwaysShow: true,
-                      offset: const Offset(-20, 0),
+                      offset: const Offset(0, 0),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -207,220 +208,15 @@ void modalBottomSheetForOnProcess(
                                         myTheme.colorScheme.primary,
                                   ),
                                   child: Text(
-                                    'Ver Cliente',
-                                    style: TextStyle(
+                                    AppLocalizations.of(context)!.seeClient,
+                                    style: const TextStyle(
                                       fontFamily: 'Poppins-regular',
                                       color: Colors.white,
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  // onPressed: () {
-                                  //   showDialog(
-                                  //     context: context,
-                                  //     builder: (BuildContext context) {
-                                  //       return AlertDialog(
-                                  //         shape: RoundedRectangleBorder(
-                                  //           borderRadius:
-                                  //               BorderRadius.circular(20),
-                                  //         ),
-                                  //         title: Text(
-                                  //           'Informacion',
-                                  //           style: TextStyle(
-                                  //             fontFamily: 'Poppins-regular',
-                                  //             color:
-                                  //                 myTheme.colorScheme.secondary,
-                                  //             fontSize: 14,
-                                  //             fontWeight: FontWeight.bold,
-                                  //           ),
-                                  //         ),
-                                  //         content: SingleChildScrollView(
-                                  //           physics: BouncingScrollPhysics(),
-                                  //           child: Column(
-                                  //             mainAxisAlignment:
-                                  //                 MainAxisAlignment.center,
-                                  //             children: [
-                                  //               Text(
-                                  //                 'Nombre/Razon Social',
-                                  //                 style: TextStyle(
-                                  //                   fontFamily:
-                                  //                       'Poppins-regular',
-                                  //                   color: myTheme
-                                  //                       .colorScheme.primary,
-                                  //                   fontSize: 12,
-                                  //                 ),
-                                  //               ),
-                                  //               TextBoxWidget(
-                                  //                 message: currentClientName,
-                                  //               ),
-                                  //               Text(
-                                  //                 'Documento de Identidad',
-                                  //                 style: TextStyle(
-                                  //                   fontFamily:
-                                  //                       'Poppins-regular',
-                                  //                   color: myTheme
-                                  //                       .colorScheme.primary,
-                                  //                   fontSize: 12,
-                                  //                 ),
-                                  //               ),
-                                  //               Row(
-                                  //                 mainAxisAlignment:
-                                  //                     MainAxisAlignment.center,
-                                  //                 children: [
-                                  //                   TextBoxWidget(
-                                  //                     message: idType,
-                                  //                   ),
-                                  //                   TextBoxWidget(
-                                  //                     message: id,
-                                  //                   ),
-                                  //                 ],
-                                  //               ),
-                                  //               Row(
-                                  //                 mainAxisAlignment:
-                                  //                     MainAxisAlignment.center,
-                                  //                 children: [
-                                  //                   Checkbox(
-                                  //                       value:
-                                  //                           specialContributor,
-                                  //                       onChanged: null),
-                                  //                   // SizedBox(width: 10),
-                                  //                   Text(
-                                  //                     'Contribuidor Especial',
-                                  //                     style: TextStyle(
-                                  //                       fontFamily:
-                                  //                           'Poppins-regular',
-                                  //                       color: myTheme
-                                  //                           .colorScheme
-                                  //                           .primary,
-                                  //                       fontSize: 12,
-                                  //                     ),
-                                  //                   ),
-                                  //                 ],
-                                  //               ),
-                                  //               Text(
-                                  //                 'Telefono',
-                                  //                 style: TextStyle(
-                                  //                   fontFamily:
-                                  //                       'Poppins-regular',
-                                  //                   color: myTheme
-                                  //                       .colorScheme.primary,
-                                  //                   fontSize: 12,
-                                  //                 ),
-                                  //               ),
-                                  //               TextBoxWidget(
-                                  //                 message: currentClientPhone,
-                                  //               ),
-                                  //               Text(
-                                  //                 'Correo',
-                                  //                 style: TextStyle(
-                                  //                   fontFamily:
-                                  //                       'Poppins-regular',
-                                  //                   color: myTheme
-                                  //                       .colorScheme.primary,
-                                  //                   fontSize: 12,
-                                  //                 ),
-                                  //               ),
-                                  //               TextBoxWidget(
-                                  //                 message: currentClientEmail,
-                                  //               ),
-                                  //               Text(
-                                  //                 'Direccion Fiscal',
-                                  //                 style: TextStyle(
-                                  //                   fontFamily:
-                                  //                       'Poppins-regular',
-                                  //                   color: myTheme
-                                  //                       .colorScheme.primary,
-                                  //                   fontSize: 12,
-                                  //                 ),
-                                  //               ),
-                                  //               TextBoxWidget(
-                                  //                 message: currentClientAddress,
-                                  //               ),
-                                  //               Text(
-                                  //                 'Direccion de despacho',
-                                  //                 style: TextStyle(
-                                  //                   fontFamily:
-                                  //                       'Poppins-regular',
-                                  //                   color: myTheme
-                                  //                       .colorScheme.primary,
-                                  //                   fontSize: 12,
-                                  //                 ),
-                                  //               ),
-                                  //               TextBoxWidget(
-                                  //                 message:
-                                  //                     currentClientDispatchAdress,
-                                  //               ),
-                                  //               Text(
-                                  //                 'Zona / Lista de Prcios',
-                                  //                 style: TextStyle(
-                                  //                   fontFamily:
-                                  //                       'Poppins-regular',
-                                  //                   color: myTheme
-                                  //                       .colorScheme.primary,
-                                  //                   fontSize: 12,
-                                  //                 ),
-                                  //               ),
-                                  //               Row(
-                                  //                 mainAxisAlignment:
-                                  //                     MainAxisAlignment.center,
-                                  //                 children: [
-                                  //                   TextBoxWidget(
-                                  //                     message:
-                                  //                         currentClientZones,
-                                  //                   ),
-                                  //                   TextBoxWidget(
-                                  //                     message:
-                                  //                         currentClientPrices,
-                                  //                   ),
-                                  //                 ],
-                                  //               ),
-                                  //               Text(
-                                  //                 'Descuento Maestro (%)',
-                                  //                 style: TextStyle(
-                                  //                   fontFamily:
-                                  //                       'Poppins-regular',
-                                  //                   color: myTheme
-                                  //                       .colorScheme.primary,
-                                  //                   fontSize: 12,
-                                  //                 ),
-                                  //               ),
-                                  //               TextBoxWidget(
-                                  //                 message:
-                                  //                     currentDiscountMaster,
-                                  //               ),
-                                  //               Row(
-                                  //                 mainAxisAlignment:
-                                  //                     MainAxisAlignment.end,
-                                  //                 children: [
-                                  //                   TextButton(
-                                  //                     onPressed: () {
-                                  //                       Navigator.pop(context);
-                                  //                     },
-                                  //                     child: Text(
-                                  //                       'Regresar',
-                                  //                       style: TextStyle(
-                                  //                         fontFamily:
-                                  //                             'Poppins-regular',
-                                  //                         color: myTheme
-                                  //                             .colorScheme
-                                  //                             .primary,
-                                  //                         fontSize: 14,
-                                  //                         fontWeight:
-                                  //                             FontWeight.bold,
-                                  //                       ),
-                                  //                     ),
-                                  //                   ),
-                                  //                 ],
-                                  //               ),
-                                  //             ],
-                                  //           ),
-                                  //         ),
-                                  //       );
-                                  //     },
-                                  //   );
-                                  // },
                                   onPressed: () {
-                                    print(clientReferenceId);
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -440,13 +236,15 @@ void modalBottomSheetForOnProcess(
                                           typeId: currentClientIdType,
                                           clientDocumentReferenceID:
                                               clientReferenceId,
+                                          dispatchAddress:
+                                              currentClientDispatchAdress,
                                         ),
                                       ),
                                     );
                                   },
                                 ),
                               ),
-                              SizedBox(width: 10),
+                              const SizedBox(width: 10),
                               Container(
                                 width: 150,
                                 height: 40,
@@ -459,8 +257,8 @@ void modalBottomSheetForOnProcess(
                                         myTheme.colorScheme.secondary,
                                   ),
                                   child: Text(
-                                    'Guardar Cambios',
-                                    style: TextStyle(
+                                    AppLocalizations.of(context)!.saveChanges,
+                                    style: const TextStyle(
                                       fontFamily: 'Poppins-regular',
                                       color: Colors.white,
                                       fontSize: 14,
@@ -468,21 +266,21 @@ void modalBottomSheetForOnProcess(
                                     ),
                                   ),
                                   onPressed: () async {
-                                    print('Actualizar estado');
-
                                     dynamic result = updateVisitData(
                                       visitDocumentId,
                                       selectedValue,
                                       userUID,
                                       commentaryValue,
+                                      context,
                                     );
                                     if (result == null) {
                                       Fluttertoast.showToast(
-                                          msg: 'Visita Modificada');
+                                          msg: AppLocalizations.of(context)!
+                                              .modifiedVisit);
                                     } else if (result != null) {
                                       Fluttertoast.showToast(
-                                          msg:
-                                              'Le falta permisos o hubo un error al Modificar la visita');
+                                          msg: AppLocalizations.of(context)!
+                                              .modifiedVisitError);
                                       Navigator.pop(context);
                                     }
                                   },
@@ -490,14 +288,15 @@ void modalBottomSheetForOnProcess(
                               ),
                             ],
                           ),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Container(
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16),
-                                    color: Colors.red),
+                                  borderRadius: BorderRadius.circular(16),
+                                  color: Colors.red,
+                                ),
                                 child: IconButton(
                                   onPressed: () {
                                     showDialog(
@@ -509,7 +308,8 @@ void modalBottomSheetForOnProcess(
                                                   BorderRadius.circular(20),
                                             ),
                                             title: Text(
-                                              '¿Quiere Eliminar esta Visita en proceso?',
+                                              AppLocalizations.of(context)!
+                                                  .visitDeleteConfirmation,
                                               style: TextStyle(
                                                 fontFamily: 'Poppins-regular',
                                                 color: myTheme
@@ -527,7 +327,9 @@ void modalBottomSheetForOnProcess(
                                                     Navigator.pop(context);
                                                   },
                                                   child: Text(
-                                                    'Regresar',
+                                                    AppLocalizations.of(
+                                                            context)!
+                                                        .goBack,
                                                     style: TextStyle(
                                                       fontFamily:
                                                           'Poppins-regular',
@@ -563,8 +365,10 @@ void modalBottomSheetForOnProcess(
                                                           .colorScheme.primary,
                                                     ),
                                                     child: Text(
-                                                      'Eliminar visita',
-                                                      style: TextStyle(
+                                                      AppLocalizations.of(
+                                                              context)!
+                                                          .visitDelete,
+                                                      style: const TextStyle(
                                                         fontFamily:
                                                             'Poppins-regular',
                                                         color: Colors.white,
@@ -583,11 +387,12 @@ void modalBottomSheetForOnProcess(
                                   style: TextButton.styleFrom(
                                     foregroundColor: Colors.red,
                                   ),
-                                  icon: Icon(Icons.delete_forever_outlined,
+                                  icon: const Icon(
+                                      Icons.delete_forever_outlined,
                                       color: Colors.white),
                                 ),
                               ),
-                              SizedBox(width: 20),
+                              const SizedBox(width: 20),
                               Container(
                                 width: 150,
                                 height: 40,
@@ -604,7 +409,7 @@ void modalBottomSheetForOnProcess(
                                         myTheme.colorScheme.primary,
                                   ),
                                   child: Text(
-                                    'Regresar',
+                                    AppLocalizations.of(context)!.goBack,
                                     style: TextStyle(
                                       fontFamily: 'Poppins-regular',
                                       color: myTheme.colorScheme.primary,
@@ -641,11 +446,9 @@ class TextBoxWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // width: 350,
-      // height: 40,
       alignment: Alignment.centerLeft,
-      margin: EdgeInsets.fromLTRB(10, 15, 0, 10),
-      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+      margin: const EdgeInsets.fromLTRB(10, 15, 0, 10),
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         color: Colors.white,
@@ -655,8 +458,6 @@ class TextBoxWidget extends StatelessWidget {
       ),
       child: Text(
         '$message',
-        // maxLines: 3,
-        // overflow: TextOverflow.ellipsis,
         style: TextStyle(
           fontFamily: 'Poppins-regular',
           fontSize: 14,

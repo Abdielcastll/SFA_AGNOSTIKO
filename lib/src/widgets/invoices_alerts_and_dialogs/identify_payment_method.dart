@@ -14,6 +14,7 @@ import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 getFromGallery(context) async {
   XFile? pickedFile =
@@ -43,6 +44,7 @@ identifyPaymentMethod(
   paidAmount,
   totalOfTheOrder,
   date,
+  context,
 ) {
   File? imageFile;
   String accountHolder = '';
@@ -77,46 +79,13 @@ identifyPaymentMethod(
   ];
   final currentCoin = sharedPreferences!.getString('currentCoin');
   print('Metodo: $selectedValueA');
-  // print(paidAmount);
-
-  // Future<List<String>> getBanks() async {
-  //   List<String> bank = [];
-  //   await FirebaseFirestore.instance
-  //       .collection('bancos')
-  //       .where('internacional', isEqualTo: false)
-  //       .get()
-  //       .then((document) {
-  //     itemsBank.clear();
-  //     document.docs.forEach((element) {
-  //       bank.add(element.get('nombre').toString());
-  //     });
-  //   });
-  //   print('Bancos Nacionales: $bank');
-  //   return bank;
-  // }
-
-  // Future<List<String>> getInterBanks() async {
-  //   List<String> bankInter = [];
-  //   await FirebaseFirestore.instance
-  //       .collection('bancos')
-  //       .where('internacional', isEqualTo: true)
-  //       .get()
-  //       .then((document) {
-  //     itemsBankInter.clear();
-  //     document.docs.forEach((element) {
-  //       bankInter.add(element.get('nombre').toString());
-  //     });
-  //   });
-  //   print('Bancos Internacionales: $bankInter');
-  //   return bankInter;
-  // }
 
   if (selectedValueA == 'Cheque') {
     return StatefulBuilder(
       builder: (context, setState) => Column(
         children: [
           Text(
-            'Banco *',
+            '${AppLocalizations.of(context)!.bank} *',
             style: TextStyle(
               fontFamily: 'Poppins-regular',
               color: myTheme.colorScheme.secondary,
@@ -196,12 +165,12 @@ identifyPaymentMethod(
                 scrollbarRadius: const Radius.circular(10),
                 scrollbarThickness: 6,
                 scrollbarAlwaysShow: true,
-                offset: const Offset(-20, 0),
+                offset: const Offset(0, 0),
               ),
             ),
           ),
           Text(
-            'Nro de Cuenta *',
+            '${AppLocalizations.of(context)!.accountNumber} *',
             style: TextStyle(
               fontFamily: 'Poppins-regular',
               color: myTheme.colorScheme.secondary,
@@ -211,7 +180,6 @@ identifyPaymentMethod(
           Container(
             margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
             height: 50,
-            // width: 200,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
@@ -262,7 +230,7 @@ identifyPaymentMethod(
             ),
           ),
           Text(
-            'Titular de la cuenta *',
+            '${AppLocalizations.of(context)!.accountHolder}*',
             style: TextStyle(
               fontFamily: 'Poppins-regular',
               color: myTheme.colorScheme.secondary,
@@ -322,7 +290,7 @@ identifyPaymentMethod(
             ),
           ),
           Text(
-            'Moneda *',
+            '${AppLocalizations.of(context)!.currency} *',
             style: TextStyle(
               fontFamily: 'Poppins-regular',
               color: myTheme.colorScheme.secondary,
@@ -409,7 +377,7 @@ identifyPaymentMethod(
           Column(
             children: [
               Text(
-                'Seleccione un archivo',
+                AppLocalizations.of(context)!.selectFile,
                 style: TextStyle(
                   fontFamily: 'Poppins-regular',
                   color: Colors.grey.shade400,
@@ -448,7 +416,7 @@ identifyPaymentMethod(
                       ),
                     ),
                     Text(
-                      'Galeria',
+                      AppLocalizations.of(context)!.gallery,
                       style: TextStyle(
                         color: myTheme.colorScheme.primary,
                         fontFamily: 'Poppins-regular',
@@ -487,7 +455,7 @@ identifyPaymentMethod(
                         setState(() => imageFile = null);
                       },
                       child: Text(
-                        'Regresar',
+                        AppLocalizations.of(context)!.goBack,
                         style: TextStyle(
                           fontFamily: 'Poppins-regular',
                           color: myTheme.colorScheme.primary,
@@ -505,8 +473,6 @@ identifyPaymentMethod(
                       child: TextButton(
                         onPressed: () async {
                           // Crear en DB una visita
-                          // TODO: Temporalmente regresara a antes
-
                           if (selectedCoin != null) {
                             if (paidAmount != null ||
                                 paidAmount != null ||
@@ -528,7 +494,7 @@ identifyPaymentMethod(
                                     date,
                                   );
                                   Fluttertoast.showToast(
-                                      msg: 'Testeo de crear pago completado');
+                                      msg: 'Pago registrado');
                                   Navigator.pop(context);
                                   Navigator.pop(context);
                                 } else {
@@ -547,15 +513,12 @@ identifyPaymentMethod(
                             Fluttertoast.showToast(
                                 msg: 'Complete los datos porfavor');
                           }
-
-                          // print(itemsBank);
-                          // print(itemsBankInter);
                         },
                         style: TextButton.styleFrom(
                           foregroundColor: myTheme.colorScheme.primary,
                         ),
                         child: Text(
-                          'Aceptar',
+                          AppLocalizations.of(context)!.orderContinue,
                           style: TextStyle(
                             fontFamily: 'Poppins-regular',
                             color: Colors.white,
@@ -578,7 +541,7 @@ identifyPaymentMethod(
       return Column(
         children: [
           Text(
-            'Id de la transaccion *',
+            '${AppLocalizations.of(context)!.transactionID} *',
             style: TextStyle(
               fontFamily: 'Poppins-regular',
               color: myTheme.colorScheme.secondary,
@@ -642,7 +605,7 @@ identifyPaymentMethod(
           Column(
             children: [
               Text(
-                'Seleccione un archivo',
+                AppLocalizations.of(context)!.selectFile,
                 style: TextStyle(
                   fontFamily: 'Poppins-regular',
                   color: Colors.grey.shade400,
@@ -681,7 +644,7 @@ identifyPaymentMethod(
                       ),
                     ),
                     Text(
-                      'Galeria',
+                      AppLocalizations.of(context)!.gallery,
                       style: TextStyle(
                         color: myTheme.colorScheme.primary,
                         fontFamily: 'Poppins-regular',
@@ -720,7 +683,7 @@ identifyPaymentMethod(
                         setState(() => imageFile = null);
                       },
                       child: Text(
-                        'Regresar',
+                        AppLocalizations.of(context)!.goBack,
                         style: TextStyle(
                           fontFamily: 'Poppins-regular',
                           color: myTheme.colorScheme.primary,
@@ -763,7 +726,7 @@ identifyPaymentMethod(
                           foregroundColor: myTheme.colorScheme.primary,
                         ),
                         child: Text(
-                          'Aceptar',
+                          AppLocalizations.of(context)!.orderContinue,
                           style: TextStyle(
                             fontFamily: 'Poppins-regular',
                             color: Colors.white,
@@ -786,7 +749,7 @@ identifyPaymentMethod(
       builder: (context, setState) => Column(
         children: [
           Text(
-            'Banco *',
+            '${AppLocalizations.of(context)!.bank} *',
             style: TextStyle(
               fontFamily: 'Poppins-regular',
               color: myTheme.colorScheme.secondary,
@@ -871,7 +834,7 @@ identifyPaymentMethod(
             ),
           ),
           Text(
-            'Nro de Voucher *',
+            '${AppLocalizations.of(context)!.voucherNumber} *',
             style: TextStyle(
               fontFamily: 'Poppins-regular',
               color: myTheme.colorScheme.secondary,
@@ -933,7 +896,7 @@ identifyPaymentMethod(
             ),
           ),
           Text(
-            'Nro de Cuenta *',
+            '${AppLocalizations.of(context)!.accountNumber} *',
             style: TextStyle(
               fontFamily: 'Poppins-regular',
               color: myTheme.colorScheme.secondary,
@@ -995,7 +958,7 @@ identifyPaymentMethod(
             ),
           ),
           Text(
-            'Moneda *',
+            '${AppLocalizations.of(context)!.currency} *',
             style: TextStyle(
               fontFamily: 'Poppins-regular',
               color: myTheme.colorScheme.secondary,
@@ -1082,7 +1045,7 @@ identifyPaymentMethod(
           Column(
             children: [
               Text(
-                'Seleccione un archivo',
+                AppLocalizations.of(context)!.selectFile,
                 style: TextStyle(
                   fontFamily: 'Poppins-regular',
                   color: Colors.grey.shade400,
@@ -1121,7 +1084,7 @@ identifyPaymentMethod(
                       ),
                     ),
                     Text(
-                      'Galeria',
+                      AppLocalizations.of(context)!.gallery,
                       style: TextStyle(
                         color: myTheme.colorScheme.primary,
                         fontFamily: 'Poppins-regular',
@@ -1160,7 +1123,7 @@ identifyPaymentMethod(
                         setState(() => imageFile = null);
                       },
                       child: Text(
-                        'Regresar',
+                        AppLocalizations.of(context)!.goBack,
                         style: TextStyle(
                           fontFamily: 'Poppins-regular',
                           color: myTheme.colorScheme.primary,
@@ -1226,7 +1189,7 @@ identifyPaymentMethod(
                           foregroundColor: myTheme.colorScheme.primary,
                         ),
                         child: Text(
-                          'Aceptar',
+                          AppLocalizations.of(context)!.orderContinue,
                           style: TextStyle(
                             fontFamily: 'Poppins-regular',
                             color: Colors.white,
@@ -1250,7 +1213,7 @@ identifyPaymentMethod(
       builder: (context, setState) => Column(
         children: [
           Text(
-            'Moneda *',
+            '${AppLocalizations.of(context)!.currency} *',
             style: TextStyle(
               fontFamily: 'Poppins-regular',
               color: myTheme.colorScheme.secondary,
@@ -1349,7 +1312,7 @@ identifyPaymentMethod(
           Column(
             children: [
               Text(
-                'Seleccione un archivo',
+                AppLocalizations.of(context)!.selectFile,
                 style: TextStyle(
                   fontFamily: 'Poppins-regular',
                   color: Colors.grey.shade400,
@@ -1388,7 +1351,7 @@ identifyPaymentMethod(
                       ),
                     ),
                     Text(
-                      'Galeria',
+                      AppLocalizations.of(context)!.gallery,
                       style: TextStyle(
                         color: myTheme.colorScheme.primary,
                         fontFamily: 'Poppins-regular',
@@ -1427,7 +1390,7 @@ identifyPaymentMethod(
                         setState(() => imageFile = null);
                       },
                       child: Text(
-                        'Regresar',
+                        AppLocalizations.of(context)!.goBack,
                         style: TextStyle(
                           fontFamily: 'Poppins-regular',
                           color: myTheme.colorScheme.primary,
@@ -1468,7 +1431,7 @@ identifyPaymentMethod(
                           foregroundColor: myTheme.colorScheme.primary,
                         ),
                         child: Text(
-                          'Aceptar',
+                          AppLocalizations.of(context)!.orderContinue,
                           style: TextStyle(
                             fontFamily: 'Poppins-regular',
                             color: Colors.white,
@@ -1492,7 +1455,7 @@ identifyPaymentMethod(
       builder: (context, setState) => Column(
         children: [
           Text(
-            'Banco *',
+            '${AppLocalizations.of(context)!.bank} *',
             style: TextStyle(
               fontFamily: 'Poppins-regular',
               color: myTheme.colorScheme.secondary,
@@ -1659,7 +1622,7 @@ identifyPaymentMethod(
                   ),
                 ),
           Text(
-            'Nro de Referencia *',
+            '${AppLocalizations.of(context)!.referenceNumber} *',
             style: TextStyle(
               fontFamily: 'Poppins-regular',
               color: myTheme.colorScheme.secondary,
@@ -1721,7 +1684,7 @@ identifyPaymentMethod(
             ),
           ),
           Text(
-            'Moneda *',
+            '${AppLocalizations.of(context)!.currency} *',
             style: TextStyle(
               fontFamily: 'Poppins-regular',
               color: myTheme.colorScheme.secondary,
@@ -1808,7 +1771,7 @@ identifyPaymentMethod(
           Column(
             children: [
               Text(
-                'Seleccione un archivo',
+                '${AppLocalizations.of(context)!.selectFile}',
                 style: TextStyle(
                   fontFamily: 'Poppins-regular',
                   color: Colors.grey.shade400,
@@ -1847,7 +1810,7 @@ identifyPaymentMethod(
                       ),
                     ),
                     Text(
-                      'Galeria',
+                      AppLocalizations.of(context)!.gallery,
                       style: TextStyle(
                         color: myTheme.colorScheme.primary,
                         fontFamily: 'Poppins-regular',
@@ -1886,7 +1849,7 @@ identifyPaymentMethod(
                         setState(() => imageFile = null);
                       },
                       child: Text(
-                        'Regresar',
+                        AppLocalizations.of(context)!.goBack,
                         style: TextStyle(
                           fontFamily: 'Poppins-regular',
                           color: myTheme.colorScheme.primary,
@@ -1992,7 +1955,7 @@ identifyPaymentMethod(
                           foregroundColor: myTheme.colorScheme.primary,
                         ),
                         child: Text(
-                          'Aceptar',
+                          AppLocalizations.of(context)!.orderContinue,
                           style: TextStyle(
                             fontFamily: 'Poppins-regular',
                             color: Colors.white,
@@ -2011,253 +1974,4 @@ identifyPaymentMethod(
       ),
     );
   }
-
-  // StatefulBuilder(builder: (context, setState) {
-  //   return Column(
-  //     children: [
-  //       Text(
-  //         'Seleccione un archivo',
-  //         style: TextStyle(
-  //           fontFamily: 'Poppins-regular',
-  //           color: Colors.grey.shade400,
-  //           fontSize: 14,
-  //         ),
-  //       ),
-  //       InkWell(
-  //         onTap: () async {
-  //           var pickedFile = await getFromGallery(context);
-  //           if (pickedFile != null) {
-  //             print('Imagen seleccionada');
-  //             var croppedImage = await cropImage(pickedFile.path, imageFile);
-  //             if (croppedImage != null) {
-  //               print('Imagen recortada');
-  //               setState(() {
-  //                 imageFile = File(croppedImage.path);
-  //               });
-  //             } else {
-  //               print('Error croppeando');
-  //             }
-  //           } else {
-  //             print('error seleccionando');
-  //             return;
-  //           }
-  //         },
-  //         child: Row(
-  //           // ignore: prefer_const_literals_to_create_immutables
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: [
-  //             Padding(
-  //               padding: EdgeInsets.all(4.0),
-  //               child: Icon(
-  //                 Icons.camera,
-  //                 color: myTheme.colorScheme.secondary,
-  //               ),
-  //             ),
-  //             Text(
-  //               'Galeria',
-  //               style: TextStyle(
-  //                 color: myTheme.colorScheme.primary,
-  //                 fontFamily: 'Poppins-regular',
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //       imageFile == null
-  //           ? Container()
-  //           : Container(
-  //               height: 300,
-  //               width: 300,
-  //               decoration: BoxDecoration(
-  //                 border: Border.all(
-  //                   color: myTheme.colorScheme.primary,
-  //                 ),
-  //                 borderRadius: BorderRadius.circular(10),
-  //               ),
-  //               child: Image.file(
-  //                 imageFile!,
-  //                 height: 300,
-  //                 width: 300,
-  //               ),
-  //             ),
-  //       Container(
-  //         alignment: Alignment.bottomCenter,
-  //         margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-  //         child: Row(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           crossAxisAlignment: CrossAxisAlignment.end,
-  //           children: [
-  //             TextButton(
-  //               onPressed: () {
-  //                 Navigator.pop(context);
-  //                 setState(() => imageFile = null);
-  //               },
-  //               child: Text(
-  //                 'Regresar',
-  //                 style: TextStyle(
-  //                   fontFamily: 'Poppins-regular',
-  //                   color: myTheme.colorScheme.primary,
-  //                   fontSize: 14,
-  //                   fontWeight: FontWeight.bold,
-  //                 ),
-  //               ),
-  //             ),
-  //             Container(
-  //               width: 100,
-  //               height: 40,
-  //               decoration: BoxDecoration(
-  //                   borderRadius: BorderRadius.circular(16),
-  //                   color: myTheme.colorScheme.primary),
-  //               child: TextButton(
-  //                 onPressed: () {
-  //                   // Crear en DB una visita
-  //                   // TODO: Temporalmente regresara a antes
-  //                   Fluttertoast.showToast(
-  //                       msg: 'Testeo de crear pago completado');
-  //                   print(itemsBank);
-  //                   print(itemsBankInter);
-  //                 },
-  //                 style: TextButton.styleFrom(
-  //                   foregroundColor: myTheme.colorScheme.primary,
-  //                 ),
-  //                 child: Text(
-  //                   'Aceptar',
-  //                   style: TextStyle(
-  //                     fontFamily: 'Poppins-regular',
-  //                     color: Colors.white,
-  //                     fontSize: 14,
-  //                     fontWeight: FontWeight.bold,
-  //                   ),
-  //                 ),
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //       Column(
-  //     children: [
-  //       Text(
-  //         'Seleccione un archivo',
-  //         style: TextStyle(
-  //           fontFamily: 'Poppins-regular',
-  //           color: Colors.grey.shade400,
-  //           fontSize: 14,
-  //         ),
-  //       ),
-  //       InkWell(
-  //         onTap: () async {
-  //           var pickedFile = await getFromGallery(context);
-  //           if (pickedFile != null) {
-  //             print('Imagen seleccionada');
-  //             var croppedImage = await cropImage(pickedFile.path, imageFile);
-  //             if (croppedImage != null) {
-  //               print('Imagen recortada');
-  //               setState(() {
-  //                 imageFile = File(croppedImage.path);
-  //               });
-  //             } else {
-  //               print('Error croppeando');
-  //             }
-  //           } else {
-  //             print('error seleccionando');
-  //             return;
-  //           }
-  //         },
-  //         child: Row(
-  //           // ignore: prefer_const_literals_to_create_immutables
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: [
-  //             Padding(
-  //               padding: EdgeInsets.all(4.0),
-  //               child: Icon(
-  //                 Icons.camera,
-  //                 color: myTheme.colorScheme.secondary,
-  //               ),
-  //             ),
-  //             Text(
-  //               'Galeria',
-  //               style: TextStyle(
-  //                 color: myTheme.colorScheme.primary,
-  //                 fontFamily: 'Poppins-regular',
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //       imageFile == null
-  //           ? Container()
-  //           : Container(
-  //               height: 300,
-  //               width: 300,
-  //               decoration: BoxDecoration(
-  //                 border: Border.all(
-  //                   color: myTheme.colorScheme.primary,
-  //                 ),
-  //                 borderRadius: BorderRadius.circular(10),
-  //               ),
-  //               child: Image.file(
-  //                 imageFile!,
-  //                 height: 300,
-  //                 width: 300,
-  //               ),
-  //             ),
-  //       Container(
-  //         alignment: Alignment.bottomCenter,
-  //         margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-  //         child: Row(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           crossAxisAlignment: CrossAxisAlignment.end,
-  //           children: [
-  //             TextButton(
-  //               onPressed: () {
-  //                 Navigator.pop(context);
-  //                 setState(() => imageFile = null);
-  //               },
-  //               child: Text(
-  //                 'Regresar',
-  //                 style: TextStyle(
-  //                   fontFamily: 'Poppins-regular',
-  //                   color: myTheme.colorScheme.primary,
-  //                   fontSize: 14,
-  //                   fontWeight: FontWeight.bold,
-  //                 ),
-  //               ),
-  //             ),
-  //             Container(
-  //               width: 100,
-  //               height: 40,
-  //               decoration: BoxDecoration(
-  //                   borderRadius: BorderRadius.circular(16),
-  //                   color: myTheme.colorScheme.primary),
-  //               child: TextButton(
-  //                 onPressed: () {
-  //                   // Crear en DB una visita
-  //                   // TODO: Temporalmente regresara a antes
-  //                   Fluttertoast.showToast(
-  //                       msg: 'Testeo de crear pago completado');
-  //                   print(itemsBank);
-  //                   print(itemsBankInter);
-  //                 },
-  //                 style: TextButton.styleFrom(
-  //                   foregroundColor: myTheme.colorScheme.primary,
-  //                 ),
-  //                 child: Text(
-  //                   'Aceptar',
-  //                   style: TextStyle(
-  //                     fontFamily: 'Poppins-regular',
-  //                     color: Colors.white,
-  //                     fontSize: 14,
-  //                     fontWeight: FontWeight.bold,
-  //                   ),
-  //                 ),
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ],
-  //   )
-  //     ],
-  //   );
-  // });
 }

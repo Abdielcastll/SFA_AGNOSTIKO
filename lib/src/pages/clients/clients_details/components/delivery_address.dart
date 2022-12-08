@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DeliveryAddress extends StatelessWidget {
   const DeliveryAddress({
@@ -27,7 +28,7 @@ class DeliveryAddress extends StatelessWidget {
             Container(
               margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
               child: Text(
-                'Dirección de Despacho',
+                AppLocalizations.of(context)!.clientDispatchAddress,
                 style: TextStyle(
                   color: myTheme.colorScheme.primary,
                   fontFamily: 'Poppins-regular',

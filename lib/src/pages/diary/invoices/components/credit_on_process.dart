@@ -26,7 +26,7 @@ class _CreditNotesOnProcessState extends State<CreditNotesOnProcess> {
         .where((element) =>
             element.isValid == false && element.isEliminated == false)
         .toList();
-    print(creditNotes);
+    // print(creditNotes);
     // print(invoicesList);
     return SingleChildScrollView(
       child: Column(

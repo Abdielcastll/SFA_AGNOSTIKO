@@ -14,21 +14,22 @@ import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/component
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class ClientDetails extends StatefulWidget {
-  const ClientDetails(
-      {Key? key,
-      this.specialContribuyer,
-      this.masterDiscount,
-      this.fiscalAddress,
-      this.email,
-      this.listOfPrices,
-      this.name,
-      this.tlf1,
-      this.tlf2,
-      this.zone,
-      this.nameId,
-      this.typeId,
-      this.clientDocumentReferenceID})
-      : super(key: key);
+  const ClientDetails({
+    Key? key,
+    this.specialContribuyer,
+    this.masterDiscount,
+    this.fiscalAddress,
+    this.email,
+    this.listOfPrices,
+    this.name,
+    this.tlf1,
+    this.tlf2,
+    this.zone,
+    this.nameId,
+    this.typeId,
+    this.clientDocumentReferenceID,
+    required this.dispatchAddress,
+  }) : super(key: key);
 
   final specialContribuyer;
   final masterDiscount;
@@ -42,6 +43,7 @@ class ClientDetails extends StatefulWidget {
   final nameId;
   final typeId;
   final clientDocumentReferenceID;
+  final dispatchAddress;
 
   @override
   State<ClientDetails> createState() => _ClientDetailsState();
@@ -98,6 +100,8 @@ class _ClientDetailsState extends State<ClientDetails> {
         typeId: widget.typeId,
         nameId: widget.nameId,
         zone: widget.zone,
+        clientDocumentReferenceID: widget.clientDocumentReferenceID,
+        dispatchAddress: widget.dispatchAddress,
       ),
     );
   }
@@ -117,6 +121,8 @@ class ClientDetailsBody extends StatelessWidget {
     required this.zone,
     required this.nameId,
     required this.typeId,
+    required this.clientDocumentReferenceID,
+    required this.dispatchAddress,
   }) : super(key: key);
 
   final specialContribuyer;
@@ -130,6 +136,8 @@ class ClientDetailsBody extends StatelessWidget {
   final zone;
   final nameId;
   final typeId;
+  final clientDocumentReferenceID;
+  final dispatchAddress;
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +146,21 @@ class ClientDetailsBody extends StatelessWidget {
       child: Column(
         children: [
           ClientPicture(name: name),
-          ButtonOptions(),
+          ButtonOptions(
+            specialContribuyer: specialContribuyer,
+            masterDiscount: masterDiscount,
+            fiscalAddress: fiscalAddress,
+            email: email,
+            listOfPrices: listOfPrices,
+            name: name,
+            tlf1: tlf1,
+            tlf2: tlf2,
+            zone: zone,
+            nameId: nameId,
+            typeId: typeId,
+            clientDocumentReferenceID: clientDocumentReferenceID,
+            dispactAddress: dispatchAddress,
+          ),
           Container(
             margin: EdgeInsets.fromLTRB(10, 15, 10, 0),
             child: Column(

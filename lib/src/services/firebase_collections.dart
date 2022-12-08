@@ -65,3 +65,6 @@ final qualityCollection = FirebaseFirestore.instance.collection('calidades');
 
 //Coleccion de tipos de Id
 final idTypeCollection = FirebaseFirestore.instance.collection('tipos_id');
+
+//Coleccion del usuarios
+final usersCollection = FirebaseFirestore.instance.collection('usuarios');

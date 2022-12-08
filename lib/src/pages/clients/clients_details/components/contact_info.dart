@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ContactInfo extends StatelessWidget {
   const ContactInfo({
@@ -33,7 +34,7 @@ class ContactInfo extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Persona de Contacto',
+                    AppLocalizations.of(context)!.clientContactInfo,
                     style: TextStyle(
                       color: myTheme.colorScheme.primary,
                       fontFamily: 'Poppins-regular',

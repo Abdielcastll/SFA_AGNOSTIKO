@@ -81,8 +81,8 @@ List<Orders> ordersFromSnapshot(QuerySnapshot snapshot) {
           ? doc.get('fechaEntrega')
           : Timestamp.fromDate(DateTime.now()),
       tax: doc.data().toString().contains('impuesto') ? doc.get('impuesto') : 0,
-      correlativeNumber: doc.data().toString().contains('norCorrelativo')
-          ? doc.get('norCorrelativo')
+      correlativeNumber: doc.data().toString().contains('nroCorrelativo')
+          ? doc.get('nroCorrelativo')
           : 0,
       orderNumber: doc.data().toString().contains('ordenDeCompra')
           ? doc.get('ordenDeCompra')

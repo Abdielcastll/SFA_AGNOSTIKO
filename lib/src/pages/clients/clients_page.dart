@@ -6,6 +6,7 @@ import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/components/client_list.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ClientsPage extends StatefulWidget {
   const ClientsPage({Key? key}) : super(key: key);
@@ -23,7 +24,7 @@ class _ClientsPageState extends State<ClientsPage> {
           value: DatabaseServiceStreams().clients,
           initialData: const [],
           catchError: (context, error) {
-            print(error);
+            // print(error);
             return;
           },
         ),
@@ -31,7 +32,7 @@ class _ClientsPageState extends State<ClientsPage> {
           value: DatabaseServiceStreams().idTypeSummary,
           initialData: null,
           catchError: (context, error) {
-            print(error);
+            // print(error);
             return;
           },
         ),
@@ -39,7 +40,7 @@ class _ClientsPageState extends State<ClientsPage> {
           value: DatabaseServiceStreams().zoneSummary,
           initialData: null,
           catchError: (context, error) {
-            print(error);
+            // print(error);
             return;
           },
         ),
@@ -47,7 +48,7 @@ class _ClientsPageState extends State<ClientsPage> {
       child: Scaffold(
         backgroundColor: Colors.grey[200],
         appBar: AppBarNavigation(
-          message: 'Clientes',
+          message: AppLocalizations.of(context)!.clients,
           isOrderActive: false,
         ),
         body: ClientsBody(),

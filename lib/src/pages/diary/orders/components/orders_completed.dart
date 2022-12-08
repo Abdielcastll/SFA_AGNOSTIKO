@@ -7,85 +7,71 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/order_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/order_card.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CompletedOrders extends StatelessWidget {
   const CompletedOrders({
     Key? key,
-    this.coinsExchangeRates,
   }) : super(key: key);
-
-  final coinsExchangeRates;
 
   @override
   Widget build(BuildContext context) {
     final orders = Provider.of<List<Orders>?>(context) ?? [];
+    print('ordenes: ${orders.length}');
+
     var dateFormatter = DateFormat('yyyy-MM-dd');
-    final ordersCompleted =
-        orders.where((element) => element.isInvoiced == true).toList();
-    // print(orders);
-    print('Ordenes completadas: ${ordersCompleted.length}');
+    final ordersCompleted = orders
+        .where((element) => element.isInvoiced == true)
+        .toList()
+        .reversed
+        .toList();
+
     final clientNames = Provider.of<List<ClientName>?>(context) ?? [];
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
-      // ignore: prefer_const_literals_to_create_immutables
       children: [
-        Row(
-          // ignore: prefer_const_literals_to_create_immutables
-          children: [
-            Padding(
-              padding: EdgeInsets.only(left: 16, top: 5),
-              child: Text(
-                textAlign: TextAlign.start,
-                'Pedidos completados (Ver Facturas)',
-                style: TextStyle(
-                  color: Colors.green,
-                  fontSize: 15,
-                ),
-              ),
+        SingleChildScrollView(
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.65,
+            child: ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              itemCount: ordersCompleted.length,
+              itemBuilder: (BuildContext context, int index) {
+                final order = ordersCompleted[index];
+                final orderTotalAmount = order.totalAmount ?? 0;
+                final unformattedDate =
+                    order.date ?? Timestamp.fromDate(DateTime.now());
+                final date =
+                    DateTime.parse(unformattedDate.toDate().toString());
+                final deliveryDate = dateFormatter.format(date);
+                final orderCommentary = order.commentary;
+                final orderClientRefID = order.clientDocumentRef;
+                final orderRefID = order.orderDocumentRef;
+                final orderIsFailed = order.isInvoiceFailed;
+                final orderStatus = AppLocalizations.of(context)!.completed;
+                final orderProducts = order.products;
+                final orderSubTotal = order.subTotal;
+                final orderDiscountMaster = order.masterDiscount;
+                final orderTax = order.tax;
+                // print(order);
+                return OrderCard(
+                  clientReferenceId: orderClientRefID,
+                  date: deliveryDate,
+                  total: orderTotalAmount,
+                  orderDocumentId: orderRefID,
+                  status: orderStatus,
+                  isInvoicesFailed: orderIsFailed,
+                  commentary: orderCommentary,
+                  products: orderProducts,
+                  subTotal: orderSubTotal,
+                  discountMaster: orderDiscountMaster,
+                  tax: orderTax,
+                  correlativeNumber: order.correlativeNumber,
+                );
+              },
             ),
-          ],
-        ),
-        SizedBox(height: 10),
-        Container(
-          height: MediaQuery.of(context).size.height * 0.7,
-          child: ListView.builder(
-            physics: ClampingScrollPhysics(),
-            itemCount: ordersCompleted.length,
-            itemBuilder: (BuildContext context, int index) {
-              final order = ordersCompleted[index];
-              final orderTotalAmount = order.totalAmount ?? 0;
-              final unformattedDate =
-                  order.deliveryDate ?? Timestamp.fromDate(DateTime.now());
-
-              final date = DateTime.parse(unformattedDate.toDate().toString());
-              final deliveryDate = dateFormatter.format(date);
-              final orderCommentary = order.commentary;
-              final orderClientRefID = order.clientDocumentRef;
-              final orderRefID = order.orderDocumentRef;
-              final orderIsFailed = order.isInvoiceFailed;
-              final orderStatus = 'Completada';
-              final orderProducts = order.products;
-              final orderSubTotal = order.subTotal;
-              final orderDiscountMaster = order.masterDiscount;
-              final orderTax = order.tax;
-              // print(order);
-              return OrderCard(
-                clientReferenceId: orderClientRefID,
-                date: deliveryDate,
-                total: orderTotalAmount,
-                orderDocumentId: orderRefID,
-                status: orderStatus,
-                isInvoicesFailed: orderIsFailed,
-                commentary: orderCommentary,
-                products: orderProducts,
-                subTotal: orderSubTotal,
-                discountMaster: orderDiscountMaster,
-                tax: orderTax,
-                coinsExchangeRates: coinsExchangeRates,
-              );
-            },
           ),
         ),
       ],

@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/account_balance_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/invoice_card.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/loading/loading_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InvoicesOnProcess extends StatefulWidget {
   const InvoicesOnProcess({Key? key}) : super(key: key);
@@ -23,36 +24,17 @@ class _InvoicesOnProcessState extends State<InvoicesOnProcess> {
     final invoices = Provider.of<List<Invoices>?>(context) ?? [];
     final invoicesList =
         invoices.where((element) => element.isPaid == false).toList();
-    // print(invoicesList);
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
-        // ignore: prefer_const_literals_to_create_immutables
         children: [
-          Row(
-            // ignore: prefer_const_literals_to_create_immutables
-            children: [
-              Padding(
-                padding: EdgeInsets.only(left: 16),
-                child: Text(
-                  textAlign: TextAlign.start,
-                  'Por Realizar',
-                  style: TextStyle(
-                    color: Colors.amber,
-                    fontSize: 15,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 10),
           SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
             child: Container(
-              height: 230,
+              height: MediaQuery.of(context).size.height * 0.65,
               child: Scrollbar(
                 child: ListView.builder(
-                  // physics: BouncingScrollPhysics(),
                   itemCount: invoicesList.length,
                   itemBuilder: (BuildContext context, int index) {
                     final invoice = invoicesList[index];
@@ -66,11 +48,12 @@ class _InvoicesOnProcessState extends State<InvoicesOnProcess> {
                         dateFormatter.format(date ?? DateTime.now());
                     final invoiceBalance = invoice.totalAmount;
                     final invoicePayments = invoice.payments;
-                    const invoiceStatus = 'En proceso';
+                    final invoiceStatus =
+                        AppLocalizations.of(context)!.onProcess;
                     final invoiceNumber = invoice.correlativeNumber;
                     final invoiceTotal = invoice.totalAmount;
                     final invoiceDocumentID = invoice.invoiceDocumentID;
-                    // print(invoice);
+
                     return InvoiceCard(
                       invoiceClient: invoiceClient,
                       invoiceDate: invoiceDate,

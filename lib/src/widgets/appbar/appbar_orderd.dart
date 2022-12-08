@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AppBarOrder extends StatelessWidget implements PreferredSizeWidget {
   const AppBarOrder({
@@ -21,7 +22,7 @@ class AppBarOrder extends StatelessWidget implements PreferredSizeWidget {
       // ),
       automaticallyImplyLeading: false,
       title: Text(
-        'Pedido',
+        AppLocalizations.of(context)!.order,
         style: TextStyle(
           fontFamily: 'Poppins-regular',
           fontSize: 21,

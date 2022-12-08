@@ -1,15 +1,10 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:pwa_sales2go_flutter/examples/catalogue_example.dart';
-import 'package:pwa_sales2go_flutter/examples/products_example.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
-import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/promotions_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/category_list.dart';
@@ -17,8 +12,10 @@ import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/most_selled_
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/new_products.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/product_list_button.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
+import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/promotions.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CataloguePage extends StatefulWidget {
   const CataloguePage(
@@ -42,7 +39,7 @@ class _CataloguePageState extends State<CataloguePage> {
           value: DatabaseServiceStreams().products,
           initialData: const [],
           catchError: (context, error) {
-            print(error);
+            // print(error);
             return;
           },
         ),
@@ -54,11 +51,19 @@ class _CataloguePageState extends State<CataloguePage> {
             return;
           },
         ),
+        StreamProvider<List<Promotions>?>.value(
+          value: DatabaseServiceStreams().promotions,
+          initialData: const [],
+          catchError: (context, error) {
+            print(error);
+            return;
+          },
+        ),
         StreamProvider<List<ProductsByDate>?>.value(
           value: DatabaseServiceStreams().productsByDate,
           initialData: const [],
           catchError: (context, error) {
-            print(error);
+            // print(error);
             return;
           },
         ),
@@ -66,7 +71,7 @@ class _CataloguePageState extends State<CataloguePage> {
           value: DatabaseServiceStreams().categorieSummary,
           initialData: null,
           catchError: (context, error) {
-            print(error);
+            // print(error);
             return;
           },
         ),
@@ -74,7 +79,7 @@ class _CataloguePageState extends State<CataloguePage> {
           value: DatabaseServiceStreams().lineSummary,
           initialData: null,
           catchError: (context, error) {
-            print(error);
+            // print(error);
             return;
           },
         ),
@@ -82,7 +87,7 @@ class _CataloguePageState extends State<CataloguePage> {
           value: DatabaseServiceStreams().stockValues,
           initialData: null,
           catchError: (context, error) {
-            print(error);
+            // print(error);
             return;
           },
         ),
@@ -94,7 +99,7 @@ class _CataloguePageState extends State<CataloguePage> {
               .map(pricesfromSnapshot),
           initialData: null,
           catchError: (context, error) {
-            print(error);
+            // print(error);
             return;
           },
         ),
@@ -104,7 +109,7 @@ class _CataloguePageState extends State<CataloguePage> {
           message: 'Apps2Go',
           isOrderActive: widget.isOrderActive,
         ),
-        backgroundColor: Colors.grey[200],
+        backgroundColor: myTheme.colorScheme.surface,
         body: CatalogueBody(isOrderActive: widget.isOrderActive),
       ),
     );
@@ -124,16 +129,11 @@ class CatalogueBody extends StatefulWidget {
 }
 
 class _CatalogueBodyState extends State<CatalogueBody> {
-  final currentCoin = sharedPreferences!.getString('currentCoin');
-
   @override
   Widget build(BuildContext context) {
-    print('Moneda Activa: $currentCoin');
-
     return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       child: Column(
-        // ignore: prefer_const_literals_to_create_immutables
         children: [
           PromotionsWidget(isOrderActive: widget.isOrderActive),
           NewProductsWidget(isOrderActive: widget.isOrderActive),

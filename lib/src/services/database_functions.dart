@@ -6,6 +6,7 @@ import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Funciones de Visitas
 
@@ -46,14 +47,15 @@ Future updateVisitData(
   String? status,
   String uid,
   String? commentary,
+  context,
 ) async {
   print('// ACTUALIZAR ESTADO DE LA VISITA //');
   bool isCompleted = false;
   bool isCancelled = false;
   if (status != null) {
-    if (status == 'Completada') {
+    if (status == AppLocalizations.of(context)!.completed) {
       isCompleted = true;
-    } else if (status == 'Cancelada') {
+    } else if (status == AppLocalizations.of(context)!.canceled) {
       isCancelled = true;
     }
   } else if (status == null) {
@@ -105,26 +107,28 @@ Future createOrder(
   print('/// CREAR PEDIDO ///');
 
   final String totalAsString = totalOfTheOrder.toStringAsFixed(2);
-  final int correlativeNumber = FirebaseFirestore.instance
-      .collectionGroup('pedidos')
-      .snapshots()
-      .toString()
-      .length;
+  var correlativeNumber = await FirebaseFirestore.instance
+      .collection('config')
+      .doc('contador_pedidos')
+      .get()
+      .then((value) {
+    return value['numero'];
+  });
+  // configDoc.get().then((value) => print('testing: ${value['numero']}'));
+  // await FirebaseFirestore.instance
+  //     .collection('config')
+  //     .doc('contador_pedidos')
+  //     .update({'numero': correlativeNumber + 1});
+  // print(configDoc);
+  // print(correlativeNumber);
   final List quantitiesList = [];
   final List productsIds = [];
   final List<Map<dynamic, dynamic>> products = [];
-  final coinsExchangeRates = [];
-  await FirebaseFirestore.instance.collection('monedas').get().then((document) {
-    // print('Cantidad de documentos en monedas: ${document.docs.length}');
-    document.docs.forEach((element) {
-      // print(element.data()['tasaDeCambio']);
-      coinsExchangeRates.add(element.data()['tasaDeCambio']);
-    });
-  });
   final Map<String, double> exchangeRate = {
-    'BTC': coinsExchangeRates[0],
-    'EUR': coinsExchangeRates[1],
-    'VED': coinsExchangeRates[2],
+    'BTC': 0.00011,
+    'EUR': 0.89,
+    'VED': 4.58,
+    'MXN': 19.43
   };
   shoppingCart.forEach((element) {
     quantitiesList.add(element.productQuantity);
@@ -134,7 +138,8 @@ Future createOrder(
       'codigo': element.code?.toString() ?? 'NaN',
       'id': element.code?.toString() ?? 'NaN',
       'idListaDePrecios': client?.prices ?? 'NaN',
-      'monto': double.parse(element.totalAmount ?? '0'),
+      'monto': double.parse(element.totalAmount ?? '0') *
+          int.parse(element.productQuantity.toString()),
       'nombre': element.name?.toString() ?? 'NaN',
       'precioUnitario': double.parse(element.unitPrice ?? '0.0'),
       'urlFoto': '',
@@ -142,44 +147,89 @@ Future createOrder(
     print('Cantidad de producto: ${element.code}: ${element.productQuantity}');
   });
   print('Cantidades: $quantitiesList');
+  print(
+      'Cliente: ${FirebaseFirestore.instance.collection('clientes').doc(client!.clientDocumentId)}');
   print('IDs: $productsIds');
   print('Productos: $products');
-  print('Cantidad de pedidos en la DB: $correlativeNumber');
-  print('Monedas: $exchangeRate');
+  print('Ordernes: ${correlativeNumber}');
+  print('nueva: ${correlativeNumber + 1}');
 
   return await FirebaseFirestore.instance
-      .collection('clientes')
-      .doc(client!.clientDocumentId)
-      .collection('pedidos')
-      .doc()
-      .set({
-    'cantidadesProductos': quantitiesList,
-    'cliente': FirebaseFirestore.instance
-        .collection('clientes')
-        .doc(client.clientDocumentId),
-    'comentario': commentary,
-    'descuentoMaestro': masterDiscount,
-    'tipoDeNegociacion': negotiation,
-    'direccionEntrega': deliveryAddress == 'Fiscal'
-        ? client.fiscalAdress
-        : client.dispatchAdress,
-    'facturacionFallida': false,
-    'facturado': false,
-    'fecha': Timestamp.fromDate(today),
-    'fechaEntrega': Timestamp.fromDate(today),
-    'idsProductos': productsIds,
-    'impuesto': taxTotal,
-    'nroCorrelativo': correlativeNumber + 1,
-    'ordenDeCompra': numberOrder ?? 0,
-    'porcentajeDescuentoMaestro': client.masterDiscount,
-    'productos': products,
-    'subtotal': subTotal,
-    'tasasDeCambio': exchangeRate,
-    'timestampRegistro': Timestamp.fromDate(DateTime.now()),
-    'totalAPagar': double.parse(totalAsString),
-    'ultimaModificacion': Timestamp.fromDate(DateTime.now()),
-    'vendedor': FirebaseFirestore.instance.collection('usuarios').doc(userUid),
-  });
+      .collection('config')
+      .doc('contador_pedidos')
+      .update({'numero': correlativeNumber + 1}).whenComplete(
+    () async {
+      return await FirebaseFirestore.instance
+          .collection('clientes')
+          .doc(client!.clientDocumentId)
+          .collection('pedidos')
+          .doc()
+          .set(
+        {
+          'cantidadesProductos': quantitiesList,
+          'cliente': FirebaseFirestore.instance
+              .collection('clientes')
+              .doc(client.clientDocumentId),
+          'comentario': commentary,
+          'descuentoMaestro': masterDiscount,
+          'tipoDeNegociacion': negotiation,
+          'direccionEntrega': deliveryAddress == 'Fiscal'
+              ? client.fiscalAdress
+              : client.dispatchAdress,
+          'facturacionFallida': false,
+          'facturado': false,
+          'fecha': Timestamp.fromDate(DateTime.now()),
+          'fechaEntrega': Timestamp.fromDate(today),
+          'idsProductos': productsIds,
+          'impuesto': taxTotal,
+          'nroCorrelativo': correlativeNumber + 1,
+          'ordenDeCompra': numberOrder ?? 0,
+          'porcentajeDescuentoMaestro': client.masterDiscount,
+          'productos': products,
+          'subtotal': subTotal,
+          'tasasDeCambio': exchangeRate,
+          'timestampRegistro': Timestamp.fromDate(DateTime.now()),
+          'totalAPagar': double.parse(totalAsString),
+          'ultimaModificacion': Timestamp.fromDate(DateTime.now()),
+          'vendedor':
+              FirebaseFirestore.instance.collection('usuarios').doc(userUid),
+        },
+      );
+    },
+  );
+  // return await FirebaseFirestore.instance
+  //     .collection('clientes')
+  //     .doc(client!.clientDocumentId)
+  //     .collection('pedidos')
+  //     .doc()
+  //     .set({
+  //   'cantidadesProductos': quantitiesList,
+  //   'cliente': FirebaseFirestore.instance
+  //       .collection('clientes')
+  //       .doc(client.clientDocumentId),
+  //   'comentario': commentary,
+  //   'descuentoMaestro': masterDiscount,
+  //   'tipoDeNegociacion': negotiation,
+  //   'direccionEntrega': deliveryAddress == 'Fiscal'
+  //       ? client.fiscalAdress
+  //       : client.dispatchAdress,
+  //   'facturacionFallida': false,
+  //   'facturado': false,
+  //   'fecha': Timestamp.fromDate(DateTime.now()),
+  //   'fechaEntrega': Timestamp.fromDate(today),
+  //   'idsProductos': productsIds,
+  //   'impuesto': taxTotal,
+  //   'nroCorrelativo': correlativeNumber + 1,
+  //   'ordenDeCompra': numberOrder ?? 0,
+  //   'porcentajeDescuentoMaestro': client.masterDiscount,
+  //   'productos': products,
+  //   'subtotal': subTotal,
+  //   'tasasDeCambio': exchangeRate,
+  //   'timestampRegistro': Timestamp.fromDate(DateTime.now()),
+  //   'totalAPagar': double.parse(totalAsString),
+  //   'ultimaModificacion': Timestamp.fromDate(DateTime.now()),
+  //   'vendedor': FirebaseFirestore.instance.collection('usuarios').doc(userUid),
+  // });
 }
 
 Future deleteOrder(
@@ -206,6 +256,7 @@ Future createInvoice(
   String? orderDocumentID,
   subTotalOfTheOrder,
   userID,
+  correlativeNumber,
 ) async {
   print('/// CREAR FACTURA ///');
 
@@ -216,11 +267,8 @@ Future createInvoice(
   final date = orderDate;
   final tax = taxTotal;
   final String totalAsString = totalOfTheOrder.toStringAsFixed(2);
-  final int correlativeNumber = FirebaseFirestore.instance
-      .collectionGroup('facturas')
-      .snapshots()
-      .toString()
-      .length;
+
+  final correlativeNumberForInvoice = correlativeNumber;
   const isPaid = false;
   final payments = [];
   final order = FirebaseFirestore.instance
@@ -238,7 +286,21 @@ Future createInvoice(
   };
   final seller = FirebaseFirestore.instance.collection('usuarios').doc(userID);
 
-  print(correlativeNumber + 35);
+  print(clientID);
+  print(discount);
+  print(date);
+  print(tax);
+  print(totalAsString);
+  print(isPaid);
+  print(payments);
+  print(order);
+  print(discountPercentage);
+  print(referenceCreditNote);
+  print(subTotal);
+  print(register);
+  print(lastModification);
+  print(seller);
+  print(correlativeNumberForInvoice);
 
   await FirebaseFirestore.instance
       .collection('clientes')
@@ -247,30 +309,55 @@ Future createInvoice(
       .doc(orderDocumentID)
       .update({
     'facturado': true,
+  }).whenComplete(() async {
+    return await FirebaseFirestore.instance
+        .collection('clientes')
+        .doc(client.clientDocumentId)
+        .collection('facturas')
+        .doc()
+        .set({
+      'cliente': clientID,
+      'descuentoMaestro': discount,
+      'fecha': Timestamp.fromDate(DateTime.now()),
+      'impuesto': tax,
+      'montoTotal': double.parse(totalAsString),
+      'nroCorrelativo': correlativeNumber,
+      'pagada': isPaid,
+      'pagos': payments,
+      'pedido': order,
+      'porcentajeDescuentoMaestro': discountPercentage,
+      'referenciaNotasCredito': referenceCreditNote,
+      'subtotal': subTotal,
+      'timestampRegistro': register,
+      'ultimaModificacion': lastModification,
+      'vendedor': seller,
+    }).whenComplete(
+            () => Fluttertoast.showToast(msg: 'Factura ${correlativeNumber}'));
   });
-  Fluttertoast.showToast(msg: 'Factura ${correlativeNumber + 1}');
-  return await FirebaseFirestore.instance
-      .collection('clientes')
-      .doc(client.clientDocumentId)
-      .collection('facturas')
-      .doc()
-      .set({
-    'cliente': clientID,
-    'descuentoMaestro': discount,
-    'fecha': Timestamp.fromDate(DateTime.parse(date)),
-    'impuesto': tax,
-    'montoTotal': double.parse(totalAsString),
-    'nroCorrelativo': correlativeNumber + 35,
-    'pagada': isPaid,
-    'pagos': payments,
-    'pedido': order,
-    'porcentajeDescuentoMaestro': discountPercentage,
-    'referenciaNotasCredito': referenceCreditNote,
-    'subtotal': subTotal,
-    'timestampRegistro': register,
-    'ultimaModificacion': lastModification,
-    'vendedor': seller,
-  });
+  ////////////////////////
+  // // Fluttertoast.showToast(msg: 'Factura ${correlativeNumber}');
+  // return await FirebaseFirestore.instance
+  //     .collection('clientes')
+  //     .doc(client.clientDocumentId)
+  //     .collection('facturas')
+  //     .doc()
+  //     .set({
+  //   'cliente': clientID,
+  //   'descuentoMaestro': discount,
+  //   'fecha': Timestamp.fromDate(DateTime.parse(date)),
+  //   'impuesto': tax,
+  //   'montoTotal': double.parse(totalAsString),
+  //   'nroCorrelativo': correlativeNumber,
+  //   'pagada': isPaid,
+  //   'pagos': payments,
+  //   'pedido': order,
+  //   'porcentajeDescuentoMaestro': discountPercentage,
+  //   'referenciaNotasCredito': referenceCreditNote,
+  //   'subtotal': subTotal,
+  //   'timestampRegistro': register,
+  //   'ultimaModificacion': lastModification,
+  //   'vendedor': seller,
+  // });
 }
 
 //Registrar pagos de cheques
@@ -290,16 +377,11 @@ Future registerBankCheckPayment(
 ) async {
   print('/// Registrar cheque en factura: $invoiceDocumentID ///');
 
-  final coinsExchangeRates = [];
-  await FirebaseFirestore.instance.collection('monedas').get().then((document) {
-    document.docs.forEach((element) {
-      coinsExchangeRates.add(element.data()['tasaDeCambio']);
-    });
-  });
   final Map<String, double> exchangeRate = {
-    'BTC': coinsExchangeRates[0],
-    'EUR': coinsExchangeRates[1],
-    'VED': coinsExchangeRates[2],
+    'BTC': 0.00011,
+    'EUR': 0.89,
+    'VED': 4.58,
+    'MXN': 19.43
   };
 
   String? banksDocumentsID;
@@ -315,15 +397,18 @@ Future registerBankCheckPayment(
 
   late var selectedCoinExchangeRate;
 
-  if (currency == 'USD') {
+  if (currency.toString().contains('USD')) {
     selectedCoinExchangeRate = 1;
-  } else if (currency == 'VED') {
-    selectedCoinExchangeRate = coinsExchangeRates[2];
-  } else if (currency == 'EUR') {
-    selectedCoinExchangeRate = coinsExchangeRates[1];
-  } else if (currency == 'BTC') {
-    selectedCoinExchangeRate = coinsExchangeRates[0];
+  } else if (currency.toString().contains('VED')) {
+    selectedCoinExchangeRate = exchangeRate['VED'];
+  } else if (currency.toString().contains('EUR')) {
+    selectedCoinExchangeRate = exchangeRate['EUR'];
+  } else if (currency.toString().contains('BTC')) {
+    selectedCoinExchangeRate = exchangeRate['BTC'];
+  } else if (currency.toString().contains('MXN')) {
+    selectedCoinExchangeRate = exchangeRate['MXN'];
   }
+
   final doubleAmount = double.parse(amount);
   final convertedAmount =
       (doubleAmount / selectedCoinExchangeRate).toStringAsFixed(2);
@@ -380,28 +465,25 @@ Future registerCriptoPayment(
 ) async {
   print('/// Registrar pago en BTC en factura: $invoiceDocumentID ///');
 
-  final coinsExchangeRates = [];
-  await FirebaseFirestore.instance.collection('monedas').get().then((document) {
-    document.docs.forEach((element) {
-      coinsExchangeRates.add(element.data()['tasaDeCambio']);
-    });
-  });
   final Map<String, double> exchangeRate = {
-    'BTC': coinsExchangeRates[0],
-    'EUR': coinsExchangeRates[1],
-    'VED': coinsExchangeRates[2],
+    'BTC': 0.00011,
+    'EUR': 0.89,
+    'VED': 4.58,
+    'MXN': 19.43
   };
 
   late var selectedCoinExchangeRate;
 
-  if (currency == 'USD') {
+  if (currency.toString().contains('USD')) {
     selectedCoinExchangeRate = 1;
-  } else if (currency == 'VED') {
-    selectedCoinExchangeRate = coinsExchangeRates[2];
-  } else if (currency == 'EUR') {
-    selectedCoinExchangeRate = coinsExchangeRates[1];
-  } else if (currency == 'BTC') {
-    selectedCoinExchangeRate = coinsExchangeRates[0];
+  } else if (currency.toString().contains('VED')) {
+    selectedCoinExchangeRate = exchangeRate['VED'];
+  } else if (currency.toString().contains('EUR')) {
+    selectedCoinExchangeRate = exchangeRate['EUR'];
+  } else if (currency.toString().contains('BTC')) {
+    selectedCoinExchangeRate = exchangeRate['BTC'];
+  } else if (currency.toString().contains('MXN')) {
+    selectedCoinExchangeRate = exchangeRate['MXN'];
   }
   final doubleAmount = double.parse(amount);
   final convertedAmount =
@@ -459,16 +541,11 @@ Future registerDepositPayment(
 ) async {
   print('/// Registrar deposito en factura: $invoiceDocumentID ///');
 
-  final coinsExchangeRates = [];
-  await FirebaseFirestore.instance.collection('monedas').get().then((document) {
-    document.docs.forEach((element) {
-      coinsExchangeRates.add(element.data()['tasaDeCambio']);
-    });
-  });
   final Map<String, double> exchangeRate = {
-    'BTC': coinsExchangeRates[0],
-    'EUR': coinsExchangeRates[1],
-    'VED': coinsExchangeRates[2],
+    'BTC': 0.00011,
+    'EUR': 0.89,
+    'VED': 4.58,
+    'MXN': 19.43
   };
 
   String? banksDocumentsID;
@@ -484,14 +561,16 @@ Future registerDepositPayment(
 
   late var selectedCoinExchangeRate;
 
-  if (currency == 'USD') {
+  if (currency.toString().contains('USD')) {
     selectedCoinExchangeRate = 1;
-  } else if (currency == 'VED') {
-    selectedCoinExchangeRate = coinsExchangeRates[2];
-  } else if (currency == 'EUR') {
-    selectedCoinExchangeRate = coinsExchangeRates[1];
-  } else if (currency == 'BTC') {
-    selectedCoinExchangeRate = coinsExchangeRates[0];
+  } else if (currency.toString().contains('VED')) {
+    selectedCoinExchangeRate = exchangeRate['VED'];
+  } else if (currency.toString().contains('EUR')) {
+    selectedCoinExchangeRate = exchangeRate['EUR'];
+  } else if (currency.toString().contains('BTC')) {
+    selectedCoinExchangeRate = exchangeRate['BTC'];
+  } else if (currency.toString().contains('MXN')) {
+    selectedCoinExchangeRate = exchangeRate['MXN'];
   }
   final doubleAmount = double.parse(amount);
   final convertedAmount =
@@ -541,28 +620,25 @@ Future registerMoneyPayment(client, invoiceDocumentID, currency, amount,
     totalOfTheOrder, imageFile, date) async {
   print('/// Registrar pago en efectivo en factura: $invoiceDocumentID ///');
 
-  final coinsExchangeRates = [];
-  await FirebaseFirestore.instance.collection('monedas').get().then((document) {
-    document.docs.forEach((element) {
-      coinsExchangeRates.add(element.data()['tasaDeCambio']);
-    });
-  });
   final Map<String, double> exchangeRate = {
-    'BTC': coinsExchangeRates[0],
-    'EUR': coinsExchangeRates[1],
-    'VED': coinsExchangeRates[2],
+    'BTC': 0.00011,
+    'EUR': 0.89,
+    'VED': 4.58,
+    'MXN': 19.43
   };
 
   late var selectedCoinExchangeRate;
 
-  if (currency == 'USD') {
+  if (currency.toString().contains('USD')) {
     selectedCoinExchangeRate = 1;
-  } else if (currency == 'VED') {
-    selectedCoinExchangeRate = coinsExchangeRates[2];
-  } else if (currency == 'EUR') {
-    selectedCoinExchangeRate = coinsExchangeRates[1];
-  } else if (currency == 'BTC') {
-    selectedCoinExchangeRate = coinsExchangeRates[0];
+  } else if (currency.toString().contains('VED')) {
+    selectedCoinExchangeRate = exchangeRate['VED'];
+  } else if (currency.toString().contains('EUR')) {
+    selectedCoinExchangeRate = exchangeRate['EUR'];
+  } else if (currency.toString().contains('BTC')) {
+    selectedCoinExchangeRate = exchangeRate['BTC'];
+  } else if (currency.toString().contains('MXN')) {
+    selectedCoinExchangeRate = exchangeRate['MXN'];
   }
   final doubleAmount = double.parse(amount);
   final convertedAmount =
@@ -618,16 +694,11 @@ Future registerTransferPayment(
 ) async {
   print('/// Registrar Trasnferencia en factura: $invoiceDocumentID ///');
 
-  final coinsExchangeRates = [];
-  await FirebaseFirestore.instance.collection('monedas').get().then((document) {
-    document.docs.forEach((element) {
-      coinsExchangeRates.add(element.data()['tasaDeCambio']);
-    });
-  });
   final Map<String, double> exchangeRate = {
-    'BTC': coinsExchangeRates[0],
-    'EUR': coinsExchangeRates[1],
-    'VED': coinsExchangeRates[2],
+    'BTC': 0.00011,
+    'EUR': 0.89,
+    'VED': 4.58,
+    'MXN': 19.43
   };
 
   String? banksDocumentsID;
@@ -643,14 +714,16 @@ Future registerTransferPayment(
 
   late var selectedCoinExchangeRate;
 
-  if (currency == 'USD') {
+  if (currency.toString().contains('USD')) {
     selectedCoinExchangeRate = 1;
-  } else if (currency == 'VED') {
-    selectedCoinExchangeRate = coinsExchangeRates[2];
-  } else if (currency == 'EUR') {
-    selectedCoinExchangeRate = coinsExchangeRates[1];
-  } else if (currency == 'BTC') {
-    selectedCoinExchangeRate = coinsExchangeRates[0];
+  } else if (currency.toString().contains('VED')) {
+    selectedCoinExchangeRate = exchangeRate['VED'];
+  } else if (currency.toString().contains('EUR')) {
+    selectedCoinExchangeRate = exchangeRate['EUR'];
+  } else if (currency.toString().contains('BTC')) {
+    selectedCoinExchangeRate = exchangeRate['BTC'];
+  } else if (currency.toString().contains('MXN')) {
+    selectedCoinExchangeRate = exchangeRate['MXN'];
   }
   final doubleAmount = double.parse(amount);
   final convertedAmount =
@@ -709,16 +782,11 @@ Future registerTransferInterPayment(
 ) async {
   print('/// Registrar transferencia inter en factura: $invoiceDocumentID ///');
 
-  final coinsExchangeRates = [];
-  await FirebaseFirestore.instance.collection('monedas').get().then((document) {
-    document.docs.forEach((element) {
-      coinsExchangeRates.add(element.data()['tasaDeCambio']);
-    });
-  });
   final Map<String, double> exchangeRate = {
-    'BTC': coinsExchangeRates[0],
-    'EUR': coinsExchangeRates[1],
-    'VED': coinsExchangeRates[2],
+    'BTC': 0.00011,
+    'EUR': 0.89,
+    'VED': 4.58,
+    'MXN': 19.43
   };
 
   String? banksDocumentsID;
@@ -733,15 +801,16 @@ Future registerTransferInterPayment(
   });
 
   late var selectedCoinExchangeRate;
-
-  if (currency == 'USD') {
+  if (currency.toString().contains('USD')) {
     selectedCoinExchangeRate = 1;
-  } else if (currency == 'VED') {
-    selectedCoinExchangeRate = coinsExchangeRates[2];
-  } else if (currency == 'EUR') {
-    selectedCoinExchangeRate = coinsExchangeRates[1];
-  } else if (currency == 'BTC') {
-    selectedCoinExchangeRate = coinsExchangeRates[0];
+  } else if (currency.toString().contains('VED')) {
+    selectedCoinExchangeRate = exchangeRate['VED'];
+  } else if (currency.toString().contains('EUR')) {
+    selectedCoinExchangeRate = exchangeRate['EUR'];
+  } else if (currency.toString().contains('BTC')) {
+    selectedCoinExchangeRate = exchangeRate['BTC'];
+  } else if (currency.toString().contains('MXN')) {
+    selectedCoinExchangeRate = exchangeRate['MXN'];
   }
   final doubleAmount = double.parse(amount);
   final convertedAmount =
