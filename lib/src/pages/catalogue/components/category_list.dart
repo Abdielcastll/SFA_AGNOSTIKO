@@ -76,7 +76,6 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                                   categories[product.categorie] == categorie)
                               .toList(),
                           listOfPrices: prices,
-                          isOrderActive: widget.isOrderActive,
                         ),
                       ),
                     );

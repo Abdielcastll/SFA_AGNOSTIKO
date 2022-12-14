@@ -13,7 +13,9 @@ import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/place_oder_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/profile/profile_page.dart';
+import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/locale_provider.dart';
+import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/auth.dart';
 import 'firebase_options.dart';
 import 'package:pwa_sales2go_flutter/src/pages/auth/login/login_page.dart';
@@ -48,33 +50,47 @@ class SfaAgnostiko extends StatelessWidget {
         create: (context) => LocaleProvider(),
         builder: (context, child) {
           final localeProvider = Provider.of<LocaleProvider>(context);
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            locale: localeProvider.locale,
-            supportedLocales: L10n.all,
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            title: 'SFA Agnostiko',
-            theme: myTheme,
-            initialRoute: 'wrapper',
-            routes: {
-              'wrapper': (BuildContext context) => Wrapper(),
-              'login': (BuildContext context) => const LoginPage(),
-              'navigation': (BuildContext context) => const NavigationPages(),
-              'notifications': (BuildContext context) =>
-                  const NotificationsPage(),
-              'place_order': (BuildContext context) => const PlaceOrderPage(),
-              'catalogue': (BuildContext context) =>
-                  const CataloguePage(isOrderActive: false),
-              'products': (BuildContext context) => const ProductsPage(),
-              'clients': (BuildContext context) => const ClientsPage(),
-              'profile': (BuildContext context) => ProfilePage(),
-              'diary': (BuildContext context) => const DiaryTabs(),
-              'order': (BuildContext context) => const OrderPage(),
+          return ChangeNotifierProvider(
+            create: (context) => CurrencyProvider(),
+            builder: (context, child) {
+              return ChangeNotifierProvider(
+                create: (context) => OrderProvider(),
+                builder: (context, child) {
+                  final orderProvider = Provider.of<OrderProvider>(context);
+                  return MaterialApp(
+                    debugShowCheckedModeBanner: false,
+                    locale: localeProvider.locale,
+                    supportedLocales: L10n.all,
+                    localizationsDelegates: const [
+                      AppLocalizations.delegate,
+                      GlobalMaterialLocalizations.delegate,
+                      GlobalWidgetsLocalizations.delegate,
+                      GlobalCupertinoLocalizations.delegate,
+                    ],
+                    title: 'SFA Agnostiko',
+                    theme: myTheme,
+                    initialRoute: 'wrapper',
+                    routes: {
+                      'wrapper': (BuildContext context) => Wrapper(),
+                      'login': (BuildContext context) => const LoginPage(),
+                      'navigation': (BuildContext context) =>
+                          const NavigationPages(),
+                      'notifications': (BuildContext context) =>
+                          const NotificationsPage(),
+                      'place_order': (BuildContext context) =>
+                          const PlaceOrderPage(),
+                      'catalogue': (BuildContext context) =>
+                          const CataloguePage(),
+                      'products': (BuildContext context) =>
+                          const ProductsPage(),
+                      'clients': (BuildContext context) => const ClientsPage(),
+                      'profile': (BuildContext context) => ProfilePage(),
+                      'diary': (BuildContext context) => const DiaryTabs(),
+                      'order': (BuildContext context) => const OrderPage(),
+                    },
+                  );
+                },
+              );
             },
           );
         },

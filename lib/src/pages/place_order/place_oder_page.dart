@@ -39,20 +39,6 @@ class PlaceOrderPage extends StatelessWidget {
               return;
             },
           ),
-          StreamProvider<IdTypeSummary?>.value(
-            value: DatabaseServiceStreams().idTypeSummary,
-            initialData: null,
-            catchError: (context, error) {
-              return;
-            },
-          ),
-          StreamProvider<ZoneSummary?>.value(
-            value: DatabaseServiceStreams().zoneSummary,
-            initialData: null,
-            catchError: (context, error) {
-              return;
-            },
-          ),
         ],
         child: const PlacerOrderBody(),
       ),

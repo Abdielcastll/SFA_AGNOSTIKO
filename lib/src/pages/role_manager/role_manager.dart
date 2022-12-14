@@ -16,7 +16,6 @@ class _RolesManagerPageState extends State<RolesManagerPage> {
       backgroundColor: Colors.grey.shade100,
       appBar: AppBarNavigation(
         message: 'Roles de Usuario',
-        isOrderActive: false,
       ),
       body: RolesManagerBody(),
     );

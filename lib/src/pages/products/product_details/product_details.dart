@@ -381,7 +381,6 @@ class ProductDetailsBody extends StatelessWidget {
                                       builder: (BuildContext context) =>
                                           ProductsPage(
                                         listOfProducts: list,
-                                        isOrderActive: isOrderActive,
                                         listOfPrices: prices,
                                       ),
                                     ),

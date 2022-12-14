@@ -16,6 +16,7 @@ import 'package:pwa_sales2go_flutter/src/services/auth.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/loading/loading_widget.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/powered_by_agnostiko/powered_by_agnostiko.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -33,7 +34,6 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: AppBarNavigation(
         message: AppLocalizations.of(context)!.profile,
-        isOrderActive: false,
       ),
       backgroundColor: Colors.grey.shade100,
       body: const ProfileBody(),
@@ -80,14 +80,17 @@ class _ProfileBodyState extends State<ProfileBody> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            UserInfo(userName: userName, charge: charge),
-            const SizedBox(height: 30),
+            const Center(
+              child: CircularProgressIndicator(),
+            ),
+            // UserInfo(userName: userName, charge: charge),
+            // const SizedBox(height: 30),
             ListTileOptions(charge: charge, name: userName, email: email),
-            const SizedBox(height: 15),
-            const LogoutButton(),
-            const SizedBox(height: 15),
-            const PoweredByAgnostiko(),
-            const SizedBox(height: 15),
+            // const SizedBox(height: 15),
+            // const LogoutButton(),
+            // const SizedBox(height: 15),
+            // const PoweredByAgnostiko(),
+            // const SizedBox(height: 15),
           ],
         ),
       ),

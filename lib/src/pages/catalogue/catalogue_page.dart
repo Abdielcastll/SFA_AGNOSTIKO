@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterfire_ui/auth.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
+import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/promotions_model.dart';
@@ -11,19 +13,16 @@ import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/category_lis
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/most_selled_products.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/new_products.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/product_list_button.dart';
+import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/promotions.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/loading/loading_widget.dart';
 
 class CataloguePage extends StatefulWidget {
-  const CataloguePage(
-      {Key? key, this.listOfPrices, required this.isOrderActive})
-      : super(key: key);
-
-  final String? listOfPrices;
-  final bool isOrderActive;
+  const CataloguePage({Key? key}) : super(key: key);
 
   @override
   State<CataloguePage> createState() => _CataloguePageState();
@@ -32,7 +31,10 @@ class CataloguePage extends StatefulWidget {
 class _CataloguePageState extends State<CataloguePage> {
   @override
   Widget build(BuildContext context) {
-    final listOfPrices = widget.listOfPrices;
+    final orderActive = Provider.of<OrderProvider>(context);
+    final currentClientForTheOrder =
+        Provider.of<OrderProvider>(context).clientForTheOrder;
+
     return MultiProvider(
       providers: [
         StreamProvider<List<Products>?>.value(
@@ -87,7 +89,7 @@ class _CataloguePageState extends State<CataloguePage> {
         StreamProvider<Prices?>.value(
           value: FirebaseFirestore.instance
               .collection('listas_de_precios')
-              .doc(listOfPrices)
+              .doc(currentClientForTheOrder?.prices.toString())
               .snapshots()
               .map(pricesfromSnapshot),
           initialData: null,
@@ -99,10 +101,9 @@ class _CataloguePageState extends State<CataloguePage> {
       child: Scaffold(
         appBar: AppBarNavigation(
           message: 'Apps2Go',
-          isOrderActive: widget.isOrderActive,
         ),
         backgroundColor: myTheme.colorScheme.surface,
-        body: CatalogueBody(isOrderActive: widget.isOrderActive),
+        body: CatalogueBody(),
       ),
     );
   }
@@ -111,10 +112,7 @@ class _CataloguePageState extends State<CataloguePage> {
 class CatalogueBody extends StatefulWidget {
   const CatalogueBody({
     Key? key,
-    required this.isOrderActive,
   }) : super(key: key);
-
-  final bool isOrderActive;
 
   @override
   State<CatalogueBody> createState() => _CatalogueBodyState();
@@ -123,17 +121,25 @@ class CatalogueBody extends StatefulWidget {
 class _CatalogueBodyState extends State<CatalogueBody> {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      child: Column(
-        children: [
-          PromotionsWidget(isOrderActive: widget.isOrderActive),
-          NewProductsWidget(isOrderActive: widget.isOrderActive),
-          ListOfProductsButton(isOrderActive: widget.isOrderActive),
-          ListOfCategories(isOrderActive: widget.isOrderActive),
-          MostSelledProducts(isOrderActive: widget.isOrderActive),
-        ],
-      ),
-    );
+    final checkProducts = Provider.of<List<Products>?>(context) ?? [];
+    final orderActive = Provider.of<OrderProvider>(context);
+    final currentClientForTheOrder =
+        Provider.of<OrderProvider>(context).clientForTheOrder;
+
+    return checkProducts.isEmpty
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              children: const [
+                PromotionsWidget(),
+                // NewProductsWidget(isOrderActive: widget.isOrderActive),
+                ListOfProductsButton(),
+                // ListOfCategories(isOrderActive: widget.isOrderActive),
+                // MostSelledProducts(isOrderActive: widget.isOrderActive),
+              ],
+            ));
   }
 }

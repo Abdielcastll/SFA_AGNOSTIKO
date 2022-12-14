@@ -11,16 +11,14 @@ import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/product_details/product_details.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
+import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PromotionsWidget extends StatefulWidget {
   const PromotionsWidget({
     Key? key,
-    required this.isOrderActive,
   }) : super(key: key);
-
-  final bool isOrderActive;
 
   @override
   State<PromotionsWidget> createState() => _PromotionsWidgetState();
@@ -45,6 +43,9 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
             productsWithPromotionID.contains(element.firebaseDocumentID))
         .toList();
     final listOfPrices = Provider.of<Prices?>(context)?.prices ?? {};
+    final orderActive = Provider.of<OrderProvider>(context);
+    final currentClientForTheOrder =
+        Provider.of<OrderProvider>(context).clientForTheOrder;
 
     return Container(
       height: 240,
@@ -151,20 +152,20 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
 
                               return GestureDetector(
                                 onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ProductsPage(
-                                        listOfProducts: products
-                                            .where((product) =>
-                                                product.promotion ==
-                                                promotion.firebaseDocumentID)
-                                            .toList(),
-                                        listOfPrices: listOfPrices,
-                                        isOrderActive: widget.isOrderActive,
-                                      ),
-                                    ),
-                                  );
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //     builder: (context) => ProductsPage(
+                                  //       listOfProducts: products
+                                  //           .where((product) =>
+                                  //               product.promotion ==
+                                  //               promotion.firebaseDocumentID)
+                                  //           .toList(),
+                                  //       listOfPrices: listOfPrices,
+                                  //       isOrderActive: widget.isOrderActive,
+                                  //     ),
+                                  //   ),
+                                  // );
                                 },
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -221,22 +222,22 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
                             } else if (snapshot.hasError) {
                               return GestureDetector(
                                 onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ProductsPage(
-                                        listOfProducts: products
-                                            .where(
-                                              (product) =>
-                                                  product.promotion ==
-                                                  promotion.firebaseDocumentID,
-                                            )
-                                            .toList(),
-                                        listOfPrices: listOfPrices,
-                                        isOrderActive: widget.isOrderActive,
-                                      ),
-                                    ),
-                                  );
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //     builder: (context) => ProductsPage(
+                                  //       listOfProducts: products
+                                  //           .where(
+                                  //             (product) =>
+                                  //                 product.promotion ==
+                                  //                 promotion.firebaseDocumentID,
+                                  //           )
+                                  //           .toList(),
+                                  //       listOfPrices: listOfPrices,
+                                  //       isOrderActive: widget.isOrderActive,
+                                  //     ),
+                                  //   ),
+                                  // );
                                 },
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,

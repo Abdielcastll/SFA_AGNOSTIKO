@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
+import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -23,6 +24,7 @@ class SelectClient extends StatefulWidget {
 
 class _SelectClientState extends State<SelectClient> {
   final clientController = TextEditingController();
+  List<Clients> starterClient = [Clients(name: 'NaN', fiscalAdress: 'NaN')];
 
   // Esta funcion se llama cada vez que el text field cambia
   void _searchClient(String query) {
@@ -43,8 +45,9 @@ class _SelectClientState extends State<SelectClient> {
 
   @override
   Widget build(BuildContext context) {
-    final zonesSummary = Provider.of<ZoneSummary?>(context)?.summary ?? {};
-    final idTypeSummary = Provider.of<IdTypeSummary?>(context)?.summary ?? {};
+    final orderActive = Provider.of<OrderProvider>(context);
+    final currentClientForTheOrder =
+        Provider.of<OrderProvider>(context).clientForTheOrder;
     return Column(
       children: [
         Container(
@@ -99,14 +102,17 @@ class _SelectClientState extends State<SelectClient> {
             color: Colors.transparent,
             child: ListView.builder(
               physics: const BouncingScrollPhysics(),
-              itemCount: widget.mutatedList!.length,
+              itemCount: widget.mutatedList?.length ?? starterClient.length,
+              // itemCount: 1,
               itemBuilder: (context, index) {
-                final client = widget.mutatedList?[index];
-                final clientName = client?.name;
-                final clientFiscalAddress = client?.fiscalAdress;
+                final client =
+                    widget.mutatedList?[index] ?? starterClient[index];
+
+                final clientName = client.name;
+                final clientFiscalAddress = client.fiscalAdress;
                 return Container(
-                  padding: const EdgeInsets.only(bottom: 5),
-                  height: 80,
+                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                  // height: 100,
                   child: ListTile(
                     tileColor: Colors.white,
                     selectedTileColor: Colors.blue,
@@ -122,19 +128,23 @@ class _SelectClientState extends State<SelectClient> {
                         fontFamily: 'Poppins-regular',
                       ),
                     ),
-                    subtitle: Text(
-                      clientFiscalAddress,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                    subtitle: Container(
+                      margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                      child: Text(
+                        clientFiscalAddress,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                     onTap: () {
+                      setState(() {
+                        orderActive.setOrder(true, client);
+                      });
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           settings: const RouteSettings(name: "ORDER"),
-                          builder: (context) => OrderPage(
-                            client: client,
-                          ),
+                          builder: (context) => const OrderPage(),
                         ),
                       );
                     },

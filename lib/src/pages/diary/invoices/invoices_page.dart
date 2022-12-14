@@ -11,6 +11,7 @@ import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/invoice
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/invoices_on_process.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/loading/loading_widget.dart';
 
 class InvoicesPage extends StatefulWidget {
   const InvoicesPage({Key? key}) : super(key: key);
@@ -24,40 +25,42 @@ class _InvoicesPageState extends State<InvoicesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        // isCheckedNotes == false
-        // ?
-        StreamProvider<List<Invoices>?>.value(
-          value: FirebaseFirestore.instance
-              .collectionGroup('facturas')
-              .orderBy('nroCorrelativo', descending: true)
-              .snapshots()
-              .map(accountInvoicesFromSnapshot),
-          initialData: const [],
-          catchError: (context, error) {
-            return;
-          },
-        )
-        // : StreamProvider<List<CreditNotes>?>.value(
-        //     value: FirebaseFirestore.instance
-        //         .collectionGroup('notas_credito')
-        //         .orderBy('fecha', descending: true)
-        //         .snapshots()
-        //         .map(accountCreditNotesFromSnapshot),
-        //     initialData: const [],
-        //     catchError: (context, error) {
-        //       return;
-        //     },
-        //   )
-      ],
-      child: SafeArea(
-        child: Scaffold(
-          backgroundColor: myTheme.colorScheme.surface,
-          body: InvoicesBody(isNotesChecked: isCheckedNotes),
-        ),
+    return
+        // MultiProvider(
+        //   providers: [
+        //     // isCheckedNotes == false
+        //     // ?
+        //     // StreamProvider<List<Invoices>?>.value(
+        //     //   value: FirebaseFirestore.instance
+        //     //       .collectionGroup('facturas')
+        //     //       .orderBy('nroCorrelativo', descending: true)
+        //     //       .snapshots()
+        //     //       .map(accountInvoicesFromSnapshot),
+        //     //   initialData: const [],
+        //     //   catchError: (context, error) {
+        //     //     return;
+        //     //   },
+        //     // )
+        //     // : StreamProvider<List<CreditNotes>?>.value(
+        //     //     value: FirebaseFirestore.instance
+        //     //         .collectionGroup('notas_credito')
+        //     //         .orderBy('fecha', descending: true)
+        //     //         .snapshots()
+        //     //         .map(accountCreditNotesFromSnapshot),
+        //     //     initialData: const [],
+        //     //     catchError: (context, error) {
+        //     //       return;
+        //     //     },
+        //     //   )
+        //   ],
+        // child:
+        SafeArea(
+      child: Scaffold(
+        backgroundColor: myTheme.colorScheme.surface,
+        body: InvoicesBody(isNotesChecked: isCheckedNotes),
       ),
     );
+    // );
   }
 }
 
@@ -84,6 +87,9 @@ class _InvoicesBodyState extends State<InvoicesBody> {
         crossAxisAlignment: CrossAxisAlignment.start,
         // ignore: prefer_const_literals_to_create_immutables
         children: [
+          Center(
+            child: CircularProgressIndicator(),
+          ),
           // Container(
           //   margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
           //   child: Row(
@@ -109,55 +115,55 @@ class _InvoicesBodyState extends State<InvoicesBody> {
           //     ],
           //   ),
           // ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Container(
-                width: 120,
-                margin: const EdgeInsets.fromLTRB(16, 10, 0, 10),
-                child: Text(
-                  seeCompleted == true
-                      ? AppLocalizations.of(context)!.completed
-                      : AppLocalizations.of(context)!.onProcess,
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    color: seeCompleted == true
-                        ? Colors.green.shade600
-                        : Colors.amber.shade600,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Poppins-regular',
-                  ),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.fromLTRB(30, 0, 0, 0),
-                child: Text(
-                  'Ver completados',
-                  style: TextStyle(
-                    fontSize: 15,
-                    // fontWeight: FontWeight.bold,
-                    fontFamily: 'Poppins-regular',
-                  ),
-                ),
-              ),
-              Checkbox(
-                activeColor: myTheme.colorScheme.primary,
-                value: seeCompleted,
-                onChanged: (value) {
-                  setState(() {
-                    seeCompleted = !seeCompleted;
-                  });
-                },
-              ),
-            ],
-          ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+          //   children: [
+          //     Container(
+          //       width: 120,
+          //       margin: const EdgeInsets.fromLTRB(16, 10, 0, 10),
+          //       child: Text(
+          //         seeCompleted == true
+          //             ? AppLocalizations.of(context)!.completed
+          //             : AppLocalizations.of(context)!.onProcess,
+          //         textAlign: TextAlign.start,
+          //         style: TextStyle(
+          //           color: seeCompleted == true
+          //               ? Colors.green.shade600
+          //               : Colors.amber.shade600,
+          //           fontSize: 15,
+          //           fontWeight: FontWeight.bold,
+          //           fontFamily: 'Poppins-regular',
+          //         ),
+          //       ),
+          //     ),
+          //     Container(
+          //       margin: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+          //       child: Text(
+          //         'Ver completados',
+          //         style: TextStyle(
+          //           fontSize: 15,
+          //           // fontWeight: FontWeight.bold,
+          //           fontFamily: 'Poppins-regular',
+          //         ),
+          //       ),
+          //     ),
+          //     Checkbox(
+          //       activeColor: myTheme.colorScheme.primary,
+          //       value: seeCompleted,
+          //       onChanged: (value) {
+          //         setState(() {
+          //           seeCompleted = !seeCompleted;
+          //         });
+          //       },
+          //     ),
+          //   ],
+          // ),
           // widget.isNotesChecked == false
           //     ? InvoicesOnProcess()
           //     : CreditNotesOnProcess(),
           // widget.isNotesChecked == false ? InvoicesList() : Container(),
           // InvoicesList(),
-          seeCompleted == true ? InvoicesList() : InvoicesOnProcess(),
+          // seeCompleted == true ? InvoicesList() : InvoicesOnProcess(),
         ],
       ),
     );

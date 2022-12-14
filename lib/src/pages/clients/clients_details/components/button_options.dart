@@ -89,33 +89,33 @@ class ButtonOptions extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
               child: ElevatedButton.icon(
                 onPressed: () {
-                  Clients? client = Clients(
-                    active: true,
-                    specialContributor: specialContribuyer,
-                    masterDiscount: masterDiscount,
-                    fiscalAdress: fiscalAddress,
-                    dispatchAdress: dispactAddress,
-                    email: email,
-                    prices: listOfPrices,
-                    name: name,
-                    phone1: tlf1,
-                    phone2: tlf2,
-                    zone: zone,
-                    id: nameId,
-                    idType: typeId,
-                    clientDocumentId: clientDocumentReferenceID,
-                    madeBy: '',
-                    modified: DateTime.now(),
-                  );
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      settings: const RouteSettings(name: "ORDER"),
-                      builder: (context) => OrderPage(
-                        client: client,
-                      ),
-                    ),
-                  );
+                  // Clients? client = Clients(
+                  //   active: true,
+                  //   specialContributor: specialContribuyer,
+                  //   masterDiscount: masterDiscount,
+                  //   fiscalAdress: fiscalAddress,
+                  //   dispatchAdress: dispactAddress,
+                  //   email: email,
+                  //   prices: listOfPrices,
+                  //   name: name,
+                  //   phone1: tlf1,
+                  //   phone2: tlf2,
+                  //   zone: zone,
+                  //   id: nameId,
+                  //   idType: typeId,
+                  //   clientDocumentId: clientDocumentReferenceID,
+                  //   madeBy: '',
+                  //   modified: DateTime.now(),
+                  // );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     settings: const RouteSettings(name: "ORDER"),
+                  //     builder: (context) => OrderPage(
+                  //       client: client,
+                  //     ),
+                  //   ),
+                  // );
                 },
                 icon: Icon(
                   MaterialCommunityIcons.cart_plus,

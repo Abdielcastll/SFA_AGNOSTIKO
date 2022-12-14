@@ -21,7 +21,6 @@ class _NewUserPageState extends State<NewUserPage> {
     return Scaffold(
       appBar: AppBarNavigation(
         message: 'Nuevo Usuario',
-        isOrderActive: false,
       ),
       backgroundColor: Colors.white,
       body: const NewUserBody(),

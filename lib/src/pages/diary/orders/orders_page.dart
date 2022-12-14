@@ -11,6 +11,7 @@ import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/orders_co
 import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/orders_on_process.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/loading/loading_widget.dart';
 
 class OrdersPage extends StatefulWidget {
   const OrdersPage({Key? key}) : super(key: key);
@@ -66,10 +67,13 @@ class _OrdersBodyState extends State<OrdersBody> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Column(
+      child:
+          // Center(
+          //   child: CircularProgressIndicator(),
+          // ),
+          Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
-        // ignore: prefer_const_literals_to_create_immutables
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,

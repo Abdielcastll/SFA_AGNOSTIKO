@@ -12,6 +12,7 @@ import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
+import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
@@ -22,12 +23,10 @@ class ProductsPage extends StatefulWidget {
     Key? key,
     this.listOfProducts,
     this.listOfPrices,
-    this.isOrderActive,
   }) : super(key: key);
 
   final List<Products>? listOfProducts;
   final listOfPrices;
-  final isOrderActive;
 
   @override
   State<ProductsPage> createState() => _ProductsPageState();
@@ -39,7 +38,6 @@ class _ProductsPageState extends State<ProductsPage> {
     return Scaffold(
       appBar: AppBarNavigation(
         message: AppLocalizations.of(context)!.products,
-        isOrderActive: widget.isOrderActive,
       ),
       backgroundColor: myTheme.colorScheme.surface,
       body: MultiProvider(
@@ -104,7 +102,6 @@ class _ProductsPageState extends State<ProductsPage> {
         child: ProductsBody(
           listOfProducts: widget.listOfProducts,
           listOfPrices: widget.listOfPrices,
-          isOrderActive: widget.isOrderActive,
         ),
       ),
     );
@@ -116,12 +113,10 @@ class ProductsBody extends StatefulWidget {
     Key? key,
     this.listOfProducts,
     this.listOfPrices,
-    required this.isOrderActive,
   }) : super(key: key);
 
   final List<Products>? listOfProducts;
   final listOfPrices;
-  final bool isOrderActive;
 
   @override
   State<ProductsBody> createState() => _ProductsBodyState();
@@ -199,6 +194,8 @@ class _ProductsBodyState extends State<ProductsBody> {
 
   @override
   Widget build(BuildContext context) {
+    final orderActive = Provider.of<OrderProvider>(context);
+
     setState(() {});
 
     final userCharge = sharedPreferences!.getString('cargo');
@@ -221,7 +218,8 @@ class _ProductsBodyState extends State<ProductsBody> {
         children: [
           if (selectedProducts.isEmpty)
             Container()
-          else if (selectedProducts.isNotEmpty && widget.isOrderActive == true)
+          else if (selectedProducts.isNotEmpty &&
+              orderActive.orderActive == true)
             Container(
               height: 70,
               width: 70,
@@ -398,7 +396,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  if (widget.isOrderActive == true ||
+                                  if (orderActive.orderActive == true ||
                                       userCharge == 'Administrador' ||
                                       userCharge == 'Gerente')
                                     Container(

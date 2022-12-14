@@ -29,7 +29,6 @@ class _AccountBalancePageState extends State<AccountBalancePage> {
       backgroundColor: Colors.grey.shade100,
       appBar: AppBarNavigation(
         message: AppLocalizations.of(context)!.accountBalance,
-        isOrderActive: false,
       ),
       body: AccountBalanceBody(
         clientDocument: widget.clientDocument,

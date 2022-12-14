@@ -3,7 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/place_oder_page.dart';
+import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -17,14 +20,19 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final orderActive = Provider.of<OrderProvider>(context);
+    final currentClientForTheOrder =
+        Provider.of<OrderProvider>(context).clientForTheOrder;
+
     return AppBar(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           bottom: Radius.circular(20),
         ),
       ),
+
       title: Padding(
-        padding: EdgeInsets.only(top: 20),
+        padding: EdgeInsets.only(left: 5),
         child: Text(
           AppLocalizations.of(context)!.diary,
           style: const TextStyle(
@@ -34,7 +42,7 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
       ),
-      centerTitle: true,
+      // centerTitle: true,
       elevation: 0,
       backgroundColor: myTheme.colorScheme.primary,
       actions: [
@@ -42,7 +50,7 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+              margin: EdgeInsets.fromLTRB(0, 0, 0, 8),
               child: IconButton(
                 constraints: const BoxConstraints(),
                 splashRadius: 20.0,
@@ -53,23 +61,71 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
                 },
               ),
             ),
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-              child: IconButton(
-                constraints: const BoxConstraints(),
-                splashRadius: 20.0,
-                icon: const Icon(MdiIcons.cartOutline, size: 25),
-                // Redireccion al flujo de realizar nuevos pedidos
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => PlaceOrderPage(),
+            orderActive.orderActive == false
+                ? Container(
+                    margin: EdgeInsets.fromLTRB(0, 0, 16, 8),
+                    child: IconButton(
+                      constraints: const BoxConstraints(),
+                      splashRadius: 20.0,
+                      icon: const Icon(MdiIcons.cartOutline, size: 24),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => PlaceOrderPage(),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
-            ),
+                  )
+                : Container(
+                    margin: EdgeInsets.fromLTRB(0, 10, 0, 8),
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            settings: const RouteSettings(name: "ORDER"),
+                            builder: (context) => const OrderPage(),
+                          ),
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.shopping_cart_rounded,
+                        size: 24,
+                      ),
+                      label: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            currentClientForTheOrder!.name,
+                            style: TextStyle(fontSize: 11),
+                          ),
+                          Text(
+                            currentClientForTheOrder.prices,
+                            style: TextStyle(fontSize: 11),
+                          ),
+                        ],
+                      ),
+                      style: ElevatedButton.styleFrom(elevation: 0),
+                    ),
+                    // child: IconButton(
+                    //   constraints: const BoxConstraints(),
+                    //   splashRadius: 20.0,
+                    //   icon:
+                    //       const Icon(Icons.shopping_cart_rounded, size: 24),
+                    //   onPressed: () {
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //         settings: const RouteSettings(name: "ORDER"),
+                    //         builder: (context) => const OrderPage(),
+                    //       ),
+                    //     );
+                    //   },
+                    // ),
+                  ),
           ],
         ),
       ],

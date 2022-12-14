@@ -127,25 +127,25 @@ class _CheckoutBodyState extends State<CheckoutBody> {
           .format(productPrice)
           .toString();
     } else if (currentCoin!.contains('VED')) {
-      return NumberFormat.currency(
+      return '\$${productPrice.toStringAsFixed(2)} = ${NumberFormat.currency(
         locale: 'es_VE',
         decimalDigits: 2,
         symbol: "Bs.",
-      ).format(productPrice * 4.58).toString();
+      ).format(productPrice * 4.58).toString()}';
     } else if (currentCoin!.contains('EUR')) {
-      return NumberFormat.currency(
+      return '\$${productPrice.toStringAsFixed(2)} = ${NumberFormat.currency(
         locale: 'es_ES',
         decimalDigits: 2,
         symbol: '€',
-      ).format(productPrice * 0.89).toString();
+      ).format(productPrice * 0.89).toString()}';
     } else if (currentCoin!.contains('MXN')) {
-      return NumberFormat.currency(
+      return '\$${productPrice.toStringAsFixed(2)} = ${NumberFormat.currency(
         locale: 'es_MX',
         decimalDigits: 2,
         symbol: '\$',
-      ).format(productPrice * 19.43);
+      ).format(productPrice * 19.43)}';
     } else if (currentCoin!.contains('BTC')) {
-      return '฿ ${(productPrice * 0.00011).toString()}';
+      return '\$${productPrice.toStringAsFixed(2)} = ฿ ${(productPrice * 0.00011).toString()}';
     } else {
       return NumberFormat.currency(
         locale: 'es_VE',
@@ -196,7 +196,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -209,7 +209,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
-                          fontSize: 16,
+                          fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -227,7 +227,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -240,7 +240,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
-                          fontSize: 16,
+                          fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -258,7 +258,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -271,7 +271,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
-                          fontSize: 16,
+                          fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -288,7 +288,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         style: TextStyle(
                           color: myTheme.colorScheme.secondary,
                           fontFamily: 'Poppins-regular',
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -298,9 +298,9 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       child: Text(
                         '${priceFormat(totalOfTheOrder)}',
                         style: TextStyle(
-                          color: myTheme.colorScheme.secondary,
+                          color: myTheme.colorScheme.onPrimaryContainer,
                           fontFamily: 'Poppins-regular',
-                          fontSize: 16,
+                          fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

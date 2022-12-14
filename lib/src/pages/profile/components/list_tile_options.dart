@@ -11,6 +11,7 @@ import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/teams_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/users_and_teams/users_and_teams.dart';
+import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -33,12 +34,11 @@ class ListTileOptions extends StatefulWidget {
 }
 
 class _ListTileOptionsState extends State<ListTileOptions> {
-  final String? currentCoin = sharedPreferences!.getString('currentCoin');
-
   @override
   Widget build(BuildContext context) {
     final zoneSummary = Provider.of<ZoneSummary?>(context)!.summary ?? [];
     final userDoc = Provider.of<CurrentUserInfo?>(context);
+    final currentCoin = Provider.of<CurrencyProvider>(context);
 
     identifyZone() {
       if (userDoc!.zone == null) {
@@ -217,9 +217,6 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                       },
                       builder: (context, snapshot) {
                         String? selectedValue;
-                        final currentCoin =
-                            sharedPreferences!.getString('currentCoin') ??
-                                'Dolares - USD';
 
                         final coins = Provider.of<List<Coin>?>(context) ?? [];
                         List? coinList = [];
@@ -355,20 +352,12 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                               TextButton(
                                 child: const Text('Aceptar'),
                                 onPressed: () {
-                                  if (selectedValue == null) {
-                                    sharedPreferences!.setString(
-                                        'currentCoin', 'Dolares - USD');
-                                    Navigator.pop(context);
-                                    Fluttertoast.showToast(
-                                        msg: 'Moneda reestablecida a dolares');
-                                  } else {
-                                    sharedPreferences!.setString('currentCoin',
-                                        selectedValue.toString());
-                                    Navigator.pop(context);
-                                    Fluttertoast.showToast(
-                                        msg:
-                                            'Moneda cambiada a $selectedValue');
-                                  }
+                                  final currentCoin =
+                                      Provider.of<CurrencyProvider>(context,
+                                          listen: false);
+
+                                  currentCoin.setCurrentCoin(selectedValue);
+                                  Navigator.pop(context);
                                 },
                               ),
                             ],
