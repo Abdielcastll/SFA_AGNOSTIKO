@@ -17,7 +17,6 @@ import 'package:pwa_sales2go_flutter/src/widgets/loading/loading_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void showCreateClientDialog(context, uid) {
-  DateTime today = DateTime.now();
   var dateFormatter = DateFormat('dd-MM-yyyy');
   String? selectedValueA;
   String? selectedValueB;
@@ -50,6 +49,8 @@ void showCreateClientDialog(context, uid) {
           final List<String> zonesStrings = List<String>.from(zonesList);
           final zonesKeys = zonesSummary.keys.toList();
           // print(zonesStrings);
+          DateTime today = DateTime.now();
+
           String formattedDate = dateFormatter.format(today);
           String? nameOfCurrentUser = sharedPreferences!.getString('nombre');
           // print('Zona seleccionada: $selectedValueA');

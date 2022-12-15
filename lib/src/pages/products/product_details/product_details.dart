@@ -14,6 +14,7 @@ import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
+import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -111,45 +112,44 @@ class ProductDetailsBody extends StatelessWidget {
   final pricesName;
   final catalogueID;
 
-  final String? currentCoin =
-      sharedPreferences!.getString('currentCoin') ?? 'Dolares - USD';
-
-  priceFormat(productPrice) {
-    if (currentCoin!.contains('USD') || currentCoin == null) {
-      return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
-          .format(productPrice)
-          .toString();
-    } else if (currentCoin!.contains('VED')) {
-      return NumberFormat.currency(
-        locale: 'es_VE',
-        decimalDigits: 2,
-        symbol: "Bs.",
-      ).format(productPrice * 4.58).toString();
-    } else if (currentCoin!.contains('EUR')) {
-      return NumberFormat.currency(
-        locale: 'es_ES',
-        decimalDigits: 2,
-        symbol: '€',
-      ).format(productPrice * 0.89).toString();
-    } else if (currentCoin!.contains('MXN')) {
-      return NumberFormat.currency(
-        locale: 'es_MX',
-        decimalDigits: 2,
-        symbol: '\$',
-      ).format(productPrice * 19.43);
-    } else if (currentCoin!.contains('BTC')) {
-      return '฿ ${(productPrice * 0.00011).toString()}';
-    } else {
-      return NumberFormat.currency(
-        locale: 'es_VE',
-        decimalDigits: 2,
-        symbol: "PPR.",
-      ).format(productPrice * 4.58).toString();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
+
+    priceFormat(productPrice) {
+      if (currentCoin!.contains('USD')) {
+        return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
+            .format(productPrice)
+            .toString();
+      } else if (currentCoin!.contains('VED')) {
+        return NumberFormat.currency(
+          locale: 'es_VE',
+          decimalDigits: 2,
+          symbol: "Bs.",
+        ).format(productPrice * 4.58).toString();
+      } else if (currentCoin!.contains('EUR')) {
+        return NumberFormat.currency(
+          locale: 'es_ES',
+          decimalDigits: 2,
+          symbol: '€',
+        ).format(productPrice * 0.89).toString();
+      } else if (currentCoin!.contains('MXN')) {
+        return NumberFormat.currency(
+          locale: 'es_MX',
+          decimalDigits: 2,
+          symbol: '\$',
+        ).format(productPrice * 19.43);
+      } else if (currentCoin!.contains('BTC')) {
+        return '฿ ${(productPrice * 0.00011).toString()}';
+      } else {
+        return NumberFormat.currency(
+          locale: 'es_VE',
+          decimalDigits: 2,
+          symbol: "PPR.",
+        ).format(productPrice * 4.58).toString();
+      }
+    }
+
     final priceProduct = priceFormat(double.parse(price ?? '0')).toString();
 
     return SingleChildScrollView(

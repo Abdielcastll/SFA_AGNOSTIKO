@@ -51,35 +51,35 @@ class _ClientDetailsState extends State<ClientDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: Wrap(
-        direction: Axis.horizontal,
-        children: [
-          Container(
-            margin: const EdgeInsets.all(10.0),
-            child: FloatingActionButton(
-              elevation: 0,
-              backgroundColor: myTheme.colorScheme.primary,
-              onPressed: () {
-                // Redireccionar a estado de cuenta
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => AccountBalancePage(
-                      clientDocument:
-                          widget.clientDocumentReferenceID.toString(),
-                      clientName: widget.name,
-                    ),
-                  ),
-                );
-              },
-              child: const Icon(
-                Icons.account_balance,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
-      ),
+      // floatingActionButton: Wrap(
+      //   direction: Axis.horizontal,
+      //   children: [
+      //     Container(
+      //       margin: const EdgeInsets.all(10.0),
+      //       child: FloatingActionButton(
+      //         elevation: 0,
+      //         backgroundColor: myTheme.colorScheme.primary,
+      //         onPressed: () {
+      //           // Redireccionar a estado de cuenta
+      //           Navigator.push(
+      //             context,
+      //             MaterialPageRoute(
+      //               builder: (BuildContext context) => AccountBalancePage(
+      //                 clientDocument:
+      //                     widget.clientDocumentReferenceID.toString(),
+      //                 clientName: widget.name,
+      //               ),
+      //             ),
+      //           );
+      //         },
+      //         child: const Icon(
+      //           Icons.account_balance,
+      //           color: Colors.white,
+      //         ),
+      //       ),
+      //     ),
+      //   ],
+      // ),
       backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
         toolbarHeight: 40,

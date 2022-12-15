@@ -15,6 +15,7 @@ import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
+import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/invoice_modalbottomsheet.dart';
@@ -79,45 +80,44 @@ class InvoiceCardBody extends StatelessWidget {
 
   final InvoiceCard widget;
 
-  final String? currentCoin =
-      sharedPreferences!.getString('currentCoin') ?? 'Dolares - USD';
-
-  priceFormat(productPrice) {
-    if (currentCoin!.contains('USD') || currentCoin == null) {
-      return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
-          .format(productPrice)
-          .toString();
-    } else if (currentCoin!.contains('VED')) {
-      return NumberFormat.currency(
-        locale: 'es_VE',
-        decimalDigits: 2,
-        symbol: "Bs.",
-      ).format(productPrice * 4.58).toString();
-    } else if (currentCoin!.contains('EUR')) {
-      return NumberFormat.currency(
-        locale: 'es_ES',
-        decimalDigits: 2,
-        symbol: '€',
-      ).format(productPrice * 0.89).toString();
-    } else if (currentCoin!.contains('MXN')) {
-      return NumberFormat.currency(
-        locale: 'es_MX',
-        decimalDigits: 2,
-        symbol: '\$',
-      ).format(productPrice * 19.43);
-    } else if (currentCoin!.contains('BTC')) {
-      return '฿ ${(productPrice * 0.00011).toString()}';
-    } else {
-      return NumberFormat.currency(
-        locale: 'es_VE',
-        decimalDigits: 2,
-        symbol: "PPR.",
-      ).format(productPrice * 4.58).toString();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
+
+    priceFormat(productPrice) {
+      if (currentCoin!.contains('USD') || currentCoin == null) {
+        return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
+            .format(productPrice)
+            .toString();
+      } else if (currentCoin!.contains('VED')) {
+        return '\$${productPrice.toStringAsFixed(2)} = ${NumberFormat.currency(
+          locale: 'es_VE',
+          decimalDigits: 2,
+          symbol: "Bs.",
+        ).format(productPrice * 4.58).toString()}';
+      } else if (currentCoin!.contains('EUR')) {
+        return '\$${productPrice.toStringAsFixed(2)} = ${NumberFormat.currency(
+          locale: 'es_ES',
+          decimalDigits: 2,
+          symbol: '€',
+        ).format(productPrice * 0.89).toString()}';
+      } else if (currentCoin!.contains('MXN')) {
+        return '\$${productPrice.toStringAsFixed(2)} = ${NumberFormat.currency(
+          locale: 'es_MX',
+          decimalDigits: 2,
+          symbol: '\$',
+        ).format(productPrice * 19.43)}';
+      } else if (currentCoin!.contains('BTC')) {
+        return '\$${productPrice.toStringAsFixed(2)} = ฿ ${(productPrice * 0.00011).toString()}';
+      } else {
+        return NumberFormat.currency(
+          locale: 'es_VE',
+          decimalDigits: 2,
+          symbol: "PPR.",
+        ).format(productPrice * 4.58).toString();
+      }
+    }
+
     Color? identifyColor() {
       if (widget.invoiceStatus == AppLocalizations.of(context)!.onProcess) {
         return Colors.amber.shade600;

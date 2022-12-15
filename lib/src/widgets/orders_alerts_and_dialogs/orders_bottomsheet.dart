@@ -2,9 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
+import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -50,11 +52,11 @@ void modalBottomSheetForOrders(
       ),
     ),
     builder: (context) {
-      final String? currentCoin =
-          sharedPreferences!.getString('currentCoin') ?? 'Dolares - USD';
+      final currentCoin =
+          Provider.of<CurrencyProvider>(context).currentCurrency;
 
       priceFormat(productPrice) {
-        if (currentCoin!.contains('USD') || currentCoin == null) {
+        if (currentCoin!.contains('USD')) {
           return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
               .format(productPrice)
               .toString();

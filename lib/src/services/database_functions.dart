@@ -17,29 +17,41 @@ Future createVisitData(
 ) async {
   print('////// CREAR VISITA EN PROCESO /////');
   final lastModified = <String, dynamic>{
-    'timestamp': Timestamp.fromDate(DateTime.now()),
+    'timestamp': Timestamp.now(),
     'usuario': FirebaseFirestore.instance.collection('usuarios').doc(userUid)
   };
 
-  return await FirebaseFirestore.instance
-      .collection('usuarios')
-      .doc(userUid)
-      .collection('visitas')
-      .doc()
-      .set({
-    'cancelada': false,
-    'cliente':
-        FirebaseFirestore.instance.collection('cliente').doc(clientDocumentId),
-    'completada': false,
-    'creadoPor': FirebaseFirestore.instance.collection('usuarios').doc(userUid),
-    'fecha': Timestamp.fromDate(date),
-    'noCobranza': false,
-    'noPedido': false,
-    'noVisita': false,
-    'timestrampRegistro': Timestamp.fromDate(DateTime.now()),
-    'ultima modificacion': Map<String, dynamic>.from(lastModified),
-    'vendedor': FirebaseFirestore.instance.collection('usuarios').doc(userUid),
-  });
+  print(false);
+  print(FirebaseFirestore.instance.collection('cliente').doc(clientDocumentId));
+  print(false);
+  print(FirebaseFirestore.instance.collection('usuarios').doc(userUid));
+  print(Timestamp.fromDate(date));
+  print(false);
+  print(false);
+  print(false);
+  print(Timestamp.fromDate(DateTime.now()));
+  print(Map<String, dynamic>.from(lastModified));
+  print(FirebaseFirestore.instance.collection('usuarios').doc(userUid));
+
+  // return await FirebaseFirestore.instance
+  //     .collection('usuarios')
+  //     .doc(userUid)
+  //     .collection('visitas')
+  //     .doc()
+  //     .set({
+  //   'cancelada': false,
+  //   'cliente':
+  //       FirebaseFirestore.instance.collection('cliente').doc(clientDocumentId),
+  //   'completada': false,
+  //   'creadoPor': FirebaseFirestore.instance.collection('usuarios').doc(userUid),
+  //   'fecha': Timestamp.fromDate(date),
+  //   'noCobranza': false,
+  //   'noPedido': false,
+  //   'noVisita': false,
+  //   'timestrampRegistro': Timestamp.fromDate(DateTime.now()),
+  //   'ultima modificacion': Map<String, dynamic>.from(lastModified),
+  //   'vendedor': FirebaseFirestore.instance.collection('usuarios').doc(userUid),
+  // });
 }
 
 Future updateVisitData(

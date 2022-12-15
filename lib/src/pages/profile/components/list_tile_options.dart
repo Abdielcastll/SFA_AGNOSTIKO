@@ -220,16 +220,26 @@ class _ListTileOptionsState extends State<ListTileOptions> {
 
                         final coins = Provider.of<List<Coin>?>(context) ?? [];
                         List? coinList = [];
+                        Map<String, dynamic>? coinExchangeList =
+                            <String, dynamic>{'USD': 1};
+                        //
                         coinList.add('Dolares - USD');
-                        coins
-                            .map((coin) => coinList.add(
-                                '${coin.name} - ${coin.code} (${coin.symbol})'))
-                            .toList();
+                        coins.map((coin) {
+                          coinList.add(
+                              '${coin.name} - ${coin.code} (${coin.symbol})');
+                          final exchangeRate = <String, dynamic>{
+                            '${coin.name} - ${coin.code} (${coin.symbol})':
+                                '${coin.exchangeRatio}'
+                          };
+                          coinExchangeList.addEntries(exchangeRate.entries);
+                        }).toList();
+
                         List? coinListSymbols = [];
                         coinListSymbols.add('USD');
                         coins
                             .map((coin) => coinListSymbols.add(coin.symbol))
                             .toList();
+                        print(coinExchangeList);
 
                         return StatefulBuilder(builder: (context, setState) {
                           List? items = coinList;
@@ -241,7 +251,7 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                               'Cambiar Moneda',
                               style: TextStyle(
                                 fontFamily: 'Poppins-regular',
-                                color: myTheme.colorScheme.secondary,
+                                color: myTheme.colorScheme.onPrimaryContainer,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -258,8 +268,7 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                                           children: [
                                             Expanded(
                                               child: Text(
-                                                selectedValue ??
-                                                    'Escoga una moneda',
+                                                '${currentCoin.currentCurrency}',
                                                 style: TextStyle(
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.bold,
@@ -296,6 +305,8 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                                               selectedValue = value as String;
                                             },
                                           );
+                                          print(
+                                              '${coinExchangeList['$selectedValue']}');
                                         },
                                         icon: const Icon(
                                           Icons.arrow_forward_ios_outlined,
@@ -339,6 +350,34 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                                       ),
                                     ),
                                   ),
+                                  selectedValue?.contains('USD') == false
+                                      ? Column(
+                                          children: [
+                                            Container(
+                                              child: Text(
+                                                'Tasa de cambio',
+                                                style: TextStyle(
+                                                  fontFamily: 'Poppins-regular',
+                                                  fontSize: 14,
+                                                  color: myTheme
+                                                      .colorScheme.secondary,
+                                                ),
+                                              ),
+                                            ),
+                                            Container(
+                                              child: Text(
+                                                '\$1 =  ${coinExchangeList['$selectedValue']}',
+                                                style: TextStyle(
+                                                  fontFamily: 'Poppins-regular',
+                                                  fontSize: 14,
+                                                  color: myTheme
+                                                      .colorScheme.secondary,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      : Container(),
                                 ],
                               ),
                             ),

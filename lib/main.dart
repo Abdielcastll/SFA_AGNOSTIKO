@@ -84,7 +84,7 @@ class SfaAgnostiko extends StatelessWidget {
                       'products': (BuildContext context) =>
                           const ProductsPage(),
                       'clients': (BuildContext context) => const ClientsPage(),
-                      'profile': (BuildContext context) => ProfilePage(),
+                      'profile': (BuildContext context) => const ProfilePage(),
                       'diary': (BuildContext context) => const DiaryTabs(),
                       'order': (BuildContext context) => const OrderPage(),
                     },

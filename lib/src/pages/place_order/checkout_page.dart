@@ -14,6 +14,7 @@ import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/completed_order.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/components/selected_client.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
+import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_checkout.dart';
@@ -79,7 +80,6 @@ class _CheckoutBodyState extends State<CheckoutBody> {
   var numberOrder;
   DateTime today = DateTime.now();
   DateFormat dateFormatter = DateFormat('dd-MM-yyyy');
-  final currentCoin = sharedPreferences!.getString('currentCoin');
 
   final List<String> items = ['Fiscal', 'Despacho'];
 
@@ -121,40 +121,6 @@ class _CheckoutBodyState extends State<CheckoutBody> {
     );
   }
 
-  priceFormat(productPrice) {
-    if (currentCoin!.contains('USD') || currentCoin == null) {
-      return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
-          .format(productPrice)
-          .toString();
-    } else if (currentCoin!.contains('VED')) {
-      return '\$${productPrice.toStringAsFixed(2)} = ${NumberFormat.currency(
-        locale: 'es_VE',
-        decimalDigits: 2,
-        symbol: "Bs.",
-      ).format(productPrice * 4.58).toString()}';
-    } else if (currentCoin!.contains('EUR')) {
-      return '\$${productPrice.toStringAsFixed(2)} = ${NumberFormat.currency(
-        locale: 'es_ES',
-        decimalDigits: 2,
-        symbol: '€',
-      ).format(productPrice * 0.89).toString()}';
-    } else if (currentCoin!.contains('MXN')) {
-      return '\$${productPrice.toStringAsFixed(2)} = ${NumberFormat.currency(
-        locale: 'es_MX',
-        decimalDigits: 2,
-        symbol: '\$',
-      ).format(productPrice * 19.43)}';
-    } else if (currentCoin!.contains('BTC')) {
-      return '\$${productPrice.toStringAsFixed(2)} = ฿ ${(productPrice * 0.00011).toString()}';
-    } else {
-      return NumberFormat.currency(
-        locale: 'es_VE',
-        decimalDigits: 2,
-        symbol: "PPR.",
-      ).format(productPrice * 4.58).toString();
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -171,6 +137,41 @@ class _CheckoutBodyState extends State<CheckoutBody> {
     String? dispatchAddress =
         widget.client?.dispatchAdress ?? 'No Hay direccion disponible';
     String formattedDate = dateFormatter.format(today);
+    final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
+
+    priceFormat(productPrice) {
+      if (currentCoin!.contains('USD')) {
+        return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
+            .format(productPrice)
+            .toString();
+      } else if (currentCoin!.contains('VED')) {
+        return NumberFormat.currency(
+          locale: 'es_VE',
+          decimalDigits: 2,
+          symbol: "Bs.",
+        ).format(productPrice * 4.58).toString();
+      } else if (currentCoin!.contains('EUR')) {
+        return NumberFormat.currency(
+          locale: 'es_ES',
+          decimalDigits: 2,
+          symbol: '€',
+        ).format(productPrice * 0.89).toString();
+      } else if (currentCoin!.contains('MXN')) {
+        return NumberFormat.currency(
+          locale: 'es_MX',
+          decimalDigits: 2,
+          symbol: '\$',
+        ).format(productPrice * 19.43);
+      } else if (currentCoin!.contains('BTC')) {
+        return '฿ ${(productPrice * 0.00011).toString()}';
+      } else {
+        return NumberFormat.currency(
+          locale: 'es_VE',
+          decimalDigits: 2,
+          symbol: "PPR.",
+        ).format(productPrice * 4.58).toString();
+      }
+    }
 
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),

@@ -2,9 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/examples/clients_example.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
+import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class SelectedClient extends StatelessWidget {
@@ -56,7 +58,7 @@ class SelectedClient extends StatelessWidget {
                     height: 30,
                     width: 180,
                     child: Text(
-                      client?.fiscalAdress,
+                      client?.fiscalAdress ?? 'NaN',
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -110,6 +112,10 @@ class SelectedClient extends StatelessWidget {
                                     TextButton(
                                       child: const Text('Aceptar'),
                                       onPressed: () {
+                                        final orderActive =
+                                            Provider.of<OrderProvider>(context,
+                                                listen: false);
+                                        orderActive.setOrder(false, Clients());
                                         objectBox.delelteAllShoppingCart();
                                         Navigator.of(context).pop();
                                         Navigator.of(context).pop();

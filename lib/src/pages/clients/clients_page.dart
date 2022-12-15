@@ -18,40 +18,38 @@ class ClientsPage extends StatefulWidget {
 class _ClientsPageState extends State<ClientsPage> {
   @override
   Widget build(BuildContext context) {
-    return
-        // MultiProvider(
-        //   providers: [
-        //     StreamProvider<List<Clients>?>.value(
-        //       value: DatabaseServiceStreams().clients,
-        //       initialData: const [],
-        //       catchError: (context, error) {
-        //         return;
-        //       },
-        //     ),
-        //     StreamProvider<IdTypeSummary?>.value(
-        //       value: DatabaseServiceStreams().idTypeSummary,
-        //       initialData: null,
-        //       catchError: (context, error) {
-        //         return;
-        //       },
-        //     ),
-        //     StreamProvider<ZoneSummary?>.value(
-        //       value: DatabaseServiceStreams().zoneSummary,
-        //       initialData: null,
-        //       catchError: (context, error) {
-        //         return;
-        //       },
-        //     ),
-        //   ],
-        //   child:
-        Scaffold(
-      backgroundColor: Colors.grey[200],
-      appBar: AppBarNavigation(
-        message: AppLocalizations.of(context)!.clients,
+    return MultiProvider(
+      providers: [
+        StreamProvider<List<Clients>?>.value(
+          value: DatabaseServiceStreams().clients,
+          initialData: const [],
+          catchError: (context, error) {
+            return;
+          },
+        ),
+        StreamProvider<IdTypeSummary?>.value(
+          value: DatabaseServiceStreams().idTypeSummary,
+          initialData: null,
+          catchError: (context, error) {
+            return;
+          },
+        ),
+        StreamProvider<ZoneSummary?>.value(
+          value: DatabaseServiceStreams().zoneSummary,
+          initialData: null,
+          catchError: (context, error) {
+            return;
+          },
+        ),
+      ],
+      child: Scaffold(
+        backgroundColor: Colors.grey[200],
+        appBar: AppBarNavigation(
+          message: AppLocalizations.of(context)!.clients,
+        ),
+        body: const ClientsBody(),
       ),
-      body: const ClientsBody(),
     );
-    // );
   }
 }
 
@@ -69,10 +67,10 @@ class ClientsBody extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Center(
-            child: CircularProgressIndicator(),
-          ),
-          // ClientList(listOfClients: clientsList),
+          // Center(
+          //   child: CircularProgressIndicator(),
+          // ),
+          ClientList(listOfClients: clientsList),
         ],
       ),
     );

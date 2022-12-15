@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
+import 'package:pwa_sales2go_flutter/src/pages/account_balance/account_balance.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
+import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -39,6 +42,9 @@ class ButtonOptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final orderActive = Provider.of<OrderProvider>(context);
+    final currentClientForTheOrder =
+        Provider.of<OrderProvider>(context).clientForTheOrder;
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Row(
@@ -56,7 +62,17 @@ class ButtonOptions extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => AccountBalancePage(
+                        clientDocument: clientDocumentReferenceID.toString(),
+                        clientName: name,
+                      ),
+                    ),
+                  );
+                },
                 icon: Icon(
                   MaterialCommunityIcons.calendar_month_outline,
                   color: myTheme.colorScheme.primary,
@@ -89,54 +105,83 @@ class ButtonOptions extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
               child: ElevatedButton.icon(
                 onPressed: () {
-                  // Clients? client = Clients(
-                  //   active: true,
-                  //   specialContributor: specialContribuyer,
-                  //   masterDiscount: masterDiscount,
-                  //   fiscalAdress: fiscalAddress,
-                  //   dispatchAdress: dispactAddress,
-                  //   email: email,
-                  //   prices: listOfPrices,
-                  //   name: name,
-                  //   phone1: tlf1,
-                  //   phone2: tlf2,
-                  //   zone: zone,
-                  //   id: nameId,
-                  //   idType: typeId,
-                  //   clientDocumentId: clientDocumentReferenceID,
-                  //   madeBy: '',
-                  //   modified: DateTime.now(),
-                  // );
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     settings: const RouteSettings(name: "ORDER"),
-                  //     builder: (context) => OrderPage(
-                  //       client: client,
-                  //     ),
-                  //   ),
-                  // );
+                  final orderActive =
+                      Provider.of<OrderProvider>(context, listen: false);
+                  final currentClientForTheOrder =
+                      Provider.of<OrderProvider>(context, listen: false)
+                          .clientForTheOrder;
+
+                  Clients? client = Clients(
+                    active: true,
+                    specialContributor: specialContribuyer,
+                    masterDiscount: masterDiscount,
+                    fiscalAdress: fiscalAddress,
+                    dispatchAdress: dispactAddress,
+                    email: email,
+                    prices: listOfPrices,
+                    name: name,
+                    phone1: tlf1,
+                    phone2: tlf2,
+                    zone: zone,
+                    id: nameId,
+                    idType: typeId,
+                    clientDocumentId: clientDocumentReferenceID,
+                    madeBy: '',
+                    modified: DateTime.now(),
+                  );
+                  orderActive.orderActive == true
+                      ? print('')
+                      : orderActive.setOrder(true, client);
+                  orderActive.orderActive == true
+                      ? currentClientForTheOrder?.name == name
+                          ? Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                settings: const RouteSettings(name: "ORDER"),
+                                builder: (context) => const OrderPage(),
+                              ),
+                            )
+                          : print('')
+                      : Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            settings: const RouteSettings(name: "ORDER"),
+                            builder: (context) => const OrderPage(),
+                          ),
+                        );
                 },
                 icon: Icon(
-                  MaterialCommunityIcons.cart_plus,
+                  orderActive.orderActive == false
+                      ? MaterialCommunityIcons.cart_plus
+                      : Icons.shopping_cart_checkout,
                   color: myTheme.colorScheme.background,
                   size: 22,
                 ),
                 label: Text(
-                  AppLocalizations.of(context)!.makeOrder,
+                  orderActive.orderActive == false
+                      ? AppLocalizations.of(context)!.makeOrder
+                      : currentClientForTheOrder?.name == name
+                          ? 'Cliente actual'
+                          : 'Orden en progreso',
                   style: TextStyle(
                     color: myTheme.colorScheme.background,
                     fontFamily: 'Poppins-regular',
-                    fontSize: 14,
+                    fontSize: orderActive.orderActive == false ? 14 : 11,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color?>(
-                    myTheme.colorScheme.primary,
+                    orderActive.orderActive == false
+                        ? myTheme.colorScheme.primary
+                        : currentClientForTheOrder?.name == name
+                            ? Colors.green
+                            : myTheme.colorScheme.error,
                   ),
                   overlayColor: MaterialStateProperty.all<Color>(
-                    myTheme.colorScheme.background,
+                    orderActive.orderActive == false
+                        ? myTheme.colorScheme.background
+                        : Colors.transparent,
                   ),
                 ),
               ),

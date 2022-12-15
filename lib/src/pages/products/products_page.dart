@@ -12,6 +12,7 @@ import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
+import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -153,45 +154,6 @@ class _ProductsBodyState extends State<ProductsBody> {
     setState(() => products = suggestions);
   }
 
-  final String? currentCoin =
-      sharedPreferences!.getString('currentCoin') ?? 'Dolares - USD';
-
-  priceFormat(productPrice) {
-    if (currentCoin!.contains('USD') || currentCoin == null) {
-      return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
-          .format(productPrice)
-          .toString();
-    } else if (currentCoin!.contains('VED')) {
-      return NumberFormat.currency(
-        locale: 'es_VE',
-        decimalDigits: 2,
-        symbol: "Bs.",
-      ).format(productPrice * 4.58).toString();
-    } else if (currentCoin!.contains('EUR')) {
-      return NumberFormat.currency(
-        locale: 'es_ES',
-        decimalDigits: 2,
-        symbol: '€',
-        // customPattern: '\u00a4 #,##.#',
-      ).format(productPrice * 0.89).toString();
-    } else if (currentCoin!.contains('MXN')) {
-      return NumberFormat.currency(
-        locale: 'es_MX',
-        decimalDigits: 2,
-        symbol: '\$',
-        // customPattern: '\u00a4 #,##$$$.#',
-      ).format(productPrice * 19.43);
-    } else if (currentCoin!.contains('BTC')) {
-      return '฿ ${(productPrice * 0.00011).toString()}';
-    } else {
-      return NumberFormat.currency(
-        locale: 'es_VE',
-        decimalDigits: 2,
-        symbol: "PPR.",
-      ).format(productPrice * 4.58).toString();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final orderActive = Provider.of<OrderProvider>(context);
@@ -210,6 +172,41 @@ class _ProductsBodyState extends State<ProductsBody> {
         Provider.of<SubCategorieSummary?>(context)?.summary ?? {};
     final sizesSummary = Provider.of<SizeSummary?>(context)?.summary ?? {};
     final stockValues = Provider.of<StockModel?>(context)?.stock ?? {};
+    final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
+
+    priceFormat(productPrice) {
+      if (currentCoin!.contains('USD')) {
+        return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
+            .format(productPrice)
+            .toString();
+      } else if (currentCoin!.contains('VED')) {
+        return NumberFormat.currency(
+          locale: 'es_VE',
+          decimalDigits: 2,
+          symbol: "Bs.",
+        ).format(productPrice * 4.58).toString();
+      } else if (currentCoin!.contains('EUR')) {
+        return NumberFormat.currency(
+          locale: 'es_ES',
+          decimalDigits: 2,
+          symbol: '€',
+        ).format(productPrice * 0.89).toString();
+      } else if (currentCoin!.contains('MXN')) {
+        return NumberFormat.currency(
+          locale: 'es_MX',
+          decimalDigits: 2,
+          symbol: '\$',
+        ).format(productPrice * 19.43);
+      } else if (currentCoin!.contains('BTC')) {
+        return '฿ ${(productPrice * 0.00011).toString()}';
+      } else {
+        return NumberFormat.currency(
+          locale: 'es_VE',
+          decimalDigits: 2,
+          symbol: "PPR.",
+        ).format(productPrice * 4.58).toString();
+      }
+    }
 
     return Scaffold(
       backgroundColor: myTheme.colorScheme.surface,
