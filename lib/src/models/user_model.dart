@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class UserModel {
   final String? uid;
   final String? email;
@@ -10,22 +12,44 @@ class UserModel {
 
 class CurrentUserInfo {
   final name;
+  final email;
   final dni;
   final zone;
+  final zoneDocument;
+  final uid;
+  final role;
 
   CurrentUserInfo({
     this.name,
     this.dni,
     this.zone,
+    this.zoneDocument,
+    this.email,
+    this.role,
+    this.uid,
   });
 }
 
-CurrentUserInfo currentUserInfoFromSnapshot(doc) {
-  return CurrentUserInfo(
-    name: doc.data().toString().contains('nombre') ? doc.get('nombre') : null,
-    dni: doc.data().toString().contains('nro_cedula')
-        ? doc.get('nro_cedula')
-        : 00000000,
-    zone: doc.data().toString().contains('zona') ? doc.get('zona').id : null,
-  );
+class CurrentUserProvider extends ChangeNotifier {
+  CurrentUserInfo? _currentUserInfo;
+
+  CurrentUserInfo? get currentUserInfo => _currentUserInfo;
+
+  void setCurrentUserInfo(CurrentUserInfo? user, choice) {
+    if (choice == true) {
+      _currentUserInfo = user;
+      notifyListeners();
+    } else if (choice == false) {
+      _currentUserInfo = CurrentUserInfo(
+        name: '',
+        dni: '',
+        zone: '',
+        zoneDocument: '',
+        email: '',
+        role: '',
+        uid: '',
+      );
+      notifyListeners();
+    }
+  }
 }

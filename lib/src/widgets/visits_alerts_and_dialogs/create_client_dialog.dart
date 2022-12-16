@@ -18,6 +18,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void showCreateClientDialog(context, uid) {
   var dateFormatter = DateFormat('dd-MM-yyyy');
+  DateTime today = DateTime.now();
+  String formattedDate = dateFormatter.format(today);
+
   String? selectedValueA;
   String? selectedValueB;
   bool isLoading = false;
@@ -49,9 +52,7 @@ void showCreateClientDialog(context, uid) {
           final List<String> zonesStrings = List<String>.from(zonesList);
           final zonesKeys = zonesSummary.keys.toList();
           // print(zonesStrings);
-          DateTime today = DateTime.now();
 
-          String formattedDate = dateFormatter.format(today);
           String? nameOfCurrentUser = sharedPreferences!.getString('nombre');
           // print('Zona seleccionada: $selectedValueA');
 
@@ -158,9 +159,16 @@ void showCreateClientDialog(context, uid) {
                                             context: context,
                                             initialDate: today,
                                             firstDate: DateTime.now(),
-                                            lastDate: DateTime(2023),
+                                            lastDate: DateTime(2030),
                                           );
                                           if (newDate == null) return;
+
+                                          setState(() {
+                                            today = newDate;
+                                            formattedDate =
+                                                dateFormatter.format(today);
+                                          });
+
                                           setState(() {
                                             today = newDate;
                                           });

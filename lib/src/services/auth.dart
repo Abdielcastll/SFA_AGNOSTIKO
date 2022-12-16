@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:flutter/material.dart';
@@ -55,38 +56,66 @@ class AuthService {
       if (record.exists) {
         try {
           if (record.data()!['activo'] == true) {
-            await sharedPreferences!.setString('uid', user.uid);
-            await sharedPreferences!
-                .setString('email', user.email ?? 'No hay email');
-            await sharedPreferences!
-                .setString('nombre', record.data()!['nombre']);
-            await sharedPreferences!
-                .setInt('nro_cedula', record.data()!['nro_cedula']);
-            List<String> indice = record.data()!['indice'].cast<String>();
-            await sharedPreferences!.setStringList('indice', indice);
-            await sharedPreferences!.setString('currentCoin', 'USD');
-            if (record.data()!['rol'].id == 'S7iQ6hOGikhwrFUHmQtV') {
-              await sharedPreferences!.setString('cargo', 'Administrador');
-            } else {
-              if (record.data()!['esGerente'] == false) {
-                if (record.data()!['esVendedor'] == false) {
-                  await sharedPreferences!.setString('cargo', 'Cobrador');
-                } else {
-                  await sharedPreferences!.setString('cargo', 'Vendedor');
-                }
-              } else {
-                await sharedPreferences!.setString('cargo', 'Gerente');
-              }
-            }
-            print('/////////////////////////////////////////////////');
-            print('Saving Data on shared preferences');
-            print(sharedPreferences!.getString('uid'));
-            print(sharedPreferences!.getString('email'));
-            print(sharedPreferences!.getString('nombre'));
-            print(sharedPreferences!.getInt('nro_cedula'));
-            print(sharedPreferences!.getStringList('indice'));
-            print(sharedPreferences!.getString('cargo'));
-            print('/////////////////////////////////////////////////');
+            // CurrentUserInfo newUser = CurrentUserInfo(
+            //   name: record.data()?['nombre'],
+            //   email: record.data()?['email'],
+            //   dni: record.data()?['nro_cedula'],
+            //   role: record.data()?['rol'].id,
+            //   zone: record.data().toString().contains('zona')
+            //       ? record.data()!['zona'].id
+            //       : 'NaN',
+            //   zoneDocument: record.data().toString().contains('zona')
+            //       ? record.data()!['zona']
+            //       : 'NaN',
+            //   uid: user.uid,
+            // );
+            // print(record.data()?['nombre']);
+            // print(record.data()?['email']);
+            // print(record.data()?['nro_cedula']);
+            // print(record.data()?['rol'].id);
+            // print(
+            //   record.data().toString().contains('zona')
+            //       ? record.data()!['zona'].id
+            //       : 'NaN',
+            // );
+            // print(record.data().toString().contains('zona')
+            //     ? record.data()!['zona']
+            //     : 'NaN');
+            // print(user.uid);
+            // currentUserActive.setCurrentUserInfo(newUser, true);
+////////////////////////////
+            // await sharedPreferences!.setString('uid', user.uid);
+            // await sharedPreferences!
+            //     .setString('email', user.email ?? 'No hay email');
+            // await sharedPreferences!
+            //     .setString('nombre', record.data()!['nombre']);
+            // await sharedPreferences!
+            //     .setInt('nro_cedula', record.data()!['nro_cedula']);
+            // List<String> indice = record.data()!['indice'].cast<String>();
+            // await sharedPreferences!.setStringList('indice', indice);
+            // await sharedPreferences!.setString('currentCoin', 'USD');
+            // if (record.data()!['rol'].id == 'S7iQ6hOGikhwrFUHmQtV') {
+            //   await sharedPreferences!.setString('cargo', 'Administrador');
+            // } else {
+            //   if (record.data()!['esGerente'] == false) {
+            //     if (record.data()!['esVendedor'] == false) {
+            //       await sharedPreferences!.setString('cargo', 'Cobrador');
+            //     } else {
+            //       await sharedPreferences!.setString('cargo', 'Vendedor');
+            //     }
+            //   } else {
+            //     await sharedPreferences!.setString('cargo', 'Gerente');
+            //   }
+            // }
+            // print('/////////////////////////////////////////////////');
+            // print('Saving Data on shared preferences');
+            // print(sharedPreferences!.getString('uid'));
+            // print(sharedPreferences!.getString('email'));
+            // print(sharedPreferences!.getString('nombre'));
+            // print(sharedPreferences!.getInt('nro_cedula'));
+            // print(sharedPreferences!.getStringList('indice'));
+            // print(sharedPreferences!.getString('cargo'));
+            // print('/////////////////////////////////////////////////');
 
             return _userFromFirebaseUser(user);
           } else {
@@ -97,6 +126,7 @@ class AuthService {
             );
           }
         } catch (e) {
+          print(e);
           Fluttertoast.showToast(
             msg: 'Error en la petición',
             backgroundColor: myTheme.colorScheme.secondary,
@@ -118,27 +148,51 @@ class AuthService {
   Future signOut() async {
     try {
       print('signed out pressed');
-      await sharedPreferences!.setString('uid', '');
-      await sharedPreferences!.setString('email', '');
-      await sharedPreferences!.setString('nombre', '');
-      await sharedPreferences!.setInt('nro_cedula', 0);
-      await sharedPreferences!.setStringList('indice', []);
-      await sharedPreferences!.setString('cargo', '');
-      await sharedPreferences!.setString('cargo', '');
-      print('/////////////////////////////////////////////////');
-      print('Saving Data on shared preferences');
-      print(sharedPreferences!.getString('uid'));
-      print(sharedPreferences!.getString('email'));
-      print(sharedPreferences!.getString('nombre'));
-      print(sharedPreferences!.getInt('nro_cedula'));
-      print(sharedPreferences!.getStringList('indice'));
-      print(sharedPreferences!.getString('cargo'));
-      print('/////////////////////////////////////////////////');
+      // await sharedPreferences!.setString('uid', '');
+      // await sharedPreferences!.setString('email', '');
+      // await sharedPreferences!.setString('nombre', '');
+      // await sharedPreferences!.setInt('nro_cedula', 0);
+      // await sharedPreferences!.setStringList('indice', []);
+      // await sharedPreferences!.setString('cargo', '');
+      // await sharedPreferences!.setString('cargo', '');
+      // print('/////////////////////////////////////////////////');
+      // print('Saving Data on shared preferences');
+      // print(sharedPreferences!.getString('uid'));
+      // print(sharedPreferences!.getString('email'));
+      // print(sharedPreferences!.getString('nombre'));
+      // print(sharedPreferences!.getInt('nro_cedula'));
+      // print(sharedPreferences!.getStringList('indice'));
+      // print(sharedPreferences!.getString('cargo'));
+      // print('/////////////////////////////////////////////////');
 
       return await _auth.signOut();
     } catch (e) {
       print(e.toString());
       return null;
     }
+  }
+
+  CurrentUserInfo userDataFromsnapshot(DocumentSnapshot snapshot) {
+    return CurrentUserInfo(
+      dni: snapshot.data().toString().contains('nro_cedula')
+          ? snapshot.get('nro_cedula')
+          : 0,
+      email: snapshot.data().toString().contains('email')
+          ? snapshot.get('email')
+          : 'NaN',
+      name: snapshot.data().toString().contains('nombre')
+          ? snapshot.get('nombre')
+          : 'NaN',
+      role: snapshot.data().toString().contains('rol')
+          ? snapshot.get('rol').id
+          : 'NaN',
+      uid: snapshot.reference.id,
+      zone: snapshot.data().toString().contains('zona')
+          ? snapshot.get('zona').id
+          : 'NaN',
+      zoneDocument: snapshot.data().toString().contains('zona')
+          ? snapshot.get('zona')
+          : 'NaN',
+    );
   }
 }

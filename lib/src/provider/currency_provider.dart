@@ -16,21 +16,5 @@ class CurrencyProvider extends ChangeNotifier {
       notifyListeners();
       Fluttertoast.showToast(msg: 'Moneda cambiada a $coin');
     }
-
-    //    if (selectedValue == null) {
-    //                                   sharedPreferences!.setString(
-    //                                       'currentCoin', 'Dolares - USD');
-    //                                   Navigator.pop(context);
-    //                                   Fluttertoast.showToast(
-    //                                       msg: 'Moneda reestablecida a dolares');
-    //                                 } else {
-    //                                   sharedPreferences!.setString('currentCoin',
-    //                                       selectedValue.toString());
-    //                                   Navigator.pop(context);
-    //                                   Fluttertoast.showToast(
-    //                                       msg:
-    //                                           'Moneda cambiada a $selectedValue');
-    //                                 }
-    // }
   }
 }

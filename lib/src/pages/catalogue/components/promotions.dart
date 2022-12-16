@@ -152,20 +152,19 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
 
                               return GestureDetector(
                                 onTap: () {
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //     builder: (context) => ProductsPage(
-                                  //       listOfProducts: products
-                                  //           .where((product) =>
-                                  //               product.promotion ==
-                                  //               promotion.firebaseDocumentID)
-                                  //           .toList(),
-                                  //       listOfPrices: listOfPrices,
-                                  //       isOrderActive: widget.isOrderActive,
-                                  //     ),
-                                  //   ),
-                                  // );
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProductsPage(
+                                        listOfProducts: products
+                                            .where((product) =>
+                                                product.promotion ==
+                                                promotion.firebaseDocumentID)
+                                            .toList(),
+                                        listOfPrices: listOfPrices,
+                                      ),
+                                    ),
+                                  );
                                 },
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,

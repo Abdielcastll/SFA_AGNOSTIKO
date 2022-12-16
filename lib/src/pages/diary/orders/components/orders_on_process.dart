@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
@@ -8,11 +9,17 @@ import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/order_car
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
-class OrdersOnProcess extends StatelessWidget {
+class OrdersOnProcess extends StatefulWidget {
   const OrdersOnProcess({
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<OrdersOnProcess> createState() => _OrdersOnProcessState();
+}
+
+class _OrdersOnProcessState extends State<OrdersOnProcess> {
+  bool isDescending = false;
   @override
   Widget build(BuildContext context) {
     final orders = Provider.of<List<Orders>?>(context) ?? [];
@@ -28,6 +35,47 @@ class OrdersOnProcess extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Container(
+            margin: const EdgeInsets.fromLTRB(10.0, 0.0, 0, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                TextButton(
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        MaterialCommunityIcons.order_alphabetical_ascending,
+                        color: Colors.grey.shade500,
+                        size: 25,
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        isDescending
+                            ? AppLocalizations.of(context)!.ascendingFilter
+                            : AppLocalizations.of(context)!.descendingFilter,
+                        style: TextStyle(
+                            fontFamily: 'Poppins-regular',
+                            color: Colors.grey.shade500,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  onPressed: () {
+                    // Re ordenar el list view alfabeticamente
+                    setState(() => isDescending = !isDescending);
+                  },
+                ),
+              ],
+            ),
+          ),
           ordersOnProcess.isNotEmpty
               ? SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
@@ -37,7 +85,10 @@ class OrdersOnProcess extends StatelessWidget {
                       child: ListView.builder(
                         itemCount: ordersOnProcess.length,
                         itemBuilder: (BuildContext context, int index) {
-                          final order = ordersOnProcess[index];
+                          final sortedOrders = isDescending
+                              ? ordersOnProcess.reversed.toList()
+                              : ordersOnProcess;
+                          final order = sortedOrders[index];
                           final orderTotalAmount = order.totalAmount ?? 0;
                           final unformattedDate =
                               order.date ?? Timestamp.fromDate(DateTime.now());

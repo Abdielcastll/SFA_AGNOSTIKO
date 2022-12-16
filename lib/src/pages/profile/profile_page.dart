@@ -14,6 +14,7 @@ import 'package:pwa_sales2go_flutter/src/pages/profile/components/logout_button.
 import 'package:pwa_sales2go_flutter/src/pages/profile/components/user_info.dart';
 import 'package:pwa_sales2go_flutter/src/services/auth.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
+import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/loading/loading_widget.dart';
@@ -51,24 +52,15 @@ class ProfileBody extends StatefulWidget {
 }
 
 class _ProfileBodyState extends State<ProfileBody> {
-  final String? userName = sharedPreferences!.getString('nombre');
-  final String? charge = sharedPreferences!.getString('cargo');
-  final String? uid = sharedPreferences!.getString('uid');
-  final String? email = sharedPreferences!.getString('email');
-
   @override
   Widget build(BuildContext context) {
     final userUID = Provider.of<UserModel>(context).uid;
+    final userEmail = Provider.of<CurrentUserInfo?>(context)?.email ?? {};
+    final userName = Provider.of<CurrentUserInfo?>(context)?.name ?? {};
+    print(userName);
+
     return MultiProvider(
       providers: [
-        StreamProvider<CurrentUserInfo?>.value(
-          value: FirebaseFirestore.instance
-              .collection('usuarios')
-              .doc(userUID)
-              .snapshots()
-              .map(currentUserInfoFromSnapshot),
-          initialData: null,
-        ),
         StreamProvider<ZoneSummary?>.value(
           value: DatabaseServiceStreams().zoneSummary,
           initialData: ZoneSummary([]),
@@ -83,9 +75,14 @@ class _ProfileBodyState extends State<ProfileBody> {
             // const Center(
             //   child: CircularProgressIndicator(),
             // ),
-            UserInfo(userName: userName, charge: charge),
+            UserInfo(
+                userName: userName,
+                charge: AppLocalizations.of(context)!.seller),
             const SizedBox(height: 30),
-            ListTileOptions(charge: charge, name: userName, email: email),
+            ListTileOptions(
+                charge: AppLocalizations.of(context)!.seller,
+                name: userName,
+                email: userEmail),
             const SizedBox(height: 15),
             const LogoutButton(),
             const SizedBox(height: 15),

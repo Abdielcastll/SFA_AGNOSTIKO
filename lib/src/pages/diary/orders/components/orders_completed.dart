@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
@@ -9,10 +10,17 @@ import 'package:pwa_sales2go_flutter/src/models/order_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/order_card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class CompletedOrders extends StatelessWidget {
+class CompletedOrders extends StatefulWidget {
   const CompletedOrders({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<CompletedOrders> createState() => _CompletedOrdersState();
+}
+
+class _CompletedOrdersState extends State<CompletedOrders> {
+  bool isDescending = false;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +40,47 @@ class CompletedOrders extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Container(
+          margin: const EdgeInsets.fromLTRB(10.0, 0.0, 0, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              TextButton(
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      MaterialCommunityIcons.order_alphabetical_ascending,
+                      color: Colors.grey.shade500,
+                      size: 25,
+                    ),
+                    const SizedBox(width: 5),
+                    Text(
+                      isDescending
+                          ? AppLocalizations.of(context)!.ascendingFilter
+                          : AppLocalizations.of(context)!.descendingFilter,
+                      style: TextStyle(
+                          fontFamily: 'Poppins-regular',
+                          color: Colors.grey.shade500,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                onPressed: () {
+                  // Re ordenar el list view alfabeticamente
+                  setState(() => isDescending = !isDescending);
+                },
+              ),
+            ],
+          ),
+        ),
         SingleChildScrollView(
           child: SizedBox(
             height: MediaQuery.of(context).size.height * 0.65,
@@ -39,7 +88,10 @@ class CompletedOrders extends StatelessWidget {
               physics: const BouncingScrollPhysics(),
               itemCount: ordersCompleted.length,
               itemBuilder: (BuildContext context, int index) {
-                final order = ordersCompleted[index];
+                final sortedOrders = isDescending
+                    ? ordersCompleted.reversed.toList()
+                    : ordersCompleted;
+                final order = sortedOrders[index];
                 final orderTotalAmount = order.totalAmount ?? 0;
                 final unformattedDate =
                     order.date ?? Timestamp.fromDate(DateTime.now());

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/components/client_list.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
+import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/loading/loading_widget.dart';
@@ -18,12 +20,20 @@ class ClientsPage extends StatefulWidget {
 class _ClientsPageState extends State<ClientsPage> {
   @override
   Widget build(BuildContext context) {
+    final userZoneDocument =
+        Provider.of<CurrentUserInfo?>(context)?.zoneDocument ?? {};
+
+    // print(currentUserActive.zone);
     return MultiProvider(
       providers: [
         StreamProvider<List<Clients>?>.value(
-          value: DatabaseServiceStreams().clients,
+          value: clientsCollection
+              .where('zona', isEqualTo: userZoneDocument)
+              .snapshots()
+              .map(clientListfromSnapshot),
           initialData: const [],
           catchError: (context, error) {
+            print(error);
             return;
           },
         ),
@@ -62,6 +72,11 @@ class ClientsBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final clients = Provider.of<List<Clients>?>(context) ?? [];
     List<Clients>? clientsList = clients;
+    // final currentUserActive =
+    //     Provider.of<CurrentUserProvider>(context).currentUserInfo;
+    // print(
+    //     clientsList.where((element) => element.zone == currentUserActive.zone));
+    // print(clients);
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,

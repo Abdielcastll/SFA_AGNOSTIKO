@@ -273,11 +273,12 @@ void modalBottomSheetForOnProcess(
                                       commentaryValue,
                                       context,
                                     );
-                                    if (result == null) {
+                                    if (result != null) {
                                       Fluttertoast.showToast(
                                           msg: AppLocalizations.of(context)!
                                               .modifiedVisit);
-                                    } else if (result != null) {
+                                      Navigator.pop(context);
+                                    } else if (result == null) {
                                       Fluttertoast.showToast(
                                           msg: AppLocalizations.of(context)!
                                               .modifiedVisitError);

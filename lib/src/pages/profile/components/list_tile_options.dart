@@ -37,14 +37,15 @@ class _ListTileOptionsState extends State<ListTileOptions> {
   @override
   Widget build(BuildContext context) {
     final zoneSummary = Provider.of<ZoneSummary?>(context)!.summary ?? [];
-    final userDoc = Provider.of<CurrentUserInfo?>(context);
+    final userZone = Provider.of<CurrentUserInfo?>(context)?.zone ?? {};
+
     final currentCoin = Provider.of<CurrencyProvider>(context);
 
     identifyZone() {
-      if (userDoc!.zone == null) {
+      if (userZone == '') {
         return "No hay zona disponible";
       } else {
-        return zoneSummary[userDoc.zone];
+        return zoneSummary[userZone];
       }
     }
 

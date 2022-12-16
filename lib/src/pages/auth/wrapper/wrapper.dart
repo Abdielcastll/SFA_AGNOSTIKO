@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
@@ -8,6 +9,8 @@ import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/auth/login/login_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation/navigation.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
+import 'package:pwa_sales2go_flutter/src/services/auth.dart';
+import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 
 class Wrapper extends StatefulWidget {
   Wrapper({Key? key}) : super(key: key);
@@ -28,7 +31,25 @@ class _WrapperState extends State<Wrapper> {
       if (orderActive.orderActive == false) {
         objectBox.delelteAllShoppingCart();
       }
-      return NavigationPages();
+
+      return StreamProvider<CurrentUserInfo?>.value(
+          value: usersCollection
+              .doc(user.uid)
+              .snapshots()
+              .map(AuthService().userDataFromsnapshot),
+          initialData: CurrentUserInfo(
+            name: '',
+            dni: '',
+            zone: '',
+            zoneDocument: '',
+            email: '',
+            role: '',
+            uid: '',
+          ),
+          catchError: (context, error) {
+            print(error);
+          },
+          child: NavigationPages());
     }
   }
 }

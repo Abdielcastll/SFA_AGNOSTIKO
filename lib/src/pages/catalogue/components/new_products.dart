@@ -12,10 +12,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../models/prices_model.dart';
 
 class NewProductsWidget extends StatefulWidget {
-  const NewProductsWidget({Key? key, required this.isOrderActive})
-      : super(key: key);
-
-  final bool isOrderActive;
+  const NewProductsWidget({Key? key}) : super(key: key);
 
   @override
   State<NewProductsWidget> createState() => _NewProductsWidgetState();
@@ -104,7 +101,6 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                       .where((element) =>
                                           element.name == product.name)
                                       .toList(),
-                                  isOrderActive: widget.isOrderActive,
                                   isProductInAPromotion: false,
                                   prices: prices,
                                   pricesName: pricesName,
@@ -227,7 +223,6 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                       .where((element) =>
                                           element.name == product.name)
                                       .toList(),
-                                  isOrderActive: widget.isOrderActive,
                                   isProductInAPromotion: false,
                                   prices: prices,
                                 ),

@@ -25,22 +25,21 @@ class _InvoicesPageState extends State<InvoicesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return
-        // MultiProvider(
-        //   providers: [
+    return MultiProvider(
+      providers: [
         //     // isCheckedNotes == false
         //     // ?
-        //     // StreamProvider<List<Invoices>?>.value(
-        //     //   value: FirebaseFirestore.instance
-        //     //       .collectionGroup('facturas')
-        //     //       .orderBy('nroCorrelativo', descending: true)
-        //     //       .snapshots()
-        //     //       .map(accountInvoicesFromSnapshot),
-        //     //   initialData: const [],
-        //     //   catchError: (context, error) {
-        //     //     return;
-        //     //   },
-        //     // )
+        StreamProvider<List<Invoices>?>.value(
+          value: FirebaseFirestore.instance
+              .collectionGroup('facturas')
+              .orderBy('nroCorrelativo', descending: true)
+              .snapshots()
+              .map(accountInvoicesFromSnapshot),
+          initialData: const [],
+          catchError: (context, error) {
+            return;
+          },
+        )
         //     // : StreamProvider<List<CreditNotes>?>.value(
         //     //     value: FirebaseFirestore.instance
         //     //         .collectionGroup('notas_credito')
@@ -52,15 +51,14 @@ class _InvoicesPageState extends State<InvoicesPage> {
         //     //       return;
         //     //     },
         //     //   )
-        //   ],
-        // child:
-        SafeArea(
-      child: Scaffold(
-        backgroundColor: myTheme.colorScheme.surface,
-        body: InvoicesBody(isNotesChecked: isCheckedNotes),
+      ],
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: myTheme.colorScheme.surface,
+          body: InvoicesBody(isNotesChecked: isCheckedNotes),
+        ),
       ),
     );
-    // );
   }
 }
 
@@ -87,83 +85,83 @@ class _InvoicesBodyState extends State<InvoicesBody> {
         crossAxisAlignment: CrossAxisAlignment.start,
         // ignore: prefer_const_literals_to_create_immutables
         children: [
-          Center(
-            child: CircularProgressIndicator(),
+          // Center(
+          //   child: CircularProgressIndicator(),
+          // ),
+          Container(
+            margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              // ignore: prefer_const_literals_to_create_immutables
+              children: [
+                // Checkbox(
+                //   checkColor: Colors.white,
+                //   value: widget.isNotesChecked,
+                //   onChanged: (bool? value) {
+                //     setState(() {
+                //       widget.isNotesChecked = value!;
+                //     });
+                //   },
+                // ),
+                // Text(
+                //   'Notas',
+                //   style: TextStyle(
+                //     fontFamily: 'Poppins-regular',
+                //     fontSize: 14,
+                //   ),
+                // ),
+              ],
+            ),
           ),
-          // Container(
-          //   margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.start,
-          //     // ignore: prefer_const_literals_to_create_immutables
-          //     children: [
-          //       // Checkbox(
-          //       //   checkColor: Colors.white,
-          //       //   value: widget.isNotesChecked,
-          //       //   onChanged: (bool? value) {
-          //       //     setState(() {
-          //       //       widget.isNotesChecked = value!;
-          //       //     });
-          //       //   },
-          //       // ),
-          //       // Text(
-          //       //   'Notas',
-          //       //   style: TextStyle(
-          //       //     fontFamily: 'Poppins-regular',
-          //       //     fontSize: 14,
-          //       //   ),
-          //       // ),
-          //     ],
-          //   ),
-          // ),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-          //   children: [
-          //     Container(
-          //       width: 120,
-          //       margin: const EdgeInsets.fromLTRB(16, 10, 0, 10),
-          //       child: Text(
-          //         seeCompleted == true
-          //             ? AppLocalizations.of(context)!.completed
-          //             : AppLocalizations.of(context)!.onProcess,
-          //         textAlign: TextAlign.start,
-          //         style: TextStyle(
-          //           color: seeCompleted == true
-          //               ? Colors.green.shade600
-          //               : Colors.amber.shade600,
-          //           fontSize: 15,
-          //           fontWeight: FontWeight.bold,
-          //           fontFamily: 'Poppins-regular',
-          //         ),
-          //       ),
-          //     ),
-          //     Container(
-          //       margin: const EdgeInsets.fromLTRB(30, 0, 0, 0),
-          //       child: Text(
-          //         'Ver completados',
-          //         style: TextStyle(
-          //           fontSize: 15,
-          //           // fontWeight: FontWeight.bold,
-          //           fontFamily: 'Poppins-regular',
-          //         ),
-          //       ),
-          //     ),
-          //     Checkbox(
-          //       activeColor: myTheme.colorScheme.primary,
-          //       value: seeCompleted,
-          //       onChanged: (value) {
-          //         setState(() {
-          //           seeCompleted = !seeCompleted;
-          //         });
-          //       },
-          //     ),
-          //   ],
-          // ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Container(
+                width: 120,
+                margin: const EdgeInsets.fromLTRB(16, 0, 0, 0),
+                child: Text(
+                  seeCompleted == true
+                      ? AppLocalizations.of(context)!.completed
+                      : AppLocalizations.of(context)!.onProcess,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    color: seeCompleted == true
+                        ? Colors.green.shade600
+                        : Colors.amber.shade600,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins-regular',
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+                child: Text(
+                  'Ver completados',
+                  style: TextStyle(
+                    fontSize: 15,
+                    // fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins-regular',
+                  ),
+                ),
+              ),
+              Checkbox(
+                activeColor: myTheme.colorScheme.primary,
+                value: seeCompleted,
+                onChanged: (value) {
+                  setState(() {
+                    seeCompleted = !seeCompleted;
+                  });
+                },
+              ),
+            ],
+          ),
           // widget.isNotesChecked == false
           //     ? InvoicesOnProcess()
           //     : CreditNotesOnProcess(),
           // widget.isNotesChecked == false ? InvoicesList() : Container(),
           // InvoicesList(),
-          // seeCompleted == true ? InvoicesList() : InvoicesOnProcess(),
+          seeCompleted == true ? InvoicesList() : InvoicesOnProcess(),
         ],
       ),
     );

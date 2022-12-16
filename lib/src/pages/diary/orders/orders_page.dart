@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/order_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/filter_orders..dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/orders_completed.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/orders_on_process.dart';
+import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/loading/loading_widget.dart';
@@ -28,11 +30,15 @@ class _OrdersPageState extends State<OrdersPage> {
 
   @override
   Widget build(BuildContext context) {
+    final userUid = Provider.of<CurrentUserInfo?>(context)?.uid ?? {};
+    final userDoc = usersCollection.doc(userUid);
+    print(userDoc);
     return MultiProvider(
       providers: [
         StreamProvider<List<Orders>?>.value(
           value: FirebaseFirestore.instance
               .collectionGroup('pedidos')
+              // .where('vendedor', isEqualTo: userDoc)
               .orderBy('fecha')
               .snapshots()
               .map(ordersFromSnapshot),

@@ -15,6 +15,7 @@ import 'package:pwa_sales2go_flutter/src/pages/place_order/completed_order.dart'
 import 'package:pwa_sales2go_flutter/src/pages/place_order/components/selected_client.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
+import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_checkout.dart';
@@ -140,36 +141,37 @@ class _CheckoutBodyState extends State<CheckoutBody> {
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
 
     priceFormat(productPrice) {
+      double correctAmount = double.parse(productPrice.toStringAsFixed(2));
       if (currentCoin!.contains('USD')) {
         return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
             .format(productPrice)
             .toString();
-      } else if (currentCoin!.contains('VED')) {
-        return NumberFormat.currency(
+      } else if (currentCoin.contains('VED')) {
+        return '\$$correctAmount = ${NumberFormat.currency(
           locale: 'es_VE',
           decimalDigits: 2,
           symbol: "Bs.",
-        ).format(productPrice * 4.58).toString();
-      } else if (currentCoin!.contains('EUR')) {
-        return NumberFormat.currency(
+        ).format(correctAmount * 4.58).toString()}';
+      } else if (currentCoin.contains('EUR')) {
+        return '\$$correctAmount = ${NumberFormat.currency(
           locale: 'es_ES',
           decimalDigits: 2,
           symbol: '€',
-        ).format(productPrice * 0.89).toString();
-      } else if (currentCoin!.contains('MXN')) {
-        return NumberFormat.currency(
+        ).format(correctAmount * 0.89).toString()}';
+      } else if (currentCoin.contains('MXN')) {
+        return '\$$correctAmount = ${NumberFormat.currency(
           locale: 'es_MX',
           decimalDigits: 2,
           symbol: '\$',
-        ).format(productPrice * 19.43);
-      } else if (currentCoin!.contains('BTC')) {
-        return '฿ ${(productPrice * 0.00011).toString()}';
+        ).format(correctAmount * 19.43)}';
+      } else if (currentCoin.contains('BTC')) {
+        return '฿ ${(correctAmount * 0.00011).toString()}';
       } else {
-        return NumberFormat.currency(
+        return '\$$correctAmount = ${NumberFormat.currency(
           locale: 'es_VE',
           decimalDigits: 2,
           symbol: "PPR.",
-        ).format(productPrice * 4.58).toString();
+        ).format(correctAmount * 4.58).toString()}';
       }
     }
 
@@ -771,6 +773,9 @@ class _CheckoutBodyState extends State<CheckoutBody> {
               borderRadius: BorderRadius.circular(16),
               child: ElevatedButton(
                 onPressed: () async {
+                  final orderActive =
+                      Provider.of<OrderProvider>(context, listen: false);
+
                   if (selectedValue2 != null) {
                     var result = await createOrder(
                       widget.client,
@@ -786,7 +791,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       widget.subTotal,
                       totalOfTheOrder,
                     );
-
+                    orderActive.setOrder(false, Clients());
                     completeOrder();
                   } else {
                     Fluttertoast.showToast(

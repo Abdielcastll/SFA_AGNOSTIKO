@@ -3,9 +3,11 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/components/selected_client.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/components/selected_products.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
+import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_orderd.dart';
 
 class OrderPage extends StatefulWidget {
