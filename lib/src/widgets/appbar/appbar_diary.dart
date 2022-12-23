@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/place_oder_page.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
@@ -13,7 +14,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
   const AppBarDiary({
     Key? key,
+    required this.userZoneDocument,
   }) : super(key: key);
+
+  final userZoneDocument;
 
   @override
   Size get preferredSize => const Size.fromHeight(110);
@@ -72,7 +76,8 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (BuildContext context) => PlaceOrderPage(),
+                            builder: (BuildContext context) => PlaceOrderPage(
+                                userZoneDocument: userZoneDocument),
                           ),
                         );
                       },

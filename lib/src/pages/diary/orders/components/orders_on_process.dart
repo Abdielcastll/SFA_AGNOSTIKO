@@ -7,6 +7,7 @@ import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/order_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/order_card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class OrdersOnProcess extends StatefulWidget {
@@ -20,11 +21,16 @@ class OrdersOnProcess extends StatefulWidget {
 
 class _OrdersOnProcessState extends State<OrdersOnProcess> {
   bool isDescending = false;
+  DateTime today = DateTime.now();
+  var dateFormatter = DateFormat('dd-MM-yyyy');
   @override
   Widget build(BuildContext context) {
     final orders = Provider.of<List<Orders>?>(context) ?? [];
+    final currentDay =
+        Provider.of<CounterLimitFirestore>(context).currentDayOrder;
+    final currentDateTime = currentDay.toDate();
+    String formattedDate = dateFormatter.format(currentDateTime);
     print('ordenes: ${orders.length}');
-    var dateFormatter = DateFormat('yyyy-MM-dd');
     final ordersOnProcess = orders
         .where((element) => element.isInvoiced == false)
         .toList()
@@ -72,6 +78,52 @@ class _OrdersOnProcessState extends State<OrdersOnProcess> {
                     // Re ordenar el list view alfabeticamente
                     setState(() => isDescending = !isDescending);
                   },
+                ),
+                const SizedBox(width: 20),
+                Container(
+                  height: 40,
+                  padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                        color: myTheme.colorScheme.secondary.withOpacity(0.3)),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(formattedDate),
+                      IconButton(
+                        onPressed: () async {
+                          final currentDayProvider =
+                              Provider.of<CounterLimitFirestore>(context,
+                                  listen: false);
+
+                          DateTime? newDate = await showDatePicker(
+                            context: context,
+                            initialDate: currentDay.toDate(),
+                            firstDate: DateTime(2010),
+                            lastDate: DateTime(2030),
+                          );
+                          if (newDate == null) {
+                            return;
+                          }
+                          setState(() {
+                            today = newDate;
+                            formattedDate = dateFormatter.format(newDate);
+                            final newDay = Timestamp.fromDate(newDate);
+                            currentDayProvider.setNewDayOrder(newDay);
+                          });
+                        },
+                        splashRadius: 5,
+                        icon: Icon(
+                          Icons.calendar_month,
+                          color: myTheme.colorScheme.primary.withOpacity(0.8),
+                          size: 20,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -125,19 +177,37 @@ class _OrdersOnProcessState extends State<OrdersOnProcess> {
                   ),
                 )
               : Container(
-                  margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                  alignment: Alignment.center,
-                  child: Center(
-                    child: Text(
-                      'No hay Ordenes pendientes',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'Poppins-regular',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: myTheme.colorScheme.primary,
+                  margin: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 200,
+                        width: 200,
+                        child: Image.asset(
+                          'assets/images/nodiary.png',
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                    ),
+                      Container(
+                        // color: Colors.green,
+                        // height: 150,
+                        // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        alignment: Alignment.center,
+                        child: Center(
+                          child: Text(
+                            'No hay ordenes este día',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontFamily: 'Poppins-regular',
+                              fontSize: 14,
+                              color: myTheme.colorScheme.onPrimaryContainer,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
         ],

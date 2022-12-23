@@ -8,6 +8,8 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/account_balance_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/invoice_card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
+import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class InvoicesList extends StatefulWidget {
   const InvoicesList({Key? key}) : super(key: key);
@@ -18,12 +20,19 @@ class InvoicesList extends StatefulWidget {
 
 class _InvoicesListState extends State<InvoicesList> {
   bool isDescending = false;
+  DateTime today = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
-    var dateFormatter = DateFormat('yyyy-MM-dd');
+    var dateFormatter = DateFormat('dd-MM-yyyy');
     final invoices = Provider.of<List<Invoices>?>(context) ?? [];
     final invoicesList =
         invoices.where((element) => element.isPaid == true).toList();
+    final currentDay =
+        Provider.of<CounterLimitFirestore>(context).currentDayInvoice;
+    final currentDateTime = currentDay.toDate();
+    String formattedDate = dateFormatter.format(currentDateTime);
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,51 +75,133 @@ class _InvoicesListState extends State<InvoicesList> {
                   setState(() => isDescending = !isDescending);
                 },
               ),
+              const SizedBox(width: 20),
+              Container(
+                height: 40,
+                padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                      color: myTheme.colorScheme.secondary.withOpacity(0.3)),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(formattedDate),
+                    IconButton(
+                      onPressed: () async {
+                        final currentDayProvider =
+                            Provider.of<CounterLimitFirestore>(context,
+                                listen: false);
+
+                        DateTime? newDate = await showDatePicker(
+                          context: context,
+                          initialDate: currentDay.toDate(),
+                          firstDate: DateTime(2010),
+                          lastDate: DateTime(2030),
+                        );
+                        if (newDate == null) {
+                          return;
+                        }
+                        setState(() {
+                          today = newDate;
+                          formattedDate = dateFormatter.format(newDate);
+                          final newDay = Timestamp.fromDate(newDate);
+                          currentDayProvider.setNewDayInvoice(newDay);
+                        });
+                      },
+                      splashRadius: 5,
+                      icon: Icon(
+                        Icons.calendar_month,
+                        color: myTheme.colorScheme.primary.withOpacity(0.8),
+                        size: 20,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
-        SingleChildScrollView(
-          child: Container(
-            height: MediaQuery.of(context).size.height * 0.65,
-            child: Scrollbar(
-              child: ListView.builder(
-                physics: ClampingScrollPhysics(),
-                itemCount: invoicesList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final sortedInvoices = isDescending
-                      ? invoicesList.reversed.toList()
-                      : invoicesList;
-                  final invoice = sortedInvoices[index];
-                  final invoiceClient = invoice.clientIdReference;
-                  final invoiceOrder = invoice.orderDate;
-                  final unformattedDate =
-                      invoice.orderDate ?? Timestamp.fromDate(DateTime.now());
-                  final date =
-                      DateTime.parse(unformattedDate.toDate().toString());
-                  final invoiceDate = dateFormatter.format(date);
-                  final invoiceBalance = invoice.totalAmount;
-                  final invoicePayments = invoice.payments;
-                  final invoiceStatus = AppLocalizations.of(context)!.invoiced;
-                  final invoiceNumber = invoice.correlativeNumber;
-                  final invoiceTotal = invoice.totalAmount;
-                  final invoiceDocumentID = invoice.invoiceDocumentID;
+        invoicesList.isNotEmpty
+            ? SingleChildScrollView(
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.65,
+                  child: Scrollbar(
+                    child: ListView.builder(
+                      physics: ClampingScrollPhysics(),
+                      itemCount: invoicesList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final sortedInvoices = isDescending
+                            ? invoicesList.reversed.toList()
+                            : invoicesList;
+                        final invoice = sortedInvoices[index];
+                        final invoiceClient = invoice.clientIdReference;
+                        final invoiceOrder = invoice.orderDate;
+                        final unformattedDate = invoice.orderDate ??
+                            Timestamp.fromDate(DateTime.now());
+                        final date =
+                            DateTime.parse(unformattedDate.toDate().toString());
+                        final invoiceDate = dateFormatter.format(date);
+                        final invoiceBalance = invoice.totalAmount;
+                        final invoicePayments = invoice.payments;
+                        final invoiceStatus =
+                            AppLocalizations.of(context)!.invoiced;
+                        final invoiceNumber = invoice.correlativeNumber;
+                        final invoiceTotal = invoice.totalAmount;
+                        final invoiceDocumentID = invoice.invoiceDocumentID;
 
-                  return InvoiceCard(
-                    invoiceClient: invoiceClient,
-                    invoiceOrder: invoiceOrder,
-                    invoiceDate: invoiceDate,
-                    invoiceBalance: invoiceBalance,
-                    invoiceStatus: invoiceStatus,
-                    invoicePayments: invoicePayments,
-                    invoiceNumber: invoiceNumber,
-                    invoiceTotal: invoiceTotal,
-                    invoiceDocumentID: invoiceDocumentID,
-                  );
-                },
+                        return InvoiceCard(
+                          invoiceClient: invoiceClient,
+                          invoiceOrder: invoiceOrder,
+                          invoiceDate: invoiceDate,
+                          invoiceBalance: invoiceBalance,
+                          invoiceStatus: invoiceStatus,
+                          invoicePayments: invoicePayments,
+                          invoiceNumber: invoiceNumber,
+                          invoiceTotal: invoiceTotal,
+                          invoiceDocumentID: invoiceDocumentID,
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              )
+            : Container(
+                margin: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: 200,
+                      width: 200,
+                      child: Image.asset(
+                        'assets/images/nodiary.png',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Container(
+                      // color: Colors.green,
+                      // height: 150,
+                      // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      alignment: Alignment.center,
+                      child: Center(
+                        child: Text(
+                          'No hay facturas este día',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: 'Poppins-regular',
+                            fontSize: 14,
+                            color: myTheme.colorScheme.onPrimaryContainer,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ),
-        ),
       ],
     );
   }

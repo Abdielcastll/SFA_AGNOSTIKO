@@ -9,6 +9,7 @@ import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/credit_
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/filter_invoices.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/invoice_completed.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/invoices_on_process.dart';
+import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/loading/loading_widget.dart';
@@ -25,6 +26,11 @@ class _InvoicesPageState extends State<InvoicesPage> {
 
   @override
   Widget build(BuildContext context) {
+    final currentDay =
+        Provider.of<CounterLimitFirestore>(context).currentDayInvoice;
+    final currentDayDateTime = currentDay.toDate();
+    DateTime tomorrow = DateTime(currentDayDateTime.year,
+        currentDayDateTime.month, currentDayDateTime.day + 1);
     return MultiProvider(
       providers: [
         //     // isCheckedNotes == false
@@ -32,7 +38,9 @@ class _InvoicesPageState extends State<InvoicesPage> {
         StreamProvider<List<Invoices>?>.value(
           value: FirebaseFirestore.instance
               .collectionGroup('facturas')
-              .orderBy('nroCorrelativo', descending: true)
+              .where('fecha', isGreaterThanOrEqualTo: currentDay)
+              .where('fecha', isLessThan: tomorrow)
+              .orderBy('fecha', descending: true)
               .snapshots()
               .map(accountInvoicesFromSnapshot),
           initialData: const [],

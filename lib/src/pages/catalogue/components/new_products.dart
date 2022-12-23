@@ -6,7 +6,9 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/product_details/product_details.dart';
+import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../models/prices_model.dart';
@@ -29,6 +31,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
     final pricesName = Provider.of<Prices?>(context)?.name ?? {};
     final products = Provider.of<List<Products>?>(context) ?? [];
     final productsList = products;
+    final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
 
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 12.0, 16, 0),
@@ -97,7 +100,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                   isProductNew: true,
                                   name: product.name,
                                   stock: stockValues[product.code] ?? 000,
-                                  list: productsList
+                                  list: productsByDate
                                       .where((element) =>
                                           element.name == product.name)
                                       .toList(),
@@ -105,6 +108,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                   prices: prices,
                                   pricesName: pricesName,
                                   catalogueID: product.catalogue,
+                                  userZoneDocument: userZoneDocument,
                                 ),
                               ),
                             );
@@ -207,6 +211,12 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                       } else if (snapshot.hasError) {
                         return GestureDetector(
                           onTap: () {
+                            final counterLimitProvider =
+                                Provider.of<CounterLimitFirestore>(context,
+                                    listen: false);
+                            if (products.length > 100) {
+                              counterLimitProvider.setProductsLimit(10, 10);
+                            }
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -219,12 +229,13 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                   isProductNew: true,
                                   name: product.name,
                                   stock: stockValues[product.code] ?? 0,
-                                  list: productsList
+                                  list: productsByDate
                                       .where((element) =>
                                           element.name == product.name)
                                       .toList(),
                                   isProductInAPromotion: false,
                                   prices: prices,
+                                  userZoneDocument: userZoneDocument,
                                 ),
                               ),
                             );

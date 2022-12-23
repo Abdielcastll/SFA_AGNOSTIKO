@@ -12,6 +12,8 @@ import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
+import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
@@ -24,10 +26,14 @@ class ProductsPage extends StatefulWidget {
     Key? key,
     this.listOfProducts,
     this.listOfPrices,
+    this.userZoneDocument,
+    this.showFullList,
   }) : super(key: key);
 
-  final List<Products>? listOfProducts;
+  final listOfProducts;
   final listOfPrices;
+  final userZoneDocument;
+  final bool? showFullList;
 
   @override
   State<ProductsPage> createState() => _ProductsPageState();
@@ -36,9 +42,12 @@ class ProductsPage extends StatefulWidget {
 class _ProductsPageState extends State<ProductsPage> {
   @override
   Widget build(BuildContext context) {
+    // print(widget.listOfProducts?.length);
+
     return Scaffold(
       appBar: AppBarNavigation(
         message: AppLocalizations.of(context)!.products,
+        userZoneDocument: widget.userZoneDocument,
       ),
       backgroundColor: myTheme.colorScheme.surface,
       body: MultiProvider(
@@ -103,6 +112,7 @@ class _ProductsPageState extends State<ProductsPage> {
         child: ProductsBody(
           listOfProducts: widget.listOfProducts,
           listOfPrices: widget.listOfPrices,
+          showFullList: widget.showFullList,
         ),
       ),
     );
@@ -110,14 +120,16 @@ class _ProductsPageState extends State<ProductsPage> {
 }
 
 class ProductsBody extends StatefulWidget {
-  const ProductsBody({
+  ProductsBody({
     Key? key,
     this.listOfProducts,
     this.listOfPrices,
+    this.showFullList,
   }) : super(key: key);
 
-  final List<Products>? listOfProducts;
+  final listOfProducts;
   final listOfPrices;
+  final bool? showFullList;
 
   @override
   State<ProductsBody> createState() => _ProductsBodyState();
@@ -126,7 +138,9 @@ class ProductsBody extends StatefulWidget {
 class _ProductsBodyState extends State<ProductsBody> {
   final searchController = TextEditingController();
   List<ShoppingCartProduct> selectedProducts = [];
-  List<Products>? products;
+  final _controller = ScrollController();
+
+  // List<Products>? products;
 
   bool isChecked = false;
   bool isDescending = false;
@@ -134,33 +148,59 @@ class _ProductsBodyState extends State<ProductsBody> {
   @override
   void initState() {
     super.initState();
-    products = widget.listOfProducts;
+    // products = widget.listOfProducts;
+    _controller.addListener(() {
+      final productsLimitProvider =
+          Provider.of<CounterLimitFirestore>(context, listen: false);
+      if (_controller.position.atEdge) {
+        bool isTop = _controller.position.pixels == 0;
+        if (isTop) {
+          Fluttertoast.showToast(msg: 'Tope de pagina');
+        } else {
+          if (productsLimitProvider.getScrollProductLimit == 0) {
+            productsLimitProvider.setProductsLimit(0, 0);
+          } else {
+            int newValor = int.parse(
+                productsLimitProvider.getScrollProductLimit.toString());
+            if (newValor == 10) {
+              productsLimitProvider.setProductsLimit(
+                  productsLimitProvider.getProductsLimit + newValor, 10);
+            } else if (newValor == 50) {
+              productsLimitProvider.setProductsLimit(
+                  productsLimitProvider.getProductsLimit + newValor, 50);
+            }
+          }
+          Fluttertoast.showToast(
+              msg: 'abajo, -  ${productsLimitProvider.getProductsLimit}');
+        }
+      }
+    });
   }
 
-  // Esta funcion se llama cada vez que el text field cambia
-  void _searchProduct(String query) {
-    List<Products>? suggestions = [];
-    // si la barra de busqueda esta vacia o solo contiene espacios vacios,
-    // se hara display de todos los items
-    if (query.isEmpty) {
-      suggestions = widget.listOfProducts;
-    } else {
-      suggestions = widget.listOfProducts
-          ?.where((product) =>
-              product.name.toLowerCase().contains(query.toLowerCase()))
-          .toList();
-    }
-    // Refrescar la UI
-    setState(() => products = suggestions);
-  }
+  // // Esta funcion se llama cada vez que el text field cambia
+  // void _searchProduct(String query) {
+  //   List<Products>? suggestions = [];
+  //   // si la barra de busqueda esta vacia o solo contiene espacios vacios,
+  //   // se hara display de todos los items
+  //   if (query.isEmpty) {
+  //     suggestions = widget.listOfProducts;
+  //   } else {
+  //     suggestions = widget.listOfProducts
+  //         ?.where((product) =>
+  //             product.name.toLowerCase().contains(query.toLowerCase()))
+  //         .toList();
+  //   }
+  //   // Refrescar la UI
+  //   setState(() => products = suggestions);
+  // }
+
+  final List<String> items = ['10', '50', 'Todos'];
+  String? selectedValue;
 
   @override
   Widget build(BuildContext context) {
     final orderActive = Provider.of<OrderProvider>(context);
 
-    // setState(() {});
-
-    final userCharge = sharedPreferences!.getString('cargo');
     final qualitiesSummary =
         Provider.of<QualitySummary?>(context)?.summary ?? {};
     final categoriesSummary =
@@ -173,6 +213,12 @@ class _ProductsBodyState extends State<ProductsBody> {
     final sizesSummary = Provider.of<SizeSummary?>(context)?.summary ?? {};
     final stockValues = Provider.of<StockModel?>(context)?.stock ?? {};
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
+    final productsLimit =
+        Provider.of<CounterLimitFirestore>(context).getProductsLimit;
+    final productsScrollLimit =
+        Provider.of<CounterLimitFirestore>(context).getScrollProductLimit;
+
+    final products = Provider.of<List<Products>?>(context) ?? [];
 
     priceFormat(productPrice) {
       double correctAmount = double.parse(productPrice.toStringAsFixed(2));
@@ -278,7 +324,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                     ),
                   ),
                 ),
-                onChanged: _searchProduct,
+                onChanged: ((value) => print(value)),
               ),
             ),
             Container(
@@ -319,18 +365,85 @@ class _ProductsBodyState extends State<ProductsBody> {
                       setState(() => isDescending = !isDescending);
                     },
                   ),
+                  const SizedBox(width: 20),
+                  widget.showFullList == true
+                      ? DropdownButtonHideUnderline(
+                          child: DropdownButton2(
+                            hint: Text(
+                              selectedValue == null
+                                  ? productsLimit == 0
+                                      ? 'Todos'
+                                      : '$productsScrollLimit'
+                                  : selectedValue.toString(),
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Theme.of(context).hintColor,
+                              ),
+                            ),
+                            items: items
+                                .map((item) => DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Text(
+                                        item,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ))
+                                .toList(),
+                            value: selectedValue,
+                            onChanged: (value) {
+                              final productsLimitProvider =
+                                  Provider.of<CounterLimitFirestore>(context,
+                                      listen: false);
+                              setState(() {
+                                selectedValue = value as String;
+                              });
+                              if (selectedValue == 'Todos') {
+                                productsLimitProvider.setProductsLimit(0, 0);
+                              } else {
+                                int newValor =
+                                    int.parse(selectedValue.toString());
+                                if (newValor == 10) {
+                                  productsLimitProvider.setProductsLimit(
+                                      newValor, 10);
+                                } else if (newValor == 50) {
+                                  productsLimitProvider.setProductsLimit(
+                                      newValor, 50);
+                                }
+                              }
+                            },
+                            buttonHeight: 40,
+                            buttonWidth: 140,
+                            itemHeight: 40,
+                            // dropdownElevation: 20,
+                          ),
+                        )
+                      : Container(),
                 ],
               ),
             ),
+            // Text(
+            //   // 'Products actuales: ${widget.listOfProducts?.length ?? 'vacio'}'
+            //   'Productos acutales: ${widget.showFullList == true ? products.length : widget.listOfProducts?.length}',
+            // ),
             SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height * 0.74,
               child: ListView.builder(
+                controller: _controller,
                 physics: const BouncingScrollPhysics(),
-                itemCount: products?.length,
+                itemCount: widget.showFullList == true
+                    ? products.length
+                    : widget.listOfProducts?.length,
                 itemBuilder: (BuildContext context, index) {
-                  final sortedProducts =
-                      isDescending ? products?.reversed.toList() : products;
+                  final sortedProducts = isDescending
+                      ? widget.showFullList == true
+                          ? products.reversed.toList()
+                          : widget.listOfProducts?.reversed.toList()
+                      : widget.showFullList == true
+                          ? products
+                          : widget.listOfProducts;
                   final product = sortedProducts![index];
                   final productStock = stockValues[product.code] ?? 000;
                   final productBrand = brandsSummary[product.brand] ?? '';
@@ -345,237 +458,227 @@ class _ProductsBodyState extends State<ProductsBody> {
                   final productDesign = designsSummary[product.design] ?? '';
                   final productPrice = widget.listOfPrices[product.code] ?? 0;
                   final priceProduct = priceFormat(productPrice);
-
-                  if (productStock > 0) {
-                    return Container(
-                      margin: const EdgeInsets.only(bottom: 10.0),
-                      height: 120,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: ListTile(
-                        onTap: () {
-                          if (product.selected == false) {
-                            if (productStock > 0) {
-                              final newProduct = ShoppingCartProduct(
-                                productQuantity: 1,
-                                code: product.code.toString(),
-                                productId: product.code.toString(),
-                                listOfPricesId: widget.listOfPrices.toString(),
-                                totalAmount: productPrice.toString(),
-                                name: product.name,
-                                unitPrice: productPrice.toString(),
-                                availableStock: productStock,
-                                urlPicture: product.catalogue.toString(),
-                              );
-                              setState(
-                                  () => product.selected = !product.selected);
-                              selectedProducts.add(newProduct);
-                            } else {
-                              Fluttertoast.showToast(
-                                  msg:
-                                      'No hay stock disponible de este producto');
-                            }
-                          } else if (product.selected == true) {
+                  // if (productStock > 0) {
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 10.0),
+                    height: 120,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: ListTile(
+                      onTap: () {
+                        if (product.selected == false) {
+                          if (productStock > 0) {
+                            final newProduct = ShoppingCartProduct(
+                              productQuantity: 1,
+                              code: product.code.toString(),
+                              productId: product.code.toString(),
+                              listOfPricesId: widget.listOfPrices.toString(),
+                              totalAmount: productPrice.toString(),
+                              name: product.name,
+                              unitPrice: productPrice.toString(),
+                              availableStock: productStock,
+                              urlPicture: product.catalogue.toString(),
+                            );
                             setState(
                                 () => product.selected = !product.selected);
-                            selectedProducts.removeWhere(
-                                (item) => item.code == product.code);
+                            selectedProducts.add(newProduct);
+                          } else {
+                            Fluttertoast.showToast(
+                                msg:
+                                    'No hay stock disponible de este producto');
                           }
-                        },
-                        title: SingleChildScrollView(
-                          physics: const BouncingScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  // if (orderActive.orderActive == true ||
-                                  //     userCharge == 'Administrador' ||
-                                  //     userCharge == 'Gerente')
-                                  Container(
-                                    height: 17,
-                                    width: 17,
-                                    margin:
-                                        const EdgeInsets.fromLTRB(5, 0, 0, 0),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(16),
-                                      color: Colors.grey.shade400,
-                                    ),
-                                    child: Checkbox(
-                                        side:
-                                            MaterialStateBorderSide.resolveWith(
-                                                (states) => const BorderSide(
-                                                    width: 1.0,
-                                                    color: Colors.transparent)),
-                                        shape: const CircleBorder(),
-                                        activeColor:
-                                            myTheme.colorScheme.primary,
-                                        value: product.selected,
-                                        onChanged: (value) {
-                                          if (product.selected == false) {
-                                            final newProduct =
-                                                ShoppingCartProduct(
-                                              productQuantity: 1,
-                                              code: product.code.toString(),
-                                              productId:
-                                                  product.code.toString(),
-                                              listOfPricesId: widget
-                                                  .listOfPrices
-                                                  .toString(),
-                                              totalAmount:
-                                                  productPrice.toString(),
-                                              name: product.name,
-                                              unitPrice:
-                                                  productPrice.toString(),
-                                              availableStock: productStock,
-                                              urlPicture: product.catalogue,
-                                            );
-
-                                            selectedProducts.add(newProduct);
-                                          } else if (product.selected == true) {
-                                            selectedProducts.removeWhere(
-                                                (item) =>
-                                                    item.code == product.code);
-                                          }
-                                          setState(
-                                              () => product.selected = value!);
-                                        }),
+                        } else if (product.selected == true) {
+                          setState(() => product.selected = !product.selected);
+                          selectedProducts
+                              .removeWhere((item) => item.code == product.code);
+                        }
+                      },
+                      title: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                // if (orderActive.orderActive == true ||
+                                //     userCharge == 'Administrador' ||
+                                //     userCharge == 'Gerente')
+                                Container(
+                                  height: 17,
+                                  width: 17,
+                                  margin: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(16),
+                                    color: Colors.grey.shade400,
                                   ),
-                                ],
-                              ),
-                              const SizedBox(width: 20),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    width: 90,
-                                    child: TextFieldForCard(
-                                      message: product.name,
-                                    ),
+                                  child: Checkbox(
+                                      side: MaterialStateBorderSide.resolveWith(
+                                          (states) => const BorderSide(
+                                              width: 1.0,
+                                              color: Colors.transparent)),
+                                      shape: const CircleBorder(),
+                                      activeColor: myTheme.colorScheme.primary,
+                                      value: product.selected,
+                                      onChanged: (value) {
+                                        if (product.selected == false) {
+                                          final newProduct =
+                                              ShoppingCartProduct(
+                                            productQuantity: 1,
+                                            code: product.code.toString(),
+                                            productId: product.code.toString(),
+                                            listOfPricesId:
+                                                widget.listOfPrices.toString(),
+                                            totalAmount:
+                                                productPrice.toString(),
+                                            name: product.name,
+                                            unitPrice: productPrice.toString(),
+                                            availableStock: productStock,
+                                            urlPicture: product.catalogue,
+                                          );
+                                          selectedProducts.add(newProduct);
+                                        } else if (product.selected == true) {
+                                          selectedProducts.removeWhere((item) =>
+                                              item.code == product.code);
+                                        }
+                                        setState(
+                                            () => product.selected = value!);
+                                      }),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(width: 20),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width: 90,
+                                  child: TextFieldForCard(
+                                    message: product.name,
                                   ),
-                                ],
-                              ),
-                              const SizedBox(width: 10),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  TextFieldForCard(
-                                    message:
-                                        '${AppLocalizations.of(context)!.productCode}:',
-                                    bold: FontWeight.bold,
-                                  ),
-                                  TextFieldForCard(
-                                    message:
-                                        '${AppLocalizations.of(context)!.stock}:',
-                                    bold: FontWeight.bold,
-                                  ),
-                                  TextFieldForCard(
-                                    message:
-                                        '${AppLocalizations.of(context)!.price}:',
-                                    bold: FontWeight.bold,
-                                  ),
-                                  TextFieldForCard(
-                                    message:
-                                        '${AppLocalizations.of(context)!.productBrand}:',
-                                    bold: FontWeight.bold,
-                                  ),
-                                  TextFieldForCard(
-                                    message:
-                                        '${AppLocalizations.of(context)!.productCategorie}:',
-                                    bold: FontWeight.bold,
-                                  ),
-                                  TextFieldForCard(
-                                    message:
-                                        '${AppLocalizations.of(context)!.productSubCategorie}:',
-                                    bold: FontWeight.bold,
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(width: 10),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  TextFieldForCard(
-                                    message: product.code,
-                                  ),
-                                  TextFieldForCard(
-                                    message: productStock,
-                                  ),
-                                  TextFieldForCard(
-                                    message: priceProduct,
-                                  ),
-                                  TextFieldForCard(
-                                    message: productBrand,
-                                  ),
-                                  TextFieldForCard(
-                                    message: productCategorie,
-                                  ),
-                                  TextFieldForCard(
-                                    message: productSubCategorie,
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(width: 10),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  TextFieldForCard(
-                                    message:
-                                        '${AppLocalizations.of(context)!.productLine}:',
-                                    bold: FontWeight.bold,
-                                  ),
-                                  TextFieldForCard(
-                                    message:
-                                        '${AppLocalizations.of(context)!.productQuality}:',
-                                    bold: FontWeight.bold,
-                                  ),
-                                  TextFieldForCard(
-                                    message:
-                                        '${AppLocalizations.of(context)!.productSize}:',
-                                    bold: FontWeight.bold,
-                                  ),
-                                  TextFieldForCard(
-                                    message:
-                                        '${AppLocalizations.of(context)!.productDesign}:',
-                                    bold: FontWeight.bold,
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(width: 10),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  TextFieldForCard(
-                                    message: productLine,
-                                  ),
-                                  TextFieldForCard(
-                                    message: productQuality,
-                                  ),
-                                  TextFieldForCard(
-                                    message: productSize,
-                                  ),
-                                  TextFieldForCard(
-                                    message: productDesign,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(width: 10),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextFieldForCard(
+                                  message:
+                                      '${AppLocalizations.of(context)!.productCode}:',
+                                  bold: FontWeight.bold,
+                                ),
+                                TextFieldForCard(
+                                  message:
+                                      '${AppLocalizations.of(context)!.stock}:',
+                                  bold: FontWeight.bold,
+                                ),
+                                TextFieldForCard(
+                                  message:
+                                      '${AppLocalizations.of(context)!.price}:',
+                                  bold: FontWeight.bold,
+                                ),
+                                TextFieldForCard(
+                                  message:
+                                      '${AppLocalizations.of(context)!.productBrand}:',
+                                  bold: FontWeight.bold,
+                                ),
+                                TextFieldForCard(
+                                  message:
+                                      '${AppLocalizations.of(context)!.productCategorie}:',
+                                  bold: FontWeight.bold,
+                                ),
+                                TextFieldForCard(
+                                  message:
+                                      '${AppLocalizations.of(context)!.productSubCategorie}:',
+                                  bold: FontWeight.bold,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(width: 10),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextFieldForCard(
+                                  message: product.code,
+                                ),
+                                TextFieldForCard(
+                                  message: productStock,
+                                ),
+                                TextFieldForCard(
+                                  message: priceProduct,
+                                ),
+                                TextFieldForCard(
+                                  message: productBrand,
+                                ),
+                                TextFieldForCard(
+                                  message: productCategorie,
+                                ),
+                                TextFieldForCard(
+                                  message: productSubCategorie,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(width: 10),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextFieldForCard(
+                                  message:
+                                      '${AppLocalizations.of(context)!.productLine}:',
+                                  bold: FontWeight.bold,
+                                ),
+                                TextFieldForCard(
+                                  message:
+                                      '${AppLocalizations.of(context)!.productQuality}:',
+                                  bold: FontWeight.bold,
+                                ),
+                                TextFieldForCard(
+                                  message:
+                                      '${AppLocalizations.of(context)!.productSize}:',
+                                  bold: FontWeight.bold,
+                                ),
+                                TextFieldForCard(
+                                  message:
+                                      '${AppLocalizations.of(context)!.productDesign}:',
+                                  bold: FontWeight.bold,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(width: 10),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextFieldForCard(
+                                  message: productLine,
+                                ),
+                                TextFieldForCard(
+                                  message: productQuality,
+                                ),
+                                TextFieldForCard(
+                                  message: productSize,
+                                ),
+                                TextFieldForCard(
+                                  message: productDesign,
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                    );
-                  } else {
-                    return Container();
-                  }
+                    ),
+                  );
+                  // } else {
+                  //   return Container();
+                  // }
                 },
               ),
             ),

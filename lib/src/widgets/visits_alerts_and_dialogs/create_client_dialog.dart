@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -20,6 +21,9 @@ void showCreateClientDialog(context, uid) {
   var dateFormatter = DateFormat('dd-MM-yyyy');
   DateTime today = DateTime.now();
   String formattedDate = dateFormatter.format(today);
+  final nameOfCurrentUser =
+      Provider.of<CurrentUserInfo>(context, listen: false).name;
+  print('nameOfCurrentUser: $nameOfCurrentUser');
 
   String? selectedValueA;
   String? selectedValueB;
@@ -53,11 +57,11 @@ void showCreateClientDialog(context, uid) {
           final zonesKeys = zonesSummary.keys.toList();
           // print(zonesStrings);
 
-          String? nameOfCurrentUser = sharedPreferences!.getString('nombre');
           // print('Zona seleccionada: $selectedValueA');
 
           return StatefulBuilder(builder: (context, setState) {
             final clients = Provider.of<List<ClientName>?>(context) ?? [];
+
             final clientsList = clients;
             final clientsFiltered = clientsList
                 .where(

@@ -6,6 +6,7 @@ import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/visit_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/visits/components/visits_completed.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/visits/components/visits_on_process.dart';
+import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/visits_alerts_and_dialogs/create_client_dialog.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -20,6 +21,12 @@ class VisitsPage extends StatefulWidget {
 class _VisitsPageState extends State<VisitsPage> {
   @override
   Widget build(BuildContext context) {
+    final currentDay =
+        Provider.of<CounterLimitFirestore>(context).currentDayVisits;
+    final currentDayDateTime = currentDay.toDate();
+    DateTime tomorrow = DateTime(currentDayDateTime.year,
+        currentDayDateTime.month, currentDayDateTime.day + 1);
+
     final user = Provider.of<UserModel?>(context);
     return StreamProvider<List<Visits>>.value(
       value: FirebaseFirestore.instance
@@ -27,6 +34,8 @@ class _VisitsPageState extends State<VisitsPage> {
           .doc(user?.uid)
           .collection('visitas')
           .orderBy('fecha', descending: true)
+          .where('fecha', isGreaterThanOrEqualTo: currentDay)
+          .where('fecha', isLessThan: tomorrow)
           .snapshots()
           .map(visitsFromSnasphot),
       initialData: const [],
@@ -41,7 +50,7 @@ class _VisitsPageState extends State<VisitsPage> {
             direction: Axis.vertical,
             children: [
               Container(
-                margin: EdgeInsets.all(10.0),
+                margin: const EdgeInsets.all(10.0),
                 child: FloatingActionButton(
                   elevation: 0,
                   backgroundColor: myTheme.colorScheme.primary,
@@ -49,7 +58,7 @@ class _VisitsPageState extends State<VisitsPage> {
                     // ShowDialog de a;adir visita
                     showCreateClientDialog(context, user?.uid);
                   },
-                  child: Icon(
+                  child: const Icon(
                     MaterialCommunityIcons.calendar_plus,
                     color: Colors.white,
                   ),
@@ -57,7 +66,7 @@ class _VisitsPageState extends State<VisitsPage> {
               ),
             ],
           ),
-          body: VisitsBody(),
+          body: const VisitsBody(),
         ),
       ),
     );
@@ -126,7 +135,9 @@ class _VisitsBodyState extends State<VisitsBody> {
               ),
             ],
           ),
-          seeCompleted == false ? VisitsOnProcess() : VisitsCompleted(),
+          seeCompleted == false
+              ? const VisitsOnProcess()
+              : const VisitsCompleted(),
         ],
       ),
     );

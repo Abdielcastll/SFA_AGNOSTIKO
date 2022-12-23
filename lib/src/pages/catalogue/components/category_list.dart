@@ -6,7 +6,9 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
+import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -25,6 +27,8 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
     final products = Provider.of<List<Products>?>(context) ?? [];
     final productsList = products;
     List categoriesSummary = categories.values.toList();
+    final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
+
     // print(categoriesSummary);
     // print(productsList);
 
@@ -65,6 +69,10 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
 
                 return GestureDetector(
                   onTap: () {
+                    final counterLimitProvider =
+                        Provider.of<CounterLimitFirestore>(context,
+                            listen: false);
+                    counterLimitProvider.setProductsLimit(0, 0);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -74,6 +82,8 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                                   categories[product.categorie] == categorie)
                               .toList(),
                           listOfPrices: prices,
+                          userZoneDocument: userZoneDocument,
+                          showFullList: true,
                         ),
                       ),
                     );

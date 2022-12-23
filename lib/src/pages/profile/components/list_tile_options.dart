@@ -23,11 +23,13 @@ class ListTileOptions extends StatefulWidget {
     this.charge,
     this.name,
     this.email,
+    required this.userZoneDocument,
   }) : super(key: key);
 
   final String? charge;
   final String? name;
   final String? email;
+  final userZoneDocument;
 
   @override
   State<ListTileOptions> createState() => _ListTileOptionsState();
@@ -129,7 +131,8 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => UsersAndTeamsPage(),
+                      builder: (BuildContext context) => UsersAndTeamsPage(
+                          userZoneDocument: widget.userZoneDocument),
                     ),
                   );
                 },

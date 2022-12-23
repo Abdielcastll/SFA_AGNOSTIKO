@@ -138,7 +138,7 @@ class _OrderCardBodyState extends State<OrderCardBody> {
           symbol: '\$',
         ).format(correctAmount * 19.43);
       } else if (currentCoin.contains('BTC')) {
-        return '฿ ${(correctAmount * 0.00011).toString()}';
+        return '฿ ${(correctAmount * 0.00011).toStringAsFixed(8)}';
       } else {
         return NumberFormat.currency(
           locale: 'es_VE',

@@ -7,7 +7,10 @@ import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_users_and_teams.dart';
 
 class UsersAndTeamsPage extends StatelessWidget {
-  const UsersAndTeamsPage({Key? key}) : super(key: key);
+  const UsersAndTeamsPage({Key? key, required this.userZoneDocument})
+      : super(key: key);
+
+  final userZoneDocument;
 
   @override
   Widget build(BuildContext context) {
@@ -16,24 +19,25 @@ class UsersAndTeamsPage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.grey.shade200,
         appBar: const AppBarUsersAndTeams(),
-        body: const UsersAndTeamsBody(),
+        body: UsersAndTeamsBody(userZoneDocument: userZoneDocument),
       ),
     );
   }
 }
 
 class UsersAndTeamsBody extends StatelessWidget {
-  const UsersAndTeamsBody({
-    Key? key,
-  }) : super(key: key);
+  const UsersAndTeamsBody({Key? key, required this.userZoneDocument})
+      : super(key: key);
+
+  final userZoneDocument;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: const TabBarView(
+      child: TabBarView(
         children: [
-          TeamsPage(),
-          UsersPage(),
+          const TeamsPage(),
+          UsersPage(userZoneDocument: userZoneDocument),
         ],
       ),
     );

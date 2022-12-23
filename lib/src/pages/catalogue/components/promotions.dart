@@ -9,8 +9,10 @@ import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/promotions_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/product_details/product_details.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
+import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -46,6 +48,10 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
     final orderActive = Provider.of<OrderProvider>(context);
     final currentClientForTheOrder =
         Provider.of<OrderProvider>(context).clientForTheOrder;
+
+    final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
+
+    print(products.length);
 
     return Container(
       height: 240,
@@ -152,16 +158,32 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
 
                               return GestureDetector(
                                 onTap: () {
+                                  final counterLimitProvider =
+                                      Provider.of<CounterLimitFirestore>(
+                                          context,
+                                          listen: false);
+                                  if (counterLimitProvider.getProductsLimit >
+                                      100) {
+                                    counterLimitProvider.setProductsLimit(
+                                        10, 10);
+                                  }
+                                  print(products
+                                      .where((product) =>
+                                          product.promotion ==
+                                          promotion.firebaseDocumentID)
+                                      .toList());
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => ProductsPage(
-                                        listOfProducts: products
+                                        listOfProducts: productsWithPromotions
                                             .where((product) =>
                                                 product.promotion ==
                                                 promotion.firebaseDocumentID)
                                             .toList(),
                                         listOfPrices: listOfPrices,
+                                        userZoneDocument: userZoneDocument,
+                                        showFullList: false,
                                       ),
                                     ),
                                   );

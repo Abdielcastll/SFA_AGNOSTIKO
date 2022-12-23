@@ -5,7 +5,12 @@ import 'package:pwa_sales2go_flutter/src/pages/users_and_teams/users/new_user/ne
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class UsersPage extends StatelessWidget {
-  const UsersPage({Key? key}) : super(key: key);
+  const UsersPage({
+    Key? key,
+    required this.userZoneDocument,
+  }) : super(key: key);
+
+  final userZoneDocument;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +59,7 @@ class UsersPage extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (BuildContext context) =>
-                          const RolesManagerPage(),
+                          RolesManagerPage(userZoneDocument: userZoneDocument),
                     ),
                   );
                 },

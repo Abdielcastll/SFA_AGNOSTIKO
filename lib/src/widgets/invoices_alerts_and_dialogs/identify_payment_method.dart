@@ -10,8 +10,10 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
+import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -77,8 +79,27 @@ identifyPaymentMethod(
   List<String> itemsCoinVED = [
     'VED',
   ];
-  final currentCoin = sharedPreferences!.getString('currentCoin');
+  // final currentCoin = sharedPreferences!.getString('currentCoin');
+  final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
+
+  priceFormat(currentCoin) {
+    if (currentCoin!.contains('USD')) {
+      return 'USD';
+    } else if (currentCoin.contains('VED')) {
+      return 'VED';
+    } else if (currentCoin.contains('EUR')) {
+      return 'EUR';
+    } else if (currentCoin.contains('MXN')) {
+      return 'MXN';
+    } else if (currentCoin.contains('BTC')) {
+      return 'BTC';
+    } else {
+      return 'PPR';
+    }
+  }
+
   print('Metodo: $selectedValueA');
+  print(priceFormat(currentCoin));
 
   if (selectedValueA == 'Cheque') {
     return StatefulBuilder(
@@ -486,7 +507,7 @@ identifyPaymentMethod(
                                     selectedCoin,
                                     paidAmount,
                                     totalOfTheOrder,
-                                    currentCoin,
+                                    priceFormat(currentCoin),
                                     selectedBank,
                                     accountNumber,
                                     accountHolder,
@@ -1155,7 +1176,7 @@ identifyPaymentMethod(
                                     selectedCoin,
                                     paidAmount,
                                     totalOfTheOrder,
-                                    currentCoin,
+                                    priceFormat(currentCoin),
                                     selectedBank,
                                     accountNumber,
                                     voucherNumber,
@@ -1884,7 +1905,7 @@ identifyPaymentMethod(
                                       selectedCoin,
                                       paidAmount,
                                       totalOfTheOrder,
-                                      currentCoin,
+                                      priceFormat(currentCoin),
                                       selectedBank,
                                       referenceId,
                                       imageFile,
@@ -1923,7 +1944,7 @@ identifyPaymentMethod(
                                       selectedCoin,
                                       paidAmount,
                                       totalOfTheOrder,
-                                      currentCoin,
+                                      priceFormat(currentCoin),
                                       selectedBank,
                                       referenceId,
                                       imageFile,

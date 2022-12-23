@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 
 class RolesManagerPage extends StatefulWidget {
-  const RolesManagerPage({super.key});
+  const RolesManagerPage({super.key, required this.userZoneDocument});
+
+  final userZoneDocument;
 
   @override
   State<RolesManagerPage> createState() => _RolesManagerPageState();
@@ -16,6 +20,7 @@ class _RolesManagerPageState extends State<RolesManagerPage> {
       backgroundColor: Colors.grey.shade100,
       appBar: AppBarNavigation(
         message: 'Roles de Usuario',
+        userZoneDocument: widget.userZoneDocument,
       ),
       body: RolesManagerBody(),
     );

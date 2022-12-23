@@ -14,8 +14,10 @@ import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/category_lis
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/most_selled_products.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/new_products.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/product_list_button.dart';
+import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
+import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/promotions.dart';
@@ -32,19 +34,30 @@ class CataloguePage extends StatefulWidget {
 class _CataloguePageState extends State<CataloguePage> {
   @override
   Widget build(BuildContext context) {
-    final orderActive = Provider.of<OrderProvider>(context);
     final currentClientForTheOrder =
         Provider.of<OrderProvider>(context).clientForTheOrder;
+    final productsLimit =
+        Provider.of<CounterLimitFirestore>(context).getProductsLimit;
+    final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
 
     return MultiProvider(
       providers: [
-        StreamProvider<List<Products>?>.value(
-          value: DatabaseServiceStreams().products,
-          initialData: const [],
-          catchError: (context, error) {
-            return;
-          },
-        ),
+        // StreamProvider<List<Products>?>.value(
+        //   value: productsLimit == 0
+        //       ? productsCollection
+        //           .orderBy('codigo')
+        //           .snapshots()
+        //           .map(productsListFromSnapshot)
+        //       : productsCollection
+        //           .orderBy('codigo')
+        //           .limit(productsLimit)
+        //           .snapshots()
+        //           .map(productsListFromSnapshot),
+        //   initialData: const [],
+        //   catchError: (context, error) {
+        //     return;
+        //   },
+        // ),
         StreamProvider<List<ProductsWithPromotions>?>.value(
           value: DatabaseServiceStreams().productsWithPromotions,
           initialData: const [],
@@ -102,6 +115,7 @@ class _CataloguePageState extends State<CataloguePage> {
       child: Scaffold(
         appBar: AppBarNavigation(
           message: 'Apps2Go',
+          userZoneDocument: userZoneDocument,
         ),
         backgroundColor: myTheme.colorScheme.surface,
         body: CatalogueBody(),
@@ -123,12 +137,12 @@ class _CatalogueBodyState extends State<CatalogueBody> {
   @override
   Widget build(BuildContext context) {
     final checkProducts = Provider.of<List<Products>?>(context) ?? [];
-    final orderActive = Provider.of<OrderProvider>(context);
-    final currentClientForTheOrder =
-        Provider.of<OrderProvider>(context).clientForTheOrder;
+    final productsLimit =
+        Provider.of<CounterLimitFirestore>(context).getProductsLimit;
+    final productsScrollLimit =
+        Provider.of<CounterLimitFirestore>(context).getScrollProductLimit;
 
-    // final currentClient = Provider.of<CurrentUserInfo?>(context)?.name ?? {};
-    // print(currentClient);
+    // print(checkProducts);
     return checkProducts.isEmpty
         ? const Center(
             child: CircularProgressIndicator(),
@@ -137,6 +151,29 @@ class _CatalogueBodyState extends State<CatalogueBody> {
             physics: const BouncingScrollPhysics(),
             child: Column(
               children: const [
+                // Text('Pantalla de prueba para aumento '),
+                // ElevatedButton(
+                //     onPressed: () {
+                //       final productsLimitProvider =
+                //           Provider.of<CounterLimitFirestore>(context,
+                //               listen: false);
+                //       if (productsScrollLimit == 0) {
+                //         productsLimitProvider.setProductsLimit(0, 0);
+                //       } else {
+                //         int newValor =
+                //             int.parse(productsScrollLimit.toString());
+                //         if (newValor == 10) {
+                //           productsLimitProvider.setProductsLimit(
+                //               productsLimit + newValor, 10);
+                //         } else if (newValor == 50) {
+                //           productsLimitProvider.setProductsLimit(
+                //               productsLimit + newValor, 50);
+                //         }
+                //       }
+                //     },
+                //     child: Text(
+                //         'Aumentar productos:${productsLimit == 0 ? 'Todos' : productsLimit} + $productsScrollLimit')),
+                // Text('Products actuales: ${checkProducts.length}'),
                 PromotionsWidget(),
                 NewProductsWidget(),
                 ListOfProductsButton(),

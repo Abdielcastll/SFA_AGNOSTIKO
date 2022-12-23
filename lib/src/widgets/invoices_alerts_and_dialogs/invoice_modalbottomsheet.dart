@@ -43,6 +43,7 @@ void modalBottomSheetForInvoices(
   String paidAmount = '00.00';
   var dateFormatter = DateFormat('dd-MM-yyyy');
   DateTime today = DateTime.now();
+  String formattedDate = dateFormatter.format(today);
   String? selectedValueA;
 
   final paymentsValidPay = invoicePayments
@@ -102,7 +103,7 @@ void modalBottomSheetForInvoices(
             symbol: '\$',
           ).format(correctAmount * 19.43);
         } else if (currentCoin.contains('BTC')) {
-          return '฿ ${(correctAmount * 0.00011).toString()}';
+          return '฿ ${(correctAmount * 0.00011).toStringAsFixed(6)}';
         } else {
           return NumberFormat.currency(
             locale: 'es_VE',
@@ -220,7 +221,7 @@ void modalBottomSheetForInvoices(
                                                   children: [
                                                     SingleChildScrollView(
                                                       child: Container(
-                                                        width: 300,
+                                                        width: 330,
                                                         height: 300,
                                                         child:
                                                             invoicePayments
@@ -263,7 +264,9 @@ void modalBottomSheetForInvoices(
                                                                                           : Colors.green
                                                                                       : Colors.red,
                                                                                 ),
-                                                                                title: Row(
+                                                                                title: Column(
+                                                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                                                  crossAxisAlignment: CrossAxisAlignment.start,
                                                                                   children: [
                                                                                     Text(
                                                                                       priceFormat(payment['monto']),
@@ -275,7 +278,6 @@ void modalBottomSheetForInvoices(
                                                                                       ),
                                                                                     ),
                                                                                     Container(
-                                                                                      margin: EdgeInsets.fromLTRB(20, 0, 0, 10),
                                                                                       child: Text(
                                                                                         paymentDate,
                                                                                         style: TextStyle(
@@ -399,8 +401,6 @@ void modalBottomSheetForInvoices(
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
-                                        String formattedDate =
-                                            dateFormatter.format(today);
                                         final List<String> items = [
                                           'Cheque',
                                           'Criptomoneda',
@@ -675,6 +675,9 @@ void modalBottomSheetForInvoices(
                                                                   setState(() {
                                                                     today =
                                                                         newDate;
+                                                                    formattedDate =
+                                                                        dateFormatter
+                                                                            .format(today);
                                                                   });
                                                                 },
                                                                 splashRadius: 5,

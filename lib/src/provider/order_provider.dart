@@ -4,7 +4,10 @@ import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 
 class OrderProvider extends ChangeNotifier {
   bool? _orderActive = false;
-  Clients? _clientForTheOrder = Clients(name: 'no-name', prices: 'GENER-03');
+  Clients? _clientForTheOrder = Clients(
+    name: 'no-name',
+    prices: 'GENER-03',
+  );
 
   bool? get orderActive => _orderActive;
 

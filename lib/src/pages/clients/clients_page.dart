@@ -20,8 +20,7 @@ class ClientsPage extends StatefulWidget {
 class _ClientsPageState extends State<ClientsPage> {
   @override
   Widget build(BuildContext context) {
-    final userZoneDocument =
-        Provider.of<CurrentUserInfo?>(context)?.zoneDocument ?? {};
+    final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
 
     // print(currentUserActive.zone);
     return MultiProvider(
@@ -56,6 +55,7 @@ class _ClientsPageState extends State<ClientsPage> {
         backgroundColor: Colors.grey[200],
         appBar: AppBarNavigation(
           message: AppLocalizations.of(context)!.clients,
+          userZoneDocument: userZoneDocument,
         ),
         body: const ClientsBody(),
       ),

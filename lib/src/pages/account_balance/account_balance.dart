@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/account_balance_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
@@ -14,10 +15,12 @@ class AccountBalancePage extends StatefulWidget {
     super.key,
     this.clientDocument,
     this.clientName,
+    this.userZoneDocument,
   });
 
   final clientDocument;
   final clientName;
+  final userZoneDocument;
 
   @override
   State<AccountBalancePage> createState() => _AccountBalancePageState();
@@ -30,6 +33,7 @@ class _AccountBalancePageState extends State<AccountBalancePage> {
       backgroundColor: Colors.grey.shade100,
       appBar: AppBarNavigation(
         message: AppLocalizations.of(context)!.accountBalance,
+        userZoneDocument: widget.userZoneDocument,
       ),
       body: AccountBalanceBody(
         clientDocument: widget.clientDocument,

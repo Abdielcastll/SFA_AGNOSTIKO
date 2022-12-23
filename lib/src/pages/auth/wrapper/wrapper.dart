@@ -48,7 +48,9 @@ class _WrapperState extends State<Wrapper> {
           ),
           catchError: (context, error) {
             print(error);
+            return;
           },
+          // child: Builder(builder: (context) => NavigationPages()));
           child: NavigationPages());
     }
   }

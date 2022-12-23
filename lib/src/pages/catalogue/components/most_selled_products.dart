@@ -8,7 +8,9 @@ import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/product_details/product_details.dart';
+import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -28,6 +30,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
     final stockValues = Provider.of<StockModel?>(context)?.stock ?? {};
     final products = Provider.of<List<Products>?>(context) ?? [];
     final prices = Provider.of<Prices?>(context)?.prices ?? {};
+    final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
 
     final productsList = products;
 
@@ -92,13 +95,14 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                   price: (prices[product.code] ?? 0).toString(),
                                   name: product.name,
                                   stock: stockValues[product.code] ?? 0,
-                                  list: productsList
+                                  list: productsBySalesList
                                       .where((element) =>
                                           element.name == product.name)
                                       .toList(),
                                   isProductInAPromotion: false,
                                   prices: prices,
                                   catalogueID: product.catalogue,
+                                  userZoneDocument: userZoneDocument,
                                 ),
                               ),
                             );
@@ -203,6 +207,12 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                       } else if (snapshot.hasError) {
                         return GestureDetector(
                           onTap: () {
+                            final counterLimitProvider =
+                                Provider.of<CounterLimitFirestore>(context,
+                                    listen: false);
+                            if (products.length > 100) {
+                              counterLimitProvider.setProductsLimit(10, 10);
+                            }
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -215,12 +225,13 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                   isProductNew: false,
                                   name: product.name,
                                   stock: stockValues[product.code] ?? 0,
-                                  list: productsList
+                                  list: productsBySalesList
                                       .where((element) =>
                                           element.name == product.name)
                                       .toList(),
                                   isProductInAPromotion: false,
                                   prices: prices,
+                                  userZoneDocument: userZoneDocument,
                                 ),
                               ),
                             );

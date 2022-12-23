@@ -10,6 +10,7 @@ import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/filter_orders..dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/orders_completed.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/orders_on_process.dart';
+import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -30,15 +31,23 @@ class _OrdersPageState extends State<OrdersPage> {
 
   @override
   Widget build(BuildContext context) {
-    final userUid = Provider.of<CurrentUserInfo?>(context)?.uid ?? {};
-    final userDoc = usersCollection.doc(userUid);
-    print(userDoc);
+    // final userUid = Provider.of<CurrentUserInfo?>(context)?.uid ?? {};
+    // final userDoc = usersCollection.doc(userUid);
+    // print(userDoc);
+    final currentDay =
+        Provider.of<CounterLimitFirestore>(context).currentDayOrder;
+    final currentDayDateTime = currentDay.toDate();
+    DateTime tomorrow = DateTime(currentDayDateTime.year,
+        currentDayDateTime.month, currentDayDateTime.day + 1);
+
     return MultiProvider(
       providers: [
         StreamProvider<List<Orders>?>.value(
           value: FirebaseFirestore.instance
               .collectionGroup('pedidos')
               // .where('vendedor', isEqualTo: userDoc)
+              .where('fecha', isGreaterThanOrEqualTo: currentDay)
+              .where('fecha', isLessThan: tomorrow)
               .orderBy('fecha')
               .snapshots()
               .map(ordersFromSnapshot),

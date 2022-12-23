@@ -14,6 +14,7 @@ import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
+import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
@@ -35,6 +36,7 @@ class ProductDetails extends StatefulWidget {
     this.prices,
     this.pricesName,
     this.catalogueID,
+    required this.userZoneDocument,
   }) : super(key: key);
 
   final String code;
@@ -44,11 +46,12 @@ class ProductDetails extends StatefulWidget {
   final String imageUrl;
   final bool isProductNew;
   final int stock;
-  final List<Products>? list;
+  final List<ProductsByDate>? list;
   final bool isProductInAPromotion;
   final prices;
   final pricesName;
   final catalogueID;
+  final userZoneDocument;
 
   @override
   State<ProductDetails> createState() => _ProductDetailsState();
@@ -73,6 +76,7 @@ class _ProductDetailsState extends State<ProductDetails> {
         prices: widget.prices,
         pricesName: widget.pricesName,
         catalogueID: widget.catalogueID,
+        userZoneDocument: widget.userZoneDocument,
       ),
     );
   }
@@ -93,6 +97,7 @@ class ProductDetailsBody extends StatelessWidget {
     this.prices,
     this.pricesName,
     this.catalogueID,
+    required this.userZoneDocument,
   }) : super(key: key);
 
   final String code;
@@ -102,11 +107,12 @@ class ProductDetailsBody extends StatelessWidget {
   final String imageUrl;
   final bool isProductNew;
   final int stock;
-  final List<Products>? list;
+  final List<ProductsByDate>? list;
   final bool isProductInAPromotion;
   final prices;
   final pricesName;
   final catalogueID;
+  final userZoneDocument;
 
   @override
   Widget build(BuildContext context) {
@@ -373,6 +379,7 @@ class ProductDetailsBody extends StatelessWidget {
                               borderRadius: BorderRadius.circular(20),
                               child: ElevatedButton.icon(
                                 onPressed: () {
+                               
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -380,6 +387,8 @@ class ProductDetailsBody extends StatelessWidget {
                                           ProductsPage(
                                         listOfProducts: list,
                                         listOfPrices: prices,
+                                        userZoneDocument: userZoneDocument,
+                                        showFullList: false,
                                       ),
                                     ),
                                   );

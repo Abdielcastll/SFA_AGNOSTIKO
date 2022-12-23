@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:flutterfire_ui/auth.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/examples/usesrs_example.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/role_manager/role_manager.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
@@ -19,8 +21,18 @@ class _NewUserPageState extends State<NewUserPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarNavigation(
-        message: 'Nuevo Usuario',
+      appBar: AppBar(
+        title: const Text(
+          'Nuevo usuario',
+          style: TextStyle(
+            letterSpacing: 0,
+            fontSize: 22,
+            fontFamily: 'Poppins-regular',
+          ),
+        ),
+        elevation: 0,
+        leadingWidth: 24.0,
+        backgroundColor: myTheme.colorScheme.primary,
       ),
       backgroundColor: Colors.white,
       body: const NewUserBody(),

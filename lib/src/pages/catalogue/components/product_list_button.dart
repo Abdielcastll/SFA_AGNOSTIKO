@@ -5,7 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/examples/products_example.dart';
 import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
+import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -19,22 +21,28 @@ class ListOfProductsButton extends StatefulWidget {
 class _ListOfProductsButtonState extends State<ListOfProductsButton> {
   @override
   Widget build(BuildContext context) {
-    final products = Provider.of<List<Products>?>(context) ?? [];
     final prices = Provider.of<Prices?>(context)?.prices ?? {};
+    final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
+    final products = Provider.of<List<Products>?>(context) ?? [];
 
-    final productsList = products;
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 10, 16, 0),
       width: MediaQuery.of(context).size.width,
       height: 45,
       child: ElevatedButton.icon(
         onPressed: () {
-          Navigator.push(
-            context,
+          final counterLimitProvider =
+              Provider.of<CounterLimitFirestore>(context, listen: false);
+          if (products.length > 100) {
+            counterLimitProvider.setProductsLimit(10, 10);
+          }
+          Navigator.of(context).push(
             MaterialPageRoute(
               builder: (BuildContext context) => ProductsPage(
-                listOfProducts: productsList,
                 listOfPrices: prices,
+                userZoneDocument: userZoneDocument,
+                listOfProducts: const [],
+                showFullList: true,
               ),
             ),
           );

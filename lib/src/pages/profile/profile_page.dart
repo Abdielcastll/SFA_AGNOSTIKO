@@ -32,10 +32,12 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
+    final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
+
     return Scaffold(
       appBar: AppBarNavigation(
-        message: AppLocalizations.of(context)!.profile,
-      ),
+          message: AppLocalizations.of(context)!.profile,
+          userZoneDocument: userZoneDocument),
       backgroundColor: Colors.grey.shade100,
       body: const ProfileBody(),
     );
@@ -58,6 +60,7 @@ class _ProfileBodyState extends State<ProfileBody> {
     final userEmail = Provider.of<CurrentUserInfo?>(context)?.email ?? {};
     final userName = Provider.of<CurrentUserInfo?>(context)?.name ?? {};
     print(userName);
+    final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
 
     return MultiProvider(
       providers: [
@@ -80,9 +83,11 @@ class _ProfileBodyState extends State<ProfileBody> {
                 charge: AppLocalizations.of(context)!.seller),
             const SizedBox(height: 30),
             ListTileOptions(
-                charge: AppLocalizations.of(context)!.seller,
-                name: userName,
-                email: userEmail),
+              charge: AppLocalizations.of(context)!.seller,
+              name: userName,
+              email: userEmail,
+              userZoneDocument: userZoneDocument,
+            ),
             const SizedBox(height: 15),
             const LogoutButton(),
             const SizedBox(height: 15),

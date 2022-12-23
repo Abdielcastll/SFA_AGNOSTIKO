@@ -269,10 +269,6 @@ Future createInvoice(
   userID,
 ) async {
   print('/// CREAR FACTURA ///');
-  // await FirebaseFirestore.instance
-  //     .collection('config')
-  //     .doc('contador_pedidos')
-  //     .update({'numero': correlativeNumber + 1});
 
   final clientID = FirebaseFirestore.instance
       .collection('clientes')
@@ -323,39 +319,44 @@ Future createInvoice(
   print(correlativeNumber);
   print(correlativeNumber + 1);
 
-  // await FirebaseFirestore.instance
-  //     .collection('clientes')
-  //     .doc(client.clientDocumentId)
-  //     .collection('pedidos')
-  //     .doc(orderDocumentID)
-  //     .update({
-  //   'facturado': true,
-  //   'nroCorrelativo': correlativeNumber + 1
-  // }).whenComplete(() async {
-  //   return await FirebaseFirestore.instance
-  //       .collection('clientes')
-  //       .doc(client.clientDocumentId)
-  //       .collection('facturas')
-  //       .doc()
-  //       .set({
-  //     'cliente': clientID,
-  //     'descuentoMaestro': discount,
-  //     'fecha': Timestamp.fromDate(DateTime.now()),
-  //     'impuesto': tax,
-  //     'montoTotal': double.parse(totalAsString),
-  //     'nroCorrelativo': correlativeNumber,
-  //     'pagada': isPaid,
-  //     'pagos': payments,
-  //     'pedido': order,
-  //     'porcentajeDescuentoMaestro': discountPercentage,
-  //     'referenciaNotasCredito': referenceCreditNote,
-  //     'subtotal': subTotal,
-  //     'timestampRegistro': register,
-  //     'ultimaModificacion': lastModification,
-  //     'vendedor': seller,
-  //   }).whenComplete(
-  //           () => Fluttertoast.showToast(msg: 'Factura ${correlativeNumber}'));
-  // });
+  await FirebaseFirestore.instance
+      .collection('clientes')
+      .doc(client.clientDocumentId)
+      .collection('pedidos')
+      .doc(orderDocumentID)
+      .update({
+    'facturado': true,
+    'nroCorrelativo': correlativeNumber + 1
+  }).whenComplete(() async {
+    return await FirebaseFirestore.instance
+        .collection('clientes')
+        .doc(client.clientDocumentId)
+        .collection('facturas')
+        .doc()
+        .set({
+      'cliente': clientID,
+      'descuentoMaestro': discount,
+      'fecha': Timestamp.fromDate(DateTime.now()),
+      'impuesto': tax,
+      'montoTotal': double.parse(totalAsString),
+      'nroCorrelativo': correlativeNumber + 1,
+      'pagada': isPaid,
+      'pagos': payments,
+      'pedido': order,
+      'porcentajeDescuentoMaestro': discountPercentage,
+      'referenciaNotasCredito': referenceCreditNote,
+      'subtotal': subTotal,
+      'timestampRegistro': register,
+      'ultimaModificacion': lastModification,
+      'vendedor': seller,
+    }).whenComplete(() async {
+      return await FirebaseFirestore.instance
+          .collection('config')
+          .doc('contador_pedidos')
+          .update({'numero': correlativeNumber + 1});
+    }).whenComplete(() =>
+            Fluttertoast.showToast(msg: 'Factura ${correlativeNumber + 1}'));
+  });
   ////////////////////////
   // // Fluttertoast.showToast(msg: 'Factura ${correlativeNumber}');
   // return await FirebaseFirestore.instance
@@ -444,33 +445,33 @@ Future registerBankCheckPayment(
   print('Numero de cuenta: $accountNumber');
   print('fecha de registro: $date');
 
-  return await FirebaseFirestore.instance
-      .collection('clientes')
-      .doc(client.clientDocumentId)
-      .collection('facturas')
-      .doc(invoiceDocumentID)
-      .update({
-    'pagos': FieldValue.arrayUnion(
-      [
-        <String, dynamic>{
-          'anulado': false,
-          'codigoMoneda': currency.toString(),
-          'conciliado': false,
-          'fecha': Timestamp.fromDate(date),
-          'metodo': 'Cheque',
-          'monto': double.parse(convertedAmount),
-          'montoOriginal': totalOfTheOrder,
-          'banco': FirebaseFirestore.instance
-              .collection('bancos')
-              .doc(banksDocumentsID),
-          'nroCuenta': int.parse(accountNumber),
-          'Titular': accountHolder,
-          'nroNotaCredito': 0,
-          'tasaDeCambio': selectedCoinExchangeRate,
-        },
-      ],
-    ),
-  });
+  // return await FirebaseFirestore.instance
+  //     .collection('clientes')
+  //     .doc(client.clientDocumentId)
+  //     .collection('facturas')
+  //     .doc(invoiceDocumentID)
+  //     .update({
+  //   'pagos': FieldValue.arrayUnion(
+  //     [
+  //       <String, dynamic>{
+  //         'anulado': false,
+  //         'codigoMoneda': currency.toString(),
+  //         'conciliado': false,
+  //         'fecha': Timestamp.fromDate(date),
+  //         'metodo': 'Cheque',
+  //         'monto': double.parse(convertedAmount),
+  //         'montoOriginal': totalOfTheOrder,
+  //         'banco': FirebaseFirestore.instance
+  //             .collection('bancos')
+  //             .doc(banksDocumentsID),
+  //         'nroCuenta': int.parse(accountNumber),
+  //         'Titular': accountHolder,
+  //         'nroNotaCredito': 0,
+  //         'tasaDeCambio': selectedCoinExchangeRate,
+  //       },
+  //     ],
+  //   ),
+  // });
 }
 
 //Registrar pagos de cripto
@@ -518,33 +519,33 @@ Future registerCriptoPayment(
   print('transaccion: $transactionId');
   print('fecha de registro: $date');
 
-  if (double.parse(convertedAmount) < totalOfTheOrder) {
-    return await FirebaseFirestore.instance
-        .collection('clientes')
-        .doc(client.clientDocumentId)
-        .collection('facturas')
-        .doc(invoiceDocumentID)
-        .update({
-      'pagos': FieldValue.arrayUnion(
-        [
-          <String, dynamic>{
-            'anulado': false,
-            'codigoMoneda': currency.toString(),
-            'conciliado': false,
-            'fecha': Timestamp.fromDate(date),
-            'metodo': 'Criptomoneda',
-            'monto': double.parse(convertedAmount),
-            'montoOriginal': totalOfTheOrder,
-            'idTransaccion': transactionId,
-            'nroNotaCredito': 0,
-            'tasaDeCambio': selectedCoinExchangeRate,
-          },
-        ],
-      ),
-    });
-  } else if (double.parse(convertedAmount) > totalOfTheOrder) {
-    Fluttertoast.showToast(msg: 'El monto a pagar es mayor que el de la orden');
-  }
+  // if (double.parse(convertedAmount) < totalOfTheOrder) {
+  //   return await FirebaseFirestore.instance
+  //       .collection('clientes')
+  //       .doc(client.clientDocumentId)
+  //       .collection('facturas')
+  //       .doc(invoiceDocumentID)
+  //       .update({
+  //     'pagos': FieldValue.arrayUnion(
+  //       [
+  //         <String, dynamic>{
+  //           'anulado': false,
+  //           'codigoMoneda': currency.toString(),
+  //           'conciliado': false,
+  //           'fecha': Timestamp.fromDate(date),
+  //           'metodo': 'Criptomoneda',
+  //           'monto': double.parse(convertedAmount),
+  //           'montoOriginal': totalOfTheOrder,
+  //           'idTransaccion': transactionId,
+  //           'nroNotaCredito': 0,
+  //           'tasaDeCambio': selectedCoinExchangeRate,
+  //         },
+  //       ],
+  //     ),
+  //   });
+  // } else if (double.parse(convertedAmount) > totalOfTheOrder) {
+  //   Fluttertoast.showToast(msg: 'El monto a pagar es mayor que el de la orden');
+  // }
 }
 
 //Registro de deposito
@@ -607,33 +608,33 @@ Future registerDepositPayment(
   print('Numero de cuenta: $accountNumber');
   print('fecha de registro: $date');
 
-  return await FirebaseFirestore.instance
-      .collection('clientes')
-      .doc(client.clientDocumentId)
-      .collection('facturas')
-      .doc(invoiceDocumentID)
-      .update({
-    'pagos': FieldValue.arrayUnion(
-      [
-        <String, dynamic>{
-          'anulado': false,
-          'codigoMoneda': currency.toString(),
-          'conciliado': false,
-          'fecha': Timestamp.fromDate(date),
-          'metodo': 'Deposito',
-          'monto': double.parse(convertedAmount),
-          'montoOriginal': totalOfTheOrder,
-          'banco': FirebaseFirestore.instance
-              .collection('bancos')
-              .doc(banksDocumentsID),
-          'nroCuenta': int.parse(accountNumber),
-          'nroVoucher': voucherNumber,
-          'nroNotaCredito': 0,
-          'tasaDeCambio': selectedCoinExchangeRate,
-        },
-      ],
-    ),
-  });
+  // return await FirebaseFirestore.instance
+  //     .collection('clientes')
+  //     .doc(client.clientDocumentId)
+  //     .collection('facturas')
+  //     .doc(invoiceDocumentID)
+  //     .update({
+  //   'pagos': FieldValue.arrayUnion(
+  //     [
+  //       <String, dynamic>{
+  //         'anulado': false,
+  //         'codigoMoneda': currency.toString(),
+  //         'conciliado': false,
+  //         'fecha': Timestamp.fromDate(date),
+  //         'metodo': 'Deposito',
+  //         'monto': double.parse(convertedAmount),
+  //         'montoOriginal': totalOfTheOrder,
+  //         'banco': FirebaseFirestore.instance
+  //             .collection('bancos')
+  //             .doc(banksDocumentsID),
+  //         'nroCuenta': int.parse(accountNumber),
+  //         'nroVoucher': voucherNumber,
+  //         'nroNotaCredito': 0,
+  //         'tasaDeCambio': selectedCoinExchangeRate,
+  //       },
+  //     ],
+  //   ),
+  // });
 }
 
 //Registrar pagos de efectivo
@@ -672,32 +673,32 @@ Future registerMoneyPayment(client, invoiceDocumentID, currency, amount,
   print('Total en USD: $convertedAmount');
   print('fecha de registro: $date');
 
-  if (double.parse(convertedAmount) < totalOfTheOrder) {
-    return await FirebaseFirestore.instance
-        .collection('clientes')
-        .doc(client.clientDocumentId)
-        .collection('facturas')
-        .doc(invoiceDocumentID)
-        .update({
-      'pagos': FieldValue.arrayUnion(
-        [
-          <String, dynamic>{
-            'anulado': false,
-            'codigoMoneda': currency.toString(),
-            'conciliado': false,
-            'fecha': Timestamp.fromDate(date),
-            'metodo': 'Efectivo',
-            'monto': double.parse(convertedAmount),
-            'montoOriginal': totalOfTheOrder,
-            'nroNotaCredito': 0,
-            'tasaDeCambio': selectedCoinExchangeRate,
-          },
-        ],
-      ),
-    });
-  } else if (double.parse(convertedAmount) > totalOfTheOrder) {
-    Fluttertoast.showToast(msg: 'El monto a pagar es mayor que el de la orden');
-  }
+  // if (double.parse(convertedAmount) < totalOfTheOrder) {
+  //   return await FirebaseFirestore.instance
+  //       .collection('clientes')
+  //       .doc(client.clientDocumentId)
+  //       .collection('facturas')
+  //       .doc(invoiceDocumentID)
+  //       .update({
+  //     'pagos': FieldValue.arrayUnion(
+  //       [
+  //         <String, dynamic>{
+  //           'anulado': false,
+  //           'codigoMoneda': currency.toString(),
+  //           'conciliado': false,
+  //           'fecha': Timestamp.fromDate(date),
+  //           'metodo': 'Efectivo',
+  //           'monto': double.parse(convertedAmount),
+  //           'montoOriginal': totalOfTheOrder,
+  //           'nroNotaCredito': 0,
+  //           'tasaDeCambio': selectedCoinExchangeRate,
+  //         },
+  //       ],
+  //     ),
+  //   });
+  // } else if (double.parse(convertedAmount) > totalOfTheOrder) {
+  //   Fluttertoast.showToast(msg: 'El monto a pagar es mayor que el de la orden');
+  // }
 }
 
 //Registrar pagos de trasnferencias nacionales
@@ -760,32 +761,32 @@ Future registerTransferPayment(
 
   print('fecha de registro: $date');
 
-  return await FirebaseFirestore.instance
-      .collection('clientes')
-      .doc(client.clientDocumentId)
-      .collection('facturas')
-      .doc(invoiceDocumentID)
-      .update({
-    'pagos': FieldValue.arrayUnion(
-      [
-        <String, dynamic>{
-          'anulado': false,
-          'codigoMoneda': currency.toString(),
-          'conciliado': false,
-          'fecha': Timestamp.fromDate(date),
-          'metodo': 'Transferencia',
-          'monto': double.parse(convertedAmount),
-          'montoOriginal': totalOfTheOrder,
-          'banco': FirebaseFirestore.instance
-              .collection('bancos')
-              .doc(banksDocumentsID),
-          'nroReferencia': int.parse(referenceId),
-          'nroNotaCredito': 0,
-          'tasaDeCambio': selectedCoinExchangeRate,
-        },
-      ],
-    ),
-  });
+  // return await FirebaseFirestore.instance
+  //     .collection('clientes')
+  //     .doc(client.clientDocumentId)
+  //     .collection('facturas')
+  //     .doc(invoiceDocumentID)
+  //     .update({
+  //   'pagos': FieldValue.arrayUnion(
+  //     [
+  //       <String, dynamic>{
+  //         'anulado': false,
+  //         'codigoMoneda': currency.toString(),
+  //         'conciliado': false,
+  //         'fecha': Timestamp.fromDate(date),
+  //         'metodo': 'Transferencia',
+  //         'monto': double.parse(convertedAmount),
+  //         'montoOriginal': totalOfTheOrder,
+  //         'banco': FirebaseFirestore.instance
+  //             .collection('bancos')
+  //             .doc(banksDocumentsID),
+  //         'nroReferencia': int.parse(referenceId),
+  //         'nroNotaCredito': 0,
+  //         'tasaDeCambio': selectedCoinExchangeRate,
+  //       },
+  //     ],
+  //   ),
+  // });
 }
 
 //Registrar pagos de trasnferencias internacionales
@@ -847,30 +848,30 @@ Future registerTransferInterPayment(
 
   print('fecha de registro: $date');
 
-  return await FirebaseFirestore.instance
-      .collection('clientes')
-      .doc(client.clientDocumentId)
-      .collection('facturas')
-      .doc(invoiceDocumentID)
-      .update({
-    'pagos': FieldValue.arrayUnion(
-      [
-        <String, dynamic>{
-          'anulado': false,
-          'codigoMoneda': currency.toString(),
-          'conciliado': false,
-          'fecha': Timestamp.fromDate(date),
-          'metodo': 'Transferencia-internacional',
-          'monto': double.parse(convertedAmount),
-          'montoOriginal': totalOfTheOrder,
-          'banco': FirebaseFirestore.instance
-              .collection('bancos')
-              .doc(banksDocumentsID),
-          'nroReferencia': int.parse(referenceId),
-          'nroNotaCredito': 0,
-          'tasaDeCambio': selectedCoinExchangeRate,
-        },
-      ],
-    ),
-  });
+  // return await FirebaseFirestore.instance
+  //     .collection('clientes')
+  //     .doc(client.clientDocumentId)
+  //     .collection('facturas')
+  //     .doc(invoiceDocumentID)
+  //     .update({
+  //   'pagos': FieldValue.arrayUnion(
+  //     [
+  //       <String, dynamic>{
+  //         'anulado': false,
+  //         'codigoMoneda': currency.toString(),
+  //         'conciliado': false,
+  //         'fecha': Timestamp.fromDate(date),
+  //         'metodo': 'Transferencia-internacional',
+  //         'monto': double.parse(convertedAmount),
+  //         'montoOriginal': totalOfTheOrder,
+  //         'banco': FirebaseFirestore.instance
+  //             .collection('bancos')
+  //             .doc(banksDocumentsID),
+  //         'nroReferencia': int.parse(referenceId),
+  //         'nroNotaCredito': 0,
+  //         'tasaDeCambio': selectedCoinExchangeRate,
+  //       },
+  //     ],
+  //   ),
+  // });
 }

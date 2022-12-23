@@ -5,17 +5,23 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/examples/clients_example.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/components/place_order/select_client.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
+import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PlaceOrderPage extends StatelessWidget {
-  const PlaceOrderPage({Key? key}) : super(key: key);
+  const PlaceOrderPage({Key? key, this.userZoneDocument}) : super(key: key);
+
+  final userZoneDocument;
 
   @override
   Widget build(BuildContext context) {
+    print('userZoneDocument: $userZoneDocument');
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -33,7 +39,10 @@ class PlaceOrderPage extends StatelessWidget {
       body: MultiProvider(
         providers: [
           StreamProvider<List<Clients>?>.value(
-            value: DatabaseServiceStreams().clients,
+            value: clientsCollection
+                .where('zona', isEqualTo: userZoneDocument)
+                .snapshots()
+                .map(clientListfromSnapshot),
             initialData: const [],
             catchError: (context, error) {
               return;
