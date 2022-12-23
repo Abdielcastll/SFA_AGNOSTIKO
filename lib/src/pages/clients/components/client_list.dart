@@ -1,9 +1,12 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
+import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -11,10 +14,12 @@ class ClientList extends StatefulWidget {
   ClientList({
     Key? key,
     this.listOfClients,
+    this.controller,
   }) : super(key: key);
 
   List<Clients>? listOfClients;
   late List<Clients>? mutatedList = listOfClients;
+  ScrollController? controller;
 
   @override
   State<ClientList> createState() => _ClientListState();
@@ -25,27 +30,35 @@ class _ClientListState extends State<ClientList> {
   bool isDescending = false;
 
   // Esta funcion se llama cada vez que el text field cambia
-  void _searchClient(String query) {
-    List<Clients>? suggestions;
-    // si la barra de busqueda esta vacia o solo contiene espacios vacios,
-    // se hara display de todos los items
-    if (query.isEmpty) {
-      suggestions = widget.listOfClients;
-    } else {
-      suggestions = widget.listOfClients
-          ?.where((clients) =>
-              clients.name.toLowerCase().contains(query.toLowerCase()))
-          .toList();
-    }
-    // Refrescar la UI
-    setState(() => widget.mutatedList = suggestions);
-  }
+  // void _searchClient(String query) {
+  //   List<Clients>? suggestions;
+  //   // si la barra de busqueda esta vacia o solo contiene espacios vacios,
+  //   // se hara display de todos los items
+  //   if (query.isEmpty) {
+  //     suggestions = widget.listOfClients;
+  //   } else {
+  //     suggestions = widget.listOfClients
+  //         ?.where((clients) =>
+  //             clients.name.toLowerCase().contains(query.toLowerCase()))
+  //         .toList();
+  //   }
+  //   // Refrescar la UI
+  //   setState(() => widget.mutatedList = suggestions);
+  // }
+
+  final List<String> items = ['10', '50', 'Todos'];
+  String? selectedValue;
 
   @override
   Widget build(BuildContext context) {
     final zonesSummary = Provider.of<ZoneSummary?>(context)?.summary ?? {};
     final idTypeSummary = Provider.of<IdTypeSummary?>(context)?.summary ?? {};
+    final clientsLimit =
+        Provider.of<CounterLimitFirestore>(context).getClientsLimit;
+    final clientsScrollLimit =
+        Provider.of<CounterLimitFirestore>(context).getScrollClientLimit;
 
+    print('widget.controller: ${widget.controller}');
     return Column(
       children: [
         Container(
@@ -80,7 +93,9 @@ class _ClientListState extends State<ClientList> {
                 ),
               ),
             ),
-            onChanged: _searchClient,
+            onChanged: ((value) {
+              print(value);
+            }),
           ),
         ),
         Container(
@@ -120,14 +135,67 @@ class _ClientListState extends State<ClientList> {
                   setState(() => isDescending = !isDescending);
                 },
               ),
+              const SizedBox(width: 20),
+              DropdownButtonHideUnderline(
+                child: DropdownButton2(
+                  hint: Text(
+                    selectedValue == null
+                        ? clientsLimit == 0
+                            ? 'Todos'
+                            : '$clientsScrollLimit'
+                        : selectedValue.toString(),
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Theme.of(context).hintColor,
+                    ),
+                  ),
+                  items: items
+                      .map((item) => DropdownMenuItem<String>(
+                            value: item,
+                            child: Text(
+                              item,
+                              style: const TextStyle(
+                                fontSize: 14,
+                              ),
+                            ),
+                          ))
+                      .toList(),
+                  value: selectedValue,
+                  onChanged: (value) {
+                    final clientsLimitProvider =
+                        Provider.of<CounterLimitFirestore>(context,
+                            listen: false);
+                    setState(() {
+                      selectedValue = value as String;
+                    });
+                    if (selectedValue == 'Todos') {
+                      clientsLimitProvider.setClientsLimit(0, 0);
+                    } else {
+                      int newValor = int.parse(selectedValue.toString());
+                      if (newValor == 10) {
+                        clientsLimitProvider.setClientsLimit(newValor, 10);
+                      } else if (newValor == 50) {
+                        clientsLimitProvider.setClientsLimit(newValor, 50);
+                      }
+                    }
+                  },
+                  buttonHeight: 40,
+                  buttonWidth: 140,
+                  itemHeight: 40,
+                  // dropdownElevation: 20,
+                ),
+              )
             ],
           ),
         ),
         widget.listOfClients!.isNotEmpty
-            ? SizedBox(
+            ? Container(
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                // color: Colors.grey,
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
+                height: MediaQuery.of(context).size.height * 0.69,
                 child: ListView.builder(
+                  controller: widget.controller,
                   physics: const BouncingScrollPhysics(),
                   itemCount: widget.mutatedList!.length,
                   itemBuilder: (BuildContext context, index) {

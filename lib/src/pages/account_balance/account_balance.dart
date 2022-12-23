@@ -31,10 +31,6 @@ class _AccountBalancePageState extends State<AccountBalancePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
-      appBar: AppBarNavigation(
-        message: AppLocalizations.of(context)!.accountBalance,
-        userZoneDocument: widget.userZoneDocument,
-      ),
       body: AccountBalanceBody(
         clientDocument: widget.clientDocument,
         clientName: widget.clientName,

@@ -14,6 +14,7 @@ class DiaryTabs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
+
     return DefaultTabController(
       length: 3,
       child: Scaffold(

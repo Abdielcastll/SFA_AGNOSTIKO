@@ -6,15 +6,41 @@ import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 class CounterLimitFirestore extends ChangeNotifier {
   int _productsLimit = 10;
   int _scrollProductLimit = 10;
+  int _clientsLimit = 10;
+  int _scrollClientLimit = 10;
   Timestamp _selectedDayVisits = Timestamp.now();
   Timestamp _selectedDayOrder = Timestamp.now();
   Timestamp _selectedDayInvoice = Timestamp.now();
 
   int get getProductsLimit => _productsLimit;
   int get getScrollProductLimit => _scrollProductLimit;
+  int get getClientsLimit => _clientsLimit;
+  int get getScrollClientLimit => _scrollClientLimit;
   Timestamp get currentDayVisits => _selectedDayVisits;
   Timestamp get currentDayOrder => _selectedDayOrder;
   Timestamp get currentDayInvoice => _selectedDayInvoice;
+
+  void setClientsLimit(int? newLimit, int? newScrollLimit) {
+    if (newLimit != null) {
+      try {
+        _clientsLimit = newLimit;
+        if (newScrollLimit != null && newScrollLimit != 0) {
+          _scrollClientLimit = newScrollLimit;
+        } else if (newScrollLimit != null && newScrollLimit == 0) {
+          _scrollClientLimit = 0;
+        }
+        notifyListeners();
+      } catch (e) {
+        Fluttertoast.showToast(
+            msg: 'Error al cambiar la cantidad de clientes a mostrar');
+        print(e);
+      }
+    } else if (newLimit == null) {
+      _clientsLimit = 10;
+      _scrollClientLimit = 10;
+      notifyListeners();
+    }
+  }
 
   void setNewDayInvoice(Timestamp? newDay) {
     if (newDay != null) {

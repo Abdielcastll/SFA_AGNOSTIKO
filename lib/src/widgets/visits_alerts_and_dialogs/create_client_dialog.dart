@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -25,9 +25,12 @@ void showCreateClientDialog(context, uid) {
       Provider.of<CurrentUserInfo>(context, listen: false).name;
   print('nameOfCurrentUser: $nameOfCurrentUser');
 
+  final List<ClientName> allClientsFromZone = [];
+
   String? selectedValueA;
   String? selectedValueB;
   bool isLoading = false;
+  bool isAllSelected = false;
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -345,107 +348,148 @@ void showCreateClientDialog(context, uid) {
                                             ),
                                           ),
                                         ),
-                                        Container(
-                                          margin: EdgeInsets.fromLTRB(
-                                              10, 5, 10, 10),
-                                          child: DropdownButtonHideUnderline(
-                                            child: DropdownButton2(
-                                              isExpanded: true,
-                                              // ignore: prefer_const_literals_to_create_immutables
-                                              hint: Row(
-                                                children: [
-                                                  Expanded(
-                                                    child: Text(
-                                                      clientHint,
-                                                      style: TextStyle(
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.bold,
+                                        isAllSelected == false
+                                            ? Container(
+                                                margin: EdgeInsets.fromLTRB(
+                                                    10, 5, 10, 10),
+                                                child:
+                                                    DropdownButtonHideUnderline(
+                                                  child: DropdownButton2(
+                                                    isExpanded: true,
+                                                    // ignore: prefer_const_literals_to_create_immutables
+                                                    hint: Row(
+                                                      children: [
+                                                        Expanded(
+                                                          child: Text(
+                                                            clientHint,
+                                                            style: TextStyle(
+                                                              fontSize: 12,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color: myTheme
+                                                                  .colorScheme
+                                                                  .primary
+                                                                  .withOpacity(
+                                                                      0.7),
+                                                            ),
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    items: items2
+                                                        .map((item) =>
+                                                            DropdownMenuItem<
+                                                                String>(
+                                                              value: item,
+                                                              child: Text(
+                                                                item,
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize: 14,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  color: myTheme
+                                                                      .colorScheme
+                                                                      .primary,
+                                                                ),
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                              ),
+                                                            ))
+                                                        .toList(),
+                                                    value: selectedValueB,
+                                                    onChanged: (value) {
+                                                      setState(
+                                                        () {
+                                                          selectedValueB =
+                                                              value as String;
+                                                        },
+                                                      );
+                                                      // Mover la funcion en la base de datos para cambiar la lista
+                                                    },
+
+                                                    icon: const Icon(
+                                                      Icons
+                                                          .arrow_forward_ios_outlined,
+                                                    ),
+                                                    iconSize: 11,
+                                                    iconEnabledColor: myTheme
+                                                        .colorScheme.primary
+                                                        .withOpacity(0.5),
+                                                    iconDisabledColor:
+                                                        Colors.grey,
+                                                    buttonHeight: 50,
+                                                    buttonWidth: 200,
+                                                    buttonPadding:
+                                                        const EdgeInsets.only(
+                                                            left: 14,
+                                                            right: 14),
+                                                    buttonDecoration:
+                                                        BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5),
+                                                      border: Border.all(
                                                         color: myTheme
                                                             .colorScheme.primary
-                                                            .withOpacity(0.7),
+                                                            .withOpacity(0.3),
                                                       ),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
+                                                      color: Colors.white,
+                                                    ),
+                                                    buttonElevation: 0,
+                                                    itemHeight: 40,
+                                                    itemPadding:
+                                                        const EdgeInsets.only(
+                                                            left: 14,
+                                                            right: 14),
+                                                    dropdownMaxHeight: 200,
+                                                    dropdownWidth: 200,
+                                                    dropdownPadding: null,
+                                                    dropdownDecoration:
+                                                        BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                      color: Colors.white,
+                                                    ),
+                                                    dropdownElevation: 8,
+                                                    scrollbarRadius:
+                                                        const Radius.circular(
+                                                            10),
+                                                    scrollbarThickness: 6,
+                                                    scrollbarAlwaysShow: true,
+                                                    offset:
+                                                        const Offset(-20, 0),
+                                                  ),
+                                                ),
+                                              )
+                                            : Container(),
+                                        clientsFiltered.isNotEmpty
+                                            ? Container(
+                                                child: Row(
+                                                children: [
+                                                  Container(
+                                                    child: Checkbox(
+                                                      value: isAllSelected,
+                                                      onChanged: (value) =>
+                                                          setState(() {
+                                                        isAllSelected =
+                                                            !isAllSelected;
+                                                      }),
                                                     ),
                                                   ),
+                                                  Container(
+                                                      child: Text(
+                                                          'Seleccionar todos')),
                                                 ],
-                                              ),
-                                              items: items2
-                                                  .map((item) =>
-                                                      DropdownMenuItem<String>(
-                                                        value: item,
-                                                        child: Text(
-                                                          item,
-                                                          style: TextStyle(
-                                                            fontSize: 14,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color: myTheme
-                                                                .colorScheme
-                                                                .primary,
-                                                          ),
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                        ),
-                                                      ))
-                                                  .toList(),
-                                              value: selectedValueB,
-                                              onChanged: (value) {
-                                                setState(
-                                                  () {
-                                                    selectedValueB =
-                                                        value as String;
-                                                  },
-                                                );
-                                                // Mover la funcion en la base de datos para cambiar la lista
-                                              },
-                                              icon: const Icon(
-                                                Icons
-                                                    .arrow_forward_ios_outlined,
-                                              ),
-                                              iconSize: 11,
-                                              iconEnabledColor: myTheme
-                                                  .colorScheme.primary
-                                                  .withOpacity(0.5),
-                                              iconDisabledColor: Colors.grey,
-                                              buttonHeight: 50,
-                                              buttonWidth: 200,
-                                              buttonPadding:
-                                                  const EdgeInsets.only(
-                                                      left: 14, right: 14),
-                                              buttonDecoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                                border: Border.all(
-                                                  color: myTheme
-                                                      .colorScheme.primary
-                                                      .withOpacity(0.3),
-                                                ),
-                                                color: Colors.white,
-                                              ),
-                                              buttonElevation: 0,
-                                              itemHeight: 40,
-                                              itemPadding:
-                                                  const EdgeInsets.only(
-                                                      left: 14, right: 14),
-                                              dropdownMaxHeight: 200,
-                                              dropdownWidth: 200,
-                                              dropdownPadding: null,
-                                              dropdownDecoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                color: Colors.white,
-                                              ),
-                                              dropdownElevation: 8,
-                                              scrollbarRadius:
-                                                  const Radius.circular(10),
-                                              scrollbarThickness: 6,
-                                              scrollbarAlwaysShow: true,
-                                              offset: const Offset(-20, 0),
-                                            ),
-                                          ),
-                                        ),
+                                              ))
+                                            : Container(),
                                         // SizedBox(height: 10),
                                         Row(
                                           mainAxisAlignment:
@@ -517,6 +561,88 @@ void showCreateClientDialog(context, uid) {
                                                             Navigator.pop(
                                                                 context);
                                                           }
+                                                        }
+                                                      },
+                                                      style:
+                                                          TextButton.styleFrom(
+                                                        foregroundColor: myTheme
+                                                            .colorScheme
+                                                            .primary,
+                                                      ),
+                                                      child: Text(
+                                                        AppLocalizations.of(
+                                                                context)!
+                                                            .createVisit,
+                                                        style: TextStyle(
+                                                          fontFamily:
+                                                              'Poppins-regular',
+                                                          color: Colors.white,
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  )
+                                                : Container(),
+                                            isAllSelected == true
+                                                ? Container(
+                                                    width: 100,
+                                                    height: 40,
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(16),
+                                                        color: myTheme
+                                                            .colorScheme
+                                                            .primary),
+                                                    child: TextButton(
+                                                      onPressed: () async {
+                                                        // Crear en DB visitas//
+                                                        if (clientsFiltered
+                                                            .isNotEmpty) {
+                                                          print(
+                                                              clientsFiltered);
+                                                          setState(() {
+                                                            isLoading = true;
+                                                          });
+
+                                                          for (var client
+                                                              in clientsFiltered) {
+                                                            await createVisitData(
+                                                                uid,
+                                                                client
+                                                                    .clientDocumentId,
+                                                                today);
+                                                          }
+                                                          // var result =
+                                                          //     await createVisitData(
+                                                          //   uid,
+                                                          //   clientDocID,
+                                                          //   today,
+                                                          // );
+                                                          // if (result == null) {
+                                                          setState(() {
+                                                            isLoading = false;
+                                                            Navigator.pop(
+                                                                context);
+                                                          });
+                                                          Fluttertoast
+                                                              .showToast(
+                                                            msg:
+                                                                'Visitas creadas',
+                                                          );
+                                                          // } else if (result !=
+                                                          //     null) {
+                                                          //   Fluttertoast
+                                                          //       .showToast(
+                                                          //     msg: AppLocalizations
+                                                          //             .of(context)!
+                                                          //         .createVisitError,
+                                                          //   );
+                                                          //   Navigator.pop(
+                                                          //       context);
+                                                          // }
                                                         }
                                                       },
                                                       style:

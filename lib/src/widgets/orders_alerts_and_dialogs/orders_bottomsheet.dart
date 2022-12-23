@@ -62,31 +62,31 @@ void modalBottomSheetForOrders(
               .format(productPrice)
               .toString();
         } else if (currentCoin.contains('VED')) {
-          return NumberFormat.currency(
+          return '\$$correctAmount = ${NumberFormat.currency(
             locale: 'es_VE',
             decimalDigits: 2,
             symbol: "Bs.",
-          ).format(correctAmount * 4.58).toString();
+          ).format(correctAmount * 4.58).toString()}';
         } else if (currentCoin.contains('EUR')) {
-          return NumberFormat.currency(
+          return '\$$correctAmount = ${NumberFormat.currency(
             locale: 'es_ES',
             decimalDigits: 2,
             symbol: '€',
-          ).format(correctAmount * 0.89).toString();
+          ).format(correctAmount * 0.89).toString()}';
         } else if (currentCoin.contains('MXN')) {
-          return NumberFormat.currency(
+          return '\$$correctAmount = ${NumberFormat.currency(
             locale: 'es_MX',
             decimalDigits: 2,
             symbol: '\$',
-          ).format(correctAmount * 19.43);
+          ).format(correctAmount * 19.43)}';
         } else if (currentCoin.contains('BTC')) {
-          return '฿ ${(correctAmount * 0.00011).toString()}';
+          return '฿ ${(correctAmount * 0.00011).toStringAsFixed(3)}';
         } else {
-          return NumberFormat.currency(
+          return '\$$correctAmount = ${NumberFormat.currency(
             locale: 'es_VE',
             decimalDigits: 2,
             symbol: "PPR.",
-          ).format(correctAmount * 4.58).toString();
+          ).format(correctAmount * 4.58).toString()}';
         }
       }
 
@@ -275,7 +275,24 @@ void modalBottomSheetForOrders(
                                                                       ),
                                                                     ),
                                                                     Text(
-                                                                      '${AppLocalizations.of(context)!.payable}: ${priceFormat(product['monto'])}',
+                                                                      '${AppLocalizations.of(context)!.payable}:',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontFamily:
+                                                                            'Poppins-regular',
+                                                                        color: Colors
+                                                                            .grey
+                                                                            .shade400,
+                                                                        fontSize:
+                                                                            12,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                      ),
+                                                                    ),
+                                                                    Text(
+                                                                      priceFormat(
+                                                                          product[
+                                                                              'monto']),
                                                                       style:
                                                                           TextStyle(
                                                                         fontFamily:

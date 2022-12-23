@@ -81,6 +81,7 @@ class SfaAgnostiko extends StatelessWidget {
                                 .map(productsListFromSnapshot),
                         initialData: const [],
                         catchError: (context, error) {
+                          print(error);
                           return;
                         },
                         child: MaterialApp(

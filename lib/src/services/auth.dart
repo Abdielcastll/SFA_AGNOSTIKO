@@ -117,7 +117,17 @@ class AuthService {
             // print(sharedPreferences!.getString('cargo'));
             // print('/////////////////////////////////////////////////');
 
-            return _userFromFirebaseUser(user);
+            if (record.data()!['rol'].id == 'pIOMu0aLkG5gWFi1UBHo' ||
+                record.data()!['rol'].id == 'S7iQ6hOGikhwrFUHmQtV') {
+              return _userFromFirebaseUser(user);
+            } else {
+              signOut();
+              Fluttertoast.showToast(
+                msg: 'Usuario no vendedor',
+                backgroundColor: myTheme.colorScheme.secondary,
+                textColor: Colors.white,
+              );
+            }
           } else {
             Fluttertoast.showToast(
               msg: 'Usuario no activo o bloqueado',

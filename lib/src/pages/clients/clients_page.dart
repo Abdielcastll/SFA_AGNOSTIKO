@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/components/client_list.dart';
+import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
@@ -21,15 +23,30 @@ class _ClientsPageState extends State<ClientsPage> {
   @override
   Widget build(BuildContext context) {
     final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
+    final clientsLimit =
+        Provider.of<CounterLimitFirestore>(context).getClientsLimit;
 
     // print(currentUserActive.zone);
     return MultiProvider(
       providers: [
         StreamProvider<List<Clients>?>.value(
-          value: clientsCollection
-              .where('zona', isEqualTo: userZoneDocument)
-              .snapshots()
-              .map(clientListfromSnapshot),
+          value: clientsLimit == 0
+              ? userZoneDocument == 'NaN'
+                  ? clientsCollection.snapshots().map(clientListfromSnapshot)
+                  : clientsCollection
+                      .where('zona', isEqualTo: userZoneDocument)
+                      .snapshots()
+                      .map(clientListfromSnapshot)
+              : userZoneDocument == 'NaN'
+                  ? clientsCollection
+                      .limit(clientsLimit)
+                      .snapshots()
+                      .map(clientListfromSnapshot)
+                  : clientsCollection
+                      .where('zona', isEqualTo: userZoneDocument)
+                      .limit(clientsLimit)
+                      .snapshots()
+                      .map(clientListfromSnapshot),
           initialData: const [],
           catchError: (context, error) {
             print(error);
@@ -63,10 +80,48 @@ class _ClientsPageState extends State<ClientsPage> {
   }
 }
 
-class ClientsBody extends StatelessWidget {
+class ClientsBody extends StatefulWidget {
   const ClientsBody({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<ClientsBody> createState() => _ClientsBodyState();
+}
+
+class _ClientsBodyState extends State<ClientsBody> {
+  final controller = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    controller.addListener(() {
+      final clientsLimitProvider =
+          Provider.of<CounterLimitFirestore>(context, listen: false);
+      if (controller.position.atEdge) {
+        bool isTop = controller.position.pixels == 0;
+        if (isTop) {
+          Fluttertoast.showToast(msg: 'Tope de pagina');
+        } else {
+          if (clientsLimitProvider.getScrollClientLimit == 0) {
+            clientsLimitProvider.setClientsLimit(0, 0);
+          } else {
+            int newValor =
+                int.parse(clientsLimitProvider.getScrollClientLimit.toString());
+            if (newValor == 10) {
+              clientsLimitProvider.setClientsLimit(
+                  clientsLimitProvider.getClientsLimit + newValor, 10);
+            } else if (newValor == 50) {
+              clientsLimitProvider.setClientsLimit(
+                  clientsLimitProvider.getClientsLimit + newValor, 50);
+            }
+          }
+          Fluttertoast.showToast(
+              msg: 'abajo, -  ${clientsLimitProvider.getClientsLimit}');
+        }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +140,7 @@ class ClientsBody extends StatelessWidget {
           // Center(
           //   child: CircularProgressIndicator(),
           // ),
-          ClientList(listOfClients: clientsList),
+          ClientList(listOfClients: clientsList, controller: controller),
         ],
       ),
     );
