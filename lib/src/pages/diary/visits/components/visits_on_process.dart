@@ -32,9 +32,9 @@ class _VisitsOnProcessState extends State<VisitsOnProcess> {
         Provider.of<CounterLimitFirestore>(context).currentDayVisits;
     final currentDateTime = currentDay.toDate();
     String formattedDate = dateFormatter.format(currentDateTime);
-    print('currentDay: $currentDay');
-    print('currentDateTime: $currentDateTime');
-    print('formattedDate: $formattedDate');
+    // print('currentDay: $currentDay');
+    // print('currentDateTime: $currentDateTime');
+    // print('formattedDate: $formattedDate');
 
     final visitsOnProcess = visits
         .where((element) =>
@@ -105,7 +105,7 @@ class _VisitsOnProcessState extends State<VisitsOnProcess> {
 
                         DateTime? newDate = await showDatePicker(
                           context: context,
-                          initialDate: currentDay.toDate(),
+                          initialDate: currentDay!.toDate(),
                           firstDate: DateTime(2010),
                           lastDate: DateTime(2030),
                         );

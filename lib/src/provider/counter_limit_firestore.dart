@@ -8,9 +8,36 @@ class CounterLimitFirestore extends ChangeNotifier {
   int _scrollProductLimit = 10;
   int _clientsLimit = 10;
   int _scrollClientLimit = 10;
-  Timestamp _selectedDayVisits = Timestamp.now();
-  Timestamp _selectedDayOrder = Timestamp.now();
-  Timestamp _selectedDayInvoice = Timestamp.now();
+  Timestamp _selectedDayVisits = Timestamp.fromDate(DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+    0,
+    0,
+    0,
+    0,
+    0,
+  ));
+  Timestamp _selectedDayOrder = Timestamp.fromDate(DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+    0,
+    0,
+    0,
+    0,
+    0,
+  ));
+  Timestamp _selectedDayInvoice = Timestamp.fromDate(DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+    0,
+    0,
+    0,
+    0,
+    0,
+  ));
 
   int get getProductsLimit => _productsLimit;
   int get getScrollProductLimit => _scrollProductLimit;

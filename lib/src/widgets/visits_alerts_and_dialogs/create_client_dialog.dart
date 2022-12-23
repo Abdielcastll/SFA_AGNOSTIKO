@@ -109,7 +109,7 @@ void showCreateClientDialog(context, uid) {
               ),
               content: SingleChildScrollView(
                 child: Container(
-                  height: 400,
+                  height: MediaQuery.of(context).size.height * 0.60,
                   width: 300,
                   child: isLoading == true
                       ? LoadingWidget(
@@ -477,16 +477,26 @@ void showCreateClientDialog(context, uid) {
                                                   Container(
                                                     child: Checkbox(
                                                       value: isAllSelected,
-                                                      onChanged: (value) =>
-                                                          setState(() {
-                                                        isAllSelected =
-                                                            !isAllSelected;
-                                                      }),
+                                                      onChanged: (value) {
+                                                        setState(() {
+                                                          selectedValueB = null;
+                                                          isAllSelected =
+                                                              !isAllSelected;
+                                                        });
+                                                      },
                                                     ),
                                                   ),
                                                   Container(
                                                       child: Text(
-                                                          'Seleccionar todos')),
+                                                    'Seleccionar todos',
+                                                    style: TextStyle(
+                                                      fontFamily:
+                                                          'Poppins-regular',
+                                                      color: myTheme
+                                                          .colorScheme.primary,
+                                                      fontSize: 14,
+                                                    ),
+                                                  )),
                                                 ],
                                               ))
                                             : Container(),

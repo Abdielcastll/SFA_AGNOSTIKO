@@ -8,6 +8,7 @@ import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/auth/login/login_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation/navigation.dart';
+import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/auth.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
@@ -50,7 +51,10 @@ class _WrapperState extends State<Wrapper> {
             print(error);
             return;
           },
-          // child: Builder(builder: (context) => NavigationPages()));
+          // builder: (context, child) {
+
+          //   return NavigationPages();
+          // });
           child: NavigationPages());
     }
   }

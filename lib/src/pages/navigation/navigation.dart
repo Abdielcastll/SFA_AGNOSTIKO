@@ -1,8 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/objectbox.g.dart';
 import 'package:pwa_sales2go_flutter/src/pages/profile/profile_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/catalogue_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/diary_tabs.dart';
+import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -29,6 +33,7 @@ class _NavigationPagesState extends State<NavigationPages> {
         index: index,
         children: screens,
       ),
+      // screens[index],
       bottomNavigationBar: NavigationBarTheme(
         data: NavigationBarThemeData(
           indicatorColor: myTheme.colorScheme.tertiary.withOpacity(0.2),

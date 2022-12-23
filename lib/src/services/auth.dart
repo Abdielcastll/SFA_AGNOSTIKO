@@ -121,7 +121,7 @@ class AuthService {
                 record.data()!['rol'].id == 'S7iQ6hOGikhwrFUHmQtV') {
               return _userFromFirebaseUser(user);
             } else {
-              signOut();
+              await signOut();
               Fluttertoast.showToast(
                 msg: 'Usuario no vendedor',
                 backgroundColor: myTheme.colorScheme.secondary,

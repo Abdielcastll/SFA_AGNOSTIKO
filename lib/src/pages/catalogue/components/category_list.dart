@@ -25,7 +25,6 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
     final categories = Provider.of<CategorieSummary?>(context)?.summary ?? {};
     final prices = Provider.of<Prices?>(context)?.prices ?? {};
     final products = Provider.of<List<Products>?>(context) ?? [];
-    final productsList = products;
     List categoriesSummary = categories.values.toList();
     final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
 
@@ -72,18 +71,26 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                     final counterLimitProvider =
                         Provider.of<CounterLimitFirestore>(context,
                             listen: false);
+                    //  counterLimitProvider.setProductsLimit(
+                    //       counterLimitProvider.getProductsLimit,
+                    //       counterLimitProvider.getScrollProductLimit);
+
                     counterLimitProvider.setProductsLimit(0, 0);
-                    Navigator.push(
-                      context,
+
+                    //   counterLimitProvider.setProductsLimit(
+                    //       counterLimitProvider.getProductsLimit,
+                    //       counterLimitProvider.getScrollProductLimit);
+
+                    Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (BuildContext context) => ProductsPage(
-                          listOfProducts: productsList
+                          listOfProducts: products
                               .where((product) =>
                                   categories[product.categorie] == categorie)
                               .toList(),
                           listOfPrices: prices,
                           userZoneDocument: userZoneDocument,
-                          showFullList: true,
+                          showFullList: false,
                         ),
                       ),
                     );

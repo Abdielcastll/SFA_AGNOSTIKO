@@ -51,7 +51,7 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
 
     final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
 
-    print(products.length);
+    // print(products.length);
 
     return Container(
       height: 240,

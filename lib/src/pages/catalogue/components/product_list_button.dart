@@ -25,6 +25,7 @@ class _ListOfProductsButtonState extends State<ListOfProductsButton> {
     final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
     final products = Provider.of<List<Products>?>(context) ?? [];
 
+    // print('products from button: ${products.length}');
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 10, 16, 0),
       width: MediaQuery.of(context).size.width,
@@ -35,6 +36,10 @@ class _ListOfProductsButtonState extends State<ListOfProductsButton> {
               Provider.of<CounterLimitFirestore>(context, listen: false);
           if (products.length > 100) {
             counterLimitProvider.setProductsLimit(10, 10);
+          } else {
+            counterLimitProvider.setProductsLimit(
+                counterLimitProvider.getProductsLimit,
+                counterLimitProvider.getScrollProductLimit);
           }
           Navigator.of(context).push(
             MaterialPageRoute(

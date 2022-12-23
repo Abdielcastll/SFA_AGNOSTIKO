@@ -28,8 +28,9 @@ class _VisitsCompletedState extends State<VisitsCompleted> {
     final visits = Provider.of<List<Visits>?>(context) ?? [];
     final currentDay =
         Provider.of<CounterLimitFirestore>(context).currentDayVisits;
-    final currentDateTime = currentDay.toDate();
-    String formattedDate = dateFormatter.format(currentDateTime);
+    final currentDateTime = currentDay?.toDate();
+    String formattedDate =
+        dateFormatter.format(currentDateTime ?? DateTime.now());
 
     final visitsCompleted = visits
         .where((element) =>
@@ -100,7 +101,7 @@ class _VisitsCompletedState extends State<VisitsCompleted> {
 
                         DateTime? newDate = await showDatePicker(
                           context: context,
-                          initialDate: currentDay.toDate(),
+                          initialDate: currentDay!.toDate(),
                           firstDate: DateTime(2010),
                           lastDate: DateTime(2030),
                         );

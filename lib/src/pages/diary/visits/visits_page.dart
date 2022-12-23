@@ -21,9 +21,9 @@ class VisitsPage extends StatefulWidget {
 class _VisitsPageState extends State<VisitsPage> {
   @override
   Widget build(BuildContext context) {
-    final currentDay =
-        Provider.of<CounterLimitFirestore>(context).currentDayVisits;
-    final currentDayDateTime = currentDay.toDate();
+    final currentDayProvider = Provider.of<CounterLimitFirestore>(context);
+
+    final currentDayDateTime = currentDayProvider.currentDayVisits.toDate();
     DateTime tomorrow = DateTime(currentDayDateTime.year,
         currentDayDateTime.month, currentDayDateTime.day + 1);
 
@@ -34,7 +34,8 @@ class _VisitsPageState extends State<VisitsPage> {
           .doc(user?.uid)
           .collection('visitas')
           .orderBy('fecha', descending: true)
-          .where('fecha', isGreaterThanOrEqualTo: currentDay)
+          .where('fecha',
+              isGreaterThanOrEqualTo: currentDayProvider.currentDayVisits)
           .where('fecha', isLessThan: tomorrow)
           .snapshots()
           .map(visitsFromSnasphot),
@@ -87,6 +88,9 @@ class _VisitsBodyState extends State<VisitsBody> {
 
   @override
   Widget build(BuildContext context) {
+    final counterDiaryProvider = Provider.of<CounterLimitFirestore>(context);
+    final newDay = counterDiaryProvider.currentDayVisits;
+
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
