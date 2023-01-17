@@ -87,8 +87,12 @@
         "description": "Diseño del producto"
     },
     "searchProductName": "Buscar nombre",
-    "@searchProduct Name": {
+    "@searchProductName": {
         "description": "Titulo para la barra de busqueda de productos"
+    },
+    "searchProductCode": "Buscar por codigo",
+    "@searchProductCode": {
+        "description": "Titulo para la barra de busqueda de productos por código"
     },
     "ascendingFilter": "Ascendente",
     "@ascendingFilter": {

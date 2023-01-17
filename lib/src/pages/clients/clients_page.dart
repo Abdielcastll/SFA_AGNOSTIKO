@@ -101,7 +101,8 @@ class _ClientsBodyState extends State<ClientsBody> {
       if (controller.position.atEdge) {
         bool isTop = controller.position.pixels == 0;
         if (isTop) {
-          Fluttertoast.showToast(msg: 'Tope de pagina');
+          // Fluttertoast.showToast(msg: 'Tope de pagina');
+          print('Top Clients page');
         } else {
           if (clientsLimitProvider.getScrollClientLimit == 0) {
             clientsLimitProvider.setClientsLimit(0, 0);
@@ -116,8 +117,7 @@ class _ClientsBodyState extends State<ClientsBody> {
                   clientsLimitProvider.getClientsLimit + newValor, 50);
             }
           }
-          Fluttertoast.showToast(
-              msg: 'abajo, -  ${clientsLimitProvider.getClientsLimit}');
+          print('Bottom Clients page');
         }
       }
     });

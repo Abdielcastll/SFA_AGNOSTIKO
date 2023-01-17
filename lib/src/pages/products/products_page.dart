@@ -140,6 +140,7 @@ class _ProductsBodyState extends State<ProductsBody> {
   final searchController = TextEditingController();
   List<ShoppingCartProduct> selectedProducts = [];
   final _controller = ScrollController();
+  List<Products> filteredProducts = [];
 
   // List<Products>? products;
 
@@ -156,7 +157,7 @@ class _ProductsBodyState extends State<ProductsBody> {
       if (_controller.position.atEdge) {
         bool isTop = _controller.position.pixels == 0;
         if (isTop) {
-          Fluttertoast.showToast(msg: 'Tope de pagina');
+          print('Top products page');
         } else {
           if (productsLimitProvider.getScrollProductLimit == 0) {
             productsLimitProvider.setProductsLimit(0, 0);
@@ -171,8 +172,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                   productsLimitProvider.getProductsLimit + newValor, 50);
             }
           }
-          Fluttertoast.showToast(
-              msg: 'abajo, -  ${productsLimitProvider.getProductsLimit}');
+          print('Bottom products page');
         }
       }
     });
@@ -200,7 +200,6 @@ class _ProductsBodyState extends State<ProductsBody> {
   final List<String> items = ['10', '50', 'Todos'];
   String? selectedValue;
 
-  List<Products> filteredProducts = [];
   @override
   Widget build(BuildContext context) {
     final orderActive = Provider.of<OrderProvider>(context);
@@ -313,13 +312,13 @@ class _ProductsBodyState extends State<ProductsBody> {
                 keyboardType: TextInputType.text,
                 maxLines: 1,
                 maxLength: 200,
-                textCapitalization: TextCapitalization.sentences,
+                textCapitalization: TextCapitalization.characters,
                 controller: searchController,
                 decoration: InputDecoration(
                   fillColor: Colors.white,
                   focusColor: Colors.white,
                   contentPadding: const EdgeInsets.fromLTRB(14, 0, 0, 0),
-                  hintText: 'Buscar por codigo',
+                  hintText: AppLocalizations.of(context)!.searchProductCode,
                   // AppLocalizations.of(context)!.searchProductName,
                   hintStyle: const TextStyle(
                     fontFamily: 'Poppins-regular',
@@ -333,11 +332,18 @@ class _ProductsBodyState extends State<ProductsBody> {
                     ),
                   ),
                 ),
+                textInputAction: TextInputAction.go,
+                onChanged: ((value) {
+                  if (value.isEmpty) {
+                    filteredProducts.clear();
+                  }
+                }),
                 onSubmitted: ((value) async {
                   print(value);
                   filteredProducts.clear();
                   await productsCollection
-                      .where('codigoIndice', arrayContains: value.toString())
+                      .where('codigoIndice',
+                          arrayContains: value.toString().toLowerCase())
                       .snapshots()
                       .forEach((element) {
                     for (var element in element.docs) {

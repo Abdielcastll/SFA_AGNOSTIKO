@@ -5,8 +5,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
+import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -49,6 +51,8 @@ class _ClientListState extends State<ClientList> {
   final List<String> items = ['10', '50', 'Todos'];
   String? selectedValue;
 
+  List<Clients> filteredClients = [];
+
   @override
   Widget build(BuildContext context) {
     final zonesSummary = Provider.of<ZoneSummary?>(context)?.summary ?? {};
@@ -57,6 +61,7 @@ class _ClientListState extends State<ClientList> {
         Provider.of<CounterLimitFirestore>(context).getClientsLimit;
     final clientsScrollLimit =
         Provider.of<CounterLimitFirestore>(context).getScrollClientLimit;
+    final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
 
     print('widget.controller: ${widget.controller}');
     return Column(
@@ -76,7 +81,7 @@ class _ClientListState extends State<ClientList> {
             keyboardType: TextInputType.text,
             maxLines: 1,
             maxLength: 200,
-            textCapitalization: TextCapitalization.characters,
+            // textCapitalization: TextCapitalization.characters,
             controller: searchClientController,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.fromLTRB(14, 0, 0, 0),
@@ -94,7 +99,91 @@ class _ClientListState extends State<ClientList> {
               ),
             ),
             onChanged: ((value) {
+              if (value.length == 0) {
+                setState(() {
+                  filteredClients.clear();
+                });
+              }
+            }),
+            textInputAction: TextInputAction.go,
+
+            onSubmitted: ((value) async {
               print(value);
+              filteredClients.clear();
+              await clientsCollection
+                  .where('zona', isEqualTo: userZoneDocument)
+                  .where('nombreIndice', arrayContains: value)
+                  .snapshots()
+                  .forEach((element) {
+                for (var snapshot in element.docs) {
+                  Clients product = Clients(
+                    active: snapshot.data().toString().contains('activo')
+                        ? snapshot.get('activo')
+                        : 'NaN',
+                    specialContributor: snapshot
+                            .data()
+                            .toString()
+                            .contains('contribuyenteEspecial')
+                        ? snapshot.get('contribuyenteEspecial')
+                        : false,
+                    madeBy: snapshot.data().toString().contains('creadoPor')
+                        ? snapshot.get('creadoPor').id
+                        : 'NaN',
+                    masterDiscount:
+                        snapshot.data().toString().contains('descuentoMaestro')
+                            ? snapshot.get('descuentoMaestro')
+                            : 'NaN',
+                    fiscalAdress:
+                        snapshot.data().toString().contains('direccionFiscal')
+                            ? snapshot.get('direccionFiscal')
+                            : 'NaN',
+                    dispatchAdress:
+                        snapshot.data().toString().contains('direccionDespacho')
+                            ? snapshot.get('direccionDespacho')
+                            : 'No hay direccion de despacho',
+                    email: snapshot.data().toString().contains('email')
+                        ? snapshot.get('email')
+                        : 'NaN',
+                    prices:
+                        snapshot.data().toString().contains('listaDePrecios')
+                            ? snapshot.get('listaDePrecios').id
+                            : 'NaN',
+                    modified: snapshot.data().toString().contains('modificado')
+                        ? snapshot.get('modificado')
+                        : 'NaN',
+                    name: snapshot.data().toString().contains('nombre')
+                        ? snapshot.get('nombre')
+                        : 'NaN',
+                    id: snapshot.data().toString().contains('numeroId')
+                        ? snapshot.get('numeroId')
+                        : 'NaN',
+                    prospect: snapshot.data().toString().contains('prospecto')
+                        ? snapshot.get('prospecto')
+                        : false,
+                    phone1: snapshot.data().toString().contains('telefono')
+                        ? snapshot.get('telefono')
+                        : 'NaN',
+                    phone2: snapshot.data().toString().contains('telefono2')
+                        ? snapshot.get('telefono2')
+                        : 'NaN',
+                    idType: snapshot.data().toString().contains('tipoId')
+                        ? snapshot.get('tipoId').id
+                        : 'NaN',
+                    zone: snapshot.data().toString().contains('zona')
+                        ? snapshot.get('zona').id
+                        : 'NaN',
+                    clientDocumentId: snapshot.reference.id,
+                  );
+                  setState(() {
+                    filteredClients.add(product);
+                  });
+                }
+              });
+              // filteredProducts.clear();
+              // setState(() {
+              //   filteredProducts = newList;
+              // });
+              // print(filteredProducts);
             }),
           ),
         ),
@@ -188,7 +277,7 @@ class _ClientListState extends State<ClientList> {
             ],
           ),
         ),
-        widget.listOfClients!.isNotEmpty
+        filteredClients.isEmpty
             ? Container(
                 margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
                 // color: Colors.grey,
@@ -317,9 +406,133 @@ class _ClientListState extends State<ClientList> {
                   },
                 ),
               )
-            : const Center(
-                child: Text('Cargando'),
-              )
+            : Container(
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                // color: Colors.grey,
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height * 0.69,
+                child: ListView.builder(
+                  controller: widget.controller,
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: filteredClients.length,
+                  itemBuilder: (BuildContext context, index) {
+                    final sortedClients = isDescending
+                        ? filteredClients.reversed.toList()
+                        : filteredClients;
+                    final client = sortedClients[index];
+                    final clientSpecialContributor =
+                        client.specialContributor ?? 'NaN';
+                    final clientMasterDiscount = client.masterDiscount ?? 'NaN';
+                    final clientFiscalAddress = client.fiscalAdress ?? 'NaN';
+                    final clientEmail = client.email ?? 'NaN';
+                    final clientPrices = client.prices ?? 'NaN';
+                    final clientName = client.name ?? 'NaN';
+                    final clientPhone1 = client.phone1 ?? 'NaN';
+                    final clientPhone2 = client.phone2 ?? 'NaN';
+                    final clientIdType = idTypeSummary[client.idType] ?? 'NaN';
+                    final clientId = client.id ?? 'NaN';
+                    final clientZone = zonesSummary[client.zone] ?? 'NaN';
+                    final clientDocumentReferenceID =
+                        client.clientDocumentId ?? 'NaN';
+                    final clientDispatchAddress =
+                        client.dispatchAdress ?? 'NaN';
+
+                    return Container(
+                      margin: const EdgeInsets.only(top: 10.0),
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: ListTile(
+                        onTap: () {
+                          // Redireccion a detalles de cliente
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ClientDetails(
+                                specialContribuyer: clientSpecialContributor,
+                                masterDiscount: clientMasterDiscount,
+                                fiscalAddress: clientFiscalAddress,
+                                email: clientEmail,
+                                listOfPrices: clientPrices,
+                                name: clientName,
+                                tlf1: clientPhone1,
+                                tlf2: clientPhone2,
+                                typeId: clientIdType,
+                                nameId: clientId,
+                                zone: clientZone,
+                                clientDocumentReferenceID:
+                                    clientDocumentReferenceID,
+                                dispatchAddress: clientDispatchAddress,
+                              ),
+                            ),
+                          );
+                        },
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(top: 5),
+                              width: 200,
+                              child: Text(
+                                clientName,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontFamily: 'Poppins-regular',
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Icon(
+                              MaterialIcons.keyboard_arrow_right,
+                              color: myTheme.colorScheme.secondary,
+                              size: 18,
+                            ),
+                          ],
+                        ),
+                        subtitle: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: 200,
+                              child: Text(
+                                clientFiscalAddress.toString().toLowerCase(),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontFamily: 'Poppins-regular',
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              alignment: Alignment.bottomRight,
+                              child: Container(
+                                margin: const EdgeInsets.fromLTRB(5, 10, 0, 0),
+                                width: 120,
+                                height: 30,
+                                child: Text(
+                                  clientEmail,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins-regular',
+                                    fontSize: 9,
+                                    color: Colors.purple.shade500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
       ],
     );
   }

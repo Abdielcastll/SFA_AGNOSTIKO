@@ -29,6 +29,8 @@ import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+// 1/17/23 BUGFIXES
+
 late ObjectBox objectBox;
 
 Future<void> main() async {

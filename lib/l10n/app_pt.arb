@@ -24,6 +24,7 @@
     "productSize": "Tamanho",
     "productDesign": "Projeto",
     "searchProductName": "Pesquisar nome",
+    "searchProductCode": "Pesquisar por código",
     "ascendingFilter": "Para Cima",
     "descendingFilter": "Queda",
 

@@ -111,7 +111,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                   children: [
                     products!.isEmpty
                         ? SizedBox(
-                            height: 340,
+                            height: MediaQuery.of(context).size.height * 0.55,
                             width: MediaQuery.of(context).size.width,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -140,7 +140,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                           )
                         : Container(
                             color: Colors.grey.shade100,
-                            height: MediaQuery.of(context).size.height * 0.5,
+                            height: MediaQuery.of(context).size.height * 0.55,
                             width: MediaQuery.of(context).size.width,
                             child: ListView.builder(
                               physics: const BouncingScrollPhysics(),

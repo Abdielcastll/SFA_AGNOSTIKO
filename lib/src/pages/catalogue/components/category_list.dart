@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
@@ -9,6 +10,7 @@ import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
+import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -26,8 +28,9 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
     final prices = Provider.of<Prices?>(context)?.prices ?? {};
     final products = Provider.of<List<Products>?>(context) ?? [];
     List categoriesSummary = categories.values.toList();
+    List categorieKeys = categories.keys.toList();
     final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
-
+    // print(categorieKeys);
     // print(categoriesSummary);
     // print(productsList);
 
@@ -65,35 +68,54 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
               itemCount: categoriesSummary.length,
               itemBuilder: (BuildContext context, index) {
                 final categorie = categoriesSummary[index];
-
+                final key = categorieKeys[index];
                 return GestureDetector(
-                  onTap: () {
-                    final counterLimitProvider =
-                        Provider.of<CounterLimitFirestore>(context,
-                            listen: false);
-                    //  counterLimitProvider.setProductsLimit(
-                    //       counterLimitProvider.getProductsLimit,
-                    //       counterLimitProvider.getScrollProductLimit);
-
-                    counterLimitProvider.setProductsLimit(0, 0);
-
-                    //   counterLimitProvider.setProductsLimit(
-                    //       counterLimitProvider.getProductsLimit,
-                    //       counterLimitProvider.getScrollProductLimit);
-
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => ProductsPage(
-                          listOfProducts: products
-                              .where((product) =>
-                                  categories[product.categorie] == categorie)
-                              .toList(),
-                          listOfPrices: prices,
-                          userZoneDocument: userZoneDocument,
-                          showFullList: false,
+                  onTap: () async {
+                    List<Products>? filteredProducts = [];
+                    filteredProducts.clear();
+                    // print(categoriesCollection.doc(key));
+                    await productsCollection
+                        .where('categoria',
+                            isEqualTo: categoriesCollection.doc(key))
+                        .snapshots()
+                        .forEach((element) {
+                      for (var element in element.docs) {
+                        Products product = Products(
+                          quality: element.data()['calidad'].id ?? '',
+                          catalogue: element.data()['catalogo'].id ?? '',
+                          categorie: element.data()['categoria'].id ?? '',
+                          code: element.data()['codigo'] ?? '',
+                          design: element.data()['diseno'].id ?? '',
+                          line: element.data()['linea'].id ?? '',
+                          brand: element.data()['marca'].id ?? '',
+                          lastModifiedDate: element.data()['modificado'] ?? '',
+                          name: element.data()['nombre'] ?? '',
+                          subCategorie: element.data()['subcategoria'].id ?? '',
+                          size: element.data()['tamano'].id ?? '',
+                          promotion:
+                              element.data().toString().contains('promocion')
+                                  ? element.data()['promocion'].id
+                                  : '',
+                          selected: false,
+                        );
+                        // print(product.categorie);
+                        setState(() {
+                          filteredProducts.add(product);
+                        });
+                      }
+                      print(filteredProducts);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => ProductsPage(
+                            listOfProducts: filteredProducts,
+                            listOfPrices: prices,
+                            userZoneDocument: userZoneDocument,
+                            showFullList: false,
+                          ),
                         ),
-                      ),
-                    );
+                      );
+                    });
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(0.0, 0.0, 16.0, 0),

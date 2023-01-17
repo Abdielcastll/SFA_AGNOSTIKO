@@ -24,6 +24,7 @@
     "productSize": "Size",
     "productDesign": "Design",
     "searchProductName": "Search name",
+    "searchProductCode": "Search by code",
     "ascendingFilter": "Ascending",
     "descendingFilter": "Descending",
 
