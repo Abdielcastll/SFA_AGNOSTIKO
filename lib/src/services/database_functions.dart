@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
@@ -7,6 +8,7 @@ import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 // Funciones de Visitas
 
@@ -319,44 +321,44 @@ Future createInvoice(
   print(correlativeNumber);
   print(correlativeNumber + 1);
 
-  await FirebaseFirestore.instance
-      .collection('clientes')
-      .doc(client.clientDocumentId)
-      .collection('pedidos')
-      .doc(orderDocumentID)
-      .update({
-    'facturado': true,
-    'nroCorrelativo': correlativeNumber + 1
-  }).whenComplete(() async {
-    return await FirebaseFirestore.instance
-        .collection('clientes')
-        .doc(client.clientDocumentId)
-        .collection('facturas')
-        .doc()
-        .set({
-      'cliente': clientID,
-      'descuentoMaestro': discount,
-      'fecha': Timestamp.fromDate(DateTime.now()),
-      'impuesto': tax,
-      'montoTotal': double.parse(totalAsString),
-      'nroCorrelativo': correlativeNumber + 1,
-      'pagada': isPaid,
-      'pagos': payments,
-      'pedido': order,
-      'porcentajeDescuentoMaestro': discountPercentage,
-      'referenciaNotasCredito': referenceCreditNote,
-      'subtotal': subTotal,
-      'timestampRegistro': register,
-      'ultimaModificacion': lastModification,
-      'vendedor': seller,
-    }).whenComplete(() async {
-      return await FirebaseFirestore.instance
-          .collection('config')
-          .doc('contador_pedidos')
-          .update({'numero': correlativeNumber + 1});
-    }).whenComplete(() =>
-            Fluttertoast.showToast(msg: 'Factura ${correlativeNumber + 1}'));
-  });
+  // await FirebaseFirestore.instance
+  //     .collection('clientes')
+  //     .doc(client.clientDocumentId)
+  //     .collection('pedidos')
+  //     .doc(orderDocumentID)
+  //     .update({
+  //   'facturado': true,
+  //   'nroCorrelativo': correlativeNumber + 1
+  // }).whenComplete(() async {
+  //   return await FirebaseFirestore.instance
+  //       .collection('clientes')
+  //       .doc(client.clientDocumentId)
+  //       .collection('facturas')
+  //       .doc()
+  //       .set({
+  //     'cliente': clientID,
+  //     'descuentoMaestro': discount,
+  //     'fecha': Timestamp.fromDate(DateTime.now()),
+  //     'impuesto': tax,
+  //     'montoTotal': double.parse(totalAsString),
+  //     'nroCorrelativo': correlativeNumber + 1,
+  //     'pagada': isPaid,
+  //     'pagos': payments,
+  //     'pedido': order,
+  //     'porcentajeDescuentoMaestro': discountPercentage,
+  //     'referenciaNotasCredito': referenceCreditNote,
+  //     'subtotal': subTotal,
+  //     'timestampRegistro': register,
+  //     'ultimaModificacion': lastModification,
+  //     'vendedor': seller,
+  //   }).whenComplete(() async {
+  //     return await FirebaseFirestore.instance
+  //         .collection('config')
+  //         .doc('contador_pedidos')
+  //         .update({'numero': correlativeNumber + 1});
+  //   }).whenComplete(() =>
+  //           Fluttertoast.showToast(msg: 'Factura ${correlativeNumber + 1}'));
+  // });
   ////////////////////////
   // // Fluttertoast.showToast(msg: 'Factura ${correlativeNumber}');
   // return await FirebaseFirestore.instance
@@ -397,6 +399,7 @@ Future registerBankCheckPayment(
   accountHolder,
   imageFile,
   date,
+  remaining,
 ) async {
   print('/// Registrar cheque en factura: $invoiceDocumentID ///');
 
@@ -404,7 +407,7 @@ Future registerBankCheckPayment(
     'BTC': 0.00011,
     'EUR': 0.89,
     'VED': 4.58,
-    'MXN': 19.43
+    'MXN': 19.43,
   };
 
   String? banksDocumentsID;
@@ -432,46 +435,104 @@ Future registerBankCheckPayment(
     selectedCoinExchangeRate = exchangeRate['MXN'];
   }
 
-  final doubleAmount = double.parse(amount);
-  final convertedAmount =
-      (doubleAmount / selectedCoinExchangeRate).toStringAsFixed(2);
+  final cancelled = false;
+  final selectedCurrency = currency;
+  final concillied = false;
+  final timestampDate = Timestamp.fromDate(date);
+  final method = 'Cheque';
+  final paidAmount = double.parse(amount);
+  final selectedBank =
+      FirebaseFirestore.instance.collection('bancos').doc(banksDocumentsID);
+  final account = accountNumber;
+  final holder = accountHolder;
+  final nroCN = 0;
+  final selectedExchangedRate = selectedCoinExchangeRate;
 
-  print('Tasa de cambio a usar: $selectedCoinExchangeRate');
-  print('banco: $bank');
-  print('bancoID: $banksDocumentsID');
-  print('Total en BS: $amount');
-  print('Total en USD: $convertedAmount');
-  print('Usuario: $accountHolder');
-  print('Numero de cuenta: $accountNumber');
-  print('fecha de registro: $date');
+  print('Datos Recibidos: //////////////////////////////');
+  print('client: $client,');
+  print('invoiceDocumentID: $invoiceDocumentID,');
+  print('currency: $currency,');
+  print('amount: ${double.parse(amount)},');
+  print('totalOfTheOrder: $totalOfTheOrder,');
+  print('currentCoin: $currentCoin,');
+  print('bank: $bank,');
+  print('accountNumber: $accountNumber,');
+  print('accountHolder: $accountHolder,');
+  print('imageFile: $imageFile,');
+  print('date: $date,');
+  print('remaining: $remaining,');
+  print('Datos a registrar pago: ///////////////////////////');
+  print('cancelled: $cancelled');
+  print('selectedCurrency: $selectedCurrency');
+  print('concillied: $concillied');
+  print('timestampDate: $timestampDate');
+  print('method: $method');
+  print('paidAmount: $paidAmount');
+  print('selectedBank: $selectedBank');
+  print('account: $account');
+  print('holder: $holder');
+  print('nroCN: $nroCN');
+  print('selectedExchangedRate: $selectedExchangedRate');
+  print('remaining: $remaining //////////////////////////////////////////////');
 
-  // return await FirebaseFirestore.instance
-  //     .collection('clientes')
-  //     .doc(client.clientDocumentId)
-  //     .collection('facturas')
-  //     .doc(invoiceDocumentID)
-  //     .update({
-  //   'pagos': FieldValue.arrayUnion(
-  //     [
-  //       <String, dynamic>{
-  //         'anulado': false,
-  //         'codigoMoneda': currency.toString(),
-  //         'conciliado': false,
-  //         'fecha': Timestamp.fromDate(date),
-  //         'metodo': 'Cheque',
-  //         'monto': double.parse(convertedAmount),
-  //         'montoOriginal': totalOfTheOrder,
-  //         'banco': FirebaseFirestore.instance
-  //             .collection('bancos')
-  //             .doc(banksDocumentsID),
-  //         'nroCuenta': int.parse(accountNumber),
-  //         'Titular': accountHolder,
-  //         'nroNotaCredito': 0,
-  //         'tasaDeCambio': selectedCoinExchangeRate,
-  //       },
-  //     ],
-  //   ),
-  // });
+  print('Se completo la factura??:');
+  print(
+      remaining - double.parse(amount) <= 0 ? 'Completado' : "Sigue pendiente");
+
+  if (amount <= remaining) {
+    try {
+      return await FirebaseFirestore.instance
+          .collection('clientes')
+          .doc(client.clientDocumentId)
+          .collection('facturas')
+          .doc(invoiceDocumentID)
+          .update({
+        'pagos': FieldValue.arrayUnion(
+          [
+            <String, dynamic>{
+              'anulado': false,
+              'codigoMoneda': currency.toString(),
+              'conciliado': false,
+              'fecha': Timestamp.fromDate(date),
+              'metodo': 'Cheque',
+              'monto': double.parse(amount),
+              'montoOriginal': totalOfTheOrder,
+              'banco': FirebaseFirestore.instance
+                  .collection('bancos')
+                  .doc(banksDocumentsID),
+              'nroCuenta': int.parse(accountNumber),
+              'titular': accountHolder,
+              // 'nroNotaCredito': 0,
+              'tasaDeCambio': selectedCoinExchangeRate,
+            },
+          ],
+        ),
+      }).whenComplete(() {
+        try {
+          if (remaining - double.parse(amount) <= 0) {
+            FirebaseFirestore.instance
+                .collection('clientes')
+                .doc(client.clientDocumentId)
+                .collection('facturas')
+                .doc(invoiceDocumentID)
+                .update({
+              'pagada': true,
+            });
+          }
+        } catch (e) {
+          print(e);
+        }
+      });
+    } catch (e) {
+      print(e);
+    }
+  } else {
+    Fluttertoast.showToast(
+      msg: 'La cantidad a pagar excede de la deuda pendiente',
+      backgroundColor: myTheme.colorScheme.secondary,
+      textColor: Colors.white,
+    );
+  }
 }
 
 //Registrar pagos de cripto
@@ -512,12 +573,14 @@ Future registerCriptoPayment(
   final convertedAmount =
       (doubleAmount / selectedCoinExchangeRate).toStringAsFixed(8);
 
-  print('Tasa de cambio a usar: $selectedCoinExchangeRate');
+  // Datos recibidos
 
-  print('Total en BTC: $amount');
-  print('Total en USD: $convertedAmount');
-  print('transaccion: $transactionId');
-  print('fecha de registro: $date');
+  // print('Tasa de cambio a usar: $selectedCoinExchangeRate');
+
+  // print('Total en BTC: $amount');
+  // print('Total en USD: $convertedAmount');
+  // print('transaccion: $transactionId');
+  // print('fecha de registro: $date');
 
   // if (double.parse(convertedAmount) < totalOfTheOrder) {
   //   return await FirebaseFirestore.instance

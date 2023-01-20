@@ -404,7 +404,7 @@
     "seePayments": "Ver Pagos",
     "registerPayment": "Registrar pago",
     "noPayments": "No hay pagos registrados",
-    "invoiceNumber": "Pagamento da fatura",
+    "invoiceNumber": "Numero de Factura",
     "upToPay": "Resto a Pagar",
     "balanceConfirmed": "Saldo confirmado",
     "balanceLeft": "Por Conciliar",

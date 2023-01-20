@@ -27,22 +27,38 @@ class _InvoicesPageState extends State<InvoicesPage> {
   @override
   Widget build(BuildContext context) {
     final currentDay =
-        Provider.of<CounterLimitFirestore>(context).currentDayInvoice;
-    final currentDayDateTime = currentDay.toDate();
+        Provider.of<CounterLimitFirestore?>(context)?.currentDayInvoice;
+    final currentDayDateTime = currentDay!.toDate();
     DateTime tomorrow = DateTime(currentDayDateTime.year,
         currentDayDateTime.month, currentDayDateTime.day + 1);
     return MultiProvider(
       providers: [
-        //     // isCheckedNotes == false
-        //     // ?
         StreamProvider<List<Invoices>?>.value(
-          value: FirebaseFirestore.instance
-              .collectionGroup('facturas')
-              .where('fecha', isGreaterThanOrEqualTo: currentDay)
-              .where('fecha', isLessThan: tomorrow)
-              .orderBy('fecha', descending: true)
-              .snapshots()
-              .map(accountInvoicesFromSnapshot),
+          value: currentDay !=
+                  Timestamp.fromDate(DateTime(
+                    DateTime.now().year + 99,
+                    DateTime.now().month + 99,
+                    DateTime.now().day + 99,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                  ))
+              ? FirebaseFirestore.instance
+                  .collectionGroup('facturas')
+                  .where('fecha', isGreaterThanOrEqualTo: currentDay)
+                  .where('fecha', isLessThan: tomorrow)
+                  .orderBy('fecha', descending: true)
+                  .snapshots()
+                  .map(accountInvoicesFromSnapshot)
+              : FirebaseFirestore.instance
+                  .collectionGroup('facturas')
+                  // .where('fecha', isGreaterThanOrEqualTo: currentDay)
+                  // .where('fecha', isLessThan: tomorrow)
+                  .orderBy('fecha', descending: true)
+                  .snapshots()
+                  .map(accountInvoicesFromSnapshot),
           initialData: const [],
           catchError: (context, error) {
             return;

@@ -46,15 +46,34 @@ void modalBottomSheetForInvoices(
   String formattedDate = dateFormatter.format(today);
   String? selectedValueA;
 
-  final paymentsValidPay = invoicePayments
-      .where((element) =>
-          element['conciliado'] == true && element['anulado'] == false)
-      .toList();
+  final paymentsValidPay =
+      invoicePayments.where((element) => element['anulado'] == false).toList();
   // print(paymentsValidPay);
+  final pendingPayments = invoicePayments
+      .where((element) =>
+          element['anulado'] == false && element['conciliado'] == false)
+      .toList();
+  final approvedPayments = invoicePayments
+      .where((element) =>
+          element['anulado'] == false && element['conciliado'] == true)
+      .toList();
+
+  print("pendingPayments: $pendingPayments");
+
+  var sumOfPendingPayments = pendingPayments.fold(0, (i, element) {
+    return i + element['monto'];
+  });
+
   var sumOfValidPayments = paymentsValidPay.fold(0, (i, element) {
     return i + element['monto'];
   });
-  print(sumOfValidPayments);
+
+  var sumOfApprovedPayments = approvedPayments.fold(0, (i, element) {
+    return i + element['monto'];
+  });
+
+  print('invoiceTotal: $invoiceTotal');
+  print('sumOfValidPayments: $sumOfValidPayments');
   final remaining = invoiceTotal - sumOfValidPayments;
   final leftoverAmount;
   if (remaining < 0) {
@@ -221,103 +240,156 @@ void modalBottomSheetForInvoices(
                                                   children: [
                                                     SingleChildScrollView(
                                                       child: Container(
-                                                        width: 330,
-                                                        height: 300,
-                                                        child:
-                                                            invoicePayments
-                                                                    .isEmpty
-                                                                ? Container(
-                                                                    width: 300,
-                                                                    height: 300,
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .center,
-                                                                    child: Text(
-                                                                      AppLocalizations.of(
-                                                                              context)!
-                                                                          .noPayments,
-                                                                      style:
-                                                                          TextStyle(
-                                                                        fontSize:
-                                                                            13,
-                                                                        fontFamily:
-                                                                            'Poppins-regular',
+                                                        // color: Colors.grey,
+                                                        height: 330,
+                                                        width: MediaQuery.of(
+                                                                context)
+                                                            .size
+                                                            .width,
+                                                        child: invoicePayments
+                                                                .isEmpty
+                                                            ? Container(
+                                                                width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width,
+                                                                height: 300,
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                child: Text(
+                                                                  AppLocalizations.of(
+                                                                          context)!
+                                                                      .noPayments,
+                                                                  style: TextStyle(
+                                                                      fontFamily:
+                                                                          'Poppins-regular',
+                                                                      fontSize:
+                                                                          13,
+                                                                      color: myTheme
+                                                                          .colorScheme
+                                                                          .onPrimaryContainer),
+                                                                ))
+                                                            : Scrollbar(
+                                                                child: ListView
+                                                                    .builder(
+                                                                  itemCount:
+                                                                      invoicePayments
+                                                                          .length,
+                                                                  itemBuilder:
+                                                                      (context,
+                                                                          index) {
+                                                                    final payment =
+                                                                        invoicePayments[
+                                                                            index];
+                                                                    final date =
+                                                                        payment[
+                                                                            'fecha'];
+                                                                    final unformattedDate =
+                                                                        DateTime.parse(date
+                                                                            .toDate()
+                                                                            .toString());
+                                                                    final paymentDate =
+                                                                        dateFormatter
+                                                                            .format(unformattedDate);
+                                                                    return ListTile(
+                                                                      onTap:
+                                                                          () {
+                                                                        // Ver o Editar detalles de pago
+                                                                      },
+                                                                      leading:
+                                                                          Icon(
+                                                                        Icons
+                                                                            .money_off_csred,
+                                                                        color: payment['anulado'] ==
+                                                                                false
+                                                                            ? payment['conciliado'] == false
+                                                                                ? Colors.amber
+                                                                                : Colors.green
+                                                                            : Colors.red,
                                                                       ),
-                                                                    ),
-                                                                  )
-                                                                : Scrollbar(
-                                                                    child: ListView
-                                                                        .builder(
-                                                                            itemCount:
-                                                                                invoicePayments.length,
-                                                                            itemBuilder: (context, index) {
-                                                                              final payment = invoicePayments[index];
-                                                                              final date = payment['fecha'];
-                                                                              final unformattedDate = DateTime.parse(date.toDate().toString());
-                                                                              final paymentDate = dateFormatter.format(unformattedDate);
-                                                                              return ListTile(
-                                                                                leading: Icon(
-                                                                                  Icons.money_off_csred,
-                                                                                  color: payment['anulado'] == false
-                                                                                      ? payment['conciliado'] == false
-                                                                                          ? Colors.amber
-                                                                                          : Colors.green
-                                                                                      : Colors.red,
-                                                                                ),
-                                                                                title: Column(
-                                                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                  children: [
-                                                                                    Text(
-                                                                                      priceFormat(payment['monto']),
-                                                                                      style: TextStyle(
-                                                                                        fontFamily: 'Poppins-regular',
-                                                                                        color: Colors.grey.shade400,
-                                                                                        fontSize: 14,
-                                                                                        fontWeight: FontWeight.bold,
-                                                                                      ),
-                                                                                    ),
-                                                                                    Container(
-                                                                                      child: Text(
-                                                                                        paymentDate,
-                                                                                        style: TextStyle(
-                                                                                          fontFamily: 'Poppins-regular',
-                                                                                          color: Colors.grey.shade400,
-                                                                                          fontSize: 10,
-                                                                                        ),
-                                                                                      ),
-                                                                                    ),
-                                                                                  ],
-                                                                                ),
-                                                                                subtitle: Text(
-                                                                                  '${payment['metodo']}',
-                                                                                  style: TextStyle(
-                                                                                    fontFamily: 'Poppins-regular',
-                                                                                    color: Colors.grey.shade400,
-                                                                                    fontSize: 12,
-                                                                                  ),
-                                                                                ),
-                                                                              );
-                                                                            }),
-                                                                  ),
+                                                                      title:
+                                                                          Column(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.start,
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.start,
+                                                                        children: [
+                                                                          Text(
+                                                                            priceFormat(payment['monto']),
+                                                                            style:
+                                                                                TextStyle(
+                                                                              fontFamily: 'Poppins-regular',
+                                                                              color: Colors.grey.shade400,
+                                                                              fontSize: 14,
+                                                                              fontWeight: FontWeight.bold,
+                                                                            ),
+                                                                          ),
+                                                                          Container(
+                                                                            child:
+                                                                                Text(
+                                                                              paymentDate,
+                                                                              style: TextStyle(
+                                                                                fontFamily: 'Poppins-regular',
+                                                                                color: Colors.grey.shade400,
+                                                                                fontSize: 10,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                      subtitle:
+                                                                          Text(
+                                                                        '${payment['metodo']}',
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontFamily:
+                                                                              'Poppins-regular',
+                                                                          color: Colors
+                                                                              .grey
+                                                                              .shade400,
+                                                                          fontSize:
+                                                                              12,
+                                                                        ),
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                ),
+                                                              ),
                                                       ),
                                                     ),
-                                                    SizedBox(height: 30),
+                                                    // SizedBox(height: 30),
                                                     Text(
-                                                      '${AppLocalizations.of(context)!.upToPay}: ${priceFormat(remaining)}',
+                                                      '${AppLocalizations.of(context)!.upToPay}: ${priceFormat(remaining > 0.00 ? remaining : 0.00)}',
                                                       style: TextStyle(
                                                         fontFamily:
                                                             'Poppins-regular',
-                                                        color: Colors.black,
+                                                        color: myTheme
+                                                            .colorScheme
+                                                            .secondary,
                                                         fontSize: 12,
                                                         fontWeight:
                                                             FontWeight.bold,
                                                       ),
                                                     ),
-                                                    // Text(
-
+                                                    remaining <= 0
+                                                        ? Text(
+                                                            'Esta factura no tiene deuda',
+                                                            style: TextStyle(
+                                                              fontFamily:
+                                                                  'Poppins-regular',
+                                                              color: myTheme
+                                                                  .colorScheme
+                                                                  .error,
+                                                              fontSize: 12,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          )
+                                                        : Container(),
                                                     Text(
-                                                      '${AppLocalizations.of(context)!.balanceConfirmed}: ${priceFormat(sumOfValidPayments)}',
+                                                      '${AppLocalizations.of(context)!.balanceConfirmed}: ${priceFormat(sumOfApprovedPayments)}',
                                                       style: TextStyle(
                                                         fontFamily:
                                                             'Poppins-regular',
@@ -328,7 +400,7 @@ void modalBottomSheetForInvoices(
                                                       ),
                                                     ),
                                                     Text(
-                                                      '${AppLocalizations.of(context)!.balanceLeft}: ${priceFormat(leftoverAmount)}',
+                                                      '${AppLocalizations.of(context)!.balanceLeft}: ${priceFormat(sumOfPendingPayments)}',
                                                       style: TextStyle(
                                                         fontFamily:
                                                             'Poppins-regular',
@@ -402,13 +474,15 @@ void modalBottomSheetForInvoices(
                                       context: context,
                                       builder: (BuildContext context) {
                                         final List<String> items = [
+                                          // 'Tarjeta de Debito',
+                                          // 'Tarjeta de Credito',
                                           'Cheque',
                                           'Criptomoneda',
-                                          'Deposito',
-                                          'Efectivo',
-                                          'Transferencia',
-                                          'Transf-internacional',
-                                          'Nota de credito',
+                                          // 'Deposito',
+                                          // 'Efectivo',
+                                          // 'Transferencia',
+                                          // 'Transf-internacional',
+                                          // 'Nota de credito',
                                         ];
                                         return StatefulBuilder(
                                           builder: ((context, setState) {
@@ -666,7 +740,7 @@ void modalBottomSheetForInvoices(
                                                                             .now(),
                                                                     lastDate:
                                                                         DateTime(
-                                                                            2023),
+                                                                            2500),
                                                                   );
                                                                   if (newDate ==
                                                                       null) {
@@ -783,8 +857,7 @@ void modalBottomSheetForInvoices(
                                                               0,
                                                               0,
                                                             ),
-                                                            hintText:
-                                                                '00000000',
+                                                            hintText: '0.00',
                                                             hintStyle:
                                                                 TextStyle(
                                                               fontFamily:
@@ -834,6 +907,7 @@ void modalBottomSheetForInvoices(
                                                           invoiceTotal,
                                                           today,
                                                           context,
+                                                          remaining,
                                                         ),
                                                       )
                                                     ],

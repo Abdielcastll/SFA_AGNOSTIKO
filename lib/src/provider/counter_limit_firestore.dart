@@ -28,7 +28,7 @@ class CounterLimitFirestore extends ChangeNotifier {
     0,
     0,
   ));
-  Timestamp _selectedDayInvoice = Timestamp.fromDate(DateTime(
+  Timestamp? _selectedDayInvoice = Timestamp.fromDate(DateTime(
     DateTime.now().year,
     DateTime.now().month,
     DateTime.now().day,
@@ -45,7 +45,7 @@ class CounterLimitFirestore extends ChangeNotifier {
   int get getScrollClientLimit => _scrollClientLimit;
   Timestamp get currentDayVisits => _selectedDayVisits;
   Timestamp get currentDayOrder => _selectedDayOrder;
-  Timestamp get currentDayInvoice => _selectedDayInvoice;
+  Timestamp? get currentDayInvoice => _selectedDayInvoice;
 
   void setClientsLimit(int? newLimit, int? newScrollLimit) {
     if (newLimit != null) {
@@ -74,7 +74,17 @@ class CounterLimitFirestore extends ChangeNotifier {
       _selectedDayInvoice = newDay;
       notifyListeners();
     } else {
-      _selectedDayInvoice = Timestamp.now();
+      _selectedDayInvoice = null;
+      // Timestamp.fromDate(DateTime(
+      //   DateTime.now().year + 99,
+      //   DateTime.now().month + 99,
+      //   DateTime.now().day + 99,
+      //   0,
+      //   0,
+      //   0,
+      //   0,
+      //   0,
+      // ));
       notifyListeners();
     }
   }

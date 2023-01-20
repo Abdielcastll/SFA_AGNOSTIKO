@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
@@ -47,6 +48,7 @@ identifyPaymentMethod(
   totalOfTheOrder,
   date,
   context,
+  remaining,
 ) {
   File? imageFile;
   String accountHolder = '';
@@ -82,24 +84,46 @@ identifyPaymentMethod(
   // final currentCoin = sharedPreferences!.getString('currentCoin');
   final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
 
-  priceFormat(currentCoin) {
+  priceFormat(productPrice) {
+    double correctAmount = double.parse(productPrice.toStringAsFixed(2));
     if (currentCoin!.contains('USD')) {
-      return 'USD';
+      return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
+          .format(productPrice)
+          .toString();
     } else if (currentCoin.contains('VED')) {
-      return 'VED';
+      return NumberFormat.currency(
+        locale: 'es_VE',
+        decimalDigits: 2,
+        symbol: "Bs.",
+      ).format(correctAmount * 4.58).toString();
     } else if (currentCoin.contains('EUR')) {
-      return 'EUR';
+      return NumberFormat.currency(
+        locale: 'es_ES',
+        decimalDigits: 2,
+        symbol: '€',
+      ).format(correctAmount * 0.89).toString();
     } else if (currentCoin.contains('MXN')) {
-      return 'MXN';
+      return NumberFormat.currency(
+        locale: 'es_MX',
+        decimalDigits: 2,
+        symbol: '\$',
+      ).format(correctAmount * 19.43);
     } else if (currentCoin.contains('BTC')) {
-      return 'BTC';
+      return '฿ ${(correctAmount * 0.00011).toString()}';
     } else {
-      return 'PPR';
+      return NumberFormat.currency(
+        locale: 'es_VE',
+        decimalDigits: 2,
+        symbol: "PPR.",
+      ).format(correctAmount * 4.58).toString();
     }
   }
 
   print('Metodo: $selectedValueA');
-  print(priceFormat(currentCoin));
+  print('currentCoin: $currentCoin');
+  // print('totalOfTheOrder: $totalOfTheOrder');
+  print('paidAmount: $paidAmount');
+  print('remaining: $remaining');
 
   if (selectedValueA == 'Cheque') {
     return StatefulBuilder(
@@ -501,23 +525,42 @@ identifyPaymentMethod(
                               if (selectedBank != null) {
                                 if (accountNumber != '' ||
                                     accountHolder != '') {
-                                  await registerBankCheckPayment(
-                                    client,
-                                    invoiceDocumentID,
-                                    selectedCoin,
-                                    paidAmount,
-                                    totalOfTheOrder,
-                                    priceFormat(currentCoin),
-                                    selectedBank,
-                                    accountNumber,
-                                    accountHolder,
-                                    imageFile,
-                                    date,
-                                  );
-                                  Fluttertoast.showToast(
-                                      msg: 'Pago registrado');
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
+                                  print('Registrando pago en cheque');
+                                  if (double.parse(paidAmount) > remaining) {
+                                    Fluttertoast.showToast(
+                                      msg:
+                                          'La cantidad a pagar excede de la deuda pendiente',
+                                      backgroundColor:
+                                          myTheme.colorScheme.secondary,
+                                      textColor: Colors.white,
+                                    );
+                                  } else {
+                                    print('Cantidad permitida');
+                                    Fluttertoast.showToast(
+                                      msg: 'Registrando Cheque',
+                                      backgroundColor:
+                                          myTheme.colorScheme.secondary,
+                                      textColor: Colors.white,
+                                    );
+                                    await registerBankCheckPayment(
+                                      client,
+                                      invoiceDocumentID,
+                                      selectedCoin,
+                                      paidAmount,
+                                      totalOfTheOrder,
+                                      currentCoin,
+                                      selectedBank,
+                                      accountNumber,
+                                      accountHolder,
+                                      imageFile,
+                                      date,
+                                      remaining,
+                                    );
+                                    // Fluttertoast.showToast(
+                                    //     msg: 'Pago registrado');
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  }
                                 } else {
                                   Fluttertoast.showToast(
                                       msg: 'Ingrese datos de cuenta validos');
