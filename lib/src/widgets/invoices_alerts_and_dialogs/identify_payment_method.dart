@@ -539,7 +539,7 @@ identifyPaymentMethod(
                                     Fluttertoast.showToast(
                                       msg: 'Registrando Cheque',
                                       backgroundColor:
-                                          myTheme.colorScheme.secondary,
+                                          myTheme.colorScheme.primary,
                                       textColor: Colors.white,
                                     );
                                     await registerBankCheckPayment(
@@ -556,8 +556,6 @@ identifyPaymentMethod(
                                       date,
                                       remaining,
                                     );
-                                    // Fluttertoast.showToast(
-                                    //     msg: 'Pago registrado');
                                     Navigator.pop(context);
                                     Navigator.pop(context);
                                   }
@@ -768,7 +766,21 @@ identifyPaymentMethod(
                           // registerCriptoPayment();
                           if (transactionId != '') {
                             if (paidAmount != null) {
-                              await registerCriptoPayment(
+                              if (double.parse(paidAmount) > remaining) {
+                                Fluttertoast.showToast(
+                                  msg:
+                                      'La cantidad a pagar excede de la deuda pendiente',
+                                  backgroundColor: myTheme.colorScheme.primary,
+                                  textColor: Colors.white,
+                                );
+                              } else {
+                                print('Cantidad permitida');
+                                Fluttertoast.showToast(
+                                  msg: 'Registrando Pago en Criptomonedas',
+                                  backgroundColor: myTheme.colorScheme.primary,
+                                  textColor: Colors.white,
+                                );
+                                await registerCriptoPayment(
                                   client,
                                   invoiceDocumentID,
                                   'BTC',
@@ -776,15 +788,16 @@ identifyPaymentMethod(
                                   totalOfTheOrder,
                                   transactionId,
                                   imageFile,
-                                  date);
-                              Navigator.pop(context);
-                              Navigator.pop(context);
+                                  date,
+                                  remaining,
+                                );
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              }
                             }
                           } else {
                             Fluttertoast.showToast(msg: 'Ingrese ID porfavor');
                           }
-                          Fluttertoast.showToast(
-                              msg: 'Testeo de crear pago completado');
                         },
                         style: TextButton.styleFrom(
                           foregroundColor: myTheme.colorScheme.primary,
@@ -1213,23 +1226,40 @@ identifyPaymentMethod(
                               if (selectedBank != null) {
                                 if (accountNumber != '' ||
                                     voucherNumber != '') {
-                                  await registerDepositPayment(
-                                    client,
-                                    invoiceDocumentID,
-                                    selectedCoin,
-                                    paidAmount,
-                                    totalOfTheOrder,
-                                    priceFormat(currentCoin),
-                                    selectedBank,
-                                    accountNumber,
-                                    voucherNumber,
-                                    imageFile,
-                                    date,
-                                  );
-                                  Fluttertoast.showToast(
-                                      msg: 'Testeo de crear pago completado');
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
+                                  if (double.parse(paidAmount) > remaining) {
+                                    Fluttertoast.showToast(
+                                      msg:
+                                          'La cantidad a pagar excede de la deuda pendiente',
+                                      backgroundColor:
+                                          myTheme.colorScheme.secondary,
+                                      textColor: Colors.white,
+                                    );
+                                  } else {
+                                    print('Cantidad permitida');
+                                    Fluttertoast.showToast(
+                                      msg: 'Registrando Pago en Criptomonedas',
+                                      backgroundColor:
+                                          myTheme.colorScheme.primary,
+                                      textColor: Colors.white,
+                                    );
+                                    await registerDepositPayment(
+                                      client,
+                                      invoiceDocumentID,
+                                      selectedCoin,
+                                      paidAmount,
+                                      totalOfTheOrder,
+                                      currentCoin,
+                                      selectedBank,
+                                      accountNumber,
+                                      voucherNumber,
+                                      imageFile,
+                                      date,
+                                      remaining,
+                                    );
+
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  }
                                 } else {
                                   Fluttertoast.showToast(
                                       msg: 'Ingrese datos de cuenta validos');
@@ -1474,22 +1504,37 @@ identifyPaymentMethod(
                           // Crear en DB una visita
 
                           if (paidAmount != null) {
+                            if (double.parse(paidAmount) > remaining) {
+                              Fluttertoast.showToast(
+                                msg:
+                                    'La cantidad a pagar excede de la deuda pendiente',
+                                backgroundColor: myTheme.colorScheme.primary,
+                                textColor: Colors.white,
+                              );
+                            } else {
+                              print('Cantidad permitida');
+                              Fluttertoast.showToast(
+                                msg: 'Registrando Pago en Efectivo',
+                                backgroundColor: myTheme.colorScheme.primary,
+                                textColor: Colors.white,
+                              );
+                            }
                             await registerMoneyPayment(
-                                client,
-                                invoiceDocumentID,
-                                selectedCoin,
-                                paidAmount,
-                                totalOfTheOrder,
-                                imageFile,
-                                date);
+                              client,
+                              invoiceDocumentID,
+                              selectedCoin,
+                              paidAmount,
+                              totalOfTheOrder,
+                              imageFile,
+                              date,
+                              remaining,
+                            );
                             Navigator.pop(context);
                             Navigator.pop(context);
                           } else {
                             Fluttertoast.showToast(
                                 msg: 'Ingrese Monto porfavor');
                           }
-                          Fluttertoast.showToast(
-                              msg: 'Testeo de crear pago completado');
                         },
                         style: TextButton.styleFrom(
                           foregroundColor: myTheme.colorScheme.primary,
@@ -1942,22 +1987,39 @@ identifyPaymentMethod(
                                   paidAmount <= totalOfTheOrder) {
                                 if (selectedBank != null) {
                                   if (referenceId != '') {
-                                    await registerTransferPayment(
-                                      client,
-                                      invoiceDocumentID,
-                                      selectedCoin,
-                                      paidAmount,
-                                      totalOfTheOrder,
-                                      priceFormat(currentCoin),
-                                      selectedBank,
-                                      referenceId,
-                                      imageFile,
-                                      date,
-                                    );
-                                    Fluttertoast.showToast(
-                                        msg: 'Testeo de crear pago completado');
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
+                                    if (double.parse(paidAmount) > remaining) {
+                                      Fluttertoast.showToast(
+                                        msg:
+                                            'La cantidad a pagar excede de la deuda pendiente',
+                                        backgroundColor:
+                                            myTheme.colorScheme.primary,
+                                        textColor: Colors.white,
+                                      );
+                                    } else {
+                                      print('Cantidad permitida');
+                                      Fluttertoast.showToast(
+                                        msg: 'Registrando $selectedValueA',
+                                        backgroundColor:
+                                            myTheme.colorScheme.primary,
+                                        textColor: Colors.white,
+                                      );
+                                      await registerTransferPayment(
+                                        client,
+                                        invoiceDocumentID,
+                                        selectedCoin,
+                                        paidAmount,
+                                        totalOfTheOrder,
+                                        currentCoin,
+                                        selectedBank,
+                                        referenceId,
+                                        imageFile,
+                                        date,
+                                        remaining,
+                                      );
+
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                    }
                                   } else {
                                     Fluttertoast.showToast(
                                         msg: 'Ingrese datos de cuenta validos');
@@ -1981,22 +2043,39 @@ identifyPaymentMethod(
                                   paidAmount <= totalOfTheOrder) {
                                 if (selectedBank != null) {
                                   if (referenceId != '') {
-                                    await registerTransferInterPayment(
-                                      client,
-                                      invoiceDocumentID,
-                                      selectedCoin,
-                                      paidAmount,
-                                      totalOfTheOrder,
-                                      priceFormat(currentCoin),
-                                      selectedBank,
-                                      referenceId,
-                                      imageFile,
-                                      date,
-                                    );
-                                    Fluttertoast.showToast(
-                                        msg: 'Testeo de crear pago completado');
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
+                                    if (double.parse(paidAmount) > remaining) {
+                                      Fluttertoast.showToast(
+                                        msg:
+                                            'La cantidad a pagar excede de la deuda pendiente',
+                                        backgroundColor:
+                                            myTheme.colorScheme.primary,
+                                        textColor: Colors.white,
+                                      );
+                                    } else {
+                                      print('Cantidad permitida');
+                                      Fluttertoast.showToast(
+                                        msg: 'Registrando $selectedValueA',
+                                        backgroundColor:
+                                            myTheme.colorScheme.primary,
+                                        textColor: Colors.white,
+                                      );
+                                      await registerTransferInterPayment(
+                                        client,
+                                        invoiceDocumentID,
+                                        selectedCoin,
+                                        paidAmount,
+                                        totalOfTheOrder,
+                                        currentCoin,
+                                        selectedBank,
+                                        referenceId,
+                                        imageFile,
+                                        date,
+                                        remaining,
+                                      );
+
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                    }
                                   } else {
                                     Fluttertoast.showToast(
                                         msg: 'Ingrese datos de cuenta validos');

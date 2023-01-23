@@ -79,7 +79,7 @@ void modalBottomSheetForInvoices(
   if (remaining < 0) {
     leftoverAmount = 0.00;
   } else {
-    leftoverAmount = remaining;
+    leftoverAmount = remaining.toStringAsFixed(2);
   }
 
   showModalBottomSheet(
@@ -478,10 +478,10 @@ void modalBottomSheetForInvoices(
                                           // 'Tarjeta de Credito',
                                           'Cheque',
                                           'Criptomoneda',
-                                          // 'Deposito',
-                                          // 'Efectivo',
-                                          // 'Transferencia',
-                                          // 'Transf-internacional',
+                                          'Deposito',
+                                          'Efectivo',
+                                          'Transferencia',
+                                          'Transf-internacional',
                                           // 'Nota de credito',
                                         ];
                                         return StatefulBuilder(
@@ -907,7 +907,9 @@ void modalBottomSheetForInvoices(
                                                           invoiceTotal,
                                                           today,
                                                           context,
-                                                          remaining,
+                                                          double.parse(remaining
+                                                              .toStringAsFixed(
+                                                                  2)),
                                                         ),
                                                       )
                                                     ],
