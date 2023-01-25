@@ -49,6 +49,7 @@ identifyPaymentMethod(
   date,
   context,
   remaining,
+  selectedCoin,
 ) {
   File? imageFile;
   String accountHolder = '';
@@ -57,7 +58,7 @@ identifyPaymentMethod(
   String voucherNumber = '';
   String referenceId = '';
   String? selectedBank;
-  String? selectedCoin;
+  // String? selectedCoin;
   List<String> itemsBank = [
     'BANCO CENTRAL',
     'BANCO BICENTENARIO',
@@ -72,15 +73,15 @@ identifyPaymentMethod(
     'HSBC',
     'WELLSFARGO',
   ];
-  List<String> itemsCoin = [
-    'USD',
-    'BTC',
-    'EUR',
-    'VED',
-  ];
-  List<String> itemsCoinVED = [
-    'VED',
-  ];
+  // List<String> itemsCoin = [
+  //   'USD',
+  //   'BTC',
+  //   'EUR',
+  //   'VED',
+  // ];
+  // List<String> itemsCoinVED = [
+  //   'VED',
+  // ];
   // final currentCoin = sharedPreferences!.getString('currentCoin');
   final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
 
@@ -332,91 +333,6 @@ identifyPaymentMethod(
                 ),
               ),
               // onChanged: searchClient,
-            ),
-          ),
-          Text(
-            '${AppLocalizations.of(context)!.currency} *',
-            style: TextStyle(
-              fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.secondary,
-              fontSize: 14,
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton2(
-                isExpanded: true,
-                // ignore: prefer_const_literals_to_create_immutables
-                hint: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        selectedCoin ?? '',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: myTheme.colorScheme.primary.withOpacity(0.7),
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-                items: itemsCoinVED
-                    .map((item) => DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(
-                            item,
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: myTheme.colorScheme.primary,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ))
-                    .toList(),
-                value: selectedCoin,
-                onChanged: (value) {
-                  setState(
-                    () {
-                      selectedCoin = value as String;
-                    },
-                  );
-                },
-                icon: const Icon(
-                  Icons.arrow_forward_ios_outlined,
-                ),
-                iconSize: 11,
-                iconEnabledColor: myTheme.colorScheme.primary.withOpacity(0.5),
-                iconDisabledColor: Colors.grey,
-                buttonHeight: 50,
-                // buttonWidth: 200,
-                buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-                buttonDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(
-                    color: myTheme.colorScheme.primary.withOpacity(0.3),
-                  ),
-                  color: Colors.white,
-                ),
-                buttonElevation: 0,
-                itemHeight: 40,
-                itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                dropdownMaxHeight: 200,
-                dropdownWidth: 200,
-                dropdownPadding: null,
-                dropdownDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                ),
-                dropdownElevation: 8,
-                scrollbarRadius: const Radius.circular(10),
-                scrollbarThickness: 6,
-                scrollbarAlwaysShow: true,
-                offset: const Offset(-20, 0),
-              ),
             ),
           ),
           Column(
@@ -1034,91 +950,6 @@ identifyPaymentMethod(
               // onChanged: searchClient,
             ),
           ),
-          Text(
-            '${AppLocalizations.of(context)!.currency} *',
-            style: TextStyle(
-              fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.secondary,
-              fontSize: 14,
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton2(
-                isExpanded: true,
-                // ignore: prefer_const_literals_to_create_immutables
-                hint: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        selectedCoin ?? '',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: myTheme.colorScheme.primary.withOpacity(0.7),
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-                items: itemsCoin
-                    .map((item) => DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(
-                            item,
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: myTheme.colorScheme.primary,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ))
-                    .toList(),
-                value: selectedCoin,
-                onChanged: (value) {
-                  setState(
-                    () {
-                      selectedCoin = value as String;
-                    },
-                  );
-                },
-                icon: const Icon(
-                  Icons.arrow_forward_ios_outlined,
-                ),
-                iconSize: 11,
-                iconEnabledColor: myTheme.colorScheme.primary.withOpacity(0.5),
-                iconDisabledColor: Colors.grey,
-                buttonHeight: 50,
-                // buttonWidth: 200,
-                buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-                buttonDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(
-                    color: myTheme.colorScheme.primary.withOpacity(0.3),
-                  ),
-                  color: Colors.white,
-                ),
-                buttonElevation: 0,
-                itemHeight: 40,
-                itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                dropdownMaxHeight: 200,
-                dropdownWidth: 200,
-                dropdownPadding: null,
-                dropdownDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                ),
-                dropdownElevation: 8,
-                scrollbarRadius: const Radius.circular(10),
-                scrollbarThickness: 6,
-                scrollbarAlwaysShow: true,
-                offset: const Offset(-20, 0),
-              ),
-            ),
-          ),
           Column(
             children: [
               Text(
@@ -1306,91 +1137,6 @@ identifyPaymentMethod(
     return StatefulBuilder(
       builder: (context, setState) => Column(
         children: [
-          Text(
-            '${AppLocalizations.of(context)!.currency} *',
-            style: TextStyle(
-              fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.secondary,
-              fontSize: 14,
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton2(
-                isExpanded: true,
-                // ignore: prefer_const_literals_to_create_immutables
-                hint: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        selectedCoin ?? '',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: myTheme.colorScheme.primary.withOpacity(0.7),
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-                items: itemsCoin
-                    .map((item) => DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(
-                            item,
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: myTheme.colorScheme.primary,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ))
-                    .toList(),
-                value: selectedCoin,
-                onChanged: (value) {
-                  setState(
-                    () {
-                      selectedCoin = value as String;
-                    },
-                  );
-                },
-                icon: const Icon(
-                  Icons.arrow_forward_ios_outlined,
-                ),
-                iconSize: 11,
-                iconEnabledColor: myTheme.colorScheme.primary.withOpacity(0.5),
-                iconDisabledColor: Colors.grey,
-                buttonHeight: 50,
-                // buttonWidth: 200,
-                buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-                buttonDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(
-                    color: myTheme.colorScheme.primary.withOpacity(0.3),
-                  ),
-                  color: Colors.white,
-                ),
-                buttonElevation: 0,
-                itemHeight: 40,
-                itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                dropdownMaxHeight: 200,
-                dropdownWidth: 200,
-                dropdownPadding: null,
-                dropdownDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                ),
-                dropdownElevation: 8,
-                scrollbarRadius: const Radius.circular(10),
-                scrollbarThickness: 6,
-                scrollbarAlwaysShow: true,
-                offset: const Offset(-20, 0),
-              ),
-            ),
-          ),
           selectedValueA == 'Nota de credito'
               ? Container(
                   child: Text(
@@ -1790,91 +1536,6 @@ identifyPaymentMethod(
                 ),
               ),
               // onChanged: searchClient,
-            ),
-          ),
-          Text(
-            '${AppLocalizations.of(context)!.currency} *',
-            style: TextStyle(
-              fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.secondary,
-              fontSize: 14,
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton2(
-                isExpanded: true,
-                // ignore: prefer_const_literals_to_create_immutables
-                hint: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        selectedCoin ?? '',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: myTheme.colorScheme.primary.withOpacity(0.7),
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-                items: itemsCoin
-                    .map((item) => DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(
-                            item,
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: myTheme.colorScheme.primary,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ))
-                    .toList(),
-                value: selectedCoin,
-                onChanged: (value) {
-                  setState(
-                    () {
-                      selectedCoin = value as String;
-                    },
-                  );
-                },
-                icon: const Icon(
-                  Icons.arrow_forward_ios_outlined,
-                ),
-                iconSize: 11,
-                iconEnabledColor: myTheme.colorScheme.primary.withOpacity(0.5),
-                iconDisabledColor: Colors.grey,
-                buttonHeight: 50,
-                // buttonWidth: 200,
-                buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-                buttonDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(
-                    color: myTheme.colorScheme.primary.withOpacity(0.3),
-                  ),
-                  color: Colors.white,
-                ),
-                buttonElevation: 0,
-                itemHeight: 40,
-                itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                dropdownMaxHeight: 200,
-                dropdownWidth: 200,
-                dropdownPadding: null,
-                dropdownDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                ),
-                dropdownElevation: 8,
-                scrollbarRadius: const Radius.circular(10),
-                scrollbarThickness: 6,
-                scrollbarAlwaysShow: true,
-                offset: const Offset(-20, 0),
-              ),
             ),
           ),
           Column(

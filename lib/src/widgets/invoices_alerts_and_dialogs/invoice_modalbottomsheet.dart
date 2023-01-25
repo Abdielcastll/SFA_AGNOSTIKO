@@ -39,12 +39,17 @@ void modalBottomSheetForInvoices(
   client,
   invoiceDocumentID,
   currentClientDispatchAdress,
+  subTotal,
+  percentageTax,
+  tax,
+  discountPercentage,
+  discount,
 ) {
-  String paidAmount = '00.00';
   var dateFormatter = DateFormat('dd-MM-yyyy');
   DateTime today = DateTime.now();
   String formattedDate = dateFormatter.format(today);
   String? selectedValueA;
+  String? selectedCoin;
 
   final paymentsValidPay =
       invoicePayments.where((element) => element['anulado'] == false).toList();
@@ -61,26 +66,28 @@ void modalBottomSheetForInvoices(
   print("pendingPayments: $pendingPayments");
 
   var sumOfPendingPayments = pendingPayments.fold(0, (i, element) {
-    return i + element['monto'];
+    return i + element['montoOriginal'];
   });
 
   var sumOfValidPayments = paymentsValidPay.fold(0, (i, element) {
-    return i + element['monto'];
+    return i + element['montoOriginal'];
   });
 
   var sumOfApprovedPayments = approvedPayments.fold(0, (i, element) {
-    return i + element['monto'];
+    return i + element['montoOriginal'];
   });
 
   print('invoiceTotal: $invoiceTotal');
   print('sumOfValidPayments: $sumOfValidPayments');
   final remaining = invoiceTotal - sumOfValidPayments;
+  print('remaining: $remaining');
   final leftoverAmount;
   if (remaining < 0) {
     leftoverAmount = 0.00;
   } else {
     leftoverAmount = remaining.toStringAsFixed(2);
   }
+  String paidAmount = remaining.toStringAsFixed(2);
 
   showModalBottomSheet(
     elevation: 0,
@@ -129,6 +136,41 @@ void modalBottomSheetForInvoices(
             decimalDigits: 2,
             symbol: "PPR.",
           ).format(correctAmount * 4.58).toString()}';
+        }
+      }
+
+      priceFormatForPaidAmount(productPrice, coin) {
+        double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+        if (coin!.contains('USD')) {
+          return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
+              .format(productPrice)
+              .toString();
+        } else if (coin.contains('VED')) {
+          return NumberFormat.currency(
+            locale: 'es_VE',
+            decimalDigits: 2,
+            symbol: "Bs.",
+          ).format(correctAmount * 4.58).toString();
+        } else if (coin.contains('EUR')) {
+          return NumberFormat.currency(
+            locale: 'es_ES',
+            decimalDigits: 2,
+            symbol: '€',
+          ).format(correctAmount * 0.89).toString();
+        } else if (coin.contains('MXN')) {
+          return NumberFormat.currency(
+            locale: 'es_MX',
+            decimalDigits: 2,
+            symbol: '\$',
+          ).format(correctAmount * 19.43);
+        } else if (coin.contains('BTC')) {
+          return '฿ ${(correctAmount * 0.00011).toString()}';
+        } else {
+          return NumberFormat.currency(
+            locale: 'es_VE',
+            decimalDigits: 2,
+            symbol: "PPR.",
+          ).format(correctAmount * 4.58).toString();
         }
       }
 
@@ -316,7 +358,7 @@ void modalBottomSheetForInvoices(
                                                                             CrossAxisAlignment.start,
                                                                         children: [
                                                                           Text(
-                                                                            priceFormat(payment['monto']),
+                                                                            priceFormat(payment['montoOriginal']),
                                                                             style:
                                                                                 TextStyle(
                                                                               fontFamily: 'Poppins-regular',
@@ -447,6 +489,7 @@ void modalBottomSheetForInvoices(
                                   foregroundColor: myTheme.colorScheme.primary,
                                 ),
                                 child: Text(
+                                  // Ver Pagos
                                   AppLocalizations.of(context)!.seePayments,
                                   style: TextStyle(
                                     fontFamily: 'Poppins-regular',
@@ -459,6 +502,7 @@ void modalBottomSheetForInvoices(
                             ),
                           ],
                         ),
+                        // Registrar pagos
                         completed
                             ? Container()
                             : Container(
@@ -484,6 +528,13 @@ void modalBottomSheetForInvoices(
                                           'Transf-internacional',
                                           // 'Nota de credito',
                                         ];
+                                        List<String> itemsCoin = [
+                                          'USD',
+                                          'BTC',
+                                          'EUR',
+                                          'VED',
+                                          'MXN',
+                                        ];
                                         return StatefulBuilder(
                                           builder: ((context, setState) {
                                             return AlertDialog(
@@ -492,6 +543,7 @@ void modalBottomSheetForInvoices(
                                                     BorderRadius.circular(20),
                                               ),
                                               title: Text(
+                                                // Registrar pagos
                                                 AppLocalizations.of(context)!
                                                     .registerPayment,
                                                 style: TextStyle(
@@ -503,11 +555,11 @@ void modalBottomSheetForInvoices(
                                                 ),
                                               ),
                                               content: Container(
-                                                // height: 150,
                                                 child: SingleChildScrollView(
                                                   child: Column(
                                                     children: [
                                                       Text(
+                                                        // Metodo de pago
                                                         AppLocalizations.of(
                                                                 context)!
                                                             .paymentMethod,
@@ -534,7 +586,7 @@ void modalBottomSheetForInvoices(
                                                                 Expanded(
                                                                   child: Text(
                                                                     selectedValueA ??
-                                                                        '',
+                                                                        'Seleccione medio de pago',
                                                                     style:
                                                                         TextStyle(
                                                                       fontSize:
@@ -606,7 +658,7 @@ void modalBottomSheetForInvoices(
                                                             iconDisabledColor:
                                                                 Colors.grey,
                                                             buttonHeight: 50,
-                                                            buttonWidth: 200,
+                                                            // buttonWidth: 200,
                                                             buttonPadding:
                                                                 const EdgeInsets
                                                                         .only(
@@ -665,6 +717,150 @@ void modalBottomSheetForInvoices(
                                                           ),
                                                         ),
                                                       ),
+                                                      Container(
+                                                        margin:
+                                                            EdgeInsets.fromLTRB(
+                                                                10, 5, 10, 10),
+                                                        child:
+                                                            DropdownButtonHideUnderline(
+                                                          child:
+                                                              DropdownButton2(
+                                                            isExpanded: true,
+                                                            // ignore: prefer_const_literals_to_create_immutables
+                                                            hint: Row(
+                                                              children: [
+                                                                Expanded(
+                                                                  child: Text(
+                                                                    selectedCoin ??
+                                                                        'Seleccione moneda',
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontSize:
+                                                                          12,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      color: myTheme
+                                                                          .colorScheme
+                                                                          .primary
+                                                                          .withOpacity(
+                                                                              0.3),
+                                                                    ),
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            items: itemsCoin
+                                                                .map((item) =>
+                                                                    DropdownMenuItem<
+                                                                        String>(
+                                                                      value:
+                                                                          item,
+                                                                      child:
+                                                                          Text(
+                                                                        item,
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontSize:
+                                                                              14,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                          color: myTheme
+                                                                              .colorScheme
+                                                                              .primary,
+                                                                        ),
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                      ),
+                                                                    ))
+                                                                .toList(),
+                                                            value: selectedCoin,
+                                                            onChanged: (value) {
+                                                              setState(
+                                                                () {
+                                                                  selectedCoin =
+                                                                      value
+                                                                          as String;
+                                                                },
+                                                              );
+                                                            },
+                                                            icon: const Icon(
+                                                              Icons
+                                                                  .arrow_forward_ios_outlined,
+                                                            ),
+                                                            iconSize: 11,
+                                                            iconEnabledColor:
+                                                                myTheme
+                                                                    .colorScheme
+                                                                    .primary
+                                                                    .withOpacity(
+                                                                        0.5),
+                                                            iconDisabledColor:
+                                                                Colors.grey,
+                                                            buttonHeight: 50,
+                                                            // buttonWidth: 200,
+                                                            buttonPadding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    left: 14,
+                                                                    right: 14),
+                                                            buttonDecoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          5),
+                                                              border:
+                                                                  Border.all(
+                                                                color: myTheme
+                                                                    .colorScheme
+                                                                    .primary
+                                                                    .withOpacity(
+                                                                        0.3),
+                                                              ),
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                            buttonElevation: 0,
+                                                            itemHeight: 40,
+                                                            itemPadding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    left: 14,
+                                                                    right: 14),
+                                                            dropdownMaxHeight:
+                                                                200,
+                                                            dropdownWidth: 200,
+                                                            dropdownPadding:
+                                                                null,
+                                                            dropdownDecoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10),
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                            dropdownElevation:
+                                                                8,
+                                                            scrollbarRadius:
+                                                                const Radius
+                                                                    .circular(10),
+                                                            scrollbarThickness:
+                                                                6,
+                                                            scrollbarAlwaysShow:
+                                                                true,
+                                                            offset:
+                                                                const Offset(
+                                                                    0, 0),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      // Fecha del registro del pago
                                                       Text(
                                                         AppLocalizations.of(
                                                                 context)!
@@ -674,14 +870,14 @@ void modalBottomSheetForInvoices(
                                                               'Poppins-regular',
                                                           color: myTheme
                                                               .colorScheme
-                                                              .secondary,
+                                                              .primary,
                                                           fontSize: 14,
                                                         ),
                                                       ),
                                                       Container(
                                                         margin:
                                                             EdgeInsets.fromLTRB(
-                                                                10, 5, 10, 10),
+                                                                10, 0, 10, 10),
                                                         padding:
                                                             EdgeInsets.fromLTRB(
                                                                 10, 10, 10, 10),
@@ -768,150 +964,262 @@ void modalBottomSheetForInvoices(
                                                           ],
                                                         ),
                                                       ),
-                                                      Text(
-                                                        '${AppLocalizations.of(context)!.amount}*',
-                                                        style: TextStyle(
-                                                          fontFamily:
-                                                              'Poppins-regular',
-                                                          color: myTheme
-                                                              .colorScheme
-                                                              .secondary,
-                                                          fontSize: 14,
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        margin:
-                                                            EdgeInsets.fromLTRB(
-                                                                10, 10, 0, 0),
-                                                        height: 50,
-                                                        // width: 200,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(10),
-                                                          border: Border.all(
-                                                            color: myTheme
-                                                                .colorScheme
-                                                                .primary
-                                                                .withOpacity(
-                                                                    0.3),
-                                                            // color: Colors.transparent,
-                                                          ),
-                                                        ),
-                                                        child: TextField(
-                                                          onChanged: (value) {
-                                                            setState(() {
-                                                              paidAmount =
-                                                                  value;
-                                                              print(paidAmount);
-                                                            });
-                                                          },
-                                                          style: TextStyle(
-                                                            fontSize: 14,
-                                                            fontFamily:
-                                                                'Poppins-regular',
-                                                            color: myTheme
-                                                                .colorScheme
-                                                                .primary,
-                                                          ),
-                                                          //TODO:
-                                                          inputFormatters: <
-                                                              TextInputFormatter>[
-                                                            FilteringTextInputFormatter
-                                                                .allow(
-                                                              RegExp(
-                                                                  r'[0-9]+[,.]{0,1}[0-9]*'),
-                                                            ),
-                                                            TextInputFormatter
-                                                                .withFunction(
-                                                              (oldValue,
-                                                                      newValue) =>
-                                                                  newValue
-                                                                      .copyWith(
-                                                                text: newValue
-                                                                    .text
-                                                                    .replaceAll(
-                                                                        ',',
-                                                                        '.'),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .phone,
+                                                      //  Monto del pago
 
-                                                          maxLines: 1,
-                                                          maxLength: 50,
-                                                          textCapitalization:
-                                                              TextCapitalization
-                                                                  .characters,
+                                                      selectedCoin == null
+                                                          ? Container()
+                                                          : Text(
+                                                              '${AppLocalizations.of(context)!.amount}*',
+                                                              style: TextStyle(
+                                                                fontFamily:
+                                                                    'Poppins-regular',
+                                                                color: myTheme
+                                                                    .colorScheme
+                                                                    .primary,
+                                                                fontSize: 14,
+                                                              ),
+                                                            ),
 
-                                                          decoration:
-                                                              InputDecoration(
-                                                            contentPadding:
-                                                                EdgeInsets
-                                                                    .fromLTRB(
-                                                              14,
-                                                              0,
-                                                              0,
-                                                              0,
-                                                            ),
-                                                            hintText: '0.00',
-                                                            hintStyle:
-                                                                TextStyle(
-                                                              fontFamily:
-                                                                  'Poppins-regular',
-                                                              fontSize: 14,
-                                                              color: myTheme
-                                                                  .colorScheme
-                                                                  .primary
-                                                                  .withOpacity(
-                                                                      0.2),
-                                                            ),
-                                                            enabledBorder:
-                                                                OutlineInputBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5),
-                                                              borderSide:
-                                                                  BorderSide(
-                                                                color: Colors
-                                                                    .transparent,
+                                                      selectedCoin == null
+                                                          ? Container()
+                                                          : Container(
+                                                              margin: EdgeInsets
+                                                                  .fromLTRB(10,
+                                                                      0, 0, 0),
+                                                              height: 50,
+                                                              // width: 200,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                                border:
+                                                                    Border.all(
+                                                                  color: myTheme
+                                                                      .colorScheme
+                                                                      .primary
+                                                                      .withOpacity(
+                                                                          0.3),
+                                                                  // color: Colors.transparent,
+                                                                ),
+                                                              ),
+                                                              child: TextField(
+                                                                onChanged:
+                                                                    (value) {
+                                                                  setState(() {
+                                                                    paidAmount =
+                                                                        value;
+                                                                    print(
+                                                                        paidAmount);
+                                                                  });
+                                                                },
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize: 14,
+                                                                  fontFamily:
+                                                                      'Poppins-regular',
+                                                                  color: myTheme
+                                                                      .colorScheme
+                                                                      .primary,
+                                                                ),
+                                                                //TODO:
+                                                                inputFormatters: <
+                                                                    TextInputFormatter>[
+                                                                  FilteringTextInputFormatter
+                                                                      .allow(
+                                                                    RegExp(
+                                                                        r'[0-9]+[,.]{0,1}[0-9]*'),
+                                                                  ),
+                                                                  TextInputFormatter
+                                                                      .withFunction(
+                                                                    (oldValue,
+                                                                            newValue) =>
+                                                                        newValue
+                                                                            .copyWith(
+                                                                      text: newValue
+                                                                          .text
+                                                                          .replaceAll(
+                                                                              ',',
+                                                                              '.'),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                                keyboardType:
+                                                                    TextInputType
+                                                                        .phone,
+
+                                                                maxLines: 1,
+                                                                maxLength: 50,
+                                                                textCapitalization:
+                                                                    TextCapitalization
+                                                                        .characters,
+
+                                                                decoration:
+                                                                    InputDecoration(
+                                                                  contentPadding:
+                                                                      EdgeInsets
+                                                                          .fromLTRB(
+                                                                    14,
+                                                                    0,
+                                                                    0,
+                                                                    0,
+                                                                  ),
+                                                                  hintText: priceFormatForPaidAmount(
+                                                                          double.parse(paidAmount.isEmpty
+                                                                              ? '0.00'
+                                                                              : paidAmount),
+                                                                          selectedCoin)
+                                                                      .toString(),
+                                                                  hintStyle:
+                                                                      TextStyle(
+                                                                    fontFamily:
+                                                                        'Poppins-regular',
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: myTheme
+                                                                        .colorScheme
+                                                                        .primary,
+                                                                  ),
+                                                                  enabledBorder:
+                                                                      OutlineInputBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(5),
+                                                                    borderSide:
+                                                                        BorderSide(
+                                                                      color: Colors
+                                                                          .transparent,
+                                                                    ),
+                                                                  ),
+                                                                  counterText:
+                                                                      '',
+                                                                  border:
+                                                                      OutlineInputBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(5),
+                                                                    borderSide:
+                                                                        BorderSide(
+                                                                      color: Colors
+                                                                          .transparent,
+                                                                    ),
+                                                                  ),
+                                                                ),
                                                               ),
                                                             ),
-                                                            counterText: '',
-                                                            border:
-                                                                OutlineInputBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5),
-                                                              borderSide:
-                                                                  BorderSide(
-                                                                color: Colors
-                                                                    .transparent,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        child:
-                                                            identifyPaymentMethod(
-                                                          selectedValueA,
-                                                          client,
-                                                          invoiceDocumentID,
-                                                          paidAmount,
-                                                          invoiceTotal,
-                                                          today,
-                                                          context,
-                                                          double.parse(remaining
-                                                              .toStringAsFixed(
-                                                                  2)),
-                                                        ),
-                                                      )
+                                                      selectedCoin != null
+                                                          ? selectedValueA !=
+                                                                  null
+                                                              ? Column(
+                                                                  children: [
+                                                                    Container(
+                                                                      margin: const EdgeInsets
+                                                                          .fromLTRB(
+                                                                        0,
+                                                                        10,
+                                                                        0,
+                                                                        0,
+                                                                      ),
+                                                                      child:
+                                                                          Text(
+                                                                        'Subtotal: ${priceFormatForPaidAmount(subTotal, selectedCoin).toString()} ',
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontFamily:
+                                                                              'Poppins-regular',
+                                                                          color: myTheme
+                                                                              .colorScheme
+                                                                              .primary,
+                                                                          fontSize:
+                                                                              10,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Text(
+                                                                      'Descuento ($discountPercentage%): ${priceFormatForPaidAmount(discount, selectedCoin).toString()}',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontFamily:
+                                                                            'Poppins-regular',
+                                                                        color: myTheme
+                                                                            .colorScheme
+                                                                            .primary,
+                                                                        fontSize:
+                                                                            10,
+                                                                      ),
+                                                                    ),
+                                                                    Container(
+                                                                      margin:
+                                                                          const EdgeInsets.fromLTRB(
+                                                                              0,
+                                                                              5,
+                                                                              0,
+                                                                              0),
+                                                                      child: Row(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.spaceAround,
+                                                                          children: [
+                                                                            Text(
+                                                                              'IVA ($percentageTax%): ${priceFormatForPaidAmount(tax, selectedCoin).toString()}',
+                                                                              style: TextStyle(
+                                                                                fontFamily: 'Poppins-regular',
+                                                                                color: myTheme.colorScheme.primary,
+                                                                                fontSize: 10,
+                                                                              ),
+                                                                            ),
+                                                                            Text(
+                                                                              'Total: ${priceFormatForPaidAmount(invoiceTotal, selectedCoin).toString()}',
+                                                                              style: TextStyle(
+                                                                                fontFamily: 'Poppins-regular',
+                                                                                color: myTheme.colorScheme.primary,
+                                                                                fontSize: 10,
+                                                                              ),
+                                                                            ),
+                                                                          ]),
+                                                                    ),
+                                                                    SizedBox(
+                                                                        height:
+                                                                            5),
+                                                                    Text(
+                                                                      // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(2), selectedCoin)}',
+                                                                      'Saldo restante: ${priceFormatForPaidAmount(remaining, selectedCoin)}',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontFamily:
+                                                                            'Poppins-regular',
+                                                                        color: myTheme
+                                                                            .colorScheme
+                                                                            .onPrimaryContainer,
+                                                                        fontSize:
+                                                                            10,
+                                                                      ),
+                                                                    ),
+                                                                    Container(
+                                                                      margin: EdgeInsets
+                                                                          .fromLTRB(
+                                                                              0,
+                                                                              5,
+                                                                              0,
+                                                                              0),
+                                                                      child:
+                                                                          identifyPaymentMethod(
+                                                                        selectedValueA,
+                                                                        client,
+                                                                        invoiceDocumentID,
+                                                                        paidAmount,
+                                                                        invoiceTotal,
+                                                                        today,
+                                                                        context,
+                                                                        double.parse(
+                                                                            remaining.toStringAsFixed(2)),
+                                                                        selectedCoin,
+                                                                      ),
+                                                                    )
+                                                                  ],
+                                                                )
+                                                              : Container()
+                                                          : Container(),
                                                     ],
                                                   ),
                                                 ),

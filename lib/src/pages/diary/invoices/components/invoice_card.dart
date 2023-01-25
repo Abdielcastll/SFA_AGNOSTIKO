@@ -33,6 +33,11 @@ class InvoiceCard extends StatefulWidget {
     this.invoiceNumber,
     this.invoiceTotal,
     this.invoiceDocumentID,
+    this.invoicePercetageTax,
+    this.invoiceTax,
+    this.invoiceSubtotal,
+    this.discount,
+    this.discountPercentage,
   }) : super(key: key);
 
   final invoiceClient;
@@ -44,6 +49,11 @@ class InvoiceCard extends StatefulWidget {
   final invoiceNumber;
   final invoiceTotal;
   final invoiceDocumentID;
+  final invoicePercetageTax;
+  final invoiceTax;
+  final invoiceSubtotal;
+  final discountPercentage;
+  final discount;
 
   @override
   State<InvoiceCard> createState() => _InvoiceCardState();
@@ -175,6 +185,11 @@ class InvoiceCardBody extends StatelessWidget {
                 currentClient,
                 widget.invoiceDocumentID,
                 currentClientDispatchAdress,
+                widget.invoiceSubtotal,
+                widget.invoicePercetageTax,
+                widget.invoiceTax,
+                widget.discountPercentage,
+                widget.discount,
               )
             : modalBottomSheetForInvoices(
                 true,
@@ -196,7 +211,13 @@ class InvoiceCardBody extends StatelessWidget {
                 widget.invoiceTotal,
                 currentClient,
                 widget.invoiceDocumentID,
-                currentClientDispatchAdress);
+                currentClientDispatchAdress,
+                widget.invoiceSubtotal,
+                widget.invoicePercetageTax,
+                widget.invoiceTax,
+                widget.discountPercentage,
+                widget.discount,
+              );
       },
       child: Padding(
         padding: EdgeInsets.only(top: 5, left: 16, right: 16, bottom: 5),
