@@ -19,6 +19,8 @@ import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../payment_method/payment_card.dart';
+
 getFromGallery(context) async {
   XFile? pickedFile =
       await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -124,6 +126,11 @@ identifyPaymentMethod(
   // print('totalOfTheOrder: $totalOfTheOrder');
   print('paidAmount: $paidAmount');
   print('remaining: $remaining');
+
+  if (selectedValueA == 'Tarjeta de Debito' ||
+      selectedValueA == 'Tarjeta de Credito') {
+    return paymentCard(double.parse(paidAmount));
+  }
 
   if (selectedValueA == 'Cheque') {
     return StatefulBuilder(
