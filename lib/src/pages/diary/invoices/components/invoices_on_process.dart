@@ -204,6 +204,12 @@ class _InvoicesOnProcessState extends State<InvoicesOnProcess> {
                             invoiceNumber: invoiceNumber,
                             invoiceTotal: invoiceTotal,
                             invoiceDocumentID: invoiceDocumentID,
+                            invoiceSubtotal: invoice.subTotalAmount,
+                            invoicePercetageTax: invoice.taxPercentage,
+                            invoiceTax: invoice.taxPercentage,
+                            discountPercentage:
+                                invoice.masterDiscountPercentage,
+                            discount: invoice.masterDiscountAmount,
                           );
                         },
                       ),

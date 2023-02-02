@@ -321,44 +321,45 @@ Future createInvoice(
   print(correlativeNumber);
   print(correlativeNumber + 1);
 
-  // await FirebaseFirestore.instance
-  //     .collection('clientes')
-  //     .doc(client.clientDocumentId)
-  //     .collection('pedidos')
-  //     .doc(orderDocumentID)
-  //     .update({
-  //   'facturado': true,
-  //   'nroCorrelativo': correlativeNumber + 1
-  // }).whenComplete(() async {
-  //   return await FirebaseFirestore.instance
-  //       .collection('clientes')
-  //       .doc(client.clientDocumentId)
-  //       .collection('facturas')
-  //       .doc()
-  //       .set({
-  //     'cliente': clientID,
-  //     'descuentoMaestro': discount,
-  //     'fecha': Timestamp.fromDate(DateTime.now()),
-  //     'impuesto': tax,
-  //     'montoTotal': double.parse(totalAsString),
-  //     'nroCorrelativo': correlativeNumber + 1,
-  //     'pagada': isPaid,
-  //     'pagos': payments,
-  //     'pedido': order,
-  //     'porcentajeDescuentoMaestro': discountPercentage,
-  //     'referenciaNotasCredito': referenceCreditNote,
-  //     'subtotal': subTotal,
-  //     'timestampRegistro': register,
-  //     'ultimaModificacion': lastModification,
-  //     'vendedor': seller,
-  //   }).whenComplete(() async {
-  //     return await FirebaseFirestore.instance
-  //         .collection('config')
-  //         .doc('contador_pedidos')
-  //         .update({'numero': correlativeNumber + 1});
-  //   }).whenComplete(() =>
-  //           Fluttertoast.showToast(msg: 'Factura ${correlativeNumber + 1}'));
-  // });
+  await FirebaseFirestore.instance
+      .collection('clientes')
+      .doc(client.clientDocumentId)
+      .collection('pedidos')
+      .doc(orderDocumentID)
+      .update({
+    'facturado': true,
+    'nroCorrelativo': correlativeNumber + 1
+  }).whenComplete(() async {
+    return await FirebaseFirestore.instance
+        .collection('clientes')
+        .doc(client.clientDocumentId)
+        .collection('facturas')
+        .doc()
+        .set({
+      'cliente': clientID,
+      'descuentoMaestro': discount,
+      'fecha': Timestamp.fromDate(DateTime.now()),
+      'impuesto': tax,
+      'montoTotal': double.parse(totalAsString),
+      'nroCorrelativo': correlativeNumber + 1,
+      'pagada': isPaid,
+      'pagos': payments,
+      'pedido': order,
+      'porcentajeDescuentoMaestro': discountPercentage,
+      'porcentajeImpuesto': 16,
+      'referenciaNotasCredito': referenceCreditNote,
+      'subtotal': subTotal,
+      'timestampRegistro': register,
+      'ultimaModificacion': lastModification,
+      'vendedor': seller,
+    }).whenComplete(() async {
+      return await FirebaseFirestore.instance
+          .collection('config')
+          .doc('contador_pedidos')
+          .update({'numero': correlativeNumber + 1});
+    }).whenComplete(() =>
+            Fluttertoast.showToast(msg: 'Factura ${correlativeNumber + 1}'));
+  });
   ////////////////////////
   // // Fluttertoast.showToast(msg: 'Factura ${correlativeNumber}');
   // return await FirebaseFirestore.instance

@@ -49,19 +49,19 @@ List<Invoices> accountInvoicesFromSnapshot(QuerySnapshot snapshot) {
       masterDiscountAmount: doc.data().toString().contains('descuentoMaestro')
           ? doc.get('descuentoMaestro')
           : 'NaN',
-      orderDate:
-          doc.data().toString().contains('fecha') ? doc.get('fecha') : 'NaN',
-      taxAmount: doc.data().toString().contains('impuesto')
-          ? doc.get('impuesto')
-          : 'NaN',
+      orderDate: doc.data().toString().contains('fecha')
+          ? doc.get('fecha')
+          : Timestamp.fromDate(DateTime(2222)),
+      taxAmount:
+          doc.data().toString().contains('impuesto') ? doc.get('impuesto') : 0,
       totalAmount: doc.data().toString().contains('montoTotal')
           ? doc.get('montoTotal')
-          : 'NaN',
+          : 0,
       correlativeNumber: doc.data().toString().contains('nroCorrelativo')
           ? doc.get('nroCorrelativo')
           : 0,
       isPaid:
-          doc.data().toString().contains('pagada') ? doc.get('pagada') : 'NaN',
+          doc.data().toString().contains('pagada') ? doc.get('pagada') : false,
       payments: doc.data().toString().contains('pagos') ? doc.get('pagos') : [],
       orderIdReference: doc.data().toString().contains('pedido')
           ? doc.get('pedido').id
@@ -69,23 +69,22 @@ List<Invoices> accountInvoicesFromSnapshot(QuerySnapshot snapshot) {
       masterDiscountPercentage:
           doc.data().toString().contains('porcentajeDescuentoMaestro')
               ? doc.get('porcentajeDescuentoMaestro')
-              : 'NaN',
+              : 0,
       taxPercentage: doc.data().toString().contains('porcentajeImpuesto')
           ? doc.get('porcentajeImpuesto')
-          : 'NaN',
+          : 0,
       creditNotesReference:
           doc.data().toString().contains('referenciaNotasCredito')
               ? doc.get('referenciaNotasCredito')
-              : 'NaN',
-      subTotalAmount: doc.data().toString().contains('subtotal')
-          ? doc.get('subtotal')
-          : 'NaN',
+              : 0,
+      subTotalAmount:
+          doc.data().toString().contains('subtotal') ? doc.get('subtotal') : 0,
       registerDate: doc.data().toString().contains('timestampRegistro')
           ? doc.get('timestampRegistro')
-          : 'NaN',
+          : Timestamp.fromDate(DateTime(2222)),
       lastModified: doc.data().toString().contains('ultimaModificacion')
           ? doc.get('ultimaModificacion')
-          : 'NaN',
+          : [],
       seller: doc.data().toString().contains('vendedor')
           ? doc.get('vendedor').id
           : 'NaN',
@@ -132,7 +131,7 @@ List<CreditNotes> accountCreditNotesFromSnapshot(QuerySnapshot snapshot) {
       date: doc.data().toString().contains('fecha') ? doc.get('fecha') : 'NaN',
       totalAmount: doc.data().toString().contains('montoTotal')
           ? doc.get('montoTotal')
-          : 'NaN',
+          : 0,
       correlativeNumber: doc.data().toString().contains('nroCorrelativo')
           ? doc.get('nroCorrelativo')
           : 0,

@@ -604,34 +604,77 @@ class _ProductsBodyState extends State<ProductsBody> {
                                             value: product.selected,
                                             onChanged: (value) {
                                               if (product.selected == false) {
-                                                final newProduct =
-                                                    ShoppingCartProduct(
-                                                  productQuantity: 1,
-                                                  code: product.code.toString(),
-                                                  productId:
-                                                      product.code.toString(),
-                                                  listOfPricesId: widget
-                                                      .listOfPrices
-                                                      .toString(),
-                                                  totalAmount:
-                                                      productPrice.toString(),
-                                                  name: product.name,
-                                                  unitPrice:
-                                                      productPrice.toString(),
-                                                  availableStock: productStock,
-                                                  urlPicture: product.catalogue,
-                                                );
-                                                selectedProducts
-                                                    .add(newProduct);
+                                                if (productStock > 0) {
+                                                  final newProduct =
+                                                      ShoppingCartProduct(
+                                                    productQuantity: 1,
+                                                    code:
+                                                        product.code.toString(),
+                                                    productId:
+                                                        product.code.toString(),
+                                                    listOfPricesId: widget
+                                                        .listOfPrices
+                                                        .toString(),
+                                                    totalAmount:
+                                                        productPrice.toString(),
+                                                    name: product.name,
+                                                    unitPrice:
+                                                        productPrice.toString(),
+                                                    availableStock:
+                                                        productStock,
+                                                    urlPicture: product
+                                                        .catalogue
+                                                        .toString(),
+                                                  );
+                                                  setState(() =>
+                                                      product.selected =
+                                                          !product.selected);
+                                                  selectedProducts
+                                                      .add(newProduct);
+                                                } else {
+                                                  Fluttertoast.showToast(
+                                                      msg:
+                                                          'No hay stock disponible de este producto');
+                                                }
                                               } else if (product.selected ==
                                                   true) {
+                                                setState(() =>
+                                                    product.selected =
+                                                        !product.selected);
                                                 selectedProducts.removeWhere(
                                                     (item) =>
                                                         item.code ==
                                                         product.code);
                                               }
-                                              setState(() =>
-                                                  product.selected = value!);
+                                              // if (product.selected == false) {
+                                              //   final newProduct =
+                                              //       ShoppingCartProduct(
+                                              //     productQuantity: 1,
+                                              //     code: product.code.toString(),
+                                              //     productId:
+                                              //         product.code.toString(),
+                                              //     listOfPricesId: widget
+                                              //         .listOfPrices
+                                              //         .toString(),
+                                              //     totalAmount:
+                                              //         productPrice.toString(),
+                                              //     name: product.name,
+                                              //     unitPrice:
+                                              //         productPrice.toString(),
+                                              //     availableStock: productStock,
+                                              //     urlPicture: product.catalogue,
+                                              //   );
+                                              //   selectedProducts
+                                              //       .add(newProduct);
+                                              // } else if (product.selected ==
+                                              //     true) {
+                                              //   selectedProducts.removeWhere(
+                                              //       (item) =>
+                                              //           item.code ==
+                                              //           product.code);
+                                              // }
+                                              // setState(() =>
+                                              //     product.selected = value!);
                                             }),
                                       ),
                                     ],
