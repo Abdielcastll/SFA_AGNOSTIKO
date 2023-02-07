@@ -7,14 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:agnostiko/agnostiko.dart';
 import 'package:intl/intl.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
+import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 /* import '../../config/app_config.dart'; */
 import '../../../dialogs/param_bitmap_dialog.dart';
 import '../../models/transaction_args.dart';
 import '../../services/utils/emv.dart';
-import '../../services/utils/locale.dart';
 import '../../services/utils/keypad.dart';
 import '../../services/utils/parameters.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EmvTransactionInfoView extends StatefulWidget {
   static String route = "/emvTransactionInfo";
@@ -34,11 +35,11 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
 
   @override
   Widget build(BuildContext context) {
-    String approvedStr = "approved".toUpperCase();
-    String declinedStr = "declined".toUpperCase();
-    String failedStr = "failed".toUpperCase();
-    String offlineStr = "offline".toUpperCase();
-    String onlineStr = "online".toUpperCase();
+    String approvedStr = AppLocalizations.of(context)!.approved.toUpperCase();
+    String declinedStr = AppLocalizations.of(context)!.declined.toUpperCase();
+    String failedStr = AppLocalizations.of(context)!.failed.toUpperCase();
+    String offlineStr = AppLocalizations.of(context)!.offline.toUpperCase();
+    String onlineStr = AppLocalizations.of(context)!.online.toUpperCase();
 
     String transactionResultStr = failedStr;
     String transactionOnlineStr = offlineStr;
@@ -61,13 +62,16 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
           transactionResultStr = approvedStr;
           Future.delayed(Duration.zero, () {
             // TODO: REGISTRAR PAGO EN DB
-            registerDebitCreditCardPayment();
+            print('Pago Aprobado - Registrando pago de Tarjeta en DB');
+            registerDebitCreditCardPayment(transactionArgs!.invoice!);
           });
           break;
         case EmvTransactionResult.Denied:
+          print('Pago denegado');
           transactionResultStr = declinedStr;
           break;
         default:
+          print('Pago Fallido');
           break;
       }
 
@@ -75,7 +79,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
           transactionInfo?.onlineRequested == true ? onlineStr : offlineStr;
 
       if (flagPrint) {
-        printTicket();
+        // printTicket();
         flagPrint = false;
       }
     }
@@ -102,14 +106,13 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
         }),
         child: Scaffold(
           appBar: AppBar(
-            title: Text("emvTransactionInfo"),
+            title: Text(AppLocalizations.of(context)!.emvTransactionInfo),
           ),
           body: ListView(
             children: [
               Text(''),
               Text(
-                "${"transaction"} " +
-                    "$transactionResultStr - $transactionOnlineStr",
+                "${AppLocalizations.of(context)!.transaction} $transactionResultStr - $transactionOnlineStr",
                 style: TextStyle(
                   color: this.transactionResult == EmvTransactionResult.Approved
                       ? Colors.green
@@ -123,7 +126,8 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
               Divider(),
               ListTile(
                 enableFeedback: true,
-                title: Text('${"transactionType"} (9C)'),
+                title: Text(
+                    '${AppLocalizations.of(context)!.transactionType} (9C)'),
                 subtitle: Text(
                   infoTags?.transactionType?.toHexStr().toUpperCase() ?? '-',
                 ),
@@ -131,13 +135,14 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
               ),
               ListTile(
                 enableFeedback: true,
-                title: Text('${"amount"} (9F02)'),
+                title: Text('${AppLocalizations.of(context)!.amount} (9F02)'),
                 subtitle: Text(_amountString),
                 onTap: () {},
               ),
               ListTile(
                 enableFeedback: true,
-                title: Text('${"cashbackAmount"} (9F03)'),
+                title: Text(
+                    '${AppLocalizations.of(context)!.cashbackAmount} (9F03)'),
                 subtitle: Text(_amountOtherString),
                 onTap: () {},
               ),
@@ -172,7 +177,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
               ...secondGenerateTiles,
               ListTile(
                 enableFeedback: true,
-                title: Text("appliedCVM"),
+                title: Text(AppLocalizations.of(context)!.appliedCVM),
                 subtitle: Text(_getCvmTypeStr(infoTags?.cvmResults)),
                 onTap: () {},
               ),
@@ -199,6 +204,24 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                 subtitle: Text(infoTags?.atc?.toHexStr().toUpperCase() ?? '-'),
                 onTap: () {},
               ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+                child: OutlinedButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: TextButton.styleFrom(
+                        foregroundColor: myTheme.colorScheme.primary,
+                        backgroundColor: Colors.blue.shade800),
+                    child: Text(
+                      'aceptar'.toUpperCase(),
+                      style: const TextStyle(
+                        fontFamily: 'Poppins-regular',
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )),
+              )
             ],
           ),
         ),
@@ -242,27 +265,27 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     List<PrinterObject> listOfTextLine = [];
     final terminalParameters = await loadTerminalParameters();
 
-    final assetsLogo = AssetImage("assets/img/logo_necs.png");
+    // final assetsLogo = AssetImage("assets/img/logo_necs.png");
 
-    ui.Image logo = await assetsLogo.toUiImage();
+    // ui.Image logo = await assetsLogo.toUiImage();
 
-    final byteDataLogo =
-        await logo.toByteData(format: ui.ImageByteFormat.rawRgba);
-    final rgbaLogo =
+    /* final byteDataLogo =
+        await logo.toByteData(format: ui.ImageByteFormat.rawRgba); */
+    /* final rgbaLogo =
         byteDataLogo?.buffer.asUint8List() ?? Uint8List.fromList([]);
 
     final maxWidth = await getPaperWidth();
-
+ */
     //final img = await bytesToUiImage(rgbaLogo, logo.width, logo.height);
-    final imgLogo =
-        PrinterImage(rgbaLogo, logo.width, logo.height, offsetX: maxWidth / 4);
+    /* final imgLogo =
+        PrinterImage(rgbaLogo, logo.width, logo.height, offsetX: maxWidth / 4); */
 
     //final logo = await assetsLogo.toPrinterImage(offsetX: maxWidth / 4);
 
     final specialFont = "DancingScript";
     final regularFont = "Roboto";
 
-    listOfTextLine.add(imgLogo);
+    /* listOfTextLine.add(imgLogo); */
 
     listOfTextLine.add(PrinterText("Solo pagos\nCDMX".toUpperCase(),
         format: TextFormat(fontSize: 16, fontFamily: specialFont),

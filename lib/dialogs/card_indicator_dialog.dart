@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// Muestra el 'semáforo' para indicación de retiro de tarjeta.
 ///
@@ -8,7 +9,7 @@ void Function(bool) showCardIndicatorDialog(
   BuildContext context,
   bool waiting,
 ) {
-  final pleaseWaitMessage = "pleaseWait";
+  final pleaseWaitMessage = AppLocalizations.of(context)!.pleaseWait;
   final removeCardMessage = "removeCard";
 
   StateSetter? setStateDialog;

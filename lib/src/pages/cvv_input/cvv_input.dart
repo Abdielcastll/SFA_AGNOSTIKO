@@ -11,7 +11,7 @@ import '../../../dialogs/info_dialog.dart';
 import '../../models/transaction_args.dart';
 import '../../widgets/sdk/on_screen_keypad.dart';
 import '../../services/utils/keypad.dart';
-import '../../services/utils/locale.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CvvInputView extends StatefulWidget {
   static String route = "/cvvInput";
@@ -120,7 +120,8 @@ class _CvvInputViewState extends State<CvvInputView> {
           "${transactionArgs.pan}D${transactionArgs.expDate ?? "0000"}";
     }
 
-    showCircularProgressDialog(context, "processing");
+    showCircularProgressDialog(
+        context, AppLocalizations.of(context)!.processing);
 
     try {
       final pharosMsg = await pharosGenerateSaleMsg(transactionArgs);

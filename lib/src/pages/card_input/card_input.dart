@@ -23,6 +23,7 @@ import '../../pages/cvv_input/cvv_input.dart';
 import '../../pages/pin_input/pin_input.dart';
 import '../../services/utils/keypad.dart';
 import '../../services/utils/comm.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CardInputView extends StatefulWidget {
   static String route = "/cardInput";
@@ -111,19 +112,19 @@ class _CardInputViewState extends State<CardInputView> {
     if (_expectedCardTypes.contains(CardType.RF)) {
       widgets.add(CardExpectedWidget(
         imageUrl: "assets/images/tap_card.png",
-        message: "tap",
+        message: AppLocalizations.of(context)!.tap,
       ));
     }
     if (_expectedCardTypes.contains(CardType.IC)) {
       widgets.add(CardExpectedWidget(
         imageUrl: "assets/images/insert_card.png",
-        message: "insertar",
+        message: AppLocalizations.of(context)!.insert,
       ));
     }
     if (_expectedCardTypes.contains(CardType.Magnetic)) {
       widgets.add(CardExpectedWidget(
         imageUrl: "assets/images/swipe_card.png",
-        message: "deslizar",
+        message: AppLocalizations.of(context)!.swipe,
       ));
     }
 
@@ -192,7 +193,8 @@ class _CardInputViewState extends State<CardInputView> {
 
   Future<void> _onICCard() async {
     transactionArgs?.entryMode = EntryMode.Contact;
-    showCircularProgressDialog(context, "pleaseWait");
+    showCircularProgressDialog(
+        context, AppLocalizations.of(context)!.pleaseWait);
     _runTransaction();
   }
 
@@ -298,8 +300,10 @@ class _CardInputViewState extends State<CardInputView> {
 
     Navigator.pop(context); // cerramos el popup anterior
 
-    MPOSController.instance.showMessage("processing");
-    showCircularProgressDialog(context, "processing");
+    MPOSController.instance
+        .showMessage(AppLocalizations.of(context)!.processing);
+    showCircularProgressDialog(
+        context, AppLocalizations.of(context)!.processing);
 
     String? responseCode;
     if (transactionArgs != null) {
@@ -438,7 +442,8 @@ class _CardInputViewState extends State<CardInputView> {
     final transactionArgs = this.transactionArgs;
     if (transactionArgs == null) return;
 
-    showCircularProgressDialog(context, "processing");
+    showCircularProgressDialog(
+        context, AppLocalizations.of(context)!.processing);
 
     final pharosMsg = await pharosGenerateSaleMsg(transactionArgs);
 

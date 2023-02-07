@@ -6,11 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:agnostiko/agnostiko.dart';
 import 'package:flutter/services.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:pwa_sales2go_flutter/dialogs/circular_progress_dialog.dart';
+import 'package:pwa_sales2go_flutter/pharos/pharos.dart';
 import 'package:pwa_sales2go_flutter/src/services/utils/comm.dart';
 
 import '../../services/utils/keypad.dart';
 import '../../services/utils/token.dart';
 import '../auth/wrapper/wrapper.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SplashScreenView extends StatefulWidget {
   static String route = "/";
@@ -177,6 +180,8 @@ class SplashScreenViewState extends State<SplashScreenView> {
         await initSDK();
       }
       print("Librería Universal de Pagos inicializada!");
+      await _validateKeyInitialization();
+
       initCompleted = true;
     } on PlatformException {
       initCompleted = _catchPlatformException();
@@ -204,11 +209,72 @@ class SplashScreenViewState extends State<SplashScreenView> {
     }
   }
 
+  Future<void> _validateKeyInitialization() async {
+    bool keyExists = await cryptoDUKPTCheckKeyExists(1);
+    if (keyExists) {
+      print('Ya existe la llave');
+      _tryKeyInitialization();
+    } else {
+      _tryKeyInitialization();
+    }
+  }
+
+  Future<void> _tryKeyInitialization() async {
+    // showCircularProgressDialog(context, 'Procesando');
+    try {
+      await _keyInitializationPharos();
+
+      print('Llaves inicializadas');
+    } on SocketException catch (e) {
+      Navigator.pop(context);
+
+      print('error ${e.message}');
+    } on StateError catch (e) {
+      Navigator.pop(context);
+      print('error ${e.message}');
+    } catch (e) {
+      // Navigator.pop(context);
+      print('error $e');
+    }
+  }
+
+  Future<void> _keyInitializationPharos() async {
+    // creamos un objeto de "Capítulo X" para la sesión de inicialización de
+    // llaves
+    final capx = CapX(1);
+
+    // solicitamos la llave de transporte encriptada mediante su
+    // correspondiente llave RSA
+    final tk =
+        await capx.getEncryptedTransportKey("assets/capx/public_pharos.pem");
+    // generamos el mensaje de solicitud para el host
+    final pharosMsgKeyInit = await pharosGenerateKeyInitialization(
+      cipheredTK: tk.keyData,
+      kcv: tk.kcv,
+    );
+    print('Generar mensaje a pharos');
+    print(pharosMsgKeyInit);
+    final pharosResponse = await processKeyInitPharos(pharosMsgKeyInit);
+    print('pharos responde');
+
+    final encryptedK0 = pharosResponse.encryptedNewKey;
+    final ksn = pharosResponse.newKeyKsn;
+    // TODO - habilitar en entorno de producción
+    //capx.loadEncryptedIPEK(ksn.toHexBytes(), encryptedK0.toHexBytes());
+
+    // cargamos la llave fija del entorno de prueba
+    // esta llave está encriptada con un KEK de valor '33333333333333333333333333333333'
+    // la llave en claro es 'A66AB26590D3186E8A4C5A40D6F4F15D'
+    await cryptoLoadIPEK(1, "FFFF7790169673800001".toHexBytes(),
+        "b8b2fc9b033410594aed0b45f571bb04".toHexBytes(),
+        kekIndex: 1);
+  }
+
   @override
   Widget build(BuildContext context) {
     String label;
     if (_cardMsg == "") {
-      label = 'loading';
+      label = AppLocalizations.of(context)!.loading;
     } else {
       label = _cardMsg;
     }

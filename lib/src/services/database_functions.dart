@@ -8,6 +8,7 @@ import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pwa_sales2go_flutter/src/models/transaction_args.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 // Funciones de Visitas
@@ -384,6 +385,99 @@ Future createInvoice(
   //   'ultimaModificacion': lastModification,
   //   'vendedor': seller,
   // });
+}
+
+//Registrar pagos de Tarjeta de Credito/Debito
+
+Future registerDebitCreditCardPayment(InvoiceData data) async {
+  Client client = data.client;
+  var invoiceDocumentID = data.invoiceDocumentID;
+  var currency = data.currency;
+  var amount = data.amount;
+  var totalOfTheOrder = data.totalOfTheOrder;
+  var currentCoin = data.currentCoin;
+  var date = data.date;
+  var remaining = data.remaining;
+
+  print('/// Registrar pago en factura: $invoiceDocumentID ///');
+
+  final Map<String, double> exchangeRate = {
+    'BTC': 0.00011,
+    'EUR': 0.89,
+    'VED': 4.58,
+    'MXN': 19.43,
+  };
+
+  late var selectedCoinExchangeRate;
+
+  if (currency.toString().contains('USD')) {
+    selectedCoinExchangeRate = 1;
+  } else if (currency.toString().contains('VED')) {
+    selectedCoinExchangeRate = exchangeRate['VED'];
+  } else if (currency.toString().contains('EUR')) {
+    selectedCoinExchangeRate = exchangeRate['EUR'];
+  } else if (currency.toString().contains('BTC')) {
+    selectedCoinExchangeRate = exchangeRate['BTC'];
+  } else if (currency.toString().contains('MXN')) {
+    selectedCoinExchangeRate = exchangeRate['MXN'];
+  }
+
+  const cancelled = false;
+  final selectedCurrency = currency.toString();
+  const concillied = false;
+  final timestampDate = Timestamp.fromDate(date);
+  const method = 'Tarjeta Debito/Credito';
+  final paidAmount = amount;
+
+  try {
+    return await FirebaseFirestore.instance
+        .collection('clientes')
+        .doc(client.clientDocumentId)
+        .collection('facturas')
+        .doc(invoiceDocumentID)
+        .update({
+      'pagos': FieldValue.arrayUnion(
+        [
+          <String, dynamic>{
+            'anulado': cancelled,
+            'codigoMoneda': selectedCurrency,
+            'conciliado': concillied,
+            'fecha': timestampDate,
+            'metodo': method,
+            'monto': paidAmount,
+            'montoOriginal': paidAmount,
+            // 'nroNotaCredito': 0,
+            'tasaDeCambio': selectedCoinExchangeRate,
+          },
+        ],
+      ),
+    }).whenComplete(() {
+      try {
+        if (remaining - amount <= 0) {
+          FirebaseFirestore.instance
+              .collection('clientes')
+              .doc(client.clientDocumentId)
+              .collection('facturas')
+              .doc(invoiceDocumentID)
+              .update({
+            'pagada': true,
+          });
+        }
+      } catch (e) {
+        print(e);
+      }
+    });
+  } catch (e) {
+    print(e);
+  }
+
+  if (paidAmount > remaining) {
+    Fluttertoast.showToast(
+      msg: 'La cantidad pagada excede de la deuda pendiente',
+      backgroundColor: myTheme.colorScheme.secondary,
+      textColor: Colors.white,
+    );
+  }
 }
 
 //Registrar pagos de cheques

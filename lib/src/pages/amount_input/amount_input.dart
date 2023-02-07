@@ -11,6 +11,7 @@ import '../pan_input/pan_input.dart';
 import '../../widgets/sdk/on_screen_keypad.dart';
 import '../../services/utils/emv.dart';
 import '../../services/utils/keypad.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AmountInputView extends StatefulWidget {
   static String route = "/amountInput";
@@ -136,7 +137,7 @@ class _AmountInputViewState extends State<AmountInputView> {
             // mostramos un popup mientras se realiza la carga de parámetros EMV
             showCircularProgressDialog(
               context,
-              "pleaseWait",
+              AppLocalizations.of(context)!.pleaseWait,
             );
             await emvPreTransaction();
             Navigator.pop(context); // y cerramos el popup antes de seguir
