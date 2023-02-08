@@ -41,6 +41,7 @@ dependencies:
   agnostiko:
     path: "../agnostiko"
   # Firebase
+  firebase_core_platform_interface: 4.5.1
   cloud_firestore: ^3.1.15
   firebase_auth: ^3.3.18
   firebase_storage: ^10.2.16
@@ -100,7 +101,7 @@ flutter:
     - assets/images/
     - assets/params/
     - assets/capx/
-    - assets/.env
+    - .env
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
