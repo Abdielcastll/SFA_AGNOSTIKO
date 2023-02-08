@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 import '../../../pharos/key_init_response.dart';
 import 'package:flutter/foundation.dart';
 
@@ -14,7 +16,7 @@ import '../../../pharos/void_response.dart';
 import 'iso8583.dart';
 
 final pharosUsername = "NECS01Oeyx";
-final pharosPassword = "";
+final pharosPassword = dotenv.env['pharosPassword'] ?? '';
 
 Future<Uint8List> getToken(String serialNumber) async {
   final response = await http.get(
