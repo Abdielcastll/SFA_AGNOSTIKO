@@ -783,109 +783,110 @@ class _CheckoutBodyState extends State<CheckoutBody> {
               ],
             ),
           ),
-          widget.client!.name.toString().contains('000A Cliente Default')
-              ? Container(
-                  margin: const EdgeInsets.fromLTRB(20, 0, 20, 30),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  width: MediaQuery.of(context).size.width,
-                  height: 50,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        // Pasar de una vez a pantalla de pago
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: myTheme.colorScheme.primary,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'FACTURAR',
-                            style: TextStyle(
-                              fontFamily: 'Poppins-regular',
-                              fontSize: 14,
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
-                            child: Icon(
-                              SimpleLineIcons.arrow_right,
-                              size: 14,
-                              color: Colors.grey.shade300,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                )
-              : Container(
-                  margin: const EdgeInsets.fromLTRB(20, 0, 20, 30),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  width: MediaQuery.of(context).size.width,
-                  height: 50,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        final orderActive =
-                            Provider.of<OrderProvider>(context, listen: false);
+          // widget.client!.name.toString().contains('000A Cliente Default')
+          // ?
+          // Container(
+          //     margin: const EdgeInsets.fromLTRB(20, 0, 20, 30),
+          //     decoration: BoxDecoration(
+          //       borderRadius: BorderRadius.circular(20),
+          //     ),
+          //     width: MediaQuery.of(context).size.width,
+          //     height: 50,
+          //     child: ClipRRect(
+          //       borderRadius: BorderRadius.circular(16),
+          //       child: ElevatedButton(
+          //         onPressed: () async {
+          //           // Pasar de una vez a pantalla de pago
+          //         },
+          //         style: ElevatedButton.styleFrom(
+          //           backgroundColor: myTheme.colorScheme.primary,
+          //         ),
+          //         child: Row(
+          //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //           children: [
+          //             const Text(
+          //               'FACTURAR',
+          //               style: TextStyle(
+          //                 fontFamily: 'Poppins-regular',
+          //                 fontSize: 14,
+          //               ),
+          //             ),
+          //             Container(
+          //               margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+          //               child: Icon(
+          //                 SimpleLineIcons.arrow_right,
+          //                 size: 14,
+          //                 color: Colors.grey.shade300,
+          //               ),
+          //             ),
+          //           ],
+          //         ),
+          //       ),
+          //     ),
+          //   )
+          // :
+          Container(
+            margin: const EdgeInsets.fromLTRB(20, 0, 20, 30),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            width: MediaQuery.of(context).size.width,
+            height: 50,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: ElevatedButton(
+                onPressed: () async {
+                  final orderActive =
+                      Provider.of<OrderProvider>(context, listen: false);
 
-                        if (selectedValue2 != null) {
-                          var result = await createOrder(
-                            widget.client,
-                            userUid,
-                            commentary,
-                            masterDiscountTotal,
-                            widget.cart,
-                            selectedValue2,
-                            selectedValue,
-                            today,
-                            taxTotal,
-                            numberOrder,
-                            widget.subTotal,
-                            totalOfTheOrder,
-                          );
-                          orderActive.setOrder(false, Clients());
-                          completeOrder();
-                        } else {
-                          Fluttertoast.showToast(
-                              msg:
-                                  'Seleccione un tipo de Negociacion por favor');
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: myTheme.colorScheme.primary,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'CONTINUAR',
-                            style: TextStyle(
-                              fontFamily: 'Poppins-regular',
-                              fontSize: 14,
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
-                            child: Icon(
-                              SimpleLineIcons.arrow_right,
-                              size: 14,
-                              color: Colors.grey.shade300,
-                            ),
-                          ),
-                        ],
+                  if (selectedValue2 != null) {
+                    var result = await createOrder(
+                      widget.client,
+                      userUid,
+                      commentary,
+                      masterDiscountTotal,
+                      widget.cart,
+                      selectedValue2,
+                      selectedValue,
+                      today,
+                      taxTotal,
+                      numberOrder,
+                      widget.subTotal,
+                      totalOfTheOrder,
+                    );
+                    orderActive.setOrder(false, Clients());
+                    completeOrder();
+                  } else {
+                    Fluttertoast.showToast(
+                        msg: 'Seleccione un tipo de Negociacion por favor');
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: myTheme.colorScheme.primary,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'CONTINUAR',
+                      style: TextStyle(
+                        fontFamily: 'Poppins-regular',
+                        fontSize: 14,
                       ),
                     ),
-                  ),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+                      child: Icon(
+                        SimpleLineIcons.arrow_right,
+                        size: 14,
+                        color: Colors.grey.shade300,
+                      ),
+                    ),
+                  ],
                 ),
+              ),
+            ),
+          ),
         ],
       ),
     );
