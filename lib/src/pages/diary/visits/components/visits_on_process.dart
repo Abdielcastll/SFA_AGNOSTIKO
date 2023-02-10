@@ -96,7 +96,19 @@ class _VisitsOnProcessState extends State<VisitsOnProcess> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(formattedDate),
+                    Text(currentDay !=
+                            Timestamp.fromDate(DateTime(
+                              DateTime.now().year + 99,
+                              DateTime.now().month + 99,
+                              DateTime.now().day + 99,
+                              0,
+                              0,
+                              0,
+                              0,
+                              0,
+                            ))
+                        ? formattedDate
+                        : 'Todos'),
                     IconButton(
                       onPressed: () async {
                         final currentDayProvider =
@@ -124,6 +136,33 @@ class _VisitsOnProcessState extends State<VisitsOnProcess> {
                         Icons.calendar_month,
                         color: myTheme.colorScheme.primary.withOpacity(0.8),
                         size: 20,
+                      ),
+                    ),
+                    Container(
+                      width: 40,
+                      child: IconButton(
+                        onPressed: () {
+                          final currentDayProvider =
+                              Provider.of<CounterLimitFirestore>(context,
+                                  listen: false);
+                          setState(() {
+                            currentDayProvider
+                                .setNewDayVisits(Timestamp.fromDate(DateTime(
+                              DateTime.now().year + 99,
+                              DateTime.now().month + 99,
+                              DateTime.now().day + 99,
+                              0,
+                              0,
+                              0,
+                              0,
+                              0,
+                            )));
+                          });
+                        },
+                        icon: Icon(
+                          Icons.disabled_by_default_outlined,
+                          color: myTheme.colorScheme.primary,
+                        ),
                       ),
                     ),
                   ],

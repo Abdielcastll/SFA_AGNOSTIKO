@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
@@ -10,7 +9,6 @@ import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/loading/loading_widget.dart';
 
 class ClientsPage extends StatefulWidget {
   const ClientsPage({Key? key}) : super(key: key);
@@ -125,12 +123,12 @@ class _ClientsBodyState extends State<ClientsBody> {
 
   @override
   Widget build(BuildContext context) {
-    final clients = Provider.of<List<Clients>?>(context) ?? [];
+    List<Clients>? clients = Provider.of<List<Clients>?>(context) ?? [];
     List<Clients>? clientsList = clients;
     // final currentUserActive =
     //     Provider.of<CurrentUserProvider>(context).currentUserInfo;
     // print(
-    //     clientsList.where((element) => element.zone == currentUserActive.zone));
+    //     clientsList.where((element) => element.zone == cur rentUserActive.zone));
     // print(clients);
     return SingleChildScrollView(
       child: Column(
