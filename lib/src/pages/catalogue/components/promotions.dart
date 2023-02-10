@@ -88,9 +88,9 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
                   child: Column(
                     children: [
                       Container(
-                        margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                        height: 120,
-                        width: 260,
+                        margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        height: 140,
+                        width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16),
                         ),
@@ -102,11 +102,12 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      // const SizedBox(height: 20),
                       Container(
-                        margin: const EdgeInsets.only(left: 12),
+                        margin: const EdgeInsets.only(top: 15),
                         width: 280,
                         height: 20,
+                        alignment: Alignment.center,
                         child: Text(
                           AppLocalizations.of(context)!.promotionsUnavaliable,
                           maxLines: 1,
@@ -116,7 +117,7 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
                             fontFamily: 'Poppins-regular',
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
-                            color: myTheme.colorScheme.secondary,
+                            color: myTheme.colorScheme.primary,
                           ),
                         ),
                       ),

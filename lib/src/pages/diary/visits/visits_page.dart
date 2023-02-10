@@ -22,6 +22,7 @@ class _VisitsPageState extends State<VisitsPage> {
   @override
   Widget build(BuildContext context) {
     final currentDayProvider = Provider.of<CounterLimitFirestore>(context);
+    final currentDay = currentDayProvider.currentDayVisits;
 
     final currentDayDateTime = currentDayProvider.currentDayVisits.toDate();
     DateTime tomorrow = DateTime(currentDayDateTime.year,
@@ -29,16 +30,37 @@ class _VisitsPageState extends State<VisitsPage> {
 
     final user = Provider.of<UserModel?>(context);
     return StreamProvider<List<Visits>>.value(
-      value: FirebaseFirestore.instance
-          .collection('usuarios')
-          .doc(user?.uid)
-          .collection('visitas')
-          .orderBy('fecha', descending: true)
-          .where('fecha',
-              isGreaterThanOrEqualTo: currentDayProvider.currentDayVisits)
-          .where('fecha', isLessThan: tomorrow)
-          .snapshots()
-          .map(visitsFromSnasphot),
+      value: currentDay !=
+              Timestamp.fromDate(DateTime(
+                DateTime.now().year + 99,
+                DateTime.now().month + 99,
+                DateTime.now().day + 99,
+                0,
+                0,
+                0,
+                0,
+                0,
+              ))
+          ? FirebaseFirestore.instance
+              .collection('usuarios')
+              .doc(user?.uid)
+              .collection('visitas')
+              .orderBy('fecha', descending: true)
+              .where('fecha',
+                  isGreaterThanOrEqualTo: currentDayProvider.currentDayVisits)
+              .where('fecha', isLessThan: tomorrow)
+              .snapshots()
+              .map(visitsFromSnasphot)
+          : FirebaseFirestore.instance
+              .collection('usuarios')
+              .doc(user?.uid)
+              .collection('visitas')
+              .orderBy('fecha', descending: true)
+              // .where('fecha',
+              //     isGreaterThanOrEqualTo: currentDayProvider.currentDayVisits)
+              // .where('fecha', isLessThan: tomorrow)
+              .snapshots()
+              .map(visitsFromSnasphot),
       initialData: const [],
       catchError: (context, error) {
         // print(error);

@@ -29,7 +29,7 @@ class ClientList extends StatefulWidget {
 
 class _ClientListState extends State<ClientList> {
   final searchClientController = TextEditingController();
-  bool isDescending = false;
+  bool isDescending = true;
 
   // Esta funcion se llama cada vez que el text field cambia
   // void _searchClient(String query) {

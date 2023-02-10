@@ -2,19 +2,19 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:pwa_sales2go_flutter/examples/clients_example.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
-import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
-import 'package:pwa_sales2go_flutter/src/pages/catalogue/catalogue_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/place_order/components/product_in_cart.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
+import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
-import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/checkout_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -31,6 +31,7 @@ class SelectedProducts extends StatefulWidget {
 }
 
 class _SelectedProductsState extends State<SelectedProducts> {
+  String? scanResult;
   late String? clientPriceList = widget.client?.prices;
   late Stream<List<ShoppingCartProduct>> streamShoppingCartProducts;
 
@@ -40,9 +41,177 @@ class _SelectedProductsState extends State<SelectedProducts> {
     streamShoppingCartProducts = objectBox.getShoppingCartProducts();
   }
 
+  Future scanBarcode() async {
+    String scanResult = '';
+    try {
+      scanResult = await FlutterBarcodeScanner.scanBarcode(
+        '#ff6666',
+        'Cancelar',
+        true,
+        ScanMode.BARCODE,
+      );
+    } on PlatformException {
+      scanResult = "Failed to get platform version.";
+      print(scanResult);
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      this.scanResult = scanResult;
+    });
+
+    // await addProductFromBarCode(scanResult);
+  }
+
+  addProductFromBarcodeResult(
+      String? scanResult, List<ShoppingCartProduct>? productsInCart) async {
+    print('productsInCart: $productsInCart');
+    final String? productScanResult = scanResult;
+    print('BARCODE SCAN RESULT: ////////////////////////');
+    print('ScanResult: $scanResult');
+    List<ShoppingCartProduct> scannedProducts = [];
+    try {
+      final stockProducts = await FirebaseFirestore.instance
+          .collection('stock')
+          .doc('productos')
+          .get()
+          .then(
+        (value) {
+          return value['valores'];
+        },
+      );
+      print(stockProducts);
+      final priceProducts = await FirebaseFirestore.instance
+          .collection('listas_de_precios')
+          .doc(clientPriceList.toString())
+          .get()
+          .then((value) {
+        return value['precios'];
+      });
+      print(priceProducts);
+
+      await FirebaseFirestore.instance
+          .collection('productos')
+          .doc(productScanResult)
+          .get()
+          .then((doc) {
+        const stock = 999;
+        const productQuantity = 1;
+        final code = doc.data().toString().contains('codigo')
+            ? doc.get('codigo')
+            : 'NaN';
+        final pricesList = clientPriceList;
+        final name = doc.data().toString().contains('nombre')
+            ? doc.get('nombre')
+            : 'NaN';
+        final catalogue = doc.data().toString().contains('catalogo')
+            ? doc.get('catalogo').id
+            : 'NaN';
+        final productPrice = priceProducts[doc.get('codigo')] ?? '0';
+        final productTotalAmount = productPrice * productQuantity;
+
+        print('stock:$stock');
+        print('productQuantity:$productQuantity');
+        print('code:$code');
+        print('pricesList:$pricesList');
+        print('name:$name');
+        print('catalogue:$catalogue');
+        print('productPrice:$productPrice');
+        print('productTotalAmount:$productTotalAmount');
+
+        if (productsInCart!.isEmpty) {
+          print('Kaede empty');
+          final result = ShoppingCartProduct(
+            availableStock: stock,
+            productQuantity: productQuantity,
+            code: code,
+            listOfPricesId: pricesList,
+            name: name,
+            productId: code,
+            unitPrice: productPrice.toString(),
+            totalAmount: productTotalAmount.toString(),
+            urlPicture: catalogue.toString(),
+          );
+          print(result);
+          scannedProducts.add(result);
+          objectBox.insertShoppingCartProduct(result);
+        } else {
+          bool isProductAlreadyInCart = false;
+          print('Kaede not empty');
+          productsInCart.forEach((element) {
+            if (element.code == code) {
+              print('Kaede is already in the cart, increasing 1');
+              isProductAlreadyInCart = true;
+
+              Fluttertoast.showToast(msg: '${element.code} + 1');
+              final result = ShoppingCartProduct(
+                id: element.id,
+                availableStock: element.availableStock,
+                productQuantity: element.productQuantity! + 1,
+                code: element.code,
+                listOfPricesId: element.listOfPricesId,
+                name: element.name,
+                productId: code,
+                unitPrice: element.unitPrice.toString(),
+                totalAmount: element.totalAmount.toString(),
+                urlPicture: element.urlPicture.toString(),
+              );
+              objectBox.insertShoppingCartProduct(result);
+            }
+          });
+          if (isProductAlreadyInCart == false) {
+            print('Kaede is not in the order, adding now');
+
+            final result = ShoppingCartProduct(
+              availableStock: stock,
+              productQuantity: productQuantity,
+              code: code,
+              listOfPricesId: pricesList,
+              name: name,
+              productId: code,
+              unitPrice: productPrice.toString(),
+              totalAmount: productTotalAmount.toString(),
+              urlPicture: catalogue.toString(),
+            );
+            objectBox.insertShoppingCartProduct(result);
+          }
+        }
+
+        // productsInCart?.forEach((element) {
+        //   if (element.code == code) {
+        //     print('Kaede 1');
+        //   } else {
+        //     print('Kaede 2');
+        //   }
+        // });
+
+        // final result = ShoppingCartProduct(
+        //   availableStock: stock,
+        //   productQuantity: productQuantity,
+        //   code: code,
+        //   listOfPricesId: pricesList,
+        //   name: name,
+        //   productId: code,
+        //   unitPrice: productPrice.toString(),
+        //   totalAmount: productTotalAmount.toString(),
+        //   urlPicture: catalogue.toString(),
+        // );
+        // print(result);
+        // scannedProducts.add(result);
+        // objectBox.insertManyShoppingCartProducts(scannedProducts);
+      });
+    } catch (e) {
+      print(e);
+    }
+
+    print(scannedProducts);
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
+    print("clientPriceList: $clientPriceList");
 
     priceFormat(productPrice) {
       double correctAmount = double.parse(productPrice.toStringAsFixed(2));
@@ -111,7 +280,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                   children: [
                     products!.isEmpty
                         ? SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.55,
+                            height: MediaQuery.of(context).size.height * 0.50,
                             width: MediaQuery.of(context).size.width,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -140,7 +309,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                           )
                         : Container(
                             color: Colors.grey.shade100,
-                            height: MediaQuery.of(context).size.height * 0.55,
+                            height: MediaQuery.of(context).size.height * 0.50,
                             width: MediaQuery.of(context).size.width,
                             child: ListView.builder(
                               physics: const BouncingScrollPhysics(),
@@ -571,7 +740,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                   ),
                                 ),
                                 Text(
-                                  '${priceFormat(subTotal)}',
+                                  priceFormat(subTotal),
                                   style: const TextStyle(
                                     fontFamily: 'Poppins-regular',
                                     fontSize: 14,
@@ -582,37 +751,90 @@ class _SelectedProductsState extends State<SelectedProducts> {
                               ],
                             ),
                           ),
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            width: 340,
-                            height: 40,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(16),
-                              child: ElevatedButton.icon(
-                                onPressed: () {
-                                  Navigator.popUntil(
-                                      context, (route) => route.isFirst);
-                                },
-                                icon: const Icon(
-                                  MaterialCommunityIcons.tag_plus,
-                                  size: 17,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
                                 ),
-                                label: Text(
-                                  AppLocalizations.of(context)!.addProducts,
-                                  style: const TextStyle(
-                                    fontFamily: 'Poppins-regular',
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                    myTheme.colorScheme.primary,
+                                width: 250,
+                                height: 40,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(16),
+                                  child: ElevatedButton.icon(
+                                    onPressed: () {
+                                      Navigator.popUntil(
+                                        context,
+                                        (route) => route.isFirst,
+                                      );
+                                    },
+                                    icon: const Icon(
+                                      MaterialCommunityIcons.tag_plus,
+                                      size: 17,
+                                    ),
+                                    label: Text(
+                                      AppLocalizations.of(context)!.addProducts,
+                                      style: const TextStyle(
+                                        fontFamily: 'Poppins-regular',
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                        myTheme.colorScheme.primary,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                width: 80,
+                                height: 40,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(16),
+                                  child: FloatingActionButton(
+                                    backgroundColor:
+                                        myTheme.colorScheme.primary,
+                                    foregroundColor: Colors.white,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(15.0),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      scanBarcode().whenComplete(
+                                        () {
+                                          if (scanResult != '-1') {
+                                            print("scanResult: $scanResult");
+                                            Fluttertoast.showToast(
+                                                msg: 'scanResult: $scanResult');
+                                          }
+                                        },
+                                      ).whenComplete(
+                                        () {
+                                          try {
+                                            print(
+                                                'Escaneando producto de la DB: ///////////////////');
+                                            addProductFromBarcodeResult(
+                                                scanResult.toString(),
+                                                products);
+                                          } catch (e) {
+                                            print('ERROR //////////////////');
+                                            print(e);
+                                          }
+                                        },
+                                      );
+                                    },
+                                    child: const Icon(FontAwesome.barcode),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           const SizedBox(height: 10),
                           products.isEmpty
@@ -696,7 +918,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           const Text(
-                                            'CONTINUAR',
+                                            'Continuar',
                                             style: TextStyle(
                                               fontFamily: 'Poppins-regular',
                                               fontSize: 14,
