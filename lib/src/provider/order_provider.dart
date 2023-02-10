@@ -9,9 +9,31 @@ class OrderProvider extends ChangeNotifier {
     prices: 'GENER-03',
   );
 
+  int _navigationIndex = 0;
+  int _diaryIndex = 0;
+
   bool? get orderActive => _orderActive;
 
   Clients? get clientForTheOrder => _clientForTheOrder;
+
+  int? get navigationIndex => _navigationIndex;
+  int? get diaryIndex => _diaryIndex;
+
+  void setNavigationIndex(int? newIndex) {
+    if (newIndex != null) {
+      _navigationIndex = newIndex;
+      notifyListeners();
+    }
+    return;
+  }
+
+  void setDiaryIndex(int? newDiaryIndex) {
+    if (newDiaryIndex != null) {
+      _diaryIndex = newDiaryIndex;
+      notifyListeners();
+    }
+    return;
+  }
 
   void setOrder(bool? orderActive, Clients? client) {
     if (orderActive == true) {

@@ -43,14 +43,33 @@ class _OrdersPageState extends State<OrdersPage> {
     return MultiProvider(
       providers: [
         StreamProvider<List<Orders>?>.value(
-          value: FirebaseFirestore.instance
-              .collectionGroup('pedidos')
-              // .where('vendedor', isEqualTo: userDoc)
-              .where('fecha', isGreaterThanOrEqualTo: currentDay)
-              .where('fecha', isLessThan: tomorrow)
-              .orderBy('fecha')
-              .snapshots()
-              .map(ordersFromSnapshot),
+          value: currentDay !=
+                  Timestamp.fromDate(DateTime(
+                    DateTime.now().year + 99,
+                    DateTime.now().month + 99,
+                    DateTime.now().day + 99,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                  ))
+              ? FirebaseFirestore.instance
+                  .collectionGroup('pedidos')
+                  // .where('vendedor', isEqualTo: userDoc)
+                  .where('fecha', isGreaterThanOrEqualTo: currentDay)
+                  .where('fecha', isLessThan: tomorrow)
+                  .orderBy('fecha')
+                  .snapshots()
+                  .map(ordersFromSnapshot)
+              : FirebaseFirestore.instance
+                  .collectionGroup('pedidos')
+                  // .where('vendedor', isEqualTo: userDoc)
+                  // .where('fecha', isGreaterThanOrEqualTo: currentDay)
+                  // .where('fecha', isLessThan: tomorrow)
+                  .orderBy('fecha')
+                  .snapshots()
+                  .map(ordersFromSnapshot),
           initialData: const [],
           catchError: (context, error) {
             print(error);

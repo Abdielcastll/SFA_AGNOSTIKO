@@ -313,136 +313,157 @@ class _CheckoutBodyState extends State<CheckoutBody> {
               ],
             ),
           ),
-          Container(
-            margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                  child: Text(
-                    AppLocalizations.of(context)!.orderDeliveryAddress,
-                    style: TextStyle(
-                      color: myTheme.colorScheme.primary,
-                      fontFamily: 'Poppins-regular',
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.fromLTRB(10, 5, 10, 10),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton2(
-                      isExpanded: true,
-                      hint: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              '$selectedValue',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: myTheme.colorScheme.primary,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                      items: items
-                          .map(
-                            (item) => DropdownMenuItem<String>(
-                              value: item,
-                              child: Text(
-                                item,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: myTheme.colorScheme.primary,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          )
-                          .toList(),
-                      value: selectedValue,
-                      onChanged: (value) {
-                        setState(
-                          () {
-                            selectedValue = value as String;
-                            if (value == 'Fiscal') {
-                              isFiscalSelected = true;
-                            } else if (value == 'Despacho') {
-                              isFiscalSelected = false;
-                            }
-                          },
-                        );
-                      },
-                      icon: const Icon(
-                        Icons.arrow_forward_ios_outlined,
-                      ),
-                      iconSize: 11,
-                      iconEnabledColor:
-                          myTheme.colorScheme.primary.withOpacity(0.5),
-                      iconDisabledColor: Colors.grey,
-                      buttonHeight: 50,
-                      buttonWidth: 150,
-                      buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-                      buttonDecoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(
-                          color: myTheme.colorScheme.primary.withOpacity(0.3),
-                        ),
-                        color: Colors.white,
-                      ),
-                      buttonElevation: 0,
-                      itemHeight: 40,
-                      itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                      dropdownMaxHeight: 200,
-                      dropdownWidth: 200,
-                      dropdownPadding: null,
-                      dropdownDecoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white,
-                      ),
-                      dropdownElevation: 8,
-                      scrollbarRadius: const Radius.circular(10),
-                      scrollbarThickness: 6,
-                      scrollbarAlwaysShow: true,
-                      offset: const Offset(-20, 0),
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: myTheme.colorScheme.primary.withOpacity(0.3),
-                    ),
-                  ),
+          widget.client!.name.toString().contains('000A Cliente Default')
+              ? Container(
+                  height: 50,
                   width: MediaQuery.of(context).size.width,
-                  child: Text(
-                    isFiscalSelected
-                        ? widget.client?.fiscalAdress
-                        : widget.client?.dispatchAdress,
-                    style: const TextStyle(
-                      fontFamily: 'Poppins-regular',
-                      fontSize: 14,
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                  child: Center(
+                    child: Text(
+                      'Dirección por defecto seleccionada',
+                      style: TextStyle(
+                        color: myTheme.colorScheme.primary,
+                        fontFamily: 'Poppins-regular',
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
+                )
+              : Container(
+                  margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                        child: Text(
+                          AppLocalizations.of(context)!.orderDeliveryAddress,
+                          style: TextStyle(
+                            color: myTheme.colorScheme.primary,
+                            fontFamily: 'Poppins-regular',
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(10, 5, 10, 10),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton2(
+                            isExpanded: true,
+                            hint: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    '$selectedValue',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: myTheme.colorScheme.primary,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            items: items
+                                .map(
+                                  (item) => DropdownMenuItem<String>(
+                                    value: item,
+                                    child: Text(
+                                      item,
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: myTheme.colorScheme.primary,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                            value: selectedValue,
+                            onChanged: (value) {
+                              setState(
+                                () {
+                                  selectedValue = value as String;
+                                  if (value == 'Fiscal') {
+                                    isFiscalSelected = true;
+                                  } else if (value == 'Despacho') {
+                                    isFiscalSelected = false;
+                                  }
+                                },
+                              );
+                            },
+                            icon: const Icon(
+                              Icons.arrow_forward_ios_outlined,
+                            ),
+                            iconSize: 11,
+                            iconEnabledColor:
+                                myTheme.colorScheme.primary.withOpacity(0.5),
+                            iconDisabledColor: Colors.grey,
+                            buttonHeight: 50,
+                            buttonWidth: 150,
+                            buttonPadding:
+                                const EdgeInsets.only(left: 14, right: 14),
+                            buttonDecoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(
+                                color: myTheme.colorScheme.primary
+                                    .withOpacity(0.3),
+                              ),
+                              color: Colors.white,
+                            ),
+                            buttonElevation: 0,
+                            itemHeight: 40,
+                            itemPadding:
+                                const EdgeInsets.only(left: 14, right: 14),
+                            dropdownMaxHeight: 200,
+                            dropdownWidth: 200,
+                            dropdownPadding: null,
+                            dropdownDecoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white,
+                            ),
+                            dropdownElevation: 8,
+                            scrollbarRadius: const Radius.circular(10),
+                            scrollbarThickness: 6,
+                            scrollbarAlwaysShow: true,
+                            offset: const Offset(0, 0),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: myTheme.colorScheme.primary.withOpacity(0.3),
+                          ),
+                        ),
+                        width: MediaQuery.of(context).size.width,
+                        child: Text(
+                          isFiscalSelected
+                              ? widget.client?.fiscalAdress
+                              : widget.client?.dispatchAdress,
+                          style: const TextStyle(
+                            fontFamily: 'Poppins-regular',
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ],
-            ),
-          ),
           Container(
             margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
             padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -697,7 +718,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       scrollbarRadius: const Radius.circular(10),
                       scrollbarThickness: 6,
                       scrollbarAlwaysShow: true,
-                      offset: const Offset(-20, 0),
+                      offset: const Offset(0, 0),
                     ),
                   ),
                 ),
@@ -762,68 +783,109 @@ class _CheckoutBodyState extends State<CheckoutBody> {
               ],
             ),
           ),
-          Container(
-            margin: const EdgeInsets.fromLTRB(20, 0, 20, 30),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            width: MediaQuery.of(context).size.width,
-            height: 50,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: ElevatedButton(
-                onPressed: () async {
-                  final orderActive =
-                      Provider.of<OrderProvider>(context, listen: false);
+          widget.client!.name.toString().contains('000A Cliente Default')
+              ? Container(
+                  margin: const EdgeInsets.fromLTRB(20, 0, 20, 30),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  width: MediaQuery.of(context).size.width,
+                  height: 50,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        // Pasar de una vez a pantalla de pago
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: myTheme.colorScheme.primary,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'FACTURAR',
+                            style: TextStyle(
+                              fontFamily: 'Poppins-regular',
+                              fontSize: 14,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+                            child: Icon(
+                              SimpleLineIcons.arrow_right,
+                              size: 14,
+                              color: Colors.grey.shade300,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+              : Container(
+                  margin: const EdgeInsets.fromLTRB(20, 0, 20, 30),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  width: MediaQuery.of(context).size.width,
+                  height: 50,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        final orderActive =
+                            Provider.of<OrderProvider>(context, listen: false);
 
-                  if (selectedValue2 != null) {
-                    var result = await createOrder(
-                      widget.client,
-                      userUid,
-                      commentary,
-                      masterDiscountTotal,
-                      widget.cart,
-                      selectedValue2,
-                      selectedValue,
-                      today,
-                      taxTotal,
-                      numberOrder,
-                      widget.subTotal,
-                      totalOfTheOrder,
-                    );
-                    orderActive.setOrder(false, Clients());
-                    completeOrder();
-                  } else {
-                    Fluttertoast.showToast(
-                        msg: 'Seleccione un tipo de Negociacion por favor');
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: myTheme.colorScheme.primary,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'CONTINUAR',
-                      style: TextStyle(
-                        fontFamily: 'Poppins-regular',
-                        fontSize: 14,
+                        if (selectedValue2 != null) {
+                          var result = await createOrder(
+                            widget.client,
+                            userUid,
+                            commentary,
+                            masterDiscountTotal,
+                            widget.cart,
+                            selectedValue2,
+                            selectedValue,
+                            today,
+                            taxTotal,
+                            numberOrder,
+                            widget.subTotal,
+                            totalOfTheOrder,
+                          );
+                          orderActive.setOrder(false, Clients());
+                          completeOrder();
+                        } else {
+                          Fluttertoast.showToast(
+                              msg:
+                                  'Seleccione un tipo de Negociacion por favor');
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: myTheme.colorScheme.primary,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'CONTINUAR',
+                            style: TextStyle(
+                              fontFamily: 'Poppins-regular',
+                              fontSize: 14,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+                            child: Icon(
+                              SimpleLineIcons.arrow_right,
+                              size: 14,
+                              color: Colors.grey.shade300,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
-                      child: Icon(
-                        SimpleLineIcons.arrow_right,
-                        size: 14,
-                        color: Colors.grey.shade300,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          ),
         ],
       ),
     );
