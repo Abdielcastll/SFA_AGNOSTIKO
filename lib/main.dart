@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/helper/object_box.dart';
 import 'package:pwa_sales2go_flutter/l10n/l10n.dart';
@@ -44,6 +45,8 @@ late ObjectBox objectBox;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   objectBox = await ObjectBox.init();
+
+  await dotenv.load();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 

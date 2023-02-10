@@ -4,24 +4,26 @@ import 'dart:io';
 
 import 'package:agnostiko/agnostiko.dart';
 import 'package:flutter/material.dart';
+import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/card_input/card_input.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/dialogs/insertCardDialog.dart';
 
 import '../../../dialogs/circular_progress_dialog.dart';
 import '../../models/transaction_args.dart';
 import '../../services/utils/emv.dart';
 
-void _acceptAmount(BuildContext context, double amount) async {
+void _acceptAmount(
+    BuildContext context, double amount, InvoiceData invoiceData) async {
   var platformInfo = await getPlatformInfo();
   var transactionArgs = TransactionArgs(
-    platformInfo: platformInfo,
-    entryMode: EntryMode.Magstripe,
-    showNumericKeyboard: !platformInfo.hasKeypad,
-    supportedCardTypes: platformInfo.supportedCardTypes,
-    emvTransactionType: EmvTransactionType.Goods,
-  );
+      platformInfo: platformInfo,
+      entryMode: EntryMode.Magstripe,
+      showNumericKeyboard: !platformInfo.hasKeypad,
+      supportedCardTypes: platformInfo.supportedCardTypes,
+      emvTransactionType: EmvTransactionType.Goods,
+      invoice: invoiceData);
+
   transactionArgs.amountInCents = (amount * 100).toInt();
 
   final hasCardReader = platformInfo.hasCardReader;
@@ -33,7 +35,7 @@ void _acceptAmount(BuildContext context, double amount) async {
       // mostramos un popup mientras se realiza la carga de parámetros EMV
       showCircularProgressDialog(
         context,
-        "pleaseWait",
+        AppLocalizations.of(context)!.pleaseWait,
       );
       await emvPreTransaction();
       Navigator.pop(context); // y cerramos el popup antes de seguir
@@ -51,7 +53,18 @@ void _acceptAmount(BuildContext context, double amount) async {
   }
 }
 
-paymentCard(double amount) {
+paymentCard(
+  double amount,
+  Client client,
+  String invoiceDocumentID,
+  double totalOfTheOrder,
+  String currentCoin,
+  DateTime date,
+  double remaining,
+) {
+  final invoiceData = InvoiceData(client, invoiceDocumentID, 'USD', amount,
+      totalOfTheOrder, currentCoin, date, remaining);
+
   return StatefulBuilder(
     builder: (context, setState) => Column(
       children: [
@@ -86,7 +99,7 @@ paymentCard(double amount) {
                         color: myTheme.colorScheme.primary),
                     child: TextButton(
                       onPressed: () {
-                        _acceptAmount(context, amount);
+                        _acceptAmount(context, amount, invoiceData);
                       },
                       style: TextButton.styleFrom(
                         foregroundColor: myTheme.colorScheme.primary,

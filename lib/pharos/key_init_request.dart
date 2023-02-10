@@ -1,12 +1,10 @@
-class PharosKeyInitRequest{
-  final String tranType= "KEY_INIT";
+class PharosKeyInitRequest {
+  final String tranType = "KEY_INIT";
   String terminalCode;
   String merchantCode;
   String encryptedRandomKey;
   String randomKeyCheckValue;
   String randomKeyCRC;
-
-
 
   PharosKeyInitRequest({
     required this.terminalCode,
@@ -23,9 +21,7 @@ class PharosKeyInitRequest{
       'merchant_code': merchantCode,
       'encrypted_random_key': encryptedRandomKey,
       'random_key_check_value': randomKeyCheckValue,
-      'random_key_crc': randomKeyCRC,
-
+      'random_key_crc': randomKeyCRC
     };
   }
-
 }

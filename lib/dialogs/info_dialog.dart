@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../src/services/utils/keypad.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<void> showInfoDialog(
   BuildContext context,
@@ -31,7 +32,7 @@ Future<void> showInfoDialog(
               content: Text(message),
               actions: <Widget>[
                 ElevatedButton(
-                  child: Text("close"),
+                  child: Text(AppLocalizations.of(context)!.close),
                   onPressed: onClose ??
                       () {
                         Navigator.pop(context);

@@ -130,7 +130,15 @@ identifyPaymentMethod(
 
   if (selectedValueA == 'Tarjeta de Debito' ||
       selectedValueA == 'Tarjeta de Credito') {
-    return paymentCard(double.parse(paidAmount));
+    return paymentCard(
+      double.parse(paidAmount),
+      client,
+      invoiceDocumentID,
+      totalOfTheOrder,
+      selectedCoin,
+      date,
+      remaining,
+    );
   }
 
   if (selectedValueA == 'Cheque') {

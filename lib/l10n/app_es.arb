@@ -427,10 +427,38 @@
 
     "transactionID": "Id de la transaccion",
     "voucherNumber": "Nro de Voucher",
-    "referenceNumber": "Nro de Referencia"
+    "referenceNumber": "Nro de Referencia",
 
 
-
+  "emvTransactionInfo": "Info de Transacción EMV",
+  "transaction": "Transacción",
+  "approved": "Aprobada",
+  "declined": "Rechazada",
+  "failed": "Fallida",
+  "offline": "Offline",
+  "online": "Online",
+  "transactionType": "Tipo de Transacción",
+  "cashbackAmount": "Monto de Cashback",
+  "appliedCVM": "CVM Aplicado",
+  "plaintextPINOffline": "PIN Offline En Claro",
+  "encipheredPINOffline": "PIN Offline Cifrado",
+  "encipheredPINOnline": "PIN Online Cifrado",
+  "plaintextPINOfflineAndSignature": "PIN Offline En Claro y Firma",
+  "encipheredPINOfflineAndSignature": "PIN Offline Cifrado y Firma",
+  "signature": "Firma",
+  "noCVM": "Sin CVM",
+  "unknown": "Desconocido",
+  "encryptionTest": "Test de encriptado:",
+  "encryptionClearOption": "En claro (sin KEK)",
+  "encryptionCipherOption": "Cifrado (con KEK)",
+  "loadKEK": "Cargar KEK",
+  "loading": "Cargando...",
+  "processing": "Procesando...",
+  "pleaseWait": "Por favor espere...",
+  "tap": "Acerque",
+  "insert": "Inserte",
+  "swipe": "Deslice",
+  "close": "Cerrar"
 
 
 

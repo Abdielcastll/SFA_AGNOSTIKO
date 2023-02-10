@@ -41,6 +41,8 @@ dependencies:
   agnostiko:
     path: "../agnostiko"
   # Firebase
+
+  firebase_core_platform_interface: 4.5.1
   cloud_firestore: ^4.3.1
   firebase_auth: ^4.2.5
   firebase_storage: ^11.0.10
@@ -62,6 +64,7 @@ dependencies:
   objectbox_flutter_libs: any
   cached_network_image: ^3.2.3
   loading_animation_widget: ^1.2.0+4
+  flutter_dotenv: ^5.0.2
 
   barcode_widget: ^2.0.3
   flutter_barcode_scanner: ^2.0.0
@@ -101,6 +104,8 @@ flutter:
   assets:
     - assets/images/
     - assets/params/
+    - assets/capx/
+    - .env
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 import '../../../pharos/key_init_response.dart';
 import 'package:flutter/foundation.dart';
 
@@ -13,8 +15,8 @@ import '../../../pharos/sale_response.dart';
 import '../../../pharos/void_response.dart';
 import 'iso8583.dart';
 
-final pharosUsername = "NecsTest569";
-final pharosPassword = "";
+final pharosUsername = "NECS01Oeyx";
+final pharosPassword = dotenv.env['pharosPassword'] ?? '';
 
 Future<Uint8List> getToken(String serialNumber) async {
   final response = await http.get(
@@ -82,17 +84,18 @@ Future<IsoMessage> processSale(IsoMessage isoMsg) async {
 
 Future<PharosKeyInitResponse> processKeyInitPharos(
     Map<String, dynamic> pharosMsgKeyInit) async {
-  final usernameAndPassword = pharosUsername + ":" + pharosPassword;
+  final usernameAndPassword = "$pharosUsername:$pharosPassword";
   final bytes = utf8.encode(usernameAndPassword);
   final encoded = base64.encode(bytes);
-  final authorizationStr = "Basic " + encoded;
+  final authorizationStr = "Basic $encoded";
   var header = {"Authorization": authorizationStr};
+  var body = jsonEncode(pharosMsgKeyInit);
   final response = await http.post(
       Uri.parse(
         'http://api-sandbox.pharospayments.com/gateway/charge',
       ),
       headers: header,
-      body: jsonEncode(pharosMsgKeyInit));
+      body: body);
   final pharosResponseJson = jsonDecode(response.body.toString());
   final keyInitResponse = PharosKeyInitResponse.fromJson(pharosResponseJson);
   print("Pharos Key init response: ${response.body.toString()}");

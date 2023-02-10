@@ -151,10 +151,41 @@
 
     "transactionID": "Transação ID",
     "voucherNumber": "Nro de Voucher",
-    "referenceNumber": "Nro de Referencia"
+    "referenceNumber": "Nro de Referencia",
 
 
 
+  "emvTransactionInfo": "EMV Transaction Info",
+  "transaction": "Transaction",
+  "approved": "Approved",
+  "declined": "Declined",
+  "failed": "Failed",
+  "offline": "Offline",
+  "online": "Online",
+  "transactionType": "Transaction Type",
+  "cashbackAmount": "Cashback Amount",
+  "appliedCVM": "Applied CVM",
+  "plaintextPINOffline": "Plaintext PIN Offline",
+  "encipheredPINOffline": "Enciphered PIN Offline",
+  "encipheredPINOnline": "Enciphered PIN Online",
+  "plaintextPINOfflineAndSignature": "Plaintext PIN Offline and Signature",
+  "encipheredPINOfflineAndSignature": "Enciphered PIN Offline and Signature",
+  "signature": "Signature",
+  "noCVM": "No CVM",
+  "unknown": "Unknown",
+  "encryptionTest": "Encryption Test:",
+  "encryptionClearOption": "Clear (Without KEK)",
+  "encryptionCipherOption": "Cipher (With KEK)",
+  "loadKEK": "Load KEK",
+  "loadKEKError": "KEK load failed",
+  "loadKEKSucceed": "KEK loaded successfully",
+  "loading": "Loading...",
+  "processing": "Processing...",
+  "pleaseWait": "Please wait...",
+  "tap": "Tap",
+  "insert": "Insert",
+  "swipe": "Swipe",
+  "close": "Close"
     
 
 
