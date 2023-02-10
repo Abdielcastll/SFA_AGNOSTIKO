@@ -64,7 +64,9 @@ class _SelectedProductsState extends State<SelectedProducts> {
     // await addProductFromBarCode(scanResult);
   }
 
-  addProductFromBarcodeResult(String? scanResult, productsInCart) async {
+  addProductFromBarcodeResult(
+      String? scanResult, List<ShoppingCartProduct>? productsInCart) async {
+    print('productsInCart: $productsInCart');
     final String? productScanResult = scanResult;
     print('BARCODE SCAN RESULT: ////////////////////////');
     print('ScanResult: $scanResult');
@@ -118,21 +120,86 @@ class _SelectedProductsState extends State<SelectedProducts> {
         print('productPrice:$productPrice');
         print('productTotalAmount:$productTotalAmount');
 
-        final result = ShoppingCartProduct(
-          availableStock: stock,
-          productQuantity: productQuantity,
-          code: code,
-          listOfPricesId: pricesList,
-          name: name,
-          productId: code,
-          unitPrice: productPrice.toString(),
-          totalAmount: productTotalAmount.toString(),
-          urlPicture: catalogue.toString(),
-        );
-        print(result);
-        scannedProducts.add(result);
-        print(productsInCart);
-        objectBox.insertManyShoppingCartProducts(scannedProducts);
+        if (productsInCart!.isEmpty) {
+          print('Kaede empty');
+          final result = ShoppingCartProduct(
+            availableStock: stock,
+            productQuantity: productQuantity,
+            code: code,
+            listOfPricesId: pricesList,
+            name: name,
+            productId: code,
+            unitPrice: productPrice.toString(),
+            totalAmount: productTotalAmount.toString(),
+            urlPicture: catalogue.toString(),
+          );
+          print(result);
+          scannedProducts.add(result);
+          objectBox.insertShoppingCartProduct(result);
+        } else {
+          bool isProductAlreadyInCart = false;
+          print('Kaede not empty');
+          productsInCart.forEach((element) {
+            if (element.code == code) {
+              print('Kaede is already in the cart, increasing 1');
+              isProductAlreadyInCart = true;
+
+              Fluttertoast.showToast(msg: '${element.code} + 1');
+              final result = ShoppingCartProduct(
+                id: element.id,
+                availableStock: element.availableStock,
+                productQuantity: element.productQuantity! + 1,
+                code: element.code,
+                listOfPricesId: element.listOfPricesId,
+                name: element.name,
+                productId: code,
+                unitPrice: element.unitPrice.toString(),
+                totalAmount: element.totalAmount.toString(),
+                urlPicture: element.urlPicture.toString(),
+              );
+              objectBox.insertShoppingCartProduct(result);
+            }
+          });
+          if (isProductAlreadyInCart == false) {
+            print('Kaede is not in the order, adding now');
+
+            final result = ShoppingCartProduct(
+              availableStock: stock,
+              productQuantity: productQuantity,
+              code: code,
+              listOfPricesId: pricesList,
+              name: name,
+              productId: code,
+              unitPrice: productPrice.toString(),
+              totalAmount: productTotalAmount.toString(),
+              urlPicture: catalogue.toString(),
+            );
+            objectBox.insertShoppingCartProduct(result);
+          }
+        }
+
+        // productsInCart?.forEach((element) {
+        //   if (element.code == code) {
+        //     print('Kaede 1');
+        //   } else {
+        //     print('Kaede 2');
+        //   }
+        // });
+
+        // final result = ShoppingCartProduct(
+        //   availableStock: stock,
+        //   productQuantity: productQuantity,
+        //   code: code,
+        //   listOfPricesId: pricesList,
+        //   name: name,
+        //   productId: code,
+        //   unitPrice: productPrice.toString(),
+        //   totalAmount: productTotalAmount.toString(),
+        //   urlPicture: catalogue.toString(),
+        // );
+        // print(result);
+        // scannedProducts.add(result);
+        // objectBox.insertManyShoppingCartProducts(scannedProducts);
       });
     } catch (e) {
       print(e);
