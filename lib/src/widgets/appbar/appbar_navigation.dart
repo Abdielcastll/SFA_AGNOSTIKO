@@ -299,6 +299,7 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
                                             print(defaultClient?.zone);
                                             orderActive.setOrder(
                                                 true, defaultClient);
+                                            Navigator.pop(context);
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(

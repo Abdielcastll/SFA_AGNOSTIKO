@@ -7,6 +7,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
@@ -17,6 +18,7 @@ import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/checkout_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/mobile_scanner/mobile_scanner.dart';
 
 class SelectedProducts extends StatefulWidget {
   const SelectedProducts({
@@ -31,7 +33,7 @@ class SelectedProducts extends StatefulWidget {
 }
 
 class _SelectedProductsState extends State<SelectedProducts> {
-  String? scanResult;
+  String? scanResult = '';
   late String? clientPriceList = widget.client?.prices;
   late Stream<List<ShoppingCartProduct>> streamShoppingCartProducts;
 
@@ -39,6 +41,17 @@ class _SelectedProductsState extends State<SelectedProducts> {
   void initState() {
     super.initState();
     streamShoppingCartProducts = objectBox.getShoppingCartProducts();
+  }
+
+  Future scanBarCode2() async {
+    MobileScanner(
+      onDetect: (capture) {
+        final List<Barcode> barcodes = capture.barcodes;
+        for (final barcode in barcodes) {
+          print('BARCODE 2: ${barcode.rawValue.toString()}');
+        }
+      },
+    );
   }
 
   Future scanBarcode() async {
@@ -60,8 +73,6 @@ class _SelectedProductsState extends State<SelectedProducts> {
     setState(() {
       this.scanResult = scanResult;
     });
-
-    // await addProductFromBarCode(scanResult);
   }
 
   addProductFromBarcodeResult(
@@ -807,28 +818,39 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                       ),
                                     ),
                                     onPressed: () {
-                                      scanBarcode().whenComplete(
-                                        () {
-                                          if (scanResult != '-1') {
-                                            print("scanResult: $scanResult");
-                                            Fluttertoast.showToast(
-                                                msg: 'scanResult: $scanResult');
-                                          }
-                                        },
-                                      ).whenComplete(
-                                        () {
-                                          try {
-                                            print(
-                                                'Escaneando producto de la DB: ///////////////////');
-                                            addProductFromBarcodeResult(
-                                                scanResult.toString(),
-                                                products);
-                                          } catch (e) {
-                                            print('ERROR //////////////////');
-                                            print(e);
-                                          }
-                                        },
-                                      );
+                                      print('sfsfsfsfaf');
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                NewBardcodeScanner(
+                                              clientPriceList: clientPriceList,
+                                              products: products,
+                                            ),
+                                          ));
+                                      // scanBarCode2();
+
+                                      // scanBarcode().whenComplete(
+                                      //   () {
+                                      //     if (scanResult != '-1') {
+                                      //       print("scanResult: $scanResult");
+                                      //       Fluttertoast.showToast(
+                                      //           msg: 'scanResult: $scanResult');
+                                      //     }
+                                      //   },
+                                      // ).whenComplete(
+                                      //   () {
+                                      //     try {
+                                      //       print(
+                                      //           'Escaneando producto de la DB: ///////////////////');
+                                      addProductFromBarcodeResult(
+                                          scanResult.toString(), products);
+                                      //     } catch (e) {
+                                      //       print('ERROR //////////////////');
+                                      //       print(e);
+                                      //     }
+                                      //   },
+                                      // );
                                     },
                                     child: const Icon(FontAwesome.barcode),
                                   ),

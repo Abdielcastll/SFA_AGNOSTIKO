@@ -86,11 +86,12 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
                                   ),
                                   title: Center(
                                     child: Text(
-                                      'Tipo de cliente a utilizar',
+                                      '¿Desea registrar el cliente?',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontFamily: 'Poppins-regular',
-                                        color: myTheme.colorScheme.primary,
+                                        color: myTheme
+                                            .colorScheme.onPrimaryContainer,
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -98,261 +99,232 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
                                   ),
                                   content: Container(
                                     // color: Colors.grey,
-                                    height: 150,
+                                    // height: 30,
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                          MainAxisAlignment.spaceEvenly,
+                                      // crossAxisAlignment:
+                                      //     CrossAxisAlignment.start,
                                       children: [
-                                        Container(
-                                          height: 120,
-                                          width: 100,
-                                          child: ElevatedButton(
-                                            onPressed: () {
-                                              // Escoger lista de clientes
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (BuildContext
-                                                          context) =>
-                                                      PlaceOrderPage(
-                                                          userZoneDocument:
-                                                              userZoneDocument),
-                                                ),
-                                              );
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: myTheme
-                                                  .colorScheme
-                                                  .onPrimaryContainer,
-                                            ),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Icon(
-                                                  Icons.list,
-                                                ),
-                                                Container(
-                                                  margin:
-                                                      const EdgeInsets.fromLTRB(
-                                                          0, 5, 0, 0),
-                                                  child: Text(
-                                                    'Lista de Clientes',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      fontFamily:
-                                                          'Poppins-regular',
-                                                      fontSize: 15,
-                                                    ),
-                                                  ),
-                                                )
-                                              ],
+                                        TextButton(
+                                          style: ButtonStyle(
+                                            overlayColor:
+                                                MaterialStateColor.resolveWith(
+                                                    (states) =>
+                                                        Colors.transparent),
+                                          ),
+                                          onPressed: () {
+                                            // Escoger lista de clientes
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (BuildContext
+                                                        context) =>
+                                                    PlaceOrderPage(
+                                                        userZoneDocument:
+                                                            userZoneDocument),
+                                              ),
+                                            );
+                                          },
+                                          child: Container(
+                                            margin: const EdgeInsets.fromLTRB(
+                                                0, 5, 0, 0),
+                                            child: Text(
+                                              'Si',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontFamily: 'Poppins-regular',
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                decoration:
+                                                    TextDecoration.underline,
+                                              ),
                                             ),
                                           ),
                                         ),
-                                        Container(
-                                          height: 120,
-                                          width: 100,
-                                          child: ElevatedButton(
-                                            onPressed: () async {
-                                              // Escoger lista de clientes
-                                              // var client =
-                                              Clients? defaultClient;
-                                              await clientsCollection
-                                                  .where('zona',
-                                                      isEqualTo:
-                                                          userZoneDocument)
-                                                  .where('numeroId',
-                                                      isEqualTo: 0)
-                                                  .get()
-                                                  .then((value) {
-                                                return value.docs
-                                                    .map((snapshot) {
-                                                  if (snapshot
-                                                      .get('nombre')
-                                                      .toString()
-                                                      .contains(
-                                                          '000A Cliente Default')) {
-                                                    defaultClient = Clients(
-                                                      active: snapshot
-                                                              .data()
-                                                              .toString()
-                                                              .contains(
-                                                                  'activo')
-                                                          ? snapshot
-                                                              .get('activo')
-                                                          : 'NaN',
-                                                      specialContributor: snapshot
-                                                              .data()
-                                                              .toString()
-                                                              .contains(
-                                                                  'contribuyenteEspecial')
-                                                          ? snapshot.get(
-                                                              'contribuyenteEspecial')
-                                                          : false,
-                                                      madeBy: snapshot
-                                                              .data()
-                                                              .toString()
-                                                              .contains(
-                                                                  'creadoPor')
-                                                          ? snapshot
-                                                              .get('creadoPor')
-                                                              .id
-                                                          : 'NaN',
-                                                      masterDiscount: snapshot
-                                                              .data()
-                                                              .toString()
-                                                              .contains(
-                                                                  'descuentoMaestro')
-                                                          ? snapshot.get(
-                                                              'descuentoMaestro')
-                                                          : 'NaN',
-                                                      fiscalAdress: snapshot
-                                                              .data()
-                                                              .toString()
-                                                              .contains(
-                                                                  'direccionFiscal')
-                                                          ? snapshot.get(
-                                                              'direccionFiscal')
-                                                          : 'NaN',
-                                                      dispatchAdress: snapshot
-                                                              .data()
-                                                              .toString()
-                                                              .contains(
-                                                                  'direccionDespacho')
-                                                          ? snapshot.get(
-                                                              'direccionDespacho')
-                                                          : 'No hay direccion de despacho',
-                                                      email: snapshot
-                                                              .data()
-                                                              .toString()
-                                                              .contains('email')
-                                                          ? snapshot
-                                                              .get('email')
-                                                          : 'NaN',
-                                                      prices: snapshot
-                                                              .data()
-                                                              .toString()
-                                                              .contains(
-                                                                  'listaDePrecios')
-                                                          ? snapshot
-                                                              .get(
-                                                                  'listaDePrecios')
-                                                              .id
-                                                          : 'NaN',
-                                                      modified: snapshot
-                                                              .data()
-                                                              .toString()
-                                                              .contains(
-                                                                  'modificado')
-                                                          ? snapshot
-                                                              .get('modificado')
-                                                          : 'NaN',
-                                                      name: snapshot
-                                                              .data()
-                                                              .toString()
-                                                              .contains(
-                                                                  'nombre')
-                                                          ? snapshot
-                                                              .get('nombre')
-                                                          : 'NaN',
-                                                      id: snapshot
-                                                              .data()
-                                                              .toString()
-                                                              .contains(
-                                                                  'numeroId')
-                                                          ? snapshot
-                                                              .get('numeroId')
-                                                          : 'NaN',
-                                                      prospect: snapshot
-                                                              .data()
-                                                              .toString()
-                                                              .contains(
-                                                                  'prospecto')
-                                                          ? snapshot
-                                                              .get('prospecto')
-                                                          : false,
-                                                      phone1: snapshot
-                                                              .data()
-                                                              .toString()
-                                                              .contains(
-                                                                  'telefono')
-                                                          ? snapshot
-                                                              .get('telefono')
-                                                          : 'NaN',
-                                                      phone2: snapshot
-                                                              .data()
-                                                              .toString()
-                                                              .contains(
-                                                                  'telefono2')
-                                                          ? snapshot
-                                                              .get('telefono2')
-                                                          : 'NaN',
-                                                      idType: snapshot
-                                                              .data()
-                                                              .toString()
-                                                              .contains(
-                                                                  'tipoId')
-                                                          ? snapshot
-                                                              .get('tipoId')
-                                                              .id
-                                                          : 'NaN',
-                                                      zone: snapshot
-                                                              .data()
-                                                              .toString()
-                                                              .contains('zona')
-                                                          ? snapshot
-                                                              .get('zona')
-                                                              .id
-                                                          : 'NaN',
-                                                      clientDocumentId:
-                                                          snapshot.reference.id,
-                                                    );
-                                                  }
-                                                }).toList();
-                                              });
+                                        TextButton(
+                                          style: ButtonStyle(
+                                            overlayColor:
+                                                MaterialStateColor.resolveWith(
+                                                    (states) =>
+                                                        Colors.transparent),
+                                          ),
+                                          onPressed: () async {
+                                            // Escoger lista de clientes
+                                            // var client =
+                                            Clients? defaultClient;
+                                            await clientsCollection
+                                                .where('zona',
+                                                    isEqualTo: userZoneDocument)
+                                                .where('numeroId', isEqualTo: 0)
+                                                .get()
+                                                .then((value) {
+                                              return value.docs.map((snapshot) {
+                                                if (snapshot
+                                                    .get('nombre')
+                                                    .toString()
+                                                    .contains(
+                                                        '000A Cliente Default')) {
+                                                  defaultClient = Clients(
+                                                    active: snapshot
+                                                            .data()
+                                                            .toString()
+                                                            .contains('activo')
+                                                        ? snapshot.get('activo')
+                                                        : 'NaN',
+                                                    specialContributor: snapshot
+                                                            .data()
+                                                            .toString()
+                                                            .contains(
+                                                                'contribuyenteEspecial')
+                                                        ? snapshot.get(
+                                                            'contribuyenteEspecial')
+                                                        : false,
+                                                    madeBy: snapshot
+                                                            .data()
+                                                            .toString()
+                                                            .contains(
+                                                                'creadoPor')
+                                                        ? snapshot
+                                                            .get('creadoPor')
+                                                            .id
+                                                        : 'NaN',
+                                                    masterDiscount: snapshot
+                                                            .data()
+                                                            .toString()
+                                                            .contains(
+                                                                'descuentoMaestro')
+                                                        ? snapshot.get(
+                                                            'descuentoMaestro')
+                                                        : 'NaN',
+                                                    fiscalAdress: snapshot
+                                                            .data()
+                                                            .toString()
+                                                            .contains(
+                                                                'direccionFiscal')
+                                                        ? snapshot.get(
+                                                            'direccionFiscal')
+                                                        : 'NaN',
+                                                    dispatchAdress: snapshot
+                                                            .data()
+                                                            .toString()
+                                                            .contains(
+                                                                'direccionDespacho')
+                                                        ? snapshot.get(
+                                                            'direccionDespacho')
+                                                        : 'No hay direccion de despacho',
+                                                    email: snapshot
+                                                            .data()
+                                                            .toString()
+                                                            .contains('email')
+                                                        ? snapshot.get('email')
+                                                        : 'NaN',
+                                                    prices: snapshot
+                                                            .data()
+                                                            .toString()
+                                                            .contains(
+                                                                'listaDePrecios')
+                                                        ? snapshot
+                                                            .get(
+                                                                'listaDePrecios')
+                                                            .id
+                                                        : 'NaN',
+                                                    modified: snapshot
+                                                            .data()
+                                                            .toString()
+                                                            .contains(
+                                                                'modificado')
+                                                        ? snapshot
+                                                            .get('modificado')
+                                                        : 'NaN',
+                                                    name: snapshot
+                                                            .data()
+                                                            .toString()
+                                                            .contains('nombre')
+                                                        ? snapshot.get('nombre')
+                                                        : 'NaN',
+                                                    id: snapshot
+                                                            .data()
+                                                            .toString()
+                                                            .contains(
+                                                                'numeroId')
+                                                        ? snapshot
+                                                            .get('numeroId')
+                                                        : 'NaN',
+                                                    prospect: snapshot
+                                                            .data()
+                                                            .toString()
+                                                            .contains(
+                                                                'prospecto')
+                                                        ? snapshot
+                                                            .get('prospecto')
+                                                        : false,
+                                                    phone1: snapshot
+                                                            .data()
+                                                            .toString()
+                                                            .contains(
+                                                                'telefono')
+                                                        ? snapshot
+                                                            .get('telefono')
+                                                        : 'NaN',
+                                                    phone2: snapshot
+                                                            .data()
+                                                            .toString()
+                                                            .contains(
+                                                                'telefono2')
+                                                        ? snapshot
+                                                            .get('telefono2')
+                                                        : 'NaN',
+                                                    idType: snapshot
+                                                            .data()
+                                                            .toString()
+                                                            .contains('tipoId')
+                                                        ? snapshot
+                                                            .get('tipoId')
+                                                            .id
+                                                        : 'NaN',
+                                                    zone: snapshot
+                                                            .data()
+                                                            .toString()
+                                                            .contains('zona')
+                                                        ? snapshot
+                                                            .get('zona')
+                                                            .id
+                                                        : 'NaN',
+                                                    clientDocumentId:
+                                                        snapshot.reference.id,
+                                                  );
+                                                }
+                                              }).toList();
+                                            });
 
-                                              print(defaultClient?.zone);
-                                              orderActive.setOrder(
-                                                  true, defaultClient);
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  settings: const RouteSettings(
-                                                      name: "ORDER"),
-                                                  builder: (context) =>
-                                                      const OrderPage(),
-                                                ),
-                                              );
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  myTheme.colorScheme.primary,
-                                            ),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Icon(
-                                                  Icons.login_rounded,
-                                                ),
-                                                Container(
-                                                  margin:
-                                                      const EdgeInsets.fromLTRB(
-                                                          0, 5, 0, 0),
-                                                  child: Text(
-                                                    'Venta Retail',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      fontFamily:
-                                                          'Poppins-regular',
-                                                      fontSize: 15,
-                                                    ),
-                                                  ),
-                                                )
-                                              ],
+                                            print(defaultClient?.zone);
+                                            orderActive.setOrder(
+                                                true, defaultClient);
+                                            Navigator.pop(context);
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                settings: const RouteSettings(
+                                                    name: "ORDER"),
+                                                builder: (context) =>
+                                                    const OrderPage(),
+                                              ),
+                                            );
+                                          },
+                                          child: Container(
+                                            margin: const EdgeInsets.fromLTRB(
+                                                0, 5, 0, 0),
+                                            child: Text(
+                                              'No',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontFamily: 'Poppins-regular',
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                decoration:
+                                                    TextDecoration.underline,
+                                              ),
                                             ),
                                           ),
                                         ),
