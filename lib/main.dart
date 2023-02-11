@@ -1,19 +1,28 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/helper/object_box.dart';
 import 'package:pwa_sales2go_flutter/l10n/l10n.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
+import 'package:pwa_sales2go_flutter/src/pages/amount_input/amount_input.dart';
 import 'package:pwa_sales2go_flutter/src/pages/auth/wrapper/wrapper.dart';
+import 'package:pwa_sales2go_flutter/src/pages/card_input/card_input.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/catalogue_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/cvv_input/cvv_input.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/diary_tabs.dart';
+import 'package:pwa_sales2go_flutter/src/pages/emv_transaction_info/emv_transaction_info.dart';
+import 'package:pwa_sales2go_flutter/src/pages/exp_date_input/exp_date_input.dart';
 import 'package:pwa_sales2go_flutter/src/pages/navigation/navigation.dart';
 import 'package:pwa_sales2go_flutter/src/pages/notifications/notifications_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/pan_input/pan_input.dart';
+import 'package:pwa_sales2go_flutter/src/pages/pin_input/pin_input.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/place_oder_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/profile/profile_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/splash_screen/splash_screen.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/locale_provider.dart';
@@ -36,6 +45,8 @@ late ObjectBox objectBox;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   objectBox = await ObjectBox.init();
+
+  await dotenv.load();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
@@ -98,8 +109,20 @@ class SfaAgnostiko extends StatelessWidget {
                           ],
                           title: 'SFA Agnostiko',
                           theme: myTheme,
-                          initialRoute: 'wrapper',
+                          initialRoute: SplashScreenView.route,
                           routes: {
+                            SplashScreenView.route: (BuildContext context) =>
+                                SplashScreenView(),
+                            PinInputView.route: (context) => PinInputView(),
+                            PanInputView.route: (context) => PanInputView(),
+                            ExpDateInputView.route: (context) =>
+                                ExpDateInputView(),
+                            EmvTransactionInfoView.route: (context) =>
+                                EmvTransactionInfoView(),
+                            CvvInputView.route: (context) => CvvInputView(),
+                            CardInputView.route: (context) => CardInputView(),
+                            AmountInputView.route: (context) =>
+                                AmountInputView(),
                             'wrapper': (BuildContext context) => Wrapper(),
                             'login': (BuildContext context) =>
                                 const LoginPage(),

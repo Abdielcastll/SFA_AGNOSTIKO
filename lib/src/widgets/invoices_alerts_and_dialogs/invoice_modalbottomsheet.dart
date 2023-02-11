@@ -2,6 +2,8 @@
 import 'dart:math' as math;
 
 import 'dart:io';
+import 'package:agnostiko/agnostiko.dart';
+import 'package:agnostiko/emv/src/emv_transaction.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,6 +19,9 @@ import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/identify_payment_method.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../../models/transaction_args.dart';
+import '../../pages/amount_input/amount_input.dart';
 
 void modalBottomSheetForInvoices(
   bool completed,
@@ -514,12 +519,27 @@ void modalBottomSheetForInvoices(
                                     color: myTheme.colorScheme.primary),
                                 child: TextButton(
                                   onPressed: () {
+                                    // ignore: use_build_context_synchronously
+                                    /* Navigator.pushNamed(
+                                      context,
+                                      AmountInputView.route,
+                                      arguments: TransactionArgs(
+                                        platformInfo: platformInfo,
+                                        entryMode: EntryMode.Magstripe,
+                                        showNumericKeyboard:
+                                            !platformInfo.hasKeypad,
+                                        supportedCardTypes:
+                                            platformInfo.supportedCardTypes,
+                                        emvTransactionType:
+                                            EmvTransactionType.Goods,
+                                      ),
+                                    ); */
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
                                         final List<String> items = [
-                                          // 'Tarjeta de Debito',
-                                          // 'Tarjeta de Credito',
+                                          'Tarjeta de Debito',
+                                          'Tarjeta de Credito',
                                           'Cheque',
                                           'Criptomoneda',
                                           'Deposito',
