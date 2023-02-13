@@ -20,7 +20,7 @@ class NewBardcodeScanner extends StatefulWidget {
 class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
   bool captured = false;
 
-  addProductFromBarcodeResult(
+  Future addProductFromBarcodeResult(
       String? scanResult, List<ShoppingCartProduct>? productsInCart) async {
     print('productsInCart: $productsInCart');
     final String? productScanResult = scanResult;
@@ -92,6 +92,7 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
           print(result);
           scannedProducts.add(result);
           objectBox.insertShoppingCartProduct(result);
+          // Navigator.popUntil(context, ModalRoute.withName('ORDER'));
         } else {
           bool isProductAlreadyInCart = false;
           print('Kaede not empty');
@@ -100,7 +101,7 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
               print('Kaede is already in the cart, increasing 1');
               isProductAlreadyInCart = true;
 
-              Fluttertoast.showToast(msg: '${element.code} + 1');
+              // Fluttertoast.showToast(msg: '${element.code} + 1');
               final result = ShoppingCartProduct(
                 id: element.id,
                 availableStock: element.availableStock,
@@ -114,6 +115,8 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
                 urlPicture: element.urlPicture.toString(),
               );
               objectBox.insertShoppingCartProduct(result);
+              Fluttertoast.showToast(msg: 'Producto añadido: $scanResult');
+              // Navigator.popUntil(context, ModalRoute.withName('ORDER'));
             }
           });
           if (isProductAlreadyInCart == false) {
@@ -131,6 +134,8 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
               urlPicture: catalogue.toString(),
             );
             objectBox.insertShoppingCartProduct(result);
+            Fluttertoast.showToast(msg: 'Producto añadido: $scanResult');
+            // Navigator.popUntil(context, ModalRoute.withName('ORDER'));
           }
         }
 
@@ -218,7 +223,6 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
       body: MobileScanner(
         // fit: BoxFit.contain,
         controller: cameraController,
-
         onDetect: (capture) {
           if (captured) return;
           Future.delayed(const Duration(seconds: 0), () async {
