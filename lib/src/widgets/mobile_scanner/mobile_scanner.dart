@@ -218,20 +218,20 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
 
         onDetect: (capture) {
           Future.delayed(const Duration(seconds: 0), () {
+            final List<Barcode> barcodes = capture.barcodes;
+            final Uint8List? image = capture.image;
+            for (final barcode in barcodes) {
+              // debugPrint('Barcode found! ${barcode.rawValue}');
+              scanResult = barcode.rawValue.toString();
+              print(scanResult);
+              Fluttertoast.showToast(msg: 'scanResult: $scanResult');
+              addProductFromBarcodeResult(
+                scanResult,
+                widget.products,
+              );
+            }
             Navigator.pop(context);
           });
-          final List<Barcode> barcodes = capture.barcodes;
-          final Uint8List? image = capture.image;
-          for (final barcode in barcodes) {
-            // debugPrint('Barcode found! ${barcode.rawValue}');
-            scanResult = barcode.rawValue.toString();
-            print(scanResult);
-            Fluttertoast.showToast(msg: 'scanResult: $scanResult');
-            addProductFromBarcodeResult(
-              scanResult,
-              widget.products,
-            );
-          }
         },
       ),
     );
