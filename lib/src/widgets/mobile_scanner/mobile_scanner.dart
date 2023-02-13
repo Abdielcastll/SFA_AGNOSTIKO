@@ -18,6 +18,8 @@ class NewBardcodeScanner extends StatefulWidget {
 }
 
 class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
+  bool captured = false;
+
   addProductFromBarcodeResult(
       String? scanResult, List<ShoppingCartProduct>? productsInCart) async {
     print('productsInCart: $productsInCart');
@@ -168,6 +170,7 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
   @override
   void initState() {
     super.initState();
+    captured = false;
     streamShoppingCartProducts = objectBox.getShoppingCartProducts();
   }
 
@@ -217,7 +220,8 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
         controller: cameraController,
 
         onDetect: (capture) {
-          Future.delayed(const Duration(seconds: 0), () {
+          if (captured) return;
+          Future.delayed(const Duration(seconds: 0), () async {
             final List<Barcode> barcodes = capture.barcodes;
             final Uint8List? image = capture.image;
             for (final barcode in barcodes) {
@@ -230,6 +234,9 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
                 widget.products,
               );
             }
+            setState(() {
+              captured = true;
+            });
             Navigator.pop(context);
           });
         },

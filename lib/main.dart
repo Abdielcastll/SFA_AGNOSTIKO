@@ -109,7 +109,8 @@ class SfaAgnostiko extends StatelessWidget {
                           ],
                           title: 'SFA Agnostiko',
                           theme: myTheme,
-                          initialRoute: SplashScreenView.route,
+                          initialRoute: "wrapper",
+                          /* SplashScreenView.route, */
                           routes: {
                             SplashScreenView.route: (BuildContext context) =>
                                 SplashScreenView(),
