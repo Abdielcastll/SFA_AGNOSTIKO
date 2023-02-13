@@ -99,17 +99,32 @@ class ProductsByDate {
 List<Products> productsListFromSnapshot(QuerySnapshot snapshot) {
   return snapshot.docs.map((doc) {
     return Products(
-      quality: doc.get('calidad').id,
-      catalogue: doc.get('catalogo').id,
-      categorie: doc.get('categoria').id,
-      code: doc.get('codigo'),
-      design: doc.get('diseno').id,
-      line: doc.get('linea').id,
-      brand: doc.get('marca').id,
-      lastModifiedDate: doc.get('modificado'),
-      name: doc.get('nombre'),
-      subCategorie: doc.get('subcategoria').id,
-      size: doc.get('tamano').id,
+      quality: doc.data().toString().contains('calidad')
+          ? doc.get('calidad').id
+          : '',
+      catalogue: doc.data().toString().contains('catalogo')
+          ? doc.get('catalogo').id
+          : '',
+      categorie: doc.data().toString().contains('categoria')
+          ? doc.get('categoria').id
+          : '',
+      code: doc.data().toString().contains('codigo') ? doc.get('codigo') : '',
+      design:
+          doc.data().toString().contains('diseno') ? doc.get('diseno').id : '',
+      line: doc.data().toString().contains('categoria')
+          ? doc.get('categoria').id
+          : '',
+      brand: doc.data().toString().contains('marca') ? doc.get('marca').id : '',
+      lastModifiedDate: doc.data().toString().contains('modificado')
+          ? doc.get('modificado')
+          : '',
+      name: doc.data().toString().contains('nombre') ? doc.get('nombre') : '',
+      subCategorie: doc.data().toString().contains('subcategoria')
+          ? doc.get('subcategoria').id
+          : '',
+      size: doc.data().toString().contains('subcategoria')
+          ? doc.get('subcategoria').id
+          : '',
       promotion: doc.data().toString().contains('promocion')
           ? doc.get('promocion').id
           : '',
@@ -122,20 +137,50 @@ List<ProductsWithPromotions> productsWithPromotionListFromSnapshot(
     QuerySnapshot snapshot) {
   return snapshot.docs.map((doc) {
     return ProductsWithPromotions(
-      quality: doc.get('calidad').id,
-      catalogue: doc.get('catalogo').id,
-      categorie: doc.get('categoria').id,
-      code: doc.get('codigo'),
-      design: doc.get('diseno').id,
-      line: doc.get('linea').id,
-      brand: doc.get('marca').id,
-      lastModifiedDate: doc.get('modificado'),
-      name: doc.get('nombre'),
-      subCategorie: doc.get('subcategoria').id,
-      size: doc.get('tamano').id,
+      // quality: doc.get('calidad').id,
+      // catalogue: doc.get('catalogo').id,
+      // categorie: doc.get('categoria').id,
+      // code: doc.get('codigo'),
+      // design: doc.get('diseno').id,
+      // line: doc.get('linea').id,
+      // brand: doc.get('marca').id,
+      // lastModifiedDate: doc.get('modificado'),
+      // name: doc.get('nombre'),
+      // subCategorie: doc.get('subcategoria').id,
+      // size: doc.get('tamano').id,
+      // promotion: doc.data().toString().contains('promocion')
+      //     ? doc.get('promocion').id
+      //     : null,
+      // selected: false,
+      quality: doc.data().toString().contains('calidad')
+          ? doc.get('calidad').id
+          : '',
+      catalogue: doc.data().toString().contains('catalogo')
+          ? doc.get('catalogo').id
+          : '',
+      categorie: doc.data().toString().contains('categoria')
+          ? doc.get('categoria').id
+          : '',
+      code: doc.data().toString().contains('codigo') ? doc.get('codigo') : '',
+      design:
+          doc.data().toString().contains('diseno') ? doc.get('diseno').id : '',
+      line: doc.data().toString().contains('categoria')
+          ? doc.get('categoria').id
+          : '',
+      brand: doc.data().toString().contains('marca') ? doc.get('marca').id : '',
+      lastModifiedDate: doc.data().toString().contains('modificado')
+          ? doc.get('modificado')
+          : '',
+      name: doc.data().toString().contains('nombre') ? doc.get('nombre') : '',
+      subCategorie: doc.data().toString().contains('subcategoria')
+          ? doc.get('subcategoria').id
+          : '',
+      size: doc.data().toString().contains('subcategoria')
+          ? doc.get('subcategoria').id
+          : '',
       promotion: doc.data().toString().contains('promocion')
           ? doc.get('promocion').id
-          : null,
+          : '',
       selected: false,
     );
   }).toList();
@@ -144,20 +189,50 @@ List<ProductsWithPromotions> productsWithPromotionListFromSnapshot(
 List<ProductsByDate> productsByDateListFromSnapshot(QuerySnapshot snapshot) {
   return snapshot.docs.map((doc) {
     return ProductsByDate(
-      quality: doc.get('calidad').id,
-      catalogue: doc.get('catalogo').id,
-      categorie: doc.get('categoria').id,
-      code: doc.get('codigo'),
-      design: doc.get('diseno').id,
-      line: doc.get('linea').id,
-      brand: doc.get('marca').id,
-      lastModifiedDate: doc.get('modificado'),
-      name: doc.get('nombre'),
-      subCategorie: doc.get('subcategoria').id,
-      size: doc.get('tamano').id,
+      // quality: doc.get('calidad').id,
+      // catalogue: doc.get('catalogo').id,
+      // categorie: doc.get('categoria').id,
+      // code: doc.get('codigo'),
+      // design: doc.get('diseno').id,
+      // line: doc.get('linea').id,
+      // brand: doc.get('marca').id,
+      // lastModifiedDate: doc.get('modificado'),
+      // name: doc.get('nombre'),
+      // subCategorie: doc.get('subcategoria').id,
+      // size: doc.get('tamano').id,
+      // promotion: doc.data().toString().contains('promocion')
+      //     ? doc.get('promocion').id
+      //     : null,
+      // selected: false,
+      quality: doc.data().toString().contains('calidad')
+          ? doc.get('calidad').id
+          : '',
+      catalogue: doc.data().toString().contains('catalogo')
+          ? doc.get('catalogo').id
+          : '',
+      categorie: doc.data().toString().contains('categoria')
+          ? doc.get('categoria').id
+          : '',
+      code: doc.data().toString().contains('codigo') ? doc.get('codigo') : '',
+      design:
+          doc.data().toString().contains('diseno') ? doc.get('diseno').id : '',
+      line: doc.data().toString().contains('categoria')
+          ? doc.get('categoria').id
+          : '',
+      brand: doc.data().toString().contains('marca') ? doc.get('marca').id : '',
+      lastModifiedDate: doc.data().toString().contains('modificado')
+          ? doc.get('modificado')
+          : '',
+      name: doc.data().toString().contains('nombre') ? doc.get('nombre') : '',
+      subCategorie: doc.data().toString().contains('subcategoria')
+          ? doc.get('subcategoria').id
+          : '',
+      size: doc.data().toString().contains('subcategoria')
+          ? doc.get('subcategoria').id
+          : '',
       promotion: doc.data().toString().contains('promocion')
           ? doc.get('promocion').id
-          : null,
+          : '',
       selected: false,
     );
   }).toList();
