@@ -114,7 +114,7 @@ class _CataloguePageState extends State<CataloguePage> {
       ],
       child: Scaffold(
         appBar: AppBarNavigation(
-          message: 'Apps2Go',
+          message: 'Agnostiko',
           userZoneDocument: userZoneDocument,
         ),
         backgroundColor: myTheme.colorScheme.surface,
