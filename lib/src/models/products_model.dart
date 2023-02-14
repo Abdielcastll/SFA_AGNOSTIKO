@@ -111,9 +111,7 @@ List<Products> productsListFromSnapshot(QuerySnapshot snapshot) {
       code: doc.data().toString().contains('codigo') ? doc.get('codigo') : '',
       design:
           doc.data().toString().contains('diseno') ? doc.get('diseno').id : '',
-      line: doc.data().toString().contains('categoria')
-          ? doc.get('categoria').id
-          : '',
+      line: doc.data().toString().contains('linea') ? doc.get('linea').id : '',
       brand: doc.data().toString().contains('marca') ? doc.get('marca').id : '',
       lastModifiedDate: doc.data().toString().contains('modificado')
           ? doc.get('modificado')
@@ -122,9 +120,8 @@ List<Products> productsListFromSnapshot(QuerySnapshot snapshot) {
       subCategorie: doc.data().toString().contains('subcategoria')
           ? doc.get('subcategoria').id
           : '',
-      size: doc.data().toString().contains('subcategoria')
-          ? doc.get('subcategoria').id
-          : '',
+      size:
+          doc.data().toString().contains('tamano') ? doc.get('tamano').id : '',
       promotion: doc.data().toString().contains('promocion')
           ? doc.get('promocion').id
           : '',
@@ -164,9 +161,7 @@ List<ProductsWithPromotions> productsWithPromotionListFromSnapshot(
       code: doc.data().toString().contains('codigo') ? doc.get('codigo') : '',
       design:
           doc.data().toString().contains('diseno') ? doc.get('diseno').id : '',
-      line: doc.data().toString().contains('categoria')
-          ? doc.get('categoria').id
-          : '',
+      line: doc.data().toString().contains('linea') ? doc.get('linea').id : '',
       brand: doc.data().toString().contains('marca') ? doc.get('marca').id : '',
       lastModifiedDate: doc.data().toString().contains('modificado')
           ? doc.get('modificado')
@@ -175,9 +170,8 @@ List<ProductsWithPromotions> productsWithPromotionListFromSnapshot(
       subCategorie: doc.data().toString().contains('subcategoria')
           ? doc.get('subcategoria').id
           : '',
-      size: doc.data().toString().contains('subcategoria')
-          ? doc.get('subcategoria').id
-          : '',
+      size:
+          doc.data().toString().contains('tamano') ? doc.get('tamano').id : '',
       promotion: doc.data().toString().contains('promocion')
           ? doc.get('promocion').id
           : '',
@@ -216,9 +210,7 @@ List<ProductsByDate> productsByDateListFromSnapshot(QuerySnapshot snapshot) {
       code: doc.data().toString().contains('codigo') ? doc.get('codigo') : '',
       design:
           doc.data().toString().contains('diseno') ? doc.get('diseno').id : '',
-      line: doc.data().toString().contains('categoria')
-          ? doc.get('categoria').id
-          : '',
+      line: doc.data().toString().contains('linea') ? doc.get('linea').id : '',
       brand: doc.data().toString().contains('marca') ? doc.get('marca').id : '',
       lastModifiedDate: doc.data().toString().contains('modificado')
           ? doc.get('modificado')
@@ -227,9 +219,8 @@ List<ProductsByDate> productsByDateListFromSnapshot(QuerySnapshot snapshot) {
       subCategorie: doc.data().toString().contains('subcategoria')
           ? doc.get('subcategoria').id
           : '',
-      size: doc.data().toString().contains('subcategoria')
-          ? doc.get('subcategoria').id
-          : '',
+      size:
+          doc.data().toString().contains('tamano') ? doc.get('tamano').id : '',
       promotion: doc.data().toString().contains('promocion')
           ? doc.get('promocion').id
           : '',

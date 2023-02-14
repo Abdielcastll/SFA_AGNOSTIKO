@@ -39,13 +39,13 @@ class ProductDetails extends StatefulWidget {
     required this.userZoneDocument,
   }) : super(key: key);
 
-  final String code;
+  final String? code;
   final String? price;
-  final String line;
-  final String name;
+  final String? line;
+  final String? name;
   final String imageUrl;
   final bool isProductNew;
-  final int stock;
+  final int? stock;
   final List<ProductsByDate>? list;
   final bool isProductInAPromotion;
   final prices;
@@ -100,13 +100,13 @@ class ProductDetailsBody extends StatelessWidget {
     required this.userZoneDocument,
   }) : super(key: key);
 
-  final String code;
+  final String? code;
   final String? price;
-  final String line;
-  final String name;
+  final String? line;
+  final String? name;
   final String imageUrl;
   final bool isProductNew;
-  final int stock;
+  final int? stock;
   final List<ProductsByDate>? list;
   final bool isProductInAPromotion;
   final prices;
@@ -118,6 +118,22 @@ class ProductDetailsBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     final orderActive = Provider.of<OrderProvider>(context);
+
+    /////////////////////////////////////////
+    print('code:$code');
+    print('price:$price');
+    print('line:$line');
+    print('name:$name');
+    print('imageUrl:$imageUrl');
+    print('isProductNew:$isProductNew');
+    print('stock:$stock');
+    print('list:$list');
+    print('isProductInAPromotion:$isProductInAPromotion');
+    print('prices:$prices');
+    print('pricesName:$pricesName');
+    print('catalogueID:$catalogueID');
+    print('userZoneDocument:$userZoneDocument');
+    /////////////////////////////////////////
 
     priceFormat(productPrice) {
       double correctAmount = double.parse(productPrice.toStringAsFixed(2));
@@ -252,7 +268,7 @@ class ProductDetailsBody extends StatelessWidget {
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: Text(
-                  name,
+                  '$name',
                   textAlign: TextAlign.left,
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
@@ -379,7 +395,6 @@ class ProductDetailsBody extends StatelessWidget {
                               borderRadius: BorderRadius.circular(20),
                               child: ElevatedButton.icon(
                                 onPressed: () {
-                               
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -445,7 +460,7 @@ class ProductDetailsBody extends StatelessWidget {
                                               BorderRadius.circular(20),
                                           child: ElevatedButton.icon(
                                             onPressed: () {
-                                              if (stock > 0) {
+                                              if (stock! > 0) {
                                                 final newProduct =
                                                     ShoppingCartProduct(
                                                   productQuantity: 1,
