@@ -109,7 +109,11 @@ class SfaAgnostiko extends StatelessWidget {
                           ],
                           title: 'SFA Agnostiko',
                           theme: myTheme,
-                          initialRoute: /* "wrapper" */
+                          initialRoute:
+                              //'wrapper' for mobile to avoid checking terminal
+                              // token, SplashScreenView.route to activate
+                              // in terminals
+                              // 'wrapper',
                               SplashScreenView.route,
                           routes: {
                             SplashScreenView.route: (BuildContext context) =>

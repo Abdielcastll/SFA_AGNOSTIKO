@@ -35,7 +35,7 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
     final orderActive = Provider.of<OrderProvider>(context);
     final currentClientForTheOrder =
         Provider.of<OrderProvider>(context).clientForTheOrder;
-    print('userZoneDocument: $userZoneDocument');
+    // print('userZoneDocument: $userZoneDocument');
 
     return AppBar(
       title: Text(
