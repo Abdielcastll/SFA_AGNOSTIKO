@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -79,6 +80,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
   String commentary = '';
   bool isFiscalSelected = true;
   var numberOrder;
+  int discountByInput = 0;
   DateTime today = DateTime.now();
   DateFormat dateFormatter = DateFormat('dd-MM-yyyy');
 
@@ -102,6 +104,12 @@ class _CheckoutBodyState extends State<CheckoutBody> {
     var total = (widget.subTotal + priceWithIVA()) - priceWithMasterDiscount();
     return total;
   }
+
+  // double totalDiscountApplied() {
+  //   var total = (widget.subTotal - (discountByInput / 100)).toStringAsFixed(2);
+  //   double doubleTotal = double.parse(total);
+  //   return doubleTotal;
+  // }
 
   completeOrder() {
     Navigator.pushReplacement(
@@ -285,11 +293,12 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
+                      margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        AppLocalizations.of(context)!.orderTotal,
+                        'Descuento aplicado ($discountByInput%)',
                         style: TextStyle(
-                          color: myTheme.colorScheme.secondary,
+                          color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -297,6 +306,38 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       ),
                     ),
                     Container(
+                      margin: const EdgeInsets.only(bottom: 5),
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        // '${totalDiscountApplied()}',
+                        'test',
+                        style: TextStyle(
+                          color: myTheme.colorScheme.primary,
+                          fontFamily: 'Poppins-regular',
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        AppLocalizations.of(context)!.orderTotal,
+                        style: TextStyle(
+                          color: myTheme.colorScheme.onPrimaryContainer,
+                          fontFamily: 'Poppins-regular',
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerRight,
                       child: Text(
                         '${priceFormat(totalOfTheOrder)}',
@@ -313,24 +354,137 @@ class _CheckoutBodyState extends State<CheckoutBody> {
               ],
             ),
           ),
-          widget.client!.name.toString().contains('000A Cliente Default')
-              ? Container(
-                  height: 50,
-                  width: MediaQuery.of(context).size.width,
-                  alignment: Alignment.center,
-                  margin: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                  child: Center(
-                    child: Text(
-                      'Dirección por defecto seleccionada',
-                      style: TextStyle(
-                        color: myTheme.colorScheme.primary,
-                        fontFamily: 'Poppins-regular',
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+          // Descuentos
+          Container(
+            // height: 150,
+            margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+            height: 100,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: Colors.white,
+            ),
+            // color: Colors.grey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: const EdgeInsets.fromLTRB(10, 5, 10, 0),
+                  child: Text(
+                    'Aplicar descuento',
+                    style: TextStyle(
+                      color: myTheme.colorScheme.primary,
+                      fontFamily: 'Poppins-regular',
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                )
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(5, 5, 10, 0),
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      // width: 300,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: Colors.transparent,
+                        ),
+                      ),
+                      child: Material(
+                        child: TextField(
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: myTheme.colorScheme.primary,
+                          ),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                          //  textAlign: TextAlign.center,
+                          keyboardType: TextInputType.phone,
+                          maxLines: 1,
+                          maxLength: 3,
+                          textCapitalization: TextCapitalization.none,
+                          decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                MaterialCommunityIcons.label_percent,
+                                color: myTheme.colorScheme.primary,
+                              ),
+                              onPressed: () {
+                                // Aplicar porcentaje
+                                // discountByInput ??= 0;
+                                if (discountByInput > 99) {
+                                  Fluttertoast.showToast(
+                                    msg:
+                                        'El descuento no puede exceder del 99%',
+                                    backgroundColor:
+                                        myTheme.colorScheme.primary,
+                                    textColor: Colors.white,
+                                  );
+                                }
+                                print(discountByInput);
+                              },
+                            ),
+                            contentPadding:
+                                const EdgeInsets.fromLTRB(14, 0, 14, 0),
+                            hintText: '% de descuento',
+                            counterText: "",
+                            hintStyle: TextStyle(
+                              fontSize: 14,
+                              color:
+                                  myTheme.colorScheme.primary.withOpacity(0.4),
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: BorderSide(
+                                color: myTheme.colorScheme.primary,
+                              ),
+                            ),
+                          ),
+                          onChanged: (value) {
+                            setState(() {
+                              if (value.isEmpty) {
+                                discountByInput = 0;
+                              } else {
+                                discountByInput = int.parse(value);
+                              }
+
+                              // print(discountByInput);
+                              // numberOrder = value;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+
+          widget.client!.name.toString().contains('000A Cliente Default')
+              ? Container(
+                  // height: 50,
+                  // width: MediaQuery.of(context).size.width,
+                  // alignment: Alignment.center,
+                  // margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  // child: Center(
+                  //   child: Text(
+                  //     'Dirección por defecto seleccionada',
+                  //     style: TextStyle(
+                  //       color: myTheme.colorScheme.primary,
+                  //       fontFamily: 'Poppins-regular',
+                  //       fontSize: 16,
+                  //       fontWeight: FontWeight.bold,
+                  //     ),
+                  //   ),
+                  // ),
+                  )
               : Container(
                   margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                   width: MediaQuery.of(context).size.width,
@@ -464,164 +618,168 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                     ],
                   ),
                 ),
-          Container(
-            margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          widget.client!.name.toString().contains('000A Cliente Default')
+              ? Container()
+              : Container(
+                  margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Column(
                     children: [
                       Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          AppLocalizations.of(context)!.orderNumber,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: myTheme.colorScheme.primary,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Fecha de Entrega',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: myTheme.colorScheme.primary,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(10, 5, 0, 0),
-                      width: 120,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: Colors.transparent,
-                        ),
-                      ),
-                      child: Container(
-                        margin: const EdgeInsets.fromLTRB(10, 5, 0, 10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(
-                            color: Colors.transparent,
-                          ),
-                        ),
-                        child: TextField(
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: myTheme.colorScheme.primary,
-                          ),
-                          keyboardType: TextInputType.phone,
-                          maxLines: 1,
-                          maxLength: 10,
-                          textCapitalization: TextCapitalization.none,
-                          decoration: InputDecoration(
-                            contentPadding:
-                                const EdgeInsets.fromLTRB(14, 0, 14, 0),
-                            hintText: '0000',
-                            counterText: "",
-                            hintStyle: TextStyle(
-                              fontSize: 14,
-                              color:
-                                  myTheme.colorScheme.primary.withOpacity(0.4),
+                        margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                AppLocalizations.of(context)!.orderNumber,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: myTheme.colorScheme.primary,
+                                ),
+                              ),
                             ),
-                            border: OutlineInputBorder(
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'Fecha de Entrega',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: myTheme.colorScheme.primary,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.fromLTRB(10, 5, 0, 0),
+                            width: 120,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(16),
-                              borderSide: BorderSide(
+                              border: Border.all(
+                                color: Colors.transparent,
+                              ),
+                            ),
+                            child: Container(
+                              margin: const EdgeInsets.fromLTRB(10, 5, 0, 10),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: Colors.transparent,
+                                ),
+                              ),
+                              child: TextField(
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: myTheme.colorScheme.primary,
+                                ),
+                                keyboardType: TextInputType.phone,
+                                maxLines: 1,
+                                maxLength: 10,
+                                textCapitalization: TextCapitalization.none,
+                                decoration: InputDecoration(
+                                  contentPadding:
+                                      const EdgeInsets.fromLTRB(14, 0, 14, 0),
+                                  hintText: '0000',
+                                  counterText: "",
+                                  hintStyle: TextStyle(
+                                    fontSize: 14,
+                                    color: myTheme.colorScheme.primary
+                                        .withOpacity(0.4),
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(16),
+                                    borderSide: BorderSide(
+                                      color: myTheme.colorScheme.primary
+                                          .withOpacity(0.3),
+                                    ),
+                                  ),
+                                ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    numberOrder = value;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                          Icon(
+                            Icons.numbers_rounded,
+                            color: myTheme.colorScheme.primary,
+                            size: 20,
+                          ),
+                          const SizedBox(width: 50),
+                          Container(
+                            height: 47,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
                                 color: myTheme.colorScheme.primary
                                     .withOpacity(0.3),
                               ),
                             ),
-                          ),
-                          onChanged: (value) {
-                            setState(() {
-                              numberOrder = value;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    Icon(
-                      Icons.numbers_rounded,
-                      color: myTheme.colorScheme.primary,
-                      size: 20,
-                    ),
-                    const SizedBox(width: 50),
-                    Container(
-                      height: 47,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: myTheme.colorScheme.primary.withOpacity(0.3),
-                        ),
-                      ),
-                      alignment: Alignment.centerLeft,
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-                            child: Text(
-                              formattedDate,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: myTheme.colorScheme.primary
-                                    .withOpacity(0.7),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 30,
-                            child: IconButton(
-                              onPressed: () async {
-                                // Seleccionar fecha
-                                DateTime? newDate = await showDatePicker(
-                                  context: context,
-                                  initialDate: today,
-                                  firstDate: DateTime.now(),
-                                  lastDate: DateTime(2023),
-                                );
-                                if (newDate == null) return;
-                                setState(() {
-                                  today = newDate;
-                                  (today);
-                                });
-                              },
-                              splashRadius: 5,
-                              icon: Icon(
-                                Icons.calendar_month,
-                                color: myTheme.colorScheme.primary,
-                                size: 20,
-                              ),
+                            alignment: Alignment.centerLeft,
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                                  child: Text(
+                                    formattedDate,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: myTheme.colorScheme.primary
+                                          .withOpacity(0.7),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 30,
+                                  child: IconButton(
+                                    onPressed: () async {
+                                      // Seleccionar fecha
+                                      DateTime? newDate = await showDatePicker(
+                                        context: context,
+                                        initialDate: today,
+                                        firstDate: DateTime.now(),
+                                        lastDate: DateTime(2023),
+                                      );
+                                      if (newDate == null) return;
+                                      setState(() {
+                                        today = newDate;
+                                        (today);
+                                      });
+                                    },
+                                    splashRadius: 5,
+                                    icon: Icon(
+                                      Icons.calendar_month,
+                                      color: myTheme.colorScheme.primary,
+                                      size: 20,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ],
-            ),
-          ),
           Container(
             margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
             padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -826,6 +984,68 @@ class _CheckoutBodyState extends State<CheckoutBody> {
           //   )
           // :
           Container(
+            margin: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            width: MediaQuery.of(context).size.width,
+            height: 50,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: ElevatedButton(
+                onPressed: () async {
+                  // final orderActive =
+                  //     Provider.of<OrderProvider>(context, listen: false);
+
+                  // if (selectedValue2 != null) {
+                  //   var result = await createOrder(
+                  //     widget.client,
+                  //     userUid,
+                  //     commentary,
+                  //     masterDiscountTotal,
+                  //     widget.cart,
+                  //     selectedValue2,
+                  //     selectedValue,
+                  //     today,
+                  //     taxTotal,
+                  //     numberOrder,
+                  //     widget.subTotal,
+                  //     totalOfTheOrder,
+                  //   );
+                  //   orderActive.setOrder(false, Clients());
+                  //   completeOrder();
+                  // } else {
+                  //   Fluttertoast.showToast(
+                  //       msg: 'Seleccione un tipo de Negociacion por favor');
+                  // }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: myTheme.colorScheme.onPrimaryContainer,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'PROCESAR PAGO ',
+                      style: TextStyle(
+                        fontFamily: 'Poppins-regular',
+                        fontSize: 14,
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+                      child: Icon(
+                        MaterialIcons.payment,
+                        size: 14,
+                        color: Colors.grey.shade300,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Container(
             margin: const EdgeInsets.fromLTRB(20, 0, 20, 30),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
@@ -867,8 +1087,12 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'CONTINUAR',
+                    Text(
+                      widget.client!.name
+                              .toString()
+                              .contains('000A Cliente Default')
+                          ? 'GUARDAR FACTURA'
+                          : 'CONTINUAR',
                       style: TextStyle(
                         fontFamily: 'Poppins-regular',
                         fontSize: 14,
@@ -877,7 +1101,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                     Container(
                       margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
                       child: Icon(
-                        SimpleLineIcons.arrow_right,
+                        MaterialIcons.save_alt,
+                        // SimpleLineIcons.arrow_right,
                         size: 14,
                         color: Colors.grey.shade300,
                       ),
