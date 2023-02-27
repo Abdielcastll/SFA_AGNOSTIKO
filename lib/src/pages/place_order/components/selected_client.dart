@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/examples/clients_example.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
@@ -21,6 +22,10 @@ class SelectedClient extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userRole = Provider.of<UserRole?>(context, listen: true);
+    print('User Role ${userRole?.name}');
+    print("Retail: ${userRole?.isRetail}");
+
     return Column(
       children: [
         Container(
@@ -39,6 +44,22 @@ class SelectedClient extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Container(
+                    margin: EdgeInsets.fromLTRB(14, 0, 0, 2),
+                    height: 16,
+                    width: 180,
+                    child: Text(
+                      userRole?.name ?? "",
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontFamily: 'Poppins-regular',
+                        fontSize: 9,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey.shade500,
+                      ),
+                    ),
+                  ),
                   Container(
                     width: 250,
                     margin: EdgeInsets.fromLTRB(14, 8, 0, 0),

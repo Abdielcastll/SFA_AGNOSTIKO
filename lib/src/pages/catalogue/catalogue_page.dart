@@ -4,6 +4,7 @@ import 'package:flutterfire_ui/auth.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/discount.dart';
 import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/promotions_model.dart';
@@ -39,7 +40,7 @@ class _CataloguePageState extends State<CataloguePage> {
     final productsLimit =
         Provider.of<CounterLimitFirestore>(context).getProductsLimit;
     final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
-
+    getDiscounts();
     return MultiProvider(
       providers: [
         // StreamProvider<List<Products>?>.value(

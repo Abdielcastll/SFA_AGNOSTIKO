@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 
 class UserModel {
   final String? uid;
@@ -28,6 +30,15 @@ class CurrentUserInfo {
     this.role,
     this.uid,
   });
+
+  Future<UserRole?> getUserRole() async {
+    print('OBTENIENDO ROL');
+    if (role == '') {
+      return null;
+    }
+    final r = await getUserRol(role);
+    return r;
+  }
 }
 
 class CurrentUserProvider extends ChangeNotifier {
