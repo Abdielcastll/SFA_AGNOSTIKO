@@ -11,6 +11,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/models/transaction_args.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
+import '../models/user_rol_model.dart';
+
 // Funciones de Visitas
 
 Future createVisitData(
@@ -1289,4 +1291,14 @@ Future registerTransferInterPayment(
       textColor: Colors.white,
     );
   }
+}
+
+// Obtener Rol
+Future<UserRole?> getUserRol(String rolId) async {
+  final rol =
+      await FirebaseFirestore.instance.collection('roles').doc(rolId).get();
+
+  if (!rol.exists) return null;
+
+  return UserRole.fromDocumentSnapshot(rol);
 }
