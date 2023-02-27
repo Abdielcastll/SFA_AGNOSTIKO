@@ -51,17 +51,15 @@ class OrderPage extends StatelessWidget {
 
             //   return NavigationPages();
             // });
-            child: user == null
-                ? Container()
-                : SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        SelectedClient(
-                            client: currentClientForTheOrder, isEditable: true),
-                        SelectedProducts(client: currentClientForTheOrder),
-                      ],
-                    ),
-                  )),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  SelectedClient(
+                      client: currentClientForTheOrder, isEditable: true),
+                  SelectedProducts(client: currentClientForTheOrder),
+                ],
+              ),
+            )),
       ),
     );
   }
