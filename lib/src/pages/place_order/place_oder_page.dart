@@ -20,7 +20,7 @@ class PlaceOrderPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('userZoneDocument: $userZoneDocument');
+    // print('userZoneDocument: $userZoneDocument');
 
     return Scaffold(
       appBar: AppBar(
