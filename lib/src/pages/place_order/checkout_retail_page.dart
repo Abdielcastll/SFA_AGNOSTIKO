@@ -26,8 +26,8 @@ import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_checkout.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class CheckoutPage extends StatefulWidget {
-  const CheckoutPage({
+class CheckoutRetailPage extends StatefulWidget {
+  const CheckoutRetailPage({
     Key? key,
     required this.client,
     required this.cart,
@@ -41,10 +41,10 @@ class CheckoutPage extends StatefulWidget {
   final coinsExchangeRates;
 
   @override
-  State<CheckoutPage> createState() => _CheckoutPageState();
+  State<CheckoutRetailPage> createState() => _CheckoutRetailPageState();
 }
 
-class _CheckoutPageState extends State<CheckoutPage> {
+class _CheckoutRetailPageState extends State<CheckoutRetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -662,399 +662,6 @@ class _CheckoutBodyState extends State<CheckoutBody> {
               ],
             ),
           ),
-
-          Container(
-            margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                  child: Text(
-                    AppLocalizations.of(context)!.orderDeliveryAddress,
-                    style: TextStyle(
-                      color: myTheme.colorScheme.primary,
-                      fontFamily: 'Poppins-regular',
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.fromLTRB(10, 5, 10, 10),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton2(
-                      isExpanded: true,
-                      hint: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              '$selectedValue',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: myTheme.colorScheme.primary,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                      items: items
-                          .map(
-                            (item) => DropdownMenuItem<String>(
-                              value: item,
-                              child: Text(
-                                item,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: myTheme.colorScheme.primary,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          )
-                          .toList(),
-                      value: selectedValue,
-                      onChanged: (value) {
-                        setState(
-                          () {
-                            selectedValue = value as String;
-                            if (value == 'Fiscal') {
-                              isFiscalSelected = true;
-                            } else if (value == 'Despacho') {
-                              isFiscalSelected = false;
-                            }
-                          },
-                        );
-                      },
-                      icon: const Icon(
-                        Icons.arrow_forward_ios_outlined,
-                      ),
-                      iconSize: 11,
-                      iconEnabledColor:
-                          myTheme.colorScheme.primary.withOpacity(0.5),
-                      iconDisabledColor: Colors.grey,
-                      buttonHeight: 50,
-                      buttonWidth: 150,
-                      buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-                      buttonDecoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(
-                          color: myTheme.colorScheme.primary.withOpacity(0.3),
-                        ),
-                        color: Colors.white,
-                      ),
-                      buttonElevation: 0,
-                      itemHeight: 40,
-                      itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                      dropdownMaxHeight: 200,
-                      dropdownWidth: 200,
-                      dropdownPadding: null,
-                      dropdownDecoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white,
-                      ),
-                      dropdownElevation: 8,
-                      scrollbarRadius: const Radius.circular(10),
-                      scrollbarThickness: 6,
-                      scrollbarAlwaysShow: true,
-                      offset: const Offset(0, 0),
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: myTheme.colorScheme.primary.withOpacity(0.3),
-                    ),
-                  ),
-                  width: MediaQuery.of(context).size.width,
-                  child: Text(
-                    isFiscalSelected
-                        ? widget.client?.fiscalAdress
-                        : widget.client?.dispatchAdress,
-                    style: const TextStyle(
-                      fontFamily: 'Poppins-regular',
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          AppLocalizations.of(context)!.orderNumber,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: myTheme.colorScheme.primary,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Fecha de Entrega',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: myTheme.colorScheme.primary,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(10, 5, 0, 0),
-                      width: 120,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: Colors.transparent,
-                        ),
-                      ),
-                      child: Container(
-                        margin: const EdgeInsets.fromLTRB(10, 5, 0, 10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(
-                            color: Colors.transparent,
-                          ),
-                        ),
-                        child: TextField(
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: myTheme.colorScheme.primary,
-                          ),
-                          keyboardType: TextInputType.phone,
-                          maxLines: 1,
-                          maxLength: 10,
-                          textCapitalization: TextCapitalization.none,
-                          decoration: InputDecoration(
-                            contentPadding:
-                                const EdgeInsets.fromLTRB(14, 0, 14, 0),
-                            hintText: '0000',
-                            counterText: "",
-                            hintStyle: TextStyle(
-                              fontSize: 14,
-                              color:
-                                  myTheme.colorScheme.primary.withOpacity(0.4),
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(16),
-                              borderSide: BorderSide(
-                                color: myTheme.colorScheme.primary
-                                    .withOpacity(0.3),
-                              ),
-                            ),
-                          ),
-                          onChanged: (value) {
-                            setState(() {
-                              numberOrder = value;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    Icon(
-                      Icons.numbers_rounded,
-                      color: myTheme.colorScheme.primary,
-                      size: 20,
-                    ),
-                    const SizedBox(width: 50),
-                    Container(
-                      height: 47,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: myTheme.colorScheme.primary.withOpacity(0.3),
-                        ),
-                      ),
-                      alignment: Alignment.centerLeft,
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-                            child: Text(
-                              formattedDate,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: myTheme.colorScheme.primary
-                                    .withOpacity(0.7),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 30,
-                            child: IconButton(
-                              onPressed: () async {
-                                // Seleccionar fecha
-                                DateTime? newDate = await showDatePicker(
-                                  context: context,
-                                  initialDate: today,
-                                  firstDate: DateTime.now(),
-                                  lastDate: DateTime(2023),
-                                );
-                                if (newDate == null) return;
-                                setState(() {
-                                  today = newDate;
-                                  (today);
-                                });
-                              },
-                              splashRadius: 5,
-                              icon: Icon(
-                                Icons.calendar_month,
-                                color: myTheme.colorScheme.primary,
-                                size: 20,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                  child: Text(
-                    'Tipo de negociacion',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: myTheme.colorScheme.primary,
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.fromLTRB(10, 5, 10, 10),
-                  width: 300,
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton2(
-                      isExpanded: true,
-                      hint: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              '$selectedValue2',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: myTheme.colorScheme.primary,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                      items: items2
-                          .map((item) => DropdownMenuItem<String>(
-                                value: item,
-                                child: Text(
-                                  item,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: myTheme.colorScheme.primary,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ))
-                          .toList(),
-                      value: selectedValue2,
-                      onChanged: (value) {
-                        setState(() {
-                          selectedValue2 = value as String;
-                          (selectedValue2);
-                        });
-                      },
-                      icon: const Icon(
-                        Icons.arrow_forward_ios_outlined,
-                      ),
-                      iconSize: 11,
-                      iconEnabledColor:
-                          myTheme.colorScheme.primary.withOpacity(0.5),
-                      iconDisabledColor: Colors.grey,
-                      buttonHeight: 50,
-                      buttonWidth: 150,
-                      buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-                      buttonDecoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(
-                          color: myTheme.colorScheme.primary.withOpacity(0.3),
-                        ),
-                        color: Colors.white,
-                      ),
-                      buttonElevation: 0,
-                      itemHeight: 40,
-                      itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                      dropdownMaxHeight: 200,
-                      dropdownWidth: 200,
-                      dropdownPadding: null,
-                      dropdownDecoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white,
-                      ),
-                      dropdownElevation: 8,
-                      scrollbarRadius: const Radius.circular(10),
-                      scrollbarThickness: 6,
-                      scrollbarAlwaysShow: true,
-                      offset: const Offset(0, 0),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
           Container(
             margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
             padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -1113,218 +720,218 @@ class _CheckoutBodyState extends State<CheckoutBody> {
               ],
             ),
           ),
-
-          // Container(
-          //   margin: const EdgeInsets.fromLTRB(20, 0, 20, 10),
-          //   decoration: BoxDecoration(
-          //     borderRadius: BorderRadius.circular(20),
-          //   ),
-          //   width: MediaQuery.of(context).size.width,
-          //   height: 50,
-          //   child: ClipRRect(
-          //     borderRadius: BorderRadius.circular(16),
-          //     child: ElevatedButton(
-          //       onPressed: () async {
-          //         // Boton de procesar pago
-          //         showDialog(
-          //             context: context,
-          //             builder: (BuildContext context) {
-          //               return AlertDialog(
-          //                 shape: RoundedRectangleBorder(
-          //                   borderRadius: BorderRadius.all(
-          //                     Radius.circular(16.0),
-          //                   ),
-          //                 ),
-          //                 title: Center(
-          //                   child: Text(
-          //                     'Confirmación',
-          //                   ),
-          //                 ),
-          //                 content: Container(
-          //                   child: SingleChildScrollView(
-          //                     child: Column(
-          //                       mainAxisAlignment: MainAxisAlignment.center,
-          //                       crossAxisAlignment: CrossAxisAlignment.center,
-          //                       // ignore: prefer_const_literals_to_create_immutables
-          //                       children: [
-          //                         Center(
-          //                           child: Text(
-          //                             '¿Pasar a procesar pago?',
-          //                             textAlign: TextAlign.center,
-          //                           ),
-          //                         ),
-          //                       ],
-          //                     ),
-          //                   ),
-          //                 ),
-          //                 actions: [
-          //                   Row(
-          //                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-          //                     children: [
-          //                       ElevatedButton.icon(
-          //                         onPressed: () {
-          //                           // Cancelar
-          //                           Navigator.pop(context);
-          //                         },
-          //                         style: ButtonStyle(
-          //                           backgroundColor: MaterialStateProperty.all(
-          //                             myTheme.colorScheme.primary,
-          //                           ),
-          //                           shape: MaterialStateProperty.all<
-          //                               RoundedRectangleBorder>(
-          //                             RoundedRectangleBorder(
-          //                               borderRadius:
-          //                                   BorderRadius.circular(18.0),
-          //                             ),
-          //                           ),
-          //                         ),
-          //                         icon: Icon(
-          //                           MaterialCommunityIcons.backspace,
-          //                           size: 16,
-          //                         ),
-          //                         label: Text(
-          //                           'Cancelar',
-          //                           style: TextStyle(
-          //                             color: Colors.white,
-          //                             fontFamily: 'Poppins-regular',
-          //                             fontSize: 14,
-          //                             fontWeight: FontWeight.bold,
-          //                           ),
-          //                         ),
-          //                       ),
-          //                       ElevatedButton.icon(
-          //                         onPressed: () async {
-          //                           // Aceptar e Iniciar el proceso de pago
-          //                           // Por pago directo
-          //                           final randomID = FirebaseFirestore.instance
-          //                               .collection('clientes')
-          //                               .doc(widget.client!.clientDocumentId)
-          //                               .collection('pedidos')
-          //                               .doc()
-          //                               .id;
-          //                           print('PAGO DIRECTO');
-          //                           await completePaymentProcess(
-          //                                   widget.client,
-          //                                   userUid,
-          //                                   commentary,
-          //                                   masterDiscountTotal,
-          //                                   widget.cart,
-          //                                   selectedValue2,
-          //                                   selectedValue,
-          //                                   today,
-          //                                   taxTotal,
-          //                                   numberOrder,
-          //                                   widget.subTotal,
-          //                                   totalOfTheOrder,
-          //                                   discountByInput,
-          //                                   randomID)
-          //                               .whenComplete(() {
-          //                             Client currentClient = Client(
-          //                               active: widget.client!.active,
-          //                               specialContributor:
-          //                                   widget.client!.specialContributor,
-          //                               madeBy: widget.client!.madeBy,
-          //                               masterDiscount:
-          //                                   widget.client!.masterDiscount,
-          //                               fiscalAdress:
-          //                                   widget.client!.fiscalAdress,
-          //                               dispatchAdress:
-          //                                   widget.client!.dispatchAdress,
-          //                               email: widget.client!.email,
-          //                               prices: widget.client!.prices,
-          //                               modified: widget.client!.modified,
-          //                               name: widget.client!.name,
-          //                               id: widget.client!.id,
-          //                               prospect: widget.client!.prospect,
-          //                               phone1: widget.client!.phone1,
-          //                               phone2: widget.client!.phone2,
-          //                               idType: widget.client!.idType,
-          //                               zone: widget.client!.zone,
-          //                               clientDocumentId:
-          //                                   widget.client!.clientDocumentId,
-          //                             );
-          //                             Navigator.push(
-          //                               context,
-          //                               MaterialPageRoute(
-          //                                 settings: RouteSettings(
-          //                                     name: 'PAGO-DIRECTO'),
-          //                                 builder: (BuildContext context) =>
-          //                                     AddPaymentPage(
-          //                                   remaining: totalOfTheOrder,
-          //                                   subTotal: widget.subTotal,
-          //                                   discountPercentage:
-          //                                       widget.client?.masterDiscount,
-          //                                   discount: (widget.subTotal / 100) *
-          //                                       widget.client?.masterDiscount,
-          //                                   tax: taxTotal,
-          //                                   percentageTax: 16,
-          //                                   client: currentClient,
-          //                                   invoiceDocumentID: randomID,
-          //                                 ),
-          //                               ),
-          //                             );
-          //                           });
-          //                           print('PAGO REGISTRADO');
-          //                         },
-          //                         style: ButtonStyle(
-          //                           backgroundColor: MaterialStateProperty.all(
-          //                             myTheme.colorScheme.onPrimaryContainer,
-          //                           ),
-          //                           shape: MaterialStateProperty.all<
-          //                               RoundedRectangleBorder>(
-          //                             RoundedRectangleBorder(
-          //                               borderRadius:
-          //                                   BorderRadius.circular(18.0),
-          //                             ),
-          //                           ),
-          //                         ),
-          //                         icon: Icon(
-          //                           MaterialCommunityIcons
-          //                               .contactless_payment_circle,
-          //                           size: 20,
-          //                         ),
-          //                         label: Text(
-          //                           'Continuar',
-          //                           style: TextStyle(
-          //                             color: Colors.white,
-          //                             fontFamily: 'Poppins-regular',
-          //                             fontSize: 14,
-          //                             fontWeight: FontWeight.bold,
-          //                           ),
-          //                         ),
-          //                       ),
-          //                     ],
-          //                   )
-          //                 ],
-          //               );
-          //             });
-          //       },
-          //       style: ElevatedButton.styleFrom(
-          //         backgroundColor: myTheme.colorScheme.onPrimaryContainer,
-          //       ),
-          //       child: Row(
-          //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //         children: [
-          //           Text(
-          //             'PROCESAR PAGO ',
-          //             style: TextStyle(
-          //               fontFamily: 'Poppins-regular',
-          //               fontSize: 14,
-          //             ),
-          //           ),
-          //           Container(
-          //             margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
-          //             child: Icon(
-          //               MaterialIcons.payment,
-          //               size: 14,
-          //               color: Colors.grey.shade300,
-          //             ),
-          //           ),
-          //         ],
-          //       ),
-          //     ),
-          //   ),
-          // ),
+          Container(
+            margin: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            width: MediaQuery.of(context).size.width,
+            height: 50,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: ElevatedButton(
+                onPressed: () async {
+                  // Boton de procesar pago
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(16.0),
+                            ),
+                          ),
+                          title: Center(
+                            child: Text(
+                              'Confirmación',
+                            ),
+                          ),
+                          content: Container(
+                            child: SingleChildScrollView(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                // ignore: prefer_const_literals_to_create_immutables
+                                children: [
+                                  Center(
+                                    child: Text(
+                                      '¿Pasar a procesar pago?',
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          actions: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                ElevatedButton.icon(
+                                  onPressed: () {
+                                    // Cancelar
+                                    Navigator.pop(context);
+                                  },
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                      myTheme.colorScheme.primary,
+                                    ),
+                                    shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(18.0),
+                                      ),
+                                    ),
+                                  ),
+                                  icon: Icon(
+                                    MaterialCommunityIcons.backspace,
+                                    size: 16,
+                                  ),
+                                  label: Text(
+                                    'Cancelar',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'Poppins-regular',
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                ElevatedButton.icon(
+                                  onPressed: () async {
+                                    // Aceptar e Iniciar el proceso de pago
+                                    // Por pago directo
+                                    final firebaseID = FirebaseFirestore
+                                        .instance
+                                        .collection('clientes')
+                                        .doc(widget.client!.clientDocumentId)
+                                        .collection('pedidos')
+                                        .doc()
+                                        .id;
+                                    print('PAGO DIRECTO');
+                                    await completePaymentProcess(
+                                            widget.client,
+                                            userUid,
+                                            commentary,
+                                            masterDiscountTotal,
+                                            widget.cart,
+                                            selectedValue2,
+                                            selectedValue,
+                                            today,
+                                            taxTotal,
+                                            numberOrder,
+                                            widget.subTotal,
+                                            totalOfTheOrder,
+                                            discountByInput,
+                                            firebaseID)
+                                        .whenComplete(() {
+                                      Client currentClient = Client(
+                                        active: widget.client!.active,
+                                        specialContributor:
+                                            widget.client!.specialContributor,
+                                        madeBy: widget.client!.madeBy,
+                                        masterDiscount:
+                                            widget.client!.masterDiscount,
+                                        fiscalAdress:
+                                            widget.client!.fiscalAdress,
+                                        dispatchAdress:
+                                            widget.client!.dispatchAdress,
+                                        email: widget.client!.email,
+                                        prices: widget.client!.prices,
+                                        modified: widget.client!.modified,
+                                        name: widget.client!.name,
+                                        id: widget.client!.id,
+                                        prospect: widget.client!.prospect,
+                                        phone1: widget.client!.phone1,
+                                        phone2: widget.client!.phone2,
+                                        idType: widget.client!.idType,
+                                        zone: widget.client!.zone,
+                                        clientDocumentId:
+                                            widget.client!.clientDocumentId,
+                                      );
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          settings: RouteSettings(
+                                              name: 'PAGO-DIRECTO'),
+                                          builder: (BuildContext context) =>
+                                              AddPaymentPage(
+                                            remaining: totalOfTheOrder,
+                                            subTotal: widget.subTotal,
+                                            discountPercentage:
+                                                widget.client?.masterDiscount,
+                                            discount: (widget.subTotal / 100) *
+                                                widget.client?.masterDiscount,
+                                            tax: taxTotal,
+                                            percentageTax: 16,
+                                            client: currentClient,
+                                            invoiceDocumentID: firebaseID,
+                                          ),
+                                        ),
+                                      );
+                                    });
+                                    print('PAGO REGISTRADO');
+                                  },
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                      myTheme.colorScheme.onPrimaryContainer,
+                                    ),
+                                    shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(18.0),
+                                      ),
+                                    ),
+                                  ),
+                                  icon: Icon(
+                                    MaterialCommunityIcons
+                                        .contactless_payment_circle,
+                                    size: 20,
+                                  ),
+                                  label: Text(
+                                    'Continuar',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'Poppins-regular',
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        );
+                      });
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: myTheme.colorScheme.onPrimaryContainer,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'PROCESAR PAGO ',
+                      style: TextStyle(
+                        fontFamily: 'Poppins-regular',
+                        fontSize: 14,
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+                      child: Icon(
+                        MaterialIcons.payment,
+                        size: 14,
+                        color: Colors.grey.shade300,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
           Container(
             margin: const EdgeInsets.fromLTRB(20, 0, 20, 30),
             decoration: BoxDecoration(

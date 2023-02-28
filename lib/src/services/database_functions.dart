@@ -120,6 +120,7 @@ Future createOrder(
   numberOrder,
   double subTotal,
   double totalOfTheOrder,
+  int? discountPercentage,
 ) async {
   print('/// CREAR PEDIDO ///');
 
@@ -198,10 +199,11 @@ Future createOrder(
       'fecha': Timestamp.fromDate(DateTime.now()),
       'fechaEntrega': Timestamp.fromDate(today),
       'idsProductos': productsIds,
-      'impuesto': taxTotal,
+      'impuesto': double.parse(taxTotal!.toStringAsFixed(2)),
       'nroCorrelativo': 'NaN',
       'ordenDeCompra': numberOrder ?? 0,
       'porcentajeDescuentoMaestro': client.masterDiscount,
+      'porcentajeDescuentoAplicado': discountPercentage,
       'productos': products,
       'subtotal': subTotal,
       'tasasDeCambio': exchangeRate,
@@ -1293,6 +1295,192 @@ Future registerTransferInterPayment(
   }
 }
 
+// Pago directo desde el checkout
+
+Future completePaymentProcess(
+  Clients? client,
+  String? userUid,
+  String? commentary,
+  double? masterDiscount,
+  List<ShoppingCartProduct> shoppingCart,
+  String? negotiation,
+  String? deliveryAddress,
+  DateTime today,
+  double? taxTotal,
+  numberOrder,
+  double subTotal,
+  double totalOfTheOrder,
+  int? discountPercentage,
+  randomID,
+) async {
+  print('CREAR PEDIDO COMPLETADO');
+  final String totalAsString = totalOfTheOrder.toStringAsFixed(2);
+  final List quantitiesList = [];
+  final List productsIds = [];
+  final List<Map<dynamic, dynamic>> products = [];
+  final Map<String, double> exchangeRate = {
+    'BTC': 0.00011,
+    'EUR': 0.89,
+    'VED': 4.58,
+    'MXN': 19.43
+  };
+  shoppingCart.forEach((element) {
+    quantitiesList.add(element.productQuantity);
+    productsIds.add(element.code);
+    products.add({
+      'cantidad': element.productQuantity?.toInt() ?? 0,
+      'codigo': element.code?.toString() ?? 'NaN',
+      'id': element.code?.toString() ?? 'NaN',
+      'idListaDePrecios': client?.prices ?? 'NaN',
+      'monto': double.parse(element.totalAmount ?? '0') *
+          int.parse(element.productQuantity.toString()),
+      'nombre': element.name?.toString() ?? 'NaN',
+      'precioUnitario': double.parse(element.unitPrice ?? '0.0'),
+      'urlFoto': '',
+    });
+    print('Cantidad de producto: ${element.code}: ${element.productQuantity}');
+  });
+  print('Cantidades: $quantitiesList');
+  print(
+      'Cliente: ${FirebaseFirestore.instance.collection('clientes').doc(client!.clientDocumentId)}');
+  print('IDs: $productsIds');
+  print('Productos: $products');
+
+  return await FirebaseFirestore.instance
+      .collection('clientes')
+      .doc(client!.clientDocumentId)
+      .collection('pedidos')
+      .doc(randomID)
+      .set(
+    {
+      'cantidadesProductos': quantitiesList,
+      'cliente': FirebaseFirestore.instance
+          .collection('clientes')
+          .doc(client.clientDocumentId),
+      'comentario': commentary,
+      'descuentoMaestro': masterDiscount,
+      'tipoDeNegociacion': negotiation,
+      'direccionEntrega': deliveryAddress == 'Fiscal'
+          ? client.fiscalAdress
+          : client.dispatchAdress,
+      'facturacionFallida': false,
+      'facturado': true,
+      'fecha': Timestamp.fromDate(DateTime.now()),
+      'fechaEntrega': Timestamp.fromDate(today),
+      'idsProductos': productsIds,
+      'impuesto': double.parse(taxTotal!.toStringAsFixed(2)),
+      'nroCorrelativo': 'NaN',
+      'ordenDeCompra': numberOrder ?? 0,
+      'porcentajeDescuentoMaestro': client.masterDiscount,
+      'porcentajeDescuentoAplicado': discountPercentage,
+      'productos': products,
+      'subtotal': subTotal,
+      'tasasDeCambio': exchangeRate,
+      'timestampRegistro': Timestamp.fromDate(DateTime.now()),
+      'totalAPagar': double.parse(totalAsString),
+      'ultimaModificacion': Timestamp.fromDate(DateTime.now()),
+      'vendedor':
+          FirebaseFirestore.instance.collection('usuarios').doc(userUid),
+    },
+  ).whenComplete(() async {
+    print('/// CREAR FACTURA ///');
+
+    final clientID = FirebaseFirestore.instance
+        .collection('clientes')
+        .doc(client.clientDocumentId);
+    final discount = masterDiscount;
+    final date = Timestamp.fromDate(DateTime.now());
+    final tax = taxTotal;
+    final String totalAsString = totalOfTheOrder.toStringAsFixed(2);
+
+    var correlativeNumber = await FirebaseFirestore.instance
+        .collection('config')
+        .doc('contador_pedidos')
+        .get()
+        .then((value) {
+      return value['numero'];
+    });
+    const isPaid = false;
+    final payments = [];
+    final order = FirebaseFirestore.instance
+        .collection('clientes')
+        .doc(client.clientDocumentId)
+        .collection('pedidos')
+        .doc(randomID);
+    final discountPercentage = client.masterDiscount;
+    final referenceCreditNote = [];
+    final subTotalInvoice = subTotal;
+    final register = Timestamp.fromDate(DateTime.now());
+    final lastModification = <String, dynamic>{
+      'timestamp': register,
+      'usuario': FirebaseFirestore.instance.collection('usuarios').doc(userUid),
+    };
+    final seller =
+        FirebaseFirestore.instance.collection('usuarios').doc(userUid);
+
+    print(clientID);
+    print(discount);
+    print(date);
+    print(tax);
+    print(totalAsString);
+    print(isPaid);
+    print(payments);
+    print(order);
+    print(discountPercentage);
+    print(referenceCreditNote);
+    print(subTotal);
+    print(register);
+    print(lastModification);
+    print(seller);
+    print(correlativeNumber);
+    print(correlativeNumber + 1);
+
+    await FirebaseFirestore.instance
+        .collection('clientes')
+        .doc(client.clientDocumentId)
+        .collection('pedidos')
+        .doc(randomID)
+        .update({
+      'facturado': true,
+      'nroCorrelativo': correlativeNumber + 1
+    }).whenComplete(() async {
+      return await FirebaseFirestore.instance
+          .collection('clientes')
+          .doc(client.clientDocumentId)
+          .collection('facturas')
+          .doc(randomID)
+          .set({
+        'cliente': clientID,
+        'descuentoMaestro': discount,
+        'fecha': Timestamp.fromDate(DateTime.now()),
+        'impuesto': double.parse(tax!.toStringAsFixed(2)),
+        'montoTotal': double.parse(totalAsString),
+        'nroCorrelativo': correlativeNumber + 1,
+        'pagada': isPaid,
+        'pagos': payments,
+        'pedido': order,
+        'porcentajeDescuentoMaestro': discountPercentage,
+        'porcentajeImpuesto': 16,
+        'referenciaNotasCredito': referenceCreditNote,
+        'subtotal': subTotalInvoice,
+        'timestampRegistro': register,
+        'ultimaModificacion': lastModification,
+        'vendedor': seller,
+      }).whenComplete(() async {
+        return await FirebaseFirestore.instance
+            .collection('config')
+            .doc('contador_pedidos')
+            .update({'numero': correlativeNumber + 1});
+      }).whenComplete(() =>
+              Fluttertoast.showToast(msg: 'Factura ${correlativeNumber + 1}'));
+    });
+  });
+  // await test().whenComplete(() {
+  //   print('2: $randomID');
+  // });
+}
+
+Future test() async {}
 // Obtener Rol
 Future<UserRole?> getUserRol(String rolId) async {
   final rol =

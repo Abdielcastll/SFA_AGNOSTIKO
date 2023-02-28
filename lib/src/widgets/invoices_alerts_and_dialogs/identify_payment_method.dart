@@ -1280,6 +1280,7 @@ identifyPaymentMethod(
                                 textColor: Colors.white,
                               );
                             }
+                            print(invoiceDocumentID);
                             await registerMoneyPayment(
                               client,
                               invoiceDocumentID,
