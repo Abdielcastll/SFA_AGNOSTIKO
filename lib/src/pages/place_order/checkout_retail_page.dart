@@ -82,6 +82,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
   String? selectedValue = 'Fiscal';
   String? selectedValue2 = 'Factura';
   String? selectedDiscount = '0';
+  double amountPayed = 0;
   String commentary = '';
   bool isFiscalSelected = true;
   var numberOrder;
@@ -152,6 +153,15 @@ class _CheckoutBodyState extends State<CheckoutBody> {
   @override
   void initState() {
     super.initState();
+  }
+
+  updatePayed(double amount) {
+    print('payed $amount');
+    if (amount != null && amount != 0) {
+      setState(() {
+        amountPayed += amount;
+      });
+    }
   }
 
   @override
@@ -659,6 +669,37 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                     ),
                   ],
                 ),
+                if (amountPayed > 0)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Monto Pagado',
+                          style: TextStyle(
+                            color: myTheme.colorScheme.onPrimaryContainer,
+                            fontFamily: 'Poppins-regular',
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 5),
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          priceFormat(amountPayed),
+                          style: TextStyle(
+                            color: myTheme.colorScheme.onPrimaryContainer,
+                            fontFamily: 'Poppins-regular',
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
               ],
             ),
           ),
@@ -811,66 +852,65 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                         .id;
                                     print('PAGO DIRECTO');
                                     await completePaymentProcess(
-                                            widget.client,
-                                            userUid,
-                                            commentary,
-                                            masterDiscountTotal,
-                                            widget.cart,
-                                            selectedValue2,
-                                            selectedValue,
-                                            today,
-                                            taxTotal,
-                                            numberOrder,
-                                            widget.subTotal,
-                                            totalOfTheOrder,
-                                            discountByInput,
-                                            firebaseID)
-                                        .whenComplete(() {
-                                      Client currentClient = Client(
-                                        active: widget.client!.active,
-                                        specialContributor:
-                                            widget.client!.specialContributor,
-                                        madeBy: widget.client!.madeBy,
-                                        masterDiscount:
-                                            widget.client!.masterDiscount,
-                                        fiscalAdress:
-                                            widget.client!.fiscalAdress,
-                                        dispatchAdress:
-                                            widget.client!.dispatchAdress,
-                                        email: widget.client!.email,
-                                        prices: widget.client!.prices,
-                                        modified: widget.client!.modified,
-                                        name: widget.client!.name,
-                                        id: widget.client!.id,
-                                        prospect: widget.client!.prospect,
-                                        phone1: widget.client!.phone1,
-                                        phone2: widget.client!.phone2,
-                                        idType: widget.client!.idType,
-                                        zone: widget.client!.zone,
-                                        clientDocumentId:
-                                            widget.client!.clientDocumentId,
-                                      );
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          settings: RouteSettings(
-                                              name: 'PAGO-DIRECTO'),
-                                          builder: (BuildContext context) =>
-                                              AddPaymentPage(
-                                            remaining: totalOfTheOrder,
-                                            subTotal: widget.subTotal,
-                                            discountPercentage:
-                                                widget.client?.masterDiscount,
-                                            discount: (widget.subTotal / 100) *
-                                                widget.client?.masterDiscount,
-                                            tax: taxTotal,
-                                            percentageTax: 16,
-                                            client: currentClient,
-                                            invoiceDocumentID: firebaseID,
-                                          ),
+                                        widget.client,
+                                        userUid,
+                                        commentary,
+                                        masterDiscountTotal,
+                                        widget.cart,
+                                        selectedValue2,
+                                        selectedValue,
+                                        today,
+                                        taxTotal,
+                                        numberOrder,
+                                        widget.subTotal,
+                                        totalOfTheOrder,
+                                        discountByInput,
+                                        firebaseID);
+                                    Client currentClient = Client(
+                                      active: widget.client!.active,
+                                      specialContributor:
+                                          widget.client!.specialContributor,
+                                      madeBy: widget.client!.madeBy,
+                                      masterDiscount:
+                                          widget.client!.masterDiscount,
+                                      fiscalAdress: widget.client!.fiscalAdress,
+                                      dispatchAdress:
+                                          widget.client!.dispatchAdress,
+                                      email: widget.client!.email,
+                                      prices: widget.client!.prices,
+                                      modified: widget.client!.modified,
+                                      name: widget.client!.name,
+                                      id: widget.client!.id,
+                                      prospect: widget.client!.prospect,
+                                      phone1: widget.client!.phone1,
+                                      phone2: widget.client!.phone2,
+                                      idType: widget.client!.idType,
+                                      zone: widget.client!.zone,
+                                      clientDocumentId:
+                                          widget.client!.clientDocumentId,
+                                    );
+                                    final payed = await Navigator.push<double>(
+                                      context,
+                                      MaterialPageRoute(
+                                        settings:
+                                            RouteSettings(name: 'PAGO-DIRECTO'),
+                                        builder: (BuildContext context) =>
+                                            AddPaymentPage(
+                                          remaining: totalOfTheOrder,
+                                          subTotal: widget.subTotal,
+                                          discountPercentage:
+                                              widget.client?.masterDiscount,
+                                          discount: (widget.subTotal / 100) *
+                                              widget.client?.masterDiscount,
+                                          tax: taxTotal,
+                                          percentageTax: 16,
+                                          client: currentClient,
+                                          invoiceDocumentID: firebaseID,
+                                          updatePayed: updatePayed,
                                         ),
-                                      );
-                                    });
+                                      ),
+                                    );
+
                                     print('PAGO REGISTRADO');
                                   },
                                   style: ButtonStyle(
@@ -1082,11 +1122,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      widget.client!.name
-                              .toString()
-                              .contains('000A Cliente Default')
-                          ? 'GUARDAR PEDIDO'
-                          : 'CONTINUAR',
+                      'GUARDAR PEDIDO',
                       style: TextStyle(
                         fontFamily: 'Poppins-regular',
                         fontSize: 14,

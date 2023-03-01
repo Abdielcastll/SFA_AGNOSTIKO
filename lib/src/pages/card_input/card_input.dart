@@ -54,10 +54,8 @@ class _CardInputViewState extends State<CardInputView> {
 
   @override
   Widget build(BuildContext context) {
-    if (transactionArgs == null) {
-      transactionArgs =
-          ModalRoute.of(context)?.settings.arguments as TransactionArgs;
-    }
+    transactionArgs ??= (ModalRoute.of(context)?.settings.arguments! as List)[0]
+        as TransactionArgs;
 
     if (_detectionStarted == false) {
       _detectionStarted = true;
@@ -266,7 +264,10 @@ class _CardInputViewState extends State<CardInputView> {
     Navigator.pushReplacementNamed(
       context,
       EmvTransactionInfoView.route,
-      arguments: transactionArgs,
+      arguments: [
+        transactionArgs,
+        (ModalRoute.of(context)?.settings.arguments! as List)[1]
+      ],
     );
   }
 
@@ -401,11 +402,11 @@ class _CardInputViewState extends State<CardInputView> {
         transactionArgs?.infoTags = await loadInfoTags();
         transactionArgs?.firstGenerateTags = await emvGetGenerateCommandTags();
       }
-      Navigator.pushReplacementNamed(
-        context,
-        EmvTransactionInfoView.route,
-        arguments: transactionArgs,
-      );
+      Navigator.pushReplacementNamed(context, EmvTransactionInfoView.route,
+          arguments: [
+            transactionArgs,
+            (ModalRoute.of(context)?.settings.arguments! as List)[1]
+          ]);
     }
   }
 

@@ -21,7 +21,8 @@ class AddPaymentPage extends StatefulWidget {
       required this.tax,
       required this.percentageTax,
       required this.invoiceDocumentID,
-      required this.client});
+      required this.client,
+      required this.updatePayed});
 
   final double remaining;
   final double subTotal;
@@ -31,6 +32,7 @@ class AddPaymentPage extends StatefulWidget {
   final int percentageTax;
   final invoiceDocumentID;
   final client;
+  final Function(double) updatePayed;
 
   @override
   State<AddPaymentPage> createState() => _AddPaymentPageState();
@@ -51,6 +53,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
         percentageTax: widget.percentageTax,
         client: widget.client,
         invoiceDocumentID: widget.invoiceDocumentID,
+        updatePayed: widget.updatePayed,
       ),
     );
   }
@@ -67,6 +70,7 @@ class AddPaymentBody extends StatefulWidget {
     required this.percentageTax,
     required this.invoiceDocumentID,
     required this.client,
+    required this.updatePayed,
   });
 
   final double remaining;
@@ -77,6 +81,7 @@ class AddPaymentBody extends StatefulWidget {
   final int percentageTax;
   final invoiceDocumentID;
   final client;
+  final Function(double) updatePayed;
 
   @override
   State<AddPaymentBody> createState() => _AddPaymentBodyState();
@@ -596,6 +601,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                   double.parse(
                                       widget.remaining.toStringAsFixed(2)),
                                   selectedCoin,
+                                  updatePayed: widget.updatePayed,
                                 ),
                               )
                             ],

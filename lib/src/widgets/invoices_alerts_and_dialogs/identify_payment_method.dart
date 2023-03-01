@@ -42,17 +42,9 @@ cropImage(filePath, imageFile) async {
   }
 }
 
-identifyPaymentMethod(
-  String? selectedValueA,
-  Client client,
-  invoiceDocumentID,
-  paidAmount,
-  totalOfTheOrder,
-  date,
-  context,
-  remaining,
-  selectedCoin,
-) {
+identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
+    paidAmount, totalOfTheOrder, date, context, remaining, selectedCoin,
+    {Function? updatePayed}) {
   File? imageFile;
   String accountHolder = '';
   String accountNumber = '';
@@ -130,15 +122,9 @@ identifyPaymentMethod(
 
   if (selectedValueA == 'Tarjeta de Debito' ||
       selectedValueA == 'Tarjeta de Credito') {
-    return paymentCard(
-      double.parse(paidAmount),
-      client,
-      invoiceDocumentID,
-      totalOfTheOrder,
-      selectedCoin,
-      date,
-      remaining,
-    );
+    return paymentCard(double.parse(paidAmount), client, invoiceDocumentID,
+        totalOfTheOrder, selectedCoin, date, remaining,
+        updatePayed: updatePayed);
   }
 
   if (selectedValueA == 'Cheque') {

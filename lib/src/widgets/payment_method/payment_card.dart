@@ -13,8 +13,12 @@ import '../../../dialogs/circular_progress_dialog.dart';
 import '../../models/transaction_args.dart';
 import '../../services/utils/emv.dart';
 
-void _acceptAmount(
-    BuildContext context, double amount, InvoiceData invoiceData) async {
+Future<double?> _acceptAmount(
+  BuildContext context,
+  double amount,
+  InvoiceData invoiceData, {
+  Function? updatePayed,
+}) async {
   var platformInfo = await getPlatformInfo();
   var transactionArgs = TransactionArgs(
       platformInfo: platformInfo,
@@ -41,8 +45,11 @@ void _acceptAmount(
       Navigator.pop(context); // y cerramos el popup antes de seguir
     }
 
-    Navigator.pushReplacementNamed(context, CardInputView.route,
-        arguments: transactionArgs);
+    Navigator.pushReplacementNamed(
+      context,
+      CardInputView.route,
+      arguments: [transactionArgs, updatePayed],
+    );
   } else {
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text(
@@ -50,6 +57,7 @@ void _acceptAmount(
       ),
     ));
     Navigator.popUntil(context, (route) => route.isFirst == true);
+    return null;
   }
 }
 
@@ -60,8 +68,9 @@ paymentCard(
   double totalOfTheOrder,
   String currentCoin,
   DateTime date,
-  double remaining,
-) {
+  double remaining, {
+  Function? updatePayed,
+}) {
   final invoiceData = InvoiceData(client, invoiceDocumentID, 'USD', amount,
       totalOfTheOrder, currentCoin, date, remaining);
 
@@ -99,7 +108,8 @@ paymentCard(
                         color: myTheme.colorScheme.primary),
                     child: TextButton(
                       onPressed: () {
-                        _acceptAmount(context, amount, invoiceData);
+                        _acceptAmount(context, amount, invoiceData,
+                            updatePayed: updatePayed);
                       },
                       style: TextButton.styleFrom(
                         foregroundColor: myTheme.colorScheme.primary,

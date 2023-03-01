@@ -373,7 +373,31 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
                           context,
                           MaterialPageRoute(
                             settings: const RouteSettings(name: "ORDER"),
-                            builder: (context) => const OrderPage(),
+                            builder: (context) =>
+                                StreamProvider<CurrentUserInfo?>.value(
+                              value: usersCollection
+                                  .doc(user.uid)
+                                  .snapshots()
+                                  .map(AuthService().userDataFromsnapshot),
+                              initialData: CurrentUserInfo(
+                                name: '',
+                                dni: '',
+                                zone: '',
+                                zoneDocument: '',
+                                email: '',
+                                role: '',
+                                uid: '',
+                              ),
+                              catchError: (context, error) {
+                                print(error);
+                                return;
+                              },
+                              // builder: (context, child) {
+
+                              //   return NavigationPages();
+                              // });
+                              child: const OrderPage(),
+                            ),
                           ),
                         );
                       },

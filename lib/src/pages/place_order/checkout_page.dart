@@ -1475,11 +1475,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      widget.client!.name
-                              .toString()
-                              .contains('000A Cliente Default')
-                          ? 'GUARDAR PEDIDO'
-                          : 'CONTINUAR',
+                      'GUARDAR PEDIDO',
                       style: TextStyle(
                         fontFamily: 'Poppins-regular',
                         fontSize: 14,
