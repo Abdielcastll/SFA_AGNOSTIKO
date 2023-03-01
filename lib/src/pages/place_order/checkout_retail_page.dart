@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -82,7 +82,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
   String? selectedValue = 'Fiscal';
   String? selectedValue2 = 'Factura';
   String? selectedDiscount = '0';
-  double amountPayed = 0;
+  // double amountPayed = 0;
   String commentary = '';
   bool isFiscalSelected = true;
   var numberOrder;
@@ -155,14 +155,14 @@ class _CheckoutBodyState extends State<CheckoutBody> {
     super.initState();
   }
 
-  updatePayed(double amount) {
-    print('payed $amount');
-    if (amount != null && amount != 0) {
-      setState(() {
-        amountPayed += amount;
-      });
-    }
-  }
+  // updatePayed(double amount) {
+  //   print('payed $amount');
+  //   if (amount != null && amount != 0) {
+  //     setState(() {
+  //       amountPayed += amount;
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -669,37 +669,37 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                     ),
                   ],
                 ),
-                if (amountPayed > 0)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Monto Pagado',
-                          style: TextStyle(
-                            color: myTheme.colorScheme.onPrimaryContainer,
-                            fontFamily: 'Poppins-regular',
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 5),
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          priceFormat(amountPayed),
-                          style: TextStyle(
-                            color: myTheme.colorScheme.onPrimaryContainer,
-                            fontFamily: 'Poppins-regular',
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                // if (amountPayed > 0)
+                //   Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       Container(
+                //         alignment: Alignment.centerLeft,
+                //         child: Text(
+                //           'Monto Pagado',
+                //           style: TextStyle(
+                //             color: myTheme.colorScheme.onPrimaryContainer,
+                //             fontFamily: 'Poppins-regular',
+                //             fontSize: 14,
+                //             fontWeight: FontWeight.bold,
+                //           ),
+                //         ),
+                //       ),
+                //       Container(
+                //         margin: const EdgeInsets.only(bottom: 5),
+                //         alignment: Alignment.centerRight,
+                //         child: Text(
+                //           priceFormat(amountPayed),
+                //           style: TextStyle(
+                //             color: myTheme.colorScheme.onPrimaryContainer,
+                //             fontFamily: 'Poppins-regular',
+                //             fontSize: 12,
+                //             fontWeight: FontWeight.bold,
+                //           ),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
               ],
             ),
           ),
@@ -889,7 +889,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                       clientDocumentId:
                                           widget.client!.clientDocumentId,
                                     );
-                                    final payed = await Navigator.push<double>(
+                                    Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         settings:
@@ -906,7 +906,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                           percentageTax: 16,
                                           client: currentClient,
                                           invoiceDocumentID: firebaseID,
-                                          updatePayed: updatePayed,
+                                          // updatePayed: updatePayed,
                                         ),
                                       ),
                                     );

@@ -12,17 +12,18 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/identify_payment_method.dart';
 
 class AddPaymentPage extends StatefulWidget {
-  const AddPaymentPage(
-      {super.key,
-      required this.remaining,
-      required this.subTotal,
-      required this.discountPercentage,
-      required this.discount,
-      required this.tax,
-      required this.percentageTax,
-      required this.invoiceDocumentID,
-      required this.client,
-      required this.updatePayed});
+  const AddPaymentPage({
+    super.key,
+    required this.remaining,
+    required this.subTotal,
+    required this.discountPercentage,
+    required this.discount,
+    required this.tax,
+    required this.percentageTax,
+    required this.invoiceDocumentID,
+    required this.client,
+    // required this.updatePayed,
+  });
 
   final double remaining;
   final double subTotal;
@@ -32,7 +33,7 @@ class AddPaymentPage extends StatefulWidget {
   final int percentageTax;
   final invoiceDocumentID;
   final client;
-  final Function(double) updatePayed;
+  // final Function(double) updatePayed;
 
   @override
   State<AddPaymentPage> createState() => _AddPaymentPageState();
@@ -53,7 +54,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
         percentageTax: widget.percentageTax,
         client: widget.client,
         invoiceDocumentID: widget.invoiceDocumentID,
-        updatePayed: widget.updatePayed,
+        // updatePayed: widget.updatePayed,
       ),
     );
   }
@@ -70,7 +71,7 @@ class AddPaymentBody extends StatefulWidget {
     required this.percentageTax,
     required this.invoiceDocumentID,
     required this.client,
-    required this.updatePayed,
+    // required this.updatePayed,
   });
 
   final double remaining;
@@ -81,7 +82,7 @@ class AddPaymentBody extends StatefulWidget {
   final int percentageTax;
   final invoiceDocumentID;
   final client;
-  final Function(double) updatePayed;
+  // final Function(double) updatePayed;
 
   @override
   State<AddPaymentBody> createState() => _AddPaymentBodyState();
@@ -89,6 +90,10 @@ class AddPaymentBody extends StatefulWidget {
 
 class _AddPaymentBodyState extends State<AddPaymentBody> {
   late String paidAmount = widget.remaining.toStringAsFixed(2);
+  double amountPayed = 0;
+  late double paidAmountWithAmountPayed =
+      double.parse(paidAmount) - amountPayed;
+
   var dateFormatter = DateFormat('dd-MM-yyyy');
   DateTime today = DateTime.now();
   String? selectedValueA;
@@ -111,6 +116,15 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
     'VED',
     'MXN',
   ];
+
+  updatePayed(double amount) {
+    print('payed $amount');
+    if (amount != null && amount != 0) {
+      setState(() {
+        amountPayed += amount;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -370,6 +384,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                     ),
                   ),
                 ),
+
                 // Fecha del registro del pago
                 Text(
                   AppLocalizations.of(context)!.date,
@@ -430,6 +445,38 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                       ),
                     ],
                   ),
+                ),
+                // Monto Pagado
+                // if (amountPayed > 0)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Monto Pagado',
+                        style: TextStyle(
+                          color: myTheme.colorScheme.onPrimaryContainer,
+                          fontFamily: 'Poppins-regular',
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 5),
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        priceFormat(amountPayed),
+                        style: TextStyle(
+                          color: myTheme.colorScheme.onPrimaryContainer,
+                          fontFamily: 'Poppins-regular',
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 //  Monto del pago
 
@@ -578,7 +625,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                               SizedBox(height: 5),
                               Text(
                                 // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(2), selectedCoin)}',
-                                'Saldo restante: ${priceFormatForPaidAmount(widget.remaining, selectedCoin)}',
+                                'Saldo restante: ${priceFormatForPaidAmount(paidAmountWithAmountPayed, selectedCoin)}',
                                 style: TextStyle(
                                   fontFamily: 'Poppins-regular',
                                   color: myTheme.colorScheme.onPrimaryContainer,
@@ -595,13 +642,13 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                   // Aqui va widget.InvoiceTotal pero hay
                                   // que consultar si primero se va a
                                   // pagar completo o por partes aca
-                                  widget.remaining,
+                                  paidAmountWithAmountPayed,
                                   today,
                                   context,
                                   double.parse(
                                       widget.remaining.toStringAsFixed(2)),
                                   selectedCoin,
-                                  updatePayed: widget.updatePayed,
+                                  updatePayed: updatePayed,
                                 ),
                               )
                             ],
