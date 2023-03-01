@@ -11,8 +11,10 @@ import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_checkout.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/identify_payment_method.dart';
 
+import '../../models/clients_model.dart';
+
 class AddPaymentPage extends StatefulWidget {
-  const AddPaymentPage({
+  AddPaymentPage({
     super.key,
     required this.remaining,
     required this.subTotal,
@@ -22,6 +24,7 @@ class AddPaymentPage extends StatefulWidget {
     required this.percentageTax,
     required this.invoiceDocumentID,
     required this.client,
+    this.amountPayed,
     // required this.updatePayed,
   });
 
@@ -33,6 +36,7 @@ class AddPaymentPage extends StatefulWidget {
   final int percentageTax;
   final invoiceDocumentID;
   final client;
+  double? amountPayed;
   // final Function(double) updatePayed;
 
   @override
@@ -54,6 +58,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
         percentageTax: widget.percentageTax,
         client: widget.client,
         invoiceDocumentID: widget.invoiceDocumentID,
+        amountPayed: widget.amountPayed,
         // updatePayed: widget.updatePayed,
       ),
     );
@@ -61,7 +66,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
 }
 
 class AddPaymentBody extends StatefulWidget {
-  const AddPaymentBody({
+  AddPaymentBody({
     super.key,
     required this.remaining,
     required this.subTotal,
@@ -71,6 +76,7 @@ class AddPaymentBody extends StatefulWidget {
     required this.percentageTax,
     required this.invoiceDocumentID,
     required this.client,
+    this.amountPayed,
     // required this.updatePayed,
   });
 
@@ -82,6 +88,7 @@ class AddPaymentBody extends StatefulWidget {
   final int percentageTax;
   final invoiceDocumentID;
   final client;
+  double? amountPayed;
   // final Function(double) updatePayed;
 
   @override
@@ -124,6 +131,12 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
         amountPayed += amount;
       });
     }
+  }
+
+  @override
+  void initState() {
+    amountPayed = widget.amountPayed ?? 0;
+    super.initState();
   }
 
   @override
@@ -649,6 +662,17 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                       widget.remaining.toStringAsFixed(2)),
                                   selectedCoin,
                                   updatePayed: updatePayed,
+                                  paymentBody: AddPaymentBodyAtt(
+                                      client: widget.client,
+                                      discount: widget.discount,
+                                      discountPercentage:
+                                          widget.discountPercentage,
+                                      invoiceDocumentID:
+                                          widget.invoiceDocumentID,
+                                      percentageTax: widget.percentageTax,
+                                      remaining: widget.remaining,
+                                      subTotal: widget.subTotal,
+                                      tax: widget.tax),
                                 ),
                               )
                             ],
@@ -662,4 +686,26 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
       ]),
     );
   }
+}
+
+class AddPaymentBodyAtt {
+  final double remaining;
+  final double subTotal;
+  final int discountPercentage;
+  final double discount;
+  final double tax;
+  final int percentageTax;
+  final Client client;
+  final String invoiceDocumentID;
+  double? amountPaied;
+
+  AddPaymentBodyAtt(
+      {required this.remaining,
+      required this.subTotal,
+      required this.discount,
+      required this.discountPercentage,
+      required this.tax,
+      required this.percentageTax,
+      required this.client,
+      required this.invoiceDocumentID});
 }

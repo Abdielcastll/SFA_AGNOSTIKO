@@ -266,7 +266,8 @@ class _CardInputViewState extends State<CardInputView> {
       EmvTransactionInfoView.route,
       arguments: [
         transactionArgs,
-        (ModalRoute.of(context)?.settings.arguments! as List)[1]
+        (ModalRoute.of(context)?.settings.arguments! as List)[1],
+        (ModalRoute.of(context)?.settings.arguments! as List)[2]
       ],
     );
   }
@@ -405,7 +406,8 @@ class _CardInputViewState extends State<CardInputView> {
       Navigator.pushReplacementNamed(context, EmvTransactionInfoView.route,
           arguments: [
             transactionArgs,
-            (ModalRoute.of(context)?.settings.arguments! as List)[1]
+            (ModalRoute.of(context)?.settings.arguments! as List)[1],
+            (ModalRoute.of(context)?.settings.arguments! as List)[2]
           ]);
     }
   }

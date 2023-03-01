@@ -17,6 +17,8 @@ import '../../services/utils/keypad.dart';
 import '../../services/utils/parameters.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../place_order/add_payment.dart';
+
 class EmvTransactionInfoView extends StatefulWidget {
   static String route = "/emvTransactionInfo";
 
@@ -218,10 +220,33 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                         final payed = transactionResult ==
                                 EmvTransactionResult.Approved
                             ? double.parse(_amountString.replaceFirst('\$', ''))
-                            : 0;
+                            : 0.0;
+                        final paymentBody = (ModalRoute.of(context)
+                            ?.settings
+                            .arguments! as List)[2] as AddPaymentBodyAtt;
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            settings: RouteSettings(name: 'PAGO-DIRECTO'),
+                            builder: (BuildContext context) => AddPaymentPage(
+                              remaining: paymentBody.remaining,
+                              subTotal: paymentBody.subTotal,
+                              discountPercentage:
+                                  paymentBody.discountPercentage,
+                              discount: paymentBody.discount,
+                              tax: paymentBody.tax,
+                              percentageTax: paymentBody.percentageTax,
+                              client: paymentBody.client,
+                              invoiceDocumentID: paymentBody.invoiceDocumentID,
+                              amountPayed:
+                                  (paymentBody.amountPaied ?? 0) + payed,
+                              // updatePayed: updatePayed,
+                            ),
+                          ),
+                        );
                         (ModalRoute.of(context)?.settings.arguments!
                             as List)[1](payed);
-                        Navigator.pop(context, payed);
+                        // Navigator.pop(context, payed);
                       }
                     },
                     style: TextButton.styleFrom(

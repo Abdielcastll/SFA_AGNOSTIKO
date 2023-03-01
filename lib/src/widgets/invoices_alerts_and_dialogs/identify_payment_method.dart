@@ -19,6 +19,7 @@ import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../pages/place_order/add_payment.dart';
 import '../payment_method/payment_card.dart';
 
 getFromGallery(context) async {
@@ -44,7 +45,7 @@ cropImage(filePath, imageFile) async {
 
 identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
     paidAmount, totalOfTheOrder, date, context, remaining, selectedCoin,
-    {Function? updatePayed}) {
+    {Function? updatePayed, AddPaymentBodyAtt? paymentBody}) {
   File? imageFile;
   String accountHolder = '';
   String accountNumber = '';
@@ -124,7 +125,7 @@ identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
       selectedValueA == 'Tarjeta de Credito') {
     return paymentCard(double.parse(paidAmount), client, invoiceDocumentID,
         totalOfTheOrder, selectedCoin, date, remaining,
-        updatePayed: updatePayed);
+        updatePayed: updatePayed, paymentBody: paymentBody);
   }
 
   if (selectedValueA == 'Cheque') {
