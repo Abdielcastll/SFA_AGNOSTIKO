@@ -11,10 +11,12 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../dialogs/circular_progress_dialog.dart';
 import '../../models/transaction_args.dart';
+import '../../pages/place_order/add_payment.dart';
 import '../../services/utils/emv.dart';
 
-void _acceptAmount(
-    BuildContext context, double amount, InvoiceData invoiceData) async {
+Future<double?> _acceptAmount(
+    BuildContext context, double amount, InvoiceData invoiceData,
+    {Function? updatePayed, AddPaymentBodyAtt? paymentBody}) async {
   var platformInfo = await getPlatformInfo();
   var transactionArgs = TransactionArgs(
       platformInfo: platformInfo,
@@ -41,8 +43,11 @@ void _acceptAmount(
       Navigator.pop(context); // y cerramos el popup antes de seguir
     }
 
-    Navigator.pushReplacementNamed(context, CardInputView.route,
-        arguments: transactionArgs);
+    Navigator.pushReplacementNamed(
+      context,
+      CardInputView.route,
+      arguments: [transactionArgs, updatePayed, paymentBody],
+    );
   } else {
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text(
@@ -50,18 +55,13 @@ void _acceptAmount(
       ),
     ));
     Navigator.popUntil(context, (route) => route.isFirst == true);
+    return null;
   }
 }
 
-paymentCard(
-  double amount,
-  Client client,
-  String invoiceDocumentID,
-  double totalOfTheOrder,
-  String currentCoin,
-  DateTime date,
-  double remaining,
-) {
+paymentCard(double amount, Client client, String invoiceDocumentID,
+    double totalOfTheOrder, String currentCoin, DateTime date, double remaining,
+    {Function? updatePayed, AddPaymentBodyAtt? paymentBody}) {
   final invoiceData = InvoiceData(client, invoiceDocumentID, 'USD', amount,
       totalOfTheOrder, currentCoin, date, remaining);
 
@@ -99,7 +99,8 @@ paymentCard(
                         color: myTheme.colorScheme.primary),
                     child: TextButton(
                       onPressed: () {
-                        _acceptAmount(context, amount, invoiceData);
+                        _acceptAmount(context, amount, invoiceData,
+                            updatePayed: updatePayed, paymentBody: paymentBody);
                       },
                       style: TextButton.styleFrom(
                         foregroundColor: myTheme.colorScheme.primary,

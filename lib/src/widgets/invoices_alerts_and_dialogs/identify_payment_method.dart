@@ -14,11 +14,13 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
+import 'package:pwa_sales2go_flutter/src/pages/place_order/completed_pay.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../pages/place_order/add_payment.dart';
 import '../payment_method/payment_card.dart';
 
 getFromGallery(context) async {
@@ -42,17 +44,9 @@ cropImage(filePath, imageFile) async {
   }
 }
 
-identifyPaymentMethod(
-  String? selectedValueA,
-  Client client,
-  invoiceDocumentID,
-  paidAmount,
-  totalOfTheOrder,
-  date,
-  context,
-  remaining,
-  selectedCoin,
-) {
+identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
+    paidAmount, totalOfTheOrder, date, context, remaining, selectedCoin,
+    {Function? updatePayed, AddPaymentBodyAtt? paymentBody}) {
   File? imageFile;
   String accountHolder = '';
   String accountNumber = '';
@@ -130,15 +124,9 @@ identifyPaymentMethod(
 
   if (selectedValueA == 'Tarjeta de Debito' ||
       selectedValueA == 'Tarjeta de Credito') {
-    return paymentCard(
-      double.parse(paidAmount),
-      client,
-      invoiceDocumentID,
-      totalOfTheOrder,
-      selectedCoin,
-      date,
-      remaining,
-    );
+    return paymentCard(double.parse(paidAmount), client, invoiceDocumentID,
+        totalOfTheOrder, selectedCoin, date, remaining,
+        updatePayed: updatePayed, paymentBody: paymentBody);
   }
 
   if (selectedValueA == 'Cheque') {
@@ -1280,6 +1268,7 @@ identifyPaymentMethod(
                                 textColor: Colors.white,
                               );
                             }
+                            print(invoiceDocumentID);
                             await registerMoneyPayment(
                               client,
                               invoiceDocumentID,
@@ -1291,7 +1280,19 @@ identifyPaymentMethod(
                               remaining,
                             );
                             Navigator.pop(context);
-                            Navigator.pop(context);
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (BuildContext context) => CompletedPayPage(
+                                    client: client.name,
+                                    total: totalOfTheOrder,
+                                    method: "Efectivo",
+                                    date:
+                                        '${date.day}-${date.month}-${date.year} ${(date as DateTime).hour}:${(date as DateTime).minute}',
+                                    address: '',
+                                    coinsExchangeRates: []),
+                              ),
+                            );
                           } else {
                             Fluttertoast.showToast(
                                 msg: 'Ingrese Monto porfavor');

@@ -17,6 +17,8 @@ import '../../services/utils/keypad.dart';
 import '../../services/utils/parameters.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../place_order/add_payment.dart';
+
 class EmvTransactionInfoView extends StatefulWidget {
   static String route = "/emvTransactionInfo";
 
@@ -45,8 +47,8 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     String transactionOnlineStr = offlineStr;
 
     if (transactionArgs == null) {
-      transactionArgs =
-          ModalRoute.of(context)?.settings.arguments as TransactionArgs;
+      transactionArgs = (ModalRoute.of(context)?.settings.arguments! as List)[0]
+          as TransactionArgs;
 
       // se supone que al llegar a esta pantalla es porque la transacción finalizó
       // por lo tanto podemos extraer toda la data que haga falta del listener
@@ -102,7 +104,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
         autofocus: true,
         focusNode: FocusNode(),
         onKey: rawKeypadHandler(context, onEscape: () {
-          Navigator.popUntil(context, (route) => route.isFirst == true);
+          Navigator.pop(context);
         }),
         child: Scaffold(
           appBar: AppBar(
@@ -208,7 +210,45 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
                 child: OutlinedButton(
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () {
+                      if (transactionResult == EmvTransactionResult.Approved &&
+                          double.parse(_amountString.replaceFirst('\$', '')) >=
+                              transactionArgs!.invoice!.remaining) {
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            'wrapper', (route) => false);
+                      } else {
+                        final payed = transactionResult ==
+                                EmvTransactionResult.Approved
+                            ? double.parse(_amountString.replaceFirst('\$', ''))
+                            : 0.0;
+                        final paymentBody = (ModalRoute.of(context)
+                            ?.settings
+                            .arguments! as List)[2] as AddPaymentBodyAtt;
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            settings: RouteSettings(name: 'PAGO-DIRECTO'),
+                            builder: (BuildContext context) => AddPaymentPage(
+                              remaining: paymentBody.remaining,
+                              subTotal: paymentBody.subTotal,
+                              discountPercentage:
+                                  paymentBody.discountPercentage,
+                              discount: paymentBody.discount,
+                              tax: paymentBody.tax,
+                              percentageTax: paymentBody.percentageTax,
+                              client: paymentBody.client,
+                              invoiceDocumentID: paymentBody.invoiceDocumentID,
+                              amountPayed:
+                                  (paymentBody.amountPaied ?? 0) + payed,
+                              // updatePayed: updatePayed,
+                            ),
+                          ),
+                        );
+                        (ModalRoute.of(context)?.settings.arguments!
+                            as List)[1](payed);
+                        // Navigator.pop(context, payed);
+                      }
+                    },
                     style: TextButton.styleFrom(
                         foregroundColor: myTheme.colorScheme.primary,
                         backgroundColor: Colors.blue.shade800),

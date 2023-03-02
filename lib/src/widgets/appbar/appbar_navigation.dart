@@ -39,14 +39,33 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
     // print('userZoneDocument: $userZoneDocument');
 
     return AppBar(
-      title: Text(
-        message,
-        style: TextStyle(
-          letterSpacing: 0,
-          fontSize: 22,
-          fontFamily: 'Poppins-regular',
-        ),
-      ),
+      title: orderActive.orderActive == true
+          ? Container(
+              margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+              height: 50,
+              width: 50,
+              child: Image.asset(
+                'assets/images/agn.png',
+                fit: BoxFit.contain,
+              ),
+            )
+          : Container(
+              margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+              height: 50,
+              width: 120,
+              child: Image.asset(
+                'assets/images/agn_full.png',
+                fit: BoxFit.contain,
+              ),
+            ),
+      // title: Text(
+      //   message,
+      //   style: TextStyle(
+      //     letterSpacing: 0,
+      //     fontSize: 22,
+      //     fontFamily: 'Poppins-regular',
+      //   ),
+      // ),
       elevation: 0,
       leadingWidth: 24.0,
       backgroundColor: myTheme.colorScheme.primary,
@@ -373,7 +392,31 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
                           context,
                           MaterialPageRoute(
                             settings: const RouteSettings(name: "ORDER"),
-                            builder: (context) => const OrderPage(),
+                            builder: (context) =>
+                                StreamProvider<CurrentUserInfo?>.value(
+                              value: usersCollection
+                                  .doc(user.uid)
+                                  .snapshots()
+                                  .map(AuthService().userDataFromsnapshot),
+                              initialData: CurrentUserInfo(
+                                name: '',
+                                dni: '',
+                                zone: '',
+                                zoneDocument: '',
+                                email: '',
+                                role: '',
+                                uid: '',
+                              ),
+                              catchError: (context, error) {
+                                print(error);
+                                return;
+                              },
+                              // builder: (context, child) {
+
+                              //   return NavigationPages();
+                              // });
+                              child: const OrderPage(),
+                            ),
                           ),
                         );
                       },

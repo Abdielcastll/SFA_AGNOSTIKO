@@ -117,7 +117,7 @@ class AuthService {
             // print(sharedPreferences!.getString('cargo'));
             // print('/////////////////////////////////////////////////');
 
-            if (record.data()!['rol'].id == 'pIOMu0aLkG5gWFi1UBHo' ||
+            if (record.data()!['esVendedor'] ||
                 record.data()!['rol'].id == 'S7iQ6hOGikhwrFUHmQtV') {
               return _userFromFirebaseUser(user);
             } else {
