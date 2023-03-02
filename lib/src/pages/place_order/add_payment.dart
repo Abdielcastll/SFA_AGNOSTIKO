@@ -460,39 +460,38 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                   ),
                 ),
                 // Monto Pagado
-                // if (amountPayed > 0)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Monto Pagado',
-                        style: TextStyle(
-                          color: myTheme.colorScheme.onPrimaryContainer,
-                          fontFamily: 'Poppins-regular',
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
+                    if (amountPayed > 0)
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Monto Pagado',
+                          style: TextStyle(
+                            color: myTheme.colorScheme.onPrimaryContainer,
+                            fontFamily: 'Poppins-regular',
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 5),
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        priceFormat(amountPayed),
-                        style: TextStyle(
-                          color: myTheme.colorScheme.onPrimaryContainer,
-                          fontFamily: 'Poppins-regular',
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
+                    if (amountPayed > 0)
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 5),
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          priceFormat(amountPayed),
+                          style: TextStyle(
+                            color: myTheme.colorScheme.onPrimaryContainer,
+                            fontFamily: 'Poppins-regular',
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
                   ],
                 ),
-                //  Monto del pago
-
                 selectedCoin == null
                     ? Container()
                     : Text(
@@ -556,7 +555,8 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                             hintText: priceFormatForPaidAmount(
                                     double.parse(paidAmount.isEmpty
                                         ? '0.00'
-                                        : paidAmount),
+                                        : paidAmountWithAmountPayed
+                                            .toStringAsFixed(2)),
                                     selectedCoin)
                                 .toString(),
                             hintStyle: TextStyle(

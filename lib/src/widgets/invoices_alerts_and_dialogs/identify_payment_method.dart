@@ -14,6 +14,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
+import 'package:pwa_sales2go_flutter/src/pages/place_order/completed_pay.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -1279,7 +1280,19 @@ identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
                               remaining,
                             );
                             Navigator.pop(context);
-                            Navigator.pop(context);
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (BuildContext context) => CompletedPayPage(
+                                    client: client.name,
+                                    total: totalOfTheOrder,
+                                    method: "Efectivo",
+                                    date:
+                                        '${date.day}-${date.month}-${date.year} ${(date as DateTime).hour}:${(date as DateTime).minute}',
+                                    address: '',
+                                    coinsExchangeRates: []),
+                              ),
+                            );
                           } else {
                             Fluttertoast.showToast(
                                 msg: 'Ingrese Monto porfavor');
