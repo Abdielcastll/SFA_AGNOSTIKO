@@ -37,17 +37,27 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
 
-      title: Padding(
-        padding: EdgeInsets.only(left: 5),
-        child: Text(
-          AppLocalizations.of(context)!.diary,
-          style: const TextStyle(
-            fontSize: 21,
-            fontWeight: FontWeight.w300,
-            fontFamily: 'Poppins-regular',
-          ),
-        ),
-      ),
+      title: orderActive.orderActive == false
+          ? Padding(
+              padding: EdgeInsets.only(left: 5, top: 5),
+              child: Text(
+                AppLocalizations.of(context)!.diary,
+                style: const TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Poppins-regular',
+                ),
+              ),
+            )
+          : Container(
+              margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+              height: 50,
+              width: 50,
+              child: Image.asset(
+                'assets/images/agn.png',
+                fit: BoxFit.contain,
+              ),
+            ),
       // centerTitle: true,
       elevation: 0,
       backgroundColor: myTheme.colorScheme.primary,
