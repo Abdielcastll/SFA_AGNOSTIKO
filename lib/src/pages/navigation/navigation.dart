@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -41,7 +43,9 @@ class _NavigationPagesState extends State<NavigationPages> {
             const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w500,
-              color: Colors.white,
+              color: Color.fromARGB(255, 196, 196, 196),
+
+              // color: Colors.white,
               fontFamily: 'Poppins-regular',
             ),
           ),
@@ -59,52 +63,60 @@ class _NavigationPagesState extends State<NavigationPages> {
             NavigationDestination(
               icon: Icon(
                 Icons.sell_outlined,
-                color: myTheme.colorScheme.background,
+                // color: myTheme.colorScheme.background,
                 size: 24,
+                color: Color.fromARGB(255, 196, 196, 196),
               ),
               selectedIcon: Icon(
                 Icons.sell,
-                color: myTheme.colorScheme.background,
+                // color: myTheme.colorScheme.background,
                 size: 24,
+                color: Color.fromARGB(255, 196, 196, 196),
               ),
               label: AppLocalizations.of(context)!.home,
             ),
             NavigationDestination(
               icon: Icon(
                 Icons.calendar_today_outlined,
-                color: myTheme.colorScheme.background,
+                // color: myTheme.colorScheme.background,
                 size: 24,
+                color: Color.fromARGB(255, 196, 196, 196),
               ),
               selectedIcon: Icon(
                 Icons.calendar_today,
-                color: myTheme.colorScheme.background,
+                // color: myTheme.colorScheme.background,
                 size: 24,
+                color: Color.fromARGB(255, 196, 196, 196),
               ),
               label: AppLocalizations.of(context)!.diary,
             ),
             NavigationDestination(
               icon: Icon(
                 Icons.store_outlined,
-                color: myTheme.colorScheme.background,
+                // color: myTheme.colorScheme.background,
                 size: 24,
+                color: Color.fromARGB(255, 196, 196, 196),
               ),
               selectedIcon: Icon(
                 Icons.store,
-                color: myTheme.colorScheme.background,
+                // color: myTheme.colorScheme.background,
                 size: 24,
+                color: Color.fromARGB(255, 196, 196, 196),
               ),
               label: AppLocalizations.of(context)!.clients,
             ),
             NavigationDestination(
               icon: Icon(
                 Icons.person_outline,
-                color: myTheme.colorScheme.background,
+                // color: myTheme.colorScheme.background,
                 size: 24,
+                color: Color.fromARGB(255, 196, 196, 196),
               ),
               selectedIcon: Icon(
                 Icons.person_outline,
-                color: myTheme.colorScheme.background,
+                // color: myTheme.colorScheme.background,
                 size: 24,
+                color: Color.fromARGB(255, 196, 196, 196),
               ),
               label: AppLocalizations.of(context)!.profile,
             ),
