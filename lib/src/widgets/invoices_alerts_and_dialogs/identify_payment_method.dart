@@ -44,9 +44,21 @@ cropImage(filePath, imageFile) async {
   }
 }
 
-identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
-    paidAmount, totalOfTheOrder, date, context, remaining, selectedCoin,
-    {Function? updatePayed, AddPaymentBodyAtt? paymentBody, noRetail = false}) {
+identifyPaymentMethod(
+  String? selectedValueA,
+  Client client,
+  invoiceDocumentID,
+  paidAmount,
+  totalOfTheOrder,
+  date,
+  context,
+  remaining,
+  selectedCoin, {
+  Function? updatePayed,
+  AddPaymentBodyAtt? paymentBody,
+  noRetail = false,
+  amountPayed,
+}) {
   File? imageFile;
   String accountHolder = '';
   String accountNumber = '';
@@ -1290,7 +1302,7 @@ identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
                               MaterialPageRoute(
                                 builder: (BuildContext context) => CompletedPayPage(
                                     client: client.name,
-                                    total: totalOfTheOrder,
+                                    total: amountPayed,
                                     method: "Efectivo",
                                     date:
                                         '${date.day}-${date.month}-${date.year} ${(date as DateTime).hour}:${(date as DateTime).minute}',

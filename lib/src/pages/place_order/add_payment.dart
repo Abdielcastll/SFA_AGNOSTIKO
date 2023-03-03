@@ -883,6 +883,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                       remaining: widget.remaining,
                                       subTotal: widget.subTotal,
                                       tax: widget.tax),
+                                  amountPayed: amountPayed,
                                 ),
                               )
                             ],
