@@ -484,74 +484,76 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                     ? Container()
                     : Column(
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              if (amountPayed > 0)
-                                Container(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    'Saldo',
-                                    style: TextStyle(
-                                      color: myTheme
-                                          .colorScheme.onPrimaryContainer,
-                                      fontFamily: 'Poppins-regular',
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
+                          if (amountPayed > 0)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'Saldo',
+                                        style: TextStyle(
+                                          color: myTheme
+                                              .colorScheme.onPrimaryContainer,
+                                          fontFamily: 'Poppins-regular',
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              if (amountPayed > 0)
-                                Container(
-                                  margin: const EdgeInsets.only(bottom: 5),
-                                  alignment: Alignment.centerRight,
-                                  child: Text(
-                                    '${priceFormat(priceFormatForPaidAmount(paidAmountWithAmountPayed, selectedCoin))}',
-                                    style: TextStyle(
-                                      color: myTheme
-                                          .colorScheme.onPrimaryContainer,
-                                      fontFamily: 'Poppins-regular',
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
+                                    Container(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'Monto Pagado',
+                                        style: TextStyle(
+                                          color: myTheme
+                                              .colorScheme.onPrimaryContainer,
+                                          fontFamily: 'Poppins-regular',
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              if (amountPayed > 0)
-                                Container(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    'Monto Pagado',
-                                    style: TextStyle(
-                                      color: myTheme
-                                          .colorScheme.onPrimaryContainer,
-                                      fontFamily: 'Poppins-regular',
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.only(bottom: 5),
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        '${priceFormat(priceFormatForPaidAmount(paidAmountWithAmountPayed, selectedCoin))}',
+                                        style: TextStyle(
+                                          color: myTheme
+                                              .colorScheme.onPrimaryContainer,
+                                          fontFamily: 'Poppins-regular',
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              if (amountPayed > 0)
-                                Container(
-                                  margin: const EdgeInsets.only(bottom: 5),
-                                  alignment: Alignment.centerRight,
-                                  child: Text(
-                                    priceFormat(amountPayed),
-                                    style: TextStyle(
-                                      color: myTheme
-                                          .colorScheme.onPrimaryContainer,
-                                      fontFamily: 'Poppins-regular',
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
+                                    Container(
+                                      margin: const EdgeInsets.only(bottom: 5),
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        priceFormat(amountPayed),
+                                        style: TextStyle(
+                                          color: myTheme
+                                              .colorScheme.onPrimaryContainer,
+                                          fontFamily: 'Poppins-regular',
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                            ],
-                          ),
+                              ],
+                            )
                         ],
                       ),
                 selectedCoin == null
