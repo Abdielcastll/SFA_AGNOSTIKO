@@ -1157,7 +1157,7 @@ void modalBottomSheetForInvoices(
                                                                       ),
                                                                     ),
                                                                     Text(
-                                                                      'Descuento ($discountPercentage%): ${priceFormatForPaidAmount(discount, selectedCoin).toString()}',
+                                                                      'Descuento Maestro ($discountPercentage%): ${priceFormatForPaidAmount(discount, selectedCoin).toString()}',
                                                                       style:
                                                                           TextStyle(
                                                                         fontFamily:
@@ -1203,7 +1203,7 @@ void modalBottomSheetForInvoices(
                                                                             5),
                                                                     Text(
                                                                       // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(2), selectedCoin)}',
-                                                                      'Saldo restante: ${priceFormatForPaidAmount(remaining, selectedCoin)}',
+                                                                      'Saldo: ${priceFormatForPaidAmount(remaining, selectedCoin)}',
                                                                       style:
                                                                           TextStyle(
                                                                         fontFamily:

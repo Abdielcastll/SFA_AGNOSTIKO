@@ -70,7 +70,11 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
               child: IconButton(
                 constraints: const BoxConstraints(),
                 splashRadius: 20.0,
-                icon: const Icon(MdiIcons.bellOutline, size: 25),
+                icon: const Icon(
+                  MdiIcons.bellOutline,
+                  size: 25,
+                  color: Color.fromARGB(255, 196, 196, 196),
+                ),
                 // Redireccionar a la pantalla de notificaciones
                 onPressed: () {
                   Navigator.pushNamed(context, 'notifications');
@@ -83,7 +87,11 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
                     child: IconButton(
                       constraints: const BoxConstraints(),
                       splashRadius: 20.0,
-                      icon: const Icon(MdiIcons.cartOutline, size: 24),
+                      icon: const Icon(
+                        MdiIcons.cartOutline,
+                        size: 24,
+                        color: Color.fromARGB(255, 196, 196, 196),
+                      ),
                       onPressed: () {
                         showDialog(
                           context: context,
@@ -364,6 +372,7 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
                       icon: const Icon(
                         Icons.shopping_cart_rounded,
                         size: 24,
+                        color: Color.fromARGB(255, 196, 196, 196),
                       ),
                       label: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -371,11 +380,19 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
                         children: [
                           Text(
                             currentClientForTheOrder!.name,
-                            style: TextStyle(fontSize: 11),
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontFamily: 'Poppins-regular',
+                              color: Color.fromARGB(255, 196, 196, 196),
+                            ),
                           ),
                           Text(
                             currentClientForTheOrder.prices,
-                            style: TextStyle(fontSize: 11),
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontFamily: 'Poppins-regular',
+                              color: Color.fromARGB(255, 196, 196, 196),
+                            ),
                           ),
                         ],
                       ),

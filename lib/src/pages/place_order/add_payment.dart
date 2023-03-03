@@ -25,6 +25,7 @@ class AddPaymentPage extends StatefulWidget {
     required this.invoiceDocumentID,
     required this.client,
     this.amountPayed,
+
     // required this.updatePayed,
   });
 
@@ -37,6 +38,7 @@ class AddPaymentPage extends StatefulWidget {
   final invoiceDocumentID;
   final client;
   double? amountPayed;
+
   // final Function(double) updatePayed;
 
   @override
@@ -59,6 +61,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
         client: widget.client,
         invoiceDocumentID: widget.invoiceDocumentID,
         amountPayed: widget.amountPayed,
+
         // updatePayed: widget.updatePayed,
       ),
     );
@@ -77,6 +80,7 @@ class AddPaymentBody extends StatefulWidget {
     required this.invoiceDocumentID,
     required this.client,
     this.amountPayed,
+
     // required this.updatePayed,
   });
 
@@ -89,6 +93,7 @@ class AddPaymentBody extends StatefulWidget {
   final invoiceDocumentID;
   final client;
   double? amountPayed;
+
   // final Function(double) updatePayed;
 
   @override
@@ -141,6 +146,9 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.discount);
+    print(widget.discountPercentage);
+
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     String formattedDate = dateFormatter.format(today);
 
@@ -460,38 +468,80 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                   ),
                 ),
                 // Monto Pagado
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    if (amountPayed > 0)
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Monto Pagado',
-                          style: TextStyle(
-                            color: myTheme.colorScheme.onPrimaryContainer,
-                            fontFamily: 'Poppins-regular',
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
+                selectedCoin != null
+                    ? Container()
+                    : Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              if (amountPayed > 0)
+                                Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    'Saldo',
+                                    style: TextStyle(
+                                      color: myTheme
+                                          .colorScheme.onPrimaryContainer,
+                                      fontFamily: 'Poppins-regular',
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              if (amountPayed > 0)
+                                Container(
+                                  margin: const EdgeInsets.only(bottom: 5),
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    '${priceFormat(priceFormatForPaidAmount(paidAmountWithAmountPayed, selectedCoin))}',
+                                    style: TextStyle(
+                                      color: myTheme
+                                          .colorScheme.onPrimaryContainer,
+                                      fontFamily: 'Poppins-regular',
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                            ],
                           ),
-                        ),
-                      ),
-                    if (amountPayed > 0)
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 5),
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          priceFormat(amountPayed),
-                          style: TextStyle(
-                            color: myTheme.colorScheme.onPrimaryContainer,
-                            fontFamily: 'Poppins-regular',
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              if (amountPayed > 0)
+                                Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    'Monto Pagado',
+                                    style: TextStyle(
+                                      color: myTheme
+                                          .colorScheme.onPrimaryContainer,
+                                      fontFamily: 'Poppins-regular',
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              if (amountPayed > 0)
+                                Container(
+                                  margin: const EdgeInsets.only(bottom: 5),
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    priceFormat(amountPayed),
+                                    style: TextStyle(
+                                      color: myTheme
+                                          .colorScheme.onPrimaryContainer,
+                                      fontFamily: 'Poppins-regular',
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                            ],
                           ),
-                        ),
+                        ],
                       ),
-                  ],
-                ),
                 selectedCoin == null
                     ? Container()
                     : Text(
@@ -518,10 +568,18 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                         ),
                         child: TextField(
                           onChanged: (value) {
-                            setState(() {
-                              paidAmount = value;
-                              print(paidAmount);
-                            });
+                            // VERIFICAR SI SE VUELVE NULLABLE
+                            if (value.isEmpty) {
+                              setState(() {
+                                paidAmount = '0';
+                                print(paidAmount);
+                              });
+                            } else {
+                              setState(() {
+                                paidAmount = value;
+                                print(paidAmount);
+                              });
+                            }
                           },
                           style: TextStyle(
                             fontSize: 14,
@@ -583,66 +641,202 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                 selectedCoin != null
                     ? selectedValueA != null
                         ? Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Container(
                                 margin: const EdgeInsets.fromLTRB(
-                                  0,
+                                  50,
                                   10,
-                                  0,
+                                  50,
                                   0,
                                 ),
-                                child: Text(
-                                  'Subtotal: ${priceFormatForPaidAmount(widget.subTotal, selectedCoin).toString()} ',
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins-regular',
-                                    color: myTheme.colorScheme.primary,
-                                    fontSize: 10,
-                                  ),
-                                ),
-                              ),
-                              Text(
-                                'Descuento (${widget.discountPercentage}%): ${priceFormatForPaidAmount(widget.discount, selectedCoin).toString()}',
-                                style: TextStyle(
-                                  fontFamily: 'Poppins-regular',
-                                  color: myTheme.colorScheme.primary,
-                                  fontSize: 10,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Subtotal:',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins-regular',
+                                        color: myTheme.colorScheme.primary,
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                    Text(
+                                      '${priceFormatForPaidAmount(widget.subTotal, selectedCoin).toString()}',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins-regular',
+                                        color: myTheme.colorScheme.primary,
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                               Container(
-                                margin: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+                                margin: const EdgeInsets.fromLTRB(
+                                  50,
+                                  0,
+                                  50,
+                                  0,
+                                ),
                                 child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Descuento Aplicado (${widget.discountPercentage}%):',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins-regular',
+                                        color: myTheme.colorScheme.primary,
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                    Text(
+                                      '${priceFormatForPaidAmount(widget.discount, selectedCoin).toString()}',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins-regular',
+                                        color: myTheme.colorScheme.primary,
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.fromLTRB(
+                                  50,
+                                  0,
+                                  50,
+                                  0,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'IVA (${widget.percentageTax}%):',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins-regular',
+                                        color: myTheme.colorScheme.primary,
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                    Text(
+                                      '${priceFormatForPaidAmount(widget.tax, selectedCoin).toString()}',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins-regular',
+                                        color: myTheme.colorScheme.primary,
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.fromLTRB(
+                                  50,
+                                  10,
+                                  50,
+                                  0,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      // Aqui va widget.InvoiceTotal pero hay
+                                      // que consultar si primero se va a
+                                      // pagar completo o por partes aca
+                                      'Total:',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins-regular',
+                                        color: myTheme.colorScheme.primary,
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                    Text(
+                                      // Aqui va widget.InvoiceTotal pero hay
+                                      // que consultar si primero se va a
+                                      // pagar completo o por partes aca
+                                      '${priceFormatForPaidAmount(widget.remaining, selectedCoin).toString()}',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins-regular',
+                                        color: myTheme.colorScheme.primary,
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              if (amountPayed > 0)
+                                Container(
+                                  margin: const EdgeInsets.fromLTRB(
+                                    50,
+                                    10,
+                                    50,
+                                    0,
+                                  ),
+                                  child: Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        'IVA (${widget.percentageTax}%): ${priceFormatForPaidAmount(widget.tax, selectedCoin).toString()}',
+                                        // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(2), selectedCoin)}',
+                                        'Monto pagado:',
                                         style: TextStyle(
                                           fontFamily: 'Poppins-regular',
-                                          color: myTheme.colorScheme.primary,
+                                          color: myTheme
+                                              .colorScheme.onPrimaryContainer,
                                           fontSize: 10,
                                         ),
                                       ),
                                       Text(
-                                        // Aqui va widget.InvoiceTotal pero hay
-                                        // que consultar si primero se va a
-                                        // pagar completo o por partes aca
-                                        'Total: ${priceFormatForPaidAmount(widget.remaining, selectedCoin).toString()}',
+                                        // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(2), selectedCoin)}',
+                                        '${priceFormat(amountPayed)}',
                                         style: TextStyle(
                                           fontFamily: 'Poppins-regular',
-                                          color: myTheme.colorScheme.primary,
+                                          color: myTheme
+                                              .colorScheme.onPrimaryContainer,
                                           fontSize: 10,
                                         ),
                                       ),
-                                    ]),
-                              ),
+                                    ],
+                                  ),
+                                ),
                               SizedBox(height: 5),
-                              Text(
-                                // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(2), selectedCoin)}',
-                                'Saldo restante: ${priceFormatForPaidAmount(paidAmountWithAmountPayed, selectedCoin)}',
-                                style: TextStyle(
-                                  fontFamily: 'Poppins-regular',
-                                  color: myTheme.colorScheme.onPrimaryContainer,
-                                  fontSize: 10,
+                              Container(
+                                margin: const EdgeInsets.fromLTRB(
+                                  50,
+                                  10,
+                                  50,
+                                  0,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(2), selectedCoin)}',
+                                      'Saldo:',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins-regular',
+                                        color: myTheme
+                                            .colorScheme.onPrimaryContainer,
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                    Text(
+                                      // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(2), selectedCoin)}',
+                                      '${priceFormatForPaidAmount(paidAmountWithAmountPayed, selectedCoin)}',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins-regular',
+                                        color: myTheme
+                                            .colorScheme.onPrimaryContainer,
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                               Container(

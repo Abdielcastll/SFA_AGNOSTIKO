@@ -898,14 +898,17 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                             AddPaymentPage(
                                           remaining: totalOfTheOrder,
                                           subTotal: widget.subTotal,
-                                          discountPercentage:
-                                              widget.client?.masterDiscount,
-                                          discount: (widget.subTotal / 100) *
-                                              widget.client?.masterDiscount,
+                                          discountPercentage: discountByInput,
+                                          // discountPercentage:
+                                          //     widget.client?.masterDiscount,
+                                          discount: totalDiscountApplied(),
+                                          // discount: (widget.subTotal / 100) *
+                                          //     widget.client?.masterDiscount,
                                           tax: taxTotal,
                                           percentageTax: 16,
                                           client: currentClient,
                                           invoiceDocumentID: firebaseID,
+
                                           // updatePayed: updatePayed,
                                         ),
                                       ),
