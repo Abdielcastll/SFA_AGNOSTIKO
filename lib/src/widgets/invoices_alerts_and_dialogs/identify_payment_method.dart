@@ -1254,9 +1254,11 @@ identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
                       child: TextButton(
                         onPressed: () async {
                           // Crear en DB una visita
-
+                          if (paidAmount is String) {
+                            paidAmount = double.parse(paidAmount);
+                          }
                           if (paidAmount != null) {
-                            if (double.parse(paidAmount) > remaining) {
+                            if (paidAmount > remaining) {
                               Fluttertoast.showToast(
                                 msg:
                                     'La cantidad a pagar excede de la deuda pendiente',
@@ -1276,7 +1278,7 @@ identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
                               client,
                               invoiceDocumentID,
                               selectedCoin,
-                              paidAmount,
+                              paidAmount.toString(),
                               totalOfTheOrder,
                               imageFile,
                               date,

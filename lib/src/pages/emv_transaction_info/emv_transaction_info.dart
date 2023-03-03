@@ -47,12 +47,6 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     String offlineStr = AppLocalizations.of(context)!.offline.toUpperCase();
     String onlineStr = AppLocalizations.of(context)!.online.toUpperCase();
 
-    CurrentUserInfo? user = Provider.of<CurrentUserInfo?>(context);
-    UserRole? userRole = Provider.of<UserRole?>(context);
-
-    print('User Infor $user');
-    print('UserRole Infor $userRole');
-
     String transactionResultStr = failedStr;
     String transactionOnlineStr = offlineStr;
 
