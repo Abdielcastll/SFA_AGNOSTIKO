@@ -1234,6 +1234,8 @@ void modalBottomSheetForInvoices(
                                                                         double.parse(
                                                                             remaining.toStringAsFixed(2)),
                                                                         selectedCoin,
+                                                                        noRetail:
+                                                                            true,
                                                                       ),
                                                                     )
                                                                   ],

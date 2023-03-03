@@ -16,7 +16,9 @@ import '../../services/utils/emv.dart';
 
 Future<double?> _acceptAmount(
     BuildContext context, double amount, InvoiceData invoiceData,
-    {Function? updatePayed, AddPaymentBodyAtt? paymentBody}) async {
+    {Function? updatePayed,
+    AddPaymentBodyAtt? paymentBody,
+    noRetail = false}) async {
   var platformInfo = await getPlatformInfo();
   var transactionArgs = TransactionArgs(
       platformInfo: platformInfo,
@@ -46,7 +48,7 @@ Future<double?> _acceptAmount(
     Navigator.pushReplacementNamed(
       context,
       CardInputView.route,
-      arguments: [transactionArgs, updatePayed, paymentBody],
+      arguments: [transactionArgs, updatePayed, paymentBody, noRetail],
     );
   } else {
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -61,7 +63,7 @@ Future<double?> _acceptAmount(
 
 paymentCard(double amount, Client client, String invoiceDocumentID,
     double totalOfTheOrder, String currentCoin, DateTime date, double remaining,
-    {Function? updatePayed, AddPaymentBodyAtt? paymentBody}) {
+    {Function? updatePayed, AddPaymentBodyAtt? paymentBody, noRetail = false}) {
   final invoiceData = InvoiceData(client, invoiceDocumentID, 'USD', amount,
       totalOfTheOrder, currentCoin, date, remaining);
 
@@ -100,7 +102,9 @@ paymentCard(double amount, Client client, String invoiceDocumentID,
                     child: TextButton(
                       onPressed: () {
                         _acceptAmount(context, amount, invoiceData,
-                            updatePayed: updatePayed, paymentBody: paymentBody);
+                            updatePayed: updatePayed,
+                            paymentBody: paymentBody,
+                            noRetail: noRetail);
                       },
                       style: TextButton.styleFrom(
                         foregroundColor: myTheme.colorScheme.primary,

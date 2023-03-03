@@ -267,7 +267,8 @@ class _CardInputViewState extends State<CardInputView> {
       arguments: [
         transactionArgs,
         (ModalRoute.of(context)?.settings.arguments! as List)[1],
-        (ModalRoute.of(context)?.settings.arguments! as List)[2]
+        (ModalRoute.of(context)?.settings.arguments! as List)[2],
+        (ModalRoute.of(context)?.settings.arguments! as List)[3]
       ],
     );
   }
@@ -407,7 +408,8 @@ class _CardInputViewState extends State<CardInputView> {
           arguments: [
             transactionArgs,
             (ModalRoute.of(context)?.settings.arguments! as List)[1],
-            (ModalRoute.of(context)?.settings.arguments! as List)[2]
+            (ModalRoute.of(context)?.settings.arguments! as List)[2],
+            (ModalRoute.of(context)?.settings.arguments! as List)[3]
           ]);
     }
   }

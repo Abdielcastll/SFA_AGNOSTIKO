@@ -46,7 +46,7 @@ cropImage(filePath, imageFile) async {
 
 identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
     paidAmount, totalOfTheOrder, date, context, remaining, selectedCoin,
-    {Function? updatePayed, AddPaymentBodyAtt? paymentBody}) {
+    {Function? updatePayed, AddPaymentBodyAtt? paymentBody, noRetail = false}) {
   File? imageFile;
   String accountHolder = '';
   String accountNumber = '';
@@ -126,7 +126,7 @@ identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
       selectedValueA == 'Tarjeta de Credito') {
     return paymentCard(double.parse(paidAmount), client, invoiceDocumentID,
         totalOfTheOrder, selectedCoin, date, remaining,
-        updatePayed: updatePayed, paymentBody: paymentBody);
+        updatePayed: updatePayed, paymentBody: paymentBody, noRetail: noRetail);
   }
 
   if (selectedValueA == 'Cheque') {

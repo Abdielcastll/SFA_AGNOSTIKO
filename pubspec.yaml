@@ -69,6 +69,7 @@ dependencies:
   barcode_widget: ^2.0.3
   flutter_barcode_scanner: ^2.0.0
   mobile_scanner: ^3.0.0
+  flutter_svg: ^1.1.6
   
 
 dev_dependencies:

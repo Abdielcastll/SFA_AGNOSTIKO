@@ -5,7 +5,11 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
 import 'package:agnostiko/agnostiko.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
@@ -42,6 +46,12 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     String failedStr = AppLocalizations.of(context)!.failed.toUpperCase();
     String offlineStr = AppLocalizations.of(context)!.offline.toUpperCase();
     String onlineStr = AppLocalizations.of(context)!.online.toUpperCase();
+
+    CurrentUserInfo? user = Provider.of<CurrentUserInfo?>(context);
+    UserRole? userRole = Provider.of<UserRole?>(context);
+
+    print('User Infor $user');
+    print('UserRole Infor $userRole');
 
     String transactionResultStr = failedStr;
     String transactionOnlineStr = offlineStr;
@@ -97,7 +107,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
 
     return WillPopScope(
       onWillPop: () async {
-        Navigator.popUntil(context, (route) => route.isFirst == true);
+        Navigator.pop(context);
         return true;
       },
       child: RawKeyboardListener(
@@ -112,7 +122,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
           ),
           body: ListView(
             children: [
-              Text(''),
+              const Text(''),
               Text(
                 "${AppLocalizations.of(context)!.transaction} $transactionResultStr - $transactionOnlineStr",
                 style: TextStyle(
@@ -124,8 +134,32 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              Text(''),
-              Divider(),
+              const Text(''),
+              const Divider(),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    height: 50,
+                    width: 120,
+                    child: SvgPicture.asset(
+                      infoTags?.cardNo?.toHexStr().substring(0, 1) == '5'
+                          ? 'assets/images/mastercard.svg'
+                          : 'assets/images/visa.svg',
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      '''${infoTags?.cardNo?.toHexStr().substring(0, 1) == '5' ? 'Mastercard' : 'Visa'} **** ${infoTags?.cardNo?.toHexStr().substring(12) ?? '-'}''',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+              const Divider(),
               ListTile(
                 enableFeedback: true,
                 title: Text(
@@ -151,30 +185,30 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
               if (_kernelTypeStr != null)
                 ListTile(
                   enableFeedback: true,
-                  title: Text('Kernel Type'),
+                  title: const Text('Kernel Type'),
                   subtitle: Text(_kernelTypeStr ?? ''),
                   onTap: () {},
                 ),
               ListTile(
                 enableFeedback: true,
-                title: Text('PAN (5A)'),
+                title: const Text('PAN (5A)'),
                 subtitle:
                     Text(infoTags?.cardNo?.toHexStr().toUpperCase() ?? '-'),
                 onTap: () {},
               ),
               ListTile(
                 enableFeedback: true,
-                title: Text('AID (9F06)'),
+                title: const Text('AID (9F06)'),
                 subtitle: Text(infoTags?.aid?.toHexStr().toUpperCase() ?? '-'),
                 onTap: () {},
               ),
               ListTile(
                 enableFeedback: true,
-                title: Text('AIP (82)'),
+                title: const Text('AIP (82)'),
                 subtitle: Text(infoTags?.aip?.toHexStr().toUpperCase() ?? '-'),
                 onTap: _onTapAip,
               ),
-              Divider(),
+              const Divider(),
               ...firstGenerateTiles,
               ...secondGenerateTiles,
               ListTile(
@@ -185,7 +219,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
               ),
               ListTile(
                 enableFeedback: true,
-                title: Text('Terminal Capabilities (9F33)'),
+                title: const Text('Terminal Capabilities (9F33)'),
                 subtitle: Text(
                   infoTags?.terminalCapabilities?.toHexStr().toUpperCase() ??
                       '-',
@@ -194,7 +228,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
               ),
               ListTile(
                 enableFeedback: true,
-                title: Text('CVM List (8E)'),
+                title: const Text('CVM List (8E)'),
                 subtitle: Text(
                   infoTags?.cvmList?.toHexStr().toUpperCase() ?? '-',
                 ),
@@ -202,7 +236,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
               ),
               ListTile(
                 enableFeedback: true,
-                title: Text('ATC (9F36)'),
+                title: const Text('ATC (9F36)'),
                 subtitle: Text(infoTags?.atc?.toHexStr().toUpperCase() ?? '-'),
                 onTap: () {},
               ),
@@ -211,6 +245,15 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                     const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
                 child: OutlinedButton(
                     onPressed: () {
+                      final noRetail = (ModalRoute.of(context)
+                          ?.settings
+                          .arguments! as List)[3];
+
+                      if (noRetail) {
+                        Navigator.pop(context);
+                        return;
+                      }
+
                       if (transactionResult == EmvTransactionResult.Approved &&
                           double.parse(_amountString.replaceFirst('\$', '')) >=
                               transactionArgs!.invoice!.remaining) {
@@ -227,7 +270,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            settings: RouteSettings(name: 'PAGO-DIRECTO'),
+                            settings: const RouteSettings(name: 'PAGO-DIRECTO'),
                             builder: (BuildContext context) => AddPaymentPage(
                               remaining: paymentBody.remaining,
                               subTotal: paymentBody.subTotal,
@@ -441,7 +484,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
 
           if (nombreTarjetahabiente != null) {
             listOfTextLine.add(PrinterText(
-                AsciiCodec().decode(nombreTarjetahabiente).toUpperCase(),
+                const AsciiCodec().decode(nombreTarjetahabiente).toUpperCase(),
                 format: TextFormat(fontSize: 16, fontFamily: regularFont),
                 alignment: TextAlignment.Center));
           }
@@ -453,14 +496,14 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
               alignment: TextAlignment.Center));
           if (nombreTarjetahabiente != null) {
             listOfTextLine.add(PrinterText(
-                AsciiCodec().decode(nombreTarjetahabiente).toUpperCase(),
+                const AsciiCodec().decode(nombreTarjetahabiente).toUpperCase(),
                 format: TextFormat(fontSize: 12, fontFamily: regularFont),
                 alignment: TextAlignment.Center));
           }
         } else {
           if (nombreTarjetahabiente != null) {
             listOfTextLine.add(PrinterText(
-                AsciiCodec().decode(nombreTarjetahabiente).toUpperCase(),
+                const AsciiCodec().decode(nombreTarjetahabiente).toUpperCase(),
                 format: TextFormat(fontSize: 12, fontFamily: regularFont),
                 alignment: TextAlignment.Center));
           }
@@ -473,7 +516,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
             alignment: TextAlignment.Center));
         if (nombreTarjetahabiente != null) {
           listOfTextLine.add(PrinterText(
-              AsciiCodec().decode(nombreTarjetahabiente).toUpperCase(),
+              const AsciiCodec().decode(nombreTarjetahabiente).toUpperCase(),
               format: TextFormat(fontSize: 12, fontFamily: regularFont),
               alignment: TextAlignment.Center));
         }
@@ -544,18 +587,18 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
         ? [
             Text(
               title,
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: const TextStyle(fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
             ListTile(
               enableFeedback: true,
-              title: Text('CID (9F27)'),
+              title: const Text('CID (9F27)'),
               subtitle: Text(_getCidStr(tags[0x9f27])),
               onTap: () {},
             ),
             ListTile(
               enableFeedback: true,
-              title: Text('TSI (9B)'),
+              title: const Text('TSI (9B)'),
               subtitle: Text(
                 tags[0x9b]?.toHexStr().toUpperCase() ?? '-',
               ),
@@ -565,7 +608,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
             ),
             ListTile(
               enableFeedback: true,
-              title: Text('TVR (95)'),
+              title: const Text('TVR (95)'),
               subtitle: Text(
                 tags[0x95]?.toHexStr().toUpperCase() ?? '-',
               ),
@@ -573,7 +616,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                 _showTvrBitmap(tags[0x95]);
               },
             ),
-            Divider(),
+            const Divider(),
           ]
         : List<Widget>.empty();
   }
