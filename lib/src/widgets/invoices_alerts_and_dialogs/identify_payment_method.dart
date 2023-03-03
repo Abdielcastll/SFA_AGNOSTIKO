@@ -124,8 +124,11 @@ identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
 
   if (selectedValueA == 'Tarjeta de Debito' ||
       selectedValueA == 'Tarjeta de Credito') {
-    return paymentCard(double.parse(paidAmount), client, invoiceDocumentID,
-        totalOfTheOrder, selectedCoin, date, remaining,
+    if (paidAmount is String) {
+      paidAmount = double.parse(paidAmount.replaceAll('\$', ''));
+    }
+    return paymentCard(paidAmount, client, invoiceDocumentID, totalOfTheOrder,
+        selectedCoin, date, remaining,
         updatePayed: updatePayed, paymentBody: paymentBody, noRetail: noRetail);
   }
 

@@ -287,8 +287,8 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                             ),
                           ),
                         );
-                        (ModalRoute.of(context)?.settings.arguments!
-                            as List)[1](payed);
+                        /* (ModalRoute.of(context)?.settings.arguments!
+                            as List)[1](payed); */
                         // Navigator.pop(context, payed);
                       }
                     },

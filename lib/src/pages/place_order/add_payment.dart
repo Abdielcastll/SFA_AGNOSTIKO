@@ -101,10 +101,9 @@ class AddPaymentBody extends StatefulWidget {
 }
 
 class _AddPaymentBodyState extends State<AddPaymentBody> {
-  late String paidAmount = widget.remaining.toStringAsFixed(2);
+  late double paidAmount = widget.remaining;
   double amountPayed = 0;
-  late double paidAmountWithAmountPayed =
-      double.parse(paidAmount) - amountPayed;
+  late double paidAmountWithAmountPayed = paidAmount - amountPayed;
 
   var dateFormatter = DateFormat('dd-MM-yyyy');
   DateTime today = DateTime.now();
@@ -152,7 +151,12 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     String formattedDate = dateFormatter.format(today);
 
+    print('Current coin $currentCoin');
+
     priceFormat(productPrice) {
+      if (productPrice is String) {
+        productPrice = double.parse(productPrice.replaceAll('\$', ''));
+      }
       double correctAmount = double.parse(productPrice.toStringAsFixed(2));
       if (currentCoin!.contains('USD')) {
         return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
@@ -188,6 +192,14 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
     }
 
     priceFormatForPaidAmount(productPrice, coin) {
+      print('Coin $coin');
+      print('productPrice $productPrice');
+
+      if (productPrice is String) {
+        productPrice = double.parse(productPrice.replaceAll('\$', ''));
+      }
+
+      coin ??= 'Dolares - USD';
       double correctAmount = double.parse(productPrice.toStringAsFixed(2));
       if (coin!.contains('USD')) {
         return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
@@ -571,12 +583,12 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                             // VERIFICAR SI SE VUELVE NULLABLE
                             if (value.isEmpty) {
                               setState(() {
-                                paidAmount = '0';
+                                paidAmount = 0;
                                 print(paidAmount);
                               });
                             } else {
                               setState(() {
-                                paidAmount = value;
+                                paidAmount = double.parse(value);
                                 print(paidAmount);
                               });
                             }
@@ -611,7 +623,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                               0,
                             ),
                             hintText: priceFormatForPaidAmount(
-                                    double.parse(paidAmount.isEmpty
+                                    double.parse(paidAmount == 0
                                         ? '0.00'
                                         : paidAmountWithAmountPayed
                                             .toStringAsFixed(2)),
@@ -663,7 +675,9 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                       ),
                                     ),
                                     Text(
-                                      '${priceFormatForPaidAmount(widget.subTotal, selectedCoin).toString()}',
+                                      priceFormatForPaidAmount(
+                                              widget.subTotal, selectedCoin)
+                                          .toString(),
                                       style: TextStyle(
                                         fontFamily: 'Poppins-regular',
                                         color: myTheme.colorScheme.primary,
