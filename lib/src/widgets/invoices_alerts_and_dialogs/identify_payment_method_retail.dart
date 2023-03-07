@@ -44,7 +44,7 @@ cropImage(filePath, imageFile) async {
   }
 }
 
-identifyPaymentMethod(
+identifyPaymentMethodRetail(
   String? selectedValueA,
   Client client,
   String? invoiceDocumentID,
@@ -1301,38 +1301,34 @@ identifyPaymentMethod(
                                   // print('context,: ${context},');
                                   // print('remaining,: ${remaining},');
                                   // print('selectedCoin: ${selectedCoin}');
-                                  try {
-                                    await registerMoneyPayment(
-                                      client: client,
-                                      invoiceDocumentID: invoiceDocumentID,
-                                      currency: selectedCoin,
-                                      amount: paidAmount,
-                                      totalOfTheOrder: totalOfTheOrder,
-                                      imageFile: imageFile,
-                                      date: date,
-                                      remaining: remaining,
-                                    ).whenComplete(() {
-                                      Navigator.pop(context);
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              CompletedPayPage(
-                                            client: client.name,
-                                            total: paidAmount,
-                                            // total: totalOfTheOrder,
-                                            method: "Efectivo",
-                                            date:
-                                                '${date!.day}-${date.month}-${date.year} ${(date as DateTime).hour}:${(date as DateTime).minute}',
-                                            address: '',
-                                            coinsExchangeRates: [],
-                                          ),
+                                  await registerMoneyPayment(
+                                    client: client,
+                                    invoiceDocumentID: invoiceDocumentID,
+                                    currency: selectedCoin,
+                                    amount: paidAmount,
+                                    totalOfTheOrder: totalOfTheOrder,
+                                    imageFile: imageFile,
+                                    date: date,
+                                    remaining: remaining,
+                                  ).whenComplete(() {
+                                    Navigator.pop(context);
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            CompletedPayPage(
+                                          client: client.name,
+                                          total: paidAmount,
+                                          // total: totalOfTheOrder,
+                                          method: "Efectivo",
+                                          date:
+                                              '${date!.day}-${date.month}-${date.year} ${(date as DateTime).hour}:${(date as DateTime).minute}',
+                                          address: '',
+                                          coinsExchangeRates: [],
                                         ),
-                                      );
-                                    });
-                                  } catch (e) {
-                                    print(e);
-                                  }
+                                      ),
+                                    );
+                                  });
                                 } else {
                                   Fluttertoast.showToast(
                                       msg: 'Ingrese Monto porfavor');

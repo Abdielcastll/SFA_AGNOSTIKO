@@ -19,6 +19,7 @@ import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/identify_payment_method.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/identify_payment_method_retail.dart';
 
 import '../../models/transaction_args.dart';
 import '../../pages/amount_input/amount_input.dart';
@@ -540,12 +541,12 @@ void modalBottomSheetForInvoices(
                                         final List<String> items = [
                                           'Tarjeta de Debito',
                                           'Tarjeta de Credito',
-                                          'Cheque',
-                                          'Criptomoneda',
-                                          'Deposito',
+                                          // 'Cheque',
+                                          // 'Criptomoneda',
+                                          // 'Deposito',
                                           'Efectivo',
-                                          'Transferencia',
-                                          'Transf-internacional',
+                                          // 'Transferencia',
+                                          // 'Transf-internacional',
                                           // 'Nota de credito',
                                         ];
                                         List<String> itemsCoin = [
@@ -1028,8 +1029,15 @@ void modalBottomSheetForInvoices(
                                                                 onChanged:
                                                                     (value) {
                                                                   setState(() {
-                                                                    paidAmount =
-                                                                        value;
+                                                                    if (value
+                                                                        .isEmpty) {
+                                                                      paidAmount =
+                                                                          '0';
+                                                                    } else {
+                                                                      paidAmount =
+                                                                          value;
+                                                                    }
+
                                                                     print(
                                                                         paidAmount);
                                                                   });
@@ -1223,11 +1231,12 @@ void modalBottomSheetForInvoices(
                                                                               0,
                                                                               0),
                                                                       child:
-                                                                          identifyPaymentMethod(
+                                                                          identifyPaymentMethodRetail(
                                                                         selectedValueA,
                                                                         client,
                                                                         invoiceDocumentID,
-                                                                        paidAmount,
+                                                                        double.parse(
+                                                                            paidAmount),
                                                                         invoiceTotal,
                                                                         today,
                                                                         context,

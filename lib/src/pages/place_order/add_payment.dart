@@ -112,12 +112,12 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
   final List<String> items = [
     'Tarjeta de Debito',
     'Tarjeta de Credito',
-    'Cheque',
-    'Criptomoneda',
-    'Deposito',
+    // 'Cheque',
+    // 'Criptomoneda',
+    // 'Deposito',
     'Efectivo',
-    'Transferencia',
-    'Transf-internacional',
+    // 'Transferencia',
+    // 'Transf-internacional',
     // 'Nota de credito',
   ];
   List<String> itemsCoin = [
@@ -883,7 +883,6 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                       remaining: widget.remaining,
                                       subTotal: widget.subTotal,
                                       tax: widget.tax),
-                                  amountPayed: amountPayed,
                                 ),
                               )
                             ],

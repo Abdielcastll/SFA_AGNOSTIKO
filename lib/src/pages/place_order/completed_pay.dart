@@ -83,7 +83,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
   @override
   Widget build(BuildContext context) {
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
-
+    // print(widget.date);
     priceFormat(productPrice) {
       double correctAmount = double.parse(productPrice.toStringAsFixed(2));
       if (currentCoin!.contains('USD')) {

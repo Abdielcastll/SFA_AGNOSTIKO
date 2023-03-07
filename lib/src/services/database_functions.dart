@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -901,28 +903,28 @@ Future registerDepositPayment(
 
 //Registrar pagos de efectivo
 
-Future registerMoneyPayment(
-  client,
-  invoiceDocumentID,
-  currency,
-  amount,
-  totalOfTheOrder,
-  imageFile,
-  date,
-  remaining,
-) async {
-  print('/// Registrar pago en efectivo en factura: $invoiceDocumentID ///');
+Future registerMoneyPayment({
+  Client? client,
+  String? invoiceDocumentID,
+  String? currency,
+  double? amount,
+  double? totalOfTheOrder,
+  File? imageFile,
+  DateTime? date,
+  double? remaining,
+}) async {
+  // print('/// Registrar pago en efectivo en factura: $invoiceDocumentID ///');
 
-  print('Datos recibidos://////////////////////////');
+  // print('Datos recibidos://////////////////////////');
 
-  print(' client: $client');
-  print('  invoiceDocumentID: $invoiceDocumentID');
-  print('  currency: $currency');
-  print('  amount: $amount');
-  print('  totalOfTheOrder: $totalOfTheOrder');
-  print('  imageFile: $imageFile');
-  print('  date: $date');
-  print('  remaining: $remaining');
+  print('invoiceDocumentID: $invoiceDocumentID');
+  print('client: ${client!.name}');
+  print('selectedCoin: $currency');
+  print('paidAmount: $amount');
+  print('totalOfTheOrder: $totalOfTheOrder');
+  print('imageFile: $imageFile');
+  print('date: $date');
+  print('remaining: $remaining');
 
   final Map<String, double> exchangeRate = {
     'BTC': 0.00011,
@@ -950,10 +952,10 @@ Future registerMoneyPayment(
   const nulled = false;
   final codeCurrency = currency.toString();
   const concillied = false;
-  final paymentDate = Timestamp.fromDate(date);
+  final paymentDate = Timestamp.fromDate(date!);
   const method = 'Efectivo';
-  final paymentAmount = double.parse(amount);
-  final originalAmount = double.parse(amount);
+  final paymentAmount = double.parse(amount.toString());
+  final originalAmount = double.parse(amount.toString());
   final exancheRates = selectedCoinExchangeRate;
 
   print('Datos a registrar:///////////////////');
@@ -966,11 +968,11 @@ Future registerMoneyPayment(
   print('originalAmount: $originalAmount');
   print('exancheRates: $exancheRates');
 
-  if (paymentAmount <= remaining) {
+  if (paymentAmount <= remaining!) {
     try {
       return await FirebaseFirestore.instance
           .collection('clientes')
-          .doc(client.clientDocumentId)
+          .doc(client!.clientDocumentId)
           .collection('facturas')
           .doc(invoiceDocumentID)
           .update({
@@ -991,7 +993,7 @@ Future registerMoneyPayment(
         ),
       }).whenComplete(() {
         try {
-          if (remaining - double.parse(amount) <= 0) {
+          if (remaining - double.parse(amount.toString()) <= 0) {
             FirebaseFirestore.instance
                 .collection('clientes')
                 .doc(client.clientDocumentId)
@@ -1004,7 +1006,7 @@ Future registerMoneyPayment(
         } catch (e) {
           print(e);
         }
-      });
+      }).whenComplete(() => print('Operación completada satisfactoriamente'));
     } catch (e) {
       print(e);
     }
