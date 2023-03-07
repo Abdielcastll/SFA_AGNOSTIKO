@@ -44,9 +44,28 @@ cropImage(filePath, imageFile) async {
   }
 }
 
+priceToCurrencySelected(productPrice, coin) {
+  double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+  if (coin!.contains('USD')) {
+    return correctAmount;
+  } else if (coin.contains('VED')) {
+    return correctAmount * 4.58;
+  } else if (coin.contains('EUR')) {
+    return correctAmount * 0.89;
+  } else if (coin.contains('MXN')) {
+    return correctAmount * 19.43;
+  } else if (coin.contains('BTC')) {
+    return correctAmount * 0.00011;
+  } else {
+    return correctAmount * 4.58;
+  }
+}
+
 identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
     paidAmount, totalOfTheOrder, date, context, remaining, selectedCoin,
     {Function? updatePayed, AddPaymentBodyAtt? paymentBody, noRetail = false}) {
+  print('paidAmount}');
+
   File? imageFile;
   String accountHolder = '';
   String accountNumber = '';
@@ -1285,19 +1304,48 @@ identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
                               remaining,
                             );
                             Navigator.pop(context);
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) => CompletedPayPage(
-                                    client: client.name,
-                                    total: totalOfTheOrder,
-                                    method: "Efectivo",
-                                    date:
-                                        '${date.day}-${date.month}-${date.year} ${(date as DateTime).hour}:${(date as DateTime).minute}',
-                                    address: '',
-                                    coinsExchangeRates: []),
-                              ),
-                            );
+
+                            if (paidAmount < remaining && paymentBody != null) {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  settings:
+                                      const RouteSettings(name: 'PAGO-DIRECTO'),
+                                  builder: (BuildContext context) =>
+                                      AddPaymentPage(
+                                    remaining: paymentBody.remaining,
+                                    subTotal: paymentBody.subTotal,
+                                    discountPercentage:
+                                        paymentBody.discountPercentage,
+                                    discount: paymentBody.discount,
+                                    tax: paymentBody.tax,
+                                    percentageTax: paymentBody.percentageTax,
+                                    client: paymentBody.client,
+                                    invoiceDocumentID:
+                                        paymentBody.invoiceDocumentID,
+                                    amountPayed:
+                                        (paymentBody.amountPaied ?? 0) +
+                                            paidAmount,
+                                    // updatePayed: updatePayed,
+                                  ),
+                                ),
+                              );
+                            } else {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      CompletedPayPage(
+                                          client: client.name,
+                                          total: totalOfTheOrder,
+                                          method: "Efectivo",
+                                          date:
+                                              '${date.day}-${date.month}-${date.year} ${(date as DateTime).hour}:${(date).minute}',
+                                          address: '',
+                                          coinsExchangeRates: const []),
+                                ),
+                              );
+                            }
                           } else {
                             Fluttertoast.showToast(
                                 msg: 'Ingrese Monto porfavor');

@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
+import 'package:pwa_sales2go_flutter/src/pages/place_order/completed_pay.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
@@ -85,7 +86,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
           transactionInfo?.onlineRequested == true ? onlineStr : offlineStr;
 
       if (flagPrint) {
-        // printTicket();
+        printTicket();
         flagPrint = false;
       }
     }
@@ -247,21 +248,32 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                         Navigator.pop(context);
                         return;
                       }
-
+                      final payed = transactionResult ==
+                              EmvTransactionResult.Approved
+                          ? double.parse(_amountString.replaceFirst('\$', ''))
+                          : 0.0;
                       if (transactionResult == EmvTransactionResult.Approved &&
-                          double.parse(_amountString.replaceFirst('\$', '')) >=
-                              transactionArgs!.invoice!.remaining) {
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                            'wrapper', (route) => false);
+                          payed >= transactionArgs!.invoice!.remaining) {
+                        final date = transactionArgs!.invoice!.date;
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => CompletedPayPage(
+                                client: transactionArgs!.invoice!.client,
+                                total:
+                                    transactionArgs!.invoice!.totalOfTheOrder,
+                                method: "Tarjeta",
+                                date:
+                                    '${date.day}-${date.month}-${date.year} ${date.hour}:${date.minute}',
+                                address: '',
+                                coinsExchangeRates: []),
+                          ),
+                        );
                       } else {
-                        final payed = transactionResult ==
-                                EmvTransactionResult.Approved
-                            ? double.parse(_amountString.replaceFirst('\$', ''))
-                            : 0.0;
                         final paymentBody = (ModalRoute.of(context)
                             ?.settings
                             .arguments! as List)[2] as AddPaymentBodyAtt;
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             settings: const RouteSettings(name: 'PAGO-DIRECTO'),
@@ -342,29 +354,29 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     List<PrinterObject> listOfTextLine = [];
     final terminalParameters = await loadTerminalParameters();
 
-    // final assetsLogo = AssetImage("assets/img/logo_necs.png");
+    const assetsLogo = AssetImage("assets/images/agn_blue.png");
 
-    // ui.Image logo = await assetsLogo.toUiImage();
+    ui.Image logo = await assetsLogo.toUiImage();
 
-    /* final byteDataLogo =
-        await logo.toByteData(format: ui.ImageByteFormat.rawRgba); */
-    /* final rgbaLogo =
+    final byteDataLogo =
+        await logo.toByteData(format: ui.ImageByteFormat.rawRgba);
+    final rgbaLogo =
         byteDataLogo?.buffer.asUint8List() ?? Uint8List.fromList([]);
 
     final maxWidth = await getPaperWidth();
- */
-    //final img = await bytesToUiImage(rgbaLogo, logo.width, logo.height);
-    /* final imgLogo =
-        PrinterImage(rgbaLogo, logo.width, logo.height, offsetX: maxWidth / 4); */
 
-    //final logo = await assetsLogo.toPrinterImage(offsetX: maxWidth / 4);
+    // final img = await bytesToUiImage(rgbaLogo, logo.width, logo.height);
+    final imgLogo =
+        PrinterImage(rgbaLogo, logo.width, logo.height, offsetX: maxWidth / 4);
 
-    final specialFont = "DancingScript";
-    final regularFont = "Roboto";
+    // final logo = await assetsLogo.toPrinterImage(offsetX: maxWidth / 4);
 
-    /* listOfTextLine.add(imgLogo); */
+    const specialFont = "DancingScript";
+    const regularFont = "Roboto";
 
-    listOfTextLine.add(PrinterText("Solo pagos\nCDMX".toUpperCase(),
+    listOfTextLine.add(imgLogo);
+
+    listOfTextLine.add(PrinterText("Agnostiko SFA".toUpperCase(),
         format: TextFormat(fontSize: 16, fontFamily: specialFont),
         alignment: TextAlignment.Center));
 
@@ -411,9 +423,13 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
           format: TextFormat(fontSize: 32, bold: true, fontFamily: regularFont),
           alignment: TextAlignment.Center));
     }
+
+    final cardBrand = infoTags?.cardNo?.toHexStr().substring(0, 1) == '5'
+        ? 'Mastercard'
+        : 'Visa';
     listOfTextLine.add(PrinterText.emptyLine(32));
     listOfTextLine.add(
-      PrinterText("BBVA Bancomer Credito".toUpperCase(),
+      PrinterText(cardBrand.toUpperCase(),
           format: TextFormat(fontSize: 16, fontFamily: regularFont),
           alignment: TextAlignment.Center),
     );
@@ -421,7 +437,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     listOfTextLine.add(PrinterText.emptyLine(16));
 
     listOfTextLine.add(
-      PrinterText("Venta".toUpperCase(),
+      PrinterText(
+          "Venta #${transactionArgs?.invoice?.invoiceDocumentID ?? '-'}"
+              .toUpperCase(),
           format: TextFormat(fontSize: 16, fontFamily: regularFont),
           alignment: TextAlignment.Center),
     );
@@ -517,7 +535,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
         break;
     }
 
-    listOfTextLine.add(PrinterText.emptyLine(24));
+    /* listOfTextLine.add(PrinterText.emptyLine(24));
 
     listOfTextLine.add(PrinterText(
         "PAGADERE NEGOCIABLE UNICAMENTE CON INSTITUCIONES DE CRÉDITO",
@@ -535,7 +553,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
         "ESTE PAGARE PROCEDE DEL CONTRATO DE APERTURA DE CREDITO QUE EL BANCO" +
             "ACREDITANTE Y EL TARJETAHABIENTE TIENEN CELEBRADO",
         format: TextFormat(fontSize: 12, fontFamily: regularFont),
-        alignment: TextAlignment.Center));
+        alignment: TextAlignment.Center)); */
 
     listOfTextLine.add(PrinterText.emptyLine(16));
 
