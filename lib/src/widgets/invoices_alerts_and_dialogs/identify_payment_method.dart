@@ -66,664 +66,1336 @@ identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
     {Function? updatePayed, AddPaymentBodyAtt? paymentBody, noRetail = false}) {
   print('paidAmount}');
 
-identifyPaymentMethod(
-  String? selectedValueA,
-  Client client,
-  String? invoiceDocumentID,
-  double? paidAmount,
-  double? totalOfTheOrder,
-  DateTime? date,
-  context,
-  double? remaining,
-  String? selectedCoin, {
-  Function? updatePayed,
-  AddPaymentBodyAtt? paymentBody,
-  noRetail = false,
-}) {
-  File? imageFile;
-  String accountHolder = '';
-  String accountNumber = '';
-  String transactionId = '';
-  String voucherNumber = '';
-  String referenceId = '';
-  String? selectedBank;
-  // String? selectedCoin;
-  List<String> itemsBank = [
-    'BANCO CENTRAL',
-    'BANCO BICENTENARIO',
-    'BANCO DE VENEZUELA',
-    'BANESCO',
-    'BOD',
-    'BNC',
-  ];
-  List<String> itemsBankInter = [
-    'BANK OF AMERICA',
-    'CITIBANK',
-    'HSBC',
-    'WELLSFARGO',
-  ];
-  // List<String> itemsCoin = [
-  //   'USD',
-  //   'BTC',
-  //   'EUR',
-  //   'VED',
-  // ];
-  // List<String> itemsCoinVED = [
-  //   'VED',
-  // ];
-  // final currentCoin = sharedPreferences!.getString('currentCoin');
-  final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
+  identifyPaymentMethod(
+    String? selectedValueA,
+    Client client,
+    String? invoiceDocumentID,
+    double? paidAmount,
+    double? totalOfTheOrder,
+    DateTime? date,
+    context,
+    double? remaining,
+    String? selectedCoin, {
+    Function? updatePayed,
+    AddPaymentBodyAtt? paymentBody,
+    noRetail = false,
+  }) {
+    File? imageFile;
+    String accountHolder = '';
+    String accountNumber = '';
+    String transactionId = '';
+    String voucherNumber = '';
+    String referenceId = '';
+    String? selectedBank;
+    // String? selectedCoin;
+    List<String> itemsBank = [
+      'BANCO CENTRAL',
+      'BANCO BICENTENARIO',
+      'BANCO DE VENEZUELA',
+      'BANESCO',
+      'BOD',
+      'BNC',
+    ];
+    List<String> itemsBankInter = [
+      'BANK OF AMERICA',
+      'CITIBANK',
+      'HSBC',
+      'WELLSFARGO',
+    ];
+    // List<String> itemsCoin = [
+    //   'USD',
+    //   'BTC',
+    //   'EUR',
+    //   'VED',
+    // ];
+    // List<String> itemsCoinVED = [
+    //   'VED',
+    // ];
+    // final currentCoin = sharedPreferences!.getString('currentCoin');
+    final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
 
-  priceFormat(productPrice) {
-    double correctAmount = double.parse(productPrice.toStringAsFixed(2));
-    if (currentCoin!.contains('USD')) {
-      return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
-          .format(productPrice)
-          .toString();
-    } else if (currentCoin.contains('VED')) {
-      return NumberFormat.currency(
-        locale: 'es_VE',
-        decimalDigits: 2,
-        symbol: "Bs.",
-      ).format(correctAmount * 4.58).toString();
-    } else if (currentCoin.contains('EUR')) {
-      return NumberFormat.currency(
-        locale: 'es_ES',
-        decimalDigits: 2,
-        symbol: '€',
-      ).format(correctAmount * 0.89).toString();
-    } else if (currentCoin.contains('MXN')) {
-      return NumberFormat.currency(
-        locale: 'es_MX',
-        decimalDigits: 2,
-        symbol: '\$',
-      ).format(correctAmount * 19.43);
-    } else if (currentCoin.contains('BTC')) {
-      return '฿ ${(correctAmount * 0.00011).toString()}';
-    } else {
-      return NumberFormat.currency(
-        locale: 'es_VE',
-        decimalDigits: 2,
-        symbol: "PPR.",
-      ).format(correctAmount * 4.58).toString();
+    priceFormat(productPrice) {
+      double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+      if (currentCoin!.contains('USD')) {
+        return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
+            .format(productPrice)
+            .toString();
+      } else if (currentCoin.contains('VED')) {
+        return NumberFormat.currency(
+          locale: 'es_VE',
+          decimalDigits: 2,
+          symbol: "Bs.",
+        ).format(correctAmount * 4.58).toString();
+      } else if (currentCoin.contains('EUR')) {
+        return NumberFormat.currency(
+          locale: 'es_ES',
+          decimalDigits: 2,
+          symbol: '€',
+        ).format(correctAmount * 0.89).toString();
+      } else if (currentCoin.contains('MXN')) {
+        return NumberFormat.currency(
+          locale: 'es_MX',
+          decimalDigits: 2,
+          symbol: '\$',
+        ).format(correctAmount * 19.43);
+      } else if (currentCoin.contains('BTC')) {
+        return '฿ ${(correctAmount * 0.00011).toString()}';
+      } else {
+        return NumberFormat.currency(
+          locale: 'es_VE',
+          decimalDigits: 2,
+          symbol: "PPR.",
+        ).format(correctAmount * 4.58).toString();
+      }
     }
-  }
 
-  print('Metodo: $selectedValueA');
-  print('currentCoin: $currentCoin');
-  // print('totalOfTheOrder: $totalOfTheOrder');
-  print('paidAmount: $paidAmount');
-  print('remaining: $remaining');
+    print('Metodo: $selectedValueA');
+    print('currentCoin: $currentCoin');
+    // print('totalOfTheOrder: $totalOfTheOrder');
+    print('paidAmount: $paidAmount');
+    print('remaining: $remaining');
 
-  if (selectedValueA == 'Tarjeta de Debito' ||
-      selectedValueA == 'Tarjeta de Credito') {
-    if (paidAmount is String) {
-      paidAmount = double.parse(paidAmount.toString().replaceAll('\$', ''));
+    if (selectedValueA == 'Tarjeta de Debito' ||
+        selectedValueA == 'Tarjeta de Credito') {
+      if (paidAmount is String) {
+        paidAmount = double.parse(paidAmount.toString().replaceAll('\$', ''));
+      }
+      return paymentCard(paidAmount!, client, invoiceDocumentID!,
+          totalOfTheOrder!, selectedCoin!, date!, remaining!,
+          updatePayed: updatePayed,
+          paymentBody: paymentBody,
+          noRetail: noRetail);
     }
-    return paymentCard(paidAmount!, client, invoiceDocumentID!,
-        totalOfTheOrder!, selectedCoin!, date!, remaining!,
-        updatePayed: updatePayed, paymentBody: paymentBody, noRetail: noRetail);
-  }
 
-  if (selectedValueA == 'Cheque') {
-    return StatefulBuilder(
-      builder: (context, setState) => Column(
-        children: [
-          Text(
-            '${AppLocalizations.of(context)!.bank} *',
-            style: TextStyle(
-              fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.secondary,
-              fontSize: 14,
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton2(
-                isExpanded: true,
-                // ignore: prefer_const_literals_to_create_immutables
-                hint: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        selectedBank ?? '',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: myTheme.colorScheme.primary.withOpacity(0.7),
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-                items: itemsBank
-                    .map((item) => DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(
-                            item,
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: myTheme.colorScheme.primary,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ))
-                    .toList(),
-                value: selectedBank,
-                onChanged: (value) {
-                  setState(
-                    () {
-                      selectedBank = value as String;
-                    },
-                  );
-                },
-                icon: const Icon(
-                  Icons.arrow_forward_ios_outlined,
-                ),
-                iconSize: 11,
-                iconEnabledColor: myTheme.colorScheme.primary.withOpacity(0.5),
-                iconDisabledColor: Colors.grey,
-                buttonHeight: 50,
-                // buttonWidth: 200,
-                buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-                buttonDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(
-                    color: myTheme.colorScheme.primary.withOpacity(0.3),
-                  ),
-                  color: Colors.white,
-                ),
-                buttonElevation: 0,
-                itemHeight: 40,
-                itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                dropdownMaxHeight: 200,
-                dropdownWidth: 200,
-                dropdownPadding: null,
-                dropdownDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                ),
-                dropdownElevation: 8,
-                scrollbarRadius: const Radius.circular(10),
-                scrollbarThickness: 6,
-                scrollbarAlwaysShow: true,
-                offset: const Offset(0, 0),
-              ),
-            ),
-          ),
-          Text(
-            '${AppLocalizations.of(context)!.accountNumber} *',
-            style: TextStyle(
-              fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.secondary,
-              fontSize: 14,
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-            height: 50,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: myTheme.colorScheme.primary.withOpacity(0.3),
-                // color: Colors.transparent,
-              ),
-            ),
-            child: TextField(
+    if (selectedValueA == 'Cheque') {
+      return StatefulBuilder(
+        builder: (context, setState) => Column(
+          children: [
+            Text(
+              '${AppLocalizations.of(context)!.bank} *',
               style: TextStyle(
-                fontSize: 14,
                 fontFamily: 'Poppins-regular',
-                color: myTheme.colorScheme.primary,
-              ),
-              keyboardType: TextInputType.phone,
-              maxLines: 1,
-              maxLength: 50,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-              ],
-              onChanged: (value) {
-                accountNumber = value;
-                print(accountNumber);
-              },
-
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
-                hintText: '00000000',
-                hintStyle: TextStyle(
-                  fontFamily: 'Poppins-regular',
-                  fontSize: 14,
-                  color: myTheme.colorScheme.primary.withOpacity(0.2),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
-                  ),
-                ),
-                counterText: '',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
-                  ),
-                ),
-              ),
-              // onChanged: searchClient,
-            ),
-          ),
-          Text(
-            '${AppLocalizations.of(context)!.accountHolder}*',
-            style: TextStyle(
-              fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.secondary,
-              fontSize: 14,
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-            height: 50,
-            // width: 200,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: myTheme.colorScheme.primary.withOpacity(0.3),
-                // color: Colors.transparent,
-              ),
-            ),
-            child: TextField(
-              style: TextStyle(
+                color: myTheme.colorScheme.secondary,
                 fontSize: 14,
-                fontFamily: 'Poppins-regular',
-                color: myTheme.colorScheme.primary,
               ),
-              keyboardType: TextInputType.name,
-              maxLines: 1,
-              maxLength: 50,
-              textCapitalization: TextCapitalization.characters,
-
-              onChanged: (value) {
-                accountHolder = value;
-                print(accountHolder);
-              },
-
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
-                hintText: '',
-                hintStyle: TextStyle(
-                  fontFamily: 'Poppins-regular',
-                  fontSize: 14,
-                  color: myTheme.colorScheme.primary.withOpacity(0.2),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
-                  ),
-                ),
-                counterText: '',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
-                  ),
-                ),
-              ),
-              // onChanged: searchClient,
             ),
-          ),
-          Column(
-            children: [
-              Text(
-                AppLocalizations.of(context)!.selectFile,
-                style: TextStyle(
-                  fontFamily: 'Poppins-regular',
-                  color: Colors.grey.shade400,
-                  fontSize: 14,
-                ),
-              ),
-              InkWell(
-                onTap: () async {
-                  var pickedFile = await getFromGallery(context);
-                  if (pickedFile != null) {
-                    print('Imagen seleccionada');
-                    var croppedImage =
-                        await cropImage(pickedFile.path, imageFile);
-                    if (croppedImage != null) {
-                      print('Imagen recortada');
-                      setState(() {
-                        imageFile = File(croppedImage.path);
-                      });
-                    } else {
-                      print('Error croppeando');
-                    }
-                  } else {
-                    print('error seleccionando');
-                    return;
-                  }
-                },
-                child: Row(
+            Container(
+              margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton2(
+                  isExpanded: true,
                   // ignore: prefer_const_literals_to_create_immutables
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(4.0),
-                      child: Icon(
-                        Icons.camera,
-                        color: myTheme.colorScheme.secondary,
+                  hint: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          selectedBank ?? '',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: myTheme.colorScheme.primary.withOpacity(0.7),
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
+                    ],
+                  ),
+                  items: itemsBank
+                      .map((item) => DropdownMenuItem<String>(
+                            value: item,
+                            child: Text(
+                              item,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: myTheme.colorScheme.primary,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ))
+                      .toList(),
+                  value: selectedBank,
+                  onChanged: (value) {
+                    setState(
+                      () {
+                        selectedBank = value as String;
+                      },
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.arrow_forward_ios_outlined,
+                  ),
+                  iconSize: 11,
+                  iconEnabledColor:
+                      myTheme.colorScheme.primary.withOpacity(0.5),
+                  iconDisabledColor: Colors.grey,
+                  buttonHeight: 50,
+                  // buttonWidth: 200,
+                  buttonPadding: const EdgeInsets.only(left: 14, right: 14),
+                  buttonDecoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    border: Border.all(
+                      color: myTheme.colorScheme.primary.withOpacity(0.3),
                     ),
-                    Text(
-                      AppLocalizations.of(context)!.gallery,
-                      style: TextStyle(
-                        color: myTheme.colorScheme.primary,
-                        fontFamily: 'Poppins-regular',
-                      ),
-                    ),
-                  ],
+                    color: Colors.white,
+                  ),
+                  buttonElevation: 0,
+                  itemHeight: 40,
+                  itemPadding: const EdgeInsets.only(left: 14, right: 14),
+                  dropdownMaxHeight: 200,
+                  dropdownWidth: 200,
+                  dropdownPadding: null,
+                  dropdownDecoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white,
+                  ),
+                  dropdownElevation: 8,
+                  scrollbarRadius: const Radius.circular(10),
+                  scrollbarThickness: 6,
+                  scrollbarAlwaysShow: true,
+                  offset: const Offset(0, 0),
                 ),
               ),
-              imageFile == null
-                  ? Container()
-                  : Container(
-                      height: 300,
-                      width: 300,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: myTheme.colorScheme.primary,
+            ),
+            Text(
+              '${AppLocalizations.of(context)!.accountNumber} *',
+              style: TextStyle(
+                fontFamily: 'Poppins-regular',
+                color: myTheme.colorScheme.secondary,
+                fontSize: 14,
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+              height: 50,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: myTheme.colorScheme.primary.withOpacity(0.3),
+                  // color: Colors.transparent,
+                ),
+              ),
+              child: TextField(
+                style: TextStyle(
+                  fontSize: 14,
+                  fontFamily: 'Poppins-regular',
+                  color: myTheme.colorScheme.primary,
+                ),
+                keyboardType: TextInputType.phone,
+                maxLines: 1,
+                maxLength: 50,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
+                onChanged: (value) {
+                  accountNumber = value;
+                  print(accountNumber);
+                },
+
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
+                  hintText: '00000000',
+                  hintStyle: TextStyle(
+                    fontFamily: 'Poppins-regular',
+                    fontSize: 14,
+                    color: myTheme.colorScheme.primary.withOpacity(0.2),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                  counterText: '',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                ),
+                // onChanged: searchClient,
+              ),
+            ),
+            Text(
+              '${AppLocalizations.of(context)!.accountHolder}*',
+              style: TextStyle(
+                fontFamily: 'Poppins-regular',
+                color: myTheme.colorScheme.secondary,
+                fontSize: 14,
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+              height: 50,
+              // width: 200,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: myTheme.colorScheme.primary.withOpacity(0.3),
+                  // color: Colors.transparent,
+                ),
+              ),
+              child: TextField(
+                style: TextStyle(
+                  fontSize: 14,
+                  fontFamily: 'Poppins-regular',
+                  color: myTheme.colorScheme.primary,
+                ),
+                keyboardType: TextInputType.name,
+                maxLines: 1,
+                maxLength: 50,
+                textCapitalization: TextCapitalization.characters,
+
+                onChanged: (value) {
+                  accountHolder = value;
+                  print(accountHolder);
+                },
+
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
+                  hintText: '',
+                  hintStyle: TextStyle(
+                    fontFamily: 'Poppins-regular',
+                    fontSize: 14,
+                    color: myTheme.colorScheme.primary.withOpacity(0.2),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                  counterText: '',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                ),
+                // onChanged: searchClient,
+              ),
+            ),
+            Column(
+              children: [
+                Text(
+                  AppLocalizations.of(context)!.selectFile,
+                  style: TextStyle(
+                    fontFamily: 'Poppins-regular',
+                    color: Colors.grey.shade400,
+                    fontSize: 14,
+                  ),
+                ),
+                InkWell(
+                  onTap: () async {
+                    var pickedFile = await getFromGallery(context);
+                    if (pickedFile != null) {
+                      print('Imagen seleccionada');
+                      var croppedImage =
+                          await cropImage(pickedFile.path, imageFile);
+                      if (croppedImage != null) {
+                        print('Imagen recortada');
+                        setState(() {
+                          imageFile = File(croppedImage.path);
+                        });
+                      } else {
+                        print('Error croppeando');
+                      }
+                    } else {
+                      print('error seleccionando');
+                      return;
+                    }
+                  },
+                  child: Row(
+                    // ignore: prefer_const_literals_to_create_immutables
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(4.0),
+                        child: Icon(
+                          Icons.camera,
+                          color: myTheme.colorScheme.secondary,
                         ),
-                        borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Image.file(
-                        imageFile!,
+                      Text(
+                        AppLocalizations.of(context)!.gallery,
+                        style: TextStyle(
+                          color: myTheme.colorScheme.primary,
+                          fontFamily: 'Poppins-regular',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                imageFile == null
+                    ? Container()
+                    : Container(
                         height: 300,
                         width: 300,
-                      ),
-                    ),
-              Container(
-                alignment: Alignment.bottomCenter,
-                margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        setState(() => imageFile = null);
-                      },
-                      child: Text(
-                        AppLocalizations.of(context)!.goBack,
-                        style: TextStyle(
-                          fontFamily: 'Poppins-regular',
-                          color: myTheme.colorScheme.primary,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: myTheme.colorScheme.primary,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Image.file(
+                          imageFile!,
+                          height: 300,
+                          width: 300,
                         ),
                       ),
-                    ),
-                    Container(
-                      width: 100,
-                      height: 40,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          color: myTheme.colorScheme.primary),
-                      child: TextButton(
-                        onPressed: () async {
-                          // Crear en DB una visita
-                          if (selectedCoin != null) {
-                            if (paidAmount != null ||
-                                paidAmount != null ||
-                                paidAmount! <= totalOfTheOrder!) {
-                              if (selectedBank != null) {
-                                if (accountNumber != '' ||
-                                    accountHolder != '') {
-                                  print('Registrando pago en cheque');
-                                  if (double.parse(paidAmount.toString()) >
-                                      remaining!) {
-                                    Fluttertoast.showToast(
-                                      msg:
-                                          'La cantidad a pagar excede de la deuda pendiente',
-                                      backgroundColor:
-                                          myTheme.colorScheme.secondary,
-                                      textColor: Colors.white,
-                                    );
-                                  } else {
-                                    print('Cantidad permitida');
-                                    Fluttertoast.showToast(
-                                      msg: 'Registrando Cheque',
-                                      backgroundColor:
-                                          myTheme.colorScheme.primary,
-                                      textColor: Colors.white,
-                                    );
-                                    await registerBankCheckPayment(
-                                      client,
-                                      invoiceDocumentID,
-                                      selectedCoin,
-                                      paidAmount,
-                                      totalOfTheOrder,
-                                      currentCoin,
-                                      selectedBank,
-                                      accountNumber,
-                                      accountHolder,
-                                      imageFile,
-                                      date,
-                                      remaining,
-                                    );
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                  }
-                                } else {
-                                  Fluttertoast.showToast(
-                                      msg: 'Ingrese datos de cuenta validos');
-                                }
-                              } else {
-                                Fluttertoast.showToast(
-                                    msg: 'Seleccione un banco por favor');
-                              }
-                            } else {
-                              Fluttertoast.showToast(
-                                  msg: 'Monto a pagar no valido');
-                            }
-                          } else {
-                            Fluttertoast.showToast(
-                                msg: 'Complete los datos porfavor');
-                          }
+                Container(
+                  alignment: Alignment.bottomCenter,
+                  margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          setState(() => imageFile = null);
                         },
-                        style: TextButton.styleFrom(
-                          foregroundColor: myTheme.colorScheme.primary,
-                        ),
                         child: Text(
-                          AppLocalizations.of(context)!.orderContinue,
+                          AppLocalizations.of(context)!.goBack,
                           style: TextStyle(
                             fontFamily: 'Poppins-regular',
-                            color: Colors.white,
+                            color: myTheme.colorScheme.primary,
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  } else if (selectedValueA == 'Criptomoneda') {
-    return StatefulBuilder(builder: (context, setState) {
-      return Column(
-        children: [
-          Text(
-            '${AppLocalizations.of(context)!.transactionID} *',
-            style: TextStyle(
-              fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.secondary,
-              fontSize: 14,
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-            height: 50,
-            // width: 200,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: myTheme.colorScheme.primary.withOpacity(0.3),
-                // color: Colors.transparent,
-              ),
-            ),
-            child: TextField(
-              style: TextStyle(
-                fontSize: 14,
-                fontFamily: 'Poppins-regular',
-                color: myTheme.colorScheme.primary,
-              ),
-              keyboardType: TextInputType.phone,
-              maxLines: 1,
-              maxLength: 50,
-              textCapitalization: TextCapitalization.characters,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-              ],
-              onChanged: (value) {
-                transactionId = value;
-                print(transactionId);
-              },
-
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
-                hintText: '00000000',
-                hintStyle: TextStyle(
-                  fontFamily: 'Poppins-regular',
-                  fontSize: 14,
-                  color: myTheme.colorScheme.primary.withOpacity(0.2),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
-                  ),
-                ),
-                counterText: '',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
-                  ),
-                ),
-              ),
-              // onChanged: searchClient,
-            ),
-          ),
-          Column(
-            children: [
-              Text(
-                AppLocalizations.of(context)!.selectFile,
-                style: TextStyle(
-                  fontFamily: 'Poppins-regular',
-                  color: Colors.grey.shade400,
-                  fontSize: 14,
-                ),
-              ),
-              InkWell(
-                onTap: () async {
-                  var pickedFile = await getFromGallery(context);
-                  if (pickedFile != null) {
-                    print('Imagen seleccionada');
-                    var croppedImage =
-                        await cropImage(pickedFile.path, imageFile);
-                    if (croppedImage != null) {
-                      print('Imagen recortada');
-                      setState(() {
-                        imageFile = File(croppedImage.path);
-                      });
-                    } else {
-                      print('Error croppeando');
-                    }
-                  } else {
-                    print('error seleccionando');
-                    return;
-                  }
-                },
-                child: Row(
-                  // ignore: prefer_const_literals_to_create_immutables
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(4.0),
-                      child: Icon(
-                        Icons.camera,
-                        color: myTheme.colorScheme.secondary,
-                      ),
-                    ),
-                    Text(
-                      AppLocalizations.of(context)!.gallery,
-                      style: TextStyle(
-                        color: myTheme.colorScheme.primary,
-                        fontFamily: 'Poppins-regular',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              imageFile == null
-                  ? Container()
-                  : Container(
-                      height: 300,
-                      width: 300,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: myTheme.colorScheme.primary,
+                      Container(
+                        width: 100,
+                        height: 40,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            color: myTheme.colorScheme.primary),
+                        child: TextButton(
+                          onPressed: () async {
+                            // Crear en DB una visita
+                            if (selectedCoin != null) {
+                              if (paidAmount != null ||
+                                  paidAmount != null ||
+                                  paidAmount! <= totalOfTheOrder!) {
+                                if (selectedBank != null) {
+                                  if (accountNumber != '' ||
+                                      accountHolder != '') {
+                                    print('Registrando pago en cheque');
+                                    if (double.parse(paidAmount.toString()) >
+                                        remaining!) {
+                                      Fluttertoast.showToast(
+                                        msg:
+                                            'La cantidad a pagar excede de la deuda pendiente',
+                                        backgroundColor:
+                                            myTheme.colorScheme.secondary,
+                                        textColor: Colors.white,
+                                      );
+                                    } else {
+                                      print('Cantidad permitida');
+                                      Fluttertoast.showToast(
+                                        msg: 'Registrando Cheque',
+                                        backgroundColor:
+                                            myTheme.colorScheme.primary,
+                                        textColor: Colors.white,
+                                      );
+                                      await registerBankCheckPayment(
+                                        client,
+                                        invoiceDocumentID,
+                                        selectedCoin,
+                                        paidAmount,
+                                        totalOfTheOrder,
+                                        currentCoin,
+                                        selectedBank,
+                                        accountNumber,
+                                        accountHolder,
+                                        imageFile,
+                                        date,
+                                        remaining,
+                                      );
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                    }
+                                  } else {
+                                    Fluttertoast.showToast(
+                                        msg: 'Ingrese datos de cuenta validos');
+                                  }
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg: 'Seleccione un banco por favor');
+                                }
+                              } else {
+                                Fluttertoast.showToast(
+                                    msg: 'Monto a pagar no valido');
+                              }
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: 'Complete los datos porfavor');
+                            }
+                          },
+                          style: TextButton.styleFrom(
+                            foregroundColor: myTheme.colorScheme.primary,
+                          ),
+                          child: Text(
+                            AppLocalizations.of(context)!.orderContinue,
+                            style: TextStyle(
+                              fontFamily: 'Poppins-regular',
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
-                        borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Image.file(
-                        imageFile!,
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    } else if (selectedValueA == 'Criptomoneda') {
+      return StatefulBuilder(builder: (context, setState) {
+        return Column(
+          children: [
+            Text(
+              '${AppLocalizations.of(context)!.transactionID} *',
+              style: TextStyle(
+                fontFamily: 'Poppins-regular',
+                color: myTheme.colorScheme.secondary,
+                fontSize: 14,
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+              height: 50,
+              // width: 200,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: myTheme.colorScheme.primary.withOpacity(0.3),
+                  // color: Colors.transparent,
+                ),
+              ),
+              child: TextField(
+                style: TextStyle(
+                  fontSize: 14,
+                  fontFamily: 'Poppins-regular',
+                  color: myTheme.colorScheme.primary,
+                ),
+                keyboardType: TextInputType.phone,
+                maxLines: 1,
+                maxLength: 50,
+                textCapitalization: TextCapitalization.characters,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
+                onChanged: (value) {
+                  transactionId = value;
+                  print(transactionId);
+                },
+
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
+                  hintText: '00000000',
+                  hintStyle: TextStyle(
+                    fontFamily: 'Poppins-regular',
+                    fontSize: 14,
+                    color: myTheme.colorScheme.primary.withOpacity(0.2),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                  counterText: '',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                ),
+                // onChanged: searchClient,
+              ),
+            ),
+            Column(
+              children: [
+                Text(
+                  AppLocalizations.of(context)!.selectFile,
+                  style: TextStyle(
+                    fontFamily: 'Poppins-regular',
+                    color: Colors.grey.shade400,
+                    fontSize: 14,
+                  ),
+                ),
+                InkWell(
+                  onTap: () async {
+                    var pickedFile = await getFromGallery(context);
+                    if (pickedFile != null) {
+                      print('Imagen seleccionada');
+                      var croppedImage =
+                          await cropImage(pickedFile.path, imageFile);
+                      if (croppedImage != null) {
+                        print('Imagen recortada');
+                        setState(() {
+                          imageFile = File(croppedImage.path);
+                        });
+                      } else {
+                        print('Error croppeando');
+                      }
+                    } else {
+                      print('error seleccionando');
+                      return;
+                    }
+                  },
+                  child: Row(
+                    // ignore: prefer_const_literals_to_create_immutables
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(4.0),
+                        child: Icon(
+                          Icons.camera,
+                          color: myTheme.colorScheme.secondary,
+                        ),
+                      ),
+                      Text(
+                        AppLocalizations.of(context)!.gallery,
+                        style: TextStyle(
+                          color: myTheme.colorScheme.primary,
+                          fontFamily: 'Poppins-regular',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                imageFile == null
+                    ? Container()
+                    : Container(
                         height: 300,
                         width: 300,
-                      ),
-                    ),
-              Container(
-                alignment: Alignment.bottomCenter,
-                margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        setState(() => imageFile = null);
-                      },
-                      child: Text(
-                        AppLocalizations.of(context)!.goBack,
-                        style: TextStyle(
-                          fontFamily: 'Poppins-regular',
-                          color: myTheme.colorScheme.primary,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: myTheme.colorScheme.primary,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Image.file(
+                          imageFile!,
+                          height: 300,
+                          width: 300,
                         ),
                       ),
+                Container(
+                  alignment: Alignment.bottomCenter,
+                  margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          setState(() => imageFile = null);
+                        },
+                        child: Text(
+                          AppLocalizations.of(context)!.goBack,
+                          style: TextStyle(
+                            fontFamily: 'Poppins-regular',
+                            color: myTheme.colorScheme.primary,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 100,
+                        height: 40,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            color: myTheme.colorScheme.primary),
+                        child: TextButton(
+                          onPressed: () async {
+                            // Crear en DB una visita
+                            // registerCriptoPayment();
+                            if (transactionId != '') {
+                              if (paidAmount != null) {
+                                if (double.parse(paidAmount.toString()) >
+                                    remaining!) {
+                                  Fluttertoast.showToast(
+                                    msg:
+                                        'La cantidad a pagar excede de la deuda pendiente',
+                                    backgroundColor:
+                                        myTheme.colorScheme.primary,
+                                    textColor: Colors.white,
+                                  );
+                                } else {
+                                  print('Cantidad permitida');
+                                  Fluttertoast.showToast(
+                                    msg: 'Registrando Pago en Criptomonedas',
+                                    backgroundColor:
+                                        myTheme.colorScheme.primary,
+                                    textColor: Colors.white,
+                                  );
+                                  await registerCriptoPayment(
+                                    client,
+                                    invoiceDocumentID,
+                                    'BTC',
+                                    paidAmount,
+                                    totalOfTheOrder,
+                                    transactionId,
+                                    imageFile,
+                                    date,
+                                    remaining,
+                                  );
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                }
+                              }
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: 'Ingrese ID porfavor');
+                            }
+                          },
+                          style: TextButton.styleFrom(
+                            foregroundColor: myTheme.colorScheme.primary,
+                          ),
+                          child: Text(
+                            AppLocalizations.of(context)!.orderContinue,
+                            style: TextStyle(
+                              fontFamily: 'Poppins-regular',
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )
+          ],
+        );
+      });
+    } else if (selectedValueA == 'Deposito') {
+      return StatefulBuilder(
+        builder: (context, setState) => Column(
+          children: [
+            Text(
+              '${AppLocalizations.of(context)!.bank} *',
+              style: TextStyle(
+                fontFamily: 'Poppins-regular',
+                color: myTheme.colorScheme.secondary,
+                fontSize: 14,
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton2(
+                  isExpanded: true,
+                  // ignore: prefer_const_literals_to_create_immutables
+                  hint: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          selectedBank ?? '',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: myTheme.colorScheme.primary.withOpacity(0.7),
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                  items: itemsBank
+                      .map((item) => DropdownMenuItem<String>(
+                            value: item,
+                            child: Text(
+                              item,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: myTheme.colorScheme.primary,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ))
+                      .toList(),
+                  value: selectedBank,
+                  onChanged: (value) {
+                    setState(
+                      () {
+                        selectedBank = value as String;
+                      },
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.arrow_forward_ios_outlined,
+                  ),
+                  iconSize: 11,
+                  iconEnabledColor:
+                      myTheme.colorScheme.primary.withOpacity(0.5),
+                  iconDisabledColor: Colors.grey,
+                  buttonHeight: 50,
+                  // buttonWidth: 200,
+                  buttonPadding: const EdgeInsets.only(left: 14, right: 14),
+                  buttonDecoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    border: Border.all(
+                      color: myTheme.colorScheme.primary.withOpacity(0.3),
                     ),
-                    Container(
-                      width: 100,
-                      height: 40,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          color: myTheme.colorScheme.primary),
-                      child: TextButton(
-                        onPressed: () async {
-                          // Crear en DB una visita
-                          // registerCriptoPayment();
-                          if (transactionId != '') {
+                    color: Colors.white,
+                  ),
+                  buttonElevation: 0,
+                  itemHeight: 40,
+                  itemPadding: const EdgeInsets.only(left: 14, right: 14),
+                  dropdownMaxHeight: 200,
+                  dropdownWidth: 200,
+                  dropdownPadding: null,
+                  dropdownDecoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white,
+                  ),
+                  dropdownElevation: 8,
+                  scrollbarRadius: const Radius.circular(10),
+                  scrollbarThickness: 6,
+                  scrollbarAlwaysShow: true,
+                  offset: const Offset(-20, 0),
+                ),
+              ),
+            ),
+            Text(
+              '${AppLocalizations.of(context)!.voucherNumber} *',
+              style: TextStyle(
+                fontFamily: 'Poppins-regular',
+                color: myTheme.colorScheme.secondary,
+                fontSize: 14,
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+              height: 50,
+              // width: 200,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: myTheme.colorScheme.primary.withOpacity(0.3),
+                  // color: Colors.transparent,
+                ),
+              ),
+              child: TextField(
+                style: TextStyle(
+                  fontSize: 14,
+                  fontFamily: 'Poppins-regular',
+                  color: myTheme.colorScheme.primary,
+                ),
+                keyboardType: TextInputType.phone,
+                maxLines: 1,
+                maxLength: 50,
+                textCapitalization: TextCapitalization.characters,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
+                onChanged: (value) {
+                  voucherNumber = value;
+                  print(voucherNumber);
+                },
+
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
+                  hintText: '00000000',
+                  hintStyle: TextStyle(
+                    fontFamily: 'Poppins-regular',
+                    fontSize: 14,
+                    color: myTheme.colorScheme.primary.withOpacity(0.2),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                  counterText: '',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                ),
+                // onChanged: searchClient,
+              ),
+            ),
+            Text(
+              '${AppLocalizations.of(context)!.accountNumber} *',
+              style: TextStyle(
+                fontFamily: 'Poppins-regular',
+                color: myTheme.colorScheme.secondary,
+                fontSize: 14,
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+              height: 50,
+              // width: 200,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: myTheme.colorScheme.primary.withOpacity(0.3),
+                  // color: Colors.transparent,
+                ),
+              ),
+              child: TextField(
+                style: TextStyle(
+                  fontSize: 14,
+                  fontFamily: 'Poppins-regular',
+                  color: myTheme.colorScheme.primary,
+                ),
+                keyboardType: TextInputType.phone,
+                maxLines: 1,
+                maxLength: 50,
+                textCapitalization: TextCapitalization.characters,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
+                onChanged: (value) {
+                  accountNumber = value;
+                  print(accountNumber);
+                },
+
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
+                  hintText: '00000000',
+                  hintStyle: TextStyle(
+                    fontFamily: 'Poppins-regular',
+                    fontSize: 14,
+                    color: myTheme.colorScheme.primary.withOpacity(0.2),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                  counterText: '',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                ),
+                // onChanged: searchClient,
+              ),
+            ),
+            Column(
+              children: [
+                Text(
+                  AppLocalizations.of(context)!.selectFile,
+                  style: TextStyle(
+                    fontFamily: 'Poppins-regular',
+                    color: Colors.grey.shade400,
+                    fontSize: 14,
+                  ),
+                ),
+                InkWell(
+                  onTap: () async {
+                    var pickedFile = await getFromGallery(context);
+                    if (pickedFile != null) {
+                      print('Imagen seleccionada');
+                      var croppedImage =
+                          await cropImage(pickedFile.path, imageFile);
+                      if (croppedImage != null) {
+                        print('Imagen recortada');
+                        setState(() {
+                          imageFile = File(croppedImage.path);
+                        });
+                      } else {
+                        print('Error croppeando');
+                      }
+                    } else {
+                      print('error seleccionando');
+                      return;
+                    }
+                  },
+                  child: Row(
+                    // ignore: prefer_const_literals_to_create_immutables
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(4.0),
+                        child: Icon(
+                          Icons.camera,
+                          color: myTheme.colorScheme.secondary,
+                        ),
+                      ),
+                      Text(
+                        AppLocalizations.of(context)!.gallery,
+                        style: TextStyle(
+                          color: myTheme.colorScheme.primary,
+                          fontFamily: 'Poppins-regular',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                imageFile == null
+                    ? Container()
+                    : Container(
+                        height: 300,
+                        width: 300,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: myTheme.colorScheme.primary,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Image.file(
+                          imageFile!,
+                          height: 300,
+                          width: 300,
+                        ),
+                      ),
+                Container(
+                  alignment: Alignment.bottomCenter,
+                  margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          setState(() => imageFile = null);
+                        },
+                        child: Text(
+                          AppLocalizations.of(context)!.goBack,
+                          style: TextStyle(
+                            fontFamily: 'Poppins-regular',
+                            color: myTheme.colorScheme.primary,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 100,
+                        height: 40,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            color: myTheme.colorScheme.primary),
+                        child: TextButton(
+                          onPressed: () async {
+                            // Crear en DB una visita
+
+                            if (selectedCoin != null) {
+                              if (paidAmount != null ||
+                                  paidAmount != null ||
+                                  paidAmount! <= totalOfTheOrder!) {
+                                if (selectedBank != null) {
+                                  if (accountNumber != '' ||
+                                      voucherNumber != '') {
+                                    if (paidAmount! > remaining!) {
+                                      Fluttertoast.showToast(
+                                        msg:
+                                            'La cantidad a pagar excede de la deuda pendiente',
+                                        backgroundColor:
+                                            myTheme.colorScheme.secondary,
+                                        textColor: Colors.white,
+                                      );
+                                    } else {
+                                      print('Cantidad permitida');
+                                      Fluttertoast.showToast(
+                                        msg:
+                                            'Registrando Pago en Criptomonedas',
+                                        backgroundColor:
+                                            myTheme.colorScheme.primary,
+                                        textColor: Colors.white,
+                                      );
+                                      await registerDepositPayment(
+                                        client,
+                                        invoiceDocumentID,
+                                        selectedCoin,
+                                        paidAmount,
+                                        totalOfTheOrder,
+                                        currentCoin,
+                                        selectedBank,
+                                        accountNumber,
+                                        voucherNumber,
+                                        imageFile,
+                                        date,
+                                        remaining,
+                                      );
+
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                    }
+                                  } else {
+                                    Fluttertoast.showToast(
+                                        msg: 'Ingrese datos de cuenta validos');
+                                  }
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg: 'Seleccione un banco por favor');
+                                }
+                              } else {
+                                Fluttertoast.showToast(
+                                    msg: 'Monto a pagar no valido');
+                              }
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: 'Complete los datos porfavor');
+                            }
+                            // print(itemsBank);
+                            // print(itemsBankInter);
+                          },
+                          style: TextButton.styleFrom(
+                            foregroundColor: myTheme.colorScheme.primary,
+                          ),
+                          child: Text(
+                            AppLocalizations.of(context)!.orderContinue,
+                            style: TextStyle(
+                              fontFamily: 'Poppins-regular',
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      );
+    } else if (selectedValueA == 'Efectivo' ||
+        selectedValueA == 'Nota de credito') {
+      return StatefulBuilder(
+        builder: (BuildContext context, setState) => Column(
+          children: [
+            selectedValueA == 'Nota de credito'
+                ? Container(
+                    child: Text(
+                      'Disponible en Nota de Credito: \$0.00',
+                      style: TextStyle(
+                        fontFamily: 'Poppins-regular',
+                        color: myTheme.colorScheme.secondary,
+                        fontSize: 14,
+                      ),
+                    ),
+                  )
+                : Container(),
+            Column(
+              children: [
+                Text(
+                  AppLocalizations.of(context)!.selectFile,
+                  style: TextStyle(
+                    fontFamily: 'Poppins-regular',
+                    color: Colors.grey.shade400,
+                    fontSize: 14,
+                  ),
+                ),
+                InkWell(
+                  onTap: () async {
+                    var pickedFile = await getFromGallery(context);
+                    if (pickedFile != null) {
+                      print('Imagen seleccionada');
+                      var croppedImage =
+                          await cropImage(pickedFile.path, imageFile);
+                      if (croppedImage != null) {
+                        print('Imagen recortada');
+                        setState(() {
+                          imageFile = File(croppedImage.path);
+                        });
+                      } else {
+                        print('Error croppeando');
+                      }
+                    } else {
+                      print('error seleccionando');
+                      return;
+                    }
+                  },
+                  child: Row(
+                    // ignore: prefer_const_literals_to_create_immutables
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(4.0),
+                        child: Icon(
+                          Icons.camera,
+                          color: myTheme.colorScheme.secondary,
+                        ),
+                      ),
+                      Text(
+                        AppLocalizations.of(context)!.gallery,
+                        style: TextStyle(
+                          color: myTheme.colorScheme.primary,
+                          fontFamily: 'Poppins-regular',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                imageFile == null
+                    ? Container()
+                    : Container(
+                        height: 300,
+                        width: 300,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: myTheme.colorScheme.primary,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Image.file(
+                          imageFile!,
+                          height: 300,
+                          width: 300,
+                        ),
+                      ),
+                Container(
+                  alignment: Alignment.bottomCenter,
+                  margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          setState(() => imageFile = null);
+                        },
+                        child: Text(
+                          AppLocalizations.of(context)!.goBack,
+                          style: TextStyle(
+                            fontFamily: 'Poppins-regular',
+                            color: myTheme.colorScheme.primary,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      paidAmount == 0
+                          ? Container()
+                          : Container(
+                              width: 100,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                  color: myTheme.colorScheme.primary),
+                              child: TextButton(
+                                onPressed: () async {
+                                  // Crear en DB una visita
+                                  if (paidAmount is String) {
+                                    paidAmount =
+                                        double.parse(paidAmount.toString());
+                                  }
+                                  if (paidAmount != null) {
+                                    if (paidAmount! > remaining!) {
+                                      Fluttertoast.showToast(
+                                        msg:
+                                            'La cantidad a pagar excede de la deuda pendiente',
+                                        backgroundColor:
+                                            myTheme.colorScheme.primary,
+                                        textColor: Colors.white,
+                                      );
+                                    } else {
+                                      print('Cantidad permitida');
+                                      // Fluttertoast.showToast(
+                                      //   msg: 'Registrando Pago en Efectivo',
+                                      //   backgroundColor:
+                                      //       myTheme.colorScheme.primary,
+                                      //   textColor: Colors.white,
+                                      // );
+                                    }
+                                    // Registrar efectivo en la DB
+                                    // print(
+                                    //     'invoiceDocumentID,: ${invoiceDocumentID},');
+                                    // print('paidAmount,: ${paidAmount},');
+                                    // print(
+                                    //     'totalOfTheOrder,: ${totalOfTheOrder},');
+                                    // print('date,: ${date},');
+                                    // print('context,: ${context},');
+                                    // print('remaining,: ${remaining},');
+                                    // print('selectedCoin: ${selectedCoin}');
+                                    try {
+                                      await registerMoneyPayment(
+                                        client: client,
+                                        invoiceDocumentID: invoiceDocumentID,
+                                        currency: selectedCoin,
+                                        amount: paidAmount,
+                                        totalOfTheOrder: totalOfTheOrder,
+                                        imageFile: imageFile,
+                                        date: date,
+                                        remaining: remaining,
+                                      ).whenComplete(() {
+                                        Navigator.pop(context);
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                CompletedPayPage(
+                                              client: client.name,
+                                              total: paidAmount,
+                                              // total: totalOfTheOrder,
+                                              method: "Efectivo",
+                                              date:
+                                                  '${date!.day}-${date.month}-${date.year} ${(date as DateTime).hour}:${(date as DateTime).minute}',
+                                              address: '',
+                                              coinsExchangeRates: [],
+                                            ),
+                                          ),
+                                        );
+                                      });
+                                    } catch (e) {
+                                      print(e);
+                                    }
+                                  } else {
+                                    Fluttertoast.showToast(
+                                        msg: 'Ingrese Monto porfavor');
+                                  }
+                                },
+                                style: TextButton.styleFrom(
+                                  foregroundColor: myTheme.colorScheme.primary,
+                                ),
+                                child: Text(
+                                  AppLocalizations.of(context)!.orderContinue,
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins-regular',
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                      Container(
+                        width: 100,
+                        height: 40,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            color: myTheme.colorScheme.primary),
+                        child: TextButton(
+                          onPressed: () async {
+                            // Crear en DB una visita
+                            if (paidAmount is String) {
+                              paidAmount = double.parse(paidAmount.toString());
+                            }
                             if (paidAmount != null) {
-                              if (double.parse(paidAmount.toString()) >
-                                  remaining!) {
+                              if (paidAmount! > remaining!) {
                                 Fluttertoast.showToast(
                                   msg:
                                       'La cantidad a pagar excede de la deuda pendiente',
@@ -733,1228 +1405,571 @@ identifyPaymentMethod(
                               } else {
                                 print('Cantidad permitida');
                                 Fluttertoast.showToast(
-                                  msg: 'Registrando Pago en Criptomonedas',
+                                  msg: 'Registrando Pago en Efectivo',
                                   backgroundColor: myTheme.colorScheme.primary,
                                   textColor: Colors.white,
                                 );
-                                await registerCriptoPayment(
-                                  client,
-                                  invoiceDocumentID,
-                                  'BTC',
-                                  paidAmount,
-                                  totalOfTheOrder,
-                                  transactionId,
-                                  imageFile,
-                                  date,
-                                  remaining,
+                              }
+                              print(invoiceDocumentID);
+                              await registerMoneyPayment(
+                                client: client,
+                                invoiceDocumentID: invoiceDocumentID,
+                                currency: selectedCoin,
+                                amount: paidAmount,
+                                totalOfTheOrder: totalOfTheOrder,
+                                imageFile: imageFile,
+                                date: date,
+                                remaining: remaining,
+                              );
+                              Navigator.pop(context);
+
+                              if (paidAmount! < remaining! &&
+                                  paymentBody != null) {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    settings: const RouteSettings(
+                                        name: 'PAGO-DIRECTO'),
+                                    builder: (BuildContext context) =>
+                                        AddPaymentPage(
+                                      remaining: paymentBody.remaining,
+                                      subTotal: paymentBody.subTotal,
+                                      discountPercentage:
+                                          paymentBody.discountPercentage,
+                                      discount: paymentBody.discount,
+                                      tax: paymentBody.tax,
+                                      percentageTax: paymentBody.percentageTax,
+                                      client: paymentBody.client,
+                                      invoiceDocumentID:
+                                          paymentBody.invoiceDocumentID,
+                                      amountPayed:
+                                          (paymentBody.amountPaied ?? 0) +
+                                              paidAmount!,
+                                      // updatePayed: updatePayed,
+                                    ),
+                                  ),
                                 );
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                              }
-                            }
-                          } else {
-                            Fluttertoast.showToast(msg: 'Ingrese ID porfavor');
-                          }
-                        },
-                        style: TextButton.styleFrom(
-                          foregroundColor: myTheme.colorScheme.primary,
-                        ),
-                        child: Text(
-                          AppLocalizations.of(context)!.orderContinue,
-                          style: TextStyle(
-                            fontFamily: 'Poppins-regular',
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          )
-        ],
-      );
-    });
-  } else if (selectedValueA == 'Deposito') {
-    return StatefulBuilder(
-      builder: (context, setState) => Column(
-        children: [
-          Text(
-            '${AppLocalizations.of(context)!.bank} *',
-            style: TextStyle(
-              fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.secondary,
-              fontSize: 14,
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton2(
-                isExpanded: true,
-                // ignore: prefer_const_literals_to_create_immutables
-                hint: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        selectedBank ?? '',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: myTheme.colorScheme.primary.withOpacity(0.7),
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-                items: itemsBank
-                    .map((item) => DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(
-                            item,
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: myTheme.colorScheme.primary,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ))
-                    .toList(),
-                value: selectedBank,
-                onChanged: (value) {
-                  setState(
-                    () {
-                      selectedBank = value as String;
-                    },
-                  );
-                },
-                icon: const Icon(
-                  Icons.arrow_forward_ios_outlined,
-                ),
-                iconSize: 11,
-                iconEnabledColor: myTheme.colorScheme.primary.withOpacity(0.5),
-                iconDisabledColor: Colors.grey,
-                buttonHeight: 50,
-                // buttonWidth: 200,
-                buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-                buttonDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(
-                    color: myTheme.colorScheme.primary.withOpacity(0.3),
-                  ),
-                  color: Colors.white,
-                ),
-                buttonElevation: 0,
-                itemHeight: 40,
-                itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                dropdownMaxHeight: 200,
-                dropdownWidth: 200,
-                dropdownPadding: null,
-                dropdownDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                ),
-                dropdownElevation: 8,
-                scrollbarRadius: const Radius.circular(10),
-                scrollbarThickness: 6,
-                scrollbarAlwaysShow: true,
-                offset: const Offset(-20, 0),
-              ),
-            ),
-          ),
-          Text(
-            '${AppLocalizations.of(context)!.voucherNumber} *',
-            style: TextStyle(
-              fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.secondary,
-              fontSize: 14,
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-            height: 50,
-            // width: 200,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: myTheme.colorScheme.primary.withOpacity(0.3),
-                // color: Colors.transparent,
-              ),
-            ),
-            child: TextField(
-              style: TextStyle(
-                fontSize: 14,
-                fontFamily: 'Poppins-regular',
-                color: myTheme.colorScheme.primary,
-              ),
-              keyboardType: TextInputType.phone,
-              maxLines: 1,
-              maxLength: 50,
-              textCapitalization: TextCapitalization.characters,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-              ],
-              onChanged: (value) {
-                voucherNumber = value;
-                print(voucherNumber);
-              },
-
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
-                hintText: '00000000',
-                hintStyle: TextStyle(
-                  fontFamily: 'Poppins-regular',
-                  fontSize: 14,
-                  color: myTheme.colorScheme.primary.withOpacity(0.2),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
-                  ),
-                ),
-                counterText: '',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
-                  ),
-                ),
-              ),
-              // onChanged: searchClient,
-            ),
-          ),
-          Text(
-            '${AppLocalizations.of(context)!.accountNumber} *',
-            style: TextStyle(
-              fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.secondary,
-              fontSize: 14,
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-            height: 50,
-            // width: 200,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: myTheme.colorScheme.primary.withOpacity(0.3),
-                // color: Colors.transparent,
-              ),
-            ),
-            child: TextField(
-              style: TextStyle(
-                fontSize: 14,
-                fontFamily: 'Poppins-regular',
-                color: myTheme.colorScheme.primary,
-              ),
-              keyboardType: TextInputType.phone,
-              maxLines: 1,
-              maxLength: 50,
-              textCapitalization: TextCapitalization.characters,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-              ],
-              onChanged: (value) {
-                accountNumber = value;
-                print(accountNumber);
-              },
-
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
-                hintText: '00000000',
-                hintStyle: TextStyle(
-                  fontFamily: 'Poppins-regular',
-                  fontSize: 14,
-                  color: myTheme.colorScheme.primary.withOpacity(0.2),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
-                  ),
-                ),
-                counterText: '',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
-                  ),
-                ),
-              ),
-              // onChanged: searchClient,
-            ),
-          ),
-          Column(
-            children: [
-              Text(
-                AppLocalizations.of(context)!.selectFile,
-                style: TextStyle(
-                  fontFamily: 'Poppins-regular',
-                  color: Colors.grey.shade400,
-                  fontSize: 14,
-                ),
-              ),
-              InkWell(
-                onTap: () async {
-                  var pickedFile = await getFromGallery(context);
-                  if (pickedFile != null) {
-                    print('Imagen seleccionada');
-                    var croppedImage =
-                        await cropImage(pickedFile.path, imageFile);
-                    if (croppedImage != null) {
-                      print('Imagen recortada');
-                      setState(() {
-                        imageFile = File(croppedImage.path);
-                      });
-                    } else {
-                      print('Error croppeando');
-                    }
-                  } else {
-                    print('error seleccionando');
-                    return;
-                  }
-                },
-                child: Row(
-                  // ignore: prefer_const_literals_to_create_immutables
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(4.0),
-                      child: Icon(
-                        Icons.camera,
-                        color: myTheme.colorScheme.secondary,
-                      ),
-                    ),
-                    Text(
-                      AppLocalizations.of(context)!.gallery,
-                      style: TextStyle(
-                        color: myTheme.colorScheme.primary,
-                        fontFamily: 'Poppins-regular',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              imageFile == null
-                  ? Container()
-                  : Container(
-                      height: 300,
-                      width: 300,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: myTheme.colorScheme.primary,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Image.file(
-                        imageFile!,
-                        height: 300,
-                        width: 300,
-                      ),
-                    ),
-              Container(
-                alignment: Alignment.bottomCenter,
-                margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        setState(() => imageFile = null);
-                      },
-                      child: Text(
-                        AppLocalizations.of(context)!.goBack,
-                        style: TextStyle(
-                          fontFamily: 'Poppins-regular',
-                          color: myTheme.colorScheme.primary,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: 100,
-                      height: 40,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          color: myTheme.colorScheme.primary),
-                      child: TextButton(
-                        onPressed: () async {
-                          // Crear en DB una visita
-
-                          if (selectedCoin != null) {
-                            if (paidAmount != null ||
-                                paidAmount != null ||
-                                paidAmount! <= totalOfTheOrder!) {
-                              if (selectedBank != null) {
-                                if (accountNumber != '' ||
-                                    voucherNumber != '') {
-                                  if (paidAmount! > remaining!) {
-                                    Fluttertoast.showToast(
-                                      msg:
-                                          'La cantidad a pagar excede de la deuda pendiente',
-                                      backgroundColor:
-                                          myTheme.colorScheme.secondary,
-                                      textColor: Colors.white,
-                                    );
-                                  } else {
-                                    print('Cantidad permitida');
-                                    Fluttertoast.showToast(
-                                      msg: 'Registrando Pago en Criptomonedas',
-                                      backgroundColor:
-                                          myTheme.colorScheme.primary,
-                                      textColor: Colors.white,
-                                    );
-                                    await registerDepositPayment(
-                                      client,
-                                      invoiceDocumentID,
-                                      selectedCoin,
-                                      paidAmount,
-                                      totalOfTheOrder,
-                                      currentCoin,
-                                      selectedBank,
-                                      accountNumber,
-                                      voucherNumber,
-                                      imageFile,
-                                      date,
-                                      remaining,
-                                    );
-
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                  }
-                                } else {
-                                  Fluttertoast.showToast(
-                                      msg: 'Ingrese datos de cuenta validos');
-                                }
                               } else {
-                                Fluttertoast.showToast(
-                                    msg: 'Seleccione un banco por favor');
-                              }
-                            } else {
-                              Fluttertoast.showToast(
-                                  msg: 'Monto a pagar no valido');
-                            }
-                          } else {
-                            Fluttertoast.showToast(
-                                msg: 'Complete los datos porfavor');
-                          }
-                          // print(itemsBank);
-                          // print(itemsBankInter);
-                        },
-                        style: TextButton.styleFrom(
-                          foregroundColor: myTheme.colorScheme.primary,
-                        ),
-                        child: Text(
-                          AppLocalizations.of(context)!.orderContinue,
-                          style: TextStyle(
-                            fontFamily: 'Poppins-regular',
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          )
-        ],
-      ),
-    );
-  } else if (selectedValueA == 'Efectivo' ||
-      selectedValueA == 'Nota de credito') {
-    return StatefulBuilder(
-      builder: (BuildContext context, setState) => Column(
-        children: [
-          selectedValueA == 'Nota de credito'
-              ? Container(
-                  child: Text(
-                    'Disponible en Nota de Credito: \$0.00',
-                    style: TextStyle(
-                      fontFamily: 'Poppins-regular',
-                      color: myTheme.colorScheme.secondary,
-                      fontSize: 14,
-                    ),
-                  ),
-                )
-              : Container(),
-          Column(
-            children: [
-              Text(
-                AppLocalizations.of(context)!.selectFile,
-                style: TextStyle(
-                  fontFamily: 'Poppins-regular',
-                  color: Colors.grey.shade400,
-                  fontSize: 14,
-                ),
-              ),
-              InkWell(
-                onTap: () async {
-                  var pickedFile = await getFromGallery(context);
-                  if (pickedFile != null) {
-                    print('Imagen seleccionada');
-                    var croppedImage =
-                        await cropImage(pickedFile.path, imageFile);
-                    if (croppedImage != null) {
-                      print('Imagen recortada');
-                      setState(() {
-                        imageFile = File(croppedImage.path);
-                      });
-                    } else {
-                      print('Error croppeando');
-                    }
-                  } else {
-                    print('error seleccionando');
-                    return;
-                  }
-                },
-                child: Row(
-                  // ignore: prefer_const_literals_to_create_immutables
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(4.0),
-                      child: Icon(
-                        Icons.camera,
-                        color: myTheme.colorScheme.secondary,
-                      ),
-                    ),
-                    Text(
-                      AppLocalizations.of(context)!.gallery,
-                      style: TextStyle(
-                        color: myTheme.colorScheme.primary,
-                        fontFamily: 'Poppins-regular',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              imageFile == null
-                  ? Container()
-                  : Container(
-                      height: 300,
-                      width: 300,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: myTheme.colorScheme.primary,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Image.file(
-                        imageFile!,
-                        height: 300,
-                        width: 300,
-                      ),
-                    ),
-              Container(
-                alignment: Alignment.bottomCenter,
-                margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        setState(() => imageFile = null);
-                      },
-                      child: Text(
-                        AppLocalizations.of(context)!.goBack,
-                        style: TextStyle(
-                          fontFamily: 'Poppins-regular',
-                          color: myTheme.colorScheme.primary,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    paidAmount == 0
-                        ? Container()
-                        : Container(
-                            width: 100,
-                            height: 40,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(16),
-                                color: myTheme.colorScheme.primary),
-                            child: TextButton(
-                              onPressed: () async {
-                                // Crear en DB una visita
-                                if (paidAmount is String) {
-                                  paidAmount =
-                                      double.parse(paidAmount.toString());
-                                }
-                                if (paidAmount != null) {
-                                  if (paidAmount! > remaining!) {
-                                    Fluttertoast.showToast(
-                                      msg:
-                                          'La cantidad a pagar excede de la deuda pendiente',
-                                      backgroundColor:
-                                          myTheme.colorScheme.primary,
-                                      textColor: Colors.white,
-                                    );
-                                  } else {
-                                    print('Cantidad permitida');
-                                    // Fluttertoast.showToast(
-                                    //   msg: 'Registrando Pago en Efectivo',
-                                    //   backgroundColor:
-                                    //       myTheme.colorScheme.primary,
-                                    //   textColor: Colors.white,
-                                    // );
-                                  }
-                                  // Registrar efectivo en la DB
-                                  // print(
-                                  //     'invoiceDocumentID,: ${invoiceDocumentID},');
-                                  // print('paidAmount,: ${paidAmount},');
-                                  // print(
-                                  //     'totalOfTheOrder,: ${totalOfTheOrder},');
-                                  // print('date,: ${date},');
-                                  // print('context,: ${context},');
-                                  // print('remaining,: ${remaining},');
-                                  // print('selectedCoin: ${selectedCoin}');
-                                  try {
-                                    await registerMoneyPayment(
-                                      client: client,
-                                      invoiceDocumentID: invoiceDocumentID,
-                                      currency: selectedCoin,
-                                      amount: paidAmount,
-                                      totalOfTheOrder: totalOfTheOrder,
-                                      imageFile: imageFile,
-                                      date: date,
-                                      remaining: remaining,
-                                    ).whenComplete(() {
-                                      Navigator.pop(context);
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              CompletedPayPage(
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        CompletedPayPage(
                                             client: client.name,
-                                            total: paidAmount,
-                                            // total: totalOfTheOrder,
+                                            total: totalOfTheOrder,
                                             method: "Efectivo",
                                             date:
-                                                '${date!.day}-${date.month}-${date.year} ${(date as DateTime).hour}:${(date as DateTime).minute}',
+                                                '${date!.day}-${date.month}-${date.year} ${(date as DateTime).hour}:${(date).minute}',
                                             address: '',
-                                            coinsExchangeRates: [],
-                                          ),
-                                        ),
-                                      );
-                                    });
-                                  } catch (e) {
-                                    print(e);
-                                  }
-                                } else {
-                                  Fluttertoast.showToast(
-                                      msg: 'Ingrese Monto porfavor');
-                                }
-                              },
-                              style: TextButton.styleFrom(
-                                foregroundColor: myTheme.colorScheme.primary,
-                              ),
-                              child: Text(
-                                AppLocalizations.of(context)!.orderContinue,
-                                style: TextStyle(
-                                  fontFamily: 'Poppins-regular',
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                    Container(
-                      width: 100,
-                      height: 40,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          color: myTheme.colorScheme.primary),
-                      child: TextButton(
-                        onPressed: () async {
-                          // Crear en DB una visita
-                          if (paidAmount is String) {
-                            paidAmount = double.parse(paidAmount);
-                          }
-                          if (paidAmount != null) {
-                            if (paidAmount > remaining) {
-                              Fluttertoast.showToast(
-                                msg:
-                                    'La cantidad a pagar excede de la deuda pendiente',
-                                backgroundColor: myTheme.colorScheme.primary,
-                                textColor: Colors.white,
-                              );
+                                            coinsExchangeRates: const []),
+                                  ),
+                                );
+                              }
                             } else {
-                              print('Cantidad permitida');
                               Fluttertoast.showToast(
-                                msg: 'Registrando Pago en Efectivo',
-                                backgroundColor: myTheme.colorScheme.primary,
-                                textColor: Colors.white,
-                              );
+                                  msg: 'Ingrese Monto porfavor');
                             }
-                            print(invoiceDocumentID);
-                            await registerMoneyPayment(
-                              client,
-                              invoiceDocumentID,
-                              selectedCoin,
-                              paidAmount.toString(),
-                              totalOfTheOrder,
-                              imageFile,
-                              date,
-                              remaining,
-                            );
-                            Navigator.pop(context);
-
-                            if (paidAmount < remaining && paymentBody != null) {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  settings:
-                                      const RouteSettings(name: 'PAGO-DIRECTO'),
-                                  builder: (BuildContext context) =>
-                                      AddPaymentPage(
-                                    remaining: paymentBody.remaining,
-                                    subTotal: paymentBody.subTotal,
-                                    discountPercentage:
-                                        paymentBody.discountPercentage,
-                                    discount: paymentBody.discount,
-                                    tax: paymentBody.tax,
-                                    percentageTax: paymentBody.percentageTax,
-                                    client: paymentBody.client,
-                                    invoiceDocumentID:
-                                        paymentBody.invoiceDocumentID,
-                                    amountPayed:
-                                        (paymentBody.amountPaied ?? 0) +
-                                            paidAmount,
-                                    // updatePayed: updatePayed,
-                                  ),
-                                ),
-                              );
-                            } else {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      CompletedPayPage(
-                                          client: client.name,
-                                          total: totalOfTheOrder,
-                                          method: "Efectivo",
-                                          date:
-                                              '${date.day}-${date.month}-${date.year} ${(date as DateTime).hour}:${(date).minute}',
-                                          address: '',
-                                          coinsExchangeRates: const []),
-                                ),
-                              );
-                            }
-                          } else {
-                            Fluttertoast.showToast(
-                                msg: 'Ingrese Monto porfavor');
-                          }
-                        },
-                        style: TextButton.styleFrom(
-                          foregroundColor: myTheme.colorScheme.primary,
-                        ),
-                        child: Text(
-                          AppLocalizations.of(context)!.orderContinue,
-                          style: TextStyle(
-                            fontFamily: 'Poppins-regular',
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
+                          },
+                          style: TextButton.styleFrom(
+                            foregroundColor: myTheme.colorScheme.primary,
                           ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          )
-        ],
-      ),
-    );
-  } else if (selectedValueA == 'Transferencia' ||
-      selectedValueA == 'Transf-internacional') {
-    return StatefulBuilder(
-      builder: (context, setState) => Column(
-        children: [
-          Text(
-            '${AppLocalizations.of(context)!.bank} *',
-            style: TextStyle(
-              fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.secondary,
-              fontSize: 14,
-            ),
-          ),
-          selectedValueA == 'Transferencia'
-              ? Container(
-                  margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton2(
-                      isExpanded: true,
-                      // ignore: prefer_const_literals_to_create_immutables
-                      hint: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              selectedBank ?? '',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: myTheme.colorScheme.primary
-                                    .withOpacity(0.7),
-                              ),
-                              overflow: TextOverflow.ellipsis,
+                          child: Text(
+                            AppLocalizations.of(context)!.orderContinue,
+                            style: TextStyle(
+                              fontFamily: 'Poppins-regular',
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ],
-                      ),
-                      items: itemsBank
-                          .map((item) => DropdownMenuItem<String>(
-                                value: item,
-                                child: Text(
-                                  item,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: myTheme.colorScheme.primary,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ))
-                          .toList(),
-                      value: selectedBank,
-                      onChanged: (value) {
-                        setState(
-                          () {
-                            selectedBank = value as String;
-                          },
-                        );
-                      },
-                      icon: const Icon(
-                        Icons.arrow_forward_ios_outlined,
-                      ),
-                      iconSize: 11,
-                      iconEnabledColor:
-                          myTheme.colorScheme.primary.withOpacity(0.5),
-                      iconDisabledColor: Colors.grey,
-                      buttonHeight: 50,
-                      // buttonWidth: 200,
-                      buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-                      buttonDecoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(
-                          color: myTheme.colorScheme.primary.withOpacity(0.3),
                         ),
-                        color: Colors.white,
                       ),
-                      buttonElevation: 0,
-                      itemHeight: 40,
-                      itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                      dropdownMaxHeight: 200,
-                      dropdownWidth: 200,
-                      dropdownPadding: null,
-                      dropdownDecoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white,
-                      ),
-                      dropdownElevation: 8,
-                      scrollbarRadius: const Radius.circular(10),
-                      scrollbarThickness: 6,
-                      scrollbarAlwaysShow: true,
-                      offset: const Offset(-20, 0),
-                    ),
-                  ),
-                )
-              : Container(
-                  margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton2(
-                      isExpanded: true,
-                      // ignore: prefer_const_literals_to_create_immutables
-                      hint: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              selectedBank ?? '',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: myTheme.colorScheme.primary
-                                    .withOpacity(0.7),
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                      items: itemsBankInter
-                          .map((item) => DropdownMenuItem<String>(
-                                value: item,
-                                child: Text(
-                                  item,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: myTheme.colorScheme.primary,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ))
-                          .toList(),
-                      value: selectedBank,
-                      onChanged: (value) {
-                        setState(
-                          () {
-                            selectedBank = value as String;
-                          },
-                        );
-                      },
-                      icon: const Icon(
-                        Icons.arrow_forward_ios_outlined,
-                      ),
-                      iconSize: 11,
-                      iconEnabledColor:
-                          myTheme.colorScheme.primary.withOpacity(0.5),
-                      iconDisabledColor: Colors.grey,
-                      buttonHeight: 50,
-                      // buttonWidth: 200,
-                      buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-                      buttonDecoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(
-                          color: myTheme.colorScheme.primary.withOpacity(0.3),
-                        ),
-                        color: Colors.white,
-                      ),
-                      buttonElevation: 0,
-                      itemHeight: 40,
-                      itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                      dropdownMaxHeight: 200,
-                      dropdownWidth: 200,
-                      dropdownPadding: null,
-                      dropdownDecoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white,
-                      ),
-                      dropdownElevation: 8,
-                      scrollbarRadius: const Radius.circular(10),
-                      scrollbarThickness: 6,
-                      scrollbarAlwaysShow: true,
-                      offset: const Offset(-20, 0),
-                    ),
+                    ],
                   ),
                 ),
-          Text(
-            '${AppLocalizations.of(context)!.referenceNumber} *',
-            style: TextStyle(
-              fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.secondary,
-              fontSize: 14,
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-            height: 50,
-            // width: 200,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: myTheme.colorScheme.primary.withOpacity(0.3),
-                // color: Colors.transparent,
-              ),
-            ),
-            child: TextField(
-              style: TextStyle(
-                fontSize: 14,
-                fontFamily: 'Poppins-regular',
-                color: myTheme.colorScheme.primary,
-              ),
-              keyboardType: TextInputType.phone,
-              maxLines: 1,
-              maxLength: 50,
-              textCapitalization: TextCapitalization.characters,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
               ],
-              onChanged: (value) {
-                referenceId = value;
-                print(referenceId);
-              },
-
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
-                hintText: '00000000',
-                hintStyle: TextStyle(
-                  fontFamily: 'Poppins-regular',
-                  fontSize: 14,
-                  color: myTheme.colorScheme.primary.withOpacity(0.2),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
-                  ),
-                ),
-                counterText: '',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
-                  ),
-                ),
+            )
+          ],
+        ),
+      );
+    } else if (selectedValueA == 'Transferencia' ||
+        selectedValueA == 'Transf-internacional') {
+      return StatefulBuilder(
+        builder: (context, setState) => Column(
+          children: [
+            Text(
+              '${AppLocalizations.of(context)!.bank} *',
+              style: TextStyle(
+                fontFamily: 'Poppins-regular',
+                color: myTheme.colorScheme.secondary,
+                fontSize: 14,
               ),
-              // onChanged: searchClient,
             ),
-          ),
-          Column(
-            children: [
-              Text(
-                '${AppLocalizations.of(context)!.selectFile}',
-                style: TextStyle(
-                  fontFamily: 'Poppins-regular',
-                  color: Colors.grey.shade400,
-                  fontSize: 14,
-                ),
-              ),
-              InkWell(
-                onTap: () async {
-                  var pickedFile = await getFromGallery(context);
-                  if (pickedFile != null) {
-                    print('Imagen seleccionada');
-                    var croppedImage =
-                        await cropImage(pickedFile.path, imageFile);
-                    if (croppedImage != null) {
-                      print('Imagen recortada');
-                      setState(() {
-                        imageFile = File(croppedImage.path);
-                      });
-                    } else {
-                      print('Error croppeando');
-                    }
-                  } else {
-                    print('error seleccionando');
-                    return;
-                  }
-                },
-                child: Row(
-                  // ignore: prefer_const_literals_to_create_immutables
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(4.0),
-                      child: Icon(
-                        Icons.camera,
-                        color: myTheme.colorScheme.secondary,
-                      ),
-                    ),
-                    Text(
-                      AppLocalizations.of(context)!.gallery,
-                      style: TextStyle(
-                        color: myTheme.colorScheme.primary,
-                        fontFamily: 'Poppins-regular',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              imageFile == null
-                  ? Container()
-                  : Container(
-                      height: 300,
-                      width: 300,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: myTheme.colorScheme.primary,
+            selectedValueA == 'Transferencia'
+                ? Container(
+                    margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton2(
+                        isExpanded: true,
+                        // ignore: prefer_const_literals_to_create_immutables
+                        hint: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                selectedBank ?? '',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: myTheme.colorScheme.primary
+                                      .withOpacity(0.7),
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
                         ),
-                        borderRadius: BorderRadius.circular(10),
+                        items: itemsBank
+                            .map((item) => DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Text(
+                                    item,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: myTheme.colorScheme.primary,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ))
+                            .toList(),
+                        value: selectedBank,
+                        onChanged: (value) {
+                          setState(
+                            () {
+                              selectedBank = value as String;
+                            },
+                          );
+                        },
+                        icon: const Icon(
+                          Icons.arrow_forward_ios_outlined,
+                        ),
+                        iconSize: 11,
+                        iconEnabledColor:
+                            myTheme.colorScheme.primary.withOpacity(0.5),
+                        iconDisabledColor: Colors.grey,
+                        buttonHeight: 50,
+                        // buttonWidth: 200,
+                        buttonPadding:
+                            const EdgeInsets.only(left: 14, right: 14),
+                        buttonDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(
+                            color: myTheme.colorScheme.primary.withOpacity(0.3),
+                          ),
+                          color: Colors.white,
+                        ),
+                        buttonElevation: 0,
+                        itemHeight: 40,
+                        itemPadding: const EdgeInsets.only(left: 14, right: 14),
+                        dropdownMaxHeight: 200,
+                        dropdownWidth: 200,
+                        dropdownPadding: null,
+                        dropdownDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white,
+                        ),
+                        dropdownElevation: 8,
+                        scrollbarRadius: const Radius.circular(10),
+                        scrollbarThickness: 6,
+                        scrollbarAlwaysShow: true,
+                        offset: const Offset(-20, 0),
                       ),
-                      child: Image.file(
-                        imageFile!,
+                    ),
+                  )
+                : Container(
+                    margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton2(
+                        isExpanded: true,
+                        // ignore: prefer_const_literals_to_create_immutables
+                        hint: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                selectedBank ?? '',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: myTheme.colorScheme.primary
+                                      .withOpacity(0.7),
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                        items: itemsBankInter
+                            .map((item) => DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Text(
+                                    item,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: myTheme.colorScheme.primary,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ))
+                            .toList(),
+                        value: selectedBank,
+                        onChanged: (value) {
+                          setState(
+                            () {
+                              selectedBank = value as String;
+                            },
+                          );
+                        },
+                        icon: const Icon(
+                          Icons.arrow_forward_ios_outlined,
+                        ),
+                        iconSize: 11,
+                        iconEnabledColor:
+                            myTheme.colorScheme.primary.withOpacity(0.5),
+                        iconDisabledColor: Colors.grey,
+                        buttonHeight: 50,
+                        // buttonWidth: 200,
+                        buttonPadding:
+                            const EdgeInsets.only(left: 14, right: 14),
+                        buttonDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(
+                            color: myTheme.colorScheme.primary.withOpacity(0.3),
+                          ),
+                          color: Colors.white,
+                        ),
+                        buttonElevation: 0,
+                        itemHeight: 40,
+                        itemPadding: const EdgeInsets.only(left: 14, right: 14),
+                        dropdownMaxHeight: 200,
+                        dropdownWidth: 200,
+                        dropdownPadding: null,
+                        dropdownDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white,
+                        ),
+                        dropdownElevation: 8,
+                        scrollbarRadius: const Radius.circular(10),
+                        scrollbarThickness: 6,
+                        scrollbarAlwaysShow: true,
+                        offset: const Offset(-20, 0),
+                      ),
+                    ),
+                  ),
+            Text(
+              '${AppLocalizations.of(context)!.referenceNumber} *',
+              style: TextStyle(
+                fontFamily: 'Poppins-regular',
+                color: myTheme.colorScheme.secondary,
+                fontSize: 14,
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+              height: 50,
+              // width: 200,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: myTheme.colorScheme.primary.withOpacity(0.3),
+                  // color: Colors.transparent,
+                ),
+              ),
+              child: TextField(
+                style: TextStyle(
+                  fontSize: 14,
+                  fontFamily: 'Poppins-regular',
+                  color: myTheme.colorScheme.primary,
+                ),
+                keyboardType: TextInputType.phone,
+                maxLines: 1,
+                maxLength: 50,
+                textCapitalization: TextCapitalization.characters,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
+                onChanged: (value) {
+                  referenceId = value;
+                  print(referenceId);
+                },
+
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
+                  hintText: '00000000',
+                  hintStyle: TextStyle(
+                    fontFamily: 'Poppins-regular',
+                    fontSize: 14,
+                    color: myTheme.colorScheme.primary.withOpacity(0.2),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                  counterText: '',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                ),
+                // onChanged: searchClient,
+              ),
+            ),
+            Column(
+              children: [
+                Text(
+                  '${AppLocalizations.of(context)!.selectFile}',
+                  style: TextStyle(
+                    fontFamily: 'Poppins-regular',
+                    color: Colors.grey.shade400,
+                    fontSize: 14,
+                  ),
+                ),
+                InkWell(
+                  onTap: () async {
+                    var pickedFile = await getFromGallery(context);
+                    if (pickedFile != null) {
+                      print('Imagen seleccionada');
+                      var croppedImage =
+                          await cropImage(pickedFile.path, imageFile);
+                      if (croppedImage != null) {
+                        print('Imagen recortada');
+                        setState(() {
+                          imageFile = File(croppedImage.path);
+                        });
+                      } else {
+                        print('Error croppeando');
+                      }
+                    } else {
+                      print('error seleccionando');
+                      return;
+                    }
+                  },
+                  child: Row(
+                    // ignore: prefer_const_literals_to_create_immutables
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(4.0),
+                        child: Icon(
+                          Icons.camera,
+                          color: myTheme.colorScheme.secondary,
+                        ),
+                      ),
+                      Text(
+                        AppLocalizations.of(context)!.gallery,
+                        style: TextStyle(
+                          color: myTheme.colorScheme.primary,
+                          fontFamily: 'Poppins-regular',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                imageFile == null
+                    ? Container()
+                    : Container(
                         height: 300,
                         width: 300,
-                      ),
-                    ),
-              Container(
-                alignment: Alignment.bottomCenter,
-                margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        setState(() => imageFile = null);
-                      },
-                      child: Text(
-                        AppLocalizations.of(context)!.goBack,
-                        style: TextStyle(
-                          fontFamily: 'Poppins-regular',
-                          color: myTheme.colorScheme.primary,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: myTheme.colorScheme.primary,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Image.file(
+                          imageFile!,
+                          height: 300,
+                          width: 300,
                         ),
                       ),
-                    ),
-                    Container(
-                      width: 100,
-                      height: 40,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          color: myTheme.colorScheme.primary),
-                      child: TextButton(
-                        onPressed: () async {
-                          // Crear en DB una visita
-                          // TODO: Temporalmente regresara a antes
-                          if (selectedValueA == 'Transferencia') {
-                            // Crear en DB una visita
-                            // TODO: Temporalmente regresara a antes
-
-                            if (selectedCoin != null) {
-                              if (paidAmount != null ||
-                                  paidAmount != null ||
-                                  paidAmount! <= totalOfTheOrder!) {
-                                if (selectedBank != null) {
-                                  if (referenceId != '') {
-                                    if (paidAmount! > remaining!) {
-                                      Fluttertoast.showToast(
-                                        msg:
-                                            'La cantidad a pagar excede de la deuda pendiente',
-                                        backgroundColor:
-                                            myTheme.colorScheme.primary,
-                                        textColor: Colors.white,
-                                      );
-                                    } else {
-                                      print('Cantidad permitida');
-                                      Fluttertoast.showToast(
-                                        msg: 'Registrando $selectedValueA',
-                                        backgroundColor:
-                                            myTheme.colorScheme.primary,
-                                        textColor: Colors.white,
-                                      );
-                                      await registerTransferPayment(
-                                        client,
-                                        invoiceDocumentID,
-                                        selectedCoin,
-                                        paidAmount,
-                                        totalOfTheOrder,
-                                        currentCoin,
-                                        selectedBank,
-                                        referenceId,
-                                        imageFile,
-                                        date,
-                                        remaining,
-                                      );
-
-                                      Navigator.pop(context);
-                                      Navigator.pop(context);
-                                    }
-                                  } else {
-                                    Fluttertoast.showToast(
-                                        msg: 'Ingrese datos de cuenta validos');
-                                  }
-                                } else {
-                                  Fluttertoast.showToast(
-                                      msg: 'Seleccione un banco por favor');
-                                }
-                              } else {
-                                Fluttertoast.showToast(
-                                    msg: 'Monto a pagar no valido');
-                              }
-                            } else {
-                              Fluttertoast.showToast(
-                                  msg: 'Complete los datos porfavor');
-                            }
-                          } else if (selectedValueA == 'Transf-internacional') {
-                            if (selectedCoin != null) {
-                              if (paidAmount != null ||
-                                  paidAmount != null ||
-                                  paidAmount! <= totalOfTheOrder!) {
-                                if (selectedBank != null) {
-                                  if (referenceId != '') {
-                                    if (paidAmount! > remaining!) {
-                                      Fluttertoast.showToast(
-                                        msg:
-                                            'La cantidad a pagar excede de la deuda pendiente',
-                                        backgroundColor:
-                                            myTheme.colorScheme.primary,
-                                        textColor: Colors.white,
-                                      );
-                                    } else {
-                                      print('Cantidad permitida');
-                                      Fluttertoast.showToast(
-                                        msg: 'Registrando $selectedValueA',
-                                        backgroundColor:
-                                            myTheme.colorScheme.primary,
-                                        textColor: Colors.white,
-                                      );
-                                      await registerTransferInterPayment(
-                                        client,
-                                        invoiceDocumentID,
-                                        selectedCoin,
-                                        paidAmount,
-                                        totalOfTheOrder,
-                                        currentCoin,
-                                        selectedBank,
-                                        referenceId,
-                                        imageFile,
-                                        date,
-                                        remaining,
-                                      );
-
-                                      Navigator.pop(context);
-                                      Navigator.pop(context);
-                                    }
-                                  } else {
-                                    Fluttertoast.showToast(
-                                        msg: 'Ingrese datos de cuenta validos');
-                                  }
-                                } else {
-                                  Fluttertoast.showToast(
-                                      msg: 'Seleccione un banco por favor');
-                                }
-                              } else {
-                                Fluttertoast.showToast(
-                                    msg: 'Monto a pagar no valido');
-                              }
-                            } else {
-                              Fluttertoast.showToast(
-                                  msg: 'Complete los datos porfavor');
-                            }
-                          }
+                Container(
+                  alignment: Alignment.bottomCenter,
+                  margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          setState(() => imageFile = null);
                         },
-                        style: TextButton.styleFrom(
-                          foregroundColor: myTheme.colorScheme.primary,
-                        ),
                         child: Text(
-                          AppLocalizations.of(context)!.orderContinue,
+                          AppLocalizations.of(context)!.goBack,
                           style: TextStyle(
                             fontFamily: 'Poppins-regular',
-                            color: Colors.white,
+                            color: myTheme.colorScheme.primary,
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                      Container(
+                        width: 100,
+                        height: 40,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            color: myTheme.colorScheme.primary),
+                        child: TextButton(
+                          onPressed: () async {
+                            // Crear en DB una visita
+                            // TODO: Temporalmente regresara a antes
+                            if (selectedValueA == 'Transferencia') {
+                              // Crear en DB una visita
+                              // TODO: Temporalmente regresara a antes
+
+                              if (selectedCoin != null) {
+                                if (paidAmount != null ||
+                                    paidAmount != null ||
+                                    paidAmount! <= totalOfTheOrder!) {
+                                  if (selectedBank != null) {
+                                    if (referenceId != '') {
+                                      if (paidAmount! > remaining!) {
+                                        Fluttertoast.showToast(
+                                          msg:
+                                              'La cantidad a pagar excede de la deuda pendiente',
+                                          backgroundColor:
+                                              myTheme.colorScheme.primary,
+                                          textColor: Colors.white,
+                                        );
+                                      } else {
+                                        print('Cantidad permitida');
+                                        Fluttertoast.showToast(
+                                          msg: 'Registrando $selectedValueA',
+                                          backgroundColor:
+                                              myTheme.colorScheme.primary,
+                                          textColor: Colors.white,
+                                        );
+                                        await registerTransferPayment(
+                                          client,
+                                          invoiceDocumentID,
+                                          selectedCoin,
+                                          paidAmount,
+                                          totalOfTheOrder,
+                                          currentCoin,
+                                          selectedBank,
+                                          referenceId,
+                                          imageFile,
+                                          date,
+                                          remaining,
+                                        );
+
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                      }
+                                    } else {
+                                      Fluttertoast.showToast(
+                                          msg:
+                                              'Ingrese datos de cuenta validos');
+                                    }
+                                  } else {
+                                    Fluttertoast.showToast(
+                                        msg: 'Seleccione un banco por favor');
+                                  }
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg: 'Monto a pagar no valido');
+                                }
+                              } else {
+                                Fluttertoast.showToast(
+                                    msg: 'Complete los datos porfavor');
+                              }
+                            } else if (selectedValueA ==
+                                'Transf-internacional') {
+                              if (selectedCoin != null) {
+                                if (paidAmount != null ||
+                                    paidAmount != null ||
+                                    paidAmount! <= totalOfTheOrder!) {
+                                  if (selectedBank != null) {
+                                    if (referenceId != '') {
+                                      if (paidAmount! > remaining!) {
+                                        Fluttertoast.showToast(
+                                          msg:
+                                              'La cantidad a pagar excede de la deuda pendiente',
+                                          backgroundColor:
+                                              myTheme.colorScheme.primary,
+                                          textColor: Colors.white,
+                                        );
+                                      } else {
+                                        print('Cantidad permitida');
+                                        Fluttertoast.showToast(
+                                          msg: 'Registrando $selectedValueA',
+                                          backgroundColor:
+                                              myTheme.colorScheme.primary,
+                                          textColor: Colors.white,
+                                        );
+                                        await registerTransferInterPayment(
+                                          client,
+                                          invoiceDocumentID,
+                                          selectedCoin,
+                                          paidAmount,
+                                          totalOfTheOrder,
+                                          currentCoin,
+                                          selectedBank,
+                                          referenceId,
+                                          imageFile,
+                                          date,
+                                          remaining,
+                                        );
+
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                      }
+                                    } else {
+                                      Fluttertoast.showToast(
+                                          msg:
+                                              'Ingrese datos de cuenta validos');
+                                    }
+                                  } else {
+                                    Fluttertoast.showToast(
+                                        msg: 'Seleccione un banco por favor');
+                                  }
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg: 'Monto a pagar no valido');
+                                }
+                              } else {
+                                Fluttertoast.showToast(
+                                    msg: 'Complete los datos porfavor');
+                              }
+                            }
+                          },
+                          style: TextButton.styleFrom(
+                            foregroundColor: myTheme.colorScheme.primary,
+                          ),
+                          child: Text(
+                            AppLocalizations.of(context)!.orderContinue,
+                            style: TextStyle(
+                              fontFamily: 'Poppins-regular',
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          )
-        ],
-      ),
-    );
+              ],
+            )
+          ],
+        ),
+      );
+    }
   }
 }
