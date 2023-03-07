@@ -44,6 +44,28 @@ cropImage(filePath, imageFile) async {
   }
 }
 
+priceToCurrencySelected(productPrice, coin) {
+  double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+  if (coin!.contains('USD')) {
+    return correctAmount;
+  } else if (coin.contains('VED')) {
+    return correctAmount * 4.58;
+  } else if (coin.contains('EUR')) {
+    return correctAmount * 0.89;
+  } else if (coin.contains('MXN')) {
+    return correctAmount * 19.43;
+  } else if (coin.contains('BTC')) {
+    return correctAmount * 0.00011;
+  } else {
+    return correctAmount * 4.58;
+  }
+}
+
+identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
+    paidAmount, totalOfTheOrder, date, context, remaining, selectedCoin,
+    {Function? updatePayed, AddPaymentBodyAtt? paymentBody, noRetail = false}) {
+  print('paidAmount}');
+
 identifyPaymentMethod(
   String? selectedValueA,
   Client client,
@@ -1352,6 +1374,107 @@ identifyPaymentMethod(
                               ),
                             ),
                           ),
+                    Container(
+                      width: 100,
+                      height: 40,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: myTheme.colorScheme.primary),
+                      child: TextButton(
+                        onPressed: () async {
+                          // Crear en DB una visita
+                          if (paidAmount is String) {
+                            paidAmount = double.parse(paidAmount);
+                          }
+                          if (paidAmount != null) {
+                            if (paidAmount > remaining) {
+                              Fluttertoast.showToast(
+                                msg:
+                                    'La cantidad a pagar excede de la deuda pendiente',
+                                backgroundColor: myTheme.colorScheme.primary,
+                                textColor: Colors.white,
+                              );
+                            } else {
+                              print('Cantidad permitida');
+                              Fluttertoast.showToast(
+                                msg: 'Registrando Pago en Efectivo',
+                                backgroundColor: myTheme.colorScheme.primary,
+                                textColor: Colors.white,
+                              );
+                            }
+                            print(invoiceDocumentID);
+                            await registerMoneyPayment(
+                              client,
+                              invoiceDocumentID,
+                              selectedCoin,
+                              paidAmount.toString(),
+                              totalOfTheOrder,
+                              imageFile,
+                              date,
+                              remaining,
+                            );
+                            Navigator.pop(context);
+
+                            if (paidAmount < remaining && paymentBody != null) {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  settings:
+                                      const RouteSettings(name: 'PAGO-DIRECTO'),
+                                  builder: (BuildContext context) =>
+                                      AddPaymentPage(
+                                    remaining: paymentBody.remaining,
+                                    subTotal: paymentBody.subTotal,
+                                    discountPercentage:
+                                        paymentBody.discountPercentage,
+                                    discount: paymentBody.discount,
+                                    tax: paymentBody.tax,
+                                    percentageTax: paymentBody.percentageTax,
+                                    client: paymentBody.client,
+                                    invoiceDocumentID:
+                                        paymentBody.invoiceDocumentID,
+                                    amountPayed:
+                                        (paymentBody.amountPaied ?? 0) +
+                                            paidAmount,
+                                    // updatePayed: updatePayed,
+                                  ),
+                                ),
+                              );
+                            } else {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      CompletedPayPage(
+                                          client: client.name,
+                                          total: totalOfTheOrder,
+                                          method: "Efectivo",
+                                          date:
+                                              '${date.day}-${date.month}-${date.year} ${(date as DateTime).hour}:${(date).minute}',
+                                          address: '',
+                                          coinsExchangeRates: const []),
+                                ),
+                              );
+                            }
+                          } else {
+                            Fluttertoast.showToast(
+                                msg: 'Ingrese Monto porfavor');
+                          }
+                        },
+                        style: TextButton.styleFrom(
+                          foregroundColor: myTheme.colorScheme.primary,
+                        ),
+                        child: Text(
+                          AppLocalizations.of(context)!.orderContinue,
+                          style: TextStyle(
+                            fontFamily: 'Poppins-regular',
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
