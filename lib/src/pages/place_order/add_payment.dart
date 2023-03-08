@@ -24,6 +24,8 @@ class AddPaymentPage extends StatefulWidget {
     required this.percentageTax,
     required this.invoiceDocumentID,
     required this.client,
+    required this.invoiceNumber,
+    required this.payments,
     this.amountPayed,
 
     // required this.updatePayed,
@@ -35,8 +37,10 @@ class AddPaymentPage extends StatefulWidget {
   final double discount;
   final double tax;
   final int percentageTax;
-  final invoiceDocumentID;
-  final client;
+  final String invoiceDocumentID;
+  final Client client;
+  final int invoiceNumber;
+  List<PayMethod> payments;
   double? amountPayed;
 
   // final Function(double) updatePayed;
@@ -61,7 +65,8 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
         client: widget.client,
         invoiceDocumentID: widget.invoiceDocumentID,
         amountPayed: widget.amountPayed,
-
+        invoiceNumber: widget.invoiceNumber,
+        payments: widget.payments,
         // updatePayed: widget.updatePayed,
       ),
     );
@@ -79,6 +84,8 @@ class AddPaymentBody extends StatefulWidget {
     required this.percentageTax,
     required this.invoiceDocumentID,
     required this.client,
+    required this.invoiceNumber,
+    required this.payments,
     this.amountPayed,
 
     // required this.updatePayed,
@@ -90,8 +97,10 @@ class AddPaymentBody extends StatefulWidget {
   final double discount;
   final double tax;
   final int percentageTax;
-  final invoiceDocumentID;
-  final client;
+  final String invoiceDocumentID;
+  final Client client;
+  final int invoiceNumber;
+  List<PayMethod> payments;
   double? amountPayed;
 
   // final Function(double) updatePayed;
@@ -882,7 +891,10 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                       percentageTax: widget.percentageTax,
                                       remaining: widget.remaining,
                                       subTotal: widget.subTotal,
-                                      tax: widget.tax),
+                                      tax: widget.tax,
+                                      invoiceNumber: widget.invoiceNumber,
+                                      currency: currentCoin!)
+                                    ..payments = widget.payments,
                                 ),
                               )
                             ],
@@ -907,6 +919,9 @@ class AddPaymentBodyAtt {
   final int percentageTax;
   final Client client;
   final String invoiceDocumentID;
+  final int invoiceNumber;
+  final String currency;
+  List<PayMethod> payments = [];
   double? amountPaied;
 
   AddPaymentBodyAtt(
@@ -917,5 +932,14 @@ class AddPaymentBodyAtt {
       required this.tax,
       required this.percentageTax,
       required this.client,
-      required this.invoiceDocumentID});
+      required this.invoiceDocumentID,
+      required this.invoiceNumber,
+      required this.currency});
+}
+
+class PayMethod {
+  String name;
+  double amount;
+
+  PayMethod(this.name, this.amount);
 }

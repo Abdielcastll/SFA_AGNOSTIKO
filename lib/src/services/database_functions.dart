@@ -1297,7 +1297,7 @@ Future registerTransferInterPayment(
 
 // Pago directo desde el checkout
 
-Future completePaymentProcess(
+Future<int> completePaymentProcess(
   Clients? client,
   String? userUid,
   String? commentary,
@@ -1346,9 +1346,9 @@ Future completePaymentProcess(
   print('IDs: $productsIds');
   print('Productos: $products');
 
-  return await FirebaseFirestore.instance
+  await FirebaseFirestore.instance
       .collection('clientes')
-      .doc(client!.clientDocumentId)
+      .doc(client.clientDocumentId)
       .collection('pedidos')
       .doc(randomID)
       .set(
@@ -1382,102 +1382,97 @@ Future completePaymentProcess(
       'vendedor':
           FirebaseFirestore.instance.collection('usuarios').doc(userUid),
     },
-  ).whenComplete(() async {
-    print('/// CREAR FACTURA ///');
+  );
+  print('/// CREAR FACTURA ///');
 
-    final clientID = FirebaseFirestore.instance
-        .collection('clientes')
-        .doc(client.clientDocumentId);
-    final discount = masterDiscount;
-    final date = Timestamp.fromDate(DateTime.now());
-    final tax = taxTotal;
-    final String totalAsString = totalOfTheOrder.toStringAsFixed(2);
+  final clientID = FirebaseFirestore.instance
+      .collection('clientes')
+      .doc(client.clientDocumentId);
+  final discount = masterDiscount;
+  final date = Timestamp.fromDate(DateTime.now());
+  final tax = taxTotal;
 
-    var correlativeNumber = await FirebaseFirestore.instance
+  var correlativeNumber = await FirebaseFirestore.instance
+      .collection('config')
+      .doc('contador_pedidos')
+      .get()
+      .then((value) {
+    return value['numero'];
+  });
+  const isPaid = false;
+  final payments = [];
+  final order = FirebaseFirestore.instance
+      .collection('clientes')
+      .doc(client.clientDocumentId)
+      .collection('pedidos')
+      .doc(randomID);
+  final masterDiscountPercentage = client.masterDiscount;
+  final referenceCreditNote = [];
+  final subTotalInvoice = subTotal;
+  final register = Timestamp.fromDate(DateTime.now());
+  final lastModification = <String, dynamic>{
+    'timestamp': register,
+    'usuario': FirebaseFirestore.instance.collection('usuarios').doc(userUid),
+  };
+  final seller = FirebaseFirestore.instance.collection('usuarios').doc(userUid);
+
+  print(clientID);
+  print(discount);
+  print(date);
+  print(tax);
+  print(totalAsString);
+  print(isPaid);
+  print(payments);
+  print(order);
+  print(masterDiscountPercentage);
+  print(referenceCreditNote);
+  print(subTotal);
+  print(register);
+  print(lastModification);
+  print(seller);
+  print(correlativeNumber);
+  print(correlativeNumber + 1);
+
+  await FirebaseFirestore.instance
+      .collection('clientes')
+      .doc(client.clientDocumentId)
+      .collection('pedidos')
+      .doc(randomID)
+      .update({'facturado': true, 'nroCorrelativo': correlativeNumber + 1});
+  await FirebaseFirestore.instance
+      .collection('clientes')
+      .doc(client.clientDocumentId)
+      .collection('facturas')
+      .doc(randomID)
+      .set({
+    'cliente': clientID,
+    'descuentoMaestro': discount,
+    'fecha': Timestamp.fromDate(DateTime.now()),
+    'impuesto': double.parse(tax!.toStringAsFixed(2)),
+    'montoTotal': double.parse(totalAsString),
+    'nroCorrelativo': correlativeNumber + 1,
+    'pagada': isPaid,
+    'pagos': payments,
+    'pedido': order,
+    'porcentajeDescuentoMaestro': masterDiscountPercentage,
+    'porcentajeImpuesto': 16,
+    'referenciaNotasCredito': referenceCreditNote,
+    'subtotal': subTotalInvoice,
+    'timestampRegistro': register,
+    'ultimaModificacion': lastModification,
+    'vendedor': seller,
+  }).whenComplete(() async {
+    return await FirebaseFirestore.instance
         .collection('config')
         .doc('contador_pedidos')
-        .get()
-        .then((value) {
-      return value['numero'];
-    });
-    const isPaid = false;
-    final payments = [];
-    final order = FirebaseFirestore.instance
-        .collection('clientes')
-        .doc(client.clientDocumentId)
-        .collection('pedidos')
-        .doc(randomID);
-    final discountPercentage = client.masterDiscount;
-    final referenceCreditNote = [];
-    final subTotalInvoice = subTotal;
-    final register = Timestamp.fromDate(DateTime.now());
-    final lastModification = <String, dynamic>{
-      'timestamp': register,
-      'usuario': FirebaseFirestore.instance.collection('usuarios').doc(userUid),
-    };
-    final seller =
-        FirebaseFirestore.instance.collection('usuarios').doc(userUid);
-
-    print(clientID);
-    print(discount);
-    print(date);
-    print(tax);
-    print(totalAsString);
-    print(isPaid);
-    print(payments);
-    print(order);
-    print(discountPercentage);
-    print(referenceCreditNote);
-    print(subTotal);
-    print(register);
-    print(lastModification);
-    print(seller);
-    print(correlativeNumber);
-    print(correlativeNumber + 1);
-
-    await FirebaseFirestore.instance
-        .collection('clientes')
-        .doc(client.clientDocumentId)
-        .collection('pedidos')
-        .doc(randomID)
-        .update({
-      'facturado': true,
-      'nroCorrelativo': correlativeNumber + 1
-    }).whenComplete(() async {
-      return await FirebaseFirestore.instance
-          .collection('clientes')
-          .doc(client.clientDocumentId)
-          .collection('facturas')
-          .doc(randomID)
-          .set({
-        'cliente': clientID,
-        'descuentoMaestro': discount,
-        'fecha': Timestamp.fromDate(DateTime.now()),
-        'impuesto': double.parse(tax!.toStringAsFixed(2)),
-        'montoTotal': double.parse(totalAsString),
-        'nroCorrelativo': correlativeNumber + 1,
-        'pagada': isPaid,
-        'pagos': payments,
-        'pedido': order,
-        'porcentajeDescuentoMaestro': discountPercentage,
-        'porcentajeImpuesto': 16,
-        'referenciaNotasCredito': referenceCreditNote,
-        'subtotal': subTotalInvoice,
-        'timestampRegistro': register,
-        'ultimaModificacion': lastModification,
-        'vendedor': seller,
-      }).whenComplete(() async {
-        return await FirebaseFirestore.instance
-            .collection('config')
-            .doc('contador_pedidos')
-            .update({'numero': correlativeNumber + 1});
-      }).whenComplete(() =>
-              Fluttertoast.showToast(msg: 'Factura ${correlativeNumber + 1}'));
-    });
-  });
+        .update({'numero': correlativeNumber + 1});
+  }).whenComplete(() =>
+          Fluttertoast.showToast(msg: 'Factura ${correlativeNumber + 1}'));
   // await test().whenComplete(() {
   //   print('2: $randomID');
   // });
+
+  return correlativeNumber + 1;
 }
 
 Future test() async {}

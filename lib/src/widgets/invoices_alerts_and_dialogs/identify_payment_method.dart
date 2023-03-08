@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
 import 'dart:io';
 
@@ -1305,30 +1305,39 @@ identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
                             );
                             Navigator.pop(context);
 
+                            paymentBody?.payments
+                                .add(PayMethod('Efectivo', paidAmount));
+
+                            print('IDENTIFY PAYMENTS');
+                            print(paymentBody?.payments.length);
+
                             if (paidAmount < remaining && paymentBody != null) {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  settings:
-                                      const RouteSettings(name: 'PAGO-DIRECTO'),
-                                  builder: (BuildContext context) =>
-                                      AddPaymentPage(
-                                    remaining: paymentBody.remaining,
-                                    subTotal: paymentBody.subTotal,
-                                    discountPercentage:
-                                        paymentBody.discountPercentage,
-                                    discount: paymentBody.discount,
-                                    tax: paymentBody.tax,
-                                    percentageTax: paymentBody.percentageTax,
-                                    client: paymentBody.client,
-                                    invoiceDocumentID:
-                                        paymentBody.invoiceDocumentID,
-                                    amountPayed:
-                                        (paymentBody.amountPaied ?? 0) +
-                                            paidAmount,
-                                    // updatePayed: updatePayed,
-                                  ),
-                                ),
+                                    settings: const RouteSettings(
+                                        name: 'PAGO-DIRECTO'),
+                                    builder: (BuildContext context) =>
+                                        AddPaymentPage(
+                                          remaining: paymentBody.remaining,
+                                          subTotal: paymentBody.subTotal,
+                                          discountPercentage:
+                                              paymentBody.discountPercentage,
+                                          discount: paymentBody.discount,
+                                          tax: paymentBody.tax,
+                                          percentageTax:
+                                              paymentBody.percentageTax,
+                                          client: paymentBody.client,
+                                          invoiceDocumentID:
+                                              paymentBody.invoiceDocumentID,
+                                          invoiceNumber:
+                                              paymentBody.invoiceNumber,
+                                          amountPayed:
+                                              (paymentBody.amountPaied ?? 0) +
+                                                  paidAmount,
+                                          payments: paymentBody.payments,
+                                          // updatePayed: updatePayed,
+                                        )),
                               );
                             } else {
                               Navigator.pushReplacement(
@@ -1342,7 +1351,20 @@ identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
                                           date:
                                               '${date.day}-${date.month}-${date.year} ${(date as DateTime).hour}:${(date).minute}',
                                           address: '',
-                                          coinsExchangeRates: const []),
+                                          coinsExchangeRates: const [],
+                                          addPaymentBody: !noRetail
+                                              ? paymentBody!
+                                              : AddPaymentBodyAtt(
+                                                  client: client,
+                                                  discount: 0,
+                                                  discountPercentage: 0,
+                                                  invoiceDocumentID: '',
+                                                  invoiceNumber: 0,
+                                                  percentageTax: 0,
+                                                  remaining: 0,
+                                                  subTotal: 0,
+                                                  tax: 0,
+                                                  currency: '')),
                                 ),
                               );
                             }

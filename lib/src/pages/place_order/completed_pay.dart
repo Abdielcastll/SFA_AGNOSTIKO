@@ -4,6 +4,10 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
+import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/transaction_args.dart';
+import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
+import 'package:pwa_sales2go_flutter/src/pages/place_order/invoicePrintLayout.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
@@ -16,6 +20,7 @@ class CompletedPayPage extends StatelessWidget {
     required this.date,
     required this.address,
     required this.coinsExchangeRates,
+    required this.addPaymentBody,
     this.orderNumber,
   }) : super(key: key);
 
@@ -26,6 +31,7 @@ class CompletedPayPage extends StatelessWidget {
   final address;
   final orderNumber;
   final coinsExchangeRates;
+  final AddPaymentBodyAtt addPaymentBody;
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +54,7 @@ class CompletedPayPage extends StatelessWidget {
           address: address,
           orderNumber: orderNumber,
           coinsExchangeRates: coinsExchangeRates,
+          addPaymentBody: addPaymentBody,
         ),
       ),
     );
@@ -64,6 +71,7 @@ class CompletedPayBody extends StatefulWidget {
     required this.address,
     required this.orderNumber,
     required this.coinsExchangeRates,
+    required this.addPaymentBody,
   }) : super(key: key);
   final client;
   final total;
@@ -72,6 +80,7 @@ class CompletedPayBody extends StatefulWidget {
   final address;
   final orderNumber;
   final coinsExchangeRates;
+  final AddPaymentBodyAtt addPaymentBody;
 
   @override
   State<CompletedPayBody> createState() => _CompletedPayBody();
@@ -246,37 +255,68 @@ class _CompletedPayBody extends State<CompletedPayBody> {
             borderRadius: BorderRadius.circular(20),
           ),
           width: 340,
-          height: 40,
-          child: ClipRRect(
+          height: 100,
+          child: /*  ClipRRect(
             borderRadius: BorderRadius.circular(16),
-            child: ElevatedButton(
-              onPressed: () {
-                objectBox.delelteAllShoppingCart();
-                Navigator.popUntil(context, (route) => route.isFirst);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: myTheme.colorScheme.primary,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Regresar al Inicio',
-                    style: TextStyle(
-                      fontFamily: 'Poppins-regular',
-                      fontSize: 14,
+            child: */
+              Column(
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  objectBox.delelteAllShoppingCart();
+                  Navigator.popUntil(context, (route) => route.isFirst);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: myTheme.colorScheme.primary,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Regresar al Inicio',
+                      style: TextStyle(
+                        fontFamily: 'Poppins-regular',
+                        fontSize: 14,
+                      ),
                     ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
-                    child: const Icon(
-                      SimpleLineIcons.check,
-                      size: 14,
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+                      child: const Icon(
+                        SimpleLineIcons.check,
+                        size: 14,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
+              ElevatedButton(
+                onPressed: () {
+                  invoicePrintLayout(widget.addPaymentBody);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: myTheme.colorScheme.primary,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Imprimir Factura',
+                      style: TextStyle(
+                        fontFamily: 'Poppins-regular',
+                        fontSize: 14,
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+                      child: const Icon(
+                        SimpleLineIcons.check,
+                        size: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
         Image.asset(
