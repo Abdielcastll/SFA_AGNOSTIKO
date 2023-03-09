@@ -7,6 +7,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -44,9 +45,32 @@ cropImage(filePath, imageFile) async {
   }
 }
 
+priceToCurrencySelected(productPrice, coin) {
+  double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+  if (coin!.contains('USD')) {
+    return correctAmount;
+  } else if (coin.contains('VED')) {
+    return correctAmount * 4.58;
+  } else if (coin.contains('EUR')) {
+    return correctAmount * 0.89;
+  } else if (coin.contains('MXN')) {
+    return correctAmount * 19.43;
+  } else if (coin.contains('BTC')) {
+    return correctAmount * 0.00011;
+  } else {
+    return correctAmount * 4.58;
+  }
+}
+
+testPrint() {
+  print('//////////////////////////////////');
+  print('TESTEO: PHOSPHOPHYLLITE');
+  print('//////////////////////////////////');
+}
+
 identifyPaymentMethodRetail(
   String? selectedValueA,
-  Client client,
+  Client? client,
   String? invoiceDocumentID,
   double? paidAmount,
   double? totalOfTheOrder,
@@ -138,7 +162,7 @@ identifyPaymentMethodRetail(
     if (paidAmount is String) {
       paidAmount = double.parse(paidAmount.toString().replaceAll('\$', ''));
     }
-    return paymentCard(paidAmount!, client, invoiceDocumentID!,
+    return paymentCard(paidAmount!, client!, invoiceDocumentID!,
         totalOfTheOrder!, selectedCoin!, date!, remaining!,
         updatePayed: updatePayed, paymentBody: paymentBody, noRetail: noRetail);
   }
@@ -148,15 +172,15 @@ identifyPaymentMethodRetail(
       builder: (context, setState) => Column(
         children: [
           Text(
-            '${AppLocalizations.of(context)!.bank} *',
+            '${AppLocalizations.of(context)!.bank}*',
             style: TextStyle(
               fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.secondary,
+              color: myTheme.colorScheme.primary,
               fontSize: 14,
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
+            margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
             child: DropdownButtonHideUnderline(
               child: DropdownButton2(
                 isExpanded: true,
@@ -165,7 +189,7 @@ identifyPaymentMethodRetail(
                   children: [
                     Expanded(
                       child: Text(
-                        selectedBank ?? '',
+                        selectedBank ?? 'Seleccione una opción',
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
@@ -195,6 +219,8 @@ identifyPaymentMethodRetail(
                   setState(
                     () {
                       selectedBank = value as String;
+                      accountNumber = '';
+                      accountHolder = '';
                     },
                   );
                 },
@@ -233,15 +259,15 @@ identifyPaymentMethodRetail(
             ),
           ),
           Text(
-            '${AppLocalizations.of(context)!.accountNumber} *',
+            '${AppLocalizations.of(context)!.accountNumber}*',
             style: TextStyle(
               fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.secondary,
+              color: myTheme.colorScheme.primary,
               fontSize: 14,
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+            margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
             height: 50,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
@@ -258,18 +284,20 @@ identifyPaymentMethodRetail(
               ),
               keyboardType: TextInputType.phone,
               maxLines: 1,
-              maxLength: 50,
+              maxLength: 20,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
               ],
               onChanged: (value) {
+                // setState(() {
                 accountNumber = value;
+                // });
                 print(accountNumber);
               },
-
+              // textAlign: TextAlign.center,
               decoration: InputDecoration(
-                contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
-                hintText: '00000000',
+                contentPadding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                hintText: '0112345678',
                 hintStyle: TextStyle(
                   fontFamily: 'Poppins-regular',
                   fontSize: 14,
@@ -292,16 +320,19 @@ identifyPaymentMethodRetail(
               // onChanged: searchClient,
             ),
           ),
-          Text(
-            '${AppLocalizations.of(context)!.accountHolder}*',
-            style: TextStyle(
-              fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.secondary,
-              fontSize: 14,
+          Container(
+            margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+            child: Text(
+              '${AppLocalizations.of(context)!.accountHolder}*',
+              style: TextStyle(
+                fontFamily: 'Poppins-regular',
+                color: myTheme.colorScheme.primary,
+                fontSize: 14,
+              ),
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+            margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
             height: 50,
             // width: 200,
             decoration: BoxDecoration(
@@ -323,13 +354,15 @@ identifyPaymentMethodRetail(
               textCapitalization: TextCapitalization.characters,
 
               onChanged: (value) {
+                // setState(() {
                 accountHolder = value;
+                // });
                 print(accountHolder);
               },
 
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
-                hintText: '',
+                hintText: 'John Doe / Jane Doe',
                 hintStyle: TextStyle(
                   fontFamily: 'Poppins-regular',
                   fontSize: 14,
@@ -354,6 +387,9 @@ identifyPaymentMethodRetail(
           ),
           Column(
             children: [
+              SizedBox(
+                height: 10,
+              ),
               Text(
                 AppLocalizations.of(context)!.selectFile,
                 style: TextStyle(
@@ -361,6 +397,9 @@ identifyPaymentMethodRetail(
                   color: Colors.grey.shade400,
                   fontSize: 14,
                 ),
+              ),
+              SizedBox(
+                height: 10,
               ),
               InkWell(
                 onTap: () async {
@@ -420,112 +459,161 @@ identifyPaymentMethodRetail(
                         width: 300,
                       ),
                     ),
-              Container(
-                alignment: Alignment.bottomCenter,
-                margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        setState(() => imageFile = null);
-                      },
-                      child: Text(
-                        AppLocalizations.of(context)!.goBack,
-                        style: TextStyle(
-                          fontFamily: 'Poppins-regular',
-                          color: myTheme.colorScheme.primary,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      setState(() => imageFile = null);
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                        myTheme.colorScheme.primary,
+                      ),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
                         ),
                       ),
                     ),
-                    Container(
-                      width: 100,
-                      height: 40,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          color: myTheme.colorScheme.primary),
-                      child: TextButton(
-                        onPressed: () async {
-                          // Crear en DB una visita
-                          if (selectedCoin != null) {
-                            if (paidAmount != null ||
-                                paidAmount != null ||
-                                paidAmount! <= totalOfTheOrder!) {
-                              if (selectedBank != null) {
-                                if (accountNumber != '' ||
-                                    accountHolder != '') {
-                                  print('Registrando pago en cheque');
-                                  if (double.parse(paidAmount.toString()) >
-                                      remaining!) {
-                                    Fluttertoast.showToast(
-                                      msg:
-                                          'La cantidad a pagar excede de la deuda pendiente',
-                                      backgroundColor:
-                                          myTheme.colorScheme.secondary,
-                                      textColor: Colors.white,
-                                    );
+                    icon: Icon(
+                      MaterialIcons.arrow_back_ios,
+                      size: 14,
+                    ),
+                    label: Text(
+                      'Cancelar',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Poppins-regular',
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  paidAmount! == 0
+                      ? Container()
+                      : Container(
+                          // width: 125,
+                          child: ElevatedButton.icon(
+                            onPressed: () async {
+                              // Crear en DB una visita
+                              if (selectedCoin != null) {
+                                if (paidAmount != null ||
+                                    paidAmount != null ||
+                                    paidAmount! <= totalOfTheOrder!) {
+                                  if (selectedBank != null) {
+                                    if (accountNumber != '' ||
+                                        accountHolder != '') {
+                                      print('Registrando pago en cheque');
+                                      if (double.parse(paidAmount.toString()) >
+                                          remaining!) {
+                                        Fluttertoast.showToast(
+                                          msg:
+                                              'La cantidad a pagar excede de la deuda pendiente',
+                                          backgroundColor:
+                                              myTheme.colorScheme.secondary,
+                                          textColor: Colors.white,
+                                        );
+                                      } else {
+                                        print('Cantidad permitida');
+                                        Fluttertoast.showToast(
+                                          msg: 'Registrando Cheque',
+                                          backgroundColor:
+                                              myTheme.colorScheme.primary,
+                                          textColor: Colors.white,
+                                        );
+                                        try {
+                                          await registerBankCheckPayment(
+                                            client: client,
+                                            invoiceDocumentID:
+                                                invoiceDocumentID,
+                                            currency: selectedCoin,
+                                            amount: paidAmount,
+                                            totalOfTheOrder: totalOfTheOrder,
+                                            currentCoin: currentCoin,
+                                            bank: selectedBank,
+                                            accountNumber: accountNumber,
+                                            accountHolder: accountHolder,
+                                            imageFile: imageFile,
+                                            date: date,
+                                            remaining: remaining,
+                                          )
+                                              .whenComplete(
+                                                  () => Navigator.pop(context))
+                                              .whenComplete(
+                                                () => Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (BuildContext
+                                                            context) =>
+                                                        CompletedPayPage(
+                                                            client:
+                                                                client!.name,
+                                                            total: paidAmount,
+                                                            method: "Cheque",
+                                                            date:
+                                                                '${date!.day}-${date.month}-${date.year} ${(date as DateTime).hour}:${(date).minute}',
+                                                            address: '',
+                                                            coinsExchangeRates: const []),
+                                                  ),
+                                                ),
+                                              );
+                                          // Navigator.pop(context);
+                                        } catch (e) {
+                                          Fluttertoast.showToast(
+                                              msg: e.toString());
+                                        }
+                                      }
+                                    } else {
+                                      Fluttertoast.showToast(
+                                          msg:
+                                              'Ingrese datos de cuenta validos');
+                                    }
                                   } else {
-                                    print('Cantidad permitida');
                                     Fluttertoast.showToast(
-                                      msg: 'Registrando Cheque',
-                                      backgroundColor:
-                                          myTheme.colorScheme.primary,
-                                      textColor: Colors.white,
-                                    );
-                                    await registerBankCheckPayment(
-                                      client,
-                                      invoiceDocumentID,
-                                      selectedCoin,
-                                      paidAmount,
-                                      totalOfTheOrder,
-                                      currentCoin,
-                                      selectedBank,
-                                      accountNumber,
-                                      accountHolder,
-                                      imageFile,
-                                      date,
-                                      remaining,
-                                    );
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
+                                        msg: 'Seleccione un banco por favor');
                                   }
                                 } else {
                                   Fluttertoast.showToast(
-                                      msg: 'Ingrese datos de cuenta validos');
+                                      msg: 'Monto a pagar no valido');
                                 }
                               } else {
                                 Fluttertoast.showToast(
-                                    msg: 'Seleccione un banco por favor');
+                                    msg: 'Complete los datos porfavor');
                               }
-                            } else {
-                              Fluttertoast.showToast(
-                                  msg: 'Monto a pagar no valido');
-                            }
-                          } else {
-                            Fluttertoast.showToast(
-                                msg: 'Complete los datos porfavor');
-                          }
-                        },
-                        style: TextButton.styleFrom(
-                          foregroundColor: myTheme.colorScheme.primary,
-                        ),
-                        child: Text(
-                          AppLocalizations.of(context)!.orderContinue,
-                          style: TextStyle(
-                            fontFamily: 'Poppins-regular',
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
+                            },
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                myTheme.colorScheme.onPrimaryContainer,
+                              ),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                ),
+                              ),
+                            ),
+                            icon: Icon(
+                              MaterialCommunityIcons.bank,
+                              size: 14,
+                            ),
+                            label: Text(
+                              'Continuar',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Poppins-regular',
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                  ],
-                ),
+                ],
+              ),
+              SizedBox(
+                height: 10,
               ),
             ],
           ),
@@ -716,7 +804,7 @@ identifyPaymentMethodRetail(
                                   textColor: Colors.white,
                                 );
                                 await registerCriptoPayment(
-                                  client,
+                                  client!,
                                   invoiceDocumentID,
                                   'BTC',
                                   paidAmount,
@@ -761,15 +849,15 @@ identifyPaymentMethodRetail(
       builder: (context, setState) => Column(
         children: [
           Text(
-            '${AppLocalizations.of(context)!.bank} *',
+            '${AppLocalizations.of(context)!.bank}*',
             style: TextStyle(
               fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.secondary,
+              color: myTheme.colorScheme.primary,
               fontSize: 14,
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
+            margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
             child: DropdownButtonHideUnderline(
               child: DropdownButton2(
                 isExpanded: true,
@@ -778,7 +866,7 @@ identifyPaymentMethodRetail(
                   children: [
                     Expanded(
                       child: Text(
-                        selectedBank ?? '',
+                        selectedBank ?? 'Seleccione una opción',
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
@@ -830,8 +918,8 @@ identifyPaymentMethodRetail(
                 buttonElevation: 0,
                 itemHeight: 40,
                 itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                dropdownMaxHeight: 200,
-                dropdownWidth: 200,
+                // dropdownMaxHeight: 200,
+                // dropdownWidth: 200,
                 dropdownPadding: null,
                 dropdownDecoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
@@ -841,20 +929,20 @@ identifyPaymentMethodRetail(
                 scrollbarRadius: const Radius.circular(10),
                 scrollbarThickness: 6,
                 scrollbarAlwaysShow: true,
-                offset: const Offset(-20, 0),
+                offset: const Offset(0, 0),
               ),
             ),
           ),
           Text(
-            '${AppLocalizations.of(context)!.voucherNumber} *',
+            '${AppLocalizations.of(context)!.voucherNumber}*',
             style: TextStyle(
               fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.secondary,
+              color: myTheme.colorScheme.primary,
               fontSize: 14,
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+            margin: EdgeInsets.fromLTRB(10, 0, 0, 10),
             height: 50,
             // width: 200,
             decoration: BoxDecoration(
@@ -884,7 +972,7 @@ identifyPaymentMethodRetail(
 
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
-                hintText: '00000000',
+                hintText: '0112345678',
                 hintStyle: TextStyle(
                   fontFamily: 'Poppins-regular',
                   fontSize: 14,
@@ -908,15 +996,15 @@ identifyPaymentMethodRetail(
             ),
           ),
           Text(
-            '${AppLocalizations.of(context)!.accountNumber} *',
+            '${AppLocalizations.of(context)!.accountNumber}*',
             style: TextStyle(
               fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.secondary,
+              color: myTheme.colorScheme.primary,
               fontSize: 14,
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+            margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
             height: 50,
             // width: 200,
             decoration: BoxDecoration(
@@ -940,13 +1028,15 @@ identifyPaymentMethodRetail(
                 FilteringTextInputFormatter.digitsOnly,
               ],
               onChanged: (value) {
+                // setState(() {
                 accountNumber = value;
+                // });
                 print(accountNumber);
               },
 
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
-                hintText: '00000000',
+                hintText: '0112345678',
                 hintStyle: TextStyle(
                   fontFamily: 'Poppins-regular',
                   fontSize: 14,
@@ -971,6 +1061,7 @@ identifyPaymentMethodRetail(
           ),
           Column(
             children: [
+              SizedBox(height: 10),
               Text(
                 AppLocalizations.of(context)!.selectFile,
                 style: TextStyle(
@@ -1041,108 +1132,157 @@ identifyPaymentMethodRetail(
                 alignment: Alignment.bottomCenter,
                 margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    TextButton(
+                    SizedBox(height: 10),
+                    ElevatedButton.icon(
                       onPressed: () {
                         Navigator.pop(context);
                         setState(() => imageFile = null);
                       },
-                      child: Text(
-                        AppLocalizations.of(context)!.goBack,
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                          myTheme.colorScheme.primary,
+                        ),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          ),
+                        ),
+                      ),
+                      icon: Icon(
+                        MaterialIcons.arrow_back_ios,
+                        size: 14,
+                      ),
+                      label: Text(
+                        'Cancelar',
                         style: TextStyle(
+                          color: Colors.white,
                           fontFamily: 'Poppins-regular',
-                          color: myTheme.colorScheme.primary,
-                          fontSize: 14,
+                          fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                    Container(
-                      width: 100,
-                      height: 40,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          color: myTheme.colorScheme.primary),
-                      child: TextButton(
-                        onPressed: () async {
-                          // Crear en DB una visita
+                    paidAmount == 0
+                        ? Container()
+                        : ElevatedButton.icon(
+                            onPressed: () async {
+                              // Crear en DB una visita
 
-                          if (selectedCoin != null) {
-                            if (paidAmount != null ||
-                                paidAmount != null ||
-                                paidAmount! <= totalOfTheOrder!) {
-                              if (selectedBank != null) {
-                                if (accountNumber != '' ||
-                                    voucherNumber != '') {
-                                  if (paidAmount! > remaining!) {
-                                    Fluttertoast.showToast(
-                                      msg:
-                                          'La cantidad a pagar excede de la deuda pendiente',
-                                      backgroundColor:
-                                          myTheme.colorScheme.secondary,
-                                      textColor: Colors.white,
-                                    );
+                              if (selectedCoin != null) {
+                                if (paidAmount != null ||
+                                    paidAmount != null ||
+                                    paidAmount! <= totalOfTheOrder!) {
+                                  if (selectedBank != null) {
+                                    if (accountNumber != '' ||
+                                        voucherNumber != '') {
+                                      if (paidAmount! > remaining!) {
+                                        Fluttertoast.showToast(
+                                          msg:
+                                              'La cantidad a pagar excede de la deuda pendiente',
+                                          backgroundColor:
+                                              myTheme.colorScheme.primary,
+                                          textColor: Colors.white,
+                                        );
+                                      } else {
+                                        print('Cantidad permitida');
+                                        Fluttertoast.showToast(
+                                          msg:
+                                              'Registrando Pago en Criptomonedas',
+                                          backgroundColor:
+                                              myTheme.colorScheme.primary,
+                                          textColor: Colors.white,
+                                        );
+                                        try {
+                                          await registerDepositPayment(
+                                            client: client,
+                                            invoiceDocumentID:
+                                                invoiceDocumentID,
+                                            currency: selectedCoin,
+                                            amount: paidAmount,
+                                            totalOfTheOrder: totalOfTheOrder,
+                                            currentCoin: currentCoin,
+                                            bank: selectedBank,
+                                            accountNumber: accountNumber,
+                                            voucherNumber: voucherNumber,
+                                            imageFile: imageFile,
+                                            date: date,
+                                            remaining: remaining,
+                                          )
+                                              .whenComplete(
+                                                  () => Navigator.pop(context))
+                                              .whenComplete(() =>
+                                                  Navigator.pushReplacement(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (BuildContext
+                                                              context) =>
+                                                          CompletedPayPage(
+                                                              client:
+                                                                  client!.name,
+                                                              total: paidAmount,
+                                                              method:
+                                                                  "Deposito",
+                                                              date:
+                                                                  '${date!.day}-${date.month}-${date.year} ${(date as DateTime).hour}:${(date).minute}',
+                                                              address: '',
+                                                              coinsExchangeRates: const []),
+                                                    ),
+                                                  ));
+                                        } catch (e) {
+                                          print(e);
+                                        }
+                                        // Navigator.pop(context);
+                                        // Navigator.pop(context);
+                                      }
+                                    } else {
+                                      Fluttertoast.showToast(
+                                          msg:
+                                              'Ingrese datos de cuenta validos');
+                                    }
                                   } else {
-                                    print('Cantidad permitida');
                                     Fluttertoast.showToast(
-                                      msg: 'Registrando Pago en Criptomonedas',
-                                      backgroundColor:
-                                          myTheme.colorScheme.primary,
-                                      textColor: Colors.white,
-                                    );
-                                    await registerDepositPayment(
-                                      client,
-                                      invoiceDocumentID,
-                                      selectedCoin,
-                                      paidAmount,
-                                      totalOfTheOrder,
-                                      currentCoin,
-                                      selectedBank,
-                                      accountNumber,
-                                      voucherNumber,
-                                      imageFile,
-                                      date,
-                                      remaining,
-                                    );
-
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
+                                        msg: 'Seleccione un banco por favor');
                                   }
                                 } else {
                                   Fluttertoast.showToast(
-                                      msg: 'Ingrese datos de cuenta validos');
+                                      msg: 'Monto a pagar no valido');
                                 }
                               } else {
                                 Fluttertoast.showToast(
-                                    msg: 'Seleccione un banco por favor');
+                                    msg: 'Complete los datos porfavor');
                               }
-                            } else {
-                              Fluttertoast.showToast(
-                                  msg: 'Monto a pagar no valido');
-                            }
-                          } else {
-                            Fluttertoast.showToast(
-                                msg: 'Complete los datos porfavor');
-                          }
-                          // print(itemsBank);
-                          // print(itemsBankInter);
-                        },
-                        style: TextButton.styleFrom(
-                          foregroundColor: myTheme.colorScheme.primary,
-                        ),
-                        child: Text(
-                          AppLocalizations.of(context)!.orderContinue,
-                          style: TextStyle(
-                            fontFamily: 'Poppins-regular',
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
+                              // print(itemsBank);
+                              // print(itemsBankInter);
+                            },
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                myTheme.colorScheme.onPrimaryContainer,
+                              ),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                ),
+                              ),
+                            ),
+                            icon: Icon(
+                              MaterialCommunityIcons.bank,
+                              size: 14,
+                            ),
+                            label: Text(
+                              'Continuar',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Poppins-regular',
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -1240,111 +1380,399 @@ identifyPaymentMethodRetail(
                 alignment: Alignment.bottomCenter,
                 margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    TextButton(
+                    SizedBox(height: 10),
+                    ElevatedButton.icon(
                       onPressed: () {
                         Navigator.pop(context);
                         setState(() => imageFile = null);
                       },
-                      child: Text(
-                        AppLocalizations.of(context)!.goBack,
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                          myTheme.colorScheme.primary,
+                        ),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          ),
+                        ),
+                      ),
+                      icon: Icon(
+                        MaterialIcons.arrow_back_ios,
+                        size: 14,
+                      ),
+                      label: Text(
+                        'Cancelar',
                         style: TextStyle(
+                          color: Colors.white,
                           fontFamily: 'Poppins-regular',
-                          color: myTheme.colorScheme.primary,
-                          fontSize: 14,
+                          fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                     paidAmount == 0
                         ? Container()
-                        : Container(
-                            width: 100,
-                            height: 40,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(16),
-                                color: myTheme.colorScheme.primary),
-                            child: TextButton(
-                              onPressed: () async {
-                                // Crear en DB una visita
-                                if (paidAmount is String) {
-                                  paidAmount =
-                                      double.parse(paidAmount.toString());
-                                }
-                                if (paidAmount != null) {
-                                  if (paidAmount! > remaining!) {
-                                    Fluttertoast.showToast(
-                                      msg:
-                                          'La cantidad a pagar excede de la deuda pendiente',
-                                      backgroundColor:
-                                          myTheme.colorScheme.primary,
-                                      textColor: Colors.white,
-                                    );
-                                  } else {
-                                    print('Cantidad permitida');
-                                    // Fluttertoast.showToast(
-                                    //   msg: 'Registrando Pago en Efectivo',
-                                    //   backgroundColor:
-                                    //       myTheme.colorScheme.primary,
-                                    //   textColor: Colors.white,
-                                    // );
-                                  }
-                                  // Registrar efectivo en la DB
-                                  // print(
-                                  //     'invoiceDocumentID,: ${invoiceDocumentID},');
-                                  // print('paidAmount,: ${paidAmount},');
-                                  // print(
-                                  //     'totalOfTheOrder,: ${totalOfTheOrder},');
-                                  // print('date,: ${date},');
-                                  // print('context,: ${context},');
-                                  // print('remaining,: ${remaining},');
-                                  // print('selectedCoin: ${selectedCoin}');
-                                  await registerMoneyPayment(
-                                    client: client,
-                                    invoiceDocumentID: invoiceDocumentID,
-                                    currency: selectedCoin,
-                                    amount: paidAmount,
-                                    totalOfTheOrder: totalOfTheOrder,
-                                    imageFile: imageFile,
-                                    date: date,
-                                    remaining: remaining,
-                                  ).whenComplete(() {
-                                    Navigator.pop(context);
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            CompletedPayPage(
-                                          client: client.name,
-                                          total: paidAmount,
-                                          // total: totalOfTheOrder,
-                                          method: "Efectivo",
-                                          date:
-                                              '${date!.day}-${date.month}-${date.year} ${(date as DateTime).hour}:${(date as DateTime).minute}',
-                                          address: '',
-                                          coinsExchangeRates: [],
-                                        ),
-                                      ),
-                                    );
-                                  });
-                                } else {
+                        : ElevatedButton.icon(
+                            onPressed: () async {
+                              // Crear en DB una visita
+                              if (paidAmount is String) {
+                                paidAmount =
+                                    double.parse(paidAmount.toString());
+                              }
+                              if (paidAmount != null) {
+                                if (paidAmount! > remaining!) {
                                   Fluttertoast.showToast(
-                                      msg: 'Ingrese Monto porfavor');
+                                    msg:
+                                        'La cantidad a pagar excede de la deuda pendiente',
+                                    backgroundColor:
+                                        myTheme.colorScheme.primary,
+                                    textColor: Colors.white,
+                                  );
+                                } else {
+                                  print('Cantidad permitida');
+                                  Fluttertoast.showToast(
+                                    msg: 'Registrando Pago en Efectivo',
+                                    backgroundColor:
+                                        myTheme.colorScheme.primary,
+                                    textColor: Colors.white,
+                                  );
+                                  print(invoiceDocumentID);
+                                  // await testPrint();
+                                  //Registrar efectivo en la DB
+                                  try {
+                                    await registerMoneyPayment(
+                                      client: client,
+                                      invoiceDocumentID: invoiceDocumentID,
+                                      currency: selectedCoin,
+                                      amount: paidAmount,
+                                      totalOfTheOrder: totalOfTheOrder,
+                                      imageFile: imageFile,
+                                      date: date,
+                                      remaining: remaining,
+                                    );
+                                    Navigator.pop(context);
+
+                                    if (paidAmount! < remaining &&
+                                        paymentBody != null) {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              CompletedPayPage(
+                                            client: client!.name,
+                                            total: paidAmount,
+                                            // total: totalOfTheOrder,
+                                            method: "Efectivo",
+                                            date:
+                                                '${date!.day}-${date.month}-${date.year} ${(date as DateTime).hour}:${(date as DateTime).minute}',
+                                            address: '',
+                                            coinsExchangeRates: [],
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              contentPadding: EdgeInsets.zero,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                              ),
+                                              content: SingleChildScrollView(
+                                                child: Stack(
+                                                  children: [
+                                                    Container(
+                                                      height: 400,
+                                                      width: 300,
+                                                      child: Opacity(
+                                                        opacity: 1,
+                                                        child: ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(20),
+                                                          child: Image.asset(
+                                                            'assets/images/payment-background.png',
+                                                            fit: BoxFit.fill,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      margin:
+                                                          EdgeInsets.all(18),
+                                                      child: Center(
+                                                        child: Column(
+                                                          children: [
+                                                            Text(
+                                                              "¡PAGO REGISTRADO!",
+                                                              style: TextStyle(
+                                                                fontFamily:
+                                                                    'Poppins-regular',
+                                                                fontSize: 18,
+                                                                color: Colors
+                                                                    .white,
+                                                                // color: Colors.green,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ),
+                                                            Container(
+                                                              margin: EdgeInsets
+                                                                  .fromLTRB(0,
+                                                                      15, 0, 0),
+                                                              width: 100,
+                                                              height: 100,
+                                                              child: Opacity(
+                                                                opacity: 0.8,
+                                                                child:
+                                                                    Image.asset(
+                                                                  'assets/images/check.png',
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Container(
+                                                              margin: EdgeInsets
+                                                                  .fromLTRB(0,
+                                                                      10, 0, 0),
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              child: Column(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  Container(
+                                                                    margin: EdgeInsets
+                                                                        .only(
+                                                                            top:
+                                                                                10),
+                                                                    child: Text(
+                                                                      'Monto pagado: 00.00',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontFamily:
+                                                                            'Poppins-regular',
+                                                                        fontSize:
+                                                                            12,
+                                                                        color: myTheme
+                                                                            .colorScheme
+                                                                            .primary,
+                                                                        // color: Colors.green,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Container(
+                                                                    margin: EdgeInsets
+                                                                        .only(
+                                                                            top:
+                                                                                10),
+                                                                    child: Text(
+                                                                      'ZONA TEST CLIENTE DEFAULT 000A1',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontFamily:
+                                                                            'Poppins-regular',
+                                                                        fontSize:
+                                                                            12,
+                                                                        color: myTheme
+                                                                            .colorScheme
+                                                                            .primary,
+                                                                        // color: Colors.green,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Container(
+                                                                    margin: EdgeInsets
+                                                                        .only(
+                                                                            top:
+                                                                                10),
+                                                                    child: Text(
+                                                                      'Fecha: 00/00/0000',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontFamily:
+                                                                            'Poppins-regular',
+                                                                        fontSize:
+                                                                            12,
+                                                                        color: myTheme
+                                                                            .colorScheme
+                                                                            .primary,
+                                                                        // color: Colors.green,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Container(
+                                                                    margin: EdgeInsets
+                                                                        .only(
+                                                                            top:
+                                                                                10),
+                                                                    child: Text(
+                                                                      'Deposito',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontFamily:
+                                                                            'Poppins-regular',
+                                                                        fontSize:
+                                                                            12,
+                                                                        color: myTheme
+                                                                            .colorScheme
+                                                                            .primary,
+                                                                        // color: Colors.green,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            Container(
+                                                              margin: EdgeInsets
+                                                                  .only(
+                                                                      top: 50),
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              child:
+                                                                  ElevatedButton
+                                                                      .icon(
+                                                                onPressed: () {
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                },
+                                                                style:
+                                                                    ButtonStyle(
+                                                                  backgroundColor:
+                                                                      MaterialStateProperty
+                                                                          .all(
+                                                                    myTheme
+                                                                        .colorScheme
+                                                                        .primary,
+                                                                  ),
+                                                                  shape: MaterialStateProperty
+                                                                      .all<
+                                                                          RoundedRectangleBorder>(
+                                                                    RoundedRectangleBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              18.0),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                icon: Icon(
+                                                                  MaterialIcons
+                                                                      .arrow_back_ios,
+                                                                  size: 12,
+                                                                ),
+                                                                label: Text(
+                                                                  'Aceptar',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontFamily:
+                                                                        'Poppins-regular',
+                                                                    fontSize:
+                                                                        12,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          });
+                                    }
+                                  } catch (e) {
+                                    print(e);
+                                    Fluttertoast.showToast(msg: e.toString());
+                                  }
+
+                                  // if (paidAmount! < remaining! &&
+                                  //     paymentBody != null) {
+                                  //   Navigator.pushReplacement(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //       settings: const RouteSettings(
+                                  //           name: 'PAGO-DIRECTO'),
+                                  //       builder: (BuildContext context) =>
+                                  //           AddPaymentPage(
+                                  //         remaining: paymentBody.remaining,
+                                  //         subTotal: paymentBody.subTotal,
+                                  //         discountPercentage:
+                                  //             paymentBody.discountPercentage,
+                                  //         discount: paymentBody.discount,
+                                  //         tax: paymentBody.tax,
+                                  //         percentageTax:
+                                  //             paymentBody.percentageTax,
+                                  //         client: paymentBody.client,
+                                  //         invoiceDocumentID:
+                                  //             paymentBody.invoiceDocumentID,
+                                  //         amountPayed:
+                                  //             (paymentBody.amountPaied ?? 0) +
+                                  //                 paidAmount!,
+                                  //         // updatePayed: updatePayed,
+                                  //       ),
+                                  //     ),
+                                  //   );
+                                  // } else {
+
+                                  // }
                                 }
-                              },
-                              style: TextButton.styleFrom(
-                                foregroundColor: myTheme.colorScheme.primary,
+                              } else {
+                                Fluttertoast.showToast(
+                                    msg: 'Ingrese Monto porfavor');
+                              }
+                            },
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                myTheme.colorScheme.onPrimaryContainer,
                               ),
-                              child: Text(
-                                AppLocalizations.of(context)!.orderContinue,
-                                style: TextStyle(
-                                  fontFamily: 'Poppins-regular',
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
                                 ),
+                              ),
+                            ),
+                            icon: Icon(
+                              MaterialCommunityIcons.hand_coin,
+                              size: 14,
+                            ),
+                            label: Text(
+                              'Continuar',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Poppins-regular',
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
@@ -1362,10 +1790,10 @@ identifyPaymentMethodRetail(
       builder: (context, setState) => Column(
         children: [
           Text(
-            '${AppLocalizations.of(context)!.bank} *',
+            '${AppLocalizations.of(context)!.bank}*',
             style: TextStyle(
               fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.secondary,
+              color: myTheme.colorScheme.primary,
               fontSize: 14,
             ),
           ),
@@ -1380,7 +1808,7 @@ identifyPaymentMethodRetail(
                         children: [
                           Expanded(
                             child: Text(
-                              selectedBank ?? '',
+                              selectedBank ?? 'Seleccione una opción',
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
@@ -1445,7 +1873,7 @@ identifyPaymentMethodRetail(
                       scrollbarRadius: const Radius.circular(10),
                       scrollbarThickness: 6,
                       scrollbarAlwaysShow: true,
-                      offset: const Offset(-20, 0),
+                      offset: const Offset(0, 0),
                     ),
                   ),
                 )
@@ -1459,7 +1887,7 @@ identifyPaymentMethodRetail(
                         children: [
                           Expanded(
                             child: Text(
-                              selectedBank ?? '',
+                              selectedBank ?? 'Seleccione una opción',
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
@@ -1524,15 +1952,15 @@ identifyPaymentMethodRetail(
                       scrollbarRadius: const Radius.circular(10),
                       scrollbarThickness: 6,
                       scrollbarAlwaysShow: true,
-                      offset: const Offset(-20, 0),
+                      offset: const Offset(0, 0),
                     ),
                   ),
                 ),
           Text(
-            '${AppLocalizations.of(context)!.referenceNumber} *',
+            '${AppLocalizations.of(context)!.referenceNumber}*',
             style: TextStyle(
               fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.secondary,
+              color: myTheme.colorScheme.primary,
               fontSize: 14,
             ),
           ),
@@ -1662,165 +2090,239 @@ identifyPaymentMethodRetail(
                 alignment: Alignment.bottomCenter,
                 margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    TextButton(
+                    SizedBox(height: 10),
+                    ElevatedButton.icon(
                       onPressed: () {
                         Navigator.pop(context);
                         setState(() => imageFile = null);
                       },
-                      child: Text(
-                        AppLocalizations.of(context)!.goBack,
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                          myTheme.colorScheme.primary,
+                        ),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          ),
+                        ),
+                      ),
+                      icon: Icon(
+                        MaterialIcons.arrow_back_ios,
+                        size: 14,
+                      ),
+                      label: Text(
+                        'Cancelar',
                         style: TextStyle(
+                          color: Colors.white,
                           fontFamily: 'Poppins-regular',
-                          color: myTheme.colorScheme.primary,
-                          fontSize: 14,
+                          fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                    Container(
-                      width: 100,
-                      height: 40,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          color: myTheme.colorScheme.primary),
-                      child: TextButton(
-                        onPressed: () async {
-                          // Crear en DB una visita
-                          // TODO: Temporalmente regresara a antes
-                          if (selectedValueA == 'Transferencia') {
-                            // Crear en DB una visita
-                            // TODO: Temporalmente regresara a antes
+                    paidAmount == 0
+                        ? Container()
+                        : ElevatedButton.icon(
+                            onPressed: () async {
+                              // TODO: Temporalmente regresara a antes
+                              if (selectedValueA == 'Transferencia') {
+                                // Crear en DB una visita
+                                // TODO: Temporalmente regresara a antes
 
-                            if (selectedCoin != null) {
-                              if (paidAmount != null ||
-                                  paidAmount != null ||
-                                  paidAmount! <= totalOfTheOrder!) {
-                                if (selectedBank != null) {
-                                  if (referenceId != '') {
-                                    if (paidAmount! > remaining!) {
-                                      Fluttertoast.showToast(
-                                        msg:
-                                            'La cantidad a pagar excede de la deuda pendiente',
-                                        backgroundColor:
-                                            myTheme.colorScheme.primary,
-                                        textColor: Colors.white,
-                                      );
+                                if (selectedCoin != null) {
+                                  if (paidAmount != null ||
+                                      paidAmount != null ||
+                                      paidAmount! <= totalOfTheOrder!) {
+                                    if (selectedBank != null) {
+                                      if (referenceId != '') {
+                                        if (paidAmount! > remaining!) {
+                                          Fluttertoast.showToast(
+                                            msg:
+                                                'La cantidad a pagar excede de la deuda pendiente',
+                                            backgroundColor:
+                                                myTheme.colorScheme.primary,
+                                            textColor: Colors.white,
+                                          );
+                                        } else {
+                                          print('Cantidad permitida');
+                                          Fluttertoast.showToast(
+                                            msg: 'Registrando $selectedValueA',
+                                            backgroundColor:
+                                                myTheme.colorScheme.primary,
+                                            textColor: Colors.white,
+                                          );
+                                          try {
+                                            await registerTransferPayment(
+                                              client: client,
+                                              invoiceDocumentID:
+                                                  invoiceDocumentID,
+                                              currency: selectedCoin,
+                                              amount: paidAmount,
+                                              totalOfTheOrder: totalOfTheOrder,
+                                              currentCoin: currentCoin,
+                                              bank: selectedBank,
+                                              referenceId: referenceId,
+                                              imageFile: imageFile,
+                                              date: date,
+                                              remaining: remaining,
+                                            )
+                                                .whenComplete(() =>
+                                                    Navigator.pop(context))
+                                                .whenComplete(() =>
+                                                    Navigator.pushReplacement(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (BuildContext
+                                                                context) =>
+                                                            CompletedPayPage(
+                                                                client: client!
+                                                                    .name,
+                                                                total:
+                                                                    paidAmount,
+                                                                method:
+                                                                    "Transferencia",
+                                                                date:
+                                                                    '${date!.day}-${date.month}-${date.year} ${(date as DateTime).hour}:${(date).minute}',
+                                                                address: '',
+                                                                coinsExchangeRates: const []),
+                                                      ),
+                                                    ));
+                                          } catch (e) {
+                                            print(e);
+                                          }
+
+                                          // Navigator.pop(context);
+                                          // Navigator.pop(context);
+                                        }
+                                      } else {
+                                        Fluttertoast.showToast(
+                                            msg:
+                                                'Ingrese datos de cuenta validos');
+                                      }
                                     } else {
-                                      print('Cantidad permitida');
                                       Fluttertoast.showToast(
-                                        msg: 'Registrando $selectedValueA',
-                                        backgroundColor:
-                                            myTheme.colorScheme.primary,
-                                        textColor: Colors.white,
-                                      );
-                                      await registerTransferPayment(
-                                        client,
-                                        invoiceDocumentID,
-                                        selectedCoin,
-                                        paidAmount,
-                                        totalOfTheOrder,
-                                        currentCoin,
-                                        selectedBank,
-                                        referenceId,
-                                        imageFile,
-                                        date,
-                                        remaining,
-                                      );
-
-                                      Navigator.pop(context);
-                                      Navigator.pop(context);
+                                          msg: 'Seleccione un banco por favor');
                                     }
                                   } else {
                                     Fluttertoast.showToast(
-                                        msg: 'Ingrese datos de cuenta validos');
+                                        msg: 'Monto a pagar no valido');
                                   }
                                 } else {
                                   Fluttertoast.showToast(
-                                      msg: 'Seleccione un banco por favor');
+                                      msg: 'Complete los datos porfavor');
                                 }
-                              } else {
-                                Fluttertoast.showToast(
-                                    msg: 'Monto a pagar no valido');
-                              }
-                            } else {
-                              Fluttertoast.showToast(
-                                  msg: 'Complete los datos porfavor');
-                            }
-                          } else if (selectedValueA == 'Transf-internacional') {
-                            if (selectedCoin != null) {
-                              if (paidAmount != null ||
-                                  paidAmount != null ||
-                                  paidAmount! <= totalOfTheOrder!) {
-                                if (selectedBank != null) {
-                                  if (referenceId != '') {
-                                    if (paidAmount! > remaining!) {
-                                      Fluttertoast.showToast(
-                                        msg:
-                                            'La cantidad a pagar excede de la deuda pendiente',
-                                        backgroundColor:
-                                            myTheme.colorScheme.primary,
-                                        textColor: Colors.white,
-                                      );
+                              } else if (selectedValueA ==
+                                  'Transf-internacional') {
+                                if (selectedCoin != null) {
+                                  if (paidAmount != null ||
+                                      paidAmount != null ||
+                                      paidAmount! <= totalOfTheOrder!) {
+                                    if (selectedBank != null) {
+                                      if (referenceId != '') {
+                                        if (paidAmount! > remaining!) {
+                                          Fluttertoast.showToast(
+                                            msg:
+                                                'La cantidad a pagar excede de la deuda pendiente',
+                                            backgroundColor:
+                                                myTheme.colorScheme.primary,
+                                            textColor: Colors.white,
+                                          );
+                                        } else {
+                                          print('Cantidad permitida');
+                                          Fluttertoast.showToast(
+                                            msg: 'Registrando $selectedValueA',
+                                            backgroundColor:
+                                                myTheme.colorScheme.primary,
+                                            textColor: Colors.white,
+                                          );
+                                          try {
+                                            await registerTransferInterPayment(
+                                              client: client,
+                                              invoiceDocumentID:
+                                                  invoiceDocumentID,
+                                              currency: selectedCoin,
+                                              amount: paidAmount,
+                                              totalOfTheOrder: totalOfTheOrder,
+                                              currentCoin: currentCoin,
+                                              bank: selectedBank,
+                                              referenceId: referenceId,
+                                              imageFile: imageFile,
+                                              date: date,
+                                              remaining: remaining,
+                                            )
+                                                .whenComplete(() =>
+                                                    Navigator.pop(context))
+                                                .whenComplete(() =>
+                                                    Navigator.pushReplacement(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (BuildContext
+                                                                context) =>
+                                                            CompletedPayPage(
+                                                                client: client!
+                                                                    .name,
+                                                                total:
+                                                                    paidAmount,
+                                                                method:
+                                                                    "Transferencia Internacional",
+                                                                date:
+                                                                    '${date!.day}-${date.month}-${date.year} ${(date as DateTime).hour}:${(date).minute}',
+                                                                address: '',
+                                                                coinsExchangeRates: const []),
+                                                      ),
+                                                    ));
+                                          } catch (e) {
+                                            print(e);
+                                          }
+                                        }
+                                      } else {
+                                        Fluttertoast.showToast(
+                                            msg:
+                                                'Ingrese datos de cuenta validos');
+                                      }
                                     } else {
-                                      print('Cantidad permitida');
                                       Fluttertoast.showToast(
-                                        msg: 'Registrando $selectedValueA',
-                                        backgroundColor:
-                                            myTheme.colorScheme.primary,
-                                        textColor: Colors.white,
-                                      );
-                                      await registerTransferInterPayment(
-                                        client,
-                                        invoiceDocumentID,
-                                        selectedCoin,
-                                        paidAmount,
-                                        totalOfTheOrder,
-                                        currentCoin,
-                                        selectedBank,
-                                        referenceId,
-                                        imageFile,
-                                        date,
-                                        remaining,
-                                      );
-
-                                      Navigator.pop(context);
-                                      Navigator.pop(context);
+                                          msg: 'Seleccione un banco por favor');
                                     }
                                   } else {
                                     Fluttertoast.showToast(
-                                        msg: 'Ingrese datos de cuenta validos');
+                                        msg: 'Monto a pagar no valido');
                                   }
                                 } else {
                                   Fluttertoast.showToast(
-                                      msg: 'Seleccione un banco por favor');
+                                      msg: 'Complete los datos porfavor');
                                 }
-                              } else {
-                                Fluttertoast.showToast(
-                                    msg: 'Monto a pagar no valido');
                               }
-                            } else {
-                              Fluttertoast.showToast(
-                                  msg: 'Complete los datos porfavor');
-                            }
-                          }
-                        },
-                        style: TextButton.styleFrom(
-                          foregroundColor: myTheme.colorScheme.primary,
-                        ),
-                        child: Text(
-                          AppLocalizations.of(context)!.orderContinue,
-                          style: TextStyle(
-                            fontFamily: 'Poppins-regular',
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
+                            },
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                myTheme.colorScheme.onPrimaryContainer,
+                              ),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                ),
+                              ),
+                            ),
+                            icon: Icon(
+                              MaterialCommunityIcons.card,
+                              size: 14,
+                            ),
+                            label: Text(
+                              'Continuar',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Poppins-regular',
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -1831,3 +2333,4 @@ identifyPaymentMethodRetail(
     );
   }
 }
+// }

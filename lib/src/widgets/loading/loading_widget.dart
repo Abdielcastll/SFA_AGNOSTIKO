@@ -16,7 +16,7 @@ class LoadingWidget extends StatelessWidget {
           // Loading class
           Center(
             child: SpinKitChasingDots(
-              color: myTheme.colorScheme.background,
+              color: myTheme.colorScheme.primary,
               size: 50,
             ),
           ),

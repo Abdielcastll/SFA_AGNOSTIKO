@@ -10,6 +10,7 @@ import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_checkout.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/identify_payment_method.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/identify_payment_method_retail.dart';
 
 import '../../models/clients_model.dart';
 
@@ -112,19 +113,19 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
   final List<String> items = [
     'Tarjeta de Debito',
     'Tarjeta de Credito',
+    'Efectivo',
     // 'Cheque',
     // 'Criptomoneda',
     // 'Deposito',
-    'Efectivo',
     // 'Transferencia',
     // 'Transf-internacional',
     // 'Nota de credito',
   ];
   List<String> itemsCoin = [
     'USD',
-    'BTC',
-    'EUR',
-    'VED',
+    // 'BTC',
+    // 'EUR',
+    // 'VED',
     'MXN',
   ];
 
@@ -857,7 +858,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                               ),
                               Container(
                                 margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                                child: identifyPaymentMethod(
+                                child: identifyPaymentMethodRetail(
                                   selectedValueA,
                                   widget.client,
                                   widget.invoiceDocumentID,
