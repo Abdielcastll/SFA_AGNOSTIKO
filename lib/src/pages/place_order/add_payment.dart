@@ -113,7 +113,6 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
   late double paidAmount = widget.remaining;
   double amountPayed = 0;
   late double paidAmountWithAmountPayed = paidAmount - amountPayedFromPays;
-
   double get amountPayedFromPays => widget.payments.fold<double>(
       0.0, (previousValue, element) => previousValue + element.amount);
 
@@ -157,9 +156,6 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.discount);
-    print(widget.discountPercentage);
-
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     String formattedDate = dateFormatter.format(today);
 
@@ -466,6 +462,9 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                         margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
                         child: IconButton(
                           onPressed: () async {
+                            if (selectedValueA?.contains('Tarjeta') == true) {
+                              return;
+                            }
                             DateTime? newDate = await showDatePicker(
                               context: context,
                               initialDate: today,
@@ -895,7 +894,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                       subTotal: widget.subTotal,
                                       tax: widget.tax,
                                       invoiceNumber: widget.invoiceNumber,
-                                      currency: currentCoin!)
+                                      currency: selectedCoin!)
                                     ..payments = widget.payments,
                                 ),
                               )

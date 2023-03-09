@@ -64,7 +64,7 @@ priceToCurrencySelected(productPrice, coin) {
 identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
     paidAmount, totalOfTheOrder, date, context, remaining, selectedCoin,
     {Function? updatePayed, AddPaymentBodyAtt? paymentBody, noRetail = false}) {
-  print('paidAmount}');
+  print('paidAmount ');
 
   File? imageFile;
   String accountHolder = '';
@@ -1277,7 +1277,7 @@ identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
                             paidAmount = double.parse(paidAmount);
                           }
                           if (paidAmount != null) {
-                            if (paidAmount > remaining) {
+                            /* if (paidAmount > remaining) {
                               Fluttertoast.showToast(
                                 msg:
                                     'La cantidad a pagar excede de la deuda pendiente',
@@ -1291,7 +1291,12 @@ identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
                                 backgroundColor: myTheme.colorScheme.primary,
                                 textColor: Colors.white,
                               );
-                            }
+                            } */
+                            Fluttertoast.showToast(
+                              msg: 'Registrando Pago en Efectivo',
+                              backgroundColor: myTheme.colorScheme.primary,
+                              textColor: Colors.white,
+                            );
                             print(invoiceDocumentID);
                             await registerMoneyPayment(
                               client,
@@ -1351,7 +1356,7 @@ identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
                                 MaterialPageRoute(
                                   builder: (BuildContext context) =>
                                       CompletedPayPage(
-                                          client: client.name,
+                                          client: client,
                                           total: totalPayed ?? totalOfTheOrder,
                                           method: "Efectivo",
                                           date:

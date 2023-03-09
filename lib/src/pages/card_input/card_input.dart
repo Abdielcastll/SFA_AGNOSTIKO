@@ -260,7 +260,8 @@ class _CardInputViewState extends State<CardInputView> {
     ));
     MPOSController.instance.showHomeScreen();
     Navigator.pop(context);
-
+    transactionArgs?.pan ??=
+        (await EmvModule.instance.getTagValue(0x57))?.toHexStr().split('d')[0];
     // en caso de error, nos movemos a la pantalla de cierre
     Navigator.pushReplacementNamed(
       context,
@@ -423,6 +424,9 @@ class _CardInputViewState extends State<CardInputView> {
         transactionArgs?.infoTags = await loadInfoTags();
         transactionArgs?.firstGenerateTags = await emvGetGenerateCommandTags();
       }
+      transactionArgs?.pan ??= (await EmvModule.instance.getTagValue(0x57))
+          ?.toHexStr()
+          .split('d')[0];
       Navigator.pushReplacementNamed(context, EmvTransactionInfoView.route,
           arguments: [
             transactionArgs,

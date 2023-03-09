@@ -45,9 +45,24 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     print('EMV TAGS');
 
     final tag5A = await emvModule.getTagValue(0x5A);
+    final tag57 = await emvModule.getTagValue(0x57);
     final tag5F34 = await emvModule.getTagValue(0x5F34);
     print(tag5F34?.toHexStr());
     print(tag5A?.toHexStr());
+    print(tag57?.toHexStr().split('d')[0]);
+  }
+
+  exchangeAmount(String coin, double amount) {
+    if (coin.contains('VED')) {
+      return amount / 4.58;
+    }
+    if (coin.contains('EUR')) {
+      return amount / 0.89;
+    }
+    if (coin.contains('MXN')) {
+      return amount / 19.43;
+    }
+    return amount;
   }
 
   @override
@@ -161,23 +176,23 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                   ),
                   Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: infoTags?.cardNo != null &&
-                              transactionArgs?.transactionInfo?.isContactless !=
-                                  true
-                          ? Text(
-                              '''${infoTags?.cardNo?.toHexStr().substring(0, 1) == '5' || transactionArgs?.transactionInfo?.kernelType == ContactlessKernelType.PayPass ? 'Mastercard' : 'Visa'} **** ${infoTags?.cardNo?.toHexStr().substring(12) ?? '-'}''',
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                            )
-                          : Container(
-                              margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                              height: 50,
-                              width: 120,
-                              child: Image.asset(
-                                'assets/images/contactless.jpeg',
-                                fit: BoxFit.contain,
-                              ),
-                            )),
+                      child: Row(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            height: 50,
+                            width: 120,
+                            child: Image.asset(
+                              'assets/images/contactless.jpeg',
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                          Text(
+                            '''**** ${(infoTags?.cardNo?.toHexStr() ?? transactionArgs?.pan)?.substring(12) ?? '-'}''',
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      )),
                 ],
               ),
               const Divider(),
@@ -294,20 +309,25 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                         Navigator.pop(context);
                         return;
                       }
-                      final payed = transactionResult ==
-                              EmvTransactionResult.Approved
-                          ? double.parse(_amountString.replaceFirst('\$', ''))
-                          : 0.0;
-
                       final paymentBody = (ModalRoute.of(context)
                           ?.settings
                           .arguments! as List)[2] as AddPaymentBodyAtt;
+
+                      final payed =
+                          transactionResult == EmvTransactionResult.Approved
+                              ? exchangeAmount(
+                                  paymentBody.currency,
+                                  double.parse(
+                                      _amountString.replaceFirst('\$', '')))
+                              : 0.0;
 
                       paymentBody.payments.add(PayMethod('Tarjeta', payed));
 
                       print('EMV INFO PAYMENTS');
                       print(paymentBody.payments.length);
                       print(paymentBody.remaining);
+                      print(paymentBody.currency);
+                      print(payed);
 
                       final totalPayed = paymentBody.payments.fold<double>(
                           0.0,
@@ -341,7 +361,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                           MaterialPageRoute(
                             settings: const RouteSettings(name: 'PAGO-DIRECTO'),
                             builder: (BuildContext context) => AddPaymentPage(
-                              remaining: paymentBody.remaining,
+                              remaining: paymentBody.remaining - payed,
                               subTotal: paymentBody.subTotal,
                               discountPercentage:
                                   paymentBody.discountPercentage,
