@@ -24,6 +24,9 @@ class ObjectBox {
           .watch(triggerImmediately: true)
           .map((query) => query.find());
 
+  List<ShoppingCartProduct> getAllShoppingCartProducts() =>
+      _shoppingCartProductBox.getAll();
+
   int insertShoppingCartProduct(ShoppingCartProduct newProduct) =>
       _shoppingCartProductBox.put(newProduct);
 

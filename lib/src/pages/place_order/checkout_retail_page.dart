@@ -852,21 +852,23 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                         .doc()
                                         .id;
                                     print('PAGO DIRECTO');
-                                    await completePaymentProcess(
-                                        widget.client,
-                                        userUid,
-                                        commentary,
-                                        masterDiscountTotal,
-                                        widget.cart,
-                                        selectedValue2,
-                                        selectedValue,
-                                        today,
-                                        taxTotal,
-                                        numberOrder,
-                                        widget.subTotal,
-                                        totalOfTheOrder,
-                                        discountByInput,
-                                        firebaseID);
+                                    final invoiceNumber =
+                                        await completePaymentProcess(
+                                            widget.client,
+                                            userUid,
+                                            commentary,
+                                            masterDiscountTotal,
+                                            widget.cart,
+                                            selectedValue2,
+                                            selectedValue,
+                                            today,
+                                            taxTotal,
+                                            numberOrder,
+                                            widget.subTotal,
+                                            totalOfTheOrder,
+                                            discountByInput,
+                                            firebaseID);
+
                                     Client currentClient = Client(
                                       active: widget.client!.active,
                                       specialContributor:
@@ -890,7 +892,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                       clientDocumentId:
                                           widget.client!.clientDocumentId,
                                     );
-                                    Navigator.push(
+
+                                    Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
                                         settings:
@@ -909,7 +912,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                           percentageTax: 16,
                                           client: currentClient,
                                           invoiceDocumentID: firebaseID,
-
+                                          invoiceNumber: invoiceNumber,
+                                          payments: [],
                                           // updatePayed: updatePayed,
                                         ),
                                       ),

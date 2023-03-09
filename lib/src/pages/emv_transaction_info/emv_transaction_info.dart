@@ -86,7 +86,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
           transactionInfo?.onlineRequested == true ? onlineStr : offlineStr;
 
       if (flagPrint) {
-        printTicket();
+        // printTicket();
         flagPrint = false;
       }
     }
@@ -240,6 +240,26 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                     const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
                 child: OutlinedButton(
                     onPressed: () {
+                      printTicket();
+                    },
+                    style: TextButton.styleFrom(
+                        foregroundColor: myTheme.colorScheme.primary,
+                        backgroundColor: Colors.blue.shade800),
+                    child: Text(
+                      'imprimir comprobante'.toUpperCase(),
+                      style: const TextStyle(
+                        fontFamily: 'Poppins-regular',
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+                child: OutlinedButton(
+                    onPressed: () {
                       final noRetail = (ModalRoute.of(context)
                           ?.settings
                           .arguments! as List)[3];
@@ -252,6 +272,16 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                               EmvTransactionResult.Approved
                           ? double.parse(_amountString.replaceFirst('\$', ''))
                           : 0.0;
+
+                      final paymentBody = (ModalRoute.of(context)
+                          ?.settings
+                          .arguments! as List)[2] as AddPaymentBodyAtt;
+
+                      paymentBody.payments.add(PayMethod('Tarjeta', payed));
+
+                      print('EMV INFO PAYMENTS');
+                      print(paymentBody.payments.length);
+
                       if (transactionResult == EmvTransactionResult.Approved &&
                           payed >= transactionArgs!.invoice!.remaining) {
                         final date = transactionArgs!.invoice!.date;
@@ -266,13 +296,11 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                                 date:
                                     '${date.day}-${date.month}-${date.year} ${date.hour}:${date.minute}',
                                 address: '',
-                                coinsExchangeRates: []),
+                                coinsExchangeRates: [],
+                                addPaymentBody: paymentBody),
                           ),
                         );
                       } else {
-                        final paymentBody = (ModalRoute.of(context)
-                            ?.settings
-                            .arguments! as List)[2] as AddPaymentBodyAtt;
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
@@ -287,6 +315,8 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                               percentageTax: paymentBody.percentageTax,
                               client: paymentBody.client,
                               invoiceDocumentID: paymentBody.invoiceDocumentID,
+                              invoiceNumber: paymentBody.invoiceNumber,
+                              payments: paymentBody.payments,
                               amountPayed:
                                   (paymentBody.amountPaied ?? 0) + payed,
                               // updatePayed: updatePayed,
@@ -464,6 +494,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     }
 
     listOfTextLine.add(PrinterText.emptyLine(16));
+    listOfTextLine.add(PrinterText(
+        "Stan: ${transactionArgs!.stan}".toUpperCase(),
+        format: TextFormat(fontSize: 16, fontFamily: regularFont)));
     listOfTextLine.add(PrinterText("Aprobación: 123456".toUpperCase(),
         format: TextFormat(fontSize: 16, fontFamily: regularFont)));
     listOfTextLine.add(PrinterText("ARQC: E47BF856EDEB5B31".toUpperCase(),

@@ -25,6 +25,8 @@ class AddPaymentPage extends StatefulWidget {
     required this.percentageTax,
     required this.invoiceDocumentID,
     required this.client,
+    required this.invoiceNumber,
+    required this.payments,
     this.amountPayed,
 
     // required this.updatePayed,
@@ -36,8 +38,10 @@ class AddPaymentPage extends StatefulWidget {
   final double discount;
   final double tax;
   final int percentageTax;
-  final invoiceDocumentID;
-  final client;
+  final String invoiceDocumentID;
+  final Client client;
+  final int invoiceNumber;
+  List<PayMethod> payments;
   double? amountPayed;
 
   // final Function(double) updatePayed;
@@ -62,7 +66,8 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
         client: widget.client,
         invoiceDocumentID: widget.invoiceDocumentID,
         amountPayed: widget.amountPayed,
-
+        invoiceNumber: widget.invoiceNumber,
+        payments: widget.payments,
         // updatePayed: widget.updatePayed,
       ),
     );
@@ -80,6 +85,8 @@ class AddPaymentBody extends StatefulWidget {
     required this.percentageTax,
     required this.invoiceDocumentID,
     required this.client,
+    required this.invoiceNumber,
+    required this.payments,
     this.amountPayed,
 
     // required this.updatePayed,
@@ -91,8 +98,10 @@ class AddPaymentBody extends StatefulWidget {
   final double discount;
   final double tax;
   final int percentageTax;
-  final invoiceDocumentID;
-  final client;
+  final String invoiceDocumentID;
+  final Client client;
+  final int invoiceNumber;
+  List<PayMethod> payments;
   double? amountPayed;
 
   // final Function(double) updatePayed;
@@ -114,11 +123,11 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
     'Tarjeta de Debito',
     'Tarjeta de Credito',
     'Efectivo',
-    // 'Cheque',
+    'Cheque',
+    'Deposito',
+    'Transferencia',
+    'Transf-internacional',
     // 'Criptomoneda',
-    // 'Deposito',
-    // 'Transferencia',
-    // 'Transf-internacional',
     // 'Nota de credito',
   ];
   List<String> itemsCoin = [
@@ -324,7 +333,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                       buttonElevation: 0,
                       itemHeight: 40,
                       itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                      dropdownMaxHeight: 200,
+                      dropdownMaxHeight: 300,
                       dropdownWidth: 200,
                       dropdownPadding: null,
                       dropdownDecoration: BoxDecoration(
@@ -335,7 +344,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                       scrollbarRadius: const Radius.circular(10),
                       scrollbarThickness: 6,
                       scrollbarAlwaysShow: true,
-                      offset: const Offset(0, 0),
+                      offset: const Offset(60, 0),
                     ),
                   ),
                 ),
@@ -414,7 +423,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                       scrollbarRadius: const Radius.circular(10),
                       scrollbarThickness: 6,
                       scrollbarAlwaysShow: true,
-                      offset: const Offset(0, 0),
+                      offset: const Offset(60, 0),
                     ),
                   ),
                 ),
@@ -432,6 +441,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                   margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
                   padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                   decoration: BoxDecoration(
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
                       color: myTheme.colorScheme.primary.withOpacity(0.3),
@@ -575,6 +585,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                         height: 50,
                         // width: 200,
                         decoration: BoxDecoration(
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
                             color: myTheme.colorScheme.primary.withOpacity(0.3),
@@ -859,19 +870,16 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                               Container(
                                 margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                                 child: identifyPaymentMethodRetail(
-                                  selectedValueA,
-                                  widget.client,
-                                  widget.invoiceDocumentID,
-                                  paidAmount,
-                                  // Aqui va widget.InvoiceTotal pero hay
-                                  // que consultar si primero se va a
-                                  // pagar completo o por partes aca
-                                  paidAmountWithAmountPayed,
-                                  today,
-                                  context,
-                                  double.parse(
+                                  selectedValueA: selectedValueA,
+                                  client: widget.client,
+                                  invoiceDocumentID: widget.invoiceDocumentID,
+                                  paidAmount: paidAmount,
+                                  totalOfTheOrder: paidAmountWithAmountPayed,
+                                  date: today,
+                                  context: context,
+                                  remaining: double.parse(
                                       widget.remaining.toStringAsFixed(2)),
-                                  selectedCoin,
+                                  selectedCoin: selectedCoin,
                                   updatePayed: updatePayed,
                                   paymentBody: AddPaymentBodyAtt(
                                       client: widget.client,
@@ -883,7 +891,10 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                       percentageTax: widget.percentageTax,
                                       remaining: widget.remaining,
                                       subTotal: widget.subTotal,
-                                      tax: widget.tax),
+                                      tax: widget.tax,
+                                      invoiceNumber: widget.invoiceNumber,
+                                      currency: currentCoin!)
+                                    ..payments = widget.payments,
                                 ),
                               )
                             ],
@@ -908,6 +919,9 @@ class AddPaymentBodyAtt {
   final int percentageTax;
   final Client client;
   final String invoiceDocumentID;
+  final int invoiceNumber;
+  final String currency;
+  List<PayMethod> payments = [];
   double? amountPaied;
 
   AddPaymentBodyAtt(
@@ -918,5 +932,14 @@ class AddPaymentBodyAtt {
       required this.tax,
       required this.percentageTax,
       required this.client,
-      required this.invoiceDocumentID});
+      required this.invoiceDocumentID,
+      required this.invoiceNumber,
+      required this.currency});
+}
+
+class PayMethod {
+  String name;
+  double amount;
+
+  PayMethod(this.name, this.amount);
 }
