@@ -19,10 +19,26 @@ import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/identify_payment_method.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/identify_payment_method_retail.dart';
 
 import '../../models/transaction_args.dart';
 import '../../pages/amount_input/amount_input.dart';
+
+priceToCurrencySelectedInput(productPrice, coin) {
+  double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+  if (coin!.contains('USD')) {
+    return correctAmount;
+  } else if (coin.contains('VED')) {
+    return correctAmount * 4.58;
+  } else if (coin.contains('EUR')) {
+    return correctAmount * 0.89;
+  } else if (coin.contains('MXN')) {
+    return correctAmount * 19.43;
+  } else if (coin.contains('BTC')) {
+    return correctAmount * 0.00011;
+  } else {
+    return correctAmount * 4.58;
+  }
+}
 
 void modalBottomSheetForInvoices(
   bool completed,
@@ -1052,7 +1068,7 @@ void modalBottomSheetForInvoices(
                                                                           '0';
                                                                     });
                                                                     print(
-                                                                        'paidAmount a 0: $paidAmount');
+                                                                        'paidAmount a 0: *${priceToCurrencySelectedInput(paidAmount, selectedCoin)}');
                                                                   } else {
                                                                     setState(
                                                                         () {
@@ -1147,7 +1163,7 @@ void modalBottomSheetForInvoices(
                                                                     0,
                                                                   ),
                                                                   hintText:
-                                                                      '${double.parse(paidAmount.isEmpty ? '0.00' : paidAmount)}',
+                                                                      ' ${priceToCurrencySelectedInput(double.parse(paidAmount), selectedCoin)}',
                                                                   hintStyle:
                                                                       TextStyle(
                                                                     height:
