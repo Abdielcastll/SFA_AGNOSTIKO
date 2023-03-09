@@ -542,6 +542,8 @@ identifyPaymentMethod({
                                           ).whenComplete(
                                             () {
                                               Navigator.pop(context);
+                                              Navigator.pop(context);
+
                                               showDialog(
                                                   context: context,
                                                   builder:
@@ -560,26 +562,6 @@ identifyPaymentMethod({
                                                         child: Stack(
                                                           children: [
                                                             Container(
-                                                              height: 400,
-                                                              width: 300,
-                                                              child: Opacity(
-                                                                opacity: 1,
-                                                                child:
-                                                                    ClipRRect(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              20),
-                                                                  child: Image
-                                                                      .asset(
-                                                                    'assets/images/payment-background.png',
-                                                                    fit: BoxFit
-                                                                        .fill,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            Container(
                                                               margin: EdgeInsets
                                                                   .all(18),
                                                               child: Center(
@@ -593,8 +575,9 @@ identifyPaymentMethod({
                                                                             'Poppins-regular',
                                                                         fontSize:
                                                                             18,
-                                                                        color: Colors
-                                                                            .white,
+                                                                        color: myTheme
+                                                                            .colorScheme
+                                                                            .onPrimaryContainer,
                                                                         // color: Colors.green,
                                                                         fontWeight:
                                                                             FontWeight.bold,
@@ -607,21 +590,26 @@ identifyPaymentMethod({
                                                                               15,
                                                                               0,
                                                                               0),
+                                                                      decoration: BoxDecoration(
+                                                                          shape: BoxShape
+                                                                              .circle,
+                                                                          color: myTheme
+                                                                              .colorScheme
+                                                                              .primary
+                                                                              .withOpacity(0.6)),
                                                                       width:
                                                                           100,
                                                                       height:
                                                                           100,
-                                                                      child:
-                                                                          Opacity(
-                                                                        opacity:
-                                                                            0.8,
-                                                                        child: Image
-                                                                            .asset(
-                                                                          'assets/images/check.png',
-                                                                          fit: BoxFit
-                                                                              .cover,
-                                                                        ),
-                                                                      ),
+                                                                      child: Opacity(
+                                                                          opacity: 0.8,
+                                                                          child: Icon(
+                                                                            Icons.check,
+                                                                            color:
+                                                                                myTheme.colorScheme.onPrimaryContainer,
+                                                                            size:
+                                                                                50,
+                                                                          )),
                                                                     ),
                                                                     Container(
                                                                       margin: EdgeInsets
@@ -1420,6 +1408,8 @@ identifyPaymentMethod({
                                             remaining: remaining,
                                           ).whenComplete(() {
                                             Navigator.pop(context);
+                                            Navigator.pop(context);
+
                                             showDialog(
                                                 context: context,
                                                 builder:
@@ -1438,25 +1428,6 @@ identifyPaymentMethod({
                                                       child: Stack(
                                                         children: [
                                                           Container(
-                                                            height: 400,
-                                                            width: 300,
-                                                            child: Opacity(
-                                                              opacity: 1,
-                                                              child: ClipRRect(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            20),
-                                                                child:
-                                                                    Image.asset(
-                                                                  'assets/images/payment-background.png',
-                                                                  fit: BoxFit
-                                                                      .fill,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Container(
                                                             margin:
                                                                 EdgeInsets.all(
                                                                     18),
@@ -1471,8 +1442,9 @@ identifyPaymentMethod({
                                                                           'Poppins-regular',
                                                                       fontSize:
                                                                           18,
-                                                                      color: Colors
-                                                                          .white,
+                                                                      color: myTheme
+                                                                          .colorScheme
+                                                                          .onPrimaryContainer,
                                                                       // color: Colors.green,
                                                                       fontWeight:
                                                                           FontWeight
@@ -1486,19 +1458,26 @@ identifyPaymentMethod({
                                                                             15,
                                                                             0,
                                                                             0),
+                                                                    decoration: BoxDecoration(
+                                                                        shape: BoxShape
+                                                                            .circle,
+                                                                        color: myTheme
+                                                                            .colorScheme
+                                                                            .primary
+                                                                            .withOpacity(0.6)),
                                                                     width: 100,
                                                                     height: 100,
-                                                                    child:
-                                                                        Opacity(
-                                                                      opacity:
-                                                                          0.8,
-                                                                      child: Image
-                                                                          .asset(
-                                                                        'assets/images/check.png',
-                                                                        fit: BoxFit
-                                                                            .cover,
-                                                                      ),
-                                                                    ),
+                                                                    child: Opacity(
+                                                                        opacity: 0.8,
+                                                                        child: Icon(
+                                                                          Icons
+                                                                              .check,
+                                                                          color: myTheme
+                                                                              .colorScheme
+                                                                              .onPrimaryContainer,
+                                                                          size:
+                                                                              50,
+                                                                        )),
                                                                   ),
                                                                   Container(
                                                                     margin: EdgeInsets
@@ -1876,6 +1855,8 @@ identifyPaymentMethod({
                               remaining: remaining,
                             ).whenComplete(() {
                               Navigator.pop(context);
+                              Navigator.pop(context);
+
                               showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
@@ -1888,21 +1869,6 @@ identifyPaymentMethod({
                                         child: Stack(
                                           children: [
                                             Container(
-                                              height: 400,
-                                              width: 300,
-                                              child: Opacity(
-                                                opacity: 1,
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                  child: Image.asset(
-                                                    'assets/images/payment-background.png',
-                                                    fit: BoxFit.fill,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
                                               margin: EdgeInsets.all(18),
                                               child: Center(
                                                 child: Column(
@@ -1913,7 +1879,9 @@ identifyPaymentMethod({
                                                         fontFamily:
                                                             'Poppins-regular',
                                                         fontSize: 18,
-                                                        color: Colors.white,
+                                                        color: myTheme
+                                                            .colorScheme
+                                                            .onPrimaryContainer,
                                                         // color: Colors.green,
                                                         fontWeight:
                                                             FontWeight.bold,
@@ -1923,15 +1891,25 @@ identifyPaymentMethod({
                                                       margin:
                                                           EdgeInsets.fromLTRB(
                                                               0, 15, 0, 0),
+                                                      decoration: BoxDecoration(
+                                                          shape:
+                                                              BoxShape.circle,
+                                                          color: myTheme
+                                                              .colorScheme
+                                                              .primary
+                                                              .withOpacity(
+                                                                  0.6)),
                                                       width: 100,
                                                       height: 100,
                                                       child: Opacity(
-                                                        opacity: 0.8,
-                                                        child: Image.asset(
-                                                          'assets/images/check.png',
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                      ),
+                                                          opacity: 0.8,
+                                                          child: Icon(
+                                                            Icons.check,
+                                                            color: myTheme
+                                                                .colorScheme
+                                                                .onPrimaryContainer,
+                                                            size: 50,
+                                                          )),
                                                     ),
                                                     Container(
                                                       margin:
@@ -2546,6 +2524,8 @@ identifyPaymentMethod({
                                               remaining: remaining,
                                             ).whenComplete(() {
                                               Navigator.pop(context);
+                                              Navigator.pop(context);
+
                                               showDialog(
                                                   context: context,
                                                   builder:
@@ -2564,26 +2544,6 @@ identifyPaymentMethod({
                                                         child: Stack(
                                                           children: [
                                                             Container(
-                                                              height: 400,
-                                                              width: 300,
-                                                              child: Opacity(
-                                                                opacity: 1,
-                                                                child:
-                                                                    ClipRRect(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              20),
-                                                                  child: Image
-                                                                      .asset(
-                                                                    'assets/images/payment-background.png',
-                                                                    fit: BoxFit
-                                                                        .fill,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            Container(
                                                               margin: EdgeInsets
                                                                   .all(18),
                                                               child: Center(
@@ -2597,8 +2557,9 @@ identifyPaymentMethod({
                                                                             'Poppins-regular',
                                                                         fontSize:
                                                                             18,
-                                                                        color: Colors
-                                                                            .white,
+                                                                        color: myTheme
+                                                                            .colorScheme
+                                                                            .onPrimaryContainer,
                                                                         // color: Colors.green,
                                                                         fontWeight:
                                                                             FontWeight.bold,
@@ -2611,21 +2572,26 @@ identifyPaymentMethod({
                                                                               15,
                                                                               0,
                                                                               0),
+                                                                      decoration: BoxDecoration(
+                                                                          shape: BoxShape
+                                                                              .circle,
+                                                                          color: myTheme
+                                                                              .colorScheme
+                                                                              .primary
+                                                                              .withOpacity(0.6)),
                                                                       width:
                                                                           100,
                                                                       height:
                                                                           100,
-                                                                      child:
-                                                                          Opacity(
-                                                                        opacity:
-                                                                            0.8,
-                                                                        child: Image
-                                                                            .asset(
-                                                                          'assets/images/check.png',
-                                                                          fit: BoxFit
-                                                                              .cover,
-                                                                        ),
-                                                                      ),
+                                                                      child: Opacity(
+                                                                          opacity: 0.8,
+                                                                          child: Icon(
+                                                                            Icons.check,
+                                                                            color:
+                                                                                myTheme.colorScheme.onPrimaryContainer,
+                                                                            size:
+                                                                                50,
+                                                                          )),
                                                                     ),
                                                                     Container(
                                                                       margin: EdgeInsets
@@ -2834,6 +2800,8 @@ identifyPaymentMethod({
                                               remaining: remaining,
                                             ).whenComplete(() {
                                               Navigator.pop(context);
+                                              Navigator.pop(context);
+
                                               showDialog(
                                                   context: context,
                                                   builder:
@@ -2852,26 +2820,6 @@ identifyPaymentMethod({
                                                         child: Stack(
                                                           children: [
                                                             Container(
-                                                              height: 400,
-                                                              width: 300,
-                                                              child: Opacity(
-                                                                opacity: 1,
-                                                                child:
-                                                                    ClipRRect(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              20),
-                                                                  child: Image
-                                                                      .asset(
-                                                                    'assets/images/payment-background.png',
-                                                                    fit: BoxFit
-                                                                        .fill,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            Container(
                                                               margin: EdgeInsets
                                                                   .all(18),
                                                               child: Center(
@@ -2885,8 +2833,9 @@ identifyPaymentMethod({
                                                                             'Poppins-regular',
                                                                         fontSize:
                                                                             18,
-                                                                        color: Colors
-                                                                            .white,
+                                                                        color: myTheme
+                                                                            .colorScheme
+                                                                            .onPrimaryContainer,
                                                                         // color: Colors.green,
                                                                         fontWeight:
                                                                             FontWeight.bold,
@@ -2899,21 +2848,26 @@ identifyPaymentMethod({
                                                                               15,
                                                                               0,
                                                                               0),
+                                                                      decoration: BoxDecoration(
+                                                                          shape: BoxShape
+                                                                              .circle,
+                                                                          color: myTheme
+                                                                              .colorScheme
+                                                                              .primary
+                                                                              .withOpacity(0.6)),
                                                                       width:
                                                                           100,
                                                                       height:
                                                                           100,
-                                                                      child:
-                                                                          Opacity(
-                                                                        opacity:
-                                                                            0.8,
-                                                                        child: Image
-                                                                            .asset(
-                                                                          'assets/images/check.png',
-                                                                          fit: BoxFit
-                                                                              .cover,
-                                                                        ),
-                                                                      ),
+                                                                      child: Opacity(
+                                                                          opacity: 0.8,
+                                                                          child: Icon(
+                                                                            Icons.check,
+                                                                            color:
+                                                                                myTheme.colorScheme.onPrimaryContainer,
+                                                                            size:
+                                                                                50,
+                                                                          )),
                                                                     ),
                                                                     Container(
                                                                       margin: EdgeInsets

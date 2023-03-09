@@ -577,25 +577,6 @@ identifyPaymentMethodRetail({
                                                       child: Stack(
                                                         children: [
                                                           Container(
-                                                            height: 400,
-                                                            width: 300,
-                                                            child: Opacity(
-                                                              opacity: 1,
-                                                              child: ClipRRect(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            20),
-                                                                child:
-                                                                    Image.asset(
-                                                                  'assets/images/payment-background.png',
-                                                                  fit: BoxFit
-                                                                      .fill,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Container(
                                                             margin:
                                                                 EdgeInsets.all(
                                                                     18),
@@ -610,8 +591,9 @@ identifyPaymentMethodRetail({
                                                                           'Poppins-regular',
                                                                       fontSize:
                                                                           18,
-                                                                      color: Colors
-                                                                          .white,
+                                                                      color: myTheme
+                                                                          .colorScheme
+                                                                          .onPrimaryContainer,
                                                                       // color: Colors.green,
                                                                       fontWeight:
                                                                           FontWeight
@@ -625,19 +607,26 @@ identifyPaymentMethodRetail({
                                                                             15,
                                                                             0,
                                                                             0),
+                                                                    decoration: BoxDecoration(
+                                                                        shape: BoxShape
+                                                                            .circle,
+                                                                        color: myTheme
+                                                                            .colorScheme
+                                                                            .primary
+                                                                            .withOpacity(0.6)),
                                                                     width: 100,
                                                                     height: 100,
-                                                                    child:
-                                                                        Opacity(
-                                                                      opacity:
-                                                                          0.8,
-                                                                      child: Image
-                                                                          .asset(
-                                                                        'assets/images/check.png',
-                                                                        fit: BoxFit
-                                                                            .cover,
-                                                                      ),
-                                                                    ),
+                                                                    child: Opacity(
+                                                                        opacity: 0.8,
+                                                                        child: Icon(
+                                                                          Icons
+                                                                              .check,
+                                                                          color: myTheme
+                                                                              .colorScheme
+                                                                              .onPrimaryContainer,
+                                                                          size:
+                                                                              50,
+                                                                        )),
                                                                   ),
                                                                   Container(
                                                                     margin: EdgeInsets
@@ -1110,8 +1099,8 @@ identifyPaymentMethodRetail({
                                         totalPayments! + payment.amount;
                                   });
                                   print(totalPayments);
-                                  paymentBody?.payments
-                                      .add(PayMethod('Efectivo', paidAmount!));
+                                  paymentBody?.payments.add(
+                                      PayMethod('Criptomoneda', paidAmount!));
 
                                   print('IDENTIFY PAYMENTS');
                                   print(paymentBody?.payments.length);
@@ -1157,8 +1146,9 @@ identifyPaymentMethodRetail({
                                                               fontFamily:
                                                                   'Poppins-regular',
                                                               fontSize: 18,
-                                                              color:
-                                                                  Colors.white,
+                                                              color: myTheme
+                                                                  .colorScheme
+                                                                  .onPrimaryContainer,
                                                               // color: Colors.green,
                                                               fontWeight:
                                                                   FontWeight
@@ -1169,17 +1159,25 @@ identifyPaymentMethodRetail({
                                                             margin: EdgeInsets
                                                                 .fromLTRB(0, 15,
                                                                     0, 0),
+                                                            decoration: BoxDecoration(
+                                                                shape: BoxShape
+                                                                    .circle,
+                                                                color: myTheme
+                                                                    .colorScheme
+                                                                    .primary
+                                                                    .withOpacity(
+                                                                        0.6)),
                                                             width: 100,
                                                             height: 100,
                                                             child: Opacity(
-                                                              opacity: 0.8,
-                                                              child:
-                                                                  Image.asset(
-                                                                'assets/images/check.png',
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                              ),
-                                                            ),
+                                                                opacity: 0.8,
+                                                                child: Icon(
+                                                                  Icons.check,
+                                                                  color: myTheme
+                                                                      .colorScheme
+                                                                      .onPrimaryContainer,
+                                                                  size: 50,
+                                                                )),
                                                           ),
                                                           Container(
                                                             margin: EdgeInsets
@@ -1823,7 +1821,7 @@ identifyPaymentMethodRetail({
                                           // Navigator.pop(context);
 
                                           paymentBody?.payments.add(PayMethod(
-                                              'Efectivo', paidAmount!));
+                                              'Deposito', paidAmount!));
 
                                           print('IDENTIFY PAYMENTS');
                                           print(paymentBody?.payments.length);
@@ -1862,25 +1860,6 @@ identifyPaymentMethodRetail({
                                                       child: Stack(
                                                         children: [
                                                           Container(
-                                                            height: 400,
-                                                            width: 300,
-                                                            child: Opacity(
-                                                              opacity: 1,
-                                                              child: ClipRRect(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            20),
-                                                                child:
-                                                                    Image.asset(
-                                                                  'assets/images/payment-background.png',
-                                                                  fit: BoxFit
-                                                                      .fill,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Container(
                                                             margin:
                                                                 EdgeInsets.all(
                                                                     18),
@@ -1895,8 +1874,9 @@ identifyPaymentMethodRetail({
                                                                           'Poppins-regular',
                                                                       fontSize:
                                                                           18,
-                                                                      color: Colors
-                                                                          .white,
+                                                                      color: myTheme
+                                                                          .colorScheme
+                                                                          .onPrimaryContainer,
                                                                       // color: Colors.green,
                                                                       fontWeight:
                                                                           FontWeight
@@ -1910,19 +1890,26 @@ identifyPaymentMethodRetail({
                                                                             15,
                                                                             0,
                                                                             0),
+                                                                    decoration: BoxDecoration(
+                                                                        shape: BoxShape
+                                                                            .circle,
+                                                                        color: myTheme
+                                                                            .colorScheme
+                                                                            .primary
+                                                                            .withOpacity(0.6)),
                                                                     width: 100,
                                                                     height: 100,
-                                                                    child:
-                                                                        Opacity(
-                                                                      opacity:
-                                                                          0.8,
-                                                                      child: Image
-                                                                          .asset(
-                                                                        'assets/images/check.png',
-                                                                        fit: BoxFit
-                                                                            .cover,
-                                                                      ),
-                                                                    ),
+                                                                    child: Opacity(
+                                                                        opacity: 0.8,
+                                                                        child: Icon(
+                                                                          Icons
+                                                                              .check,
+                                                                          color: myTheme
+                                                                              .colorScheme
+                                                                              .onPrimaryContainer,
+                                                                          size:
+                                                                              50,
+                                                                        )),
                                                                   ),
                                                                   Container(
                                                                     margin: EdgeInsets
@@ -2382,22 +2369,6 @@ identifyPaymentMethodRetail({
                                                 child: Stack(
                                                   children: [
                                                     Container(
-                                                      height: 400,
-                                                      width: 300,
-                                                      child: Opacity(
-                                                        opacity: 1,
-                                                        child: ClipRRect(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(20),
-                                                          child: Image.asset(
-                                                            'assets/images/payment-background.png',
-                                                            fit: BoxFit.fill,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Container(
                                                       margin:
                                                           EdgeInsets.all(18),
                                                       child: Center(
@@ -2409,8 +2380,9 @@ identifyPaymentMethodRetail({
                                                                 fontFamily:
                                                                     'Poppins-regular',
                                                                 fontSize: 18,
-                                                                color: Colors
-                                                                    .white,
+                                                                color: myTheme
+                                                                    .colorScheme
+                                                                    .onPrimaryContainer,
                                                                 // color: Colors.green,
                                                                 fontWeight:
                                                                     FontWeight
@@ -2421,17 +2393,25 @@ identifyPaymentMethodRetail({
                                                               margin: EdgeInsets
                                                                   .fromLTRB(0,
                                                                       15, 0, 0),
+                                                              decoration: BoxDecoration(
+                                                                  shape: BoxShape
+                                                                      .circle,
+                                                                  color: myTheme
+                                                                      .colorScheme
+                                                                      .primary
+                                                                      .withOpacity(
+                                                                          0.6)),
                                                               width: 100,
                                                               height: 100,
                                                               child: Opacity(
-                                                                opacity: 0.8,
-                                                                child:
-                                                                    Image.asset(
-                                                                  'assets/images/check.png',
-                                                                  fit: BoxFit
-                                                                      .cover,
-                                                                ),
-                                                              ),
+                                                                  opacity: 0.8,
+                                                                  child: Icon(
+                                                                    Icons.check,
+                                                                    color: myTheme
+                                                                        .colorScheme
+                                                                        .onPrimaryContainer,
+                                                                    size: 50,
+                                                                  )),
                                                             ),
                                                             Container(
                                                               margin: EdgeInsets
@@ -3098,7 +3078,7 @@ identifyPaymentMethodRetail({
                                             });
                                             print(totalPayments);
                                             paymentBody?.payments.add(PayMethod(
-                                                'Efectivo', paidAmount!));
+                                                'Transferencia', paidAmount!));
 
                                             print('IDENTIFY PAYMENTS');
                                             print(paymentBody?.payments.length);
@@ -3123,26 +3103,6 @@ identifyPaymentMethodRetail({
                                                         child: Stack(
                                                           children: [
                                                             Container(
-                                                              height: 400,
-                                                              width: 300,
-                                                              child: Opacity(
-                                                                opacity: 1,
-                                                                child:
-                                                                    ClipRRect(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              20),
-                                                                  child: Image
-                                                                      .asset(
-                                                                    'assets/images/payment-background.png',
-                                                                    fit: BoxFit
-                                                                        .fill,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            Container(
                                                               margin: EdgeInsets
                                                                   .all(18),
                                                               child: Center(
@@ -3156,8 +3116,9 @@ identifyPaymentMethodRetail({
                                                                             'Poppins-regular',
                                                                         fontSize:
                                                                             18,
-                                                                        color: Colors
-                                                                            .white,
+                                                                        color: myTheme
+                                                                            .colorScheme
+                                                                            .onPrimaryContainer,
                                                                         // color: Colors.green,
                                                                         fontWeight:
                                                                             FontWeight.bold,
@@ -3170,21 +3131,114 @@ identifyPaymentMethodRetail({
                                                                               15,
                                                                               0,
                                                                               0),
+                                                                      decoration: BoxDecoration(
+                                                                          shape: BoxShape
+                                                                              .circle,
+                                                                          color: myTheme
+                                                                              .colorScheme
+                                                                              .primary
+                                                                              .withOpacity(0.6)),
                                                                       width:
                                                                           100,
                                                                       height:
                                                                           100,
-                                                                      child:
-                                                                          Opacity(
-                                                                        opacity:
-                                                                            0.8,
-                                                                        child: Image
-                                                                            .asset(
-                                                                          'assets/images/check.png',
-                                                                          fit: BoxFit
-                                                                              .cover,
-                                                                        ),
+                                                                      child: Opacity(
+                                                                          opacity: 0.8,
+                                                                          child: Icon(
+                                                                            Icons.check,
+                                                                            color:
+                                                                                myTheme.colorScheme.onPrimaryContainer,
+                                                                            size:
+                                                                                50,
+                                                                          )),
+                                                                    ),
+                                                                    Text(
+                                                                      "¡PAGO REGISTRADO!",
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontFamily:
+                                                                            'Poppins-regular',
+                                                                        fontSize:
+                                                                            18,
+                                                                        color: myTheme
+                                                                            .colorScheme
+                                                                            .onPrimaryContainer,
+                                                                        // color: Colors.green,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
                                                                       ),
+                                                                    ),
+                                                                    Container(
+                                                                      margin: EdgeInsets
+                                                                          .fromLTRB(
+                                                                              0,
+                                                                              15,
+                                                                              0,
+                                                                              0),
+                                                                      decoration: BoxDecoration(
+                                                                          shape: BoxShape
+                                                                              .circle,
+                                                                          color: myTheme
+                                                                              .colorScheme
+                                                                              .primary
+                                                                              .withOpacity(0.6)),
+                                                                      width:
+                                                                          100,
+                                                                      height:
+                                                                          100,
+                                                                      child: Opacity(
+                                                                          opacity: 0.8,
+                                                                          child: Icon(
+                                                                            Icons.check,
+                                                                            color:
+                                                                                myTheme.colorScheme.onPrimaryContainer,
+                                                                            size:
+                                                                                50,
+                                                                          )),
+                                                                    ),
+                                                                    Text(
+                                                                      "¡PAGO REGISTRADO!",
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontFamily:
+                                                                            'Poppins-regular',
+                                                                        fontSize:
+                                                                            18,
+                                                                        color: myTheme
+                                                                            .colorScheme
+                                                                            .onPrimaryContainer,
+                                                                        // color: Colors.green,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                      ),
+                                                                    ),
+                                                                    Container(
+                                                                      margin: EdgeInsets
+                                                                          .fromLTRB(
+                                                                              0,
+                                                                              15,
+                                                                              0,
+                                                                              0),
+                                                                      decoration: BoxDecoration(
+                                                                          shape: BoxShape
+                                                                              .circle,
+                                                                          color: myTheme
+                                                                              .colorScheme
+                                                                              .primary
+                                                                              .withOpacity(0.6)),
+                                                                      width:
+                                                                          100,
+                                                                      height:
+                                                                          100,
+                                                                      child: Opacity(
+                                                                          opacity: 0.8,
+                                                                          child: Icon(
+                                                                            Icons.check,
+                                                                            color:
+                                                                                myTheme.colorScheme.onPrimaryContainer,
+                                                                            size:
+                                                                                50,
+                                                                          )),
                                                                     ),
                                                                     Container(
                                                                       margin: EdgeInsets
@@ -3461,7 +3515,8 @@ identifyPaymentMethodRetail({
                                             });
                                             print(totalPayments);
                                             paymentBody?.payments.add(PayMethod(
-                                                'Efectivo', paidAmount!));
+                                                'Transferencia-internacional',
+                                                paidAmount!));
 
                                             print('IDENTIFY PAYMENTS');
                                             print(paymentBody?.payments.length);
@@ -3486,26 +3541,6 @@ identifyPaymentMethodRetail({
                                                         child: Stack(
                                                           children: [
                                                             Container(
-                                                              height: 400,
-                                                              width: 300,
-                                                              child: Opacity(
-                                                                opacity: 1,
-                                                                child:
-                                                                    ClipRRect(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              20),
-                                                                  child: Image
-                                                                      .asset(
-                                                                    'assets/images/payment-background.png',
-                                                                    fit: BoxFit
-                                                                        .fill,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            Container(
                                                               margin: EdgeInsets
                                                                   .all(18),
                                                               child: Center(
@@ -3519,8 +3554,9 @@ identifyPaymentMethodRetail({
                                                                             'Poppins-regular',
                                                                         fontSize:
                                                                             18,
-                                                                        color: Colors
-                                                                            .white,
+                                                                        color: myTheme
+                                                                            .colorScheme
+                                                                            .onPrimaryContainer,
                                                                         // color: Colors.green,
                                                                         fontWeight:
                                                                             FontWeight.bold,
@@ -3533,21 +3569,26 @@ identifyPaymentMethodRetail({
                                                                               15,
                                                                               0,
                                                                               0),
+                                                                      decoration: BoxDecoration(
+                                                                          shape: BoxShape
+                                                                              .circle,
+                                                                          color: myTheme
+                                                                              .colorScheme
+                                                                              .primary
+                                                                              .withOpacity(0.6)),
                                                                       width:
                                                                           100,
                                                                       height:
                                                                           100,
-                                                                      child:
-                                                                          Opacity(
-                                                                        opacity:
-                                                                            0.8,
-                                                                        child: Image
-                                                                            .asset(
-                                                                          'assets/images/check.png',
-                                                                          fit: BoxFit
-                                                                              .cover,
-                                                                        ),
-                                                                      ),
+                                                                      child: Opacity(
+                                                                          opacity: 0.8,
+                                                                          child: Icon(
+                                                                            Icons.check,
+                                                                            color:
+                                                                                myTheme.colorScheme.onPrimaryContainer,
+                                                                            size:
+                                                                                50,
+                                                                          )),
                                                                     ),
                                                                     Container(
                                                                       margin: EdgeInsets
