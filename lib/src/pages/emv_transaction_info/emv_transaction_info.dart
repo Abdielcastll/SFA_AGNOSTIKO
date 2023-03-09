@@ -13,6 +13,7 @@ import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/completed_pay.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 
 /* import '../../config/app_config.dart'; */
 import '../../../dialogs/param_bitmap_dialog.dart';
@@ -50,19 +51,6 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     print(tag5F34?.toHexStr());
     print(tag5A?.toHexStr());
     print(tag57?.toHexStr().split('d')[0]);
-  }
-
-  exchangeAmount(String coin, double amount) {
-    if (coin.contains('VED')) {
-      return amount / 4.58;
-    }
-    if (coin.contains('EUR')) {
-      return amount / 0.89;
-    }
-    if (coin.contains('MXN')) {
-      return amount / 19.43;
-    }
-    return amount;
   }
 
   @override

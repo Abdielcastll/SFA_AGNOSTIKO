@@ -92,7 +92,7 @@ void modalBottomSheetForInvoices(
   } else {
     leftoverAmount = remaining.toStringAsFixed(2);
   }
-  String paidAmount = remaining.toStringAsFixed(2);
+  double paidAmount = double.parse(remaining.toStringAsFixed(2));
 
   showModalBottomSheet(
     elevation: 0,
@@ -1028,8 +1028,15 @@ void modalBottomSheetForInvoices(
                                                                 onChanged:
                                                                     (value) {
                                                                   setState(() {
-                                                                    paidAmount =
-                                                                        value;
+                                                                    if (value
+                                                                        .isEmpty) {
+                                                                      paidAmount =
+                                                                          0;
+                                                                    } else {
+                                                                      paidAmount =
+                                                                          double.parse(
+                                                                              value);
+                                                                    }
                                                                     print(
                                                                         paidAmount);
                                                                   });
@@ -1086,9 +1093,7 @@ void modalBottomSheetForInvoices(
                                                                     0,
                                                                   ),
                                                                   hintText: priceFormatForPaidAmount(
-                                                                          double.parse(paidAmount.isEmpty
-                                                                              ? '0.00'
-                                                                              : paidAmount),
+                                                                          paidAmount,
                                                                           selectedCoin)
                                                                       .toString(),
                                                                   hintStyle:

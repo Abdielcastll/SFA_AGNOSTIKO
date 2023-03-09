@@ -92,11 +92,12 @@ class _CompletedPayBody extends State<CompletedPayBody> {
       0.0, (previousValue, element) => previousValue + element.amount);
   @override
   Widget build(BuildContext context) {
-    final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
+    final currentCoin =
+        Provider.of<CurrencyProvider>(context).currentCurrency ?? 'MXN';
 
     priceFormat(productPrice) {
       double correctAmount = double.parse(productPrice.toStringAsFixed(2));
-      if (currentCoin!.contains('USD')) {
+      if (currentCoin.contains('USD')) {
         return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
             .format(productPrice)
             .toString();
@@ -292,7 +293,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  invoicePrintLayout(widget.addPaymentBody);
+                  invoicePrintLayout(widget.addPaymentBody, currentCoin);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: myTheme.colorScheme.primary,

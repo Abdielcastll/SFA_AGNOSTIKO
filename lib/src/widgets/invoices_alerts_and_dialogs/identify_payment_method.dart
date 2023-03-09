@@ -19,6 +19,7 @@ import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 
 import '../../pages/place_order/add_payment.dart';
 import '../payment_method/payment_card.dart';
@@ -61,9 +62,19 @@ priceToCurrencySelected(productPrice, coin) {
   }
 }
 
-identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
-    paidAmount, totalOfTheOrder, date, context, remaining, selectedCoin,
-    {Function? updatePayed, AddPaymentBodyAtt? paymentBody, noRetail = false}) {
+identifyPaymentMethod(
+    String? selectedValueA,
+    Client client,
+    invoiceDocumentID,
+    double paidAmount,
+    double totalOfTheOrder,
+    date,
+    context,
+    remaining,
+    selectedCoin,
+    {Function? updatePayed,
+    AddPaymentBodyAtt? paymentBody,
+    noRetail = false}) {
   print('paidAmount ');
 
   File? imageFile;
@@ -143,9 +154,6 @@ identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
 
   if (selectedValueA == 'Tarjeta de Debito' ||
       selectedValueA == 'Tarjeta de Credito') {
-    if (paidAmount is String) {
-      paidAmount = double.parse(paidAmount.replaceAll('\$', ''));
-    }
     return paymentCard(paidAmount, client, invoiceDocumentID, totalOfTheOrder,
         selectedCoin, date, remaining,
         updatePayed: updatePayed, paymentBody: paymentBody, noRetail: noRetail);
@@ -467,7 +475,7 @@ identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
                                 if (accountNumber != '' ||
                                     accountHolder != '') {
                                   print('Registrando pago en cheque');
-                                  if (double.parse(paidAmount) > remaining) {
+                                  if (paidAmount > remaining) {
                                     Fluttertoast.showToast(
                                       msg:
                                           'La cantidad a pagar excede de la deuda pendiente',
@@ -707,7 +715,7 @@ identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
                           // registerCriptoPayment();
                           if (transactionId != '') {
                             if (paidAmount != null) {
-                              if (double.parse(paidAmount) > remaining) {
+                              if (paidAmount > remaining) {
                                 Fluttertoast.showToast(
                                   msg:
                                       'La cantidad a pagar excede de la deuda pendiente',
@@ -1082,7 +1090,7 @@ identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
                               if (selectedBank != null) {
                                 if (accountNumber != '' ||
                                     voucherNumber != '') {
-                                  if (double.parse(paidAmount) > remaining) {
+                                  if (paidAmount > remaining) {
                                     Fluttertoast.showToast(
                                       msg:
                                           'La cantidad a pagar excede de la deuda pendiente',
@@ -1273,9 +1281,6 @@ identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
                       child: TextButton(
                         onPressed: () async {
                           // Crear en DB una visita
-                          if (paidAmount is String) {
-                            paidAmount = double.parse(paidAmount);
-                          }
                           if (paidAmount != null) {
                             /* if (paidAmount > remaining) {
                               Fluttertoast.showToast(
@@ -1310,8 +1315,11 @@ identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
                             );
                             Navigator.pop(context);
 
+                            final amountExchanged =
+                                exchangeAmount(selectedCoin, paidAmount);
+
                             paymentBody?.payments
-                                .add(PayMethod('Efectivo', totalOfTheOrder));
+                                .add(PayMethod('Efectivo', amountExchanged));
 
                             print('IDENTIFY PAYMENTS');
                             print(paymentBody?.payments.length);
@@ -1322,7 +1330,8 @@ identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
                                     (previousValue, element) =>
                                         previousValue + element.amount);
 
-                            if (paidAmount < remaining && paymentBody != null) {
+                            if (amountExchanged < remaining &&
+                                paymentBody != null) {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
@@ -1330,7 +1339,8 @@ identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
                                         name: 'PAGO-DIRECTO'),
                                     builder: (BuildContext context) =>
                                         AddPaymentPage(
-                                          remaining: paymentBody.remaining,
+                                          remaining: paymentBody.remaining -
+                                              amountExchanged,
                                           subTotal: paymentBody.subTotal,
                                           discountPercentage:
                                               paymentBody.discountPercentage,
@@ -1345,7 +1355,7 @@ identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
                                               paymentBody.invoiceNumber,
                                           amountPayed:
                                               (paymentBody.amountPaied ?? 0) +
-                                                  paidAmount,
+                                                  amountExchanged,
                                           payments: paymentBody.payments,
                                           // updatePayed: updatePayed,
                                         )),
@@ -1750,7 +1760,7 @@ identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
                                   paidAmount <= totalOfTheOrder) {
                                 if (selectedBank != null) {
                                   if (referenceId != '') {
-                                    if (double.parse(paidAmount) > remaining) {
+                                    if (paidAmount > remaining) {
                                       Fluttertoast.showToast(
                                         msg:
                                             'La cantidad a pagar excede de la deuda pendiente',
@@ -1806,7 +1816,7 @@ identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
                                   paidAmount <= totalOfTheOrder) {
                                 if (selectedBank != null) {
                                   if (referenceId != '') {
-                                    if (double.parse(paidAmount) > remaining) {
+                                    if (paidAmount > remaining) {
                                       Fluttertoast.showToast(
                                         msg:
                                             'La cantidad a pagar excede de la deuda pendiente',

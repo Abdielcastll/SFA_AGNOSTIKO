@@ -9,7 +9,7 @@ import 'dart:ui' as ui;
 import '../../services/utils/parameters.dart';
 import 'add_payment.dart';
 
-Future invoicePrintLayout(AddPaymentBodyAtt invoice) async {
+Future invoicePrintLayout(AddPaymentBodyAtt invoice, String currentCoin) async {
   final products = objectBox.getAllShoppingCartProducts();
 
   List<PrinterObject> listOfTextLine = [];
@@ -111,11 +111,11 @@ Future invoicePrintLayout(AddPaymentBodyAtt invoice) async {
     listOfTextLine.add(PrinterSplitText(
         product.name ?? '-',
         priceFormatForPaidAmount(
-            (productPrice * product.productQuantity!), invoice.currency),
+            (productPrice * product.productQuantity!), currentCoin),
         format: TextFormat(fontSize: 16, fontFamily: regularFont)));
 
     listOfTextLine.add(PrinterText(
-        '${product.productQuantity}  X  ${priceFormatForPaidAmount(productPrice, invoice.currency)}',
+        '${product.productQuantity}  X  ${priceFormatForPaidAmount(productPrice, currentCoin)}',
         format: TextFormat(fontSize: 16, fontFamily: regularFont)));
 
     productsCant += product.productQuantity!;
@@ -128,15 +128,15 @@ Future invoicePrintLayout(AddPaymentBodyAtt invoice) async {
   listOfTextLine.add(PrinterText.emptyLine(16));
 
   listOfTextLine.add(PrinterSplitText("SubTotal".toUpperCase(),
-      priceFormatForPaidAmount(invoice.subTotal, invoice.currency),
+      priceFormatForPaidAmount(invoice.subTotal, currentCoin),
       format: TextFormat(fontSize: 16, fontFamily: regularFont)));
 
   listOfTextLine.add(PrinterSplitText("Descuento".toUpperCase(),
-      priceFormatForPaidAmount(invoice.discount, invoice.currency),
+      priceFormatForPaidAmount(invoice.discount, currentCoin),
       format: TextFormat(fontSize: 16, fontFamily: regularFont)));
 
   listOfTextLine.add(PrinterSplitText("IVA (16%)".toUpperCase(),
-      priceFormatForPaidAmount(invoice.tax, invoice.currency),
+      priceFormatForPaidAmount(invoice.tax, currentCoin),
       format: TextFormat(fontSize: 16, fontFamily: regularFont)));
 
   listOfTextLine.add(PrinterSplitText(
@@ -144,7 +144,7 @@ Future invoicePrintLayout(AddPaymentBodyAtt invoice) async {
       priceFormatForPaidAmount(
           (invoice.subTotal - invoice.discount + invoice.tax)
               .toStringAsFixed(2),
-          invoice.currency),
+          currentCoin),
       format: TextFormat(fontSize: 16, fontFamily: regularFont)));
 
   listOfTextLine.add(PrinterText.emptyLine(16));
@@ -157,9 +157,9 @@ Future invoicePrintLayout(AddPaymentBodyAtt invoice) async {
 
   listOfTextLine.add(PrinterText.emptyLine(16));
 
-  for (final pay in invoice.payments!) {
+  for (final pay in invoice.payments) {
     listOfTextLine.add(PrinterSplitText(pay.name.toUpperCase(),
-        priceFormatForPaidAmount(pay.amount, invoice.currency),
+        priceFormatForPaidAmount(pay.amount, currentCoin),
         format: TextFormat(fontSize: 16, fontFamily: regularFont)));
   }
 
@@ -168,7 +168,7 @@ Future invoicePrintLayout(AddPaymentBodyAtt invoice) async {
   print(invoice.subTotal);
   print(invoice.discount);
   print(invoice.tax);
-  print(invoice.currency);
+  print(currentCoin);
   print(invoice.payments.length);
 
   final printerScript =

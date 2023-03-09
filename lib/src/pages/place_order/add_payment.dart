@@ -110,11 +110,11 @@ class AddPaymentBody extends StatefulWidget {
 }
 
 class _AddPaymentBodyState extends State<AddPaymentBody> {
-  late double paidAmount = widget.remaining;
+  late double remaining = widget.remaining;
+  late List<PayMethod> payments = widget.payments;
   double amountPayed = 0;
-  late double paidAmountWithAmountPayed = paidAmount - amountPayedFromPays;
-  double get amountPayedFromPays => widget.payments.fold<double>(
-      0.0, (previousValue, element) => previousValue + element.amount);
+
+  get getTotalAmount => widget.subTotal + widget.tax - widget.discount;
 
   var dateFormatter = DateFormat('dd-MM-yyyy');
   DateTime today = DateTime.now();
@@ -123,19 +123,19 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
   final List<String> items = [
     'Tarjeta de Debito',
     'Tarjeta de Credito',
-    'Cheque',
-    'Criptomoneda',
-    'Deposito',
     'Efectivo',
+    'Cheque',
+    'Deposito',
     'Transferencia',
     'Transf-internacional',
+    // 'Criptomoneda',
     // 'Nota de credito',
   ];
   List<String> itemsCoin = [
     'USD',
-    'BTC',
-    'EUR',
-    'VED',
+    // 'BTC',
+    // 'EUR',
+    // 'VED',
     'MXN',
   ];
 
@@ -156,6 +156,16 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
 
   @override
   Widget build(BuildContext context) {
+    double amountToPay = widget.remaining;
+    print('amountPayed222222222222: $amountPayed');
+    print(widget.discount);
+    print(widget.discountPercentage);
+    double? paymentsTotalAmount = 0;
+    for (var payment in widget.payments) {
+      paymentsTotalAmount = paymentsTotalAmount! + payment.amount;
+    }
+    print('paymentsTotalAmount: $paymentsTotalAmount');
+
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     String formattedDate = dateFormatter.format(today);
 
@@ -242,561 +252,608 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
       }
     }
 
-    return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      child: Column(children: [
-        Container(
-          margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-          child: Center(
-            child: Text(
-              'Añadir Pago',
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.popUntil(context, ModalRoute.withName('ORDER'));
+        return true;
+      },
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Column(children: [
+          Container(
+            margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+            child: Center(
+              child: Text(
+                'Añadir Pago',
+              ),
             ),
           ),
-        ),
-        Container(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Text(
-                  // Metodo de pago
-                  AppLocalizations.of(context)!.paymentMethod,
-                  style: TextStyle(
-                    fontFamily: 'Poppins-regular',
-                    color: Color.fromARGB(255, 0, 24, 143),
-                    fontSize: 14,
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton2(
-                      isExpanded: true,
-                      // ignore: prefer_const_literals_to_create_immutables
-                      hint: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              selectedValueA ?? 'Seleccione medio de pago',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromRGBO(46, 62, 174, 1)
-                                    .withOpacity(0.3),
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                      items: items
-                          .map((item) => DropdownMenuItem<String>(
-                                value: item,
-                                child: Text(
-                                  item,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: myTheme.colorScheme.primary,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ))
-                          .toList(),
-                      value: selectedValueA,
-                      onChanged: (value) {
-                        setState(
-                          () {
-                            selectedValueA = value as String;
-                          },
-                        );
-                        print(selectedValueA);
-                      },
-                      icon: const Icon(
-                        Icons.arrow_forward_ios_outlined,
-                      ),
-                      iconSize: 11,
-                      iconEnabledColor:
-                          myTheme.colorScheme.primary.withOpacity(0.5),
-                      iconDisabledColor: Colors.grey,
-                      buttonHeight: 50,
-                      // buttonWidth: 200,
-                      buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-                      buttonDecoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(
-                          color: myTheme.colorScheme.primary.withOpacity(0.3),
-                        ),
-                        color: Colors.white,
-                      ),
-                      buttonElevation: 0,
-                      itemHeight: 40,
-                      itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                      dropdownMaxHeight: 200,
-                      dropdownWidth: 200,
-                      dropdownPadding: null,
-                      dropdownDecoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white,
-                      ),
-                      dropdownElevation: 8,
-                      scrollbarRadius: const Radius.circular(10),
-                      scrollbarThickness: 6,
-                      scrollbarAlwaysShow: true,
-                      offset: const Offset(0, 0),
+          Container(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Text(
+                    // Metodo de pago
+                    AppLocalizations.of(context)!.paymentMethod,
+                    style: TextStyle(
+                      fontFamily: 'Poppins-regular',
+                      color: Color.fromARGB(255, 0, 24, 143),
+                      fontSize: 14,
                     ),
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton2(
-                      isExpanded: true,
-                      // ignore: prefer_const_literals_to_create_immutables
-                      hint: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              selectedCoin ?? 'Seleccione moneda',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: myTheme.colorScheme.primary
-                                    .withOpacity(0.3),
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                      items: itemsCoin
-                          .map((item) => DropdownMenuItem<String>(
-                                value: item,
-                                child: Text(
-                                  item,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: myTheme.colorScheme.primary,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
+                  Container(
+                    margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton2(
+                        isExpanded: true,
+                        // ignore: prefer_const_literals_to_create_immutables
+                        hint: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                selectedValueA ?? 'Seleccione medio de pago',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color.fromRGBO(46, 62, 174, 1)
+                                      .withOpacity(0.3),
                                 ),
-                              ))
-                          .toList(),
-                      value: selectedCoin,
-                      onChanged: (value) {
-                        setState(
-                          () {
-                            selectedCoin = value as String;
-                          },
-                        );
-                      },
-                      icon: const Icon(
-                        Icons.arrow_forward_ios_outlined,
-                      ),
-                      iconSize: 11,
-                      iconEnabledColor:
-                          myTheme.colorScheme.primary.withOpacity(0.5),
-                      iconDisabledColor: Colors.grey,
-                      buttonHeight: 50,
-                      // buttonWidth: 200,
-                      buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-                      buttonDecoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(
-                          color: myTheme.colorScheme.primary.withOpacity(0.3),
-                        ),
-                        color: Colors.white,
-                      ),
-                      buttonElevation: 0,
-                      itemHeight: 40,
-                      itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                      dropdownMaxHeight: 200,
-                      dropdownWidth: 200,
-                      dropdownPadding: null,
-                      dropdownDecoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white,
-                      ),
-                      dropdownElevation: 8,
-                      scrollbarRadius: const Radius.circular(10),
-                      scrollbarThickness: 6,
-                      scrollbarAlwaysShow: true,
-                      offset: const Offset(0, 0),
-                    ),
-                  ),
-                ),
-
-                // Fecha del registro del pago
-                Text(
-                  AppLocalizations.of(context)!.date,
-                  style: TextStyle(
-                    fontFamily: 'Poppins-regular',
-                    color: myTheme.colorScheme.primary,
-                    fontSize: 14,
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
-                  padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: myTheme.colorScheme.primary.withOpacity(0.3),
-                    ),
-                  ),
-                  alignment: Alignment.centerLeft,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        formattedDate,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: myTheme.colorScheme.primary.withOpacity(0.7),
-                        ),
-                      ),
-                      Container(
-                        height: 30,
-                        width: 30,
-                        margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
-                        child: IconButton(
-                          onPressed: () async {
-                            if (selectedValueA?.contains('Tarjeta') == true) {
-                              return;
-                            }
-                            DateTime? newDate = await showDatePicker(
-                              context: context,
-                              initialDate: today,
-                              firstDate: DateTime.now(),
-                              lastDate: DateTime(2500),
-                            );
-                            if (newDate == null) {
-                              return;
-                            }
-                            setState(() {
-                              today = newDate;
-                              formattedDate = dateFormatter.format(today);
-                            });
-                          },
-                          splashRadius: 5,
-                          icon: Icon(
-                            Icons.calendar_month,
-                            color: myTheme.colorScheme.primary,
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                // Monto Pagado
-                selectedCoin != null
-                    ? Container()
-                    : Column(
-                        children: [
-                          if (amountPayed > 0)
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'Saldo',
-                                        style: TextStyle(
-                                          color: myTheme
-                                              .colorScheme.onPrimaryContainer,
-                                          fontFamily: 'Poppins-regular',
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'Monto Pagado',
-                                        style: TextStyle(
-                                          color: myTheme
-                                              .colorScheme.onPrimaryContainer,
-                                          fontFamily: 'Poppins-regular',
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      margin: const EdgeInsets.only(bottom: 5),
-                                      alignment: Alignment.centerRight,
-                                      child: Text(
-                                        '${priceFormat(priceFormatForPaidAmount(paidAmountWithAmountPayed, selectedCoin))}',
-                                        style: TextStyle(
-                                          color: myTheme
-                                              .colorScheme.onPrimaryContainer,
-                                          fontFamily: 'Poppins-regular',
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      margin: const EdgeInsets.only(bottom: 5),
-                                      alignment: Alignment.centerRight,
-                                      child: Text(
-                                        priceFormat(amountPayed),
-                                        style: TextStyle(
-                                          color: myTheme
-                                              .colorScheme.onPrimaryContainer,
-                                          fontFamily: 'Poppins-regular',
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            )
-                        ],
-                      ),
-                selectedCoin == null
-                    ? Container()
-                    : Text(
-                        '${AppLocalizations.of(context)!.amount}*',
-                        style: TextStyle(
-                          fontFamily: 'Poppins-regular',
-                          color: myTheme.colorScheme.primary,
-                          fontSize: 14,
-                        ),
-                      ),
-
-                selectedCoin == null
-                    ? Container()
-                    : Container(
-                        margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                        height: 50,
-                        // width: 200,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: myTheme.colorScheme.primary.withOpacity(0.3),
-                            // color: Colors.transparent,
-                          ),
-                        ),
-                        child: TextField(
-                          onChanged: (value) {
-                            // VERIFICAR SI SE VUELVE NULLABLE
-                            if (value.isEmpty) {
-                              setState(() {
-                                paidAmount = 0;
-                                print(paidAmount);
-                              });
-                            } else {
-                              setState(() {
-                                paidAmount = double.parse(value);
-                                print(paidAmount);
-                              });
-                            }
-                          },
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontFamily: 'Poppins-regular',
-                            color: myTheme.colorScheme.primary,
-                          ),
-                          //TODO:
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.allow(
-                              RegExp(r'[0-9]+[,.]{0,1}[0-9]*'),
-                            ),
-                            TextInputFormatter.withFunction(
-                              (oldValue, newValue) => newValue.copyWith(
-                                text: newValue.text.replaceAll(',', '.'),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           ],
-                          keyboardType: TextInputType.phone,
-
-                          maxLines: 1,
-                          maxLength: 50,
-                          textCapitalization: TextCapitalization.characters,
-
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.fromLTRB(
-                              14,
-                              0,
-                              0,
-                              0,
-                            ),
-                            hintText: priceFormatForPaidAmount(
-                                    double.parse(paidAmount == 0
-                                        ? '0.00'
-                                        : paidAmountWithAmountPayed
-                                            .toStringAsFixed(2)),
-                                    selectedCoin)
-                                .toString(),
-                            hintStyle: TextStyle(
-                              fontFamily: 'Poppins-regular',
-                              fontSize: 14,
-                              color: myTheme.colorScheme.primary,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
+                        ),
+                        items: items
+                            .map((item) => DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Text(
+                                    item,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: myTheme.colorScheme.primary,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ))
+                            .toList(),
+                        value: selectedValueA,
+                        onChanged: (value) {
+                          setState(
+                            () {
+                              selectedValueA = value as String;
+                            },
+                          );
+                          print(selectedValueA);
+                        },
+                        icon: const Icon(
+                          Icons.arrow_forward_ios_outlined,
+                        ),
+                        iconSize: 11,
+                        iconEnabledColor:
+                            myTheme.colorScheme.primary.withOpacity(0.5),
+                        iconDisabledColor: Colors.grey,
+                        buttonHeight: 50,
+                        // buttonWidth: 200,
+                        buttonPadding:
+                            const EdgeInsets.only(left: 14, right: 14),
+                        buttonDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(
+                            color: myTheme.colorScheme.primary.withOpacity(0.3),
+                          ),
+                          color: Colors.white,
+                        ),
+                        buttonElevation: 0,
+                        itemHeight: 40,
+                        itemPadding: const EdgeInsets.only(left: 14, right: 14),
+                        dropdownMaxHeight: 300,
+                        dropdownWidth: 200,
+                        dropdownPadding: null,
+                        dropdownDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white,
+                        ),
+                        dropdownElevation: 8,
+                        scrollbarRadius: const Radius.circular(10),
+                        scrollbarThickness: 6,
+                        scrollbarAlwaysShow: true,
+                        offset: const Offset(60, 0),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton2(
+                        isExpanded: true,
+                        // ignore: prefer_const_literals_to_create_immutables
+                        hint: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                selectedCoin ?? 'Seleccione moneda',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: myTheme.colorScheme.primary
+                                      .withOpacity(0.3),
+                                ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                            counterText: '',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
+                          ],
+                        ),
+                        items: itemsCoin
+                            .map((item) => DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Text(
+                                    item,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: myTheme.colorScheme.primary,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ))
+                            .toList(),
+                        value: selectedCoin,
+                        onChanged: (value) {
+                          setState(
+                            () {
+                              selectedCoin = value as String;
+                            },
+                          );
+                        },
+                        icon: const Icon(
+                          Icons.arrow_forward_ios_outlined,
+                        ),
+                        iconSize: 11,
+                        iconEnabledColor:
+                            myTheme.colorScheme.primary.withOpacity(0.5),
+                        iconDisabledColor: Colors.grey,
+                        buttonHeight: 50,
+                        // buttonWidth: 200,
+                        buttonPadding:
+                            const EdgeInsets.only(left: 14, right: 14),
+                        buttonDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(
+                            color: myTheme.colorScheme.primary.withOpacity(0.3),
+                          ),
+                          color: Colors.white,
+                        ),
+                        buttonElevation: 0,
+                        itemHeight: 40,
+                        itemPadding: const EdgeInsets.only(left: 14, right: 14),
+                        dropdownMaxHeight: 200,
+                        dropdownWidth: 200,
+                        dropdownPadding: null,
+                        dropdownDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white,
+                        ),
+                        dropdownElevation: 8,
+                        scrollbarRadius: const Radius.circular(10),
+                        scrollbarThickness: 6,
+                        scrollbarAlwaysShow: true,
+                        offset: const Offset(60, 0),
+                      ),
+                    ),
+                  ),
+
+                  // Fecha del registro del pago
+                  Text(
+                    AppLocalizations.of(context)!.date,
+                    style: TextStyle(
+                      fontFamily: 'Poppins-regular',
+                      color: myTheme.colorScheme.primary,
+                      fontSize: 14,
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                    padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: myTheme.colorScheme.primary.withOpacity(0.3),
+                      ),
+                    ),
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          formattedDate,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: myTheme.colorScheme.primary.withOpacity(0.7),
+                          ),
+                        ),
+                        Container(
+                          height: 30,
+                          width: 30,
+                          margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                          child: IconButton(
+                            onPressed: () async {
+                              if (selectedValueA?.contains('Tarjeta') == true) {
+                                return;
+                              }
+                              DateTime? newDate = await showDatePicker(
+                                context: context,
+                                initialDate: today,
+                                firstDate: DateTime.now(),
+                                lastDate: DateTime(2500),
+                              );
+                              if (newDate == null) {
+                                return;
+                              }
+                              setState(() {
+                                today = newDate;
+                                formattedDate = dateFormatter.format(today);
+                              });
+                            },
+                            splashRadius: 5,
+                            icon: Icon(
+                              Icons.calendar_month,
+                              color: myTheme.colorScheme.primary,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Monto Pagado
+                  selectedCoin != null
+                      ? Container()
+                      : Column(
+                          children: [
+                            if (amountPayed > 0)
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          'Saldo',
+                                          style: TextStyle(
+                                            color: myTheme
+                                                .colorScheme.onPrimaryContainer,
+                                            fontFamily: 'Poppins-regular',
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          'Monto Pagado',
+                                          style: TextStyle(
+                                            color: myTheme
+                                                .colorScheme.onPrimaryContainer,
+                                            fontFamily: 'Poppins-regular',
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        margin:
+                                            const EdgeInsets.only(bottom: 5),
+                                        alignment: Alignment.centerRight,
+                                        child: Text(
+                                          '${priceFormat(priceFormatForPaidAmount(remaining, selectedCoin))}',
+                                          style: TextStyle(
+                                            color: myTheme
+                                                .colorScheme.onPrimaryContainer,
+                                            fontFamily: 'Poppins-regular',
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        margin:
+                                            const EdgeInsets.only(bottom: 5),
+                                        alignment: Alignment.centerRight,
+                                        child: Text(
+                                          priceFormat(paymentsTotalAmount),
+                                          style: TextStyle(
+                                            color: myTheme
+                                                .colorScheme.onPrimaryContainer,
+                                            fontFamily: 'Poppins-regular',
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              )
+                          ],
+                        ),
+                  selectedCoin == null
+                      ? Container()
+                      : Text(
+                          '${AppLocalizations.of(context)!.amount}*',
+                          style: TextStyle(
+                            fontFamily: 'Poppins-regular',
+                            color: myTheme.colorScheme.primary,
+                            fontSize: 14,
+                          ),
+                        ),
+
+                  selectedCoin == null
+                      ? Container()
+                      : Container(
+                          margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                          height: 50,
+                          // width: 200,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color:
+                                  myTheme.colorScheme.primary.withOpacity(0.3),
+                              // color: Colors.transparent,
+                            ),
+                          ),
+                          child: TextField(
+                            onChanged: (value) {
+                              // VERIFICAR SI SE VUELVE NULLABLE
+                              if (value.isEmpty) {
+                                setState(() {
+                                  amountToPay = 0;
+                                  print(amountToPay);
+                                });
+                              } else {
+                                setState(() {
+                                  amountToPay = double.parse(value);
+                                  print(amountToPay);
+                                });
+                              }
+                            },
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'Poppins-regular',
+                              color: myTheme.colorScheme.primary,
+                            ),
+                            //TODO:
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.allow(
+                                RegExp(r'[0-9]+[,.]{0,1}[0-9]*'),
+                              ),
+                              TextInputFormatter.withFunction(
+                                (oldValue, newValue) => newValue.copyWith(
+                                  text: newValue.text.replaceAll(',', '.'),
+                                ),
+                              ),
+                            ],
+                            keyboardType: TextInputType.phone,
+
+                            maxLines: 1,
+                            maxLength: 50,
+                            textCapitalization: TextCapitalization.characters,
+
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.fromLTRB(
+                                14,
+                                0,
+                                0,
+                                0,
+                              ),
+                              hintText: priceFormatForPaidAmount(
+                                      double.parse(remaining == 0
+                                          ? '0.00'
+                                          : remaining.toStringAsFixed(2)),
+                                      selectedCoin)
+                                  .toString(),
+                              hintStyle: TextStyle(
+                                fontFamily: 'Poppins-regular',
+                                fontSize: 14,
+                                color: myTheme.colorScheme.primary,
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5),
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                ),
+                              ),
+                              counterText: '',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5),
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                selectedCoin != null
-                    ? selectedValueA != null
-                        ? Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                margin: const EdgeInsets.fromLTRB(
-                                  50,
-                                  10,
-                                  50,
-                                  0,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Subtotal:',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins-regular',
-                                        color: myTheme.colorScheme.primary,
-                                        fontSize: 10,
+                  selectedCoin != null
+                      ? selectedValueA != null
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  margin: const EdgeInsets.fromLTRB(
+                                    50,
+                                    10,
+                                    50,
+                                    0,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Subtotal:',
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins-regular',
+                                          color: myTheme.colorScheme.primary,
+                                          fontSize: 10,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      priceFormatForPaidAmount(
-                                              widget.subTotal, selectedCoin)
-                                          .toString(),
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins-regular',
-                                        color: myTheme.colorScheme.primary,
-                                        fontSize: 10,
+                                      Text(
+                                        priceFormatForPaidAmount(
+                                                widget.subTotal, selectedCoin)
+                                            .toString(),
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins-regular',
+                                          color: myTheme.colorScheme.primary,
+                                          fontSize: 10,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.fromLTRB(
-                                  50,
-                                  0,
-                                  50,
-                                  0,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Descuento Aplicado (${widget.discountPercentage}%):',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins-regular',
-                                        color: myTheme.colorScheme.primary,
-                                        fontSize: 10,
+                                Container(
+                                  margin: const EdgeInsets.fromLTRB(
+                                    50,
+                                    0,
+                                    50,
+                                    0,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Descuento Aplicado (${widget.discountPercentage}%):',
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins-regular',
+                                          color: myTheme.colorScheme.primary,
+                                          fontSize: 10,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      '${priceFormatForPaidAmount(widget.discount, selectedCoin).toString()}',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins-regular',
-                                        color: myTheme.colorScheme.primary,
-                                        fontSize: 10,
+                                      Text(
+                                        '${priceFormatForPaidAmount(widget.discount, selectedCoin).toString()}',
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins-regular',
+                                          color: myTheme.colorScheme.primary,
+                                          fontSize: 10,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.fromLTRB(
-                                  50,
-                                  0,
-                                  50,
-                                  0,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'IVA (${widget.percentageTax}%):',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins-regular',
-                                        color: myTheme.colorScheme.primary,
-                                        fontSize: 10,
+                                Container(
+                                  margin: const EdgeInsets.fromLTRB(
+                                    50,
+                                    0,
+                                    50,
+                                    0,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'IVA (${widget.percentageTax}%):',
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins-regular',
+                                          color: myTheme.colorScheme.primary,
+                                          fontSize: 10,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      '${priceFormatForPaidAmount(widget.tax, selectedCoin).toString()}',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins-regular',
-                                        color: myTheme.colorScheme.primary,
-                                        fontSize: 10,
+                                      Text(
+                                        '${priceFormatForPaidAmount(widget.tax, selectedCoin).toString()}',
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins-regular',
+                                          color: myTheme.colorScheme.primary,
+                                          fontSize: 10,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.fromLTRB(
-                                  50,
-                                  10,
-                                  50,
-                                  0,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      // Aqui va widget.InvoiceTotal pero hay
-                                      // que consultar si primero se va a
-                                      // pagar completo o por partes aca
-                                      'Total:',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins-regular',
-                                        color: myTheme.colorScheme.primary,
-                                        fontSize: 10,
+                                Container(
+                                  margin: const EdgeInsets.fromLTRB(
+                                    50,
+                                    10,
+                                    50,
+                                    0,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        // Aqui va widget.InvoiceTotal pero hay
+                                        // que consultar si primero se va a
+                                        // pagar completo o por partes aca
+                                        'Total:',
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins-regular',
+                                          color: myTheme.colorScheme.primary,
+                                          fontSize: 10,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      // Aqui va widget.InvoiceTotal pero hay
-                                      // que consultar si primero se va a
-                                      // pagar completo o por partes aca
-                                      '${priceFormatForPaidAmount(widget.remaining, selectedCoin).toString()}',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins-regular',
-                                        color: myTheme.colorScheme.primary,
-                                        fontSize: 10,
+                                      Text(
+                                        // Aqui va widget.InvoiceTotal pero hay
+                                        // que consultar si primero se va a
+                                        // pagar completo o por partes aca
+                                        '${priceFormatForPaidAmount(widget.subTotal + widget.tax - widget.discount, selectedCoin).toString()}',
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins-regular',
+                                          color: myTheme.colorScheme.primary,
+                                          fontSize: 10,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              if (amountPayed > 0)
+                                if (amountPayed > 0)
+                                  Container(
+                                    margin: const EdgeInsets.fromLTRB(
+                                      50,
+                                      10,
+                                      50,
+                                      0,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(2), selectedCoin)}',
+                                          'Monto pagado:',
+                                          style: TextStyle(
+                                            fontFamily: 'Poppins-regular',
+                                            color: myTheme
+                                                .colorScheme.onPrimaryContainer,
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                        Text(
+                                          // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(2), selectedCoin)}',
+                                          priceFormat(paymentsTotalAmount),
+                                          style: TextStyle(
+                                            fontFamily: 'Poppins-regular',
+                                            color: myTheme
+                                                .colorScheme.onPrimaryContainer,
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                SizedBox(height: 5),
                                 Container(
                                   margin: const EdgeInsets.fromLTRB(
                                     50,
@@ -810,7 +867,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                     children: [
                                       Text(
                                         // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(2), selectedCoin)}',
-                                        'Monto pagado:',
+                                        'Saldo:',
                                         style: TextStyle(
                                           fontFamily: 'Poppins-regular',
                                           color: myTheme
@@ -820,7 +877,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                       ),
                                       Text(
                                         // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(2), selectedCoin)}',
-                                        '${priceFormat(amountPayedFromPays)}',
+                                        '${priceFormatForPaidAmount(remaining, selectedCoin)}',
                                         style: TextStyle(
                                           fontFamily: 'Poppins-regular',
                                           color: myTheme
@@ -831,82 +888,46 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                     ],
                                   ),
                                 ),
-                              SizedBox(height: 5),
-                              Container(
-                                margin: const EdgeInsets.fromLTRB(
-                                  50,
-                                  10,
-                                  50,
-                                  0,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(2), selectedCoin)}',
-                                      'Saldo:',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins-regular',
-                                        color: myTheme
-                                            .colorScheme.onPrimaryContainer,
-                                        fontSize: 10,
-                                      ),
-                                    ),
-                                    Text(
-                                      // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(2), selectedCoin)}',
-                                      '${priceFormatForPaidAmount(paidAmountWithAmountPayed, selectedCoin)}',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins-regular',
-                                        color: myTheme
-                                            .colorScheme.onPrimaryContainer,
-                                        fontSize: 10,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                                child: identifyPaymentMethod(
-                                  selectedValueA,
-                                  widget.client,
-                                  widget.invoiceDocumentID,
-                                  paidAmount,
-                                  // Aqui va widget.InvoiceTotal pero hay
-                                  // que consultar si primero se va a
-                                  // pagar completo o por partes aca
-                                  paidAmountWithAmountPayed,
-                                  today,
-                                  context,
-                                  paidAmountWithAmountPayed,
-                                  selectedCoin,
-                                  updatePayed: updatePayed,
-                                  paymentBody: AddPaymentBodyAtt(
-                                      client: widget.client,
-                                      discount: widget.discount,
-                                      discountPercentage:
-                                          widget.discountPercentage,
-                                      invoiceDocumentID:
-                                          widget.invoiceDocumentID,
-                                      percentageTax: widget.percentageTax,
-                                      remaining: paidAmountWithAmountPayed,
-                                      subTotal: widget.subTotal,
-                                      tax: widget.tax,
-                                      invoiceNumber: widget.invoiceNumber,
-                                      currency: selectedCoin!)
-                                    ..payments = widget.payments,
-                                ),
-                              )
-                            ],
-                          )
-                        : Container()
-                    : Container(),
-              ],
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                                  child: identifyPaymentMethod(
+                                    selectedValueA,
+                                    widget.client,
+                                    widget.invoiceDocumentID,
+                                    amountToPay,
+                                    getTotalAmount,
+                                    today,
+                                    context,
+                                    double.parse(
+                                        widget.remaining.toStringAsFixed(2)),
+                                    selectedCoin,
+                                    updatePayed: updatePayed,
+                                    paymentBody: AddPaymentBodyAtt(
+                                        client: widget.client,
+                                        discount: widget.discount,
+                                        discountPercentage:
+                                            widget.discountPercentage,
+                                        invoiceDocumentID:
+                                            widget.invoiceDocumentID,
+                                        percentageTax: widget.percentageTax,
+                                        remaining: widget.remaining,
+                                        subTotal: widget.subTotal,
+                                        tax: widget.tax,
+                                        invoiceNumber: widget.invoiceNumber,
+                                        currency: selectedCoin!)
+                                      ..payments = widget.payments,
+                                  ),
+                                )
+                              ],
+                            )
+                          : Container()
+                      : Container(),
+                ],
+              ),
             ),
           ),
-        ),
-      ]),
+        ]),
+      ),
     );
   }
 }
