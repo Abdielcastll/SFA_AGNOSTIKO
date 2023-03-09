@@ -112,7 +112,10 @@ class AddPaymentBody extends StatefulWidget {
 class _AddPaymentBodyState extends State<AddPaymentBody> {
   late double paidAmount = widget.remaining;
   double amountPayed = 0;
-  late double paidAmountWithAmountPayed = paidAmount - amountPayed;
+  late double paidAmountWithAmountPayed = paidAmount - amountPayedFromPays;
+
+  double get amountPayedFromPays => widget.payments.fold<double>(
+      0.0, (previousValue, element) => previousValue + element.amount);
 
   var dateFormatter = DateFormat('dd-MM-yyyy');
   DateTime today = DateTime.now();
@@ -818,7 +821,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                       ),
                                       Text(
                                         // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(2), selectedCoin)}',
-                                        '${priceFormat(amountPayed)}',
+                                        '${priceFormat(amountPayedFromPays)}',
                                         style: TextStyle(
                                           fontFamily: 'Poppins-regular',
                                           color: myTheme
@@ -877,8 +880,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                   paidAmountWithAmountPayed,
                                   today,
                                   context,
-                                  double.parse(
-                                      widget.remaining.toStringAsFixed(2)),
+                                  paidAmountWithAmountPayed,
                                   selectedCoin,
                                   updatePayed: updatePayed,
                                   paymentBody: AddPaymentBodyAtt(
@@ -889,7 +891,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                       invoiceDocumentID:
                                           widget.invoiceDocumentID,
                                       percentageTax: widget.percentageTax,
-                                      remaining: widget.remaining,
+                                      remaining: paidAmountWithAmountPayed,
                                       subTotal: widget.subTotal,
                                       tax: widget.tax,
                                       invoiceNumber: widget.invoiceNumber,

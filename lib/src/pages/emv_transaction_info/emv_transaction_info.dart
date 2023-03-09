@@ -40,8 +40,20 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
 
   EmvTransactionResult? transactionResult;
 
+  getEmvTags() async {
+    final emvModule = EmvModule.instance;
+    print('EMV TAGS');
+
+    final tag5A = await emvModule.getTagValue(0x5A);
+    final tag5F34 = await emvModule.getTagValue(0x5F34);
+    print(tag5F34?.toHexStr());
+    print(tag5A?.toHexStr());
+  }
+
   @override
   Widget build(BuildContext context) {
+    getEmvTags();
+
     String approvedStr = AppLocalizations.of(context)!.approved.toUpperCase();
     String declinedStr = AppLocalizations.of(context)!.declined.toUpperCase();
     String failedStr = AppLocalizations.of(context)!.failed.toUpperCase();
@@ -113,8 +125,8 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
         }),
         child: Scaffold(
           appBar: AppBar(
-            title: Text(AppLocalizations.of(context)!.emvTransactionInfo),
-          ),
+              title: Text(AppLocalizations.of(context)!.emvTransactionInfo),
+              automaticallyImplyLeading: false),
           body: ListView(
             children: [
               const Text(''),
@@ -139,19 +151,33 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                     height: 50,
                     width: 120,
                     child: SvgPicture.asset(
-                      infoTags?.cardNo?.toHexStr().substring(0, 1) == '5'
+                      infoTags?.cardNo?.toHexStr().substring(0, 1) == '5' ||
+                              transactionArgs?.transactionInfo?.kernelType ==
+                                  ContactlessKernelType.PayPass
                           ? 'assets/images/mastercard.svg'
                           : 'assets/images/visa.svg',
                       fit: BoxFit.contain,
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      '''${infoTags?.cardNo?.toHexStr().substring(0, 1) == '5' ? 'Mastercard' : 'Visa'} **** ${infoTags?.cardNo?.toHexStr().substring(12) ?? '-'}''',
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
+                      padding: const EdgeInsets.all(8.0),
+                      child: infoTags?.cardNo != null &&
+                              transactionArgs?.transactionInfo?.isContactless !=
+                                  true
+                          ? Text(
+                              '''${infoTags?.cardNo?.toHexStr().substring(0, 1) == '5' || transactionArgs?.transactionInfo?.kernelType == ContactlessKernelType.PayPass ? 'Mastercard' : 'Visa'} **** ${infoTags?.cardNo?.toHexStr().substring(12) ?? '-'}''',
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            )
+                          : Container(
+                              margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                              height: 50,
+                              width: 120,
+                              child: Image.asset(
+                                'assets/images/contactless.jpeg',
+                                fit: BoxFit.contain,
+                              ),
+                            )),
                 ],
               ),
               const Divider(),
@@ -177,7 +203,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                 subtitle: Text(_amountOtherString),
                 onTap: () {},
               ),
-              if (_kernelTypeStr != null)
+              /* if (_kernelTypeStr != null)
                 ListTile(
                   enableFeedback: true,
                   title: const Text('Kernel Type'),
@@ -234,7 +260,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                 title: const Text('ATC (9F36)'),
                 subtitle: Text(infoTags?.atc?.toHexStr().toUpperCase() ?? '-'),
                 onTap: () {},
-              ),
+              ), */
               Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
@@ -281,17 +307,26 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
 
                       print('EMV INFO PAYMENTS');
                       print(paymentBody.payments.length);
+                      print(paymentBody.remaining);
+
+                      final totalPayed = paymentBody.payments.fold<double>(
+                          0.0,
+                          (previousValue, element) =>
+                              previousValue + element.amount);
+
+                      final totalInvoice = paymentBody.subTotal +
+                          paymentBody.tax -
+                          paymentBody.discount;
 
                       if (transactionResult == EmvTransactionResult.Approved &&
-                          payed >= transactionArgs!.invoice!.remaining) {
+                          totalPayed >= totalInvoice) {
                         final date = transactionArgs!.invoice!.date;
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             builder: (BuildContext context) => CompletedPayPage(
                                 client: transactionArgs!.invoice!.client,
-                                total:
-                                    transactionArgs!.invoice!.totalOfTheOrder,
+                                total: totalPayed,
                                 method: "Tarjeta",
                                 date:
                                     '${date.day}-${date.month}-${date.year} ${date.hour}:${date.minute}',
@@ -381,6 +416,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   void printTicket() async {
     final emv = EmvModule.instance;
 
+    final paymentBody = (ModalRoute.of(context)?.settings.arguments! as List)[2]
+        as AddPaymentBodyAtt;
+
     List<PrinterObject> listOfTextLine = [];
     final terminalParameters = await loadTerminalParameters();
 
@@ -467,12 +505,15 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     listOfTextLine.add(PrinterText.emptyLine(16));
 
     listOfTextLine.add(
-      PrinterText(
-          "Venta #${transactionArgs?.invoice?.invoiceDocumentID ?? '-'}"
-              .toUpperCase(),
+      PrinterText("Venta #${paymentBody.invoiceNumber}".toUpperCase(),
           format: TextFormat(fontSize: 16, fontFamily: regularFont),
           alignment: TextAlignment.Center),
     );
+    listOfTextLine.add(PrinterText(
+        transactionResult == EmvTransactionResult.Approved
+            ? 'PAGO APROBADO'
+            : 'PAGO RECHAZADO',
+        format: TextFormat(fontSize: 16, fontFamily: regularFont)));
     listOfTextLine.add(PrinterSplitText(
         "Total M.N.".toUpperCase(), _amountString,
         format: TextFormat(fontSize: 16, fontFamily: regularFont)));

@@ -430,7 +430,7 @@
     "referenceNumber": "Nro de Referencia",
 
 
-  "emvTransactionInfo": "Info de Transacción EMV",
+  "emvTransactionInfo": "Info de Transacción",
   "transaction": "Transacción",
   "approved": "Aprobada",
   "declined": "Rechazada",

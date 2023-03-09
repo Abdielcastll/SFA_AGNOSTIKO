@@ -1306,10 +1306,16 @@ identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
                             Navigator.pop(context);
 
                             paymentBody?.payments
-                                .add(PayMethod('Efectivo', paidAmount));
+                                .add(PayMethod('Efectivo', totalOfTheOrder));
 
                             print('IDENTIFY PAYMENTS');
                             print(paymentBody?.payments.length);
+
+                            final totalPayed = paymentBody?.payments
+                                .fold<double>(
+                                    0.0,
+                                    (previousValue, element) =>
+                                        previousValue + element.amount);
 
                             if (paidAmount < remaining && paymentBody != null) {
                               Navigator.pushReplacement(
@@ -1346,7 +1352,7 @@ identifyPaymentMethod(String? selectedValueA, Client client, invoiceDocumentID,
                                   builder: (BuildContext context) =>
                                       CompletedPayPage(
                                           client: client.name,
-                                          total: totalOfTheOrder,
+                                          total: totalPayed ?? totalOfTheOrder,
                                           method: "Efectivo",
                                           date:
                                               '${date.day}-${date.month}-${date.year} ${(date as DateTime).hour}:${(date).minute}',

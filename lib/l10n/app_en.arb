@@ -156,7 +156,7 @@
 
 
 
-  "emvTransactionInfo": "EMV Transaction Info",
+  "emvTransactionInfo": "Transaction Info",
   "transaction": "Transaction",
   "approved": "Approved",
   "declined": "Declined",
