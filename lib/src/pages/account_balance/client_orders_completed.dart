@@ -1,16 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/order_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/order_card.dart';
+import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class ClientOrdersCompleted extends StatefulWidget {
-  const ClientOrdersCompleted({super.key});
+  ClientOrdersCompleted({
+    super.key,
+    this.controller,
+  });
+
+  ScrollController? controller;
 
   @override
   State<ClientOrdersCompleted> createState() => _ClientOrdersCompletedState();
@@ -20,6 +27,7 @@ class _ClientOrdersCompletedState extends State<ClientOrdersCompleted> {
   bool isDescending = false;
   DateTime today = DateTime.now();
   var dateFormatter = DateFormat('dd-MM-yyyy');
+
   @override
   Widget build(BuildContext context) {
     final orders = Provider.of<List<Orders>?>(context) ?? [];
@@ -81,6 +89,7 @@ class _ClientOrdersCompletedState extends State<ClientOrdersCompleted> {
                 child: SizedBox(
                   height: MediaQuery.of(context).size.height * 0.65,
                   child: ListView.builder(
+                    controller: widget.controller,
                     physics: const BouncingScrollPhysics(),
                     itemCount: ordersCompleted.length,
                     itemBuilder: (BuildContext context, int index) {

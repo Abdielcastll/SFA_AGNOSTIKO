@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/examples/example_invoices_list.dart';
 import 'package:pwa_sales2go_flutter/src/models/account_balance_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/credit_on_process.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/filter_invoices.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/invoice_completed.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/invoices_on_process.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
+import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/loading/loading_widget.dart';
@@ -26,6 +28,9 @@ class _InvoicesPageState extends State<InvoicesPage> {
 
   @override
   Widget build(BuildContext context) {
+    final userUid = Provider.of<CurrentUserInfo?>(context)?.uid ?? {};
+    final userDoc = usersCollection.doc(userUid);
+    print(userDoc);
     final currentDay =
         Provider.of<CounterLimitFirestore?>(context)?.currentDayInvoice;
     final currentDayDateTime = currentDay!.toDate();
@@ -47,6 +52,7 @@ class _InvoicesPageState extends State<InvoicesPage> {
                   ))
               ? FirebaseFirestore.instance
                   .collectionGroup('facturas')
+                  .where('vendedor', isEqualTo: userDoc)
                   .where('fecha', isGreaterThanOrEqualTo: currentDay)
                   .where('fecha', isLessThan: tomorrow)
                   .orderBy('fecha', descending: true)
@@ -54,6 +60,7 @@ class _InvoicesPageState extends State<InvoicesPage> {
                   .map(accountInvoicesFromSnapshot)
               : FirebaseFirestore.instance
                   .collectionGroup('facturas')
+                  .where('vendedor', isEqualTo: userDoc)
                   // .where('fecha', isGreaterThanOrEqualTo: currentDay)
                   // .where('fecha', isLessThan: tomorrow)
                   .orderBy('fecha', descending: true)
@@ -61,6 +68,7 @@ class _InvoicesPageState extends State<InvoicesPage> {
                   .map(accountInvoicesFromSnapshot),
           initialData: const [],
           catchError: (context, error) {
+            print(error);
             return;
           },
         )

@@ -29,6 +29,7 @@ class OrderPage extends StatelessWidget {
     final currentClientForTheOrder =
         Provider.of<OrderProvider>(context).clientForTheOrder;
     final user = Provider.of<CurrentUserInfo?>(context, listen: true);
+    final double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
@@ -52,12 +53,15 @@ class OrderPage extends StatelessWidget {
             //   return NavigationPages();
             // });
             child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  SelectedClient(
-                      client: currentClientForTheOrder, isEditable: true),
-                  SelectedProducts(client: currentClientForTheOrder),
-                ],
+              child: Container(
+                // color: Colors.red,
+                child: Column(
+                  children: [
+                    SelectedClient(
+                        client: currentClientForTheOrder, isEditable: true),
+                    SelectedProducts(client: currentClientForTheOrder),
+                  ],
+                ),
               ),
             )),
       ),

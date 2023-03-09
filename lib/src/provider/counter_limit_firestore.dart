@@ -8,6 +8,10 @@ class CounterLimitFirestore extends ChangeNotifier {
   int _scrollProductLimit = 10;
   int _clientsLimit = 10;
   int _scrollClientLimit = 10;
+  int _scrollBalance = 10;
+  int _scrollBalanceLimit = 10;
+  int _orderBalanceLimit = 20;
+  int _scrollOrderBalanceLimit = 20;
   Timestamp _selectedDayVisits = Timestamp.fromDate(DateTime(
     DateTime.now().year,
     DateTime.now().month,
@@ -43,9 +47,58 @@ class CounterLimitFirestore extends ChangeNotifier {
   int get getScrollProductLimit => _scrollProductLimit;
   int get getClientsLimit => _clientsLimit;
   int get getScrollClientLimit => _scrollClientLimit;
+  int get getScrollBalance => _scrollBalance;
+  int get getScrollBalanceLimit => _scrollBalanceLimit;
+  int get getScrollOrderBalance => _orderBalanceLimit;
+  int get getScrollOrderBalanceLimit => _scrollOrderBalanceLimit;
+
   Timestamp get currentDayVisits => _selectedDayVisits;
   Timestamp get currentDayOrder => _selectedDayOrder;
   Timestamp? get currentDayInvoice => _selectedDayInvoice;
+
+  void setOrderBalanceLimit(int? newLimit, int? newScrollLimit) {
+    if (newLimit != null) {
+      try {
+        _orderBalanceLimit = newLimit;
+        if (newScrollLimit != null && newScrollLimit != 0) {
+          _scrollOrderBalanceLimit = newScrollLimit;
+        } else if (newScrollLimit != null && newScrollLimit == 0) {
+          _scrollOrderBalanceLimit = 0;
+        }
+        notifyListeners();
+      } catch (e) {
+        Fluttertoast.showToast(
+            msg: 'Error al cambiar la cantidad de clientes a mostrar');
+        print(e);
+      }
+    } else if (newLimit == null) {
+      _orderBalanceLimit = 10;
+      _scrollOrderBalanceLimit = 10;
+      notifyListeners();
+    }
+  }
+
+  void setBalanceLimit(int? newLimit, int? newScrollLimit) {
+    if (newLimit != null) {
+      try {
+        _scrollBalance = newLimit;
+        if (newScrollLimit != null && newScrollLimit != 0) {
+          _scrollBalanceLimit = newScrollLimit;
+        } else if (newScrollLimit != null && newScrollLimit == 0) {
+          _scrollBalanceLimit = 0;
+        }
+        notifyListeners();
+      } catch (e) {
+        Fluttertoast.showToast(
+            msg: 'Error al cambiar la cantidad de clientes a mostrar');
+        print(e);
+      }
+    } else if (newLimit == null) {
+      _scrollBalance = 10;
+      _scrollBalanceLimit = 10;
+      notifyListeners();
+    }
+  }
 
   void setClientsLimit(int? newLimit, int? newScrollLimit) {
     if (newLimit != null) {

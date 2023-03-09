@@ -31,8 +31,8 @@ class _OrdersPageState extends State<OrdersPage> {
 
   @override
   Widget build(BuildContext context) {
-    // final userUid = Provider.of<CurrentUserInfo?>(context)?.uid ?? {};
-    // final userDoc = usersCollection.doc(userUid);
+    final userUid = Provider.of<CurrentUserInfo?>(context)?.uid ?? {};
+    final userDoc = usersCollection.doc(userUid);
     // print(userDoc);
     final currentDay =
         Provider.of<CounterLimitFirestore>(context).currentDayOrder;
@@ -56,7 +56,7 @@ class _OrdersPageState extends State<OrdersPage> {
                   ))
               ? FirebaseFirestore.instance
                   .collectionGroup('pedidos')
-                  // .where('vendedor', isEqualTo: userDoc)
+                  .where('vendedor', isEqualTo: userDoc)
                   .where('fecha', isGreaterThanOrEqualTo: currentDay)
                   .where('fecha', isLessThan: tomorrow)
                   .orderBy('fecha')
@@ -64,7 +64,7 @@ class _OrdersPageState extends State<OrdersPage> {
                   .map(ordersFromSnapshot)
               : FirebaseFirestore.instance
                   .collectionGroup('pedidos')
-                  // .where('vendedor', isEqualTo: userDoc)
+                  .where('vendedor', isEqualTo: userDoc)
                   // .where('fecha', isGreaterThanOrEqualTo: currentDay)
                   // .where('fecha', isLessThan: tomorrow)
                   .orderBy('fecha')

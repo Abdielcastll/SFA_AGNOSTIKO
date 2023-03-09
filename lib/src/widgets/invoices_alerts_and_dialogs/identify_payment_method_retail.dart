@@ -732,26 +732,28 @@ identifyPaymentMethodRetail({
                                                                             .icon(
                                                                       onPressed:
                                                                           () {
-                                                                        Navigator
-                                                                            .pushReplacement(
-                                                                          context,
-                                                                          MaterialPageRoute(
-                                                                              settings: const RouteSettings(name: 'PAGO-DIRECTO'),
-                                                                              builder: (BuildContext context) => AddPaymentPage(
-                                                                                    remaining: paymentBody.remaining,
-                                                                                    subTotal: paymentBody.subTotal,
-                                                                                    discountPercentage: paymentBody.discountPercentage,
-                                                                                    discount: paymentBody.discount,
-                                                                                    tax: paymentBody.tax,
-                                                                                    percentageTax: paymentBody.percentageTax,
-                                                                                    client: paymentBody.client,
-                                                                                    invoiceDocumentID: paymentBody.invoiceDocumentID,
-                                                                                    invoiceNumber: paymentBody.invoiceNumber,
-                                                                                    amountPayed: (paymentBody.amountPaied ?? 0) + paidAmount!,
-                                                                                    payments: paymentBody.payments,
-                                                                                    // updatePayed: updatePayed,
-                                                                                  )),
-                                                                        );
+                                                                        print(
+                                                                            'paymentBody.payments:${paymentBody.payments}');
+                                                                        // Navigator
+                                                                        //     .pushReplacement(
+                                                                        //   context,
+                                                                        //   MaterialPageRoute(
+                                                                        //       settings: const RouteSettings(name: 'PAGO-DIRECTO'),
+                                                                        //       builder: (BuildContext context) => AddPaymentPage(
+                                                                        //             remaining: paymentBody.remaining,
+                                                                        //             subTotal: paymentBody.subTotal,
+                                                                        //             discountPercentage: paymentBody.discountPercentage,
+                                                                        //             discount: paymentBody.discount,
+                                                                        //             tax: paymentBody.tax,
+                                                                        //             percentageTax: paymentBody.percentageTax,
+                                                                        //             client: paymentBody.client,
+                                                                        //             invoiceDocumentID: paymentBody.invoiceDocumentID,
+                                                                        //             invoiceNumber: paymentBody.invoiceNumber,
+                                                                        //             amountPayed: (paymentBody.amountPaied ?? 0) + paidAmount!,
+                                                                        //             payments: paymentBody.payments,
+                                                                        //             // updatePayed: updatePayed,
+                                                                        //           )),
+                                                                        // );
                                                                         // Navigator.pop(
                                                                         //     context);
                                                                       },
@@ -2014,7 +2016,12 @@ identifyPaymentMethodRetail({
                                       remaining: remaining,
                                     );
                                     // Navigator.pop(context);
-
+                                    double? totalPayments = 0;
+                                    paymentBody?.payments.forEach((payment) {
+                                      totalPayments =
+                                          totalPayments! + payment.amount;
+                                    });
+                                    print(totalPayments);
                                     paymentBody?.payments.add(
                                         PayMethod('Efectivo', paidAmount!));
 
@@ -2204,6 +2211,8 @@ identifyPaymentMethodRetail({
                                                                   ElevatedButton
                                                                       .icon(
                                                                 onPressed: () {
+                                                                  print(
+                                                                      'paymentBody.payments:${paymentBody.payments}');
                                                                   Navigator
                                                                       .pushReplacement(
                                                                     context,

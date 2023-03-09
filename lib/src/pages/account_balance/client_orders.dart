@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/order_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/account_balance/client_orders_completed.dart';
 import 'package:pwa_sales2go_flutter/src/pages/account_balance/client_orders_onprocess,.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/orders/orders_page.dart';
+import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -21,10 +23,13 @@ class ClientOrders extends StatefulWidget {
 class _ClientOrdersState extends State<ClientOrders> {
   @override
   Widget build(BuildContext context) {
+    final scrollLimit =
+        Provider.of<CounterLimitFirestore>(context).getScrollOrderBalance;
     final document = clientsCollection
         .doc(widget.clientDocument)
         .collection('pedidos')
         .orderBy('fecha')
+        .limit(scrollLimit)
         .snapshots();
     return MultiProvider(
       providers: [
@@ -61,6 +66,46 @@ class ClientOrdersBody extends StatefulWidget {
 
 class _ClientOrdersBodyState extends State<ClientOrdersBody> {
   bool seeCompleted = false;
+  final _controller = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    // products = widget.listOfProducts;
+    _controller.addListener(() {
+      final productsLimitProvider =
+          Provider.of<CounterLimitFirestore>(context, listen: false);
+      if (_controller.position.atEdge) {
+        bool isTop = _controller.position.pixels == 0;
+        if (isTop) {
+          int newValor =
+              int.parse(productsLimitProvider.getScrollOrderBalance.toString());
+          print('Top balance page');
+          productsLimitProvider.setOrderBalanceLimit(30, 30);
+        } else {
+          if (productsLimitProvider.getScrollOrderBalanceLimit == 0) {
+            productsLimitProvider.setOrderBalanceLimit(0, 0);
+          } else {
+            int newValor = int.parse(
+                productsLimitProvider.getScrollOrderBalanceLimit.toString());
+            if (newValor == 30) {
+              productsLimitProvider.setOrderBalanceLimit(
+                  productsLimitProvider.getScrollOrderBalance + newValor, 30);
+            } else if (newValor == 50) {
+              productsLimitProvider.setOrderBalanceLimit(
+                  productsLimitProvider.getScrollOrderBalance + newValor, 50);
+            }
+          }
+          print('Bottom balance page');
+          Fluttertoast.showToast(
+            msg: 'Solicitando +10 pedidos',
+            backgroundColor: myTheme.colorScheme.primary,
+            textColor: Colors.white,
+          );
+        }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,8 +162,12 @@ class _ClientOrdersBodyState extends State<ClientOrdersBody> {
             ],
           ),
           seeCompleted == false
-              ? ClientsOrdersOnProcess()
-              : ClientOrdersCompleted(),
+              ? ClientsOrdersOnProcess(
+                  controller: _controller,
+                )
+              : ClientOrdersCompleted(
+                  controller: _controller,
+                ),
         ],
       ),
     );
