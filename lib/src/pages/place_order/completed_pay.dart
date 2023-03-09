@@ -9,6 +9,7 @@ import 'package:pwa_sales2go_flutter/src/models/transaction_args.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/invoicePrintLayout.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
+import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class CompletedPayPage extends StatelessWidget {

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -486,22 +488,33 @@ Future registerDebitCreditCardPayment(InvoiceData data) async {
 
 //Registrar pagos de cheques
 
-Future registerBankCheckPayment(
-  Client client,
-  invoiceDocumentID,
-  currency,
-  amount,
-  totalOfTheOrder,
-  currentCoin,
-  bank,
-  accountNumber,
-  accountHolder,
-  imageFile,
-  date,
-  remaining,
-) async {
-  print('/// Registrar cheque en factura: $invoiceDocumentID ///');
-
+Future registerBankCheckPayment({
+  Client? client,
+  String? invoiceDocumentID,
+  String? currency,
+  double? amount,
+  double? totalOfTheOrder,
+  String? currentCoin,
+  String? bank,
+  String? accountNumber,
+  String? accountHolder,
+  File? imageFile,
+  DateTime? date,
+  double? remaining,
+}) async {
+  // print('/// Registrar cheque en factura: $invoiceDocumentID ///');
+  print('client: $client');
+  print('invoiceDocumentID: $invoiceDocumentID');
+  print('currency: $currency');
+  print('amount: $amount');
+  print('totalOfTheOrder: $totalOfTheOrder');
+  print('currentCoin: $currentCoin');
+  print('bank: $bank');
+  print('accountNumber: $accountNumber');
+  print('accountHolder: $accountHolder');
+  print('imageFile: $imageFile');
+  print('date: $date');
+  print('remaining: $remaining');
   final Map<String, double> exchangeRate = {
     'BTC': 0.00011,
     'EUR': 0.89,
@@ -537,9 +550,9 @@ Future registerBankCheckPayment(
   const cancelled = false;
   final selectedCurrency = currency.toString();
   const concillied = false;
-  final timestampDate = Timestamp.fromDate(date);
+  final timestampDate = Timestamp.fromDate(date!);
   const method = 'Cheque';
-  final paidAmount = double.parse(amount);
+  final paidAmount = double.parse(amount.toString());
   final selectedBank =
       FirebaseFirestore.instance.collection('bancos').doc(banksDocumentsID);
   final account = accountNumber;
@@ -547,41 +560,14 @@ Future registerBankCheckPayment(
   const nroCN = 0;
   final selectedExchangedRate = selectedCoinExchangeRate;
 
-  print('Datos Recibidos: //////////////////////////////');
-  print('client: $client,');
-  print('invoiceDocumentID: $invoiceDocumentID,');
-  print('currency: $currency,');
-  print('amount: ${double.parse(amount)},');
-  print('totalOfTheOrder: $totalOfTheOrder,');
-  print('currentCoin: $currentCoin,');
-  print('bank: $bank,');
-  print('accountNumber: $accountNumber,');
-  print('accountHolder: $accountHolder,');
-  print('imageFile: $imageFile,');
-  print('date: $date,');
-  print('remaining: $remaining,');
-  print('Datos a registrar pago: ///////////////////////////');
-  print('cancelled: $cancelled');
-  print('selectedCurrency: $selectedCurrency');
-  print('concillied: $concillied');
-  print('timestampDate: $timestampDate');
-  print('method: $method');
-  print('paidAmount: $paidAmount');
-  print('selectedBank: $selectedBank');
-  print('account: $account');
-  print('holder: $holder');
-  print('nroCN: $nroCN');
-  print('selectedExchangedRate: $selectedExchangedRate');
-  print('remaining: $remaining //////////////////////////////////////////////');
-
   print('Se completo la factura??:');
-  print(remaining - paidAmount <= 0 ? 'Completado' : "Sigue pendiente");
+  print(remaining! - paidAmount <= 0 ? 'Completado' : "Sigue pendiente");
 
   if (paidAmount <= remaining) {
     try {
       return await FirebaseFirestore.instance
           .collection('clientes')
-          .doc(client.clientDocumentId)
+          .doc(client!.clientDocumentId)
           .collection('facturas')
           .doc(invoiceDocumentID)
           .update({
@@ -598,7 +584,7 @@ Future registerBankCheckPayment(
               'banco': FirebaseFirestore.instance
                   .collection('bancos')
                   .doc(banksDocumentsID),
-              'nroCuenta': int.parse(accountNumber),
+              'nroCuenta': int.parse(accountNumber!),
               'titular': accountHolder,
               // 'nroNotaCredito': 0,
               'tasaDeCambio': selectedCoinExchangeRate,
@@ -607,7 +593,7 @@ Future registerBankCheckPayment(
         ),
       }).whenComplete(() {
         try {
-          if (remaining - double.parse(amount) <= 0) {
+          if (remaining - amount! <= 0) {
             FirebaseFirestore.instance
                 .collection('clientes')
                 .doc(client.clientDocumentId)
@@ -755,24 +741,24 @@ Future registerCriptoPayment(
 }
 
 //Registro de deposito
-Future registerDepositPayment(
-  Client client,
-  invoiceDocumentID,
-  currency,
-  amount,
-  totalOfTheOrder,
-  currentCoin,
-  bank,
-  accountNumber,
-  voucherNumber,
-  imageFile,
-  date,
-  remaining,
-) async {
+Future registerDepositPayment({
+  Client? client,
+  String? invoiceDocumentID,
+  String? currency,
+  double? amount,
+  double? totalOfTheOrder,
+  String? currentCoin,
+  String? bank,
+  String? accountNumber,
+  String? voucherNumber,
+  File? imageFile,
+  DateTime? date,
+  double? remaining,
+}) async {
   print('/// Registrar deposito en factura: $invoiceDocumentID ///');
 
   print('Datos Recibidos: //////////////////////');
-  print(' client: $client');
+  print(' client: ${client!.name}');
   print('  invoiceDocumentID: $invoiceDocumentID');
   print('  currency: $currency');
   print('  amount: $amount');
@@ -824,27 +810,16 @@ Future registerDepositPayment(
   const cancelled = false;
   final selectedCurrency = currency.toString();
   const concillied = false;
-  final timestampDate = Timestamp.fromDate(date);
+  final timestampDate = Timestamp.fromDate(date!);
   const method = 'Deposito';
-  final paidAmount = double.parse(amount);
+  final paidAmount = double.parse(amount.toString());
   final selectedBank =
       FirebaseFirestore.instance.collection('bancos').doc(banksDocumentsID);
-  final account = int.parse(accountNumber);
+  final account = int.parse(accountNumber!);
   final voucher = voucherNumber;
   final selectedExchangedRate = selectedCoinExchangeRate;
 
-  print('cancelled: $cancelled');
-  print('selectedCurrency: $selectedCurrency');
-  print('concillied: $concillied');
-  print('timestampDate: $timestampDate');
-  print('method: $method');
-  print('paidAmount: $paidAmount');
-  print('selectedBank: $selectedBank');
-  print('account: $account');
-  print('voucher: $voucher');
-  print('selectedExchangedRate: $selectedExchangedRate');
-
-  if (paidAmount <= remaining) {
+  if (paidAmount <= remaining!) {
     try {
       print('Pago registrado correctamente');
       return await FirebaseFirestore.instance
@@ -873,7 +848,7 @@ Future registerDepositPayment(
         ),
       }).whenComplete(() {
         try {
-          if (remaining - double.parse(amount) <= 0) {
+          if (remaining - double.parse(amount.toString()) <= 0) {
             FirebaseFirestore.instance
                 .collection('clientes')
                 .doc(client.clientDocumentId)
@@ -901,28 +876,28 @@ Future registerDepositPayment(
 
 //Registrar pagos de efectivo
 
-Future registerMoneyPayment(
-  client,
-  invoiceDocumentID,
-  currency,
-  amount,
-  totalOfTheOrder,
-  imageFile,
-  date,
-  remaining,
-) async {
-  print('/// Registrar pago en efectivo en factura: $invoiceDocumentID ///');
+Future registerMoneyPayment({
+  Client? client,
+  String? invoiceDocumentID,
+  String? currency,
+  double? amount,
+  double? totalOfTheOrder,
+  File? imageFile,
+  DateTime? date,
+  double? remaining,
+}) async {
+  // print('/// Registrar pago en efectivo en factura: $invoiceDocumentID ///');
 
-  print('Datos recibidos://////////////////////////');
+  // print('Datos recibidos://////////////////////////');
 
-  print(' client: $client');
-  print('  invoiceDocumentID: $invoiceDocumentID');
-  print('  currency: $currency');
-  print('  amount: $amount');
-  print('  totalOfTheOrder: $totalOfTheOrder');
-  print('  imageFile: $imageFile');
-  print('  date: $date');
-  print('  remaining: $remaining');
+  print('invoiceDocumentID: $invoiceDocumentID');
+  print('client: ${client!.name}');
+  print('selectedCoin: $currency');
+  print('paidAmount: $amount');
+  print('totalOfTheOrder: $totalOfTheOrder');
+  print('imageFile: $imageFile');
+  print('date: $date');
+  print('remaining: $remaining');
 
   final Map<String, double> exchangeRate = {
     'BTC': 0.00011,
@@ -950,10 +925,10 @@ Future registerMoneyPayment(
   const nulled = false;
   final codeCurrency = currency.toString();
   const concillied = false;
-  final paymentDate = Timestamp.fromDate(date);
+  final paymentDate = Timestamp.fromDate(date!);
   const method = 'Efectivo';
-  final paymentAmount = double.parse(amount);
-  final originalAmount = double.parse(amount);
+  final paymentAmount = double.parse(amount.toString());
+  final originalAmount = double.parse(amount.toString());
   final exancheRates = selectedCoinExchangeRate;
 
   print('Datos a registrar:///////////////////');
@@ -966,11 +941,11 @@ Future registerMoneyPayment(
   print('originalAmount: $originalAmount');
   print('exancheRates: $exancheRates');
 
-  if (paymentAmount <= remaining) {
+  if (paymentAmount <= remaining!) {
     try {
       return await FirebaseFirestore.instance
           .collection('clientes')
-          .doc(client.clientDocumentId)
+          .doc(client!.clientDocumentId)
           .collection('facturas')
           .doc(invoiceDocumentID)
           .update({
@@ -991,7 +966,7 @@ Future registerMoneyPayment(
         ),
       }).whenComplete(() {
         try {
-          if (remaining - double.parse(amount) <= 0) {
+          if (remaining - double.parse(amount.toString()) <= 0) {
             FirebaseFirestore.instance
                 .collection('clientes')
                 .doc(client.clientDocumentId)
@@ -1004,7 +979,7 @@ Future registerMoneyPayment(
         } catch (e) {
           print(e);
         }
-      });
+      }).whenComplete(() => print('Operación completada satisfactoriamente'));
     } catch (e) {
       print(e);
     }
@@ -1019,19 +994,19 @@ Future registerMoneyPayment(
 
 //Registrar pagos de trasnferencias nacionales
 
-Future registerTransferPayment(
-  client,
-  invoiceDocumentID,
-  currency,
-  amount,
-  totalOfTheOrder,
-  currentCoin,
-  bank,
-  referenceId,
-  imageFile,
-  date,
-  remaining,
-) async {
+Future registerTransferPayment({
+  Client? client,
+  String? invoiceDocumentID,
+  String? currency,
+  double? amount,
+  double? totalOfTheOrder,
+  String? currentCoin,
+  String? bank,
+  String? referenceId,
+  File? imageFile,
+  DateTime? date,
+  double? remaining,
+}) async {
   print('/// Registrar Trasnferencia en factura: $invoiceDocumentID ///');
 
   print('Datos recibidos:////////////////////////////////');
@@ -1087,12 +1062,12 @@ Future registerTransferPayment(
   const cancelled = false;
   final selectedCurrency = currency.toString();
   const concillied = false;
-  final timestampDate = Timestamp.fromDate(date);
+  final timestampDate = Timestamp.fromDate(date!);
   const method = 'Transferencia';
-  final paidAmount = double.parse(amount);
+  final paidAmount = double.parse(amount.toString());
   final selectedBank =
       FirebaseFirestore.instance.collection('bancos').doc(banksDocumentsID);
-  final referenceID = int.parse(referenceId);
+  final referenceID = int.parse(referenceId!);
   final selectedExchangedRate = selectedCoinExchangeRate;
 
   print('cancelled: $cancelled');
@@ -1105,11 +1080,11 @@ Future registerTransferPayment(
   print('referenceID: $referenceID');
   print('selectedExchangedRate: $selectedExchangedRate');
 
-  if (paidAmount <= remaining) {
+  if (paidAmount <= remaining!) {
     try {
       return await FirebaseFirestore.instance
           .collection('clientes')
-          .doc(client.clientDocumentId)
+          .doc(client!.clientDocumentId)
           .collection('facturas')
           .doc(invoiceDocumentID)
           .update({
@@ -1131,7 +1106,7 @@ Future registerTransferPayment(
         ),
       }).whenComplete(() {
         try {
-          if (remaining - double.parse(amount) <= 0) {
+          if (remaining - double.parse(amount.toString()) <= 0) {
             FirebaseFirestore.instance
                 .collection('clientes')
                 .doc(client.clientDocumentId)
@@ -1159,19 +1134,19 @@ Future registerTransferPayment(
 
 //Registrar pagos de trasnferencias internacionales
 
-Future registerTransferInterPayment(
-  client,
-  invoiceDocumentID,
-  currency,
-  amount,
-  totalOfTheOrder,
-  currentCoin,
-  bank,
-  referenceId,
-  imageFile,
-  date,
-  remaining,
-) async {
+Future registerTransferInterPayment({
+  Client? client,
+  String? invoiceDocumentID,
+  String? currency,
+  double? amount,
+  double? totalOfTheOrder,
+  String? currentCoin,
+  String? bank,
+  String? referenceId,
+  File? imageFile,
+  DateTime? date,
+  double? remaining,
+}) async {
   print('/// Registrar transferencia inter en factura: $invoiceDocumentID ///');
   print('Datos recibidos:////////////////////////////////');
 
@@ -1225,12 +1200,12 @@ Future registerTransferInterPayment(
   const cancelled = false;
   final selectedCurrency = currency.toString();
   const concillied = false;
-  final timestampDate = Timestamp.fromDate(date);
+  final timestampDate = Timestamp.fromDate(date!);
   const method = 'Transferencia Internacional';
-  final paidAmount = double.parse(amount);
+  final paidAmount = double.parse(amount.toString());
   final selectedBank =
       FirebaseFirestore.instance.collection('bancos').doc(banksDocumentsID);
-  final referenceID = int.parse(referenceId);
+  final referenceID = int.parse(referenceId!);
   final selectedExchangedRate = selectedCoinExchangeRate;
 
   print('cancelled: $cancelled');
@@ -1243,11 +1218,11 @@ Future registerTransferInterPayment(
   print('referenceID: $referenceID');
   print('selectedExchangedRate: $selectedExchangedRate');
 
-  if (paidAmount <= remaining) {
+  if (paidAmount <= remaining!) {
     try {
       return await FirebaseFirestore.instance
           .collection('clientes')
-          .doc(client.clientDocumentId)
+          .doc(client!.clientDocumentId)
           .collection('facturas')
           .doc(invoiceDocumentID)
           .update({
@@ -1269,7 +1244,7 @@ Future registerTransferInterPayment(
         ),
       }).whenComplete(() {
         try {
-          if (remaining - double.parse(amount) <= 0) {
+          if (remaining - double.parse(amount.toString()) <= 0) {
             FirebaseFirestore.instance
                 .collection('clientes')
                 .doc(client.clientDocumentId)

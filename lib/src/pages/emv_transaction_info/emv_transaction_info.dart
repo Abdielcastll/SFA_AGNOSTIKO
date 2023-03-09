@@ -289,6 +289,26 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                     const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
                 child: OutlinedButton(
                     onPressed: () {
+                      printTicket();
+                    },
+                    style: TextButton.styleFrom(
+                        foregroundColor: myTheme.colorScheme.primary,
+                        backgroundColor: Colors.blue.shade800),
+                    child: Text(
+                      'imprimir comprobante'.toUpperCase(),
+                      style: const TextStyle(
+                        fontFamily: 'Poppins-regular',
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+                child: OutlinedButton(
+                    onPressed: () {
                       final noRetail = (ModalRoute.of(context)
                           ?.settings
                           .arguments! as List)[3];

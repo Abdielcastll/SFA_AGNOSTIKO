@@ -10,6 +10,7 @@ import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_checkout.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/identify_payment_method.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/identify_payment_method_retail.dart';
 
 import '../../models/clients_model.dart';
 
@@ -890,17 +891,17 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                 ),
                                 Container(
                                   margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                                  child: identifyPaymentMethod(
-                                    selectedValueA,
-                                    widget.client,
-                                    widget.invoiceDocumentID,
-                                    amountToPay,
-                                    getTotalAmount,
-                                    today,
-                                    context,
-                                    double.parse(
+                                  child: identifyPaymentMethodRetail(
+                                    selectedValueA: selectedValueA!,
+                                    client: widget.client,
+                                    invoiceDocumentID: widget.invoiceDocumentID,
+                                    paidAmount: amountToPay,
+                                    totalOfTheOrder: getTotalAmount,
+                                    date: today,
+                                    context: context,
+                                    remaining: double.parse(
                                         widget.remaining.toStringAsFixed(2)),
-                                    selectedCoin,
+                                    selectedCoin: selectedCoin!,
                                     updatePayed: updatePayed,
                                     paymentBody: AddPaymentBodyAtt(
                                         client: widget.client,
