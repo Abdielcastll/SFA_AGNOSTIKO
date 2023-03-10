@@ -25,7 +25,7 @@ class CompletedPayPage extends StatelessWidget {
     this.orderNumber,
   }) : super(key: key);
 
-  final client;
+  final Client client;
   final total;
   final method;
   final date;
@@ -74,7 +74,7 @@ class CompletedPayBody extends StatefulWidget {
     required this.coinsExchangeRates,
     required this.addPaymentBody,
   }) : super(key: key);
-  final client;
+  final Client client;
   final total;
   final method;
   final date;
@@ -89,14 +89,16 @@ class CompletedPayBody extends StatefulWidget {
 
 class _CompletedPayBody extends State<CompletedPayBody> {
   late List<double> coinsExchangeRates = widget.coinsExchangeRates;
-
+  late double totalPayed = widget.addPaymentBody.payments.fold<double>(
+      0.0, (previousValue, element) => previousValue + element.amount);
   @override
   Widget build(BuildContext context) {
-    final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
-    // print(widget.date);
+    final currentCoin =
+        Provider.of<CurrencyProvider>(context).currentCurrency ?? 'MXN';
+
     priceFormat(productPrice) {
       double correctAmount = double.parse(productPrice.toStringAsFixed(2));
-      if (currentCoin!.contains('USD')) {
+      if (currentCoin.contains('USD')) {
         return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
             .format(productPrice)
             .toString();
@@ -172,7 +174,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
                           // height: 60,
                           width: 140,
                           child: Text(
-                            widget.client,
+                            widget.client.name,
                             style: TextStyle(
                               color: Colors.grey.shade500,
                               fontFamily: 'Poppins-regular',
@@ -265,9 +267,6 @@ class _CompletedPayBody extends State<CompletedPayBody> {
               ElevatedButton(
                 onPressed: () {
                   objectBox.delelteAllShoppingCart();
-                  final currentClientForTheOrder =
-                      Provider.of<OrderProvider>(context, listen: false);
-                  currentClientForTheOrder.setOrder(false, Clients());
                   Navigator.popUntil(context, (route) => route.isFirst);
                 },
                 style: ElevatedButton.styleFrom(
@@ -295,7 +294,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  invoicePrintLayout(widget.addPaymentBody);
+                  invoicePrintLayout(widget.addPaymentBody, currentCoin);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: myTheme.colorScheme.primary,

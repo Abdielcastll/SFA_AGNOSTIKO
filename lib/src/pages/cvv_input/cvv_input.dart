@@ -111,7 +111,7 @@ class _CvvInputViewState extends State<CvvInputView> {
   }
 
   void _doSale() async {
-    final transactionArgs = this.transactionArgs;
+    /* final transactionArgs = this.transactionArgs;
     if (transactionArgs == null) return;
 
     if (transactionArgs.entryMode == EntryMode.Manual &&
@@ -138,7 +138,7 @@ class _CvvInputViewState extends State<CvvInputView> {
       _showError(e, "commError");
     } catch (e) {
       _showError(e, "internalError");
-    }
+    } */
   }
 
   void _showError(dynamic e, String message) {

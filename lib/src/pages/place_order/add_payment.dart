@@ -111,12 +111,13 @@ class AddPaymentBody extends StatefulWidget {
 }
 
 class _AddPaymentBodyState extends State<AddPaymentBody> {
-  late double paidAmount = widget.remaining;
+  late double remaining = widget.remaining;
+  late double amountToPay = widget.remaining;
+  bool amountChanged = false;
   late List<PayMethod> payments = widget.payments;
-
   double amountPayed = 0;
 
-  late double paidAmountWithAmountPayed = paidAmount - amountPayed;
+  get getTotalAmount => widget.subTotal + widget.tax - widget.discount;
 
   var dateFormatter = DateFormat('dd-MM-yyyy');
   DateTime today = DateTime.now();
@@ -158,9 +159,6 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
 
   @override
   Widget build(BuildContext context) {
-    print('amountPayed222222222222: $amountPayed');
-    print(widget.discount);
-    print(widget.discountPercentage);
     double? paymentsTotalAmount = 0;
     for (var payment in widget.payments) {
       paymentsTotalAmount = paymentsTotalAmount! + payment.amount;
@@ -481,6 +479,9 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                           margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
                           child: IconButton(
                             onPressed: () async {
+                              if (selectedValueA?.contains('Tarjeta') == true) {
+                                return;
+                              }
                               DateTime? newDate = await showDatePicker(
                                 context: context,
                                 initialDate: today,
@@ -555,7 +556,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                             const EdgeInsets.only(bottom: 5),
                                         alignment: Alignment.centerRight,
                                         child: Text(
-                                          '${priceFormat(priceFormatForPaidAmount(paidAmountWithAmountPayed, selectedCoin))}',
+                                          '${priceFormat(priceFormatForPaidAmount(remaining, selectedCoin))}',
                                           style: TextStyle(
                                             color: myTheme
                                                 .colorScheme.onPrimaryContainer,
@@ -615,17 +616,22 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                           child: TextField(
                             onChanged: (value) {
                               // VERIFICAR SI SE VUELVE NULLABLE
+
                               if (value.isEmpty) {
                                 setState(() {
-                                  paidAmount = 0;
-                                  print(paidAmount);
+                                  amountToPay = 0;
+                                  print(amountToPay);
                                 });
                               } else {
                                 setState(() {
-                                  paidAmount = double.parse(value);
-                                  print(paidAmount);
+                                  amountToPay = double.parse(value);
+                                  print('amountToPay');
+                                  print(amountToPay);
                                 });
                               }
+                              setState(() {
+                                amountChanged = true;
+                              });
                             },
                             style: TextStyle(
                               fontSize: 14,
@@ -657,10 +663,9 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                 0,
                               ),
                               hintText: priceFormatForPaidAmount(
-                                      double.parse(paidAmount == 0
+                                      double.parse(remaining == 0
                                           ? '0.00'
-                                          : paidAmountWithAmountPayed
-                                              .toStringAsFixed(2)),
+                                          : remaining.toStringAsFixed(2)),
                                       selectedCoin)
                                   .toString(),
                               hintStyle: TextStyle(
@@ -807,7 +812,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                         // Aqui va widget.InvoiceTotal pero hay
                                         // que consultar si primero se va a
                                         // pagar completo o por partes aca
-                                        '${priceFormatForPaidAmount(widget.remaining, selectedCoin).toString()}',
+                                        '${priceFormatForPaidAmount(widget.subTotal + widget.tax - widget.discount, selectedCoin).toString()}',
                                         style: TextStyle(
                                           fontFamily: 'Poppins-regular',
                                           color: myTheme.colorScheme.primary,
@@ -876,7 +881,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                       ),
                                       Text(
                                         // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(2), selectedCoin)}',
-                                        '${priceFormatForPaidAmount(paidAmountWithAmountPayed, selectedCoin)}',
+                                        '${priceFormatForPaidAmount(remaining, selectedCoin)}',
                                         style: TextStyle(
                                           fontFamily: 'Poppins-regular',
                                           color: myTheme
@@ -890,16 +895,19 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                 Container(
                                   margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                                   child: identifyPaymentMethodRetail(
-                                    selectedValueA: selectedValueA,
+                                    selectedValueA: selectedValueA!,
                                     client: widget.client,
                                     invoiceDocumentID: widget.invoiceDocumentID,
-                                    paidAmount: paidAmount,
-                                    totalOfTheOrder: paidAmountWithAmountPayed,
+                                    paidAmount: amountChanged
+                                        ? amountToPay
+                                        : priceToCurrencySelected(
+                                            amountToPay, selectedCoin!),
+                                    totalOfTheOrder: getTotalAmount,
                                     date: today,
                                     context: context,
                                     remaining: double.parse(
                                         widget.remaining.toStringAsFixed(2)),
-                                    selectedCoin: selectedCoin,
+                                    selectedCoin: selectedCoin!,
                                     updatePayed: updatePayed,
                                     paymentBody: AddPaymentBodyAtt(
                                         client: widget.client,
@@ -909,12 +917,11 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                         invoiceDocumentID:
                                             widget.invoiceDocumentID,
                                         percentageTax: widget.percentageTax,
-                                        remaining:
-                                            widget.remaining - amountPayed,
+                                        remaining: widget.remaining,
                                         subTotal: widget.subTotal,
                                         tax: widget.tax,
                                         invoiceNumber: widget.invoiceNumber,
-                                        currency: currentCoin!)
+                                        currency: selectedCoin!)
                                       ..payments = widget.payments,
                                   ),
                                 )

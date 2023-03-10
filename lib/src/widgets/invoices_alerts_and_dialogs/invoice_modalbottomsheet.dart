@@ -109,7 +109,7 @@ void modalBottomSheetForInvoices(
   } else {
     leftoverAmount = remaining.toStringAsFixed(2);
   }
-  String paidAmount = remaining.toStringAsFixed(2);
+  double paidAmount = double.parse(remaining.toStringAsFixed(2));
 
   showModalBottomSheet(
     elevation: 0,
@@ -1060,31 +1060,18 @@ void modalBottomSheetForInvoices(
                                                               child: TextField(
                                                                 onChanged:
                                                                     (value) {
-                                                                  if (value
-                                                                      .isEmpty) {
-                                                                    setState(
-                                                                        () {
+                                                                  setState(() {
+                                                                    if (value
+                                                                        .isEmpty) {
                                                                       paidAmount =
-                                                                          '0';
-                                                                    });
-                                                                    print(
-                                                                        'paidAmount a 0: *${priceToCurrencySelectedInput(paidAmount, selectedCoin)}');
-                                                                  } else {
-                                                                    setState(
-                                                                        () {
+                                                                          0;
+                                                                    } else {
                                                                       paidAmount =
-                                                                          value;
-                                                                    });
-                                                                    print(
-                                                                        'paidAmount: $paidAmount');
-                                                                  }
-
-                                                                  print(
-                                                                      paidAmount);
+                                                                          double.parse(
+                                                                              value);
+                                                                    }
+                                                                  });
                                                                 },
-                                                                // textAlign:
-                                                                //     TextAlign
-                                                                //         .center,
                                                                 style:
                                                                     TextStyle(
                                                                   fontSize: 14,
@@ -1163,7 +1150,7 @@ void modalBottomSheetForInvoices(
                                                                     0,
                                                                   ),
                                                                   hintText:
-                                                                      ' ${priceToCurrencySelectedInput(double.parse(paidAmount), selectedCoin)}',
+                                                                      ' ${priceToCurrencySelectedInput(double.parse(paidAmount.toStringAsFixed(2).toString()), selectedCoin)}',
                                                                   hintStyle:
                                                                       TextStyle(
                                                                     height:
@@ -1302,13 +1289,13 @@ void modalBottomSheetForInvoices(
                                                                       child:
                                                                           identifyPaymentMethod(
                                                                         selectedValueA:
-                                                                            selectedValueA,
+                                                                            selectedValueA!,
                                                                         client:
                                                                             client,
                                                                         invoiceDocumentID:
                                                                             invoiceDocumentID,
                                                                         paidAmount:
-                                                                            double.parse(paidAmount),
+                                                                            paidAmount,
                                                                         totalOfTheOrder:
                                                                             invoiceTotal,
                                                                         date:
@@ -1318,7 +1305,7 @@ void modalBottomSheetForInvoices(
                                                                         remaining:
                                                                             double.parse(remaining.toStringAsFixed(2)),
                                                                         selectedCoin:
-                                                                            selectedCoin,
+                                                                            selectedCoin!,
                                                                         noRetail:
                                                                             true,
                                                                       ),

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import 'package:agnostiko/agnostiko.dart';
 import 'package:intl/intl.dart';
+import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
 
 /* import '../../config/app_config.dart'; */
 import '../../../dialogs/info_dialog.dart';
@@ -259,7 +260,8 @@ class _CardInputViewState extends State<CardInputView> {
     ));
     MPOSController.instance.showHomeScreen();
     Navigator.pop(context);
-
+    transactionArgs?.pan ??=
+        (await EmvModule.instance.getTagValue(0x57))?.toHexStr().split('d')[0];
     // en caso de error, nos movemos a la pantalla de cierre
     Navigator.pushReplacementNamed(
       context,
@@ -292,6 +294,22 @@ class _CardInputViewState extends State<CardInputView> {
     );
   }
 
+  getCurrencyFromPaymentBody() {
+    final addPaymentBody = (ModalRoute.of(context)?.settings.arguments!
+        as List)[2] as AddPaymentBodyAtt;
+
+    if (addPaymentBody.currency.toUpperCase().contains('USD')) {
+      return '840';
+    }
+    if (addPaymentBody.currency.toUpperCase().contains('EUR')) {
+      return '978';
+    }
+    if (addPaymentBody.currency.toUpperCase().contains('MXN')) {
+      return '484';
+    }
+    return '484';
+  }
+
   Future<void> _onOnlineRequested(EmvOnlineRequestedEvent event) async {
     final transactionArgs = this.transactionArgs;
 
@@ -314,7 +332,9 @@ class _CardInputViewState extends State<CardInputView> {
       transactionArgs.infoTags = await loadInfoTags();
       transactionArgs.firstGenerateTags = await emvGetGenerateCommandTags();
 
-      final pharosMsg = await pharosGenerateSaleMsg(transactionArgs);
+      final currency = getCurrencyFromPaymentBody();
+
+      final pharosMsg = await pharosGenerateSaleMsg(transactionArgs, currency);
       print("PHAROS MSG: ${jsonEncode(pharosMsg)}");
 
       try {
@@ -404,6 +424,9 @@ class _CardInputViewState extends State<CardInputView> {
         transactionArgs?.infoTags = await loadInfoTags();
         transactionArgs?.firstGenerateTags = await emvGetGenerateCommandTags();
       }
+      transactionArgs?.pan ??= (await EmvModule.instance.getTagValue(0x57))
+          ?.toHexStr()
+          .split('d')[0];
       Navigator.pushReplacementNamed(context, EmvTransactionInfoView.route,
           arguments: [
             transactionArgs,
@@ -438,10 +461,10 @@ class _CardInputViewState extends State<CardInputView> {
     }
   }
 
-  void _goToCvvInput() {
+  /* void _goToCvvInput() {
     Navigator.pushReplacementNamed(context, CvvInputView.route,
         arguments: transactionArgs);
-  }
+  } */
 
   void _doMagneticStripeSale() async {
     final transactionArgs = this.transactionArgs;
@@ -450,7 +473,9 @@ class _CardInputViewState extends State<CardInputView> {
     showCircularProgressDialog(
         context, AppLocalizations.of(context)!.processing);
 
-    final pharosMsg = await pharosGenerateSaleMsg(transactionArgs);
+    final currency = getCurrencyFromPaymentBody();
+
+    final pharosMsg = await pharosGenerateSaleMsg(transactionArgs, currency);
 
     print("PHAROS MSG: ${jsonEncode(pharosMsg)}");
     final response = await processSalePharos(pharosMsg);

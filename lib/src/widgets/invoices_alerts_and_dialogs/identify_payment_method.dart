@@ -20,6 +20,7 @@ import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 
 import '../../pages/place_order/add_payment.dart';
 import '../payment_method/payment_card.dart';
@@ -45,9 +46,9 @@ cropImage(filePath, imageFile) async {
   }
 }
 
-priceToCurrencySelected(productPrice, coin) {
+priceToCurrencySelected(double productPrice, String coin) {
   double correctAmount = double.parse(productPrice.toStringAsFixed(2));
-  if (coin!.contains('USD')) {
+  if (coin.contains('USD')) {
     return correctAmount;
   } else if (coin.contains('VED')) {
     return correctAmount * 4.58;
@@ -86,15 +87,15 @@ testPrint() {
 }
 
 identifyPaymentMethod({
-  String? selectedValueA,
-  Client? client,
-  String? invoiceDocumentID,
-  double? paidAmount,
-  double? totalOfTheOrder,
-  DateTime? date,
+  required String selectedValueA,
+  required Client client,
+  required String invoiceDocumentID,
+  required double paidAmount,
+  required double totalOfTheOrder,
+  required DateTime date,
   context,
-  double? remaining,
-  String? selectedCoin,
+  required double remaining,
+  required String selectedCoin,
   Function? updatePayed,
   AddPaymentBodyAtt? paymentBody,
   noRetail = false,
@@ -192,11 +193,8 @@ identifyPaymentMethod({
 
   if (selectedValueA == 'Tarjeta de Debito' ||
       selectedValueA == 'Tarjeta de Credito') {
-    if (paidAmount is String) {
-      paidAmount = double.parse(paidAmount.toString().replaceAll('\$', ''));
-    }
-    return paymentCard(paidAmount!, client!, invoiceDocumentID!,
-        totalOfTheOrder!, selectedCoin!, date!, remaining!,
+    return paymentCard(paidAmount, client, invoiceDocumentID, totalOfTheOrder,
+        selectedCoin, date, remaining,
         updatePayed: updatePayed, paymentBody: paymentBody, noRetail: noRetail);
   }
 
@@ -1017,8 +1015,7 @@ identifyPaymentMethod({
                           // registerCriptoPayment();
                           if (transactionId != '') {
                             if (paidAmount != null) {
-                              if (double.parse(paidAmount.toString()) >
-                                  remaining!) {
+                              if (paidAmount > remaining) {
                                 Fluttertoast.showToast(
                                   msg:
                                       'La cantidad a pagar excede de la deuda pendiente',
