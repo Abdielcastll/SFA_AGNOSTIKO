@@ -67,15 +67,15 @@ priceReturnToOriginal(productPrice, coin) {
   if (coin!.contains('USD')) {
     return correctAmount;
   } else if (coin.contains('VED')) {
-    return correctAmount / 4.58;
+    return double.parse((correctAmount / 4.58).toStringAsFixed(2));
   } else if (coin.contains('EUR')) {
-    return correctAmount / 0.89;
+    return double.parse((correctAmount / 0.89).toStringAsFixed(2));
   } else if (coin.contains('MXN')) {
-    return correctAmount / 19.43;
+    return double.parse((correctAmount / 19.43).toStringAsFixed(2));
   } else if (coin.contains('BTC')) {
-    return correctAmount / 0.00011;
+    return double.parse((correctAmount / 0.00011).toStringAsFixed(2));
   } else {
-    return correctAmount / 4.58;
+    return double.parse((correctAmount / 4.58).toStringAsFixed(2));
   }
 }
 
@@ -132,6 +132,22 @@ identifyPaymentMethod({
   // ];
   // final currentCoin = sharedPreferences!.getString('currentCoin');
   final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
+
+  symbolMoney(coin) {
+    if (coin!.contains('USD')) {
+      return "USD\$.";
+    } else if (coin.contains('VED')) {
+      return "BsS.";
+    } else if (coin.contains('EUR')) {
+      return "€.";
+    } else if (coin.contains('MXN')) {
+      return "MXN\$.";
+    } else if (coin.contains('BTC')) {
+      return '฿.';
+    } else {
+      return "PPR";
+    }
+  }
 
   priceFormat(productPrice) {
     double correctAmount = double.parse(productPrice.toStringAsFixed(2));
@@ -651,7 +667,7 @@ identifyPaymentMethod({
                                                                                 EdgeInsets.only(top: 10),
                                                                             child:
                                                                                 Text(
-                                                                              'Monto pagado: ${priceFormat(paidAmount)}',
+                                                                              'Monto pagado: ${symbolMoney(currentCoin)}: ${priceReturnToOriginal(paidAmount, selectedCoin)}',
                                                                               style: TextStyle(
                                                                                 fontFamily: 'Poppins-regular',
                                                                                 fontSize: 12,
@@ -1527,7 +1543,7 @@ identifyPaymentMethod({
                                                                               EdgeInsets.only(top: 10),
                                                                           child:
                                                                               Text(
-                                                                            'Monto pagado: ${priceFormat(paidAmount)}',
+                                                                            'Monto pagado: ${symbolMoney(currentCoin)}: ${priceReturnToOriginal(paidAmount, selectedCoin)}',
                                                                             style:
                                                                                 TextStyle(
                                                                               fontFamily: 'Poppins-regular',
@@ -1975,7 +1991,7 @@ identifyPaymentMethod({
                                                                           top:
                                                                               10),
                                                                   child: Text(
-                                                                    'Monto pagado: ${priceFormat(paidAmount)}',
+                                                                    'Monto pagado: ${symbolMoney(currentCoin)}: ${priceReturnToOriginal(paidAmount, selectedCoin)}',
                                                                     style:
                                                                         TextStyle(
                                                                       fontFamily:
@@ -2651,7 +2667,7 @@ identifyPaymentMethod({
                                                                                 EdgeInsets.only(top: 10),
                                                                             child:
                                                                                 Text(
-                                                                              'Monto pagado: ${priceFormat(paidAmount)}',
+                                                                              'Monto pagado: ${symbolMoney(currentCoin)}: ${priceReturnToOriginal(paidAmount, selectedCoin)}',
                                                                               style: TextStyle(
                                                                                 fontFamily: 'Poppins-regular',
                                                                                 fontSize: 12,
@@ -2932,7 +2948,7 @@ identifyPaymentMethod({
                                                                                 EdgeInsets.only(top: 10),
                                                                             child:
                                                                                 Text(
-                                                                              'Monto pagado: ${priceFormat(paidAmount)}',
+                                                                              'Monto pagado: ${symbolMoney(currentCoin)}: ${priceReturnToOriginal(paidAmount, selectedCoin)}',
                                                                               style: TextStyle(
                                                                                 fontFamily: 'Poppins-regular',
                                                                                 fontSize: 12,
