@@ -102,6 +102,22 @@ identifyPaymentMethodRetail({
   // final currentCoin = sharedPreferences!.getString('currentCoin');
   final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
 
+  symbolMoney(coin) {
+    if (coin!.contains('USD')) {
+      return "USD\$.";
+    } else if (coin.contains('VED')) {
+      return "BsS.";
+    } else if (coin.contains('EUR')) {
+      return "€.";
+    } else if (coin.contains('MXN')) {
+      return "MXN\$.";
+    } else if (coin.contains('BTC')) {
+      return '฿.';
+    } else {
+      return "PPR";
+    }
+  }
+
   final amountExchanged = exchangeAmount(selectedCoin, paidAmount);
 
   final totalPayed = paymentBody.payments.fold<double>(
@@ -635,7 +651,7 @@ identifyPaymentMethodRetail({
                                                                                 10),
                                                                         child:
                                                                             Text(
-                                                                          'Monto pagado: ${priceFormat(paidAmount)}',
+                                                                          'Monto pagado: ${symbolMoney(selectedCoin)}: $paidAmount',
                                                                           style:
                                                                               TextStyle(
                                                                             fontFamily:
@@ -1178,7 +1194,7 @@ identifyPaymentMethodRetail({
                                                                         top:
                                                                             10),
                                                                 child: Text(
-                                                                  'Monto pagado: ${priceFormat(paidAmount)}',
+                                                                  'Monto pagado: ${symbolMoney(selectedCoin)}: $paidAmount',
                                                                   style:
                                                                       TextStyle(
                                                                     fontFamily:
@@ -1885,7 +1901,7 @@ identifyPaymentMethodRetail({
                                                                                 10),
                                                                         child:
                                                                             Text(
-                                                                          'Monto pagado: ${priceFormat(paidAmount)}',
+                                                                          'Monto pagado: ${symbolMoney(selectedCoin)}: $paidAmount',
                                                                           style:
                                                                               TextStyle(
                                                                             fontFamily:
@@ -2378,7 +2394,7 @@ identifyPaymentMethodRetail({
                                                                           top:
                                                                               10),
                                                                   child: Text(
-                                                                    'Monto pagado: ${priceFormat(paidAmount)}',
+                                                                    'Monto pagado: ${symbolMoney(selectedCoin)}: $paidAmount',
                                                                     style:
                                                                         TextStyle(
                                                                       fontFamily:
@@ -3093,96 +3109,6 @@ identifyPaymentMethodRetail({
                                                                               50,
                                                                         )),
                                                                   ),
-                                                                  Text(
-                                                                    "¡PAGO REGISTRADO!",
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontFamily:
-                                                                          'Poppins-regular',
-                                                                      fontSize:
-                                                                          18,
-                                                                      color: myTheme
-                                                                          .colorScheme
-                                                                          .onPrimaryContainer,
-                                                                      // color: Colors.green,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                    ),
-                                                                  ),
-                                                                  Container(
-                                                                    margin: EdgeInsets
-                                                                        .fromLTRB(
-                                                                            0,
-                                                                            15,
-                                                                            0,
-                                                                            0),
-                                                                    decoration: BoxDecoration(
-                                                                        shape: BoxShape
-                                                                            .circle,
-                                                                        color: myTheme
-                                                                            .colorScheme
-                                                                            .primary
-                                                                            .withOpacity(0.6)),
-                                                                    width: 100,
-                                                                    height: 100,
-                                                                    child: Opacity(
-                                                                        opacity: 0.8,
-                                                                        child: Icon(
-                                                                          Icons
-                                                                              .check,
-                                                                          color: myTheme
-                                                                              .colorScheme
-                                                                              .onPrimaryContainer,
-                                                                          size:
-                                                                              50,
-                                                                        )),
-                                                                  ),
-                                                                  Text(
-                                                                    "¡PAGO REGISTRADO!",
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontFamily:
-                                                                          'Poppins-regular',
-                                                                      fontSize:
-                                                                          18,
-                                                                      color: myTheme
-                                                                          .colorScheme
-                                                                          .onPrimaryContainer,
-                                                                      // color: Colors.green,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                    ),
-                                                                  ),
-                                                                  Container(
-                                                                    margin: EdgeInsets
-                                                                        .fromLTRB(
-                                                                            0,
-                                                                            15,
-                                                                            0,
-                                                                            0),
-                                                                    decoration: BoxDecoration(
-                                                                        shape: BoxShape
-                                                                            .circle,
-                                                                        color: myTheme
-                                                                            .colorScheme
-                                                                            .primary
-                                                                            .withOpacity(0.6)),
-                                                                    width: 100,
-                                                                    height: 100,
-                                                                    child: Opacity(
-                                                                        opacity: 0.8,
-                                                                        child: Icon(
-                                                                          Icons
-                                                                              .check,
-                                                                          color: myTheme
-                                                                              .colorScheme
-                                                                              .onPrimaryContainer,
-                                                                          size:
-                                                                              50,
-                                                                        )),
-                                                                  ),
                                                                   Container(
                                                                     margin: EdgeInsets
                                                                         .fromLTRB(
@@ -3207,7 +3133,7 @@ identifyPaymentMethodRetail({
                                                                               EdgeInsets.only(top: 10),
                                                                           child:
                                                                               Text(
-                                                                            'Monto pagado: ${priceFormat(paidAmount)}',
+                                                                            'Monto pagado: ${symbolMoney(selectedCoin)}: $paidAmount',
                                                                             style:
                                                                                 TextStyle(
                                                                               fontFamily: 'Poppins-regular',
@@ -3475,23 +3401,6 @@ identifyPaymentMethodRetail({
                                                             child: Center(
                                                               child: Column(
                                                                 children: [
-                                                                  Text(
-                                                                    "¡PAGO REGISTRADO!",
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontFamily:
-                                                                          'Poppins-regular',
-                                                                      fontSize:
-                                                                          18,
-                                                                      color: myTheme
-                                                                          .colorScheme
-                                                                          .onPrimaryContainer,
-                                                                      // color: Colors.green,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                    ),
-                                                                  ),
                                                                   Container(
                                                                     margin: EdgeInsets
                                                                         .fromLTRB(
@@ -3544,7 +3453,7 @@ identifyPaymentMethodRetail({
                                                                               EdgeInsets.only(top: 10),
                                                                           child:
                                                                               Text(
-                                                                            'Monto pagado: ${priceFormat(paidAmount)}',
+                                                                            'Monto pagado: ${symbolMoney(selectedCoin)}: $paidAmount',
                                                                             style:
                                                                                 TextStyle(
                                                                               fontFamily: 'Poppins-regular',

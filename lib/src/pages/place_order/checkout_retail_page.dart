@@ -1150,176 +1150,176 @@ class _CheckoutBodyState extends State<CheckoutBody> {
               ),
             ),
           ),
-          ElevatedButton(
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        contentPadding: EdgeInsets.zero,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        content: SingleChildScrollView(
-                          child: Stack(
-                            children: [
-                              Container(
-                                height: 400,
-                                width: 300,
-                                child: Opacity(
-                                  opacity: 1,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(20),
-                                    child: Image.asset(
-                                      'assets/images/payment-background.png',
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.all(18),
-                                child: Center(
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        "¡PAGO REGISTRADO!",
-                                        style: TextStyle(
-                                          fontFamily: 'Poppins-regular',
-                                          fontSize: 18,
-                                          color: Colors.white,
-                                          // color: Colors.green,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Container(
-                                        margin:
-                                            EdgeInsets.fromLTRB(0, 15, 0, 0),
-                                        width: 100,
-                                        height: 100,
-                                        child: Opacity(
-                                          opacity: 0.8,
-                                          child: Image.asset(
-                                            'assets/images/check.png',
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        margin:
-                                            EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                        alignment: Alignment.center,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Container(
-                                              margin: EdgeInsets.only(top: 10),
-                                              child: Text(
-                                                'Monto pagado: 00.00',
-                                                style: TextStyle(
-                                                  fontFamily: 'Poppins-regular',
-                                                  fontSize: 12,
-                                                  color: myTheme
-                                                      .colorScheme.primary,
-                                                  // color: Colors.green,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              margin: EdgeInsets.only(top: 10),
-                                              child: Text(
-                                                'ZONA TEST CLIENTE DEFAULT 000A1',
-                                                style: TextStyle(
-                                                  fontFamily: 'Poppins-regular',
-                                                  fontSize: 12,
-                                                  color: myTheme
-                                                      .colorScheme.primary,
-                                                  // color: Colors.green,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              margin: EdgeInsets.only(top: 10),
-                                              child: Text(
-                                                'Fecha: 00/00/0000',
-                                                style: TextStyle(
-                                                  fontFamily: 'Poppins-regular',
-                                                  fontSize: 12,
-                                                  color: myTheme
-                                                      .colorScheme.primary,
-                                                  // color: Colors.green,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              margin: EdgeInsets.only(top: 10),
-                                              child: Text(
-                                                'Deposito',
-                                                style: TextStyle(
-                                                  fontFamily: 'Poppins-regular',
-                                                  fontSize: 12,
-                                                  color: myTheme
-                                                      .colorScheme.primary,
-                                                  // color: Colors.green,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.only(top: 50),
-                                        alignment: Alignment.center,
-                                        child: ElevatedButton.icon(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                              myTheme.colorScheme.primary,
-                                            ),
-                                            shape: MaterialStateProperty.all<
-                                                RoundedRectangleBorder>(
-                                              RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(18.0),
-                                              ),
-                                            ),
-                                          ),
-                                          icon: Icon(
-                                            MaterialIcons.arrow_back_ios,
-                                            size: 12,
-                                          ),
-                                          label: Text(
-                                            'Aceptar',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: 'Poppins-regular',
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    });
-              },
-              child: Text('Test'))
+          // ElevatedButton(
+          //     onPressed: () {
+          //       showDialog(
+          //           context: context,
+          //           builder: (BuildContext context) {
+          //             return AlertDialog(
+          //               contentPadding: EdgeInsets.zero,
+          //               shape: RoundedRectangleBorder(
+          //                 borderRadius: BorderRadius.circular(20),
+          //               ),
+          //               content: SingleChildScrollView(
+          //                 child: Stack(
+          //                   children: [
+          //                     Container(
+          //                       height: 400,
+          //                       width: 300,
+          //                       child: Opacity(
+          //                         opacity: 1,
+          //                         child: ClipRRect(
+          //                           borderRadius: BorderRadius.circular(20),
+          //                           child: Image.asset(
+          //                             'assets/images/payment-background.png',
+          //                             fit: BoxFit.fill,
+          //                           ),
+          //                         ),
+          //                       ),
+          //                     ),
+          //                     Container(
+          //                       margin: EdgeInsets.all(18),
+          //                       child: Center(
+          //                         child: Column(
+          //                           children: [
+          //                             Text(
+          //                               "¡PAGO REGISTRADO!",
+          //                               style: TextStyle(
+          //                                 fontFamily: 'Poppins-regular',
+          //                                 fontSize: 18,
+          //                                 color: Colors.white,
+          //                                 // color: Colors.green,
+          //                                 fontWeight: FontWeight.bold,
+          //                               ),
+          //                             ),
+          //                             Container(
+          //                               margin:
+          //                                   EdgeInsets.fromLTRB(0, 15, 0, 0),
+          //                               width: 100,
+          //                               height: 100,
+          //                               child: Opacity(
+          //                                 opacity: 0.8,
+          //                                 child: Image.asset(
+          //                                   'assets/images/check.png',
+          //                                   fit: BoxFit.cover,
+          //                                 ),
+          //                               ),
+          //                             ),
+          //                             Container(
+          //                               margin:
+          //                                   EdgeInsets.fromLTRB(0, 10, 0, 0),
+          //                               alignment: Alignment.center,
+          //                               child: Column(
+          //                                 mainAxisAlignment:
+          //                                     MainAxisAlignment.center,
+          //                                 crossAxisAlignment:
+          //                                     CrossAxisAlignment.center,
+          //                                 children: [
+          //                                   Container(
+          //                                     margin: EdgeInsets.only(top: 10),
+          //                                     child: Text(
+          //                                       'Monto pagado: 00.00',
+          //                                       style: TextStyle(
+          //                                         fontFamily: 'Poppins-regular',
+          //                                         fontSize: 12,
+          //                                         color: myTheme
+          //                                             .colorScheme.primary,
+          //                                         // color: Colors.green,
+          //                                         fontWeight: FontWeight.bold,
+          //                                       ),
+          //                                     ),
+          //                                   ),
+          //                                   Container(
+          //                                     margin: EdgeInsets.only(top: 10),
+          //                                     child: Text(
+          //                                       'ZONA TEST CLIENTE DEFAULT 000A1',
+          //                                       style: TextStyle(
+          //                                         fontFamily: 'Poppins-regular',
+          //                                         fontSize: 12,
+          //                                         color: myTheme
+          //                                             .colorScheme.primary,
+          //                                         // color: Colors.green,
+          //                                         fontWeight: FontWeight.bold,
+          //                                       ),
+          //                                     ),
+          //                                   ),
+          //                                   Container(
+          //                                     margin: EdgeInsets.only(top: 10),
+          //                                     child: Text(
+          //                                       'Fecha: 00/00/0000',
+          //                                       style: TextStyle(
+          //                                         fontFamily: 'Poppins-regular',
+          //                                         fontSize: 12,
+          //                                         color: myTheme
+          //                                             .colorScheme.primary,
+          //                                         // color: Colors.green,
+          //                                         fontWeight: FontWeight.bold,
+          //                                       ),
+          //                                     ),
+          //                                   ),
+          //                                   Container(
+          //                                     margin: EdgeInsets.only(top: 10),
+          //                                     child: Text(
+          //                                       'Deposito',
+          //                                       style: TextStyle(
+          //                                         fontFamily: 'Poppins-regular',
+          //                                         fontSize: 12,
+          //                                         color: myTheme
+          //                                             .colorScheme.primary,
+          //                                         // color: Colors.green,
+          //                                         fontWeight: FontWeight.bold,
+          //                                       ),
+          //                                     ),
+          //                                   ),
+          //                                 ],
+          //                               ),
+          //                             ),
+          //                             Container(
+          //                               margin: EdgeInsets.only(top: 50),
+          //                               alignment: Alignment.center,
+          //                               child: ElevatedButton.icon(
+          //                                 onPressed: () {
+          //                                   Navigator.pop(context);
+          //                                 },
+          //                                 style: ButtonStyle(
+          //                                   backgroundColor:
+          //                                       MaterialStateProperty.all(
+          //                                     myTheme.colorScheme.primary,
+          //                                   ),
+          //                                   shape: MaterialStateProperty.all<
+          //                                       RoundedRectangleBorder>(
+          //                                     RoundedRectangleBorder(
+          //                                       borderRadius:
+          //                                           BorderRadius.circular(18.0),
+          //                                     ),
+          //                                   ),
+          //                                 ),
+          //                                 icon: Icon(
+          //                                   MaterialIcons.arrow_back_ios,
+          //                                   size: 12,
+          //                                 ),
+          //                                 label: Text(
+          //                                   'Aceptar',
+          //                                   style: TextStyle(
+          //                                     color: Colors.white,
+          //                                     fontFamily: 'Poppins-regular',
+          //                                     fontSize: 12,
+          //                                     fontWeight: FontWeight.bold,
+          //                                   ),
+          //                                 ),
+          //                               ),
+          //                             )
+          //                           ],
+          //                         ),
+          //                       ),
+          //                     ),
+          //                   ],
+          //                 ),
+          //               ),
+          //             );
+          //           });
+          //     },
+          //     child: Text('Test'))
         ],
       ),
     );
