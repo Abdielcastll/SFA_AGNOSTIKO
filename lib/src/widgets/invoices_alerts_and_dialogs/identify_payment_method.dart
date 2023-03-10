@@ -667,7 +667,7 @@ identifyPaymentMethod({
                                                                                 EdgeInsets.only(top: 10),
                                                                             child:
                                                                                 Text(
-                                                                              'Monto pagado: ${symbolMoney(currentCoin)}: ${priceReturnToOriginal(paidAmount, selectedCoin)}',
+                                                                              'Monto pagado: ${symbolMoney(selectedCoin)}: $paidAmount',
                                                                               style: TextStyle(
                                                                                 fontFamily: 'Poppins-regular',
                                                                                 fontSize: 12,
@@ -1543,7 +1543,7 @@ identifyPaymentMethod({
                                                                               EdgeInsets.only(top: 10),
                                                                           child:
                                                                               Text(
-                                                                            'Monto pagado: ${symbolMoney(currentCoin)}: ${priceReturnToOriginal(paidAmount, selectedCoin)}',
+                                                                            'Monto pagado: ${symbolMoney(selectedCoin)}: $paidAmount',
                                                                             style:
                                                                                 TextStyle(
                                                                               fontFamily: 'Poppins-regular',
@@ -1991,7 +1991,7 @@ identifyPaymentMethod({
                                                                           top:
                                                                               10),
                                                                   child: Text(
-                                                                    'Monto pagado: ${symbolMoney(currentCoin)}: ${priceReturnToOriginal(paidAmount, selectedCoin)}',
+                                                                    'Monto pagado: ${symbolMoney(selectedCoin)}: $paidAmount',
                                                                     style:
                                                                         TextStyle(
                                                                       fontFamily:
@@ -2667,7 +2667,7 @@ identifyPaymentMethod({
                                                                                 EdgeInsets.only(top: 10),
                                                                             child:
                                                                                 Text(
-                                                                              'Monto pagado: ${symbolMoney(currentCoin)}: ${priceReturnToOriginal(paidAmount, selectedCoin)}',
+                                                                              'Monto pagado: ${symbolMoney(selectedCoin)}: $paidAmount',
                                                                               style: TextStyle(
                                                                                 fontFamily: 'Poppins-regular',
                                                                                 fontSize: 12,
@@ -2948,7 +2948,7 @@ identifyPaymentMethod({
                                                                                 EdgeInsets.only(top: 10),
                                                                             child:
                                                                                 Text(
-                                                                              'Monto pagado: ${symbolMoney(currentCoin)}: ${priceReturnToOriginal(paidAmount, selectedCoin)}',
+                                                                              'Monto pagado: ${symbolMoney(selectedCoin)}: $paidAmount',
                                                                               style: TextStyle(
                                                                                 fontFamily: 'Poppins-regular',
                                                                                 fontSize: 12,
