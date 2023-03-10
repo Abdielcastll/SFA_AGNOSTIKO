@@ -563,59 +563,51 @@ Future registerBankCheckPayment({
   print('Se completo la factura??:');
   print(remaining! - paidAmount <= 0 ? 'Completado' : "Sigue pendiente");
 
-  if (paidAmount <= remaining) {
-    try {
-      return await FirebaseFirestore.instance
-          .collection('clientes')
-          .doc(client!.clientDocumentId)
-          .collection('facturas')
-          .doc(invoiceDocumentID)
-          .update({
-        'pagos': FieldValue.arrayUnion(
-          [
-            <String, dynamic>{
-              'anulado': cancelled,
-              'codigoMoneda': selectedCurrency,
-              'conciliado': concillied,
-              'fecha': timestampDate,
-              'metodo': method,
-              'monto': paidAmount,
-              'montoOriginal': paidAmount,
-              'banco': FirebaseFirestore.instance
-                  .collection('bancos')
-                  .doc(banksDocumentsID),
-              'nroCuenta': int.parse(accountNumber!),
-              'titular': accountHolder,
-              // 'nroNotaCredito': 0,
-              'tasaDeCambio': selectedCoinExchangeRate,
-            },
-          ],
-        ),
-      }).whenComplete(() {
-        try {
-          if (remaining - amount! <= 0) {
-            FirebaseFirestore.instance
-                .collection('clientes')
-                .doc(client.clientDocumentId)
-                .collection('facturas')
-                .doc(invoiceDocumentID)
-                .update({
-              'pagada': true,
-            });
-          }
-        } catch (e) {
-          print(e);
+  try {
+    return await FirebaseFirestore.instance
+        .collection('clientes')
+        .doc(client!.clientDocumentId)
+        .collection('facturas')
+        .doc(invoiceDocumentID)
+        .update({
+      'pagos': FieldValue.arrayUnion(
+        [
+          <String, dynamic>{
+            'anulado': cancelled,
+            'codigoMoneda': selectedCurrency,
+            'conciliado': concillied,
+            'fecha': timestampDate,
+            'metodo': method,
+            'monto': paidAmount,
+            'montoOriginal': paidAmount,
+            'banco': FirebaseFirestore.instance
+                .collection('bancos')
+                .doc(banksDocumentsID),
+            'nroCuenta': int.parse(accountNumber!),
+            'titular': accountHolder,
+            // 'nroNotaCredito': 0,
+            'tasaDeCambio': selectedCoinExchangeRate,
+          },
+        ],
+      ),
+    }).whenComplete(() {
+      try {
+        if (remaining - amount! <= 0) {
+          FirebaseFirestore.instance
+              .collection('clientes')
+              .doc(client.clientDocumentId)
+              .collection('facturas')
+              .doc(invoiceDocumentID)
+              .update({
+            'pagada': true,
+          });
         }
-      });
-    } catch (e) {
-      print(e);
-    }
-  } else {
-    Fluttertoast.showToast(
-      msg: 'La cantidad a pagar excede de la deuda pendiente',
-      backgroundColor: myTheme.colorScheme.secondary,
-      textColor: Colors.white,
-    );
+      } catch (e) {
+        print(e);
+      }
+    });
+  } catch (e) {
+    print(e);
   }
 }
 
@@ -688,55 +680,47 @@ Future registerCriptoPayment(
   print('transactionID: $transactionID');
   print('exancheRates: $exancheRates');
 
-  if (paymentAmount <= remaining) {
-    try {
-      print('Pago registrado correctamente');
-      return await FirebaseFirestore.instance
-          .collection('clientes')
-          .doc(client.clientDocumentId)
-          .collection('facturas')
-          .doc(invoiceDocumentID)
-          .update({
-        'pagos': FieldValue.arrayUnion(
-          [
-            <String, dynamic>{
-              'anulado': nulled,
-              'codigoMoneda': codeCurrency,
-              'conciliado': concillied,
-              'fecha': paymentDate,
-              'metodo': method,
-              'monto': paymentAmount,
-              'montoOriginal': paymentAmount,
-              'idTransaccion': transactionID,
-              'tasaDeCambio': selectedCoinExchangeRate,
-            },
-          ],
-        ),
-      }).whenComplete(() {
-        try {
-          if (remaining - double.parse(amount) <= 0) {
-            FirebaseFirestore.instance
-                .collection('clientes')
-                .doc(client.clientDocumentId)
-                .collection('facturas')
-                .doc(invoiceDocumentID)
-                .update({
-              'pagada': true,
-            });
-          }
-        } catch (e) {
-          print(e);
+  try {
+    print('Pago registrado correctamente');
+    return await FirebaseFirestore.instance
+        .collection('clientes')
+        .doc(client.clientDocumentId)
+        .collection('facturas')
+        .doc(invoiceDocumentID)
+        .update({
+      'pagos': FieldValue.arrayUnion(
+        [
+          <String, dynamic>{
+            'anulado': nulled,
+            'codigoMoneda': codeCurrency,
+            'conciliado': concillied,
+            'fecha': paymentDate,
+            'metodo': method,
+            'monto': paymentAmount,
+            'montoOriginal': paymentAmount,
+            'idTransaccion': transactionID,
+            'tasaDeCambio': selectedCoinExchangeRate,
+          },
+        ],
+      ),
+    }).whenComplete(() {
+      try {
+        if (remaining - double.parse(amount) <= 0) {
+          FirebaseFirestore.instance
+              .collection('clientes')
+              .doc(client.clientDocumentId)
+              .collection('facturas')
+              .doc(invoiceDocumentID)
+              .update({
+            'pagada': true,
+          });
         }
-      });
-    } catch (e) {
-      print(e);
-    }
-  } else {
-    Fluttertoast.showToast(
-      msg: 'El pago registrado excede a la deuda pendiente',
-      backgroundColor: myTheme.colorScheme.primaryContainer,
-      textColor: Colors.white,
-    );
+      } catch (e) {
+        print(e);
+      }
+    });
+  } catch (e) {
+    print(e);
   }
 }
 
@@ -819,58 +803,50 @@ Future registerDepositPayment({
   final voucher = voucherNumber;
   final selectedExchangedRate = selectedCoinExchangeRate;
 
-  if (paidAmount <= remaining!) {
-    try {
-      print('Pago registrado correctamente');
-      return await FirebaseFirestore.instance
-          .collection('clientes')
-          .doc(client.clientDocumentId)
-          .collection('facturas')
-          .doc(invoiceDocumentID)
-          .update({
-        'pagos': FieldValue.arrayUnion(
-          [
-            <String, dynamic>{
-              'anulado': cancelled,
-              'codigoMoneda': selectedCurrency,
-              'conciliado': concillied,
-              'fecha': timestampDate,
-              'metodo': method,
-              'monto': paidAmount,
-              'montoOriginal': paidAmount,
-              'banco': selectedBank,
-              'nroCuenta': account,
-              'nroVoucher': voucher,
-              // 'nroNotaCredito': 0,
-              'tasaDeCambio': selectedCoinExchangeRate,
-            },
-          ],
-        ),
-      }).whenComplete(() {
-        try {
-          if (remaining - double.parse(amount.toString()) <= 0) {
-            FirebaseFirestore.instance
-                .collection('clientes')
-                .doc(client.clientDocumentId)
-                .collection('facturas')
-                .doc(invoiceDocumentID)
-                .update({
-              'pagada': true,
-            });
-          }
-        } catch (e) {
-          print(e);
+  try {
+    print('Pago registrado correctamente');
+    return await FirebaseFirestore.instance
+        .collection('clientes')
+        .doc(client.clientDocumentId)
+        .collection('facturas')
+        .doc(invoiceDocumentID)
+        .update({
+      'pagos': FieldValue.arrayUnion(
+        [
+          <String, dynamic>{
+            'anulado': cancelled,
+            'codigoMoneda': selectedCurrency,
+            'conciliado': concillied,
+            'fecha': timestampDate,
+            'metodo': method,
+            'monto': paidAmount,
+            'montoOriginal': paidAmount,
+            'banco': selectedBank,
+            'nroCuenta': account,
+            'nroVoucher': voucher,
+            // 'nroNotaCredito': 0,
+            'tasaDeCambio': selectedCoinExchangeRate,
+          },
+        ],
+      ),
+    }).whenComplete(() {
+      try {
+        if (remaining! - double.parse(amount.toString()) <= 0) {
+          FirebaseFirestore.instance
+              .collection('clientes')
+              .doc(client.clientDocumentId)
+              .collection('facturas')
+              .doc(invoiceDocumentID)
+              .update({
+            'pagada': true,
+          });
         }
-      });
-    } catch (e) {
-      print(e);
-    }
-  } else {
-    Fluttertoast.showToast(
-      msg: 'La cantidad a pagar excede de la deuda pendiente',
-      backgroundColor: myTheme.colorScheme.secondary,
-      textColor: Colors.white,
-    );
+      } catch (e) {
+        print(e);
+      }
+    });
+  } catch (e) {
+    print(e);
   }
 }
 
@@ -941,54 +917,46 @@ Future registerMoneyPayment({
   print('originalAmount: $originalAmount');
   print('exancheRates: $exancheRates');
 
-  if (paymentAmount <= remaining!) {
-    try {
-      return await FirebaseFirestore.instance
-          .collection('clientes')
-          .doc(client!.clientDocumentId)
-          .collection('facturas')
-          .doc(invoiceDocumentID)
-          .update({
-        'pagos': FieldValue.arrayUnion(
-          [
-            <String, dynamic>{
-              'anulado': nulled,
-              'codigoMoneda': codeCurrency,
-              'conciliado': concillied,
-              'fecha': paymentDate,
-              'metodo': method,
-              'monto': paymentAmount,
-              'montoOriginal': originalAmount,
-              // 'nroNotaCredito': 0,
-              'tasaDeCambio': selectedCoinExchangeRate,
-            },
-          ],
-        ),
-      }).whenComplete(() {
-        try {
-          if (remaining - double.parse(amount.toString()) <= 0) {
-            FirebaseFirestore.instance
-                .collection('clientes')
-                .doc(client.clientDocumentId)
-                .collection('facturas')
-                .doc(invoiceDocumentID)
-                .update({
-              'pagada': true,
-            });
-          }
-        } catch (e) {
-          print(e);
+  try {
+    return await FirebaseFirestore.instance
+        .collection('clientes')
+        .doc(client!.clientDocumentId)
+        .collection('facturas')
+        .doc(invoiceDocumentID)
+        .update({
+      'pagos': FieldValue.arrayUnion(
+        [
+          <String, dynamic>{
+            'anulado': nulled,
+            'codigoMoneda': codeCurrency,
+            'conciliado': concillied,
+            'fecha': paymentDate,
+            'metodo': method,
+            'monto': paymentAmount,
+            'montoOriginal': originalAmount,
+            // 'nroNotaCredito': 0,
+            'tasaDeCambio': selectedCoinExchangeRate,
+          },
+        ],
+      ),
+    }).whenComplete(() {
+      try {
+        if (remaining! - double.parse(amount.toString()) <= 0) {
+          FirebaseFirestore.instance
+              .collection('clientes')
+              .doc(client.clientDocumentId)
+              .collection('facturas')
+              .doc(invoiceDocumentID)
+              .update({
+            'pagada': true,
+          });
         }
-      }).whenComplete(() => print('Operación completada satisfactoriamente'));
-    } catch (e) {
-      print(e);
-    }
-  } else {
-    Fluttertoast.showToast(
-      msg: 'La cantidad a pagar excede de la deuda pendiente',
-      backgroundColor: myTheme.colorScheme.secondary,
-      textColor: Colors.white,
-    );
+      } catch (e) {
+        print(e);
+      }
+    }).whenComplete(() => print('Operación completada satisfactoriamente'));
+  } catch (e) {
+    print(e);
   }
 }
 
@@ -1080,55 +1048,47 @@ Future registerTransferPayment({
   print('referenceID: $referenceID');
   print('selectedExchangedRate: $selectedExchangedRate');
 
-  if (paidAmount <= remaining!) {
-    try {
-      return await FirebaseFirestore.instance
-          .collection('clientes')
-          .doc(client!.clientDocumentId)
-          .collection('facturas')
-          .doc(invoiceDocumentID)
-          .update({
-        'pagos': FieldValue.arrayUnion(
-          [
-            <String, dynamic>{
-              'anulado': cancelled,
-              'codigoMoneda': selectedCurrency,
-              'conciliado': concillied,
-              'fecha': timestampDate,
-              'metodo': method,
-              'monto': paidAmount,
-              'montoOriginal': paidAmount,
-              'banco': selectedBank,
-              'nroReferencia': referenceID,
-              'tasaDeCambio': selectedCoinExchangeRate,
-            },
-          ],
-        ),
-      }).whenComplete(() {
-        try {
-          if (remaining - double.parse(amount.toString()) <= 0) {
-            FirebaseFirestore.instance
-                .collection('clientes')
-                .doc(client.clientDocumentId)
-                .collection('facturas')
-                .doc(invoiceDocumentID)
-                .update({
-              'pagada': true,
-            });
-          }
-        } catch (e) {
-          print(e);
+  try {
+    return await FirebaseFirestore.instance
+        .collection('clientes')
+        .doc(client!.clientDocumentId)
+        .collection('facturas')
+        .doc(invoiceDocumentID)
+        .update({
+      'pagos': FieldValue.arrayUnion(
+        [
+          <String, dynamic>{
+            'anulado': cancelled,
+            'codigoMoneda': selectedCurrency,
+            'conciliado': concillied,
+            'fecha': timestampDate,
+            'metodo': method,
+            'monto': paidAmount,
+            'montoOriginal': paidAmount,
+            'banco': selectedBank,
+            'nroReferencia': referenceID,
+            'tasaDeCambio': selectedCoinExchangeRate,
+          },
+        ],
+      ),
+    }).whenComplete(() {
+      try {
+        if (remaining! - double.parse(amount.toString()) <= 0) {
+          FirebaseFirestore.instance
+              .collection('clientes')
+              .doc(client.clientDocumentId)
+              .collection('facturas')
+              .doc(invoiceDocumentID)
+              .update({
+            'pagada': true,
+          });
         }
-      });
-    } catch (e) {
-      print(e);
-    }
-  } else {
-    Fluttertoast.showToast(
-      msg: 'La cantidad a pagar excede de la deuda pendiente',
-      backgroundColor: myTheme.colorScheme.secondary,
-      textColor: Colors.white,
-    );
+      } catch (e) {
+        print(e);
+      }
+    });
+  } catch (e) {
+    print(e);
   }
 }
 
@@ -1218,55 +1178,47 @@ Future registerTransferInterPayment({
   print('referenceID: $referenceID');
   print('selectedExchangedRate: $selectedExchangedRate');
 
-  if (paidAmount <= remaining!) {
-    try {
-      return await FirebaseFirestore.instance
-          .collection('clientes')
-          .doc(client!.clientDocumentId)
-          .collection('facturas')
-          .doc(invoiceDocumentID)
-          .update({
-        'pagos': FieldValue.arrayUnion(
-          [
-            <String, dynamic>{
-              'anulado': cancelled,
-              'codigoMoneda': selectedCurrency,
-              'conciliado': concillied,
-              'fecha': timestampDate,
-              'metodo': method,
-              'monto': paidAmount,
-              'montoOriginal': paidAmount,
-              'banco': selectedBank,
-              'nroReferencia': referenceID,
-              'tasaDeCambio': selectedCoinExchangeRate,
-            },
-          ],
-        ),
-      }).whenComplete(() {
-        try {
-          if (remaining - double.parse(amount.toString()) <= 0) {
-            FirebaseFirestore.instance
-                .collection('clientes')
-                .doc(client.clientDocumentId)
-                .collection('facturas')
-                .doc(invoiceDocumentID)
-                .update({
-              'pagada': true,
-            });
-          }
-        } catch (e) {
-          print(e);
+  try {
+    return await FirebaseFirestore.instance
+        .collection('clientes')
+        .doc(client!.clientDocumentId)
+        .collection('facturas')
+        .doc(invoiceDocumentID)
+        .update({
+      'pagos': FieldValue.arrayUnion(
+        [
+          <String, dynamic>{
+            'anulado': cancelled,
+            'codigoMoneda': selectedCurrency,
+            'conciliado': concillied,
+            'fecha': timestampDate,
+            'metodo': method,
+            'monto': paidAmount,
+            'montoOriginal': paidAmount,
+            'banco': selectedBank,
+            'nroReferencia': referenceID,
+            'tasaDeCambio': selectedCoinExchangeRate,
+          },
+        ],
+      ),
+    }).whenComplete(() {
+      try {
+        if (remaining! - double.parse(amount.toString()) <= 0) {
+          FirebaseFirestore.instance
+              .collection('clientes')
+              .doc(client.clientDocumentId)
+              .collection('facturas')
+              .doc(invoiceDocumentID)
+              .update({
+            'pagada': true,
+          });
         }
-      });
-    } catch (e) {
-      print(e);
-    }
-  } else {
-    Fluttertoast.showToast(
-      msg: 'La cantidad a pagar excede de la deuda pendiente',
-      backgroundColor: myTheme.colorScheme.secondary,
-      textColor: Colors.white,
-    );
+      } catch (e) {
+        print(e);
+      }
+    });
+  } catch (e) {
+    print(e);
   }
 }
 

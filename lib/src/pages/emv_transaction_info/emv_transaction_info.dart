@@ -289,26 +289,6 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                     const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
                 child: OutlinedButton(
                     onPressed: () {
-                      printTicket();
-                    },
-                    style: TextButton.styleFrom(
-                        foregroundColor: myTheme.colorScheme.primary,
-                        backgroundColor: Colors.blue.shade800),
-                    child: Text(
-                      'imprimir comprobante'.toUpperCase(),
-                      style: const TextStyle(
-                        fontFamily: 'Poppins-regular',
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
-                child: OutlinedButton(
-                    onPressed: () {
                       final noRetail = (ModalRoute.of(context)
                           ?.settings
                           .arguments! as List)[3];
@@ -515,9 +495,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       final cardlength = cardTag.length;
       String cardResult =
           cardTag.replaceRange(0, cardlength - 4, '*' * (cardlength - 4));
-      listOfTextLine.add(PrinterText(cardResult.toUpperCase(),
-          format: TextFormat(fontSize: 32, bold: true, fontFamily: regularFont),
-          alignment: TextAlignment.Center));
+      listOfTextLine.add(PrinterText('Tarjeta: ${cardResult.toUpperCase()}',
+          format:
+              TextFormat(fontSize: 16, bold: true, fontFamily: regularFont)));
     }
 
     final cardBrand = infoTags?.cardNo?.toHexStr().substring(0, 1) == '5'

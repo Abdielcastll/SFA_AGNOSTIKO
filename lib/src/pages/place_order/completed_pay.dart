@@ -25,7 +25,7 @@ class CompletedPayPage extends StatelessWidget {
     this.orderNumber,
   }) : super(key: key);
 
-  final client;
+  final Client client;
   final total;
   final method;
   final date;

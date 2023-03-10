@@ -112,6 +112,8 @@ class AddPaymentBody extends StatefulWidget {
 
 class _AddPaymentBodyState extends State<AddPaymentBody> {
   late double remaining = widget.remaining;
+  late double amountToPay = widget.remaining;
+  bool amountChanged = false;
   late List<PayMethod> payments = widget.payments;
   double amountPayed = 0;
 
@@ -157,10 +159,6 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
 
   @override
   Widget build(BuildContext context) {
-    double amountToPay = widget.remaining;
-    print('amountPayed222222222222: $amountPayed');
-    print(widget.discount);
-    print(widget.discountPercentage);
     double? paymentsTotalAmount = 0;
     for (var payment in widget.payments) {
       paymentsTotalAmount = paymentsTotalAmount! + payment.amount;
@@ -618,6 +616,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                           child: TextField(
                             onChanged: (value) {
                               // VERIFICAR SI SE VUELVE NULLABLE
+
                               if (value.isEmpty) {
                                 setState(() {
                                   amountToPay = 0;
@@ -626,9 +625,13 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                               } else {
                                 setState(() {
                                   amountToPay = double.parse(value);
+                                  print('amountToPay');
                                   print(amountToPay);
                                 });
                               }
+                              setState(() {
+                                amountChanged = true;
+                              });
                             },
                             style: TextStyle(
                               fontSize: 14,
@@ -895,7 +898,10 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                     selectedValueA: selectedValueA!,
                                     client: widget.client,
                                     invoiceDocumentID: widget.invoiceDocumentID,
-                                    paidAmount: amountToPay,
+                                    paidAmount: amountChanged
+                                        ? amountToPay
+                                        : priceToCurrencySelected(
+                                            amountToPay, selectedCoin!),
                                     totalOfTheOrder: getTotalAmount,
                                     date: today,
                                     context: context,

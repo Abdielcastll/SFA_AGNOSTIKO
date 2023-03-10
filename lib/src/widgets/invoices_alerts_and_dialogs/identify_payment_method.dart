@@ -46,9 +46,9 @@ cropImage(filePath, imageFile) async {
   }
 }
 
-priceToCurrencySelected(productPrice, coin) {
+priceToCurrencySelected(double productPrice, String coin) {
   double correctAmount = double.parse(productPrice.toStringAsFixed(2));
-  if (coin!.contains('USD')) {
+  if (coin.contains('USD')) {
     return correctAmount;
   } else if (coin.contains('VED')) {
     return correctAmount * 4.58;
