@@ -467,8 +467,9 @@ Future registerDebitCreditCardPayment(InvoiceData data) async {
             'conciliado': concillied,
             'fecha': timestampDate,
             'metodo': method,
-            'monto': priceReturnToOriginal(paidAmount, 'USD'),
-            'montoOriginal': priceReturnToOriginal(paidAmount, 'USD'),
+            'monto': priceReturnToOriginal(paidAmount, selectedCurrency),
+            'montoOriginal':
+                priceReturnToOriginal(paidAmount, selectedCurrency),
             // 'nroNotaCredito': 0,
             'tasaDeCambio': selectedCoinExchangeRate,
           },
