@@ -11134,10 +11134,6 @@ androidx.recyclerview.widget.AdapterHelper:
     static final int POSITION_TYPE_NEW_OR_LAID_OUT
     private static final java.lang.String TAG
     varargs androidx.recyclerview.widget.AdapterHelper addUpdateOp(androidx.recyclerview.widget.AdapterHelper$UpdateOp[])
-    boolean onItemRangeChanged(int,int,java.lang.Object)
-    boolean onItemRangeInserted(int,int)
-    boolean onItemRangeMoved(int,int,int)
-    boolean onItemRangeRemoved(int,int)
 androidx.recyclerview.widget.AdapterListUpdateCallback
 androidx.recyclerview.widget.AsyncDifferConfig$Builder
 androidx.recyclerview.widget.AsyncDifferConfig
@@ -11247,7 +11243,6 @@ androidx.recyclerview.widget.LinearLayoutManager:
     private static final float MAX_SCROLL_FACTOR
     private static final java.lang.String TAG
     public static final int VERTICAL
-    public void <init>(android.content.Context)
     public int findFirstCompletelyVisibleItemPosition()
     public int findLastCompletelyVisibleItemPosition()
     public int getInitialPrefetchItemCount()
@@ -11292,28 +11287,6 @@ androidx.recyclerview.widget.OrientationHelper:
     public abstract void offsetChild(android.view.View,int)
 androidx.recyclerview.widget.PagerSnapHelper:
     private static final int MAX_SCROLL_ON_FLING_DURATION
-androidx.recyclerview.widget.RecyclerView$Adapter:
-    public final void notifyItemChanged(int)
-    public final void notifyItemChanged(int,java.lang.Object)
-    public final void notifyItemInserted(int)
-    public final void notifyItemMoved(int,int)
-    public final void notifyItemRangeChanged(int,int)
-    public final void notifyItemRangeChanged(int,int,java.lang.Object)
-    public final void notifyItemRangeInserted(int,int)
-    public final void notifyItemRangeRemoved(int,int)
-    public final void notifyItemRemoved(int)
-androidx.recyclerview.widget.RecyclerView$AdapterDataObservable:
-    public void notifyItemMoved(int,int)
-    public void notifyItemRangeChanged(int,int)
-    public void notifyItemRangeChanged(int,int,java.lang.Object)
-    public void notifyItemRangeInserted(int,int)
-    public void notifyItemRangeRemoved(int,int)
-androidx.recyclerview.widget.RecyclerView$AdapterDataObserver:
-    public void onItemRangeChanged(int,int)
-    public void onItemRangeChanged(int,int,java.lang.Object)
-    public void onItemRangeInserted(int,int)
-    public void onItemRangeMoved(int,int,int)
-    public void onItemRangeRemoved(int,int)
 androidx.recyclerview.widget.RecyclerView$EdgeEffectFactory$EdgeDirection
 androidx.recyclerview.widget.RecyclerView$EdgeEffectFactory:
     public static final int DIRECTION_BOTTOM
@@ -11373,12 +11346,6 @@ androidx.recyclerview.widget.RecyclerView$RecycledViewPool:
 androidx.recyclerview.widget.RecyclerView$Recycler:
     static final int DEFAULT_CACHE_SIZE
     public void bindViewToPosition(android.view.View,int)
-androidx.recyclerview.widget.RecyclerView$RecyclerViewDataObserver:
-    public void onItemRangeChanged(int,int,java.lang.Object)
-    public void onItemRangeInserted(int,int)
-    public void onItemRangeMoved(int,int,int)
-    public void onItemRangeRemoved(int,int)
-    void triggerUpdateProcessor()
 androidx.recyclerview.widget.RecyclerView$SimpleOnItemTouchListener
 androidx.recyclerview.widget.RecyclerView$SmoothScroller$Action:
     public static final int UNDEFINED_DURATION
@@ -11407,23 +11374,6 @@ androidx.recyclerview.widget.RecyclerView$State:
     public boolean willRunSimpleAnimations()
 androidx.recyclerview.widget.RecyclerView$ViewCacheExtension:
     public void <init>()
-androidx.recyclerview.widget.RecyclerView$ViewHolder:
-    static final int FLAG_ADAPTER_FULLUPDATE
-    static final int FLAG_ADAPTER_POSITION_UNKNOWN
-    static final int FLAG_APPEARED_IN_PRE_LAYOUT
-    static final int FLAG_BOUNCED_FROM_HIDDEN_LIST
-    static final int FLAG_BOUND
-    static final int FLAG_IGNORE
-    static final int FLAG_INVALID
-    static final int FLAG_MOVED
-    static final int FLAG_NOT_RECYCLABLE
-    static final int FLAG_REMOVED
-    static final int FLAG_RETURNED_FROM_SCRAP
-    static final int FLAG_TMP_DETACHED
-    static final int FLAG_UPDATE
-    static final int PENDING_ACCESSIBILITY_STATE_NOT_SET
-    public final int getPosition()
-    void stopIgnoring()
 androidx.recyclerview.widget.RecyclerView:
     static final boolean DEBUG
     static final int DEFAULT_ORIENTATION
@@ -12482,24 +12432,645 @@ app.meedu.flutter_facebook_auth.R$string
 app.meedu.flutter_facebook_auth.R$style
 app.meedu.flutter_facebook_auth.R$styleable
 app.meedu.flutter_facebook_auth.R
-b.d:
-    public final int H()
-b.f:
-    public final com.newland.sdk.emvl3.internal.configuration.AidImpl r()
-    public final com.newland.sdk.emvl3.internal.configuration.AidImpl s()
-    public final com.newland.sdk.emvl3.internal.configuration.CapkImpl t()
-    public final com.newland.sdk.emvl3.internal.transaction.EmvL3Impl u()
-b.g:
-    public final com.newland.sdk.emvl3.api.internal.listener.PerfromTransactionListener m()
-b.h:
-    public final void a(com.newland.nsdk.core.api.internal.pinentry.PINEntryListener)
-    public final com.newland.nsdk.core.api.internal.pinentry.PINEntryListener c()
-    public final boolean e()
-c.a$a
-c.a:
-    public void <init>(android.content.Context,android.util.AttributeSet)
-    public final android.view.View a(int)
-    public final void a()
+b.j:
+    public final boolean d()
+com.a.a.a.a$a$1
+com.a.a.a.a$a
+com.a.a.a.aa$a$1
+com.a.a.a.aa$a
+com.a.a.a.aa
+com.a.a.a.ab$a$1
+com.a.a.a.ab$a$2
+com.a.a.a.ab$a
+com.a.a.a.ab
+com.a.a.a.ac$a$1
+com.a.a.a.ac$a
+com.a.a.a.ac
+com.a.a.a.ad$a$1
+com.a.a.a.ad$a
+com.a.a.a.ad
+com.a.a.a.ae$a$1
+com.a.a.a.ae$a
+com.a.a.a.ae
+com.a.a.a.af$a$1
+com.a.a.a.af$a
+com.a.a.a.af
+com.a.a.a.ag
+com.a.a.a.ah$a$1
+com.a.a.a.ah$a$2
+com.a.a.a.ah$a
+com.a.a.a.ah
+com.a.a.a.ai$a$1
+com.a.a.a.ai$a
+com.a.a.a.ai
+com.a.a.a.aj$a$1
+com.a.a.a.aj$a$2
+com.a.a.a.aj$a$3
+com.a.a.a.aj$a$4
+com.a.a.a.aj$a$5
+com.a.a.a.aj$a
+com.a.a.a.ak$a$1
+com.a.a.a.ak$a
+com.a.a.a.ak
+com.a.a.a.al
+com.a.a.a.am
+com.a.a.a.an$a$1
+com.a.a.a.an$a
+com.a.a.a.an
+com.a.a.a.ao
+com.a.a.a.ap$a$1
+com.a.a.a.ap$a$2
+com.a.a.a.ap$a
+com.a.a.a.ap
+com.a.a.a.aq$a$1
+com.a.a.a.aq$a
+com.a.a.a.aq
+com.a.a.a.ar$a$1
+com.a.a.a.ar$a$2
+com.a.a.a.ar$a$3
+com.a.a.a.ar$a$4
+com.a.a.a.ar$a$5
+com.a.a.a.ar$a
+com.a.a.a.ar
+com.a.a.a.as$a$1
+com.a.a.a.as$a
+com.a.a.a.as
+com.a.a.a.at
+com.a.a.a.au
+com.a.a.a.av$a$1
+com.a.a.a.av$a
+com.a.a.a.av
+com.a.a.a.aw
+com.a.a.a.ax
+com.a.a.a.ay
+com.a.a.a.az$a$1
+com.a.a.a.az$a$2
+com.a.a.a.az$a$3
+com.a.a.a.az$a$4
+com.a.a.a.az$a$5
+com.a.a.a.az$a$7
+com.a.a.a.az$a$8
+com.a.a.a.az$a:
+    private void <init>()
+    public static com.a.a.a.az a()
+    public static com.a.a.a.az a(com.a.a.a.az,com.a.a.a.az)
+    public static varargs com.a.a.a.az a(com.a.a.a.az,com.a.a.a.az,com.a.a.a.az[])
+    public static com.a.a.a.az a(com.a.a.a.bp)
+    public static com.a.a.a.az a(com.a.a.a.bp,boolean)
+    public static com.a.a.a.az b(com.a.a.a.az,com.a.a.a.az)
+    public static varargs com.a.a.a.az b(com.a.a.a.az,com.a.a.a.az,com.a.a.a.az[])
+    public static com.a.a.a.az c(com.a.a.a.az,com.a.a.a.az)
+com.a.a.a.b$a$1
+com.a.a.a.b$a$2
+com.a.a.a.b$a
+com.a.a.a.b
+com.a.a.a.ba$a$1
+com.a.a.a.ba$a
+com.a.a.a.bb
+com.a.a.a.bc
+com.a.a.a.bd
+com.a.a.a.be
+com.a.a.a.bf
+com.a.a.a.bg
+com.a.a.a.bh
+com.a.a.a.bi
+com.a.a.a.bj
+com.a.a.a.bk
+com.a.a.a.bl
+com.a.a.a.bm
+com.a.a.a.bn
+com.a.a.a.bo
+com.a.a.a.bp
+com.a.a.a.bq
+com.a.a.a.br
+com.a.a.a.bs
+com.a.a.a.bt:
+    public abstract int a(java.lang.Object)
+com.a.a.a.bu
+com.a.a.a.bv$a$1
+com.a.a.a.bv$a
+com.a.a.a.bv
+com.a.a.a.c$a$1
+com.a.a.a.c$a$2
+com.a.a.a.c$a
+com.a.a.a.c
+com.a.a.a.d$a$1
+com.a.a.a.d$a
+com.a.a.a.d
+com.a.a.a.e
+com.a.a.a.f$a$1
+com.a.a.a.f$a$2
+com.a.a.a.f$a$3
+com.a.a.a.f$a$4
+com.a.a.a.f$a$5
+com.a.a.a.f$a
+com.a.a.a.f
+com.a.a.a.g
+com.a.a.a.h$a$1
+com.a.a.a.h$a$2
+com.a.a.a.h$a
+com.a.a.a.h
+com.a.a.a.i
+com.a.a.a.j$a$1
+com.a.a.a.j$a$2
+com.a.a.a.j$a
+com.a.a.a.j
+com.a.a.a.k$a$1
+com.a.a.a.k$a
+com.a.a.a.k
+com.a.a.a.l$a$1
+com.a.a.a.l$a$2
+com.a.a.a.l$a$3
+com.a.a.a.l$a$4
+com.a.a.a.l$a$5
+com.a.a.a.l$a
+com.a.a.a.l
+com.a.a.a.m$a$1
+com.a.a.a.m$a
+com.a.a.a.m
+com.a.a.a.n
+com.a.a.a.o
+com.a.a.a.p$a$1
+com.a.a.a.p$a
+com.a.a.a.p
+com.a.a.a.q$a$1
+com.a.a.a.q$a$2
+com.a.a.a.q$a
+com.a.a.a.r$a$1
+com.a.a.a.r$a
+com.a.a.a.r
+com.a.a.a.s$a$1
+com.a.a.a.s$a$2
+com.a.a.a.s$a
+com.a.a.a.s
+com.a.a.a.t$a$1
+com.a.a.a.t$a$2
+com.a.a.a.t$a
+com.a.a.a.t
+com.a.a.a.u$a$1
+com.a.a.a.u$a
+com.a.a.a.u
+com.a.a.a.v$a$1
+com.a.a.a.v$a
+com.a.a.a.v
+com.a.a.a.w$a$1
+com.a.a.a.w$a
+com.a.a.a.w
+com.a.a.a.x$a$1
+com.a.a.a.x$a
+com.a.a.a.x
+com.a.a.a.y$a$1
+com.a.a.a.y$a$2
+com.a.a.a.y$a
+com.a.a.a.y
+com.a.a.a.z$a$1
+com.a.a.a.z$a
+com.a.a.a.z
+com.a.a.b$10
+com.a.a.b$11
+com.a.a.b$13
+com.a.a.b$14
+com.a.a.b$15
+com.a.a.b$16
+com.a.a.b$17
+com.a.a.b$18
+com.a.a.b$19
+com.a.a.b$20
+com.a.a.b$21
+com.a.a.b$22
+com.a.a.b$23
+com.a.a.b$24
+com.a.a.b$25
+com.a.a.b$26
+com.a.a.b$27
+com.a.a.b$28
+com.a.a.b$29
+com.a.a.b$2
+com.a.a.b$30
+com.a.a.b$31$1
+com.a.a.b$31
+com.a.a.b$32
+com.a.a.b$33
+com.a.a.b$35
+com.a.a.b$36
+com.a.a.b$37
+com.a.a.b$38
+com.a.a.b$39
+com.a.a.b$3
+com.a.a.b$42
+com.a.a.b$43
+com.a.a.b$44
+com.a.a.b$45
+com.a.a.b$4
+com.a.a.b$5
+com.a.a.b$6
+com.a.a.b$7
+com.a.a.b$8
+com.a.a.b$9
+com.a.a.b$b
+com.a.a.b$c
+com.a.a.b.a:
+    static final long a
+    private static final java.lang.String b
+    public void <init>()
+    public static java.util.Queue a()
+    public static varargs java.lang.Object[] a(int,java.lang.Object[])
+    public static java.lang.Object[] a(java.lang.Object[],int)
+com.a.a.b.b$1
+com.a.a.b.b$2
+com.a.a.b.b
+com.a.a.b.c:
+    private void <init>()
+    public static java.util.List a(java.util.Iterator)
+    public static double[] a(com.a.a.c.g$a)
+    public static long[] a(com.a.a.c.g$c)
+    public static java.lang.Object[] a(java.util.Iterator,com.a.a.a.ai)
+com.a.a.b.d:
+    public void <init>()
+com.a.a.b.e$a$1
+com.a.a.b.e$a
+com.a.a.b.e$b:
+    void <init>(int)
+com.a.a.b.e$c$1
+com.a.a.b.e$c
+com.a.a.b.e$d:
+    void <init>(int)
+    public boolean b()
+    public void h()
+    public abstract java.util.Iterator iterator()
+com.a.a.b.e
+com.a.a.b:
+    private void <init>()
+    private static com.a.a.a a(com.a.a.a.a)
+    public static com.a.a.a a(com.a.a.a.az)
+    public static com.a.a.a a(com.a.a.a.az,com.a.a.a)
+    public static com.a.a.a a(com.a.a.a.ba)
+    public static com.a.a.a a(com.a.a.a.bs)
+    public static com.a.a.a a(com.a.a.a.bt)
+    public static com.a.a.a a(com.a.a.a.bu)
+    public static com.a.a.a a(com.a.a.a.q)
+    public static com.a.a.a a(com.a.a.a.q,com.a.a.a.ba,com.a.a.a)
+    public static com.a.a.a a(com.a.a.a.q,com.a.a.a.q)
+    public static com.a.a.a a(com.a.a.a.q,com.a.a.a.q,com.a.a.a.ba)
+    public static com.a.a.a a(com.a.a.a.q,com.a.a.a.q,com.a.a.a.c)
+    public static com.a.a.a a(com.a.a.a.q,com.a.a.a.q,com.a.a.a.c,com.a.a.a.ba)
+    public static com.a.a.a a(com.a.a.a.q,com.a.a.a)
+    public static com.a.a.a a(com.a.a.a,com.a.a.a.q)
+    public static com.a.a.a a(java.lang.CharSequence)
+    public static com.a.a.a a(java.lang.CharSequence,java.lang.CharSequence,java.lang.CharSequence)
+    public static com.a.a.a a(java.lang.CharSequence,java.lang.CharSequence,java.lang.CharSequence,java.lang.String)
+    public static com.a.a.a a(java.lang.Object,com.a.a.a.c)
+    public static com.a.a.a a(java.lang.Object,com.a.a.a.q,com.a.a.a.c)
+    static synthetic java.lang.IllegalStateException a(java.lang.Object,java.lang.Object,java.lang.Object)
+    static synthetic void a(java.util.Map,java.lang.Object,java.lang.Object,com.a.a.a.c)
+    public static com.a.a.a b()
+    public static com.a.a.a b(com.a.a.a.az,com.a.a.a)
+    public static com.a.a.a b(com.a.a.a.bs)
+    public static com.a.a.a b(com.a.a.a.bt)
+    public static com.a.a.a b(com.a.a.a.bu)
+    public static com.a.a.a b(com.a.a.a.q)
+    public static com.a.a.a b(com.a.a.a.q,com.a.a.a.q)
+    public static com.a.a.a b(com.a.a.a.q,com.a.a.a.q,com.a.a.a.c)
+    public static com.a.a.a b(com.a.a.a.q,com.a.a.a)
+    private static java.lang.IllegalStateException b(java.lang.Object,java.lang.Object,java.lang.Object)
+    private static void b(java.util.Map,java.lang.Object,java.lang.Object,com.a.a.a.c)
+    public static com.a.a.a c()
+    public static com.a.a.a c(com.a.a.a.q)
+    public static com.a.a.a c(com.a.a.a.q,com.a.a.a)
+    public static com.a.a.a d()
+    public static com.a.a.a e()
+    public static com.a.a.a f()
+    private static com.a.a.a.ba h()
+    private static com.a.a.a.bv i()
+com.a.a.c$1
+com.a.a.c$2
+com.a.a.c$3
+com.a.a.c$4
+com.a.a.c$5
+com.a.a.c$6
+com.a.a.c$7
+com.a.a.c$8
+com.a.a.c$9
+com.a.a.c.a
+com.a.a.c.b
+com.a.a.c.c
+com.a.a.c.d
+com.a.a.c.e$a
+com.a.a.c.e$b
+com.a.a.c.e$c
+com.a.a.c.e
+com.a.a.c.f$a
+com.a.a.c.f$b
+com.a.a.c.f$c
+com.a.a.c.f
+com.a.a.c.g$a
+com.a.a.c.g$c
+com.a.a.c.g
+com.a.a.c
+com.a.a.d$1
+com.a.a.d$2
+com.a.a.d$3
+com.a.a.d$4
+com.a.a.d$5
+com.a.a.d.a
+com.a.a.d.ab
+com.a.a.d.ac
+com.a.a.d.ad
+com.a.a.d.ae
+com.a.a.d.af
+com.a.a.d.ag
+com.a.a.d.ah
+com.a.a.d.ai
+com.a.a.d.aj
+com.a.a.d.ak
+com.a.a.d.al
+com.a.a.d.an
+com.a.a.d.ao
+com.a.a.d.ap
+com.a.a.d.aq
+com.a.a.d.ar
+com.a.a.d.as
+com.a.a.d.at
+com.a.a.d.au
+com.a.a.d.av
+com.a.a.d.aw
+com.a.a.d.ax
+com.a.a.d.ay
+com.a.a.d.az
+com.a.a.d.b
+com.a.a.d.ba
+com.a.a.d.bb
+com.a.a.d.bc
+com.a.a.d.bd
+com.a.a.d.be
+com.a.a.d.bf
+com.a.a.d.bg
+com.a.a.d.bh
+com.a.a.d.bi
+com.a.a.d.bj
+com.a.a.d.bk
+com.a.a.d.bl
+com.a.a.d.bm
+com.a.a.d.bn
+com.a.a.d.bo
+com.a.a.d.bp
+com.a.a.d.bq
+com.a.a.d.br
+com.a.a.d.bs
+com.a.a.d.bt
+com.a.a.d.bu
+com.a.a.d.bv
+com.a.a.d.bw
+com.a.a.d.bx
+com.a.a.d.bz
+com.a.a.d.c
+com.a.a.d.ca
+com.a.a.d.cb
+com.a.a.d.cc
+com.a.a.d.cd
+com.a.a.d.ce
+com.a.a.d.cf
+com.a.a.d.cg
+com.a.a.d.ch
+com.a.a.d.ci
+com.a.a.d.cj
+com.a.a.d.ck
+com.a.a.d.cl
+com.a.a.d.cm$1
+com.a.a.d.cm$a
+com.a.a.d.cm
+com.a.a.d.cn
+com.a.a.d.co
+com.a.a.d.cp
+com.a.a.d.cq
+com.a.a.d.cr
+com.a.a.d.cs
+com.a.a.d.ct
+com.a.a.d.cu
+com.a.a.d.cv
+com.a.a.d.cw
+com.a.a.d.cx
+com.a.a.d.d
+com.a.a.d.e
+com.a.a.d.f
+com.a.a.d.g
+com.a.a.d.h
+com.a.a.d.i
+com.a.a.d.j
+com.a.a.d.k
+com.a.a.d.l
+com.a.a.d.m
+com.a.a.d.n
+com.a.a.d.o
+com.a.a.d.p
+com.a.a.d.q
+com.a.a.d.r
+com.a.a.d.s
+com.a.a.d.t
+com.a.a.d.u
+com.a.a.d.v
+com.a.a.d.x
+com.a.a.d.y
+com.a.a.d.z
+com.a.a.d
+com.a.a.e
+com.a.a.f
+com.a.a.g$2
+com.a.a.g$3
+com.a.a.g$4
+com.a.a.g$5:
+    public int a(java.lang.Integer)
+    public synthetic bridge int a(java.lang.Object)
+com.a.a.g:
+    public com.a.a.d a(com.a.a.a.al)
+    public com.a.a.g a(int,int,com.a.a.a.aa)
+    public com.a.a.g a(int,int,com.a.a.a.ag)
+    public com.a.a.g a(int,com.a.a.a.ag)
+    public static com.a.a.g a(int,com.a.a.a.aj,com.a.a.a.an)
+    public static com.a.a.g a(int,com.a.a.a.an)
+    public com.a.a.g a(long)
+    public com.a.a.g a(com.a.a.a.aa)
+    public com.a.a.g a(com.a.a.a.ag)
+    public com.a.a.g a(com.a.a.a.ah)
+    public static com.a.a.g a(com.a.a.a.ak)
+    public com.a.a.g a(com.a.a.a.an)
+    public static com.a.a.g a(com.a.a.c.g$b)
+    public static com.a.a.g a(com.a.a.g,com.a.a.g)
+    public static com.a.a.g a(java.lang.CharSequence)
+    public com.a.a.g a(java.lang.Runnable)
+    public com.a.a.g a(java.util.Comparator)
+    public static varargs com.a.a.g a(int[])
+    public com.a.a.h a(com.a.a.a.am)
+    public com.a.a.p a(com.a.a.a.ai)
+    public java.lang.Object a(com.a.a.a.ba,com.a.a.a.ax)
+    public java.lang.Object a(com.a.a.a.q)
+    public void a(int,int,com.a.a.a.y)
+    public void a(com.a.a.a.y)
+    public int b(int,com.a.a.a.ag)
+    public com.a.a.c.g$b b()
+    public com.a.a.g b(int)
+    public com.a.a.g b(long)
+    public com.a.a.g b(com.a.a.a.ag)
+    public com.a.a.g b(com.a.a.a.ai)
+    public com.a.a.g b(com.a.a.a.aj)
+    public void b(com.a.a.a.ah)
+    public com.a.a.g c(com.a.a.a.aj)
+    public com.a.a.m c(com.a.a.a.ag)
+    public com.a.a.p c()
+    public com.a.a.g d()
+    public com.a.a.g d(com.a.a.a.aj)
+    public com.a.a.g e()
+    public com.a.a.g e(com.a.a.a.aj)
+    public boolean f(com.a.a.a.aj)
+    public int g()
+    public boolean g(com.a.a.a.aj)
+    public com.a.a.m h()
+    public boolean h(com.a.a.a.aj)
+    public com.a.a.m i()
+    public long j()
+    public com.a.a.m k()
+    public com.a.a.m l()
+    public int m()
+    public com.a.a.m n()
+com.a.a.h$1
+com.a.a.h$2
+com.a.a.h$3
+com.a.a.h$4
+com.a.a.h$5
+com.a.a.h
+com.a.a.i:
+    private void <init>()
+    public static int a(int,int)
+    public static int a(long,long)
+    public static int a(java.lang.Object)
+    public static int a(java.lang.Object,java.lang.Object,java.util.Comparator)
+    public static varargs int a(java.lang.Object[])
+    public static java.lang.Object a(java.lang.Object,com.a.a.a.ba)
+    public static java.lang.String a(java.lang.Object,java.lang.String)
+    public static java.util.Collection a(java.util.Collection)
+    public static boolean a(java.lang.Object,java.lang.Object)
+    public static java.lang.Object b(java.lang.Object,com.a.a.a.ba)
+    public static java.lang.Object b(java.lang.Object,java.lang.String)
+    public static boolean b(java.lang.Object,java.lang.Object)
+    public static java.lang.Object c(java.lang.Object,java.lang.Object)
+    public static boolean c(java.lang.Object)
+    public static boolean d(java.lang.Object)
+com.a.a.j
+com.a.a.k
+com.a.a.l
+com.a.a.m
+com.a.a.n
+com.a.a.o$1
+com.a.a.o$2
+com.a.a.o$3
+com.a.a.o$4
+com.a.a.o$5
+com.a.a.o$6
+com.a.a.o
+com.a.a.p$1
+com.a.a.p$2
+com.a.a.p$3
+com.a.a.p$4
+com.a.a.p$5
+com.a.a.p$6
+com.a.a.p$7
+com.a.a.p:
+    private static final int c
+    private static final int d
+    private static final int e
+    private void <init>(com.a.a.b.d,java.lang.Iterable)
+    private void <init>(java.lang.Iterable)
+    public com.a.a.d a(com.a.a.a.bs)
+    public com.a.a.g a(com.a.a.a.bt)
+    public com.a.a.h a(com.a.a.a.bu)
+    public static com.a.a.p a()
+    public com.a.a.p a(int)
+    public static com.a.a.p a(int,int)
+    public com.a.a.p a(int,int,com.a.a.a.af)
+    public com.a.a.p a(int,int,com.a.a.a.x)
+    public com.a.a.p a(long)
+    public static com.a.a.p a(long,long)
+    public com.a.a.p a(com.a.a.a.af)
+    public com.a.a.p a(com.a.a.a.b)
+    public static com.a.a.p a(com.a.a.a.ba)
+    public com.a.a.p a(com.a.a.a.h)
+    public com.a.a.p a(com.a.a.a.x)
+    public static com.a.a.p a(com.a.a.p,com.a.a.p)
+    public static com.a.a.p a(com.a.a.p,com.a.a.p,com.a.a.a.b)
+    public com.a.a.p a(java.lang.Class)
+    public static com.a.a.p a(java.lang.Iterable)
+    public static com.a.a.p a(java.lang.Object)
+    public static com.a.a.p a(java.lang.Object,com.a.a.a.az,com.a.a.a.bv)
+    public com.a.a.p a(java.lang.Object,com.a.a.a.b)
+    public static com.a.a.p a(java.lang.Object,com.a.a.a.bv)
+    public com.a.a.p a(java.lang.Runnable)
+    public com.a.a.p a(java.util.Comparator)
+    public static com.a.a.p a(java.util.Iterator,java.util.Iterator)
+    public static com.a.a.p a(java.util.Iterator,java.util.Iterator,com.a.a.a.b)
+    public static com.a.a.p a(java.util.Map)
+    public static varargs com.a.a.p a(java.lang.Object[])
+    public java.lang.Object a(int,int,java.lang.Object,com.a.a.a.r)
+    public java.lang.Object a(com.a.a.a.ba,com.a.a.a.a)
+    public java.lang.Object a(com.a.a.a.q)
+    public java.lang.Object a(java.lang.Object,com.a.a.a.r)
+    public void a(int,int,com.a.a.a.s)
+    public void a(com.a.a.a.s)
+    private boolean a(com.a.a.a.az,int)
+    public java.lang.Object[] a(com.a.a.a.ai)
+    public com.a.a.j b(com.a.a.a.b)
+    public com.a.a.j b(java.util.Comparator)
+    public com.a.a.p b(int)
+    public static com.a.a.p b(int,int)
+    public com.a.a.p b(int,int,com.a.a.a.af)
+    public com.a.a.p b(long)
+    public static com.a.a.p b(long,long)
+    public com.a.a.p b(com.a.a.a.af)
+    public com.a.a.p b(com.a.a.a.q)
+    public static com.a.a.p b(com.a.a.p,com.a.a.p,com.a.a.a.b)
+    public static com.a.a.p b(java.lang.Iterable)
+    public com.a.a.p b(java.lang.Object)
+    public static com.a.a.p b(java.util.Iterator)
+    public static com.a.a.p b(java.util.Iterator,java.util.Iterator,com.a.a.a.b)
+    public static com.a.a.p b(java.util.Map)
+    public static com.a.a.p b(java.lang.Object[])
+    public java.lang.Object b(java.lang.Object,com.a.a.a.b)
+    public java.util.Iterator b()
+    public void b(com.a.a.a.h)
+    public com.a.a.j c(java.util.Comparator)
+    public com.a.a.p c()
+    public com.a.a.p c(int,int)
+    public com.a.a.p c(int,int,com.a.a.a.af)
+    public com.a.a.p c(com.a.a.a.af)
+    public com.a.a.p c(com.a.a.a.az)
+    public com.a.a.p c(com.a.a.a.q)
+    public com.a.a.g d(com.a.a.a.q)
+    public com.a.a.p d()
+    public com.a.a.p d(int,int)
+    public com.a.a.p d(int,int,com.a.a.a.af)
+    public com.a.a.p d(com.a.a.a.af)
+    public com.a.a.p d(com.a.a.a.az)
+    public com.a.a.h e(com.a.a.a.q)
+    public com.a.a.j e(int,int,com.a.a.a.af)
+    public com.a.a.j e(com.a.a.a.af)
+    public com.a.a.p e()
+    public com.a.a.p e(com.a.a.a.az)
+    public com.a.a.d f(com.a.a.a.q)
+    public com.a.a.p f()
+    public boolean f(com.a.a.a.az)
+    public com.a.a.p g()
+    public com.a.a.p g(com.a.a.a.q)
+    public boolean g(com.a.a.a.az)
+    public com.a.a.p h(com.a.a.a.q)
+    public boolean h(com.a.a.a.az)
+    public java.lang.Object[] h()
+    public com.a.a.p i(com.a.a.a.q)
+    public java.util.List i()
+    public long j()
+    public com.a.a.p j(com.a.a.a.q)
+    public com.a.a.j k()
+    public com.a.a.j l()
+    public java.lang.Object m()
+    public com.a.a.j n()
 com.aboutyou.dart_packages.sign_in_with_apple.BuildConfig
 com.aboutyou.dart_packages.sign_in_with_apple.R$attr
 com.aboutyou.dart_packages.sign_in_with_apple.R$color
@@ -13410,17 +13981,19 @@ com.apps2go.agnostiko.R$drawable
 com.apps2go.agnostiko.R$id
 com.apps2go.agnostiko.R$integer
 com.apps2go.agnostiko.R$layout
+com.apps2go.agnostiko.R$raw
 com.apps2go.agnostiko.R$string
 com.apps2go.agnostiko.R$style
 com.apps2go.agnostiko.R$styleable
-com.apps2go.agnostiko.R$xml
 com.apps2go.agnostiko.R
 com.apps2go.agnostiko.common.IImplementation:
     private com.apps2go.agnostiko.imp.bluetooth.BluetoothHandler bluetoothHandler
     private com.apps2go.agnostiko.imp.mdb.IMDB mdb
+    private com.apps2go.agnostiko.imp.scanner.IScanner scanner
     public final io.flutter.embedding.engine.plugins.FlutterPlugin$FlutterPluginBinding getPluginBinding()
     public final void setBluetoothHandler(com.apps2go.agnostiko.imp.bluetooth.BluetoothHandler)
     public final void setMdb(com.apps2go.agnostiko.imp.mdb.IMDB)
+    public final void setScanner(com.apps2go.agnostiko.imp.scanner.IScanner)
 com.apps2go.agnostiko.common.bluetooth.BluetoothConnection$Companion
 com.apps2go.agnostiko.common.bluetooth.BluetoothConnection$ConnectionThread
 com.apps2go.agnostiko.common.bluetooth.BluetoothConnection
@@ -13514,7 +14087,7 @@ com.apps2go.agnostiko.common.emv.EmvTransactionInfo:
     public final boolean getOnlineRequested()
     public final boolean getPinRequested()
     public final com.apps2go.agnostiko.common.emv.EmvTransactionResult getResult()
-    public final byte[] getScriptResults()
+    public final boolean isContactless()
 com.apps2go.agnostiko.common.emv.EmvTransactionParameters:
     public synthetic void <init>(int,int,long,java.lang.Long,boolean,int,kotlin.jvm.internal.DefaultConstructorMarker)
     public static final com.apps2go.agnostiko.common.emv.EmvTransactionParameters fromHashMap(java.util.HashMap)
@@ -13537,7 +14110,6 @@ com.apps2go.agnostiko.common.emv.TerminalParameters$Companion:
 com.apps2go.agnostiko.common.emv.TerminalParameters:
     public static final com.apps2go.agnostiko.common.emv.TerminalParameters fromHashMap(java.util.HashMap)
     public static final com.apps2go.agnostiko.common.emv.TerminalParameters fromJSON(org.json.JSONObject)
-    public final java.lang.String getMerchantNameAndLocation()
     public final java.util.HashMap toHashMap()
     public final org.json.JSONObject toJSON()
 com.apps2go.agnostiko.common.ped.DUKPTResult$Companion:
@@ -13591,20 +14163,18 @@ com.apps2go.agnostiko.common.printer.PrinterText$Companion
 com.apps2go.agnostiko.common.printer.PrinterText
 com.apps2go.agnostiko.common.printer.TextAlignment
 com.apps2go.agnostiko.common.printer.TextFormat
-com.apps2go.agnostiko.common.utils.AmountKt:
-    public static final byte[] toAmountBinary(long)
+com.apps2go.agnostiko.common.utils.AmountKt
 com.apps2go.agnostiko.common.utils.FileNative$Companion
 com.apps2go.agnostiko.common.utils.FileNative
 com.apps2go.agnostiko.common.utils.FilesKt
 com.apps2go.agnostiko.common.utils.HexExtensionsKt:
-    private static final java.lang.String fixHexEvenLen(java.lang.String)
     public static final byte[] toBcdBytes(int)
     public static final byte[] toBcdBytes(long)
     public static final byte[] toBcdBytes(short)
-    public static final java.lang.String toHexStr(int)
     public static final java.lang.String toHexStr(long)
     public static final java.lang.String toHexStr(short)
-com.apps2go.agnostiko.common.utils.ImageKt
+com.apps2go.agnostiko.common.utils.ImageKt:
+    public static final byte[] bitmapToRgba(android.graphics.Bitmap)
 com.apps2go.agnostiko.common.utils.ImageNative$Companion
 com.apps2go.agnostiko.common.utils.ImageNative
 com.apps2go.agnostiko.common.utils.JSONExtensionsKt
@@ -13620,12 +14190,14 @@ com.apps2go.agnostiko.common.utils.PlatformInfo:
     public final boolean getHasMDB()
     public final boolean getHasPinEntryDevice()
     public final boolean getHasPrinter()
+    public final boolean getHasScannerHw()
     public final java.util.List getSupportedCardTypes()
     public final java.lang.String getVersion()
 com.apps2go.agnostiko.common.utils.TlvPackage$Companion:
     public final com.apps2go.agnostiko.common.utils.TlvPackage unpack(byte[])
 com.apps2go.agnostiko.common.utils.TlvPackage:
     public void <init>(java.util.List)
+    public final void add(int,byte)
     private final void clear()
     private final com.apps2go.agnostiko.common.utils.TlvTag get(int)
     private final com.apps2go.agnostiko.common.utils.TlvTag getAt(int)
@@ -13650,28 +14222,27 @@ com.apps2go.agnostiko.imp.emv.IEmvModule:
     public final java.util.List g()
     public final java.lang.Object h()
     public final java.util.List i()
-    public final boolean q()
+    public final com.apps2go.agnostiko.common.emv.TerminalParameters q()
+    public final boolean r()
 com.apps2go.agnostiko.imp.emv.IEmvTransaction:
-    public final void a(java.lang.String,java.lang.String,java.lang.Object)
     public final com.apps2go.agnostiko.imp.cards.ICardReader c()
     public final com.apps2go.agnostiko.common.IImplementation d()
-    public final boolean h()
+    public final boolean i()
 com.apps2go.agnostiko.imp.ped.ICrypto:
     public final java.lang.Object c()
     public final com.apps2go.agnostiko.common.IImplementation d()
+com.apps2go.agnostiko.imp.ped.IPinEntry:
+    public final com.apps2go.agnostiko.common.IImplementation a()
 com.apps2go.agnostiko.imp.printer.IPrinter:
     public final java.lang.Object c()
-    public final com.apps2go.agnostiko.common.IImplementation d()
-com.apps2go.agnostiko.newland_nsdk.NSDKInstallationReceiver$Companion:
+com.apps2go.agnostiko.newland.DelReceiver$Companion:
     public final java.lang.String getACTION_DELETE_APP_HIDE()
-    public final java.lang.String getACTION_INSTALL_APP_HIDE()
-com.apps2go.agnostiko.newland_nsdk.NSDKInstallationReceiver:
+com.apps2go.agnostiko.newland.DelReceiver:
     public static final synthetic java.lang.String access$getACTION_DELETE_APP_HIDE$cp()
+com.apps2go.agnostiko.newland.InstallationReceiver$Companion:
+    public final java.lang.String getACTION_INSTALL_APP_HIDE()
+com.apps2go.agnostiko.newland.InstallationReceiver:
     public static final synthetic java.lang.String access$getACTION_INSTALL_APP_HIDE$cp()
-com.apps2go.agnostiko.newland_nsdk.activity.KeyBoardNumberActivity:
-    public void _$_clearFindViewByIdCache()
-    public android.view.View _$_findCachedViewById(int)
-    public final void setInternalListener(com.newland.nsdk.core.api.internal.pinentry.PINEntryListener)
 com.example.desktop_webview_auth.BuildConfig
 com.example.desktop_webview_auth.R$attr
 com.example.desktop_webview_auth.R$color
@@ -36969,8 +37540,1183 @@ com.maru.twitter_login.customtabsclient.CustomTabsHelper:
     private static final java.lang.String TAG
     private void <init>()
     public static java.lang.String[] getPackages()
-com.newland.me.module.printer.TTFPrint:
-    public native int GetStrPrnSize(byte[],int,int[],int[])
+com.newland.a.a.a
+com.newland.a.a.b$a
+com.newland.a.a.b$b
+com.newland.a.a.b$c
+com.newland.a.a.b
+com.newland.a.a
+com.newland.b.a.a:
+    public void <init>()
+    public static int a()
+    public static byte[] a(long)
+    public static byte[] a(long,int)
+com.newland.b.a.b:
+    public void <init>()
+com.newland.b.b:
+    private static final long a
+    public void <init>(com.newland.b.j,java.lang.String,java.lang.Throwable)
+    public com.newland.b.j a()
+com.newland.b.d:
+    public abstract int b(byte[])
+com.newland.b.e:
+    public static final java.lang.String D
+    public static final java.lang.String E
+    public static final java.lang.String F
+    public static final java.lang.String G
+    public static final java.lang.String H
+    public static final int x
+    public static final int y
+    public static final int z
+    public void <init>()
+    public static byte a(byte[])
+com.newland.b.f:
+    private static final int b
+    public int b(byte[])
+com.newland.b.g:
+    private static final boolean b
+    private static final long c
+    private static final int d
+    private static final int i
+    private static final int k
+    private static final int l
+    private static final int m
+    private static final int n
+    public void a(long,java.util.concurrent.TimeUnit,com.newland.b.k)
+    public void f()
+    private void m()
+com.newland.b.h:
+    public void a(byte[])
+com.newland.b.i:
+    public com.newland.b.j a()
+    public void a(java.lang.Throwable)
+com.newland.buildtask.BuildConfig
+com.newland.buildtask.R$anim
+com.newland.buildtask.R$attr
+com.newland.buildtask.R$bool
+com.newland.buildtask.R$color
+com.newland.buildtask.R$dimen
+com.newland.buildtask.R$drawable:
+    public static final int abc_ab_share_pack_mtrl_alpha
+    public static final int abc_action_bar_item_background_material
+    public static final int abc_btn_borderless_material
+    public static final int abc_btn_check_material
+    public static final int abc_btn_check_to_on_mtrl_000
+    public static final int abc_btn_check_to_on_mtrl_015
+    public static final int abc_btn_colored_material
+    public static final int abc_btn_default_mtrl_shape
+    public static final int abc_btn_radio_material
+    public static final int abc_btn_radio_to_on_mtrl_000
+    public static final int abc_btn_radio_to_on_mtrl_015
+    public static final int abc_btn_switch_to_on_mtrl_00001
+    public static final int abc_btn_switch_to_on_mtrl_00012
+    public static final int abc_cab_background_internal_bg
+    public static final int abc_cab_background_top_material
+    public static final int abc_cab_background_top_mtrl_alpha
+    public static final int abc_control_background_material
+    public static final int abc_dialog_material_background
+    public static final int abc_edit_text_material
+    public static final int abc_ic_ab_back_material
+    public static final int abc_ic_arrow_drop_right_black_24dp
+    public static final int abc_ic_clear_material
+    public static final int abc_ic_commit_search_api_mtrl_alpha
+    public static final int abc_ic_go_search_api_material
+    public static final int abc_ic_menu_copy_mtrl_am_alpha
+    public static final int abc_ic_menu_cut_mtrl_alpha
+    public static final int abc_ic_menu_overflow_material
+    public static final int abc_ic_menu_paste_mtrl_am_alpha
+    public static final int abc_ic_menu_selectall_mtrl_alpha
+    public static final int abc_ic_menu_share_mtrl_alpha
+    public static final int abc_ic_search_api_material
+    public static final int abc_ic_voice_search_api_material
+    public static final int abc_item_background_holo_dark
+    public static final int abc_item_background_holo_light
+    public static final int abc_list_divider_material
+    public static final int abc_list_divider_mtrl_alpha
+    public static final int abc_list_focused_holo
+    public static final int abc_list_longpressed_holo
+    public static final int abc_list_pressed_holo_dark
+    public static final int abc_list_pressed_holo_light
+    public static final int abc_list_selector_background_transition_holo_dark
+    public static final int abc_list_selector_background_transition_holo_light
+    public static final int abc_list_selector_disabled_holo_dark
+    public static final int abc_list_selector_disabled_holo_light
+    public static final int abc_list_selector_holo_dark
+    public static final int abc_list_selector_holo_light
+    public static final int abc_menu_hardkey_panel_mtrl_mult
+    public static final int abc_popup_background_mtrl_mult
+    public static final int abc_ratingbar_indicator_material
+    public static final int abc_ratingbar_material
+    public static final int abc_ratingbar_small_material
+    public static final int abc_scrubber_control_off_mtrl_alpha
+    public static final int abc_scrubber_control_to_pressed_mtrl_000
+    public static final int abc_scrubber_control_to_pressed_mtrl_005
+    public static final int abc_scrubber_primary_mtrl_alpha
+    public static final int abc_scrubber_track_mtrl_alpha
+    public static final int abc_seekbar_thumb_material
+    public static final int abc_seekbar_tick_mark_material
+    public static final int abc_seekbar_track_material
+    public static final int abc_spinner_mtrl_am_alpha
+    public static final int abc_spinner_textfield_background_material
+    public static final int abc_switch_thumb_material
+    public static final int abc_switch_track_mtrl_alpha
+    public static final int abc_tab_indicator_material
+    public static final int abc_tab_indicator_mtrl_alpha
+    public static final int abc_text_cursor_material
+    public static final int abc_textfield_activated_mtrl_alpha
+    public static final int abc_textfield_default_mtrl_alpha
+    public static final int abc_textfield_search_activated_mtrl_alpha
+    public static final int abc_textfield_search_default_mtrl_alpha
+    public static final int abc_textfield_search_material
+    public static final int abc_vector_test
+    public static final int bluetooth
+    public static final int bluetooth_device
+    public static final int lightoff_w
+    public static final int lighton_w
+    public static final int nl_550_1
+    public static final int nl_550_2
+    public static final int nl_700_1
+    public static final int nl_700_2
+    public static final int nl_850_1
+    public static final int nl_850_2
+    public static final int nl_900_1
+    public static final int nl_900_2
+    public static final int nl_910_1
+    public static final int nl_910_2
+    public static final int nl_f10_1
+    public static final int nl_f10_2
+    public static final int nl_f7_1
+    public static final int nl_f7_2
+    public static final int nl_saoma_houzhi
+    public static final int nl_saoma_qianzhi
+    public static final int nl_scan_switch_bg
+    public static final int nl_x3_1
+    public static final int nl_x3_2
+    public static final int nl_x5_1
+    public static final int nl_x5_2
+    public static final int notification_action_background
+    public static final int notification_bg
+    public static final int notification_bg_low
+    public static final int notification_bg_low_normal
+    public static final int notification_bg_low_pressed
+    public static final int notification_bg_normal
+    public static final int notification_bg_normal_pressed
+    public static final int notification_icon_background
+    public static final int notification_template_icon_bg
+    public static final int notification_template_icon_low_bg
+    public static final int notification_tile_bg
+    public static final int notify_panel_notification_icon_bg
+    public static final int scan_900_list
+    public static final int tooltip_frame_dark
+    public static final int tooltip_frame_light
+    private void <init>()
+com.newland.buildtask.R$id:
+    public static final int action_bar
+    public static final int action_bar_activity_content
+    public static final int action_bar_container
+    public static final int action_bar_root
+    public static final int action_bar_spinner
+    public static final int action_bar_subtitle
+    public static final int action_bar_title
+    public static final int action_container
+    public static final int action_context_bar
+    public static final int action_divider
+    public static final int action_image
+    public static final int action_menu_divider
+    public static final int action_menu_presenter
+    public static final int action_mode_bar
+    public static final int action_mode_bar_stub
+    public static final int action_mode_close_button
+    public static final int action_text
+    public static final int actions
+    public static final int activity_chooser_view_content
+    public static final int add
+    public static final int alertTitle
+    public static final int async
+    public static final int blocking
+    public static final int bottom
+    public static final int buttonPanel
+    public static final int checkbox
+    public static final int chronometer
+    public static final int content
+    public static final int contentPanel
+    public static final int custom
+    public static final int customPanel
+    public static final int decor_content_parent
+    public static final int default_activity_button
+    public static final int edit_query
+    public static final int end
+    public static final int expand_activities_button
+    public static final int expanded_menu
+    public static final int forever
+    public static final int group_divider
+    public static final int home
+    public static final int icon
+    public static final int icon_group
+    public static final int image
+    public static final int img
+    public static final int info
+    public static final int italic
+    public static final int item_touch_helper_previous_elevation
+    public static final int left
+    public static final int line1
+    public static final int line3
+    public static final int listMode
+    public static final int list_item
+    public static final int multiply
+    public static final int none
+    public static final int normal
+    public static final int notification_background
+    public static final int notification_main_column
+    public static final int notification_main_column_container
+    public static final int parentPanel
+    public static final int progress_circular
+    public static final int progress_horizontal
+    public static final int radio
+    public static final int right
+    public static final int right_icon
+    public static final int right_side
+    public static final int scanviewback
+    public static final int screen
+    public static final int scrollIndicatorDown
+    public static final int scrollIndicatorUp
+    public static final int scrollView
+    public static final int search_badge
+    public static final int search_bar
+    public static final int search_button
+    public static final int search_close_btn
+    public static final int search_edit_frame
+    public static final int search_go_btn
+    public static final int search_mag_icon
+    public static final int search_plate
+    public static final int search_src_text
+    public static final int search_voice_btn
+    public static final int select_dialog_listview
+    public static final int shortcut
+    public static final int spacer
+    public static final int split_action_bar
+    public static final int src_atop
+    public static final int src_in
+    public static final int src_over
+    public static final int start
+    public static final int submenuarrow
+    public static final int submit_area
+    public static final int tabMode
+    public static final int tag_transition_group
+    public static final int tag_unhandled_key_event_manager
+    public static final int tag_unhandled_key_listeners
+    public static final int text
+    public static final int text2
+    public static final int textSpacerNoButtons
+    public static final int textSpacerNoTitle
+    public static final int time
+    public static final int title
+    public static final int titleDividerNoCustom
+    public static final int title_template
+    public static final int top
+    public static final int topPanel
+    public static final int uniform
+    public static final int up
+    public static final int wrap_content
+    private void <init>()
+com.newland.buildtask.R$integer
+com.newland.buildtask.R$layout:
+    public static final int abc_action_bar_title_item
+    public static final int abc_action_bar_up_container
+    public static final int abc_action_menu_item_layout
+    public static final int abc_action_menu_layout
+    public static final int abc_action_mode_bar
+    public static final int abc_action_mode_close_item_material
+    public static final int abc_activity_chooser_view
+    public static final int abc_activity_chooser_view_list_item
+    public static final int abc_alert_dialog_button_bar_material
+    public static final int abc_alert_dialog_material
+    public static final int abc_alert_dialog_title_material
+    public static final int abc_cascading_menu_item_layout
+    public static final int abc_dialog_title_material
+    public static final int abc_expanded_menu_layout
+    public static final int abc_list_menu_item_checkbox
+    public static final int abc_list_menu_item_icon
+    public static final int abc_list_menu_item_layout
+    public static final int abc_list_menu_item_radio
+    public static final int abc_popup_menu_header_item_layout
+    public static final int abc_popup_menu_item_layout
+    public static final int abc_screen_content_include
+    public static final int abc_screen_simple
+    public static final int abc_screen_simple_overlay_action_mode
+    public static final int abc_screen_toolbar
+    public static final int abc_search_dropdown_item_icons_2line
+    public static final int abc_search_view
+    public static final int abc_select_dialog_material
+    public static final int abc_tooltip
+    public static final int notification_action
+    public static final int notification_action_tombstone
+    public static final int notification_template_custom_big
+    public static final int notification_template_icon_group
+    public static final int notification_template_part_chronometer
+    public static final int notification_template_part_time
+    public static final int select_dialog_item_material
+    public static final int select_dialog_multichoice_material
+    public static final int select_dialog_singlechoice_material
+    public static final int support_simple_spinner_dropdown_item
+    private void <init>()
+com.newland.buildtask.R$raw:
+    private void <init>()
+com.newland.buildtask.R$string:
+    public static final int abc_action_bar_home_description
+    public static final int abc_action_bar_up_description
+    public static final int abc_action_menu_overflow_description
+    public static final int abc_action_mode_done
+    public static final int abc_activity_chooser_view_see_all
+    public static final int abc_activitychooserview_choose_application
+    public static final int abc_capital_off
+    public static final int abc_capital_on
+    public static final int abc_menu_alt_shortcut_label
+    public static final int abc_menu_ctrl_shortcut_label
+    public static final int abc_menu_delete_shortcut_label
+    public static final int abc_menu_enter_shortcut_label
+    public static final int abc_menu_function_shortcut_label
+    public static final int abc_menu_meta_shortcut_label
+    public static final int abc_menu_shift_shortcut_label
+    public static final int abc_menu_space_shortcut_label
+    public static final int abc_menu_sym_shortcut_label
+    public static final int abc_prepend_shortcut_label
+    public static final int abc_search_hint
+    public static final int abc_searchview_description_clear
+    public static final int abc_searchview_description_query
+    public static final int abc_searchview_description_search
+    public static final int abc_searchview_description_submit
+    public static final int abc_searchview_description_voice
+    public static final int abc_shareactionprovider_share_with
+    public static final int abc_shareactionprovider_share_with_application
+    public static final int abc_toolbar_collapse_description
+    public static final int as_pictured
+    public static final int available_device
+    public static final int bluetooth
+    public static final int bluetooth_open
+    public static final int bluetooth_reset
+    public static final int bluetooth_title
+    public static final int bonded_devices
+    public static final int bt_not_enable
+    public static final int connect_error
+    public static final int connected_device
+    public static final int device_not_disconnect
+    public static final int enable_bt
+    public static final int keyboard_amount
+    public static final int keyboard_backspace
+    public static final int keyboard_tip
+    public static final int position_phone_pos
+    public static final int search_menu_title
+    public static final int status_bar_notification_info_overflow
+    public static final int swit_back_scanner
+    public static final int swit_front_scanner
+    public static final int valid_devices
+    private void <init>()
+com.newland.buildtask.R$style
+com.newland.buildtask.R$styleable
+com.newland.buildtask.R
+com.newland.c.a.a
+com.newland.c.a.b$a
+com.newland.c.a.b$b
+com.newland.c.a.b
+com.newland.c.a
+com.newland.c.b$a
+com.newland.c.b$b
+com.newland.c.b
+com.newland.event.EM_SYS_EVENT
+com.newland.event.EventCallBack:
+    public abstract void callback(int,int,byte[])
+com.newland.forth.module.crypto.cipher.Cipher:
+    private static final int MODE_DECRYPT
+    private static final int MODE_ENCRYPT
+    private static final java.lang.String TAG
+com.newland.forth.module.crypto.cipher.MacGenerator:
+    private static final java.lang.String TAG
+com.newland.forth.module.crypto.keystore.KeyManager:
+    private static final java.lang.String TAG
+    public int deleteKey(com.newland.forth.spi.crypto.keystore.Key)
+    public int generateKey(com.newland.forth.spi.crypto.keystore.KeyGenerateMethod,com.newland.forth.spi.crypto.cipher.AlgorithmParameters,com.newland.forth.spi.crypto.keystore.Key,com.newland.forth.spi.crypto.keystore.Key)
+    public int generateKey(com.newland.forth.spi.crypto.keystore.KeyGenerateMethod,com.newland.forth.spi.crypto.keystore.Key,com.newland.forth.spi.crypto.keystore.Key)
+    public int getKeyInfo(com.newland.forth.spi.crypto.keystore.KeyInfoID,com.newland.forth.spi.crypto.keystore.Key,byte[])
+    public int getKeyOwner(java.lang.String)
+    public int setKeyOwner(java.lang.String)
+com.newland.forth.module.crypto.keystore.ST_SEC_KCV_DATA:
+    public int getnCheckMode()
+    public int getnLen()
+    public byte[] getsCheckBuf()
+com.newland.forth.module.crypto.keystore.ST_SEC_KEYIN_DATA:
+    public int getCipherMode()
+    public int getKEKType()
+    public int getKEKUsage()
+    public int getKeyType()
+    public int getKeyUsage()
+    public int getPadingMode()
+    public byte[] getPsIV()
+    public byte[] getPsKsn()
+    public int getUcKEKIdx()
+    public int getUcKeyIdx()
+    public int getnADSize()
+    public int getnKeyDataLen()
+    public int getnKeyLen()
+    public int getnKsnLen()
+    public byte[] getpAD()
+    public byte[] getpKeyData()
+com.newland.forth.module.jni.ForthJni:
+    public native int NAPI_SecDeleteKey(int,int,int)
+    public native int NAPI_SecGetKeyInfo(int,int,int,int,byte[],int,byte[],int[])
+    public native int NAPI_SecGetKeyOwner(int,byte[])
+    public native int NDK_SecSetKeyOwner(java.lang.String)
+    private boolean isLibLoadSucc()
+com.newland.forth.spi.common.NDKErrorCode
+com.newland.forth.spi.crypto.cipher.CipherOutput:
+    public void <init>(int,byte[])
+    public int getRet()
+com.newland.forth.spi.crypto.keystore.DUKPTKey:
+    public void setPlaintextKeyVal(byte[])
+com.newland.forth.spi.crypto.keystore.KeyInfoID
+com.newland.forth.spi.crypto.keystore.KeyManagerSpi:
+    public abstract int deleteKey(com.newland.forth.spi.crypto.keystore.Key)
+    public abstract int generateKey(com.newland.forth.spi.crypto.keystore.KeyGenerateMethod,com.newland.forth.spi.crypto.cipher.AlgorithmParameters,com.newland.forth.spi.crypto.keystore.Key,com.newland.forth.spi.crypto.keystore.Key)
+    public abstract int generateKey(com.newland.forth.spi.crypto.keystore.KeyGenerateMethod,com.newland.forth.spi.crypto.keystore.Key,com.newland.forth.spi.crypto.keystore.Key)
+    public abstract int getKeyInfo(com.newland.forth.spi.crypto.keystore.KeyInfoID,com.newland.forth.spi.crypto.keystore.Key,byte[])
+    public abstract int getKeyOwner(java.lang.String)
+    public abstract int setKeyOwner(java.lang.String)
+com.newland.forth.spi.crypto.keystore.SymmetricKey:
+    public void setPlaintextKeyVal(byte[])
+com.newland.ndk.AlgN:
+    protected void <init>()
+    public native int NDK_AlgSHA1(byte[],int,byte[])
+    public native int NDK_AlgSHA256(byte[],int,byte[])
+    public native int NDK_AlgTDes(byte[],byte[],byte[],int,int)
+com.newland.ndk.BuildConfig
+com.newland.ndk.FileN:
+    public native int NDK_CopyFileToSecMod(java.lang.String,java.lang.String)
+    public native int NDK_FsDel(java.lang.String)
+    public native int NDK_FsExist(java.lang.String)
+    public native int NDK_FsFormat()
+    public native int NDK_FsRename(java.lang.String,java.lang.String)
+    public native int NDK_FsSeek(int,int,int)
+    public native int NDK_FsTell(int,int[])
+com.newland.ndk.IcCard:
+    protected void <init>()
+    public native int NDK_IccDetect(int[])
+    public native int NDK_IccGetProtocol(int,int[])
+    public native int NDK_IccGetVersion(byte[])
+    public native int NDK_IccPowerDown(int)
+    public native int NDK_IccPowerUp(int,byte[],int[])
+    public native int NDK_IccSetConfig(int,int,int)
+    public native int NDK_IccSetPowerUpMode(int,int)
+    public native int NDK_Iccrw(int,int,byte[],int[],byte[])
+com.newland.ndk.Kb
+com.newland.ndk.MagCard:
+    public native int NDK_MagOpen()
+    public native int NDK_MagReadNormal(byte[],byte[],byte[],int[])
+    public native int NDK_MagReadRaw(byte[],short[],byte[],short[],byte[],short[])
+    public native int NDK_MagReadRawData(int,int,int,int,byte[],int[])
+    public native int NDK_MagReset()
+    public native int NDK_MagSwiped(byte[])
+com.newland.ndk.NdkApiManager:
+    private com.newland.ndk.napi.SecNapi mSecNapi
+    private static final java.lang.String tag
+    public com.newland.ndk.AlgN getAlgN()
+    public com.newland.ndk.IcCard getIcCard()
+    public com.newland.ndk.napi.SecNapi getSecNapi()
+com.newland.ndk.Print:
+    public native int NDK_PrnCutterInit()
+    public native int NDK_PrnCutterPerformance()
+    public native int NDK_PrnFeedByPixel(int)
+    public native int NDK_PrnGetVersion(byte[])
+    public native int NDK_PrnImage(int,int,int,byte[])
+    public native int NDK_PrnInit(int)
+    public native int NDK_PrnSetFont(int,int)
+    public native int NDK_PrnSetForm(int,int,int)
+    public native int NDK_PrnSetGreyScale(int)
+    public native int NDK_PrnSetMode(int,int)
+    public native int NDK_PrnSetParam(int,int)
+    public native int NDK_PrnSetUnderLine(int)
+    public native int NDK_PrnStart()
+    public int NDK_PrnStr(java.lang.String)
+    private native int NDK_PrnStr_m(byte[])
+com.newland.ndk.RfCard:
+    public int NDK_FelicaPoll(com.newland.ndk.param.FelicaParam,byte[],int[])
+    private native int NDK_FelicaPoll(byte[],byte[],int[])
+    public int NDK_FelicaSetTimeout(int)
+    private native int NDK_FelicaSetTimeout1(int)
+    public native int NDK_GetIgnoreProtocol(int[])
+    public native int NDK_GetRfidType(int[])
+    public native int NDK_M0Authen(byte[])
+    public native int NDK_M0Authen_Release(int,byte[],int[],byte[])
+    public native int NDK_M0Read(byte,int[],byte[])
+    public native int NDK_M0Write(byte,int,byte[])
+    public native int NDK_M1Anti(int[],byte[])
+    public native int NDK_M1Anti_SEL(byte,int[],byte[])
+    public native int NDK_M1Decrement(byte,int,byte[])
+    public native int NDK_M1ExternalAuthen(int,byte[],byte,byte[],byte)
+    public native int NDK_M1Increment(byte,int,byte[])
+    public native int NDK_M1InternalAuthen(int,byte[],byte,byte)
+    public native int NDK_M1KeyLoad(byte,byte)
+    public native int NDK_M1KeyStore(byte,byte,byte[])
+    public native int NDK_M1Read(byte,int[],byte[])
+    public native int NDK_M1Request(byte,int[],byte[])
+    public native int NDK_M1Restore(byte)
+    public native int NDK_M1Select(int,byte[],byte[])
+    public native int NDK_M1Select_SEL(byte,int,byte[],byte[])
+    public native int NDK_M1Transfer(byte)
+    public native int NDK_M1Write(byte,int[],byte[])
+    public native int NDK_MifareActive(byte,byte[],int[],byte[])
+    public native int NDK_PiccQuickRequest(int)
+    public native int NDK_RfidCloseRf()
+    public native int NDK_RfidConfig(int)
+    public native int NDK_RfidFelicaApdu(int,byte[],int[],byte[])
+    public native int NDK_RfidFelicaPoll(byte[],int[])
+    public native int NDK_RfidInit(byte[])
+    public native int NDK_RfidOpenRf()
+    public native int NDK_RfidPiccActivate(byte[],int[],byte[])
+    public native int NDK_RfidPiccApdu(int,byte[],int[],byte[])
+    public native int NDK_RfidPiccDeactivate(int)
+    public native int NDK_RfidPiccDetect(byte[])
+    public native int NDK_RfidPiccState()
+    public native int NDK_RfidPiccType(byte)
+    public native int NDK_RfidResume()
+    public native int NDK_RfidSetPiccParam(byte,int,byte[])
+    public native int NDK_RfidSuspend()
+    public native int NDK_RfidTypeARats(byte,int[],byte[])
+    public native int NDK_RfidVersion(byte[])
+    public native int NDK_SetIgnoreProtocol(int)
+com.newland.ndk.SecN:
+    public native int NDK_SecCalcDesDukpt(byte,byte,java.lang.String,int,byte[],byte[],byte[],byte)
+    public native int NDK_SecClear()
+    public native int NDK_SecGetCfg(int[])
+    public native int NDK_SecGetDrySR(int[])
+    public native int NDK_SecGetDukptKsn(byte,byte[])
+    public native int NDK_SecGetMac(byte,byte[],int,byte[],byte)
+    public native int NDK_SecGetMacDukpt(byte,byte[],int,byte[],byte[],byte)
+    public native int NDK_SecGetPin(byte,java.lang.String,java.lang.String,byte[],byte,int)
+    public native int NDK_SecGetPinDukpt(byte,java.lang.String,java.lang.String,byte[],byte[],byte,int)
+    public native int NDK_SecGetPinResult(byte[],int[])
+    public native int NDK_SecGetPinResultDukpt(byte[],byte[],int[])
+    public native int NDK_SecGetTamperStatus(int[])
+    public native int NDK_SecGetVer(byte[])
+    public native int NDK_SecIncreaseDukptKsn(byte)
+    public native int NDK_SecKeyDelete(byte,byte)
+    public native int NDK_SecKeyErase()
+    public int NDK_SecLoadKey(com.newland.ndk.h.ST_SEC_KEY_INFO,com.newland.ndk.h.ST_SEC_KCV_INFO)
+    private native int NDK_SecLoadKey_m(byte,byte,byte,byte,int,byte[],int,int,byte[])
+    public int NDK_SecLoadRsaKey(byte,com.newland.ndk.h.ST_SEC_RSA_KEY)
+    private native int NDK_SecLoadRsaKey_m(byte,int,byte[],byte[],byte[])
+    public int NDK_SecLoadTIK(byte,byte,byte,byte[],byte[],com.newland.ndk.h.ST_SEC_KCV_INFO)
+    private native int NDK_SecLoadTIK_m(byte,byte,byte,byte[],byte[],int,int,byte[])
+    public native int NDK_SecRecover(byte,byte,int,byte[])
+    public native int NDK_SecSetCfg(int)
+    public native int NDK_SecSetFunctionKey(byte)
+    public native int NDK_SecSetIntervaltime(int,int)
+    public native int NDK_SecUserKeyDelete()
+    public int NDK_SecVerifyCipherPin(byte,java.lang.String,com.newland.ndk.h.ST_SEC_RSA_KEY,byte[],byte,int)
+    private native int NDK_SecVerifyCipherPin_m(byte,java.lang.String,int,byte[],byte[],byte[],byte[],byte,int)
+    public native int NDK_SecVerifyPlainPin(byte,java.lang.String,byte[],byte,int)
+    public native int NDK_SecVppTpInit(byte[],byte[],byte[])
+com.newland.ndk.SerialPort:
+    private native int NDK_PortReadLen(int,int[])
+    public int NDK_PortReadLen(com.newland.ndk.h.EM_PORT_NUM,int[])
+com.newland.ndk.SysN:
+    public native int NDK_LedSetFlickParam(int,long,long)
+    public native int NDK_LedStatus(int)
+    public native int NDK_SysBeep()
+    public native int NDK_SysDelay(int)
+    public native int NDK_SysEnterBoot()
+    public native int NDK_SysExit(int)
+    public native int NDK_SysGetBeepVol(int[])
+    public int NDK_SysGetConfigInfo(com.newland.ndk.h.EM_SYS_CONFIG,int[])
+    private native int NDK_SysGetConfigInfo_m(int,int[])
+    public native int NDK_SysGetFirmwareInfo(int[])
+    public int NDK_SysGetPosTime(com.newland.ndk.h.PosTime)
+    private native int NDK_SysGetPosTime_m(int[],int[],int[],int[],int[],int[])
+    public native int NDK_SysGetPowerVol(int[])
+    public native int NDK_SysGetStatisticsData(int,long[])
+    public native int NDK_SysGoSuspend()
+    public native int NDK_SysGoSuspend_Extern()
+    public native int NDK_SysInitStatisticsData()
+    public native int NDK_SysMsDelay(int)
+    public native int NDK_SysReadWatch(int[])
+    public native int NDK_SysReboot()
+    public native int NDK_SysSetBeepVol(int)
+    public int NDK_SysSetPosInfo(com.newland.ndk.h.EM_SYS_HWINFO,java.lang.String)
+    private native int NDK_SysSetPosInfo_m(int,java.lang.String)
+    public int NDK_SysSetPosTime(com.newland.ndk.h.PosTime)
+    private native int NDK_SysSetPosTime_m(int,int,int,int,int,int)
+    public native int NDK_SysSetSuspend(int)
+    public native int NDK_SysSetSuspendDuration(int)
+    public native int NDK_SysShutDown()
+    public native int NDK_SysStartWatch()
+    public native int NDK_SysStopWatch(int[])
+    public native int NDK_SysTime(int[])
+    public native int NDK_SysTimeBeep(int,int)
+    public native int NDK_SysWakeUp()
+    public native int NDk_SysGetK21Version(byte[])
+com.newland.ndk.ToolN
+com.newland.ndk.h.EM_SYS_CONFIG
+com.newland.ndk.h.ENUM_MAG_DATA_TYPE
+com.newland.ndk.h.ENUM_MAG_TRACK
+com.newland.ndk.h.PosTime
+com.newland.ndk.h.ST_RSA_PRIVATE_KEY
+com.newland.ndk.h.ST_RSA_PUBLIC_KEY
+com.newland.ndk.h.ST_SEC_KEY_INFO
+com.newland.ndk.napi.ByteUtils
+com.newland.ndk.napi.EM_SEC_ASYM_CRYPTO_MODE
+com.newland.ndk.napi.EM_SEC_ASYM_ENCODING_MODE
+com.newland.ndk.napi.EM_SEC_CRYPTO_KEY_TYPE
+com.newland.ndk.napi.EM_SEC_KEYIN_METHOD
+com.newland.ndk.napi.EM_SEC_KEY_INFO_ID
+com.newland.ndk.napi.EM_SEC_KEY_USAGE
+com.newland.ndk.napi.EM_SEC_MD_TYPE
+com.newland.ndk.napi.JNI_ST_SEC_ASYM_KEYIN_DATA
+com.newland.ndk.napi.ST_SEC_ASYM_ALG_INFO
+com.newland.ndk.napi.ST_SEC_ASYM_KEYIN_DATA
+com.newland.ndk.napi.ST_SEC_ASYM_KEY_INFO
+com.newland.ndk.napi.ST_SEC_KCV_DATA
+com.newland.ndk.napi.ST_SEC_KEYIN_DATA
+com.newland.ndk.napi.SecNapi
+com.newland.ndk.param.FelicaParam
+com.newland.ndk.pin.KeyBoardHelper
+com.newland.sdk.ModuleManage:
+    private static final java.lang.String EMVSPVersion
+    private static final java.lang.String NDKEMVVersion
+    private static final java.lang.String TAG
+    public void destroy()
+    public com.newland.sdk.module.displayScreen.DisplayScreenModule getDisplayScreenModule()
+    public com.newland.sdk.module.emv.EMVModule getEMVL3Module()
+    public com.newland.sdk.module.externalbuzzer.ExtBuzzerModule getExtBuzzerModule()
+    public com.newland.sdk.module.externalCardreader.ExtCardReaderModule getExtCardReaderModule()
+    public com.newland.sdk.module.cashbox.ExtCashBoxModule getExtCashBoxModule()
+    public com.newland.sdk.module.externaliccard.ExtICCardModule getExtICCardModule()
+    public com.newland.sdk.module.externalLight.ExtIndicatorLightModule getExtIndicatorLightModule()
+    public com.newland.sdk.module.externalKeyboard.ExtKeyboardModule getExtKeyboardModule()
+    public com.newland.sdk.module.externalmagic.ExtMagicCardModule getExtMagCardModule()
+    public com.newland.sdk.module.externalPin.ExtPinpadModule getExtPinpadModule()
+    public com.newland.sdk.module.externalrfcard.ExtRFCardModule getExtRFCardModule()
+    public com.newland.sdk.module.externalScan.ExtScanBoxModule getExtScanBoxModule()
+    public com.newland.sdk.module.externalsignature.ExtSignatureModule getExtSignatureModule()
+    public com.newland.sdk.module.printerPro.NPrinterModule getPrinterProModule()
+    public com.newland.sdk.module.scanner.ScannerModule getScannerModule()
+    public com.newland.sdk.module.serialport.SerialPortModule getSerialPortModule()
+    public com.newland.sdk.module.settings.SettingsModule getSettingsModule()
+    public com.newland.sdk.module.sm.SmModule getSmModule()
+    public com.newland.sdk.module.usb.USBModule getUSBModule()
+    public void setLoggerLevel(int)
+    public boolean setMposParams(com.newland.sdk.mtype.MposParams)
+com.newland.sdk.a.a.a.a$a:
+    private static final long a
+com.newland.sdk.a.a.a.a$b:
+    private static final long serialVersionUID
+com.newland.sdk.a.a.a.a:
+    private static final int A_RFCARD
+    private static final int B_RFCARD
+    private static final int CHECK_TRACK
+    private static final int M1_RFCARD
+    private static final int MASK_ICCARD
+    private static final int MASK_RFCARD
+    private static final int MASK_SWIPER
+com.newland.sdk.a.a.b.a$a:
+    private static final long serialVersionUID
+    public void <init>()
+com.newland.sdk.a.a.b.b$a:
+    private java.lang.String customSN
+    private byte personalizationState
+    private byte[] pid
+    private java.lang.String udId
+com.newland.sdk.a.a.b.b$d:
+    public void <init>()
+com.newland.sdk.a.a.b.c$a
+com.newland.sdk.a.a.b.c
+com.newland.sdk.a.a.b.d$a
+com.newland.sdk.a.a.b.d
+com.newland.sdk.a.a.b.e$a:
+    public void <init>()
+com.newland.sdk.a.a.c.a$a:
+    public void <init>()
+com.newland.sdk.a.a.d.a$a:
+    private java.lang.String answerCode
+    private int keyIndex
+    public int c()
+    public java.lang.String d()
+    public byte[] e()
+com.newland.sdk.a.a.d.a:
+    public void <init>(int,int,int,byte[],byte[],byte[])
+com.newland.sdk.a.a.d.c$a:
+    public void <init>()
+com.newland.sdk.a.a.d.c:
+    private static final int DELETE_ALL_KEY
+    private static final int DELETE_DATAENCRYPT_KEY
+    private static final int DELETE_INDEX_KEY
+    private static final int DELETE_MAC_KEY
+    private static final int DELETE_MAIN_KEY
+    private static final int DELETE_PIN_KEY
+    public static com.newland.sdk.a.a.d.c b()
+com.newland.sdk.a.a.d.d$a:
+    private int keyIndex
+    public int a()
+com.newland.sdk.a.a.d.e$a:
+    private byte[] responseCheckValue
+    public byte[] b()
+com.newland.sdk.a.a.d.i$c:
+    public void <init>()
+com.newland.sdk.a.a.d.i$d
+com.newland.sdk.a.a.d.i$e
+com.newland.sdk.a.a.d.i:
+    private static final int MONITOR_CHECK_TRACK
+    private static final int MONITOR_DISABLE
+    private static final int MONITOR_ICCARD
+    private static final int MONITOR_SWIPER
+    public void <init>(int,byte[],int,com.newland.sdk.module.pin.AccountInputType,java.lang.String,int,byte[],com.newland.sdk.me.module.pininput.h,java.lang.String,int,int)
+com.newland.sdk.a.a.d.j$c
+com.newland.sdk.a.a.d.j:
+    private static final int MONITOR_CHECK_TRACK
+    private static final int MONITOR_DISABLE
+    private static final int MONITOR_ICCARD
+    private static final int MONITOR_SWIPER
+com.newland.sdk.a.a.e.a$a:
+    public void <init>()
+com.newland.sdk.a.a.e.b$a:
+    public void <init>()
+com.newland.sdk.a.a.e.c$a:
+    public void <init>()
+com.newland.sdk.a.a.e.e$a:
+    public void <init>()
+com.newland.sdk.a.a.e.f$a
+com.newland.sdk.a.a.e.g$a:
+    public void <init>()
+com.newland.sdk.a.a.e.h$b:
+    public void <init>()
+com.newland.sdk.a.a.e.h:
+    private static final int A_RFCARD
+    private static final int B_RFCARD
+    private static final int M1_RFCARD
+    private java.lang.String showMsg
+com.newland.sdk.a.a.f.a$a:
+    private byte[] extInfo
+    private byte readModel
+    public byte[] c()
+    public byte e()
+com.newland.sdk.a.a.f.a$b
+com.newland.sdk.a.a.f.a$c:
+    public void <init>()
+com.newland.sdk.a.a.f.a:
+    private static final int MASK_IC_SECONDTRACK
+com.newland.sdk.a.a.f.b$a:
+    public void <init>()
+    public java.lang.Object a(byte[],int,int)
+    public byte[] a(java.lang.Object)
+com.newland.sdk.a.a.f.b$b:
+    private byte[] extInfo
+    public byte[] j()
+com.newland.sdk.a.a.f.b$c
+com.newland.sdk.a.a.f.b$d:
+    public void <init>()
+com.newland.sdk.a.a.f.b:
+    private static final int MASK_FIRSTTRACK
+    private static final int MASK_IC_SECONDTRACK
+    private static final int MASK_SECONDTRACK
+    private static final int MASK_THIRDTRACK
+com.newland.sdk.a.a.f.c$a:
+    public void <init>()
+    public java.lang.Object a(byte[],int,int)
+    public byte[] a(java.lang.Object)
+com.newland.sdk.a.a.f.c$b:
+    public void a(java.lang.String)
+    public void b(java.lang.String)
+com.newland.sdk.a.a.f.c$c:
+    public void <init>()
+com.newland.sdk.a.a.f.c:
+    private static final int MASK_FIRSTTRACK
+    private static final int MASK_SECONDTRACK
+    private static final int MASK_THIRDTRACK
+com.newland.sdk.a.b.d.a:
+    private static final int d
+    private static final int g
+    private static final int h
+    private static final int i
+    private static final int j
+com.newland.sdk.a.b.f.a:
+    private static final int a
+com.newland.sdk.b.a.f.a:
+    public static final int a
+    public static final int b
+    public static final int c
+    public static final int d
+    public static final int e
+    public static final int f
+    public static final int g
+    public static final int h
+    public static final int i
+    public static final int j
+    public static final int k
+    public static final int l
+    public static final int m
+    private static final int o
+    private static final java.lang.String p
+    private static final int q
+    private static final int r
+    private static final int s
+    private static final int t
+    private static final int u
+    private static final int v
+com.newland.sdk.b.a.f.b:
+    private static final int f
+com.newland.sdk.ble.BluetoothBaseActivity$MyAdapter:
+    public void remove(int)
+    public void updateName(int,java.lang.String)
+com.newland.sdk.common.RunningModel:
+    public void <init>()
+com.newland.sdk.mtype.ConnectionCloseEvent:
+    public void <init>(java.lang.String)
+    public void <init>(java.lang.String,java.lang.Throwable)
+com.newland.sdk.mtype.Device:
+    public abstract java.util.Date getDeviceDate()
+    public varargs abstract com.newland.sdk.utils.TLVPackage getDeviceParams(int[])
+    public abstract com.newland.sdk.mtype.DeviceTransationManager getDeviceTransationManager()
+    public abstract byte[] getRandom(int)
+    public abstract java.lang.String[] getSupportExModule()
+    public abstract com.newland.sdk.mtype.ModuleType[] getSupportStandardModule()
+    public abstract java.lang.String getTusn()
+    public abstract void reset()
+    public abstract void setCSN(java.lang.String)
+    public abstract void setDeviceDate(java.util.Date)
+    public abstract void setDeviceParams(com.newland.sdk.utils.TLVPackage)
+com.newland.sdk.mtype.DeviceDriver:
+    public abstract com.newland.sdk.mtype.conn.DeviceConnType[] getSupportConnType()
+    public abstract boolean isSupportedConnType(com.newland.sdk.mtype.conn.DeviceConnType)
+com.newland.sdk.mtype.DeviceException:
+    private static final long serialVersionUID
+    public void <init>(int,java.lang.String,java.lang.Throwable)
+com.newland.sdk.mtype.DeviceInvokeException:
+    private static final long serialVersionUID
+    public java.lang.String getNativeCode()
+com.newland.sdk.mtype.DeviceOutofLineException:
+    private static final long serialVersionUID
+com.newland.sdk.mtype.DeviceTransationManager:
+    public abstract void beginTransaction(long,java.util.concurrent.TimeUnit)
+    public abstract void endTransaction()
+    public abstract com.newland.sdk.mtype.TransactionStatus getTransactionStatus()
+    public abstract boolean isBusy()
+com.newland.sdk.mtype.ExModuleType
+com.newland.sdk.mtype.Module:
+    public abstract java.lang.String getDescription()
+    public abstract com.newland.sdk.mtype.Device getOwner()
+com.newland.sdk.mtype.MposParams:
+    private java.lang.String mAddress
+    private com.newland.sdk.mtype.MposParams$ConnectType mConnectType
+    private java.lang.String mName
+    public void <init>()
+com.newland.sdk.mtype.OpenTrasactionException
+com.newland.sdk.mtype.ProcessTimeoutException:
+    public java.lang.String msg
+    private static final long serialVersionUID
+com.newland.sdk.mtype.TransactionNeededException:
+    private static final long serialVersionUID
+    public void <init>(java.lang.String,java.lang.Throwable)
+com.newland.sdk.mtype.TransactionStatus
+com.newland.sdk.mtype.common.Const$EmvSelfDefinedReference
+com.newland.sdk.mtype.common.Const$EmvStandardReference
+com.newland.sdk.mtype.common.Const
+com.newland.sdk.mtype.common.ErrorCode
+com.newland.sdk.mtype.common.EventConst
+com.newland.sdk.mtype.common.MESeriesConst$TrackEncryptAlgorithm
+com.newland.sdk.mtype.common.MESeriesConst
+com.newland.sdk.mtype.conn.DeviceConnParams:
+    public abstract java.lang.String getParam(java.lang.String)
+    public abstract java.util.Set getParamKeys()
+com.newland.sdk.mtype.event.DeviceEvent:
+    public abstract com.newland.sdk.mtype.Device getOwner()
+    public abstract long timestamp()
+com.newland.sdk.mtype.event.DeviceMenuEvent:
+    private static final int KEY_CANCEL
+    private static final int MAC_ERROR
+    private static final int NO_MENU
+    private static final int TIMEOUT_ERROR
+    public java.lang.String getEcode()
+com.newland.sdk.mtype.log.DeviceLoggerFactory:
+    public void <init>()
+    public void init(com.newland.sdk.mtype.log.IDeviceLoggerFactory)
+    public static void init(java.lang.String)
+com.newland.sdk.mtype.util.Dump:
+    public void <init>()
+com.newland.sdk.mtype.util.InnerUtils:
+    public static final java.lang.String ENCODING
+    public static final byte ETX
+    public static final byte FS
+    public static final byte GS
+    public static final byte RS
+    public static final byte STX
+    public static final byte US
+    private void <init>()
+    public static void asciiToEbcdic(java.lang.String,byte[],int)
+    public static byte[] asciiToEbcdic(java.lang.String)
+    public static byte[] asciiToEbcdic(byte[])
+    public static long bcdToLong(byte[],int,int,boolean)
+    public static int bitSet2Int(java.util.BitSet)
+    public static java.lang.String bitSet2String(java.util.BitSet)
+    public static byte[] bitSet2byte(java.util.BitSet)
+    public static byte[] bitSet2byte(java.util.BitSet,int)
+    public static byte[] bitSet2extendedByte(java.util.BitSet)
+    public static java.lang.String blankUnPad(java.lang.String)
+    public static java.util.BitSet byte2BitSet(java.util.BitSet,byte[],int)
+    public static java.util.BitSet byte2BitSet(byte[],int,int)
+    public static java.util.BitSet byte2BitSet(byte[],int,boolean)
+    public static java.lang.String[] commaDecode(java.lang.String)
+    public static java.lang.String commaEncode(java.lang.String[])
+    public static byte[] concat(byte[],int,int,byte[],int,int)
+    public static byte[] concat(byte[],byte[])
+    public static java.lang.String dumpString(byte[])
+    public static java.lang.String ebcdicToAscii(byte[])
+    public static java.lang.String ebcdicToAscii(byte[],int,int)
+    public static byte[] ebcdicToAsciiBytes(byte[])
+    public static byte[] ebcdicToAsciiBytes(byte[],int,int)
+    public static java.lang.String formatAmount(long,int)
+    public static java.lang.String formatAmountConversionRate(double)
+    public static java.lang.String formatDouble(double,int)
+    public static java.util.BitSet hex2BitSet(java.util.BitSet,byte[],int)
+    public static java.util.BitSet hex2BitSet(byte[],int,int)
+    public static java.util.BitSet hex2BitSet(byte[],int,boolean)
+    private static java.lang.String hexOffset(int)
+    public static java.lang.String hexString(byte[],int,int)
+    public static java.lang.String hexdump(byte[])
+    public static java.lang.String hexdump(byte[],int,int)
+    public static java.lang.String hexor(java.lang.String,java.lang.String)
+    public static java.util.BitSet int2BitSet(int)
+    public static java.util.BitSet int2BitSet(int,int)
+    public static byte[] intToBytes(int,boolean)
+    public static boolean isAlphaNumeric(java.lang.String)
+    public static boolean isBlank(java.lang.String)
+    public static boolean isNumeric(java.lang.String,int)
+    public static boolean isZero(java.lang.String)
+    public static java.lang.String millisToString(long)
+    public static com.newland.sdk.utils.TLVMsg newTlvMsg()
+    public static java.lang.String normalize(java.lang.String)
+    public static java.lang.String normalize(java.lang.String,boolean)
+    public static byte[] packIntToBytes(int,int,boolean)
+    public static double parseAmountConversionRate(java.lang.String)
+    public static int parseInt(java.lang.String)
+    public static int parseInt(java.lang.String,int)
+    public static int parseInt(byte[])
+    public static int parseInt(byte[],int)
+    public static int parseInt(char[])
+    public static int parseInt(char[],int)
+    public static java.lang.String protect(java.lang.String)
+    public static void sleep(long)
+    public static byte[] str2bcd(java.lang.String,boolean,byte)
+    public static java.lang.String strpad(java.lang.String,int)
+    public static java.lang.String strpadf(java.lang.String,int)
+    public static java.lang.String takeFirstN(java.lang.String,int)
+    public static java.lang.String takeLastN(java.lang.String,int)
+    public static int[] toIntArray(java.lang.String)
+    public static java.lang.String[] toStringArray(java.lang.String)
+    public static java.lang.String trim(java.lang.String)
+    public static byte[] trim(byte[],int)
+    public static java.lang.String trimf(java.lang.String)
+    public static int unPackIntFromBytes(byte[],int,int,boolean)
+    public static byte[] xor(byte[],byte[])
+    public static java.lang.String zeroUnPad(java.lang.String)
+    public static java.lang.String zeropad(long,int)
+    public static java.lang.String zeropad(java.lang.String,int)
+    public static java.lang.String zeropadRight(java.lang.String,int)
+com.newland.sdk.mtype.util.SimIdGenerator:
+    public void clear(java.lang.Object)
+    public void clearAll()
+    public long getMaxValue()
+com.newland.sdk.mtypex.a.a:
+    public static final java.lang.String a
+    public static final java.lang.String b
+    public static final java.lang.String c
+    public static final java.lang.String d
+    private static final int e
+    public void <init>(java.lang.String,com.newland.sdk.mtype.event.DeviceEventListener)
+    public void a(java.lang.Integer)
+    public void a(boolean)
+    public boolean a()
+    private boolean a(java.lang.String)
+    public void b(boolean)
+    public boolean b()
+    public void c(boolean)
+    public boolean c()
+    public java.util.Set getParamKeys()
+com.newland.sdk.mtypex.a.b:
+    public static final java.lang.String a
+    private void a(android.bluetooth.BluetoothDevice)
+com.newland.sdk.mtypex.a.d:
+    private static final long b
+    private static final int f
+    private static final int g
+    public int a(byte[],int,int)
+com.newland.sdk.mtypex.a.e:
+    public void <init>()
+com.newland.sdk.mtypex.b$1:
+    public void beginTransaction(long,java.util.concurrent.TimeUnit)
+    public void endTransaction()
+    public com.newland.sdk.mtype.TransactionStatus getTransactionStatus()
+    public boolean isBusy()
+com.newland.sdk.mtypex.b.a:
+    public java.lang.String getParam(java.lang.String)
+    public java.util.Set getParamKeys()
+com.newland.sdk.mtypex.b.c$1:
+    final synthetic com.newland.sdk.mtypex.b.c a
+    void <init>(com.newland.sdk.mtypex.b.c)
+    public void a()
+com.newland.sdk.mtypex.b.c:
+    static synthetic boolean a(com.newland.sdk.mtypex.b.c,boolean)
+    public synchronized void beginTransaction(long,java.util.concurrent.TimeUnit)
+    public com.newland.sdk.mtypex.conn.q d()
+    public synchronized void endTransaction()
+    public void f()
+    public com.newland.sdk.mtypex.conn.k g()
+    public com.newland.sdk.mtype.TransactionStatus getTransactionStatus()
+    public boolean isBusy()
+com.newland.sdk.mtypex.c.a:
+    public java.lang.String getParam(java.lang.String)
+    public java.util.Set getParamKeys()
+com.newland.sdk.mtypex.c.c$b:
+    public void <init>(com.newland.sdk.mtypex.c.c,java.lang.String,com.newland.sdk.mtypex.cmd.f)
+com.newland.sdk.mtypex.c.c:
+    private static final int f
+    public com.newland.sdk.mtypex.cmd.g b(com.newland.sdk.mtypex.cmd.f)
+    public void beginTransaction(long,java.util.concurrent.TimeUnit)
+    public com.newland.sdk.mtypex.conn.q d()
+    public void endTransaction()
+    public com.newland.sdk.mtype.TransactionStatus getTransactionStatus()
+    public boolean isBusy()
+com.newland.sdk.mtypex.cmd.a.c:
+    public byte[] d()
+com.newland.sdk.mtypex.cmd.b.a:
+    public int a(byte[],int,int)
+com.newland.sdk.mtypex.cmd.b.c:
+    private static final int b
+com.newland.sdk.mtypex.cmd.b.d:
+    protected static final int a
+    private static final int i
+    private static final int j
+    private static final int k
+    private static final int l
+    private static final int m
+    private static final int n
+    private static final int p
+    private static final long q
+com.newland.sdk.mtypex.cmd.b.e:
+    public abstract int a(byte[],int,int)
+com.newland.sdk.mtypex.cmd.b.g:
+    private static final long a
+    public void <init>(java.lang.String,java.lang.Throwable)
+com.newland.sdk.mtypex.cmd.g:
+    public abstract boolean isSuccess()
+    public abstract boolean isUserCanceled()
+com.newland.sdk.mtypex.cmd.h:
+    private static final long a
+    public boolean isSuccess()
+    public boolean isUserCanceled()
+com.newland.sdk.mtypex.cmd.l:
+    public boolean isSuccess()
+    public boolean isUserCanceled()
+com.newland.sdk.mtypex.conn.g:
+    public abstract com.newland.sdk.mtypex.cmd.g b(com.newland.sdk.mtypex.cmd.f)
+    public abstract com.newland.sdk.mtypex.conn.q d()
+com.newland.sdk.mtypex.conn.i:
+    public byte[] a()
+com.newland.sdk.mtypex.conn.k
+com.newland.sdk.mtypex.conn.m:
+    public void b(com.newland.sdk.mtypex.conn.j)
+com.newland.sdk.mtypex.conn.n:
+    private static final long f
+com.newland.sdk.mtypex.conn.o$a:
+    private static final long b
+    public boolean isSuccess()
+    public boolean isUserCanceled()
+com.newland.sdk.mtypex.conn.o$b:
+    private static final long b
+    public boolean isSuccess()
+    public boolean isUserCanceled()
+com.newland.sdk.mtypex.conn.o:
+    public com.newland.sdk.mtypex.cmd.g b(com.newland.sdk.mtypex.cmd.f)
+    public com.newland.sdk.mtypex.conn.q d()
+com.newland.sdk.mtypex.conn.p:
+    private static final int c
+    private static final int d
+    private static final int e
+com.newland.sdk.mtypex.d.c
+com.newland.sdk.mtypex.e.a:
+    public void a(byte[])
+com.newland.sdk.mtypex.e.b:
+    private static final long a
+    public com.newland.sdk.utils.TLVMsg a()
+    public void a(int)
+    public void a(byte[],int,int)
+    public com.newland.sdk.utils.TLVMsg c(int)
+com.newland.sdk.mtypex.f.a:
+    public java.lang.String getParam(java.lang.String)
+    public java.util.Set getParamKeys()
+com.newland.sdk.mtypex.f.b:
+    public static final int b
+    public static final int c
+    private static final long d
+    public int a(byte[],int,int)
+com.newland.sdk.mtypex.f.c:
+    private static final java.lang.String d
+com.newland.sdk.mtypex.f:
+    private static final int b
+    private static final int c
+com.newland.sdk.mtypex.module.common.emv.SoundPoolImpl:
+    public void unLoad()
+com.newland.sdk.mtypex.module.common.emv.a:
+    public void <init>()
+    public static boolean a(java.lang.Object)
+    public static boolean b(java.lang.Class)
+    public static boolean b(java.lang.Object)
+com.newland.sdk.pininput.KeyBoardActivity:
+    private static final java.lang.String TAG
+com.newland.sdk.pininput.KeyBoardLayoutConfig:
+    private static final java.lang.String TAG
+com.newland.sdk.pininput.KeyBoardView$PinKey
+com.newland.sdk.pininput.KeyBoardView:
+    public void <init>(android.content.Context)
+com.newland.sdk.pininput.PSView:
+    public void <init>(android.content.Context)
+com.newland.sdk.scanner.ResultPoint:
+    public void <init>(float,float)
+com.newland.sdk.scanner.ScanViewActivity:
+    private static final int Code_PERMISSION
+com.newland.sdk.scanner.ScanViewBack:
+    private static final long ANIMATION_DELAY
+    private static final int CORNER_WIDTH
+    private static final int MAX_FRAME_HEIGHT
+    private static final int MAX_FRAME_WIDTH
+    private static final int MIDDLE_LINE_WIDTH
+    private static final int MIN_FRAME_HEIGHT
+    private static final int MIN_FRAME_WIDTH
+    private static final int OPAQUE
+    private static final int SPEEN_DISTANCE
+    private static final int TEXT_PADDING_TOP
+    private static final int TEXT_SIZE
+    private android.graphics.Camera camera
+    public void <init>(android.content.Context)
+    public void addPossibleResultPoint(com.newland.sdk.scanner.ResultPoint)
+    public void drawResultBitmap(android.graphics.Bitmap)
+    public void drawViewfinder()
+com.newland.sdk.utils.ISOUtils:
+    private void <init>()
+    public static byte[] concat(byte[],byte[])
+    public static boolean isNumeric(java.lang.String,int)
+    public static com.newland.sdk.utils.TLVMsg newTlvMsg()
+    public static com.newland.sdk.utils.TLVPackage newTlvPackage()
+    public static java.lang.String padleft(java.lang.String,int,char)
+    public static java.lang.String padright(java.lang.String,int,char)
+    public static byte[] str2bcd(java.lang.String,boolean)
+    private static byte[] str2bcd(java.lang.String,boolean,byte[],int)
+com.newland.smmanager.SmManager:
+    private static final java.lang.String tag
+    public native int NDK_AlgSM2Sign_YS(int,byte[],byte[])
+    public native int NDK_SecGetCfg(int[])
+    public native int NDK_SecSetCfg(int)
+com.newland.uartport.UartPort:
+    public void <init>()
+    public static native int JNI_debug(int)
+com.newland.uartport.a
 com.tekartik.sqflite.BuildConfig
 com.tekartik.sqflite.Constant:
     static final java.lang.String CMD_GET
@@ -41872,8 +43618,76 @@ kotlin.UByteArray$Iterator
 kotlin.UByteArray
 kotlin.UByteArrayKt
 kotlin.UByteKt
-kotlin.UInt$Companion
-kotlin.UInt
+kotlin.UInt:
+    public static final int MAX_VALUE
+    public static final int MIN_VALUE
+    public static final int SIZE_BITS
+    public static final int SIZE_BYTES
+    private final int data
+    private synthetic void <init>(int)
+    private static final int and-WZ4Q5Ns(int,int)
+    public static final synthetic kotlin.UInt box-impl(int)
+    public synthetic bridge int compareTo(java.lang.Object)
+    private static final int compareTo-7apg3OU(int,byte)
+    private static final int compareTo-VKZWuLQ(int,long)
+    private int compareTo-WZ4Q5Ns(int)
+    private static int compareTo-WZ4Q5Ns(int,int)
+    private static final int compareTo-xj2QHRw(int,short)
+    private static final int dec-pVg5ArA(int)
+    private static final int div-7apg3OU(int,byte)
+    private static final long div-VKZWuLQ(int,long)
+    private static final int div-WZ4Q5Ns(int,int)
+    private static final int div-xj2QHRw(int,short)
+    public boolean equals(java.lang.Object)
+    public static boolean equals-impl(int,java.lang.Object)
+    public static final boolean equals-impl0(int,int)
+    private static final int floorDiv-7apg3OU(int,byte)
+    private static final long floorDiv-VKZWuLQ(int,long)
+    private static final int floorDiv-WZ4Q5Ns(int,int)
+    private static final int floorDiv-xj2QHRw(int,short)
+    public static synthetic void getData$annotations()
+    public int hashCode()
+    public static int hashCode-impl(int)
+    private static final int inc-pVg5ArA(int)
+    private static final int inv-pVg5ArA(int)
+    private static final int minus-7apg3OU(int,byte)
+    private static final long minus-VKZWuLQ(int,long)
+    private static final int minus-WZ4Q5Ns(int,int)
+    private static final int minus-xj2QHRw(int,short)
+    private static final byte mod-7apg3OU(int,byte)
+    private static final long mod-VKZWuLQ(int,long)
+    private static final int mod-WZ4Q5Ns(int,int)
+    private static final short mod-xj2QHRw(int,short)
+    private static final int or-WZ4Q5Ns(int,int)
+    private static final int plus-7apg3OU(int,byte)
+    private static final long plus-VKZWuLQ(int,long)
+    private static final int plus-WZ4Q5Ns(int,int)
+    private static final int plus-xj2QHRw(int,short)
+    private static final kotlin.ranges.UIntRange rangeTo-WZ4Q5Ns(int,int)
+    private static final int rem-7apg3OU(int,byte)
+    private static final long rem-VKZWuLQ(int,long)
+    private static final int rem-WZ4Q5Ns(int,int)
+    private static final int rem-xj2QHRw(int,short)
+    private static final int shl-pVg5ArA(int,int)
+    private static final int shr-pVg5ArA(int,int)
+    private static final int times-7apg3OU(int,byte)
+    private static final long times-VKZWuLQ(int,long)
+    private static final int times-WZ4Q5Ns(int,int)
+    private static final int times-xj2QHRw(int,short)
+    private static final byte toByte-impl(int)
+    private static final double toDouble-impl(int)
+    private static final float toFloat-impl(int)
+    private static final int toInt-impl(int)
+    private static final long toLong-impl(int)
+    private static final short toShort-impl(int)
+    public java.lang.String toString()
+    public static java.lang.String toString-impl(int)
+    private static final byte toUByte-w2LRezQ(int)
+    private static final int toUInt-pVg5ArA(int)
+    private static final long toULong-s-VKNKU(int)
+    private static final short toUShort-Mh2AYeg(int)
+    public final synthetic int unbox-impl()
+    private static final int xor-WZ4Q5Ns(int,int)
 kotlin.UIntArray$Iterator
 kotlin.UIntArray
 kotlin.UIntArrayKt
@@ -46668,7 +48482,26 @@ kotlin.text.StringsKt___StringsKt:
 kotlin.text.SystemProperties
 kotlin.text.TypeAliasesKt
 kotlin.text.Typography
-kotlin.text.UStringsKt
+kotlin.text.UStringsKt:
+    public static final java.lang.String toString-JSWoG40(long,int)
+    public static final java.lang.String toString-LxnNnR4(byte,int)
+    public static final java.lang.String toString-olVBNx4(short,int)
+    public static final byte toUByte(java.lang.String)
+    public static final byte toUByte(java.lang.String,int)
+    public static final kotlin.UByte toUByteOrNull(java.lang.String)
+    public static final kotlin.UByte toUByteOrNull(java.lang.String,int)
+    public static final int toUInt(java.lang.String)
+    public static final int toUInt(java.lang.String,int)
+    public static final kotlin.UInt toUIntOrNull(java.lang.String)
+    public static final kotlin.UInt toUIntOrNull(java.lang.String,int)
+    public static final long toULong(java.lang.String)
+    public static final long toULong(java.lang.String,int)
+    public static final kotlin.ULong toULongOrNull(java.lang.String)
+    public static final kotlin.ULong toULongOrNull(java.lang.String,int)
+    public static final short toUShort(java.lang.String)
+    public static final short toUShort(java.lang.String,int)
+    public static final kotlin.UShort toUShortOrNull(java.lang.String)
+    public static final kotlin.UShort toUShortOrNull(java.lang.String,int)
 kotlin.text._OneToManyTitlecaseMappingsKt
 kotlin.text.jdk8.RegexExtensionsJDK8Kt
 kotlin.time.AbstractDoubleTimeSource$DoubleTimeMark
@@ -49716,6 +51549,8 @@ androidx.viewpager2.adapter.FragmentStateAdapter$FragmentMaxLifecycleEnforcer$3:
 androidx.viewpager2.adapter.FragmentStateAdapter$FragmentMaxLifecycleEnforcer
 androidx.viewpager2.adapter.FragmentStateAdapter
 androidx.viewpager2.adapter.FragmentViewHolder
+com.a.a.b.d:
+    public java.lang.Runnable a
 com.amolg.flutterbarcodescanner.camera.CameraSource$FrameProcessingRunnable:
     public static final synthetic boolean $assertionsDisabled
 com.amolg.flutterbarcodescanner.camera.CameraSource:
@@ -49919,6 +51754,33 @@ com.google.protobuf.UnsafeUtil:
     public static long objectFieldOffset(java.lang.reflect.Field)
 com.maru.twitter_login.chrome_custom_tabs.ChromeCustomTabsActivity:
     public static final synthetic boolean $assertionsDisabled
+com.newland.b.e:
+    public static byte A
+    public static int B
+    public static int C
+com.newland.ndk.AlgN
+com.newland.ndk.IcCard
+com.newland.ndk.NdkApiManager:
+    public com.newland.ndk.AlgN alg
+    public com.newland.ndk.IcCard ic
+com.newland.sdk.ModuleManage$1
+com.newland.sdk.ModuleManage:
+    public static synthetic com.newland.sdk.me.DeviceManager access$000()
+    public static synthetic com.newland.sdk.mtype.log.DeviceLogger access$100(com.newland.sdk.ModuleManage)
+    public static synthetic boolean access$200(com.newland.sdk.ModuleManage)
+    public static synthetic void access$300(com.newland.sdk.ModuleManage)
+    public final void connectMpos()
+    public final void disConnectMpos()
+com.newland.sdk.mtype.MposParams:
+    public java.lang.String getAddress()
+    public com.newland.sdk.mtype.MposParams$ConnectType getConnectType()
+    public java.lang.String getName()
+    public void setAddress(java.lang.String)
+    public void setConnectType(com.newland.sdk.mtype.MposParams$ConnectType)
+    public void setName(java.lang.String)
+com.newland.sdk.mtypex.a.a:
+    public void <init>(java.lang.String)
+com.newland.sdk.mtypex.f.a
 io.flutter.Log:
     public static int ASSERT
     public static int DEBUG

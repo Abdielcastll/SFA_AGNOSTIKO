@@ -166,15 +166,17 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Container(
-                            margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            height: 50,
-                            width: 120,
-                            child: Image.asset(
-                              'assets/images/contactless.jpeg',
-                              fit: BoxFit.contain,
+                          if (transactionArgs?.transactionInfo?.isContactless ==
+                              true)
+                            Container(
+                              margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                              height: 50,
+                              width: 120,
+                              child: Image.asset(
+                                'assets/images/contactless.jpeg',
+                                fit: BoxFit.contain,
+                              ),
                             ),
-                          ),
                           Text(
                             '''**** ${(infoTags?.cardNo?.toHexStr() ?? transactionArgs?.pan)?.substring(12) ?? '-'}''',
                             style: const TextStyle(fontWeight: FontWeight.bold),

@@ -34,7 +34,7 @@ class InvoiceCard extends StatefulWidget {
     this.invoiceTotal,
     this.invoiceDocumentID,
     this.invoicePercetageTax,
-    this.invoiceTax,
+    required this.invoiceTax,
     this.invoiceSubtotal,
     this.discount,
     this.discountPercentage,
@@ -50,7 +50,7 @@ class InvoiceCard extends StatefulWidget {
   final invoiceTotal;
   final invoiceDocumentID;
   final invoicePercetageTax;
-  final invoiceTax;
+  final double invoiceTax;
   final invoiceSubtotal;
   final discountPercentage;
   final discount;

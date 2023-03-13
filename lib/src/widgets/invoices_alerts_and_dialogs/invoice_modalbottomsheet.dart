@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
+import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/identify_payment_method.dart';
@@ -63,7 +64,7 @@ void modalBottomSheetForInvoices(
   currentClientDispatchAdress,
   subTotal,
   percentageTax,
-  tax,
+  double tax,
   discountPercentage,
   discount,
 ) {
@@ -977,6 +978,15 @@ void modalBottomSheetForInvoices(
                                                               child: IconButton(
                                                                 onPressed:
                                                                     () async {
+                                                                  if (selectedValueA!
+                                                                      .toLowerCase()
+                                                                      .contains(
+                                                                          'tarjeta')) {
+                                                                    today =
+                                                                        DateTime
+                                                                            .now();
+                                                                    return;
+                                                                  }
                                                                   DateTime?
                                                                       newDate =
                                                                       await showDatePicker(
@@ -1286,29 +1296,38 @@ void modalBottomSheetForInvoices(
                                                                         0,
                                                                         0,
                                                                       ),
-                                                                      child:
-                                                                          identifyPaymentMethod(
-                                                                        selectedValueA:
-                                                                            selectedValueA!,
-                                                                        client:
-                                                                            client,
-                                                                        invoiceDocumentID:
-                                                                            invoiceDocumentID,
-                                                                        paidAmount:
-                                                                            paidAmount,
-                                                                        totalOfTheOrder:
-                                                                            invoiceTotal,
-                                                                        date:
-                                                                            today,
-                                                                        context:
-                                                                            context,
-                                                                        remaining:
-                                                                            double.parse(remaining.toStringAsFixed(2)),
-                                                                        selectedCoin:
-                                                                            selectedCoin!,
-                                                                        noRetail:
-                                                                            true,
-                                                                      ),
+                                                                      child: identifyPaymentMethod(
+                                                                          selectedValueA:
+                                                                              selectedValueA!,
+                                                                          client:
+                                                                              client,
+                                                                          invoiceDocumentID:
+                                                                              invoiceDocumentID,
+                                                                          paidAmount:
+                                                                              paidAmount,
+                                                                          totalOfTheOrder:
+                                                                              invoiceTotal,
+                                                                          date:
+                                                                              today,
+                                                                          context:
+                                                                              context,
+                                                                          remaining: double.parse(remaining.toStringAsFixed(
+                                                                              2)),
+                                                                          selectedCoin:
+                                                                              selectedCoin!,
+                                                                          noRetail:
+                                                                              true,
+                                                                          paymentBody: AddPaymentBodyAtt(
+                                                                              client: client,
+                                                                              currency: selectedCoin!,
+                                                                              discount: 0,
+                                                                              discountPercentage: 0,
+                                                                              invoiceDocumentID: invoiceDocumentID,
+                                                                              invoiceNumber: invoiceNumber,
+                                                                              percentageTax: percentageTax,
+                                                                              remaining: remaining,
+                                                                              subTotal: subTotal,
+                                                                              tax: tax)),
                                                                     )
                                                                   ],
                                                                 )

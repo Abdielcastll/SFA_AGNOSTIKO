@@ -480,6 +480,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                           child: IconButton(
                             onPressed: () async {
                               if (selectedValueA?.contains('Tarjeta') == true) {
+                                today = DateTime.now();
                                 return;
                               }
                               DateTime? newDate = await showDatePicker(

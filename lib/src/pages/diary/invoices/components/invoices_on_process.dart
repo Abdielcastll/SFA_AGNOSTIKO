@@ -207,7 +207,7 @@ class _InvoicesOnProcessState extends State<InvoicesOnProcess> {
                             invoiceDocumentID: invoiceDocumentID,
                             invoiceSubtotal: invoice.subTotalAmount,
                             invoicePercetageTax: invoice.taxPercentage,
-                            invoiceTax: invoice.taxPercentage,
+                            invoiceTax: invoice.taxAmount,
                             discountPercentage:
                                 invoice.masterDiscountPercentage,
                             discount: invoice.masterDiscountAmount,

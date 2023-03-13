@@ -203,7 +203,7 @@ class _InvoicesListState extends State<InvoicesList> {
                           invoiceDocumentID: invoiceDocumentID,
                           invoiceSubtotal: invoice.subTotalAmount,
                           invoicePercetageTax: invoice.taxPercentage,
-                          invoiceTax: invoice.taxPercentage,
+                          invoiceTax: invoice.taxAmount,
                         );
                       },
                     ),
