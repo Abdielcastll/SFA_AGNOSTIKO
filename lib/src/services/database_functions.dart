@@ -396,6 +396,23 @@ Future createInvoice(
 //Registrar pagos de Tarjeta de Credito/Debito
 
 Future registerDebitCreditCardPayment(InvoiceData data) async {
+  priceReturnToOriginal(productPrice, coin) {
+    double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+    if (coin!.contains('USD')) {
+      return correctAmount;
+    } else if (coin.contains('VED')) {
+      return double.parse((correctAmount / 4.58).toStringAsFixed(2));
+    } else if (coin.contains('EUR')) {
+      return double.parse((correctAmount / 0.89).toStringAsFixed(2));
+    } else if (coin.contains('MXN')) {
+      return double.parse((correctAmount / 19.43).toStringAsFixed(2));
+    } else if (coin.contains('BTC')) {
+      return double.parse((correctAmount / 0.00011).toStringAsFixed(2));
+    } else {
+      return double.parse((correctAmount / 4.58).toStringAsFixed(2));
+    }
+  }
+
   Client client = data.client;
   var invoiceDocumentID = data.invoiceDocumentID;
   var currency = data.currency;
@@ -450,8 +467,8 @@ Future registerDebitCreditCardPayment(InvoiceData data) async {
             'conciliado': concillied,
             'fecha': timestampDate,
             'metodo': method,
-            'monto': paidAmount,
-            'montoOriginal': paidAmount,
+            'monto': priceReturnToOriginal(paidAmount, currentCoin),
+            'montoOriginal': priceReturnToOriginal(paidAmount, currentCoin),
             // 'nroNotaCredito': 0,
             'tasaDeCambio': selectedCoinExchangeRate,
           },

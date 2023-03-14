@@ -944,6 +944,12 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                       borderRadius: BorderRadius.circular(16),
                                       child: ElevatedButton(
                                         onPressed: () {
+                                          // print('Selected product Test prints');
+                                          // print(
+                                          //     'widget.client: ${widget.client!.name}');
+                                          // print(
+                                          //     'products: ${products.map((e) => e.name)}');
+                                          // print('subTotal: ${subTotal}');
                                           userRole?.isRetail == false
                                               ? Navigator.push(
                                                   context,

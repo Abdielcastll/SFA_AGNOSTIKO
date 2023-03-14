@@ -230,7 +230,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(bottom: 5),
+                      // margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerLeft,
                       child: Text(
                         AppLocalizations.of(context)!.subtotal,
@@ -243,7 +243,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       ),
                     ),
                     Container(
-                      margin: const EdgeInsets.only(bottom: 5),
+                      // margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerRight,
                       child: Text(
                         '${priceFormat(widget.subTotal)}',
@@ -261,7 +261,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(bottom: 5),
+                      // margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerLeft,
                       child: Text(
                         '${AppLocalizations.of(context)!.masterDiscount} ($clientMasterDiscount%)',
@@ -274,10 +274,10 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       ),
                     ),
                     Container(
-                      margin: const EdgeInsets.only(bottom: 5),
+                      // margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerRight,
                       child: Text(
-                        '${priceFormat(masterDiscountTotal)}',
+                        '- ${priceFormat(masterDiscountTotal)}',
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
@@ -292,38 +292,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(bottom: 5),
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        '${AppLocalizations.of(context)!.tax} (16%)',
-                        style: TextStyle(
-                          color: myTheme.colorScheme.primary,
-                          fontFamily: 'Poppins-regular',
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 5),
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        '${priceFormat(taxTotal)}',
-                        style: TextStyle(
-                          color: myTheme.colorScheme.primary,
-                          fontFamily: 'Poppins-regular',
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 5),
+                      // margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerLeft,
                       child: Row(
                         children: [
@@ -625,11 +594,42 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       ),
                     ),
                     Container(
-                      margin: const EdgeInsets.only(bottom: 5),
+                      // margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerRight,
                       child: Text(
                         '- ${priceFormat(totalDiscountApplied())}',
                         // 'test',
+                        style: TextStyle(
+                          color: myTheme.colorScheme.primary,
+                          fontFamily: 'Poppins-regular',
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 10),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '${AppLocalizations.of(context)!.tax} (16%)',
+                        style: TextStyle(
+                          color: myTheme.colorScheme.primary,
+                          fontFamily: 'Poppins-regular',
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 10),
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        '${priceFormat(taxTotal)}',
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
@@ -844,6 +844,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                   onPressed: () async {
                                     // Aceptar e Iniciar el proceso de pago
                                     // Por pago directo
+                                    print('Iniciar proceso de pago directo');
                                     final firebaseID = FirebaseFirestore
                                         .instance
                                         .collection('clientes')
@@ -851,7 +852,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                         .collection('pedidos')
                                         .doc()
                                         .id;
-                                    print('PAGO DIRECTO');
+                                    print(firebaseID);
                                     final invoiceNumber =
                                         await completePaymentProcess(
                                             widget.client,
