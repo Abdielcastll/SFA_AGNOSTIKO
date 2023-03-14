@@ -475,6 +475,9 @@ Future registerDebitCreditCardPayment(InvoiceData data) async {
         ],
       ),
     }).whenComplete(() {
+      print(
+          'remaining $remaining ${priceReturnToOriginal(remaining, currentCoin)}');
+      print('amount $amount ${priceReturnToOriginal(amount, currentCoin)}');
       try {
         if (priceReturnToOriginal(remaining, currentCoin) -
                 priceReturnToOriginal(amount, currentCoin) <=

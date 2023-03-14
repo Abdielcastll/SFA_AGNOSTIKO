@@ -8,6 +8,7 @@ import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/card_input/card_input.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/identify_payment_method.dart';
 
 import '../../../dialogs/circular_progress_dialog.dart';
 import '../../models/transaction_args.dart';
@@ -64,6 +65,8 @@ Future<double?> _acceptAmount(
 paymentCard(double amount, Client client, String invoiceDocumentID,
     double totalOfTheOrder, String currentCoin, DateTime date, double remaining,
     {Function? updatePayed, AddPaymentBodyAtt? paymentBody, noRetail = false}) {
+  remaining = priceToCurrencySelected(remaining, currentCoin);
+
   final invoiceData = InvoiceData(client, invoiceDocumentID, 'USD', amount,
       totalOfTheOrder, currentCoin, date, remaining);
 
