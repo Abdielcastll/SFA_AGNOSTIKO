@@ -476,7 +476,9 @@ Future registerDebitCreditCardPayment(InvoiceData data) async {
       ),
     }).whenComplete(() {
       try {
-        if (remaining - amount <= 0) {
+        if (priceReturnToOriginal(remaining, currentCoin) -
+                priceReturnToOriginal(amount, currentCoin) <=
+            0) {
           FirebaseFirestore.instance
               .collection('clientes')
               .doc(client.clientDocumentId)
@@ -564,6 +566,23 @@ Future registerBankCheckPayment({
     selectedCoinExchangeRate = exchangeRate['MXN'];
   }
 
+  priceReturnToOriginal(productPrice, coin) {
+    double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+    if (coin!.contains('USD')) {
+      return correctAmount;
+    } else if (coin.contains('VED')) {
+      return double.parse((correctAmount / 4.58).toStringAsFixed(2));
+    } else if (coin.contains('EUR')) {
+      return double.parse((correctAmount / 0.89).toStringAsFixed(2));
+    } else if (coin.contains('MXN')) {
+      return double.parse((correctAmount / 19.43).toStringAsFixed(2));
+    } else if (coin.contains('BTC')) {
+      return double.parse((correctAmount / 0.00011).toStringAsFixed(2));
+    } else {
+      return double.parse((correctAmount / 4.58).toStringAsFixed(2));
+    }
+  }
+
   const cancelled = false;
   final selectedCurrency = currency.toString();
   const concillied = false;
@@ -609,7 +628,9 @@ Future registerBankCheckPayment({
       ),
     }).whenComplete(() {
       try {
-        if (remaining - amount! <= 0) {
+        if (priceReturnToOriginal(remaining, currency) -
+                priceReturnToOriginal(amount, currency) <=
+            0) {
           FirebaseFirestore.instance
               .collection('clientes')
               .doc(client.clientDocumentId)
@@ -674,6 +695,22 @@ Future registerCriptoPayment(
   } else if (currency.toString().contains('MXN')) {
     selectedCoinExchangeRate = exchangeRate['MXN'];
   }
+  priceReturnToOriginal(productPrice, coin) {
+    double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+    if (coin!.contains('USD')) {
+      return correctAmount;
+    } else if (coin.contains('VED')) {
+      return double.parse((correctAmount / 4.58).toStringAsFixed(2));
+    } else if (coin.contains('EUR')) {
+      return double.parse((correctAmount / 0.89).toStringAsFixed(2));
+    } else if (coin.contains('MXN')) {
+      return double.parse((correctAmount / 19.43).toStringAsFixed(2));
+    } else if (coin.contains('BTC')) {
+      return double.parse((correctAmount / 0.00011).toStringAsFixed(2));
+    } else {
+      return double.parse((correctAmount / 4.58).toStringAsFixed(2));
+    }
+  }
 
   const nulled = false;
   final codeCurrency = currency.toString();
@@ -722,7 +759,9 @@ Future registerCriptoPayment(
       ),
     }).whenComplete(() {
       try {
-        if (remaining - double.parse(amount) <= 0) {
+        if (priceReturnToOriginal(remaining, currency) -
+                priceReturnToOriginal(amount, currency) <=
+            0) {
           FirebaseFirestore.instance
               .collection('clientes')
               .doc(client.clientDocumentId)
@@ -803,6 +842,22 @@ Future registerDepositPayment({
   } else if (currency.toString().contains('MXN')) {
     selectedCoinExchangeRate = exchangeRate['MXN'];
   }
+  priceReturnToOriginal(productPrice, coin) {
+    double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+    if (coin!.contains('USD')) {
+      return correctAmount;
+    } else if (coin.contains('VED')) {
+      return double.parse((correctAmount / 4.58).toStringAsFixed(2));
+    } else if (coin.contains('EUR')) {
+      return double.parse((correctAmount / 0.89).toStringAsFixed(2));
+    } else if (coin.contains('MXN')) {
+      return double.parse((correctAmount / 19.43).toStringAsFixed(2));
+    } else if (coin.contains('BTC')) {
+      return double.parse((correctAmount / 0.00011).toStringAsFixed(2));
+    } else {
+      return double.parse((correctAmount / 4.58).toStringAsFixed(2));
+    }
+  }
   // final convertedAmount =
   //     (doubleAmount / selectedCoinExchangeRate).toStringAsFixed(2);
 
@@ -848,7 +903,9 @@ Future registerDepositPayment({
       ),
     }).whenComplete(() {
       try {
-        if (remaining! - double.parse(amount.toString()) <= 0) {
+        if (priceReturnToOriginal(remaining, currency) -
+                priceReturnToOriginal(amount, currency) <=
+            0) {
           FirebaseFirestore.instance
               .collection('clientes')
               .doc(client.clientDocumentId)
@@ -912,6 +969,23 @@ Future registerMoneyPayment({
   } else if (currency.toString().contains('MXN')) {
     selectedCoinExchangeRate = exchangeRate['MXN'];
   }
+  priceReturnToOriginal(productPrice, coin) {
+    double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+    if (coin!.contains('USD')) {
+      return correctAmount;
+    } else if (coin.contains('VED')) {
+      return double.parse((correctAmount / 4.58).toStringAsFixed(2));
+    } else if (coin.contains('EUR')) {
+      return double.parse((correctAmount / 0.89).toStringAsFixed(2));
+    } else if (coin.contains('MXN')) {
+      return double.parse((correctAmount / 19.43).toStringAsFixed(2));
+    } else if (coin.contains('BTC')) {
+      return double.parse((correctAmount / 0.00011).toStringAsFixed(2));
+    } else {
+      return double.parse((correctAmount / 4.58).toStringAsFixed(2));
+    }
+  }
+
   // final doubleAmount = double.parse(amount);
   // final convertedAmount =
   //     (doubleAmount / selectedCoinExchangeRate).toStringAsFixed(8);
@@ -958,7 +1032,9 @@ Future registerMoneyPayment({
       ),
     }).whenComplete(() {
       try {
-        if (remaining! - double.parse(amount.toString()) <= 0) {
+        if (priceReturnToOriginal(remaining, currency) -
+                priceReturnToOriginal(amount, currency) <=
+            0) {
           FirebaseFirestore.instance
               .collection('clientes')
               .doc(client.clientDocumentId)
@@ -1039,6 +1115,22 @@ Future registerTransferPayment({
   } else if (currency.toString().contains('MXN')) {
     selectedCoinExchangeRate = exchangeRate['MXN'];
   }
+  priceReturnToOriginal(productPrice, coin) {
+    double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+    if (coin!.contains('USD')) {
+      return correctAmount;
+    } else if (coin.contains('VED')) {
+      return double.parse((correctAmount / 4.58).toStringAsFixed(2));
+    } else if (coin.contains('EUR')) {
+      return double.parse((correctAmount / 0.89).toStringAsFixed(2));
+    } else if (coin.contains('MXN')) {
+      return double.parse((correctAmount / 19.43).toStringAsFixed(2));
+    } else if (coin.contains('BTC')) {
+      return double.parse((correctAmount / 0.00011).toStringAsFixed(2));
+    } else {
+      return double.parse((correctAmount / 4.58).toStringAsFixed(2));
+    }
+  }
   // final doubleAmount = double.parse(amount);
   // final convertedAmount =
   //     (doubleAmount / selectedCoinExchangeRate).toStringAsFixed(2);
@@ -1090,7 +1182,9 @@ Future registerTransferPayment({
       ),
     }).whenComplete(() {
       try {
-        if (remaining! - double.parse(amount.toString()) <= 0) {
+        if (priceReturnToOriginal(remaining, currency) -
+                priceReturnToOriginal(amount, currency) <=
+            0) {
           FirebaseFirestore.instance
               .collection('clientes')
               .doc(client.clientDocumentId)
@@ -1184,6 +1278,22 @@ Future registerTransferInterPayment({
       FirebaseFirestore.instance.collection('bancos').doc(banksDocumentsID);
   final referenceID = int.parse(referenceId!);
   final selectedExchangedRate = selectedCoinExchangeRate;
+  priceReturnToOriginal(productPrice, coin) {
+    double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+    if (coin!.contains('USD')) {
+      return correctAmount;
+    } else if (coin.contains('VED')) {
+      return double.parse((correctAmount / 4.58).toStringAsFixed(2));
+    } else if (coin.contains('EUR')) {
+      return double.parse((correctAmount / 0.89).toStringAsFixed(2));
+    } else if (coin.contains('MXN')) {
+      return double.parse((correctAmount / 19.43).toStringAsFixed(2));
+    } else if (coin.contains('BTC')) {
+      return double.parse((correctAmount / 0.00011).toStringAsFixed(2));
+    } else {
+      return double.parse((correctAmount / 4.58).toStringAsFixed(2));
+    }
+  }
 
   print('cancelled: $cancelled');
   print('selectedCurrency: $selectedCurrency');
@@ -1220,7 +1330,9 @@ Future registerTransferInterPayment({
       ),
     }).whenComplete(() {
       try {
-        if (remaining! - double.parse(amount.toString()) <= 0) {
+        if (priceReturnToOriginal(remaining, currency) -
+                priceReturnToOriginal(amount, currency) <=
+            0) {
           FirebaseFirestore.instance
               .collection('clientes')
               .doc(client.clientDocumentId)
