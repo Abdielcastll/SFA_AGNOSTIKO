@@ -111,7 +111,7 @@ void modalBottomSheetForInvoices(
   } else {
     leftoverAmount = remaining.toStringAsFixed(2);
   }
-  double paidAmount = 0.00;
+  double paidAmount = remaining;
 
   // double paidAmount = selectedCoin == null
   //     ? double.parse(remaining.toStringAsFixed(2))
@@ -1170,8 +1170,8 @@ void modalBottomSheetForInvoices(
                                                                     0,
                                                                   ),
                                                                   hintText:
-                                                                      '$paidAmount',
-                                                                  // ' ${priceToCurrencySelectedInput(double.parse(paidAmount.toStringAsFixed(2).toString()), selectedCoin)}',
+                                                                      // '$paidAmount',
+                                                                      ' ${priceToCurrencySelectedInput(paidAmount, selectedCoin)}',
                                                                   hintStyle:
                                                                       TextStyle(
                                                                     height:
@@ -1314,8 +1314,8 @@ void modalBottomSheetForInvoices(
                                                                               client,
                                                                           invoiceDocumentID:
                                                                               invoiceDocumentID,
-                                                                          paidAmount:
-                                                                              paidAmount,
+                                                                          paidAmount: priceToCurrencySelectedInput(paidAmount,
+                                                                              selectedCoin),
                                                                           totalOfTheOrder:
                                                                               invoiceTotal,
                                                                           date:
