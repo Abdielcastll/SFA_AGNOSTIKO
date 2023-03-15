@@ -102,7 +102,8 @@ void modalBottomSheetForInvoices(
 
   print('invoiceTotal: $invoiceTotal');
   print('sumOfValidPayments: $sumOfValidPayments');
-  final remaining = invoiceTotal - sumOfValidPayments;
+  final remaining =
+      double.parse((invoiceTotal - sumOfValidPayments).toStringAsFixed(2));
   print('remaining: $remaining');
   final leftoverAmount;
   if (remaining < 0) {

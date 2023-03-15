@@ -51,15 +51,15 @@ priceToCurrencySelected(double productPrice, String coin) {
   if (coin.contains('USD')) {
     return correctAmount;
   } else if (coin.contains('VED')) {
-    return correctAmount * 4.58;
+    return double.parse((correctAmount * 4.58).toStringAsFixed(2));
   } else if (coin.contains('EUR')) {
-    return correctAmount * 0.89;
+    return double.parse((correctAmount * 0.89).toStringAsFixed(2));
   } else if (coin.contains('MXN')) {
-    return correctAmount * 19.43;
+    return double.parse((correctAmount * 19.43).toStringAsFixed(2));
   } else if (coin.contains('BTC')) {
-    return correctAmount * 0.00011;
+    return double.parse((correctAmount * 0.00011).toStringAsFixed(2));
   } else {
-    return correctAmount * 4.58;
+    return double.parse((correctAmount * 4.58).toStringAsFixed(2));
   }
 }
 
@@ -540,9 +540,7 @@ identifyPaymentMethod({
                                       print('Registrando pago en cheque');
                                       if (paidAmount! >
                                           priceToCurrencySelected(
-                                              double.parse(remaining!
-                                                  .toStringAsFixed(2)),
-                                              selectedCoin)) {
+                                              remaining, selectedCoin)) {
                                         Fluttertoast.showToast(
                                           msg:
                                               'La cantidad a pagar excede de la deuda pendiente',
@@ -1020,9 +1018,7 @@ identifyPaymentMethod({
                             if (paidAmount != null) {
                               if (paidAmount! >
                                   priceToCurrencySelected(
-                                      double.parse(
-                                          remaining!.toStringAsFixed(2)),
-                                      selectedCoin)) {
+                                      remaining, selectedCoin)) {
                                 Fluttertoast.showToast(
                                   msg:
                                       'La cantidad a pagar excede de la deuda pendiente',
@@ -1415,9 +1411,7 @@ identifyPaymentMethod({
                                         voucherNumber != '') {
                                       if (paidAmount! >
                                           priceToCurrencySelected(
-                                              double.parse(remaining!
-                                                  .toStringAsFixed(2)),
-                                              selectedCoin)) {
+                                              remaining, selectedCoin)) {
                                         Fluttertoast.showToast(
                                           msg:
                                               'La cantidad a pagar excede de la deuda pendiente',
@@ -1872,9 +1866,7 @@ identifyPaymentMethod({
                               if (paidAmount != null) {
                                 if (paidAmount! >
                                     priceToCurrencySelected(
-                                        double.parse(
-                                            remaining!.toStringAsFixed(2)),
-                                        selectedCoin))
+                                        remaining, selectedCoin))
                                 // if (paidAmount! > remaining! ||
                                 //     paidAmount! > 0)
                                 {
@@ -1891,9 +1883,7 @@ identifyPaymentMethod({
                                   //     paidAmount!, selectedCoin));
                                   print(paidAmount!);
                                   print(priceToCurrencySelected(
-                                      double.parse(
-                                          remaining!.toStringAsFixed(2)),
-                                      selectedCoin));
+                                      remaining, selectedCoin));
                                 } else {
                                   print('Cantidad permitida');
                                   Fluttertoast.showToast(
@@ -2548,9 +2538,7 @@ identifyPaymentMethod({
                                       if (referenceId != '') {
                                         if (paidAmount! >
                                             priceToCurrencySelected(
-                                                double.parse(remaining!
-                                                    .toStringAsFixed(2)),
-                                                selectedCoin)) {
+                                                remaining, selectedCoin)) {
                                           Fluttertoast.showToast(
                                             msg:
                                                 'La cantidad a pagar excede de la deuda pendiente',
@@ -2829,9 +2817,7 @@ identifyPaymentMethod({
                                       if (referenceId != '') {
                                         if (paidAmount! >
                                             priceToCurrencySelected(
-                                                double.parse(remaining!
-                                                    .toStringAsFixed(2)),
-                                                selectedCoin)) {
+                                                remaining, selectedCoin)) {
                                           Fluttertoast.showToast(
                                             msg:
                                                 'La cantidad a pagar excede de la deuda pendiente',
