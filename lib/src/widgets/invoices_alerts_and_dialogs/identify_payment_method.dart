@@ -2,9 +2,7 @@
 
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -13,9 +11,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
-import 'package:pwa_sales2go_flutter/src/pages/place_order/completed_pay.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -43,23 +39,6 @@ cropImage(filePath, imageFile) async {
   );
   if (croppedImage != null) {
     return croppedImage;
-  }
-}
-
-priceToCurrencySelected(double productPrice, String coin) {
-  double correctAmount = double.parse(productPrice.toStringAsFixed(2));
-  if (coin.contains('USD')) {
-    return correctAmount;
-  } else if (coin.contains('VED')) {
-    return double.parse((correctAmount * 4.58).toStringAsFixed(2));
-  } else if (coin.contains('EUR')) {
-    return double.parse((correctAmount * 0.89).toStringAsFixed(2));
-  } else if (coin.contains('MXN')) {
-    return double.parse((correctAmount * 19.43).toStringAsFixed(2));
-  } else if (coin.contains('BTC')) {
-    return double.parse((correctAmount * 0.00011).toStringAsFixed(2));
-  } else {
-    return double.parse((correctAmount * 4.58).toStringAsFixed(2));
   }
 }
 

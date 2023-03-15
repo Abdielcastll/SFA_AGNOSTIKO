@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
+import 'package:pwa_sales2go_flutter/src/pages/diary/diary_tabs.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/completed_pay.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -290,89 +291,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
                 child: OutlinedButton(
-                    onPressed: () {
-                      final noRetail = (ModalRoute.of(context)
-                          ?.settings
-                          .arguments! as List)[3];
-
-                      if (noRetail) {
-                        Navigator.pop(context);
-                        return;
-                      }
-                      final paymentBody = (ModalRoute.of(context)
-                          ?.settings
-                          .arguments! as List)[2] as AddPaymentBodyAtt;
-
-                      final payed =
-                          transactionResult == EmvTransactionResult.Approved
-                              ? exchangeAmount(
-                                  paymentBody.currency,
-                                  double.parse(
-                                      _amountString.replaceFirst('\$', '')))
-                              : 0.0;
-
-                      paymentBody.payments.add(PayMethod('Tarjeta', payed));
-
-                      print('EMV INFO PAYMENTS');
-                      print(paymentBody.payments.length);
-                      print(paymentBody.remaining);
-                      print(paymentBody.currency);
-                      print(payed);
-
-                      final totalPayed = paymentBody.payments.fold<double>(
-                          0.0,
-                          (previousValue, element) =>
-                              previousValue + element.amount);
-
-                      final totalInvoice = paymentBody.subTotal +
-                          paymentBody.tax -
-                          paymentBody.discount;
-
-                      if (transactionResult == EmvTransactionResult.Approved &&
-                          totalPayed >= totalInvoice) {
-                        final date = transactionArgs!.invoice!.date;
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) => CompletedPayPage(
-                                client: transactionArgs!.invoice!.client,
-                                total: totalPayed,
-                                method: "Tarjeta",
-                                date:
-                                    '${date.day}-${date.month}-${date.year} ${date.hour}:${date.minute}',
-                                address: '',
-                                coinsExchangeRates: [],
-                                addPaymentBody: paymentBody),
-                          ),
-                        );
-                      } else {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            settings: const RouteSettings(name: 'PAGO-DIRECTO'),
-                            builder: (BuildContext context) => AddPaymentPage(
-                              remaining: paymentBody.remaining - payed,
-                              subTotal: paymentBody.subTotal,
-                              discountPercentage:
-                                  paymentBody.discountPercentage,
-                              discount: paymentBody.discount,
-                              tax: paymentBody.tax,
-                              percentageTax: paymentBody.percentageTax,
-                              client: paymentBody.client,
-                              invoiceDocumentID: paymentBody.invoiceDocumentID,
-                              invoiceNumber: paymentBody.invoiceNumber,
-                              payments: paymentBody.payments,
-                              amountPayed:
-                                  (paymentBody.amountPaied ?? 0) + payed,
-                              // updatePayed: updatePayed,
-                            ),
-                          ),
-                        );
-                        /* (ModalRoute.of(context)?.settings.arguments!
-                            as List)[1](payed); */
-                        // Navigator.pop(context, payed);
-                      }
-                    },
+                    onPressed: onAccept,
                     style: TextButton.styleFrom(
                         foregroundColor: myTheme.colorScheme.primary,
                         backgroundColor: Colors.blue.shade800),
@@ -391,6 +310,80 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
         ),
       ),
     );
+  }
+
+  onAccept() {
+    final noRetail = (ModalRoute.of(context)?.settings.arguments! as List)[3];
+
+    if (noRetail) {
+      Navigator.pop(context);
+      Navigator.pop(context);
+      return;
+    }
+    final paymentBody = (ModalRoute.of(context)?.settings.arguments! as List)[2]
+        as AddPaymentBodyAtt;
+
+    final payed = transactionResult == EmvTransactionResult.Approved
+        ? exchangeAmount(paymentBody.currency,
+            double.parse(_amountString.replaceFirst('\$', '')))
+        : 0.0;
+
+    paymentBody.payments.add(PayMethod('Tarjeta', payed));
+
+    print('EMV INFO PAYMENTS');
+    print(paymentBody.payments.length);
+    print(paymentBody.remaining);
+    print(paymentBody.currency);
+    print(payed);
+
+    final totalPayed = paymentBody.payments.fold<double>(
+        0.0, (previousValue, element) => previousValue + element.amount);
+
+    final totalInvoice =
+        paymentBody.subTotal + paymentBody.tax - paymentBody.discount;
+
+    if (transactionResult == EmvTransactionResult.Approved &&
+        totalPayed >= totalInvoice) {
+      final date = transactionArgs!.invoice!.date;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => CompletedPayPage(
+              client: transactionArgs!.invoice!.client,
+              total: totalPayed,
+              method: "Tarjeta",
+              date:
+                  '${date.day}-${date.month}-${date.year} ${date.hour}:${date.minute}',
+              address: '',
+              coinsExchangeRates: [],
+              addPaymentBody: paymentBody),
+        ),
+      );
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          settings: const RouteSettings(name: 'PAGO-DIRECTO'),
+          builder: (BuildContext context) => AddPaymentPage(
+            remaining: paymentBody.remaining - payed,
+            subTotal: paymentBody.subTotal,
+            discountPercentage: paymentBody.discountPercentage,
+            discount: paymentBody.discount,
+            tax: paymentBody.tax,
+            percentageTax: paymentBody.percentageTax,
+            client: paymentBody.client,
+            invoiceDocumentID: paymentBody.invoiceDocumentID,
+            invoiceNumber: paymentBody.invoiceNumber,
+            payments: paymentBody.payments,
+            amountPayed: (paymentBody.amountPaied ?? 0) + payed,
+            // updatePayed: updatePayed,
+          ),
+        ),
+      );
+      /* (ModalRoute.of(context)?.settings.arguments!
+                            as List)[1](payed); */
+      // Navigator.pop(context, payed);
+    }
   }
 
   String? getMonth(String monthNum) {

@@ -8,6 +8,7 @@ import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/card_input/card_input.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/identify_payment_method.dart';
 
 import '../../../dialogs/circular_progress_dialog.dart';

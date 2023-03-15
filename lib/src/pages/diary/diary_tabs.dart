@@ -11,6 +11,7 @@ import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_diary.dart';
 
 class DiaryTabs extends StatefulWidget {
+  static String route = 'diary';
   const DiaryTabs({Key? key}) : super(key: key);
 
   @override
