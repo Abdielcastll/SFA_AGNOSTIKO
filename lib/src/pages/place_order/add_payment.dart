@@ -116,6 +116,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
   bool amountChanged = false;
   late List<PayMethod> payments = widget.payments;
   double amountPayed = 0;
+  final fieldText = TextEditingController();
 
   get getTotalAmount => widget.subTotal + widget.tax - widget.discount;
 
@@ -181,6 +182,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
       paymentsTotalAmount = paymentsTotalAmount! + payment.amount;
     }
     print('paymentsTotalAmount: $paymentsTotalAmount');
+    print('Remaining on retail: ${remaining}');
 
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     String formattedDate = dateFormatter.format(today);
@@ -416,6 +418,9 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                             .toList(),
                         value: selectedCoin,
                         onChanged: (value) {
+                          // Pendiente
+                          // fieldText.clear();
+
                           setState(
                             () {
                               selectedCoin = value as String;
@@ -651,6 +656,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                 amountChanged = true;
                               });
                             },
+                            controller: fieldText,
                             style: TextStyle(
                               fontSize: 14,
                               fontFamily: 'Poppins-regular',
