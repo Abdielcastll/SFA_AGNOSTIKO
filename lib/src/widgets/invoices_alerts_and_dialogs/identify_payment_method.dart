@@ -1422,8 +1422,7 @@ identifyPaymentMethod({
                                       } else {
                                         print('Cantidad permitida');
                                         Fluttertoast.showToast(
-                                          msg:
-                                              'Registrando Pago en Criptomonedas',
+                                          msg: 'Registrando Pago con deposito',
                                           backgroundColor:
                                               myTheme.colorScheme.primary,
                                           textColor: Colors.white,

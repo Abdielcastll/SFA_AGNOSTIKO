@@ -111,7 +111,6 @@ void modalBottomSheetForInvoices(
   } else {
     leftoverAmount = remaining.toStringAsFixed(2);
   }
-  double paidAmount = remaining;
 
   // double paidAmount = selectedCoin == null
   //     ? double.parse(remaining.toStringAsFixed(2))
@@ -130,6 +129,8 @@ void modalBottomSheetForInvoices(
       ),
     ),
     builder: (context) {
+      // double paidAmount = remaining;
+
       print(invoiceDocumentID);
       final currentCoin =
           Provider.of<CurrencyProvider>(context).currentCurrency;
@@ -222,6 +223,9 @@ void modalBottomSheetForInvoices(
 
       return StatefulBuilder(
         builder: (context, setState) {
+          // priceToCurrencySelectedInput(remaining, selectedCoin);
+          double paidAmount = remaining;
+
           return SafeArea(
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
@@ -847,8 +851,17 @@ void modalBottomSheetForInvoices(
                                                                           as String;
                                                                 },
                                                               );
+                                                              setState(() {
+                                                                paidAmount =
+                                                                    priceToCurrencySelectedInput(
+                                                                        remaining,
+                                                                        selectedCoin);
+                                                              });
+
                                                               print(
                                                                   'Moneda cambiada');
+                                                              print(
+                                                                  'Nuevo valor:');
                                                               print(paidAmount);
                                                             },
                                                             icon: const Icon(
@@ -1080,17 +1093,21 @@ void modalBottomSheetForInvoices(
                                                               child: TextField(
                                                                 onChanged:
                                                                     (value) {
-                                                                  setState(() {
-                                                                    if (value
-                                                                        .isEmpty) {
+                                                                  if (value
+                                                                      .isEmpty) {
+                                                                    setState(
+                                                                        () {
                                                                       paidAmount =
                                                                           0;
-                                                                    } else {
+                                                                    });
+                                                                  } else {
+                                                                    setState(
+                                                                        () {
                                                                       paidAmount =
                                                                           double.parse(
                                                                               value);
-                                                                    }
-                                                                  });
+                                                                    });
+                                                                  }
                                                                 },
                                                                 style:
                                                                     TextStyle(
@@ -1170,8 +1187,8 @@ void modalBottomSheetForInvoices(
                                                                     0,
                                                                   ),
                                                                   hintText:
-                                                                      // '$paidAmount',
-                                                                      ' ${priceToCurrencySelectedInput(paidAmount, selectedCoin)}',
+                                                                      '$paidAmount',
+                                                                  // ' ${priceToCurrencySelectedInput(remaining, selectedCoin)}',
                                                                   hintStyle:
                                                                       TextStyle(
                                                                     height:
@@ -1314,8 +1331,8 @@ void modalBottomSheetForInvoices(
                                                                               client,
                                                                           invoiceDocumentID:
                                                                               invoiceDocumentID,
-                                                                          paidAmount: priceToCurrencySelectedInput(paidAmount,
-                                                                              selectedCoin),
+                                                                          paidAmount:
+                                                                              paidAmount,
                                                                           totalOfTheOrder:
                                                                               invoiceTotal,
                                                                           date:
