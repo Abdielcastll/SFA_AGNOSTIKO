@@ -110,7 +110,12 @@ void modalBottomSheetForInvoices(
   } else {
     leftoverAmount = remaining.toStringAsFixed(2);
   }
-  double paidAmount = double.parse(remaining.toStringAsFixed(2));
+  double paidAmount = 0.00;
+
+  // double paidAmount = selectedCoin == null
+  //     ? double.parse(remaining.toStringAsFixed(2))
+  //     : priceToCurrencySelectedInput(
+  //         double.parse(remaining.toStringAsFixed(2)), selectedCoin);
 
   showModalBottomSheet(
     elevation: 0,
@@ -841,6 +846,9 @@ void modalBottomSheetForInvoices(
                                                                           as String;
                                                                 },
                                                               );
+                                                              print(
+                                                                  'Moneda cambiada');
+                                                              print(paidAmount);
                                                             },
                                                             icon: const Icon(
                                                               Icons
@@ -1161,7 +1169,8 @@ void modalBottomSheetForInvoices(
                                                                     0,
                                                                   ),
                                                                   hintText:
-                                                                      ' ${priceToCurrencySelectedInput(double.parse(paidAmount.toStringAsFixed(2).toString()), selectedCoin)}',
+                                                                      '$paidAmount',
+                                                                  // ' ${priceToCurrencySelectedInput(double.parse(paidAmount.toStringAsFixed(2).toString()), selectedCoin)}',
                                                                   hintStyle:
                                                                       TextStyle(
                                                                     height:

@@ -476,12 +476,14 @@ Future registerDebitCreditCardPayment(InvoiceData data) async {
       ),
     }).whenComplete(() {
       print(
-          'remaining $remaining ${priceReturnToOriginal(remaining, currentCoin)}');
-      print('amount $amount ${priceReturnToOriginal(amount, currentCoin)}');
+          'remaining de proceso: ${priceToCurrencySelected(remaining!, currency!)}');
+      print('Amount de proceso: ${priceToCurrencySelected(amount!, currency)}');
+      print(
+          'restante total: ${priceToCurrencySelected(remaining!, currency!) - priceToCurrencySelected(amount!, currency)}');
+      var total = priceToCurrencySelected(remaining!, currency!) -
+          priceToCurrencySelected(amount!, currency);
       try {
-        if (priceReturnToOriginal(remaining, currentCoin) -
-                priceReturnToOriginal(amount, currentCoin) <=
-            0) {
+        if (total <= 0) {
           FirebaseFirestore.instance
               .collection('clientes')
               .doc(client.clientDocumentId)
@@ -630,10 +632,15 @@ Future registerBankCheckPayment({
         ],
       ),
     }).whenComplete(() {
+      print(
+          'remaining de proceso: ${priceToCurrencySelected(remaining!, currency!)}');
+      print('Amount de proceso: ${priceToCurrencySelected(amount!, currency)}');
+      print(
+          'restante total: ${priceToCurrencySelected(remaining!, currency!) - priceToCurrencySelected(amount!, currency)}');
+      var total = priceToCurrencySelected(remaining!, currency!) -
+          priceToCurrencySelected(amount!, currency);
       try {
-        if (priceReturnToOriginal(remaining, currency) -
-                priceReturnToOriginal(amount, currency) <=
-            0) {
+        if (total <= 0) {
           FirebaseFirestore.instance
               .collection('clientes')
               .doc(client.clientDocumentId)
@@ -761,10 +768,15 @@ Future registerCriptoPayment(
         ],
       ),
     }).whenComplete(() {
+      print(
+          'remaining de proceso: ${priceToCurrencySelected(remaining!, currency!)}');
+      print('Amount de proceso: ${priceToCurrencySelected(amount!, currency)}');
+      print(
+          'restante total: ${priceToCurrencySelected(remaining!, currency!) - priceToCurrencySelected(amount!, currency)}');
+      var total = priceToCurrencySelected(remaining!, currency!) -
+          priceToCurrencySelected(amount!, currency);
       try {
-        if (priceReturnToOriginal(remaining, currency) -
-                priceReturnToOriginal(amount, currency) <=
-            0) {
+        if (total <= 0) {
           FirebaseFirestore.instance
               .collection('clientes')
               .doc(client.clientDocumentId)
@@ -905,10 +917,15 @@ Future registerDepositPayment({
         ],
       ),
     }).whenComplete(() {
+      print(
+          'remaining de proceso: ${priceToCurrencySelected(remaining!, currency!)}');
+      print('Amount de proceso: ${priceToCurrencySelected(amount!, currency)}');
+      print(
+          'restante total: ${priceToCurrencySelected(remaining!, currency!) - priceToCurrencySelected(amount!, currency)}');
+      var total = priceToCurrencySelected(remaining!, currency!) -
+          priceToCurrencySelected(amount!, currency);
       try {
-        if (priceReturnToOriginal(remaining, currency) -
-                priceReturnToOriginal(amount, currency) <=
-            0) {
+        if (total <= 0) {
           FirebaseFirestore.instance
               .collection('clientes')
               .doc(client.clientDocumentId)
@@ -1034,10 +1051,16 @@ Future registerMoneyPayment({
         ],
       ),
     }).whenComplete(() {
+      print(
+          'remaining de proceso: ${priceToCurrencySelected(remaining!, currency!)}');
+      print('Amount de proceso: ${priceToCurrencySelected(amount!, currency)}');
+      print(
+          'restante total: ${priceToCurrencySelected(remaining!, currency!) - priceToCurrencySelected(amount!, currency)}');
+      var total = priceToCurrencySelected(remaining!, currency!) -
+          priceToCurrencySelected(amount!, currency);
       try {
-        if (priceReturnToOriginal(remaining, currency) -
-                priceReturnToOriginal(amount, currency) <=
-            0) {
+        if (total <= 0) {
+          print('Factura pagada completamente');
           FirebaseFirestore.instance
               .collection('clientes')
               .doc(client.clientDocumentId)
@@ -1184,10 +1207,15 @@ Future registerTransferPayment({
         ],
       ),
     }).whenComplete(() {
+      print(
+          'remaining de proceso: ${priceToCurrencySelected(remaining!, currency!)}');
+      print('Amount de proceso: ${priceToCurrencySelected(amount!, currency)}');
+      print(
+          'restante total: ${priceToCurrencySelected(remaining!, currency!) - priceToCurrencySelected(amount!, currency)}');
+      var total = priceToCurrencySelected(remaining!, currency!) -
+          priceToCurrencySelected(amount!, currency);
       try {
-        if (priceReturnToOriginal(remaining, currency) -
-                priceReturnToOriginal(amount, currency) <=
-            0) {
+        if (total <= 0) {
           FirebaseFirestore.instance
               .collection('clientes')
               .doc(client.clientDocumentId)
@@ -1332,10 +1360,15 @@ Future registerTransferInterPayment({
         ],
       ),
     }).whenComplete(() {
+      print(
+          'remaining de proceso: ${priceToCurrencySelected(remaining!, currency!)}');
+      print('Amount de proceso: ${priceToCurrencySelected(amount!, currency)}');
+      print(
+          'restante total: ${priceToCurrencySelected(remaining!, currency!) - priceToCurrencySelected(amount!, currency)}');
+      var total = priceToCurrencySelected(remaining!, currency!) -
+          priceToCurrencySelected(amount!, currency);
       try {
-        if (priceReturnToOriginal(remaining, currency) -
-                priceReturnToOriginal(amount, currency) <=
-            0) {
+        if (total <= 0) {
           FirebaseFirestore.instance
               .collection('clientes')
               .doc(client.clientDocumentId)
@@ -1543,4 +1576,21 @@ Future<UserRole?> getUserRol(String rolId) async {
   if (!rol.exists) return null;
 
   return UserRole.fromDocumentSnapshot(rol);
+}
+
+priceToCurrencySelected(double productPrice, String coin) {
+  double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+  if (coin.contains('USD')) {
+    return correctAmount;
+  } else if (coin.contains('VED')) {
+    return correctAmount * 4.58;
+  } else if (coin.contains('EUR')) {
+    return correctAmount * 0.89;
+  } else if (coin.contains('MXN')) {
+    return correctAmount * 19.43;
+  } else if (coin.contains('BTC')) {
+    return correctAmount * 0.00011;
+  } else {
+    return correctAmount * 4.58;
+  }
 }

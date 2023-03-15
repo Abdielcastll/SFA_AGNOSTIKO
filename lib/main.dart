@@ -113,7 +113,7 @@ class SfaAgnostiko extends StatelessWidget {
                               //'wrapper' for mobile to avoid checking terminal
                               // token, SplashScreenView.route to activate
                               // in terminals
-                              //'wrapper',
+                              // 'wrapper',
                               SplashScreenView.route,
                           routes: {
                             SplashScreenView.route: (BuildContext context) =>

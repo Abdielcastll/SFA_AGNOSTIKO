@@ -538,8 +538,11 @@ identifyPaymentMethod({
                                     if (accountNumber != '' ||
                                         accountHolder != '') {
                                       print('Registrando pago en cheque');
-                                      if (double.parse(paidAmount.toString()) >
-                                          remaining!) {
+                                      if (paidAmount! >
+                                          priceToCurrencySelected(
+                                              double.parse(remaining!
+                                                  .toStringAsFixed(2)),
+                                              selectedCoin)) {
                                         Fluttertoast.showToast(
                                           msg:
                                               'La cantidad a pagar excede de la deuda pendiente',
@@ -1015,7 +1018,11 @@ identifyPaymentMethod({
                           // registerCriptoPayment();
                           if (transactionId != '') {
                             if (paidAmount != null) {
-                              if (paidAmount > remaining) {
+                              if (paidAmount! >
+                                  priceToCurrencySelected(
+                                      double.parse(
+                                          remaining!.toStringAsFixed(2)),
+                                      selectedCoin)) {
                                 Fluttertoast.showToast(
                                   msg:
                                       'La cantidad a pagar excede de la deuda pendiente',
@@ -1857,6 +1864,7 @@ identifyPaymentMethod({
                         : ElevatedButton.icon(
                             onPressed: () async {
                               // Crear en DB una visita
+
                               if (paidAmount is String) {
                                 paidAmount =
                                     double.parse(paidAmount.toString());
@@ -1877,13 +1885,15 @@ identifyPaymentMethod({
                                         myTheme.colorScheme.primary,
                                     textColor: Colors.white,
                                   );
-                                  print('TEST 00000000');
+                                  print('TEST 00000000PHOS');
 
                                   // print(priceToCurrencySelected(
                                   //     paidAmount!, selectedCoin));
                                   print(paidAmount!);
                                   print(priceToCurrencySelected(
-                                      remaining, selectedCoin));
+                                      double.parse(
+                                          remaining!.toStringAsFixed(2)),
+                                      selectedCoin));
                                 } else {
                                   print('Cantidad permitida');
                                   Fluttertoast.showToast(
