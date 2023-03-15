@@ -225,6 +225,7 @@ void modalBottomSheetForInvoices(
         builder: (context, setState) {
           // priceToCurrencySelectedInput(remaining, selectedCoin);
           double paidAmount = remaining;
+          final fieldText = TextEditingController();
 
           return SafeArea(
             child: Container(
@@ -851,6 +852,7 @@ void modalBottomSheetForInvoices(
                                                                           as String;
                                                                 },
                                                               );
+                                                              fieldText.clear();
                                                               setState(() {
                                                                 paidAmount =
                                                                     priceToCurrencySelectedInput(
@@ -1109,6 +1111,8 @@ void modalBottomSheetForInvoices(
                                                                     });
                                                                   }
                                                                 },
+                                                                controller:
+                                                                    fieldText,
                                                                 style:
                                                                     TextStyle(
                                                                   fontSize: 14,
