@@ -12,6 +12,7 @@ import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/models/transaction_args.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 
 import '../models/user_rol_model.dart';
 
@@ -1576,21 +1577,4 @@ Future<UserRole?> getUserRol(String rolId) async {
   if (!rol.exists) return null;
 
   return UserRole.fromDocumentSnapshot(rol);
-}
-
-priceToCurrencySelected(double productPrice, String coin) {
-  double correctAmount = double.parse(productPrice.toStringAsFixed(2));
-  if (coin.contains('USD')) {
-    return correctAmount;
-  } else if (coin.contains('VED')) {
-    return correctAmount * 4.58;
-  } else if (coin.contains('EUR')) {
-    return correctAmount * 0.89;
-  } else if (coin.contains('MXN')) {
-    return correctAmount * 19.43;
-  } else if (coin.contains('BTC')) {
-    return correctAmount * 0.00011;
-  } else {
-    return correctAmount * 4.58;
-  }
 }
