@@ -49,6 +49,8 @@ dependencies:
   firebase_core: ^2.4.1
   flutterfire_ui: ^0.4.2+3
   # Flutter packages
+  photo_view: ^0.14.0
+  full_screen_image: ^2.0.0
   shared_preferences: ^2.0.15
   fluttertoast: ^8.0.9
   flutter_swiper_plus: ^2.0.4

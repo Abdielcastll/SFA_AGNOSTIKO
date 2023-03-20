@@ -85,7 +85,9 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                     }),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        final url = snapshot.data!.toString();
+                        final url = snapshot.data?.toString();
+                        // print('PRINTING URL IN NEW PRODUCTWS');
+                        // print(product.catalogue);
                         return GestureDetector(
                           onTap: () {
                             Navigator.push(
@@ -96,7 +98,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                   code: product.code,
                                   price: (prices[product.code] ?? 0).toString(),
                                   line: linesSummary[product.line],
-                                  imageUrl: url,
+                                  imageUrl: url!,
                                   isProductNew: true,
                                   name: product.name,
                                   stock: stockValues[product.code] ?? 000,
@@ -109,6 +111,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                   pricesName: pricesName,
                                   catalogueID: product.catalogue,
                                   userZoneDocument: userZoneDocument,
+                                  showListButton: true,
                                 ),
                               ),
                             );
@@ -131,7 +134,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                     width: 160,
                                     child: CachedNetworkImage(
                                       fit: BoxFit.cover,
-                                      imageUrl: url,
+                                      imageUrl: url!,
                                       placeholder: (context, url) => Container(
                                           alignment: Alignment.center,
                                           width: 300,
@@ -236,6 +239,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                   isProductInAPromotion: false,
                                   prices: prices,
                                   userZoneDocument: userZoneDocument,
+                                  showListButton: true,
                                 ),
                               ),
                             );

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class CurrencyProvider extends ChangeNotifier {
-  String? _currentCurrency = 'Dolares - USD';
+  // String? _currentCurrency = 'Dolares - USD';
+  String? _currentCurrency = 'Pesos Mexicanos - MXN';
 
   String? get currentCurrency => _currentCurrency;
 

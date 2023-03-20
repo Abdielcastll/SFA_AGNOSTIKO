@@ -142,35 +142,10 @@ class _CatalogueBodyState extends State<CatalogueBody> {
         Provider.of<CounterLimitFirestore>(context).getProductsLimit;
     final productsScrollLimit =
         Provider.of<CounterLimitFirestore>(context).getScrollProductLimit;
-
-    // print(checkProducts);
     return SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: const [
-            // Text('Pantalla de prueba para aumento '),
-            // ElevatedButton(
-            //     onPressed: () {
-            //       final productsLimitProvider =
-            //           Provider.of<CounterLimitFirestore>(context,
-            //               listen: false);
-            //       if (productsScrollLimit == 0) {
-            //         productsLimitProvider.setProductsLimit(0, 0);
-            //       } else {
-            //         int newValor =
-            //             int.parse(productsScrollLimit.toString());
-            //         if (newValor == 10) {
-            //           productsLimitProvider.setProductsLimit(
-            //               productsLimit + newValor, 10);
-            //         } else if (newValor == 50) {
-            //           productsLimitProvider.setProductsLimit(
-            //               productsLimit + newValor, 50);
-            //         }
-            //       }
-            //     },
-            //     child: Text(
-            //         'Aumentar productos:${productsLimit == 0 ? 'Todos' : productsLimit} + $productsScrollLimit')),
-            // Text('Products actuales: ${checkProducts.length}'),
             PromotionsWidget(),
             NewProductsWidget(),
             ListOfProductsButton(),

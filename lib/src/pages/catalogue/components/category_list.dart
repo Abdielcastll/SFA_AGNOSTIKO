@@ -2,6 +2,7 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
@@ -26,6 +27,7 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
   Widget build(BuildContext context) {
     final categories = Provider.of<CategorieSummary?>(context)?.summary ?? {};
     final prices = Provider.of<Prices?>(context)?.prices ?? {};
+    final pricesName = Provider.of<Prices?>(context)?.name ?? {};
     final products = Provider.of<List<Products>?>(context) ?? [];
     List categoriesSummary = categories.values.toList();
     List categorieKeys = categories.keys.toList();
@@ -65,15 +67,18 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
             child: ListView.builder(
               physics: BouncingScrollPhysics(),
               scrollDirection: Axis.horizontal,
-              itemCount: categoriesSummary.length,
+              itemCount: 3,
+              // categoriesSummary.length,
               itemBuilder: (BuildContext context, index) {
                 final categorie = categoriesSummary[index];
                 final key = categorieKeys[index];
                 return GestureDetector(
                   onTap: () async {
+                    String? mostRecentProduct = '';
                     List<Products>? filteredProducts = [];
                     filteredProducts.clear();
                     // print(categoriesCollection.doc(key));
+
                     await productsCollection
                         .where('categoria',
                             isEqualTo: categoriesCollection.doc(key))
@@ -104,6 +109,7 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                         });
                       }
                       print(filteredProducts);
+                      print(filteredProducts.first.name);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -112,6 +118,7 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                             listOfPrices: prices,
                             userZoneDocument: userZoneDocument,
                             showFullList: false,
+                            pricesName: pricesName,
                           ),
                         ),
                       );
@@ -135,22 +142,120 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                                 borderRadius: BorderRadius.circular(8)),
                             height: 240,
                             width: 120,
-                            child: CachedNetworkImage(
-                              fit: BoxFit.cover,
-                              imageUrl: 'https://i.imgur.com/H9rVf4m.jpg',
-                              placeholder: (context, url) => Container(
-                                  width: 300,
-                                  child: const Center(
-                                      child: CircularProgressIndicator())),
-                              errorWidget: (context, url, error) => Image.asset(
-                                'assets/images/nocategorie.jpg',
-                                fit: BoxFit.cover,
-                              ),
+                            child: FutureBuilder(
+                              future: productsCollection
+                                  .where('categoria',
+                                      isEqualTo: categoriesCollection.doc(key))
+                                  .orderBy('modificado', descending: true)
+                                  .limit(1)
+                                  .snapshots()
+                                  .first
+                                  .then(
+                                (value) {
+                                  var cataloguePath = value.docs;
+                                  print(
+                                      'PRINTING CATALOGUE PATHs IDs IN CATEGORY LIST');
+                                  for (var path in cataloguePath) {
+                                    print(path.id);
+                                    print(path.get('nombre'));
+                                    var catalogueId = path
+                                            .data()
+                                            .toString()
+                                            .contains('catalogo')
+                                        ? path.get('catalogo').id
+                                        : 'NO CATALOGUE ID FOUND';
+                                    print(catalogueId);
+
+                                    // print('TEST TO GET IMAGE');
+
+                                    return catalogueId;
+                                  }
+                                },
+                              ).catchError((e) {
+                                print(
+                                    'ERROR ON GETTING IMAGE PATH FROM FIREBASE COLLECTION IN CATEGORY LIST');
+                                print(e);
+                              }),
+                              builder: (context, snapshot) {
+                                final catalogueID = snapshot.data!.toString();
+                                if (snapshot.hasData) {
+                                  return FutureBuilder<String?>(
+                                    future: FirebaseStorage.instance
+                                        .ref()
+                                        .child('imagenes')
+                                        .child('catalogos')
+                                        .child(catalogueID)
+                                        .child('1')
+                                        .getDownloadURL()
+                                        .catchError((e) {
+                                      print(
+                                          'ERROR ON GETTING IMAGE FROM FIREBASE STORAGE IN CATEGORY LIST');
+                                      print(e);
+                                      return 'assets/images/nocategorie.jpg';
+                                    }),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        final url = snapshot.data!.toString();
+                                        print('URL FOR CATEGORIE');
+                                        print(url);
+                                        return CachedNetworkImage(
+                                          fit: BoxFit.cover,
+                                          imageUrl:
+                                              // 'assets/images/nocategorie.jpg',
+                                              url,
+                                          placeholder: (context, url) =>
+                                              Container(
+                                            width: 300,
+                                            child: const Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            ),
+                                          ),
+                                          errorWidget: (context, url, error) =>
+                                              Image.asset(
+                                            'assets/images/nocategorie.jpg',
+                                            fit: BoxFit.cover,
+                                          ),
+                                        );
+                                      } else if (snapshot.hasError) {
+                                        return CachedNetworkImage(
+                                          fit: BoxFit.cover,
+                                          imageUrl:
+                                              'https://i.imgur.com/H9rVf4m.jpg',
+                                          placeholder: (context, url) =>
+                                              Container(
+                                            width: 300,
+                                            child: const Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            ),
+                                          ),
+                                          errorWidget: (context, url, error) =>
+                                              Image.asset(
+                                            'assets/images/nocategorie.jpg',
+                                            fit: BoxFit.cover,
+                                          ),
+                                        );
+                                      } else {
+                                        return const SizedBox(
+                                          width: 140,
+                                          child: Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  );
+                                } else {
+                                  return const SizedBox(
+                                    width: 140,
+                                    child: Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  );
+                                }
+                              },
                             ),
-                            // child: Image.network(
-                            //   'https://i.imgur.com/H9rVf4m.jpg',
-                            //   fit: BoxFit.cover,
-                            // ),
                           ),
                         ),
                         Align(

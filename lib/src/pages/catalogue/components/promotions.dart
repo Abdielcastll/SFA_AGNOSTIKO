@@ -33,6 +33,7 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
         Provider.of<List<ProductsWithPromotions>?>(context) ?? [];
     List<ProductsWithPromotions>? productsWithPromotionList =
         productsWithPromotions;
+    final pricesName = Provider.of<Prices?>(context)?.name ?? {};
     final linesSummary = Provider.of<LineSummary?>(context)?.summary ?? {};
     final stockValues = Provider.of<StockModel?>(context)?.stock ?? {};
     final products = Provider.of<List<Products>?>(context) ?? [];
@@ -183,6 +184,7 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
                                         listOfPrices: listOfPrices,
                                         userZoneDocument: userZoneDocument,
                                         showFullList: false,
+                                        pricesName: pricesName,
                                       ),
                                     ),
                                   );
@@ -242,22 +244,24 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
                             } else if (snapshot.hasError) {
                               return GestureDetector(
                                 onTap: () {
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //     builder: (context) => ProductsPage(
-                                  //       listOfProducts: products
-                                  //           .where(
-                                  //             (product) =>
-                                  //                 product.promotion ==
-                                  //                 promotion.firebaseDocumentID,
-                                  //           )
-                                  //           .toList(),
-                                  //       listOfPrices: listOfPrices,
-                                  //       isOrderActive: widget.isOrderActive,
-                                  //     ),
-                                  //   ),
-                                  // );
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProductsPage(
+                                        listOfProducts: productsWithPromotions
+                                            .where(
+                                              (product) =>
+                                                  product.promotion ==
+                                                  promotion.firebaseDocumentID,
+                                            )
+                                            .toList(),
+                                        listOfPrices: listOfPrices,
+                                        userZoneDocument: userZoneDocument,
+                                        showFullList: false,
+                                        pricesName: pricesName,
+                                      ),
+                                    ),
+                                  );
                                 },
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,

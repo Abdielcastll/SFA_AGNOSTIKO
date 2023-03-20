@@ -1,18 +1,15 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
-import 'package:pwa_sales2go_flutter/src/global/global.dart';
-import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
-import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
+import 'package:pwa_sales2go_flutter/src/pages/products/product_details/product_details.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
@@ -29,11 +26,13 @@ class ProductsPage extends StatefulWidget {
     this.listOfPrices,
     this.userZoneDocument,
     this.showFullList,
+    this.pricesName,
   }) : super(key: key);
 
   final listOfProducts;
   final listOfPrices;
   final userZoneDocument;
+  final pricesName;
   final bool? showFullList;
 
   @override
@@ -114,6 +113,8 @@ class _ProductsPageState extends State<ProductsPage> {
           listOfProducts: widget.listOfProducts,
           listOfPrices: widget.listOfPrices,
           showFullList: widget.showFullList,
+          userZoneDocument: widget.userZoneDocument,
+          pricesName: widget.pricesName,
         ),
       ),
     );
@@ -126,11 +127,15 @@ class ProductsBody extends StatefulWidget {
     this.listOfProducts,
     this.listOfPrices,
     this.showFullList,
+    this.userZoneDocument,
+    this.pricesName,
   }) : super(key: key);
 
   final listOfProducts;
   final listOfPrices;
   final bool? showFullList;
+  final userZoneDocument;
+  final pricesName;
 
   @override
   State<ProductsBody> createState() => _ProductsBodyState();
@@ -138,8 +143,8 @@ class ProductsBody extends StatefulWidget {
 
 class _ProductsBodyState extends State<ProductsBody> {
   final searchController = TextEditingController();
-  List<ShoppingCartProduct> selectedProducts = [];
   final _controller = ScrollController();
+  List<ShoppingCartProduct> selectedProducts = [];
   List<Products> filteredProducts = [];
 
   // List<Products>? products;
@@ -171,8 +176,23 @@ class _ProductsBodyState extends State<ProductsBody> {
               productsLimitProvider.setProductsLimit(
                   productsLimitProvider.getProductsLimit + newValor, 50);
             }
+            ScaffoldMessenger.of(context)
+              ..removeCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  backgroundColor: myTheme.colorScheme.primary,
+                  duration: const Duration(seconds: 1),
+                  content: Text(
+                    "Cargando $newValor productos adicionales",
+                    style: const TextStyle(
+                      fontFamily: 'Poppins-regular',
+                    ),
+                  ),
+                ),
+              );
+
+            print('Bottom products page');
           }
-          print('Bottom products page');
         }
       }
     });
@@ -281,8 +301,20 @@ class _ProductsBodyState extends State<ProductsBody> {
                   // Agregar productos al carrito
 
                   objectBox.insertManyShoppingCartProducts(selectedProducts);
-                  Fluttertoast.showToast(
-                      msg: 'Productos Añadidos exitosamente');
+                  ScaffoldMessenger.of(context)
+                    ..removeCurrentSnackBar()
+                    ..showSnackBar(
+                      SnackBar(
+                        backgroundColor: myTheme.colorScheme.primary,
+                        duration: const Duration(seconds: 1),
+                        content: const Text(
+                          "Productos añadidos exitosamente",
+                          style: TextStyle(
+                            fontFamily: 'Poppins-regular',
+                          ),
+                        ),
+                      ),
+                    );
                 },
                 child: const Icon(
                   Icons.add_shopping_cart_rounded,
@@ -303,6 +335,7 @@ class _ProductsBodyState extends State<ProductsBody> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Colors.transparent),
               ),
               child: TextField(
                 style: const TextStyle(
@@ -320,16 +353,19 @@ class _ProductsBodyState extends State<ProductsBody> {
                   contentPadding: const EdgeInsets.fromLTRB(14, 0, 0, 0),
                   hintText: AppLocalizations.of(context)!.searchProductCode,
                   // AppLocalizations.of(context)!.searchProductName,
-                  hintStyle: const TextStyle(
+                  hintStyle: TextStyle(
                     fontFamily: 'Poppins-regular',
                     fontSize: 14,
+                    color: Colors.grey.shade500,
                   ),
                   counterText: '',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide(
-                      color: myTheme.colorScheme.primary.withOpacity(0.5),
-                    ),
+                    borderSide: BorderSide(color: myTheme.colorScheme.primary),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(color: myTheme.colorScheme.primary),
                   ),
                 ),
                 textInputAction: TextInputAction.go,
@@ -364,22 +400,6 @@ class _ProductsBodyState extends State<ProductsBody> {
                                 ? element.data()['promocion'].id
                                 : '',
                         selected: false,
-                        // quality: 'test',
-                        // catalogue: 'test',
-                        // categorie: 'test',
-                        // code: 'test',
-                        // design: 'test',
-                        // line: 'test',
-                        // brand: 'test',
-                        // lastModifiedDate: 'test',
-                        // name: 'test',
-                        // subCategorie: 'test',
-                        // size: 'test',
-                        // promotion: 'test',
-                        // // element.data().toString().contains('promocion')
-                        // //     ? element.data()['promocion'].id
-                        // //     : '',
-                        // selected: false,
                       );
                       setState(() {
                         filteredProducts.add(product);
@@ -396,9 +416,9 @@ class _ProductsBodyState extends State<ProductsBody> {
               ),
             ),
             Container(
-              margin: const EdgeInsets.fromLTRB(20.0, 5.0, 0, 0),
+              margin: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   TextButton(
                     style: ButtonStyle(
@@ -445,7 +465,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                   : selectedValue.toString(),
                               style: TextStyle(
                                 fontSize: 14,
-                                color: Theme.of(context).hintColor,
+                                color: Colors.grey.shade500,
                               ),
                             ),
                             items: items
@@ -453,8 +473,10 @@ class _ProductsBodyState extends State<ProductsBody> {
                                       value: item,
                                       child: Text(
                                         item,
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontSize: 14,
+                                          fontFamily: 'Poppins-regular',
+                                          color: Colors.grey.shade500,
                                         ),
                                       ),
                                     ))
@@ -482,9 +504,15 @@ class _ProductsBodyState extends State<ProductsBody> {
                               }
                             },
                             buttonHeight: 40,
-                            buttonWidth: 140,
+                            buttonWidth: 100,
                             itemHeight: 40,
-                            // dropdownElevation: 20,
+                            alignment: Alignment.center,
+                            buttonElevation: 1,
+                            dropdownElevation: 1,
+                            dropdownDecoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(14),
+                              color: Colors.white,
+                            ),
                           ),
                         )
                       : Container(),
@@ -558,9 +586,21 @@ class _ProductsBodyState extends State<ProductsBody> {
                                       product.selected = !product.selected);
                                   selectedProducts.add(newProduct);
                                 } else {
-                                  Fluttertoast.showToast(
-                                      msg:
-                                          'No hay stock disponible de este producto');
+                                  ScaffoldMessenger.of(context)
+                                    ..removeCurrentSnackBar()
+                                    ..showSnackBar(
+                                      SnackBar(
+                                        backgroundColor:
+                                            myTheme.colorScheme.primary,
+                                        duration: const Duration(seconds: 1),
+                                        content: const Text(
+                                          "No hay stock disponible de este producto",
+                                          style: TextStyle(
+                                            fontFamily: 'Poppins-regular',
+                                          ),
+                                        ),
+                                      ),
+                                    );
                                 }
                               } else if (product.selected == true) {
                                 setState(
@@ -568,6 +608,107 @@ class _ProductsBodyState extends State<ProductsBody> {
                                 selectedProducts.removeWhere(
                                     (item) => item.code == product.code);
                               }
+                            },
+                            onLongPress: () {
+                              // Pendiente
+
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      FutureBuilder(
+                                    future: FirebaseStorage.instance
+                                        .ref()
+                                        .child('imagenes')
+                                        .child('catalogos')
+                                        .child(product.catalogue)
+                                        .child('1')
+                                        .getDownloadURL()
+                                        .catchError((e) {
+                                      print(e);
+                                    }),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        final url = snapshot.data!.toString();
+
+                                        return ProductDetails(
+                                          code: product.code,
+                                          price: (productPrice).toString(),
+                                          line: productLine,
+                                          imageUrl: url,
+                                          isProductNew: false,
+                                          name: product.name,
+                                          stock: productStock ?? 0,
+                                          list: [
+                                            ProductsByDate(
+                                              quality: 'nan',
+                                              catalogue: 'test',
+                                              categorie: 'test',
+                                              code: 'test',
+                                              design: 'test',
+                                              line: 'test',
+                                              brand: 'test',
+                                              lastModifiedDate: DateTime.now(),
+                                              name: 'test',
+                                              subCategorie: 'test',
+                                              size: 'test',
+                                              selected: false,
+                                            )
+                                          ],
+                                          isProductInAPromotion: false,
+                                          prices: widget.listOfPrices,
+                                          pricesName: widget.pricesName,
+                                          catalogueID: product.catalogue,
+                                          userZoneDocument:
+                                              widget.userZoneDocument,
+                                          showListButton: false,
+                                        );
+                                      } else if (snapshot.hasError) {
+                                        return ProductDetails(
+                                          code: product.code,
+                                          price: (productPrice).toString(),
+                                          line: productLine,
+                                          imageUrl:
+                                              'https://i.imgur.com/BPbj6Gy.jpg',
+                                          isProductNew: false,
+                                          name: product.name,
+                                          stock: productStock ?? 0,
+                                          list: [
+                                            ProductsByDate(
+                                              quality: 'nan',
+                                              catalogue: 'test',
+                                              categorie: 'test',
+                                              code: 'test',
+                                              design: 'test',
+                                              line: 'test',
+                                              brand: 'test',
+                                              lastModifiedDate: DateTime.now(),
+                                              name: 'test',
+                                              subCategorie: 'test',
+                                              size: 'test',
+                                              selected: false,
+                                            )
+                                          ],
+                                          isProductInAPromotion: false,
+                                          prices: widget.listOfPrices,
+                                          pricesName: widget.pricesName,
+                                          catalogueID: product.catalogue,
+                                          userZoneDocument:
+                                              widget.userZoneDocument,
+                                          showListButton: false,
+                                        );
+                                      } else {
+                                        return const SizedBox(
+                                          width: 140,
+                                          child: Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ),
+                              );
                             },
                             title: SingleChildScrollView(
                               physics: const BouncingScrollPhysics(),
@@ -632,9 +773,25 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                   selectedProducts
                                                       .add(newProduct);
                                                 } else {
-                                                  Fluttertoast.showToast(
-                                                      msg:
-                                                          'No hay stock disponible de este producto');
+                                                  ScaffoldMessenger.of(context)
+                                                    ..removeCurrentSnackBar()
+                                                    ..showSnackBar(
+                                                      SnackBar(
+                                                        backgroundColor: myTheme
+                                                            .colorScheme
+                                                            .primary,
+                                                        duration:
+                                                            const Duration(
+                                                                seconds: 1),
+                                                        content: const Text(
+                                                          "No hay stock disponible de este producto",
+                                                          style: TextStyle(
+                                                            fontFamily:
+                                                                'Poppins-regular',
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    );
                                                 }
                                               } else if (product.selected ==
                                                   true) {
@@ -870,9 +1027,21 @@ class _ProductsBodyState extends State<ProductsBody> {
                                       product.selected = !product.selected);
                                   selectedProducts.add(newProduct);
                                 } else {
-                                  Fluttertoast.showToast(
-                                      msg:
-                                          'No hay stock disponible de este producto');
+                                  ScaffoldMessenger.of(context)
+                                    ..removeCurrentSnackBar()
+                                    ..showSnackBar(
+                                      SnackBar(
+                                        backgroundColor:
+                                            myTheme.colorScheme.primary,
+                                        duration: const Duration(seconds: 1),
+                                        content: const Text(
+                                          "No hay stock disponible de este producto",
+                                          style: TextStyle(
+                                            fontFamily: 'Poppins-regular',
+                                          ),
+                                        ),
+                                      ),
+                                    );
                                 }
                               } else if (product.selected == true) {
                                 setState(
@@ -880,6 +1049,106 @@ class _ProductsBodyState extends State<ProductsBody> {
                                 selectedProducts.removeWhere(
                                     (item) => item.code == product.code);
                               }
+                            },
+                            onLongPress: () {
+                              // Pendiente
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      FutureBuilder(
+                                    future: FirebaseStorage.instance
+                                        .ref()
+                                        .child('imagenes')
+                                        .child('catalogos')
+                                        .child(product.catalogue)
+                                        .child('1')
+                                        .getDownloadURL()
+                                        .catchError((e) {
+                                      print(e);
+                                    }),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        final url = snapshot.data!.toString();
+
+                                        return ProductDetails(
+                                          code: product.code,
+                                          price: (productPrice).toString(),
+                                          line: productLine,
+                                          imageUrl: url,
+                                          isProductNew: false,
+                                          name: product.name,
+                                          stock: productStock ?? 0,
+                                          list: [
+                                            ProductsByDate(
+                                              quality: 'nan',
+                                              catalogue: 'test',
+                                              categorie: 'test',
+                                              code: 'test',
+                                              design: 'test',
+                                              line: 'test',
+                                              brand: 'test',
+                                              lastModifiedDate: DateTime.now(),
+                                              name: 'test',
+                                              subCategorie: 'test',
+                                              size: 'test',
+                                              selected: false,
+                                            )
+                                          ],
+                                          isProductInAPromotion: false,
+                                          prices: widget.listOfPrices,
+                                          pricesName: widget.pricesName,
+                                          catalogueID: product.catalogue,
+                                          userZoneDocument:
+                                              widget.userZoneDocument,
+                                          showListButton: false,
+                                        );
+                                      } else if (snapshot.hasError) {
+                                        return ProductDetails(
+                                          code: product.code,
+                                          price: (productPrice).toString(),
+                                          line: productLine,
+                                          imageUrl:
+                                              'https://i.imgur.com/BPbj6Gy.jpg',
+                                          isProductNew: false,
+                                          name: product.name,
+                                          stock: productStock ?? 0,
+                                          list: [
+                                            ProductsByDate(
+                                              quality: 'nan',
+                                              catalogue: 'test',
+                                              categorie: 'test',
+                                              code: 'test',
+                                              design: 'test',
+                                              line: 'test',
+                                              brand: 'test',
+                                              lastModifiedDate: DateTime.now(),
+                                              name: 'test',
+                                              subCategorie: 'test',
+                                              size: 'test',
+                                              selected: false,
+                                            )
+                                          ],
+                                          isProductInAPromotion: false,
+                                          prices: widget.listOfPrices,
+                                          pricesName: widget.pricesName,
+                                          catalogueID: product.catalogue,
+                                          userZoneDocument:
+                                              widget.userZoneDocument,
+                                          showListButton: false,
+                                        );
+                                      } else {
+                                        return const SizedBox(
+                                          width: 140,
+                                          child: Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ),
+                              );
                             },
                             title: SingleChildScrollView(
                               physics: const BouncingScrollPhysics(),

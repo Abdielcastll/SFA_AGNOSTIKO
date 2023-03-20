@@ -31,6 +31,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
     final products = Provider.of<List<Products>?>(context) ?? [];
     final prices = Provider.of<Prices?>(context)?.prices ?? {};
     final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
+    final pricesName = Provider.of<Prices?>(context)?.name ?? {};
 
     final productsList = products;
 
@@ -103,6 +104,8 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                   prices: prices,
                                   catalogueID: product.catalogue,
                                   userZoneDocument: userZoneDocument,
+                                  showListButton: true,
+                                  // pricesName: pricesName,
                                 ),
                               ),
                             );
@@ -232,6 +235,8 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                   isProductInAPromotion: false,
                                   prices: prices,
                                   userZoneDocument: userZoneDocument,
+                                  showListButton: true,
+                                  pricesName: pricesName,
                                 ),
                               ),
                             );

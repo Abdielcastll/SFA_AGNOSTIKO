@@ -22,6 +22,7 @@ class _ListOfProductsButtonState extends State<ListOfProductsButton> {
   @override
   Widget build(BuildContext context) {
     final prices = Provider.of<Prices?>(context)?.prices ?? {};
+    final pricesName = Provider.of<Prices?>(context)?.name ?? {};
     final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
     final products = Provider.of<List<Products>?>(context) ?? [];
 
@@ -48,6 +49,7 @@ class _ListOfProductsButtonState extends State<ListOfProductsButton> {
                 userZoneDocument: userZoneDocument,
                 listOfProducts: const [],
                 showFullList: true,
+                pricesName: pricesName,
               ),
             ),
           );

@@ -113,8 +113,8 @@ class SfaAgnostiko extends StatelessWidget {
                               //'wrapper' for mobile to avoid checking terminal
                               // token, SplashScreenView.route to activate
                               // in terminals
-                              // 'wrapper',
-                              SplashScreenView.route,
+                              'wrapper',
+                          // SplashScreenView.route,
                           routes: {
                             SplashScreenView.route: (BuildContext context) =>
                                 SplashScreenView(),
@@ -139,8 +139,8 @@ class SfaAgnostiko extends StatelessWidget {
                                 const PlaceOrderPage(),
                             'catalogue': (BuildContext context) =>
                                 const CataloguePage(),
-                            'products': (BuildContext context) =>
-                                ProductsPage(),
+                            // 'products': (BuildContext context) =>
+                            //     const ProductsPage(pricesName: 'GENER-03'),
                             'clients': (BuildContext context) =>
                                 const ClientsPage(),
                             'profile': (BuildContext context) =>

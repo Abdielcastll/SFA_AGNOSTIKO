@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:full_screen_image/full_screen_image.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/examples/products_example.dart';
@@ -37,6 +38,7 @@ class ProductDetails extends StatefulWidget {
     this.pricesName,
     this.catalogueID,
     required this.userZoneDocument,
+    required this.showListButton,
   }) : super(key: key);
 
   final String? code;
@@ -45,9 +47,10 @@ class ProductDetails extends StatefulWidget {
   final String? name;
   final String imageUrl;
   final bool isProductNew;
+  final bool showListButton;
+  final bool isProductInAPromotion;
   final int? stock;
   final List<ProductsByDate>? list;
-  final bool isProductInAPromotion;
   final prices;
   final pricesName;
   final catalogueID;
@@ -77,6 +80,7 @@ class _ProductDetailsState extends State<ProductDetails> {
         pricesName: widget.pricesName,
         catalogueID: widget.catalogueID,
         userZoneDocument: widget.userZoneDocument,
+        showListButton: widget.showListButton,
       ),
     );
   }
@@ -98,6 +102,7 @@ class ProductDetailsBody extends StatelessWidget {
     this.pricesName,
     this.catalogueID,
     required this.userZoneDocument,
+    required this.showListButton,
   }) : super(key: key);
 
   final String? code;
@@ -106,6 +111,7 @@ class ProductDetailsBody extends StatelessWidget {
   final String? name;
   final String imageUrl;
   final bool isProductNew;
+  final bool showListButton;
   final int? stock;
   final List<ProductsByDate>? list;
   final bool isProductInAPromotion;
@@ -181,26 +187,31 @@ class ProductDetailsBody extends StatelessWidget {
             Stack(
               alignment: Alignment.topRight,
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Colors.transparent,
-                  ),
-                  height: 380,
-                  width: MediaQuery.of(context).size.width * 0.90,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: CachedNetworkImage(
-                      fit: BoxFit.cover,
-                      imageUrl: imageUrl,
-                      placeholder: (context, url) => Container(
-                          alignment: Alignment.center,
-                          width: 300,
-                          child:
-                              const Center(child: CircularProgressIndicator())),
-                      errorWidget: (context, url, error) => Image.asset(
-                        'assets/images/noproduct.jpg',
-                        fit: BoxFit.cover,
+                FullScreenWidget(
+                  disposeLevel: DisposeLevel.Low,
+                  child: InteractiveViewer(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.transparent,
+                      ),
+                      height: 380,
+                      width: MediaQuery.of(context).size.width * 0.90,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: CachedNetworkImage(
+                          fit: BoxFit.cover,
+                          imageUrl: imageUrl,
+                          placeholder: (context, url) => Container(
+                              alignment: Alignment.center,
+                              width: 300,
+                              child: const Center(
+                                  child: CircularProgressIndicator())),
+                          errorWidget: (context, url, error) => Image.asset(
+                            'assets/images/noproduct.jpg',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -274,268 +285,550 @@ class ProductDetailsBody extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontFamily: 'Poppins-regular',
-                    fontSize: 26,
-                    color: myTheme.colorScheme.onBackground,
+                    fontSize: 24,
+                    color: myTheme.colorScheme.primary,
                   ),
                 ),
               ),
             ),
             Container(
-              margin: const EdgeInsets.fromLTRB(10, 10, 0, 20),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              '$line • ',
-                              style: TextStyle(
-                                color: Colors.grey.shade700,
-                                fontFamily: 'Poppins-regular',
-                                fontSize: 16,
+              margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: orderActive.orderActive == false
+                        ? MainAxisAlignment.center
+                        : MainAxisAlignment.spaceBetween,
+                    children: [
+                      // SizedBox(height: 10),
+                      showListButton == false
+                          ? Container()
+                          : Container(
+                              // alignment: Alignment.centerLeft,
+                              child: Container(
+                                // margin: const EdgeInsets.only(left: 30.0),
+                                // width: 160,
+                                height: 38,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: ElevatedButton.icon(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              ProductsPage(
+                                            listOfProducts: list,
+                                            listOfPrices: prices,
+                                            userZoneDocument: userZoneDocument,
+                                            showFullList: false,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    icon: Icon(
+                                      MaterialCommunityIcons.view_list,
+                                      color: myTheme
+                                          .colorScheme.onPrimaryContainer,
+                                    ),
+                                    style: ButtonStyle(
+                                      shadowColor:
+                                          MaterialStateProperty.all<Color>(
+                                              Colors.transparent),
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                        const Color.fromARGB(255, 159, 165, 252)
+                                            .withOpacity(0.3),
+                                      ),
+                                      overlayColor:
+                                          MaterialStateProperty.all<Color>(
+                                              myTheme.colorScheme.primary
+                                                  .withOpacity(0.3)),
+                                    ),
+                                    label: Text(
+                                      AppLocalizations.of(context)!.seeInList,
+                                      style: TextStyle(
+                                          color: myTheme
+                                              .colorScheme.onPrimaryContainer,
+                                          fontFamily: 'Poppins-regular',
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
-                            Text(
-                              '${AppLocalizations.of(context)!.stock}: $stock',
-                              style: TextStyle(
-                                color: Colors.grey.shade700,
-                                fontFamily: 'Poppins-regular',
-                                fontSize: 16,
+                      orderActive.orderActive == false
+                          ? Container()
+                          : Container(
+                              // margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                              // alignment: Alignment.center,
+                              child: Container(
+                                // margin: const EdgeInsets.only(left: 30.0),
+                                height: 38,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: ElevatedButton.icon(
+                                    onPressed: () {
+                                      if (stock! > 0) {
+                                        final newProduct = ShoppingCartProduct(
+                                          productQuantity: 1,
+                                          code: code,
+                                          productId: code,
+                                          listOfPricesId: pricesName.toString(),
+                                          totalAmount: price.toString(),
+                                          name: name,
+                                          unitPrice: price.toString(),
+                                          availableStock: stock,
+                                          urlPicture: catalogueID.toString(),
+                                        );
+
+                                        objectBox.insertShoppingCartProduct(
+                                            newProduct);
+                                        Fluttertoast.showToast(
+                                            msg:
+                                                'Producto añadido correctamente');
+                                      } else {
+                                        Fluttertoast.showToast(
+                                            msg:
+                                                'No hay stock disponible para este producto');
+                                      }
+                                      Fluttertoast.showToast(
+                                          msg:
+                                              'Producto añadido correctamente');
+                                    },
+                                    icon: Icon(
+                                      Icons.add_shopping_cart_rounded,
+                                      color: myTheme
+                                          .colorScheme.onPrimaryContainer,
+                                    ),
+                                    style: ButtonStyle(
+                                      shadowColor:
+                                          MaterialStateProperty.all<Color>(
+                                              Colors.transparent),
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                        const Color.fromARGB(255, 159, 165, 252)
+                                            .withOpacity(0.3),
+                                      ),
+                                      overlayColor:
+                                          MaterialStateProperty.all<Color>(
+                                              myTheme.colorScheme.primary
+                                                  .withOpacity(0.3)),
+                                    ),
+                                    label: Text(
+                                      'Añadir',
+                                      style: TextStyle(
+                                        color: myTheme
+                                            .colorScheme.onPrimaryContainer,
+                                        fontFamily: 'Poppins-regular',
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                    ],
+                  ),
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(10, 15, 10, 0),
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Linea: ',
+                          style: TextStyle(
+                            color: myTheme.colorScheme.onPrimaryContainer,
+                            fontFamily: 'Poppins-regular',
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          '$line •',
+                          style: TextStyle(
+                            color: myTheme.colorScheme.primary,
+                            fontFamily: 'Poppins-regular',
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(10, 5, 10, 0),
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '${AppLocalizations.of(context)!.stock}: ',
+                          style: TextStyle(
+                            color: myTheme.colorScheme.onPrimaryContainer,
+                            fontFamily: 'Poppins-regular',
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          '$stock en inventario',
+                          style: TextStyle(
+                            color: myTheme.colorScheme.primary,
+                            fontFamily: 'Poppins-regular',
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    margin: const EdgeInsets.fromLTRB(10, 5, 10, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '${AppLocalizations.of(context)!.price}: ',
+                          style: TextStyle(
+                            color: myTheme.colorScheme.onPrimaryContainer,
+                            fontFamily: 'Poppins-regular',
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          priceProduct,
+                          style: TextStyle(
+                            color: myTheme.colorScheme.primary,
+                            fontFamily: 'Poppins-regular',
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        margin: const EdgeInsets.fromLTRB(10, 5, 10, 0),
+                        child: Text(
+                          AppLocalizations.of(context)!.colors,
+                          style: TextStyle(
+                            color: myTheme.colorScheme.onPrimaryContainer,
+                            fontFamily: 'Poppins-regular',
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                        child: Row(
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(right: 5.0),
+                              height: 30,
+                              width: 30,
+                              decoration: BoxDecoration(
+                                color: Colors.amber,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(right: 5.0),
+                              height: 30,
+                              width: 30,
+                              decoration: BoxDecoration(
+                                color: myTheme.colorScheme.onPrimaryContainer,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                            Container(
+                              // margin: const EdgeInsets.only(right: 5.0),
+                              height: 30,
+                              width: 30,
+                              decoration: BoxDecoration(
+                                color: Colors.green.shade900,
+                                borderRadius: BorderRadius.circular(20),
                               ),
                             ),
                           ],
                         ),
-                        Container(
-                          margin: const EdgeInsets.fromLTRB(0, 5, 10, 0),
-                          child: Text(
-                            '${AppLocalizations.of(context)!.price}: $priceProduct',
-                            style: TextStyle(
-                              color: Colors.grey.shade700,
-                              fontFamily: 'Poppins-regular',
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.fromLTRB(0, 5, 10, 0),
-                          child: Text(
-                            AppLocalizations.of(context)!.colors,
-                            style: TextStyle(
-                              color: Colors.grey.shade700,
-                              fontFamily: 'Poppins-regular',
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                          child: Row(
-                            children: [
-                              Container(
-                                margin: const EdgeInsets.only(right: 5.0),
-                                height: 30,
-                                width: 30,
-                                decoration: BoxDecoration(
-                                  color: Colors.amber,
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.only(right: 5.0),
-                                height: 30,
-                                width: 30,
-                                decoration: BoxDecoration(
-                                  color: myTheme.colorScheme.onPrimaryContainer,
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.only(right: 5.0),
-                                height: 30,
-                                width: 30,
-                                decoration: BoxDecoration(
-                                  color: Colors.green.shade900,
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.fromLTRB(0, 5, 10, 0),
-                          child: Text(
-                            'ID: $code',
-                            style: TextStyle(
-                              color: Colors.grey.shade700,
-                              fontFamily: 'Poppins-regular',
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          child: Container(
-                            margin: const EdgeInsets.only(left: 30.0),
-                            // width: 160,
-                            height: 38,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20)),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: ElevatedButton.icon(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          ProductsPage(
-                                        listOfProducts: list,
-                                        listOfPrices: prices,
-                                        userZoneDocument: userZoneDocument,
-                                        showFullList: false,
-                                      ),
-                                    ),
-                                  );
-                                },
-                                icon: Icon(
-                                  MaterialCommunityIcons.view_list,
-                                  color: myTheme.colorScheme.onPrimaryContainer,
-                                ),
-                                style: ButtonStyle(
-                                  shadowColor: MaterialStateProperty.all<Color>(
-                                      Colors.transparent),
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                    const Color.fromARGB(255, 159, 165, 252)
-                                        .withOpacity(0.3),
-                                  ),
-                                  overlayColor:
-                                      MaterialStateProperty.all<Color>(myTheme
-                                          .colorScheme.primary
-                                          .withOpacity(0.3)),
-                                ),
-                                label: Text(
-                                  AppLocalizations.of(context)!.seeInList,
-                                  style: TextStyle(
-                                      color: myTheme
-                                          .colorScheme.onPrimaryContainer,
-                                      fontFamily: 'Poppins-regular',
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              orderActive.orderActive == false
-                                  ? Container()
-                                  : Container(
-                                      margin: const EdgeInsets.fromLTRB(
-                                          0, 10, 0, 0),
-                                      alignment: Alignment.center,
-                                      child: Container(
-                                        margin:
-                                            const EdgeInsets.only(left: 30.0),
-                                        height: 38,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(20)),
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          child: ElevatedButton.icon(
-                                            onPressed: () {
-                                              if (stock! > 0) {
-                                                final newProduct =
-                                                    ShoppingCartProduct(
-                                                  productQuantity: 1,
-                                                  code: code,
-                                                  productId: code,
-                                                  listOfPricesId:
-                                                      pricesName.toString(),
-                                                  totalAmount: price.toString(),
-                                                  name: name,
-                                                  unitPrice: price.toString(),
-                                                  availableStock: stock,
-                                                  urlPicture:
-                                                      catalogueID.toString(),
-                                                );
-
-                                                objectBox
-                                                    .insertShoppingCartProduct(
-                                                        newProduct);
-                                                Fluttertoast.showToast(
-                                                    msg:
-                                                        'Producto añadido correctamente');
-                                              } else {
-                                                Fluttertoast.showToast(
-                                                    msg:
-                                                        'No hay stock disponible para este producto');
-                                              }
-                                              Fluttertoast.showToast(
-                                                  msg:
-                                                      'Producto añadido correctamente');
-                                            },
-                                            icon: Icon(
-                                              Icons.add_shopping_cart_rounded,
-                                              color: myTheme.colorScheme
-                                                  .onPrimaryContainer,
-                                            ),
-                                            style: ButtonStyle(
-                                              shadowColor: MaterialStateProperty
-                                                  .all<Color>(
-                                                      Colors.transparent),
-                                              backgroundColor:
-                                                  MaterialStateProperty.all<
-                                                      Color>(
-                                                const Color.fromARGB(
-                                                        255, 159, 165, 252)
-                                                    .withOpacity(0.3),
-                                              ),
-                                              overlayColor:
-                                                  MaterialStateProperty
-                                                      .all<Color>(myTheme
-                                                          .colorScheme.primary
-                                                          .withOpacity(0.3)),
-                                            ),
-                                            label: Text(
-                                              'Añadir',
-                                              style: TextStyle(
-                                                color: myTheme.colorScheme
-                                                    .onPrimaryContainer,
-                                                fontFamily: 'Poppins-regular',
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
+            // Container(
+            //   margin: const EdgeInsets.fromLTRB(10, 10, 0, 20),
+            //   child: SingleChildScrollView(
+            //     scrollDirection: Axis.horizontal,
+            //     child: Row(
+            //       crossAxisAlignment: CrossAxisAlignment.start,
+            //       children: [
+            //         Column(
+            //           crossAxisAlignment: CrossAxisAlignment.start,
+            //           children: [
+            //             Row(
+            //               children: [
+            //                 Text(
+            //                   '$line • ',
+            //                   style: TextStyle(
+            //                     color: Colors.grey.shade700,
+            //                     fontFamily: 'Poppins-regular',
+            //                     fontSize: 16,
+            //                   ),
+            //                 ),
+            //                 Text(
+            //                   '${AppLocalizations.of(context)!.stock}: $stock',
+            //                   style: TextStyle(
+            //                     color: Colors.grey.shade700,
+            //                     fontFamily: 'Poppins-regular',
+            //                     fontSize: 16,
+            //                   ),
+            //                 ),
+            //               ],
+            //             ),
+            //             Container(
+            //               margin: const EdgeInsets.fromLTRB(0, 5, 10, 0),
+            //               child: Text(
+            //                 '${AppLocalizations.of(context)!.price}: $priceProduct',
+            //                 style: TextStyle(
+            //                   color: Colors.grey.shade700,
+            //                   fontFamily: 'Poppins-regular',
+            //                   fontSize: 16,
+            //                 ),
+            //               ),
+            //             ),
+            //             Container(
+            //               margin: const EdgeInsets.fromLTRB(0, 5, 10, 0),
+            //               child: Text(
+            //                 AppLocalizations.of(context)!.colors,
+            //                 style: TextStyle(
+            //                   color: Colors.grey.shade700,
+            //                   fontFamily: 'Poppins-regular',
+            //                   fontSize: 16,
+            //                 ),
+            //               ),
+            //             ),
+            //             Container(
+            //               margin: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+            //               child: Row(
+            //                 children: [
+            //                   Container(
+            //                     margin: const EdgeInsets.only(right: 5.0),
+            //                     height: 30,
+            //                     width: 30,
+            //                     decoration: BoxDecoration(
+            //                       color: Colors.amber,
+            //                       borderRadius: BorderRadius.circular(20),
+            //                     ),
+            //                   ),
+            //                   Container(
+            //                     margin: const EdgeInsets.only(right: 5.0),
+            //                     height: 30,
+            //                     width: 30,
+            //                     decoration: BoxDecoration(
+            //                       color: myTheme.colorScheme.onPrimaryContainer,
+            //                       borderRadius: BorderRadius.circular(20),
+            //                     ),
+            //                   ),
+            //                   Container(
+            //                     margin: const EdgeInsets.only(right: 5.0),
+            //                     height: 30,
+            //                     width: 30,
+            //                     decoration: BoxDecoration(
+            //                       color: Colors.green.shade900,
+            //                       borderRadius: BorderRadius.circular(20),
+            //                     ),
+            //                   ),
+            //                 ],
+            //               ),
+            //             ),
+            //             Container(
+            //               margin: const EdgeInsets.fromLTRB(0, 5, 10, 0),
+            //               child: Text(
+            //                 'ID: $code',
+            //                 style: TextStyle(
+            //                   color: Colors.grey.shade700,
+            //                   fontFamily: 'Poppins-regular',
+            //                   fontSize: 16,
+            //                 ),
+            //               ),
+            //             ),
+            //           ],
+            //         ),
+            //         Column(
+            //           mainAxisAlignment: MainAxisAlignment.center,
+            //           crossAxisAlignment: CrossAxisAlignment.center,
+            //           children: [
+            //             showListButton == false
+            //                 ? Container()
+            //                 : Container(
+            //                     alignment: Alignment.centerLeft,
+            //                     child: Container(
+            //                       margin: const EdgeInsets.only(left: 30.0),
+            //                       // width: 160,
+            //                       height: 38,
+            //                       decoration: BoxDecoration(
+            //                           borderRadius: BorderRadius.circular(20)),
+            //                       child: ClipRRect(
+            //                         borderRadius: BorderRadius.circular(20),
+            //                         child: ElevatedButton.icon(
+            //                           onPressed: () {
+            //                             Navigator.push(
+            //                               context,
+            //                               MaterialPageRoute(
+            //                                 builder: (BuildContext context) =>
+            //                                     ProductsPage(
+            //                                   listOfProducts: list,
+            //                                   listOfPrices: prices,
+            //                                   userZoneDocument:
+            //                                       userZoneDocument,
+            //                                   showFullList: false,
+            //                                 ),
+            //                               ),
+            //                             );
+            //                           },
+            //                           icon: Icon(
+            //                             MaterialCommunityIcons.view_list,
+            //                             color: myTheme
+            //                                 .colorScheme.onPrimaryContainer,
+            //                           ),
+            //                           style: ButtonStyle(
+            //                             shadowColor:
+            //                                 MaterialStateProperty.all<Color>(
+            //                                     Colors.transparent),
+            //                             backgroundColor:
+            //                                 MaterialStateProperty.all<Color>(
+            //                               const Color.fromARGB(
+            //                                       255, 159, 165, 252)
+            //                                   .withOpacity(0.3),
+            //                             ),
+            //                             overlayColor:
+            //                                 MaterialStateProperty.all<Color>(
+            //                                     myTheme.colorScheme.primary
+            //                                         .withOpacity(0.3)),
+            //                           ),
+            //                           label: Text(
+            //                             AppLocalizations.of(context)!.seeInList,
+            //                             style: TextStyle(
+            //                                 color: myTheme
+            //                                     .colorScheme.onPrimaryContainer,
+            //                                 fontFamily: 'Poppins-regular',
+            //                                 fontSize: 13,
+            //                                 fontWeight: FontWeight.bold),
+            //                           ),
+            //                         ),
+            //                       ),
+            //                     ),
+            //                   ),
+            //             Row(
+            //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //               children: [
+            //                 orderActive.orderActive == false
+            //                     ? Container()
+            //                     : Container(
+            //                         margin: const EdgeInsets.fromLTRB(
+            //                             0, 10, 0, 0),
+            //                         alignment: Alignment.center,
+            //                         child: Container(
+            //                           margin:
+            //                               const EdgeInsets.only(left: 30.0),
+            //                           height: 38,
+            //                           decoration: BoxDecoration(
+            //                               borderRadius:
+            //                                   BorderRadius.circular(20)),
+            //                           child: ClipRRect(
+            //                             borderRadius:
+            //                                 BorderRadius.circular(20),
+            //                             child: ElevatedButton.icon(
+            //                               onPressed: () {
+            //                                 if (stock! > 0) {
+            //                                   final newProduct =
+            //                                       ShoppingCartProduct(
+            //                                     productQuantity: 1,
+            //                                     code: code,
+            //                                     productId: code,
+            //                                     listOfPricesId:
+            //                                         pricesName.toString(),
+            //                                     totalAmount: price.toString(),
+            //                                     name: name,
+            //                                     unitPrice: price.toString(),
+            //                                     availableStock: stock,
+            //                                     urlPicture:
+            //                                         catalogueID.toString(),
+            //                                   );
+
+            //                                   objectBox
+            //                                       .insertShoppingCartProduct(
+            //                                           newProduct);
+            //                                   Fluttertoast.showToast(
+            //                                       msg:
+            //                                           'Producto añadido correctamente');
+            //                                 } else {
+            //                                   Fluttertoast.showToast(
+            //                                       msg:
+            //                                           'No hay stock disponible para este producto');
+            //                                 }
+            //                                 Fluttertoast.showToast(
+            //                                     msg:
+            //                                         'Producto añadido correctamente');
+            //                               },
+            //                               icon: Icon(
+            //                                 Icons.add_shopping_cart_rounded,
+            //                                 color: myTheme.colorScheme
+            //                                     .onPrimaryContainer,
+            //                               ),
+            //                               style: ButtonStyle(
+            //                                 shadowColor: MaterialStateProperty
+            //                                     .all<Color>(
+            //                                         Colors.transparent),
+            //                                 backgroundColor:
+            //                                     MaterialStateProperty.all<
+            //                                         Color>(
+            //                                   const Color.fromARGB(
+            //                                           255, 159, 165, 252)
+            //                                       .withOpacity(0.3),
+            //                                 ),
+            //                                 overlayColor:
+            //                                     MaterialStateProperty
+            //                                         .all<Color>(myTheme
+            //                                             .colorScheme.primary
+            //                                             .withOpacity(0.3)),
+            //                               ),
+            //                               label: Text(
+            //                                 'Añadir',
+            //                                 style: TextStyle(
+            //                                   color: myTheme.colorScheme
+            //                                       .onPrimaryContainer,
+            //                                   fontFamily: 'Poppins-regular',
+            //                                   fontSize: 13,
+            //                                   fontWeight: FontWeight.bold,
+            //                                 ),
+            //                               ),
+            //                             ),
+            //                           ),
+            //                         ),
+            //                       ),
+            //               ],
+            //             ),
+            //           ],
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),
