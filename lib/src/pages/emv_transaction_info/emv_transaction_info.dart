@@ -304,27 +304,27 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                         ),
                       )),
                 ),
-              //if (transactionArgs!.isFallback)
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
-                child: OutlinedButton(
-                    onPressed: () {
-                      onVoidExecute();
-                    },
-                    style: TextButton.styleFrom(
-                        foregroundColor: myTheme.colorScheme.primary,
-                        backgroundColor: Colors.blue.shade800),
-                    child: Text(
-                      'Realizar reverso'.toUpperCase(),
-                      style: const TextStyle(
-                        fontFamily: 'Poppins-regular',
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )),
-              ),
+              if (transactionArgs!.isFallback)
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 4.0, horizontal: 16.0),
+                  child: OutlinedButton(
+                      onPressed: () {
+                        onVoidExecute();
+                      },
+                      style: TextButton.styleFrom(
+                          foregroundColor: myTheme.colorScheme.primary,
+                          backgroundColor: Colors.blue.shade800),
+                      child: Text(
+                        'Realizar reverso'.toUpperCase(),
+                        style: const TextStyle(
+                          fontFamily: 'Poppins-regular',
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )),
+                ),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
@@ -361,18 +361,18 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     final paymentBody = (ModalRoute.of(context)?.settings.arguments! as List)[2]
         as AddPaymentBodyAtt;
 
-    final payed = transactionResult == EmvTransactionResult.Approved
-        ? exchangeAmount(paymentBody.currency,
-            double.parse(_amountString.replaceFirst('\$', '')))
-        : 0.0;
-
-    paymentBody.payments.add(PayMethod('Tarjeta', payed));
-
     print('EMV INFO PAYMENTS');
     print(paymentBody.payments.length);
     print(paymentBody.remaining);
     print(paymentBody.currency);
+    print(paymentBody.amountPaied);
+
+    final payed = transactionResult == EmvTransactionResult.Approved
+        ? exchangeAmount(paymentBody.currency, _amountDouble)
+        : 0.0;
     print(payed);
+
+    paymentBody.payments.add(PayMethod('Tarjeta', payed));
 
     final totalPayed = paymentBody.payments.fold<double>(
         0.0, (previousValue, element) => previousValue + element.amount);
@@ -720,8 +720,20 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     return _amountBytesToString(infoTags?.amount);
   }
 
+  double get _amountDouble {
+    return _amountBytesToDouble(infoTags?.amount);
+  }
+
   String get _amountOtherString {
     return _amountBytesToString(infoTags?.amountOther);
+  }
+
+  double _amountBytesToDouble(Uint8List? amountBytes) {
+    if (amountBytes != null) {
+      final amountInt = int.parse(amountBytes.toHexStr());
+      return double.parse((amountInt / 100).toStringAsFixed(2));
+    }
+    return 0.0;
   }
 
   String _amountBytesToString(Uint8List? amountBytes) {
