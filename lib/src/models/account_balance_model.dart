@@ -4,7 +4,7 @@ class Invoices {
   final clientIdReference;
   final masterDiscountAmount;
   final orderDate;
-  final taxAmount;
+  final double taxAmount;
   final totalAmount;
   final correlativeNumber;
   final isPaid;
@@ -23,7 +23,7 @@ class Invoices {
     this.clientIdReference,
     this.masterDiscountAmount,
     this.orderDate,
-    this.taxAmount,
+    required this.taxAmount,
     this.totalAmount,
     this.correlativeNumber,
     this.isPaid,

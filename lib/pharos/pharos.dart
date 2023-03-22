@@ -20,6 +20,7 @@ import '../src/services/utils/counters.dart';
 /// Genera mensaje de venta o reembolso para switch Pharos
 Future<Map<String, dynamic>> pharosGenerateSaleMsg(
   TransactionArgs transactionArgs,
+  String trxCurrency,
 ) async {
   final emvModule = EmvModule.instance;
   final now = DateTime.now();
@@ -49,7 +50,7 @@ Future<Map<String, dynamic>> pharosGenerateSaleMsg(
   if (tag5F20 != null) {
     cardHolderName = AsciiCodec().decode(tag5F20);
   }
-  final currency = "484";
+  final currency = trxCurrency;
   final orderNumber = "#723456";
   final terminalCode = "1774";
   final merchantCode = "1230";

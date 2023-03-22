@@ -10,7 +10,7 @@ void Function(bool) showCardIndicatorDialog(
   bool waiting,
 ) {
   final pleaseWaitMessage = AppLocalizations.of(context)!.pleaseWait;
-  final removeCardMessage = "removeCard";
+  const removeCardMessage = "Alejar la tarjeta";
 
   StateSetter? setStateDialog;
 

@@ -12483,12 +12483,12 @@ app.meedu.flutter_facebook_auth.R$style
 app.meedu.flutter_facebook_auth.R$styleable
 app.meedu.flutter_facebook_auth.R
 b.d:
-    public final int H()
+    public final int I()
 b.f:
-    public final com.newland.sdk.emvl3.internal.configuration.AidImpl r()
     public final com.newland.sdk.emvl3.internal.configuration.AidImpl s()
-    public final com.newland.sdk.emvl3.internal.configuration.CapkImpl t()
-    public final com.newland.sdk.emvl3.internal.transaction.EmvL3Impl u()
+    public final com.newland.sdk.emvl3.internal.configuration.AidImpl t()
+    public final com.newland.sdk.emvl3.internal.configuration.CapkImpl u()
+    public final com.newland.sdk.emvl3.internal.transaction.EmvL3Impl v()
 b.g:
     public final com.newland.sdk.emvl3.api.internal.listener.PerfromTransactionListener m()
 b.h:
@@ -13418,9 +13418,11 @@ com.apps2go.agnostiko.R
 com.apps2go.agnostiko.common.IImplementation:
     private com.apps2go.agnostiko.imp.bluetooth.BluetoothHandler bluetoothHandler
     private com.apps2go.agnostiko.imp.mdb.IMDB mdb
+    private com.apps2go.agnostiko.imp.scanner.IScanner scanner
     public final io.flutter.embedding.engine.plugins.FlutterPlugin$FlutterPluginBinding getPluginBinding()
     public final void setBluetoothHandler(com.apps2go.agnostiko.imp.bluetooth.BluetoothHandler)
     public final void setMdb(com.apps2go.agnostiko.imp.mdb.IMDB)
+    public final void setScanner(com.apps2go.agnostiko.imp.scanner.IScanner)
 com.apps2go.agnostiko.common.bluetooth.BluetoothConnection$Companion
 com.apps2go.agnostiko.common.bluetooth.BluetoothConnection$ConnectionThread
 com.apps2go.agnostiko.common.bluetooth.BluetoothConnection
@@ -13620,6 +13622,7 @@ com.apps2go.agnostiko.common.utils.PlatformInfo:
     public final boolean getHasMDB()
     public final boolean getHasPinEntryDevice()
     public final boolean getHasPrinter()
+    public final boolean getHasScannerHw()
     public final java.util.List getSupportedCardTypes()
     public final java.lang.String getVersion()
 com.apps2go.agnostiko.common.utils.TlvPackage$Companion:
@@ -13650,7 +13653,7 @@ com.apps2go.agnostiko.imp.emv.IEmvModule:
     public final java.util.List g()
     public final java.lang.Object h()
     public final java.util.List i()
-    public final boolean q()
+    public final boolean r()
 com.apps2go.agnostiko.imp.emv.IEmvTransaction:
     public final void a(java.lang.String,java.lang.String,java.lang.Object)
     public final com.apps2go.agnostiko.imp.cards.ICardReader c()

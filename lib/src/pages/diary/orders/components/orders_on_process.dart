@@ -113,7 +113,7 @@ class _OrdersOnProcessState extends State<OrdersOnProcess> {
 
                           DateTime? newDate = await showDatePicker(
                             context: context,
-                            initialDate: currentDay.toDate(),
+                            initialDate: DateTime.now(),
                             firstDate: DateTime(2010),
                             lastDate: DateTime(2030),
                           );
@@ -171,7 +171,7 @@ class _OrdersOnProcessState extends State<OrdersOnProcess> {
               ? SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   child: Container(
-                    height: MediaQuery.of(context).size.height * 0.65,
+                    height: MediaQuery.of(context).size.height * 0.52,
                     child: Scrollbar(
                       child: ListView.builder(
                         itemCount: ordersOnProcess.length,

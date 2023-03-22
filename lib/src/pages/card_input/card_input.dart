@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import 'package:agnostiko/agnostiko.dart';
 import 'package:intl/intl.dart';
+import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
 
 /* import '../../config/app_config.dart'; */
 import '../../../dialogs/info_dialog.dart';
@@ -185,6 +186,7 @@ class _CardInputViewState extends State<CardInputView> {
       print("Error: $e");
       print(stackTrace);
       Navigator.popUntil(context, (route) => route.isFirst == true);
+      Navigator.pop(context);
     }
     print("****************CARD READER CLOSED*****************");
   }
@@ -240,9 +242,9 @@ class _CardInputViewState extends State<CardInputView> {
         }
       }
     } on SocketException catch (e) {
-      return _processEMVException(e, "commError");
+      return _processEMVException(e, "Error de conexion");
     } catch (e) {
-      return _processEMVException(e, "internalError");
+      return _processEMVException(e, "Error interno");
     }
 
     if (!mounted) return;
@@ -259,7 +261,8 @@ class _CardInputViewState extends State<CardInputView> {
     ));
     MPOSController.instance.showHomeScreen();
     Navigator.pop(context);
-
+    transactionArgs?.pan ??=
+        (await EmvModule.instance.getTagValue(0x57))?.toHexStr().split('d')[0];
     // en caso de error, nos movemos a la pantalla de cierre
     Navigator.pushReplacementNamed(
       context,
@@ -267,7 +270,8 @@ class _CardInputViewState extends State<CardInputView> {
       arguments: [
         transactionArgs,
         (ModalRoute.of(context)?.settings.arguments! as List)[1],
-        (ModalRoute.of(context)?.settings.arguments! as List)[2]
+        (ModalRoute.of(context)?.settings.arguments! as List)[2],
+        (ModalRoute.of(context)?.settings.arguments! as List)[3]
       ],
     );
   }
@@ -289,6 +293,22 @@ class _CardInputViewState extends State<CardInputView> {
       PinInputView.route,
       arguments: transactionArgs,
     );
+  }
+
+  getCurrencyFromPaymentBody() {
+    final addPaymentBody = (ModalRoute.of(context)?.settings.arguments!
+        as List)[2] as AddPaymentBodyAtt;
+
+    if (addPaymentBody.currency.toUpperCase().contains('USD')) {
+      return '840';
+    }
+    if (addPaymentBody.currency.toUpperCase().contains('EUR')) {
+      return '978';
+    }
+    if (addPaymentBody.currency.toUpperCase().contains('MXN')) {
+      return '484';
+    }
+    return '484';
   }
 
   Future<void> _onOnlineRequested(EmvOnlineRequestedEvent event) async {
@@ -313,7 +333,9 @@ class _CardInputViewState extends State<CardInputView> {
       transactionArgs.infoTags = await loadInfoTags();
       transactionArgs.firstGenerateTags = await emvGetGenerateCommandTags();
 
-      final pharosMsg = await pharosGenerateSaleMsg(transactionArgs);
+      final currency = getCurrencyFromPaymentBody();
+
+      final pharosMsg = await pharosGenerateSaleMsg(transactionArgs, currency);
       print("PHAROS MSG: ${jsonEncode(pharosMsg)}");
 
       try {
@@ -386,30 +408,32 @@ class _CardInputViewState extends State<CardInputView> {
         this._isFallback = true;
       });
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("chipError"),
+        content: Text("Error de chip"),
       ));
       _startCardDetection(
         _supportedCardTypes.where((type) => type != CardType.IC).toList(),
       );
-    } else {
-      if (event.transactionInfo.onlineRequested &&
-          !event.transactionInfo.isContactless) {
-        // si la transacción terminó tras irse online, ya el 1st GENERATE AC
-        // debería haberse guardado y necesitamos guardar el 2nd GENERATE AC
-        // si no es Contactless
-        transactionArgs?.secondGenerateTags = await emvGetGenerateCommandTags();
-      } else {
-        // si la transacción terminó sin irse online, solo hubo 1st GENERATE AC
-        transactionArgs?.infoTags = await loadInfoTags();
-        transactionArgs?.firstGenerateTags = await emvGetGenerateCommandTags();
-      }
-      Navigator.pushReplacementNamed(context, EmvTransactionInfoView.route,
-          arguments: [
-            transactionArgs,
-            (ModalRoute.of(context)?.settings.arguments! as List)[1],
-            (ModalRoute.of(context)?.settings.arguments! as List)[2]
-          ]);
     }
+    if (event.transactionInfo.onlineRequested &&
+        !event.transactionInfo.isContactless) {
+      // si la transacción terminó tras irse online, ya el 1st GENERATE AC
+      // debería haberse guardado y necesitamos guardar el 2nd GENERATE AC
+      // si no es Contactless
+      transactionArgs?.secondGenerateTags = await emvGetGenerateCommandTags();
+    } else {
+      // si la transacción terminó sin irse online, solo hubo 1st GENERATE AC
+      transactionArgs?.infoTags = await loadInfoTags();
+      transactionArgs?.firstGenerateTags = await emvGetGenerateCommandTags();
+    }
+    transactionArgs?.pan ??=
+        (await EmvModule.instance.getTagValue(0x57))?.toHexStr().split('d')[0];
+    Navigator.pushReplacementNamed(context, EmvTransactionInfoView.route,
+        arguments: [
+          transactionArgs,
+          (ModalRoute.of(context)?.settings.arguments! as List)[1],
+          (ModalRoute.of(context)?.settings.arguments! as List)[2],
+          (ModalRoute.of(context)?.settings.arguments! as List)[3]
+        ]);
   }
 
   Future<void> _onMagneticCard(DUKPTEncryptedTracksData? tracksData) async {
@@ -436,10 +460,10 @@ class _CardInputViewState extends State<CardInputView> {
     }
   }
 
-  void _goToCvvInput() {
+  /* void _goToCvvInput() {
     Navigator.pushReplacementNamed(context, CvvInputView.route,
         arguments: transactionArgs);
-  }
+  } */
 
   void _doMagneticStripeSale() async {
     final transactionArgs = this.transactionArgs;
@@ -448,7 +472,9 @@ class _CardInputViewState extends State<CardInputView> {
     showCircularProgressDialog(
         context, AppLocalizations.of(context)!.processing);
 
-    final pharosMsg = await pharosGenerateSaleMsg(transactionArgs);
+    final currency = getCurrencyFromPaymentBody();
+
+    final pharosMsg = await pharosGenerateSaleMsg(transactionArgs, currency);
 
     print("PHAROS MSG: ${jsonEncode(pharosMsg)}");
     final response = await processSalePharos(pharosMsg);
@@ -456,7 +482,7 @@ class _CardInputViewState extends State<CardInputView> {
 
     Navigator.pop(context);
     showInfoDialog(context, "Result: $responseCode", onClose: () {
-      Navigator.popUntil(context, (route) => route.isFirst == true);
+      Navigator.pop(context);
     });
   }
 }

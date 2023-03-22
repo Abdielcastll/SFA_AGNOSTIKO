@@ -117,7 +117,7 @@ class _CompletedOrdersState extends State<CompletedOrders> {
 
                         DateTime? newDate = await showDatePicker(
                           context: context,
-                          initialDate: currentDay.toDate(),
+                          initialDate: DateTime.now(),
                           firstDate: DateTime(2010),
                           lastDate: DateTime(2030),
                         );
@@ -174,7 +174,7 @@ class _CompletedOrdersState extends State<CompletedOrders> {
         ordersCompleted.isNotEmpty
             ? SingleChildScrollView(
                 child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.65,
+                  height: MediaQuery.of(context).size.height * 0.52,
                   child: ListView.builder(
                     physics: const BouncingScrollPhysics(),
                     itemCount: ordersCompleted.length,

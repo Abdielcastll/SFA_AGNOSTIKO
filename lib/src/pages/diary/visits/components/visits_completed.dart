@@ -113,7 +113,7 @@ class _VisitsCompletedState extends State<VisitsCompleted> {
 
                         DateTime? newDate = await showDatePicker(
                           context: context,
-                          initialDate: currentDay!.toDate(),
+                          initialDate: DateTime.now(),
                           firstDate: DateTime(2010),
                           lastDate: DateTime(2030),
                         );
@@ -169,7 +169,7 @@ class _VisitsCompletedState extends State<VisitsCompleted> {
         ),
         visitsCompleted.isNotEmpty
             ? Container(
-                height: MediaQuery.of(context).size.height * 0.65,
+                height: MediaQuery.of(context).size.height * 0.52,
                 child: Scrollbar(
                   child: ListView.builder(
                     itemCount: visitsCompleted.length,

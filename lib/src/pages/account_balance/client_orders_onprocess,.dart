@@ -1,15 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/order_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/order_card.dart';
+import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class ClientsOrdersOnProcess extends StatefulWidget {
-  const ClientsOrdersOnProcess({super.key});
+  ClientsOrdersOnProcess({super.key, this.controller});
+
+  ScrollController? controller;
 
   @override
   State<ClientsOrdersOnProcess> createState() => _ClientsOrdersOnProcessState();
@@ -81,6 +85,7 @@ class _ClientsOrdersOnProcessState extends State<ClientsOrdersOnProcess> {
                     height: MediaQuery.of(context).size.height * 0.65,
                     child: Scrollbar(
                       child: ListView.builder(
+                        controller: widget.controller,
                         itemCount: ordersOnProcess.length,
                         itemBuilder: (BuildContext context, int index) {
                           final sortedOrders = isDescending

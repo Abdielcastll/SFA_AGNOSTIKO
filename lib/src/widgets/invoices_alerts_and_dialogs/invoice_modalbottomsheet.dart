@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
+import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/identify_payment_method.dart';
@@ -22,6 +23,23 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../models/transaction_args.dart';
 import '../../pages/amount_input/amount_input.dart';
+
+priceToCurrencySelectedInput(productPrice, coin) {
+  double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+  if (coin!.contains('USD')) {
+    return double.parse(correctAmount.toStringAsFixed(2));
+  } else if (coin.contains('VED')) {
+    return double.parse((correctAmount * 4.58).toStringAsFixed(2));
+  } else if (coin.contains('EUR')) {
+    return double.parse((correctAmount * 0.89).toStringAsFixed(2));
+  } else if (coin.contains('MXN')) {
+    return double.parse((correctAmount * 19.43).toStringAsFixed(2));
+  } else if (coin.contains('BTC')) {
+    return double.parse((correctAmount * 0.00011).toStringAsFixed(2));
+  } else {
+    return double.parse((correctAmount * 4.58).toStringAsFixed(2));
+  }
+}
 
 void modalBottomSheetForInvoices(
   bool completed,
@@ -46,7 +64,7 @@ void modalBottomSheetForInvoices(
   currentClientDispatchAdress,
   subTotal,
   percentageTax,
-  tax,
+  double tax,
   discountPercentage,
   discount,
 ) {
@@ -84,7 +102,8 @@ void modalBottomSheetForInvoices(
 
   print('invoiceTotal: $invoiceTotal');
   print('sumOfValidPayments: $sumOfValidPayments');
-  final remaining = invoiceTotal - sumOfValidPayments;
+  final remaining =
+      double.parse((invoiceTotal - sumOfValidPayments).toStringAsFixed(2));
   print('remaining: $remaining');
   final leftoverAmount;
   if (remaining < 0) {
@@ -92,7 +111,11 @@ void modalBottomSheetForInvoices(
   } else {
     leftoverAmount = remaining.toStringAsFixed(2);
   }
-  String paidAmount = remaining.toStringAsFixed(2);
+
+  // double paidAmount = selectedCoin == null
+  //     ? double.parse(remaining.toStringAsFixed(2))
+  //     : priceToCurrencySelectedInput(
+  //         double.parse(remaining.toStringAsFixed(2)), selectedCoin);
 
   showModalBottomSheet(
     elevation: 0,
@@ -106,6 +129,9 @@ void modalBottomSheetForInvoices(
       ),
     ),
     builder: (context) {
+      // double paidAmount = remaining;
+
+      print(invoiceDocumentID);
       final currentCoin =
           Provider.of<CurrencyProvider>(context).currentCurrency;
 
@@ -179,8 +205,28 @@ void modalBottomSheetForInvoices(
         }
       }
 
+      symbolMoney(coin) {
+        if (coin!.contains('USD')) {
+          return "USD\$.";
+        } else if (coin.contains('VED')) {
+          return "BsS.";
+        } else if (coin.contains('EUR')) {
+          return "€.";
+        } else if (coin.contains('MXN')) {
+          return "MXN\$.";
+        } else if (coin.contains('BTC')) {
+          return '฿.';
+        } else {
+          return "PPR";
+        }
+      }
+
       return StatefulBuilder(
         builder: (context, setState) {
+          // priceToCurrencySelectedInput(remaining, selectedCoin);
+          double paidAmount = remaining;
+          final fieldText = TextEditingController();
+
           return SafeArea(
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
@@ -540,19 +586,19 @@ void modalBottomSheetForInvoices(
                                         final List<String> items = [
                                           'Tarjeta de Debito',
                                           'Tarjeta de Credito',
-                                          'Cheque',
-                                          'Criptomoneda',
-                                          'Deposito',
                                           'Efectivo',
+                                          'Cheque',
+                                          'Deposito',
                                           'Transferencia',
                                           'Transf-internacional',
+                                          // 'Criptomoneda',
                                           // 'Nota de credito',
                                         ];
                                         List<String> itemsCoin = [
                                           'USD',
-                                          'BTC',
-                                          'EUR',
-                                          'VED',
+                                          // 'BTC',
+                                          // 'EUR',
+                                          // 'VED',
                                           'MXN',
                                         ];
                                         return StatefulBuilder(
@@ -709,7 +755,7 @@ void modalBottomSheetForInvoices(
                                                                     left: 14,
                                                                     right: 14),
                                                             dropdownMaxHeight:
-                                                                200,
+                                                                300,
                                                             dropdownWidth: 200,
                                                             dropdownPadding:
                                                                 null,
@@ -806,6 +852,19 @@ void modalBottomSheetForInvoices(
                                                                           as String;
                                                                 },
                                                               );
+                                                              fieldText.clear();
+                                                              setState(() {
+                                                                paidAmount =
+                                                                    priceToCurrencySelectedInput(
+                                                                        remaining,
+                                                                        selectedCoin);
+                                                              });
+
+                                                              print(
+                                                                  'Moneda cambiada');
+                                                              print(
+                                                                  'Nuevo valor:');
+                                                              print(paidAmount);
                                                             },
                                                             icon: const Icon(
                                                               Icons
@@ -944,6 +1003,15 @@ void modalBottomSheetForInvoices(
                                                               child: IconButton(
                                                                 onPressed:
                                                                     () async {
+                                                                  if (selectedValueA!
+                                                                      .toLowerCase()
+                                                                      .contains(
+                                                                          'tarjeta')) {
+                                                                    today =
+                                                                        DateTime
+                                                                            .now();
+                                                                    return;
+                                                                  }
                                                                   DateTime?
                                                                       newDate =
                                                                       await showDatePicker(
@@ -1005,7 +1073,7 @@ void modalBottomSheetForInvoices(
                                                           : Container(
                                                               margin: EdgeInsets
                                                                   .fromLTRB(10,
-                                                                      0, 0, 0),
+                                                                      0, 10, 0),
                                                               height: 50,
                                                               // width: 200,
                                                               decoration:
@@ -1027,13 +1095,24 @@ void modalBottomSheetForInvoices(
                                                               child: TextField(
                                                                 onChanged:
                                                                     (value) {
-                                                                  setState(() {
-                                                                    paidAmount =
-                                                                        value;
-                                                                    print(
-                                                                        paidAmount);
-                                                                  });
+                                                                  if (value
+                                                                      .isEmpty) {
+                                                                    setState(
+                                                                        () {
+                                                                      paidAmount =
+                                                                          0;
+                                                                    });
+                                                                  } else {
+                                                                    setState(
+                                                                        () {
+                                                                      paidAmount =
+                                                                          double.parse(
+                                                                              value);
+                                                                    });
+                                                                  }
                                                                 },
+                                                                controller:
+                                                                    fieldText,
                                                                 style:
                                                                     TextStyle(
                                                                   fontSize: 14,
@@ -1044,6 +1123,7 @@ void modalBottomSheetForInvoices(
                                                                       .primary,
                                                                 ),
                                                                 //TODO:
+
                                                                 inputFormatters: <
                                                                     TextInputFormatter>[
                                                                   FilteringTextInputFormatter
@@ -1077,6 +1157,31 @@ void modalBottomSheetForInvoices(
 
                                                                 decoration:
                                                                     InputDecoration(
+                                                                  prefixIcon:
+                                                                      Container(
+                                                                    width: 40,
+                                                                    height: 40,
+                                                                    child:
+                                                                        Center(
+                                                                      child:
+                                                                          Text(
+                                                                        symbolMoney(
+                                                                            selectedCoin),
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontFamily:
+                                                                              'Poppins-regular',
+                                                                          fontSize:
+                                                                              14,
+                                                                          color: myTheme
+                                                                              .colorScheme
+                                                                              .primary,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
                                                                   contentPadding:
                                                                       EdgeInsets
                                                                           .fromLTRB(
@@ -1085,14 +1190,13 @@ void modalBottomSheetForInvoices(
                                                                     0,
                                                                     0,
                                                                   ),
-                                                                  hintText: priceFormatForPaidAmount(
-                                                                          double.parse(paidAmount.isEmpty
-                                                                              ? '0.00'
-                                                                              : paidAmount),
-                                                                          selectedCoin)
-                                                                      .toString(),
+                                                                  hintText:
+                                                                      '$paidAmount',
+                                                                  // ' ${priceToCurrencySelectedInput(remaining, selectedCoin)}',
                                                                   hintStyle:
                                                                       TextStyle(
+                                                                    height:
+                                                                        1.85,
                                                                     fontFamily:
                                                                         'Poppins-regular',
                                                                     fontSize:
@@ -1157,7 +1261,7 @@ void modalBottomSheetForInvoices(
                                                                       ),
                                                                     ),
                                                                     Text(
-                                                                      'Descuento ($discountPercentage%): ${priceFormatForPaidAmount(discount, selectedCoin).toString()}',
+                                                                      'Descuento Maestro ($discountPercentage%): ${priceFormatForPaidAmount(discount, selectedCoin).toString()}',
                                                                       style:
                                                                           TextStyle(
                                                                         fontFamily:
@@ -1203,7 +1307,7 @@ void modalBottomSheetForInvoices(
                                                                             5),
                                                                     Text(
                                                                       // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(2), selectedCoin)}',
-                                                                      'Saldo restante: ${priceFormatForPaidAmount(remaining, selectedCoin)}',
+                                                                      'Saldo: ${priceFormatForPaidAmount(remaining, selectedCoin)}',
                                                                       style:
                                                                           TextStyle(
                                                                         fontFamily:
@@ -1215,26 +1319,47 @@ void modalBottomSheetForInvoices(
                                                                             10,
                                                                       ),
                                                                     ),
+                                                                    Divider(),
                                                                     Container(
                                                                       margin: EdgeInsets
                                                                           .fromLTRB(
-                                                                              0,
-                                                                              5,
-                                                                              0,
-                                                                              0),
-                                                                      child:
-                                                                          identifyPaymentMethod(
-                                                                        selectedValueA,
-                                                                        client,
-                                                                        invoiceDocumentID,
-                                                                        paidAmount,
-                                                                        invoiceTotal,
-                                                                        today,
-                                                                        context,
-                                                                        double.parse(
-                                                                            remaining.toStringAsFixed(2)),
-                                                                        selectedCoin,
+                                                                        0,
+                                                                        5,
+                                                                        0,
+                                                                        0,
                                                                       ),
+                                                                      child: identifyPaymentMethod(
+                                                                          selectedValueA:
+                                                                              selectedValueA!,
+                                                                          client:
+                                                                              client,
+                                                                          invoiceDocumentID:
+                                                                              invoiceDocumentID,
+                                                                          paidAmount:
+                                                                              paidAmount,
+                                                                          totalOfTheOrder:
+                                                                              invoiceTotal,
+                                                                          date:
+                                                                              today,
+                                                                          context:
+                                                                              context,
+                                                                          remaining: double.parse(remaining.toStringAsFixed(
+                                                                              2)),
+                                                                          selectedCoin:
+                                                                              selectedCoin!,
+                                                                          noRetail:
+                                                                              true,
+                                                                          paymentBody: AddPaymentBodyAtt(
+                                                                              client: client,
+                                                                              currency: selectedCoin!,
+                                                                              discount: 0,
+                                                                              discountPercentage: 0,
+                                                                              invoiceDocumentID: invoiceDocumentID,
+                                                                              invoiceNumber: invoiceNumber,
+                                                                              percentageTax: percentageTax,
+                                                                              remaining: remaining,
+                                                                              subTotal: subTotal,
+                                                                              tax: tax)),
                                                                     )
                                                                   ],
                                                                 )

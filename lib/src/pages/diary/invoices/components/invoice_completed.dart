@@ -109,7 +109,7 @@ class _InvoicesListState extends State<InvoicesList> {
 
                         DateTime? newDate = await showDatePicker(
                           context: context,
-                          initialDate: currentDay.toDate(),
+                          initialDate: DateTime.now(),
                           firstDate: DateTime(2010),
                           lastDate: DateTime(2500),
                         );
@@ -166,7 +166,7 @@ class _InvoicesListState extends State<InvoicesList> {
         invoicesList.isNotEmpty
             ? SingleChildScrollView(
                 child: Container(
-                  height: MediaQuery.of(context).size.height * 0.65,
+                  height: MediaQuery.of(context).size.height * 0.52,
                   child: Scrollbar(
                     child: ListView.builder(
                       physics: ClampingScrollPhysics(),
@@ -203,7 +203,7 @@ class _InvoicesListState extends State<InvoicesList> {
                           invoiceDocumentID: invoiceDocumentID,
                           invoiceSubtotal: invoice.subTotalAmount,
                           invoicePercetageTax: invoice.taxPercentage,
-                          invoiceTax: invoice.taxPercentage,
+                          invoiceTax: invoice.taxAmount,
                         );
                       },
                     ),

@@ -112,7 +112,7 @@ class _InvoicesOnProcessState extends State<InvoicesOnProcess> {
 
                           DateTime? newDate = await showDatePicker(
                             context: context,
-                            initialDate: currentDay.toDate(),
+                            initialDate: DateTime.now(),
                             firstDate: DateTime(2010),
                             lastDate: DateTime(2500),
                           );
@@ -170,7 +170,8 @@ class _InvoicesOnProcessState extends State<InvoicesOnProcess> {
               ? SingleChildScrollView(
                   physics: BouncingScrollPhysics(),
                   child: Container(
-                    height: MediaQuery.of(context).size.height * 0.65,
+                    // color: Colors.red,
+                    height: MediaQuery.of(context).size.height * 0.52,
                     child: Scrollbar(
                       child: ListView.builder(
                         itemCount: invoicesList.length,
@@ -206,7 +207,7 @@ class _InvoicesOnProcessState extends State<InvoicesOnProcess> {
                             invoiceDocumentID: invoiceDocumentID,
                             invoiceSubtotal: invoice.subTotalAmount,
                             invoicePercetageTax: invoice.taxPercentage,
-                            invoiceTax: invoice.taxPercentage,
+                            invoiceTax: invoice.taxAmount,
                             discountPercentage:
                                 invoice.masterDiscountPercentage,
                             discount: invoice.masterDiscountAmount,

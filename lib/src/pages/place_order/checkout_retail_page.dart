@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, prefer_const_literals_to_create_immutables
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +10,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/examples/clients_example.dart';
 import 'package:pwa_sales2go_flutter/examples/products_example.dart';
+import 'package:pwa_sales2go_flutter/objectbox.g.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/discount.dart';
@@ -229,7 +230,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(bottom: 5),
+                      // margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerLeft,
                       child: Text(
                         AppLocalizations.of(context)!.subtotal,
@@ -242,7 +243,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       ),
                     ),
                     Container(
-                      margin: const EdgeInsets.only(bottom: 5),
+                      // margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerRight,
                       child: Text(
                         '${priceFormat(widget.subTotal)}',
@@ -260,7 +261,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(bottom: 5),
+                      // margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerLeft,
                       child: Text(
                         '${AppLocalizations.of(context)!.masterDiscount} ($clientMasterDiscount%)',
@@ -273,10 +274,10 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       ),
                     ),
                     Container(
-                      margin: const EdgeInsets.only(bottom: 5),
+                      // margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerRight,
                       child: Text(
-                        '${priceFormat(masterDiscountTotal)}',
+                        '- ${priceFormat(masterDiscountTotal)}',
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
@@ -291,38 +292,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(bottom: 5),
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        '${AppLocalizations.of(context)!.tax} (16%)',
-                        style: TextStyle(
-                          color: myTheme.colorScheme.primary,
-                          fontFamily: 'Poppins-regular',
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 5),
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        '${priceFormat(taxTotal)}',
-                        style: TextStyle(
-                          color: myTheme.colorScheme.primary,
-                          fontFamily: 'Poppins-regular',
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 5),
+                      // margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerLeft,
                       child: Row(
                         children: [
@@ -624,11 +594,42 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       ),
                     ),
                     Container(
-                      margin: const EdgeInsets.only(bottom: 5),
+                      // margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerRight,
                       child: Text(
                         '- ${priceFormat(totalDiscountApplied())}',
                         // 'test',
+                        style: TextStyle(
+                          color: myTheme.colorScheme.primary,
+                          fontFamily: 'Poppins-regular',
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 10),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '${AppLocalizations.of(context)!.tax} (16%)',
+                        style: TextStyle(
+                          color: myTheme.colorScheme.primary,
+                          fontFamily: 'Poppins-regular',
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 10),
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        '${priceFormat(taxTotal)}',
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
@@ -843,6 +844,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                   onPressed: () async {
                                     // Aceptar e Iniciar el proceso de pago
                                     // Por pago directo
+                                    print('Iniciar proceso de pago directo');
                                     final firebaseID = FirebaseFirestore
                                         .instance
                                         .collection('clientes')
@@ -850,22 +852,24 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                         .collection('pedidos')
                                         .doc()
                                         .id;
-                                    print('PAGO DIRECTO');
-                                    await completePaymentProcess(
-                                        widget.client,
-                                        userUid,
-                                        commentary,
-                                        masterDiscountTotal,
-                                        widget.cart,
-                                        selectedValue2,
-                                        selectedValue,
-                                        today,
-                                        taxTotal,
-                                        numberOrder,
-                                        widget.subTotal,
-                                        totalOfTheOrder,
-                                        discountByInput,
-                                        firebaseID);
+                                    print(firebaseID);
+                                    final invoiceNumber =
+                                        await completePaymentProcess(
+                                            widget.client,
+                                            userUid,
+                                            commentary,
+                                            masterDiscountTotal,
+                                            widget.cart,
+                                            selectedValue2,
+                                            selectedValue,
+                                            today,
+                                            taxTotal,
+                                            numberOrder,
+                                            widget.subTotal,
+                                            totalOfTheOrder,
+                                            discountByInput,
+                                            firebaseID);
+
                                     Client currentClient = Client(
                                       active: widget.client!.active,
                                       specialContributor:
@@ -889,7 +893,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                       clientDocumentId:
                                           widget.client!.clientDocumentId,
                                     );
-                                    Navigator.push(
+
+                                    Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
                                         settings:
@@ -898,14 +903,18 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                             AddPaymentPage(
                                           remaining: totalOfTheOrder,
                                           subTotal: widget.subTotal,
-                                          discountPercentage:
-                                              widget.client?.masterDiscount,
-                                          discount: (widget.subTotal / 100) *
-                                              widget.client?.masterDiscount,
+                                          discountPercentage: discountByInput,
+                                          // discountPercentage:
+                                          //     widget.client?.masterDiscount,
+                                          discount: totalDiscountApplied(),
+                                          // discount: (widget.subTotal / 100) *
+                                          //     widget.client?.masterDiscount,
                                           tax: taxTotal,
                                           percentageTax: 16,
                                           client: currentClient,
                                           invoiceDocumentID: firebaseID,
+                                          invoiceNumber: invoiceNumber,
+                                          payments: [],
                                           // updatePayed: updatePayed,
                                         ),
                                       ),
@@ -1142,6 +1151,176 @@ class _CheckoutBodyState extends State<CheckoutBody> {
               ),
             ),
           ),
+          // ElevatedButton(
+          //     onPressed: () {
+          //       showDialog(
+          //           context: context,
+          //           builder: (BuildContext context) {
+          //             return AlertDialog(
+          //               contentPadding: EdgeInsets.zero,
+          //               shape: RoundedRectangleBorder(
+          //                 borderRadius: BorderRadius.circular(20),
+          //               ),
+          //               content: SingleChildScrollView(
+          //                 child: Stack(
+          //                   children: [
+          //                     Container(
+          //                       height: 400,
+          //                       width: 300,
+          //                       child: Opacity(
+          //                         opacity: 1,
+          //                         child: ClipRRect(
+          //                           borderRadius: BorderRadius.circular(20),
+          //                           child: Image.asset(
+          //                             'assets/images/payment-background.png',
+          //                             fit: BoxFit.fill,
+          //                           ),
+          //                         ),
+          //                       ),
+          //                     ),
+          //                     Container(
+          //                       margin: EdgeInsets.all(18),
+          //                       child: Center(
+          //                         child: Column(
+          //                           children: [
+          //                             Text(
+          //                               "¡PAGO REGISTRADO!",
+          //                               style: TextStyle(
+          //                                 fontFamily: 'Poppins-regular',
+          //                                 fontSize: 18,
+          //                                 color: Colors.white,
+          //                                 // color: Colors.green,
+          //                                 fontWeight: FontWeight.bold,
+          //                               ),
+          //                             ),
+          //                             Container(
+          //                               margin:
+          //                                   EdgeInsets.fromLTRB(0, 15, 0, 0),
+          //                               width: 100,
+          //                               height: 100,
+          //                               child: Opacity(
+          //                                 opacity: 0.8,
+          //                                 child: Image.asset(
+          //                                   'assets/images/check.png',
+          //                                   fit: BoxFit.cover,
+          //                                 ),
+          //                               ),
+          //                             ),
+          //                             Container(
+          //                               margin:
+          //                                   EdgeInsets.fromLTRB(0, 10, 0, 0),
+          //                               alignment: Alignment.center,
+          //                               child: Column(
+          //                                 mainAxisAlignment:
+          //                                     MainAxisAlignment.center,
+          //                                 crossAxisAlignment:
+          //                                     CrossAxisAlignment.center,
+          //                                 children: [
+          //                                   Container(
+          //                                     margin: EdgeInsets.only(top: 10),
+          //                                     child: Text(
+          //                                       'Monto pagado: 00.00',
+          //                                       style: TextStyle(
+          //                                         fontFamily: 'Poppins-regular',
+          //                                         fontSize: 12,
+          //                                         color: myTheme
+          //                                             .colorScheme.primary,
+          //                                         // color: Colors.green,
+          //                                         fontWeight: FontWeight.bold,
+          //                                       ),
+          //                                     ),
+          //                                   ),
+          //                                   Container(
+          //                                     margin: EdgeInsets.only(top: 10),
+          //                                     child: Text(
+          //                                       'ZONA TEST CLIENTE DEFAULT 000A1',
+          //                                       style: TextStyle(
+          //                                         fontFamily: 'Poppins-regular',
+          //                                         fontSize: 12,
+          //                                         color: myTheme
+          //                                             .colorScheme.primary,
+          //                                         // color: Colors.green,
+          //                                         fontWeight: FontWeight.bold,
+          //                                       ),
+          //                                     ),
+          //                                   ),
+          //                                   Container(
+          //                                     margin: EdgeInsets.only(top: 10),
+          //                                     child: Text(
+          //                                       'Fecha: 00/00/0000',
+          //                                       style: TextStyle(
+          //                                         fontFamily: 'Poppins-regular',
+          //                                         fontSize: 12,
+          //                                         color: myTheme
+          //                                             .colorScheme.primary,
+          //                                         // color: Colors.green,
+          //                                         fontWeight: FontWeight.bold,
+          //                                       ),
+          //                                     ),
+          //                                   ),
+          //                                   Container(
+          //                                     margin: EdgeInsets.only(top: 10),
+          //                                     child: Text(
+          //                                       'Deposito',
+          //                                       style: TextStyle(
+          //                                         fontFamily: 'Poppins-regular',
+          //                                         fontSize: 12,
+          //                                         color: myTheme
+          //                                             .colorScheme.primary,
+          //                                         // color: Colors.green,
+          //                                         fontWeight: FontWeight.bold,
+          //                                       ),
+          //                                     ),
+          //                                   ),
+          //                                 ],
+          //                               ),
+          //                             ),
+          //                             Container(
+          //                               margin: EdgeInsets.only(top: 50),
+          //                               alignment: Alignment.center,
+          //                               child: ElevatedButton.icon(
+          //                                 onPressed: () {
+          //                                   Navigator.pop(context);
+          //                                 },
+          //                                 style: ButtonStyle(
+          //                                   backgroundColor:
+          //                                       MaterialStateProperty.all(
+          //                                     myTheme.colorScheme.primary,
+          //                                   ),
+          //                                   shape: MaterialStateProperty.all<
+          //                                       RoundedRectangleBorder>(
+          //                                     RoundedRectangleBorder(
+          //                                       borderRadius:
+          //                                           BorderRadius.circular(18.0),
+          //                                     ),
+          //                                   ),
+          //                                 ),
+          //                                 icon: Icon(
+          //                                   MaterialIcons.arrow_back_ios,
+          //                                   size: 12,
+          //                                 ),
+          //                                 label: Text(
+          //                                   'Aceptar',
+          //                                   style: TextStyle(
+          //                                     color: Colors.white,
+          //                                     fontFamily: 'Poppins-regular',
+          //                                     fontSize: 12,
+          //                                     fontWeight: FontWeight.bold,
+          //                                   ),
+          //                                 ),
+          //                               ),
+          //                             )
+          //                           ],
+          //                         ),
+          //                       ),
+          //                     ),
+          //                   ],
+          //                 ),
+          //               ),
+          //             );
+          //           });
+          //     },
+          //     child: Text('Test'))
         ],
       ),
     );

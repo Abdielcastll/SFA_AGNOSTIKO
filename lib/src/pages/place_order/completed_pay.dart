@@ -4,7 +4,12 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
+import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/transaction_args.dart';
+import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
+import 'package:pwa_sales2go_flutter/src/pages/place_order/invoicePrintLayout.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
+import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class CompletedPayPage extends StatelessWidget {
@@ -16,16 +21,18 @@ class CompletedPayPage extends StatelessWidget {
     required this.date,
     required this.address,
     required this.coinsExchangeRates,
+    required this.addPaymentBody,
     this.orderNumber,
   }) : super(key: key);
 
-  final client;
+  final Client client;
   final total;
   final method;
   final date;
   final address;
   final orderNumber;
   final coinsExchangeRates;
+  final AddPaymentBodyAtt addPaymentBody;
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +55,7 @@ class CompletedPayPage extends StatelessWidget {
           address: address,
           orderNumber: orderNumber,
           coinsExchangeRates: coinsExchangeRates,
+          addPaymentBody: addPaymentBody,
         ),
       ),
     );
@@ -64,14 +72,16 @@ class CompletedPayBody extends StatefulWidget {
     required this.address,
     required this.orderNumber,
     required this.coinsExchangeRates,
+    required this.addPaymentBody,
   }) : super(key: key);
-  final client;
+  final Client client;
   final total;
   final method;
   final date;
   final address;
   final orderNumber;
   final coinsExchangeRates;
+  final AddPaymentBodyAtt addPaymentBody;
 
   @override
   State<CompletedPayBody> createState() => _CompletedPayBody();
@@ -79,14 +89,16 @@ class CompletedPayBody extends StatefulWidget {
 
 class _CompletedPayBody extends State<CompletedPayBody> {
   late List<double> coinsExchangeRates = widget.coinsExchangeRates;
-
+  late double totalPayed = widget.addPaymentBody.payments.fold<double>(
+      0.0, (previousValue, element) => previousValue + element.amount);
   @override
   Widget build(BuildContext context) {
-    final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
+    final currentCoin =
+        Provider.of<CurrencyProvider>(context).currentCurrency ?? 'MXN';
 
     priceFormat(productPrice) {
       double correctAmount = double.parse(productPrice.toStringAsFixed(2));
-      if (currentCoin!.contains('USD')) {
+      if (currentCoin.contains('USD')) {
         return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
             .format(productPrice)
             .toString();
@@ -162,7 +174,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
                           // height: 60,
                           width: 140,
                           child: Text(
-                            widget.client,
+                            widget.client.name,
                             style: TextStyle(
                               color: Colors.grey.shade500,
                               fontFamily: 'Poppins-regular',
@@ -246,37 +258,68 @@ class _CompletedPayBody extends State<CompletedPayBody> {
             borderRadius: BorderRadius.circular(20),
           ),
           width: 340,
-          height: 40,
-          child: ClipRRect(
+          height: 100,
+          child: /*  ClipRRect(
             borderRadius: BorderRadius.circular(16),
-            child: ElevatedButton(
-              onPressed: () {
-                objectBox.delelteAllShoppingCart();
-                Navigator.popUntil(context, (route) => route.isFirst);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: myTheme.colorScheme.primary,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Regresar al Inicio',
-                    style: TextStyle(
-                      fontFamily: 'Poppins-regular',
-                      fontSize: 14,
+            child: */
+              Column(
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  objectBox.delelteAllShoppingCart();
+                  Navigator.popUntil(context, (route) => route.isFirst);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: myTheme.colorScheme.primary,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Regresar al Inicio',
+                      style: TextStyle(
+                        fontFamily: 'Poppins-regular',
+                        fontSize: 14,
+                      ),
                     ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
-                    child: const Icon(
-                      SimpleLineIcons.check,
-                      size: 14,
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+                      child: const Icon(
+                        SimpleLineIcons.check,
+                        size: 14,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
+              ElevatedButton(
+                onPressed: () {
+                  invoicePrintLayout(widget.addPaymentBody, currentCoin);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: myTheme.colorScheme.primary,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Imprimir Factura',
+                      style: TextStyle(
+                        fontFamily: 'Poppins-regular',
+                        fontSize: 14,
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+                      child: const Icon(
+                        SimpleLineIcons.check,
+                        size: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
         Image.asset(

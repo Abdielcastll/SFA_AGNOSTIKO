@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/account_balance_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
+import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
@@ -40,7 +42,7 @@ class _AccountBalancePageState extends State<AccountBalancePage> {
 }
 
 class AccountBalanceBody extends StatefulWidget {
-  const AccountBalanceBody({
+  AccountBalanceBody({
     Key? key,
     this.clientDocument,
     this.clientName,
@@ -60,6 +62,8 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
 
   @override
   Widget build(BuildContext context) {
+    final scrollLimit =
+        Provider.of<CounterLimitFirestore>(context).getScrollBalance;
     return MultiProvider(
       providers: [
         isCheckedFactures == true
@@ -68,6 +72,7 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
                     .collection('clientes')
                     .doc(widget.clientDocument.toString())
                     .collection('facturas')
+                    .limit(scrollLimit)
                     .orderBy('nroCorrelativo', descending: false)
                     .snapshots()
                     .map(accountInvoicesFromSnapshot),
@@ -101,6 +106,7 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
                 children: [
                   Checkbox(
                     checkColor: Colors.white,
+                    activeColor: myTheme.colorScheme.primary,
                     value: isCheckedOnProcess,
                     onChanged: (bool? value) {
                       setState(() {
@@ -117,6 +123,7 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
                   ),
                   Checkbox(
                     checkColor: Colors.white,
+                    activeColor: myTheme.colorScheme.primary,
                     value: isCheckedNotes,
                     onChanged: (bool? value) {
                       setState(() {
@@ -137,6 +144,7 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
                   ),
                   Checkbox(
                     checkColor: Colors.white,
+                    activeColor: myTheme.colorScheme.primary,
                     value: isCheckedFactures,
                     onChanged: (bool? value) {
                       setState(() {
@@ -381,7 +389,7 @@ class _StatusBarResumeState extends State<StatusBarResume> {
 }
 
 class ShowInvoices extends StatefulWidget {
-  const ShowInvoices({
+  ShowInvoices({
     Key? key,
     this.isCheckedOnProcess,
     this.clientName,
@@ -407,6 +415,47 @@ class _ShowInvoicesState extends State<ShowInvoices> {
         color: Colors.amber,
       );
     }
+  }
+
+  final _controller = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    // products = widget.listOfProducts;
+    _controller.addListener(() {
+      final productsLimitProvider =
+          Provider.of<CounterLimitFirestore>(context, listen: false);
+      if (_controller.position.atEdge) {
+        bool isTop = _controller.position.pixels == 0;
+        if (isTop) {
+          int newValor =
+              int.parse(productsLimitProvider.getScrollBalanceLimit.toString());
+          print('Top balance page');
+          productsLimitProvider.setBalanceLimit(10, 10);
+        } else {
+          if (productsLimitProvider.getScrollBalanceLimit == 0) {
+            productsLimitProvider.setBalanceLimit(0, 0);
+          } else {
+            int newValor = int.parse(
+                productsLimitProvider.getScrollBalanceLimit.toString());
+            if (newValor == 10) {
+              productsLimitProvider.setBalanceLimit(
+                  productsLimitProvider.getScrollBalance + newValor, 10);
+            } else if (newValor == 50) {
+              productsLimitProvider.setProductsLimit(
+                  productsLimitProvider.getScrollBalance + newValor, 50);
+            }
+          }
+          print('Bottom balance page');
+          Fluttertoast.showToast(
+            msg: 'Solicitando +10 facturas',
+            backgroundColor: myTheme.colorScheme.primary,
+            textColor: Colors.white,
+          );
+        }
+      }
+    });
   }
 
   @override
@@ -455,9 +504,10 @@ class _ShowInvoicesState extends State<ShowInvoices> {
 
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
+      height: MediaQuery.of(context).size.height * 0.51,
       margin: const EdgeInsets.fromLTRB(10, 20, 10, 5),
       child: ListView.builder(
+        controller: _controller,
         physics: const BouncingScrollPhysics(),
         itemCount: widget.isCheckedOnProcess == true
             ? invoicesOnProcessList.length

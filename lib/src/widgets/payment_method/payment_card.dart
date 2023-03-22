@@ -8,6 +8,8 @@ import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/card_input/card_input.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/identify_payment_method.dart';
 
 import '../../../dialogs/circular_progress_dialog.dart';
 import '../../models/transaction_args.dart';
@@ -16,7 +18,9 @@ import '../../services/utils/emv.dart';
 
 Future<double?> _acceptAmount(
     BuildContext context, double amount, InvoiceData invoiceData,
-    {Function? updatePayed, AddPaymentBodyAtt? paymentBody}) async {
+    {Function? updatePayed,
+    AddPaymentBodyAtt? paymentBody,
+    noRetail = false}) async {
   var platformInfo = await getPlatformInfo();
   var transactionArgs = TransactionArgs(
       platformInfo: platformInfo,
@@ -46,7 +50,7 @@ Future<double?> _acceptAmount(
     Navigator.pushReplacementNamed(
       context,
       CardInputView.route,
-      arguments: [transactionArgs, updatePayed, paymentBody],
+      arguments: [transactionArgs, updatePayed, paymentBody, noRetail],
     );
   } else {
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -61,7 +65,9 @@ Future<double?> _acceptAmount(
 
 paymentCard(double amount, Client client, String invoiceDocumentID,
     double totalOfTheOrder, String currentCoin, DateTime date, double remaining,
-    {Function? updatePayed, AddPaymentBodyAtt? paymentBody}) {
+    {Function? updatePayed, AddPaymentBodyAtt? paymentBody, noRetail = false}) {
+  remaining = priceToCurrencySelected(remaining, currentCoin);
+
   final invoiceData = InvoiceData(client, invoiceDocumentID, 'USD', amount,
       totalOfTheOrder, currentCoin, date, remaining);
 
@@ -100,7 +106,9 @@ paymentCard(double amount, Client client, String invoiceDocumentID,
                     child: TextButton(
                       onPressed: () {
                         _acceptAmount(context, amount, invoiceData,
-                            updatePayed: updatePayed, paymentBody: paymentBody);
+                            updatePayed: updatePayed,
+                            paymentBody: paymentBody,
+                            noRetail: noRetail);
                       },
                       style: TextButton.styleFrom(
                         foregroundColor: myTheme.colorScheme.primary,
