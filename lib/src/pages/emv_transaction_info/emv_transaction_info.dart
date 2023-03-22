@@ -8,11 +8,15 @@ import 'package:agnostiko/agnostiko.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/dialogs/circular_progress_dialog.dart';
+import 'package:pwa_sales2go_flutter/dialogs/info_dialog.dart';
+import 'package:pwa_sales2go_flutter/pharos/pharos.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/diary_tabs.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/completed_pay.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
+import 'package:pwa_sales2go_flutter/src/services/utils/comm.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 
@@ -145,48 +149,59 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              const Text(''),
-              const Divider(),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    height: 50,
-                    width: 120,
-                    child: SvgPicture.asset(
-                      infoTags?.cardNo?.toHexStr().substring(0, 1) == '5' ||
-                              transactionArgs?.transactionInfo?.kernelType ==
-                                  ContactlessKernelType.PayPass
-                          ? 'assets/images/mastercard.svg'
-                          : 'assets/images/visa.svg',
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                  Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          if (transactionArgs?.transactionInfo?.isContactless ==
-                              true)
-                            Container(
-                              margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                              height: 50,
-                              width: 120,
-                              child: Image.asset(
-                                'assets/images/contactless.jpeg',
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                          Text(
-                            '''**** ${(infoTags?.cardNo?.toHexStr() ?? transactionArgs?.pan)?.substring(12) ?? '-'}''',
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      )),
-                ],
+              Text(
+                transactionArgs!.isFallback ? 'Error de Chip' : '',
+                style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
+                textAlign: TextAlign.center,
               ),
               const Divider(),
+              if (!transactionArgs!.isFallback)
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      height: 50,
+                      width: 120,
+                      child: SvgPicture.asset(
+                        infoTags?.cardNo?.toHexStr().substring(0, 1) == '5' ||
+                                transactionArgs?.transactionInfo?.kernelType ==
+                                    ContactlessKernelType.PayPass
+                            ? 'assets/images/mastercard.svg'
+                            : 'assets/images/visa.svg',
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                    Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            if (transactionArgs
+                                    ?.transactionInfo?.isContactless ==
+                                true)
+                              Container(
+                                margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                height: 50,
+                                width: 120,
+                                child: Image.asset(
+                                  'assets/images/contactless.jpeg',
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            Text(
+                              '''**** ${(infoTags?.cardNo?.toHexStr() ?? transactionArgs?.pan)?.substring(12) ?? '-'}''',
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        )),
+                  ],
+                ),
+              if (!transactionArgs!.isFallback) const Divider(),
               ListTile(
                 enableFeedback: true,
                 title: Text(
@@ -267,26 +282,49 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                 subtitle: Text(infoTags?.atc?.toHexStr().toUpperCase() ?? '-'),
                 onTap: () {},
               ), */
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
-                child: OutlinedButton(
-                    onPressed: () {
-                      printTicket();
-                    },
-                    style: TextButton.styleFrom(
-                        foregroundColor: myTheme.colorScheme.primary,
-                        backgroundColor: Colors.blue.shade800),
-                    child: Text(
-                      'imprimir comprobante'.toUpperCase(),
-                      style: const TextStyle(
-                        fontFamily: 'Poppins-regular',
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )),
-              ),
+
+              if (!transactionArgs!.isFallback)
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 4.0, horizontal: 16.0),
+                  child: OutlinedButton(
+                      onPressed: () {
+                        printTicket();
+                      },
+                      style: TextButton.styleFrom(
+                          foregroundColor: myTheme.colorScheme.primary,
+                          backgroundColor: Colors.blue.shade800),
+                      child: Text(
+                        'imprimir comprobante'.toUpperCase(),
+                        style: const TextStyle(
+                          fontFamily: 'Poppins-regular',
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )),
+                ),
+              if (transactionArgs!.isFallback)
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 4.0, horizontal: 16.0),
+                  child: OutlinedButton(
+                      onPressed: () {
+                        onVoidExecute();
+                      },
+                      style: TextButton.styleFrom(
+                          foregroundColor: myTheme.colorScheme.primary,
+                          backgroundColor: Colors.blue.shade800),
+                      child: Text(
+                        'Realizar reverso'.toUpperCase(),
+                        style: const TextStyle(
+                          fontFamily: 'Poppins-regular',
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )),
+                ),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
@@ -323,18 +361,18 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     final paymentBody = (ModalRoute.of(context)?.settings.arguments! as List)[2]
         as AddPaymentBodyAtt;
 
-    final payed = transactionResult == EmvTransactionResult.Approved
-        ? exchangeAmount(paymentBody.currency,
-            double.parse(_amountString.replaceFirst('\$', '')))
-        : 0.0;
-
-    paymentBody.payments.add(PayMethod('Tarjeta', payed));
-
     print('EMV INFO PAYMENTS');
     print(paymentBody.payments.length);
     print(paymentBody.remaining);
     print(paymentBody.currency);
+    print(paymentBody.amountPaied);
+
+    final payed = transactionResult == EmvTransactionResult.Approved
+        ? exchangeAmount(paymentBody.currency, _amountDouble)
+        : 0.0;
     print(payed);
+
+    paymentBody.payments.add(PayMethod('Tarjeta', payed));
 
     final totalPayed = paymentBody.payments.fold<double>(
         0.0, (previousValue, element) => previousValue + element.amount);
@@ -384,6 +422,35 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                             as List)[1](payed); */
       // Navigator.pop(context, payed);
     }
+  }
+
+  onVoidExecute() async {
+    final pharosVoidMsg =
+        await pharosGenerateVoidMsg(transactionArgs!.stan.toString());
+    print("$pharosVoidMsg");
+    String? responseCode;
+    try {
+      showCircularProgressDialog(
+        context,
+        AppLocalizations.of(context)!.pleaseWait,
+      );
+      final response = await processVoidPharos(pharosVoidMsg);
+      responseCode = response.resultCode;
+    } catch (e) {
+      print("Error: $e");
+    }
+
+    Navigator.pop(context);
+
+    String infoDialogText;
+    if (responseCode == "00") {
+      infoDialogText = 'Reverso aceptado';
+    } else {
+      infoDialogText = 'Reverso rechazado';
+    }
+    showInfoDialog(context, "$infoDialogText", onClose: () {
+      Navigator.pop(context);
+    });
   }
 
   String? getMonth(String monthNum) {
@@ -517,12 +584,11 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
             ? 'PAGO APROBADO'
             : 'PAGO RECHAZADO',
         format: TextFormat(fontSize: 16, fontFamily: regularFont)));
-    listOfTextLine.add(PrinterSplitText(
-        "Total M.N.".toUpperCase(), _amountString,
+    listOfTextLine.add(PrinterSplitText("Total:".toUpperCase(), _amountString,
         format: TextFormat(fontSize: 16, fontFamily: regularFont)));
 
     final contactlessBool = transactionArgs?.transactionInfo?.isContactless;
-    switch (contactlessBool) {
+    /* switch (contactlessBool) {
       case false:
         listOfTextLine.add(
           PrinterText("I@1".toUpperCase(),
@@ -535,7 +601,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
               format: TextFormat(fontSize: 16, fontFamily: regularFont)),
         );
         break;
-    }
+    } */
 
     listOfTextLine.add(PrinterText.emptyLine(16));
     listOfTextLine.add(PrinterText(
@@ -561,16 +627,16 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
 
     listOfTextLine.add(PrinterText.emptyLine(16));
 
+    listOfTextLine.add(PrinterText('FIRMA:______________________________',
+        format: TextFormat(fontSize: 16, fontFamily: regularFont)));
+
+    listOfTextLine.add(PrinterText.emptyLine(16));
+
     final nombreTarjetahabiente = await emv.getTagValue(0x5f20);
 
     switch (contactlessBool) {
       case false:
         if (_getCvmTypeStr(infoTags?.cvmResults) == "FIRMA") {
-          listOfTextLine.add(PrinterText(
-              "FIRMA___________________".toUpperCase(),
-              format: TextFormat(fontSize: 16, fontFamily: regularFont),
-              alignment: TextAlignment.Center));
-
           if (nombreTarjetahabiente != null) {
             listOfTextLine.add(PrinterText(
                 const AsciiCodec().decode(nombreTarjetahabiente).toUpperCase(),
@@ -612,6 +678,17 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
         break;
     }
 
+    listOfTextLine.add(PrinterText.emptyLine(16));
+
+    listOfTextLine.add(PrinterText(
+        'he leido y acepto los terminos y condiciones.'.toUpperCase(),
+        format: TextFormat(fontSize: 14, fontFamily: regularFont),
+        alignment: TextAlignment.Center));
+
+    listOfTextLine.add(PrinterText('powered by pharos payments'.toUpperCase(),
+        format: TextFormat(fontSize: 14, fontFamily: regularFont),
+        alignment: TextAlignment.Center));
+
     /* listOfTextLine.add(PrinterText.emptyLine(24));
 
     listOfTextLine.add(PrinterText(
@@ -643,8 +720,20 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     return _amountBytesToString(infoTags?.amount);
   }
 
+  double get _amountDouble {
+    return _amountBytesToDouble(infoTags?.amount);
+  }
+
   String get _amountOtherString {
     return _amountBytesToString(infoTags?.amountOther);
+  }
+
+  double _amountBytesToDouble(Uint8List? amountBytes) {
+    if (amountBytes != null) {
+      final amountInt = int.parse(amountBytes.toHexStr());
+      return double.parse((amountInt / 100).toStringAsFixed(2));
+    }
+    return 0.0;
   }
 
   String _amountBytesToString(Uint8List? amountBytes) {
