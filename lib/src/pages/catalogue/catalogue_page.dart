@@ -77,6 +77,8 @@ class _CataloguePageState extends State<CataloguePage> {
           value: DatabaseServiceStreams().productsByDate,
           initialData: const [],
           catchError: (context, error) {
+            print('ERROR PRODUCTS BY DATE PROVIDER');
+            print(error);
             return;
           },
         ),

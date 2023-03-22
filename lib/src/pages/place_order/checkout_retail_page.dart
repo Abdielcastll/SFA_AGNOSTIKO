@@ -181,35 +181,36 @@ class _CheckoutBodyState extends State<CheckoutBody> {
     priceFormat(productPrice) {
       double correctAmount = double.parse(productPrice.toStringAsFixed(2));
       if (currentCoin!.contains('USD')) {
-        return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
-            .format(productPrice)
-            .toString();
+        return NumberFormat.simpleCurrency(
+          locale: 'en-US',
+          decimalDigits: 2,
+        ).format(productPrice).toString();
       } else if (currentCoin.contains('VED')) {
-        return '\$$correctAmount = ${NumberFormat.currency(
+        return NumberFormat.currency(
           locale: 'es_VE',
           decimalDigits: 2,
           symbol: "Bs.",
-        ).format(correctAmount * 4.58).toString()}';
+        ).format(correctAmount * 4.58).toString();
       } else if (currentCoin.contains('EUR')) {
-        return '\$$correctAmount = ${NumberFormat.currency(
+        return NumberFormat.currency(
           locale: 'es_ES',
           decimalDigits: 2,
           symbol: '€',
-        ).format(correctAmount * 0.89).toString()}';
+        ).format(correctAmount * 0.89).toString();
       } else if (currentCoin.contains('MXN')) {
-        return '\$$correctAmount = ${NumberFormat.currency(
+        return NumberFormat.currency(
           locale: 'es_MX',
           decimalDigits: 2,
           symbol: '\$',
-        ).format(correctAmount * 19.43)}';
+        ).format(correctAmount * 19.43);
       } else if (currentCoin.contains('BTC')) {
         return '฿ ${(correctAmount * 0.00011).toString()}';
       } else {
-        return '\$$correctAmount = ${NumberFormat.currency(
+        return NumberFormat.currency(
           locale: 'es_VE',
           decimalDigits: 2,
           symbol: "PPR.",
-        ).format(correctAmount * 4.58).toString()}';
+        ).format(correctAmount * 4.58).toString();
       }
     }
 
@@ -243,14 +244,14 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       ),
                     ),
                     Container(
-                      // margin: const EdgeInsets.only(bottom: 5),
-                      alignment: Alignment.centerRight,
+                      margin: const EdgeInsets.only(right: 10),
+                      alignment: Alignment.centerLeft,
                       child: Text(
-                        '${priceFormat(widget.subTotal)}',
+                        priceFormat(widget.subTotal),
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
-                          fontSize: 12,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -274,14 +275,14 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       ),
                     ),
                     Container(
-                      // margin: const EdgeInsets.only(bottom: 5),
-                      alignment: Alignment.centerRight,
+                      margin: const EdgeInsets.only(right: 10),
+                      alignment: Alignment.centerLeft,
                       child: Text(
                         '- ${priceFormat(masterDiscountTotal)}',
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
-                          fontSize: 12,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -594,7 +595,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       ),
                     ),
                     Container(
-                      // margin: const EdgeInsets.only(bottom: 5),
+                      margin: const EdgeInsets.only(right: 10),
                       alignment: Alignment.centerRight,
                       child: Text(
                         '- ${priceFormat(totalDiscountApplied())}',
@@ -602,7 +603,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
-                          fontSize: 12,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -626,14 +627,14 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       ),
                     ),
                     Container(
-                      margin: const EdgeInsets.only(bottom: 10),
+                      margin: const EdgeInsets.only(bottom: 10, right: 10),
                       alignment: Alignment.centerRight,
                       child: Text(
-                        '${priceFormat(taxTotal)}',
+                        priceFormat(taxTotal),
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
-                          fontSize: 12,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -656,51 +657,20 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       ),
                     ),
                     Container(
-                      margin: const EdgeInsets.only(bottom: 5),
+                      margin: const EdgeInsets.only(bottom: 5, right: 10),
                       alignment: Alignment.centerRight,
                       child: Text(
-                        '${priceFormat(totalOfTheOrder)}',
+                        priceFormat(totalOfTheOrder),
                         style: TextStyle(
                           color: myTheme.colorScheme.onPrimaryContainer,
                           fontFamily: 'Poppins-regular',
-                          fontSize: 12,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                   ],
                 ),
-                // if (amountPayed > 0)
-                //   Row(
-                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //     children: [
-                //       Container(
-                //         alignment: Alignment.centerLeft,
-                //         child: Text(
-                //           'Monto Pagado',
-                //           style: TextStyle(
-                //             color: myTheme.colorScheme.onPrimaryContainer,
-                //             fontFamily: 'Poppins-regular',
-                //             fontSize: 14,
-                //             fontWeight: FontWeight.bold,
-                //           ),
-                //         ),
-                //       ),
-                //       Container(
-                //         margin: const EdgeInsets.only(bottom: 5),
-                //         alignment: Alignment.centerRight,
-                //         child: Text(
-                //           priceFormat(amountPayed),
-                //           style: TextStyle(
-                //             color: myTheme.colorScheme.onPrimaryContainer,
-                //             fontFamily: 'Poppins-regular',
-                //             fontSize: 12,
-                //             fontWeight: FontWeight.bold,
-                //           ),
-                //         ),
-                //       ),
-                //     ],
-                //   ),
               ],
             ),
           ),

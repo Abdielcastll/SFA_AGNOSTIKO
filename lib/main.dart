@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
@@ -59,6 +60,10 @@ class SfaAgnostiko extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var prissa = FirebaseFirestore.instance
+        .collection('marcas')
+        .doc('fekpFNxAR5U9PZko1XWq');
+
     return StreamProvider<UserModel?>.value(
       value: AuthService().user,
       initialData: null,
@@ -84,10 +89,12 @@ class SfaAgnostiko extends StatelessWidget {
                       return StreamProvider<List<Products>?>.value(
                         value: productsLimit == 0
                             ? productsCollection
+                                .where('marca', isEqualTo: prissa)
                                 .orderBy('codigo')
                                 .snapshots()
                                 .map(productsListFromSnapshot)
                             : productsCollection
+                                .where('marca', isEqualTo: prissa)
                                 .orderBy('codigo')
                                 .limit(productsLimit)
                                 .snapshots()
@@ -95,6 +102,7 @@ class SfaAgnostiko extends StatelessWidget {
                         initialData: const [],
                         catchError: (context, error) {
                           print(error);
+                          print('PRODIVER PRODUCT ERROR');
                           return;
                         },
                         child: MaterialApp(

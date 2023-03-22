@@ -174,31 +174,31 @@ class _CheckoutBodyState extends State<CheckoutBody> {
             .format(productPrice)
             .toString();
       } else if (currentCoin.contains('VED')) {
-        return '\$$correctAmount = ${NumberFormat.currency(
+        return NumberFormat.currency(
           locale: 'es_VE',
           decimalDigits: 2,
           symbol: "Bs.",
-        ).format(correctAmount * 4.58).toString()}';
+        ).format(correctAmount * 4.58).toString();
       } else if (currentCoin.contains('EUR')) {
-        return '\$$correctAmount = ${NumberFormat.currency(
+        return NumberFormat.currency(
           locale: 'es_ES',
           decimalDigits: 2,
           symbol: '€',
-        ).format(correctAmount * 0.89).toString()}';
+        ).format(correctAmount * 0.89).toString();
       } else if (currentCoin.contains('MXN')) {
-        return '\$$correctAmount = ${NumberFormat.currency(
+        return NumberFormat.currency(
           locale: 'es_MX',
           decimalDigits: 2,
           symbol: '\$',
-        ).format(correctAmount * 19.43)}';
+        ).format(correctAmount * 19.43);
       } else if (currentCoin.contains('BTC')) {
         return '฿ ${(correctAmount * 0.00011).toString()}';
       } else {
-        return '\$$correctAmount = ${NumberFormat.currency(
+        return NumberFormat.currency(
           locale: 'es_VE',
           decimalDigits: 2,
           symbol: "PPR.",
-        ).format(correctAmount * 4.58).toString()}';
+        ).format(correctAmount * 4.58).toString();
       }
     }
 
@@ -235,7 +235,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerRight,
                       child: Text(
-                        '${priceFormat(widget.subTotal)}',
+                        priceFormat(widget.subTotal),
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
@@ -266,7 +266,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerRight,
                       child: Text(
-                        '${priceFormat(masterDiscountTotal)}',
+                        priceFormat(masterDiscountTotal),
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
@@ -297,7 +297,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerRight,
                       child: Text(
-                        '${priceFormat(taxTotal)}',
+                        priceFormat(taxTotal),
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
@@ -648,7 +648,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerRight,
                       child: Text(
-                        '${priceFormat(totalOfTheOrder)}',
+                        priceFormat(totalOfTheOrder),
                         style: TextStyle(
                           color: myTheme.colorScheme.onPrimaryContainer,
                           fontFamily: 'Poppins-regular',

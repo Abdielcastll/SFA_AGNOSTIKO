@@ -30,6 +30,7 @@ class ClientList extends StatefulWidget {
 class _ClientListState extends State<ClientList> {
   final searchClientController = TextEditingController();
   bool isDescending = true;
+  bool isSearchingByname = false;
 
   // Esta funcion se llama cada vez que el text field cambia
   // void _searchClient(String query) {
@@ -78,14 +79,39 @@ class _ClientListState extends State<ClientList> {
               fontSize: 14,
               fontFamily: 'Poppins-regular',
             ),
-            keyboardType: TextInputType.text,
+            keyboardType: isSearchingByname == true
+                ? TextInputType.text
+                : TextInputType.phone,
             maxLines: 1,
             maxLength: 200,
             // textCapitalization: TextCapitalization.characters,
             controller: searchClientController,
             decoration: InputDecoration(
+              prefixIcon: Icon(
+                isSearchingByname ? Icons.person : Icons.numbers,
+                color: isSearchingByname
+                    ? myTheme.colorScheme.primary
+                    : myTheme.colorScheme.onPrimaryContainer,
+              ),
+              suffixIcon: Container(
+                child: IconButton(
+                  splashRadius: 1,
+                  icon: Icon(
+                    Icons.compare_arrows_rounded,
+                    color: myTheme.colorScheme.onPrimaryContainer,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      isSearchingByname = !isSearchingByname;
+                    });
+                  },
+                ),
+              ),
               contentPadding: const EdgeInsets.fromLTRB(14, 0, 0, 0),
-              hintText: AppLocalizations.of(context)!.searchProductName,
+              hintText: isSearchingByname == true
+                  ? AppLocalizations.of(context)!.searchProductName
+                  // : AppLocalizations.of(context)!.searchProductCode,
+                  : 'Buscar por, Cedula, RIF, etc...',
               hintStyle: const TextStyle(
                 fontFamily: 'Poppins-regular',
                 fontSize: 14,
@@ -108,13 +134,19 @@ class _ClientListState extends State<ClientList> {
             textInputAction: TextInputAction.go,
 
             onSubmitted: ((value) async {
+              // isSearchingByname == true
               print(value);
               filteredClients.clear();
-              await clientsCollection
-                  .where('zona', isEqualTo: userZoneDocument)
-                  .where('nombreIndice', arrayContains: value)
-                  .snapshots()
-                  .forEach((element) {
+              var selectedClientsCollection = isSearchingByname == true
+                  ? clientsCollection
+                      .where('zona', isEqualTo: userZoneDocument)
+                      .where('nombreIndice', arrayContains: value)
+                      .snapshots()
+                  : clientsCollection
+                      .where('zona', isEqualTo: userZoneDocument)
+                      .where('numeroId', isEqualTo: int.parse(value))
+                      .snapshots();
+              await selectedClientsCollection.forEach((element) {
                 for (var snapshot in element.docs) {
                   Clients product = Clients(
                     active: snapshot.data().toString().contains('activo')
@@ -279,7 +311,7 @@ class _ClientListState extends State<ClientList> {
         ),
         filteredClients.isEmpty
             ? Container(
-                margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                 // color: Colors.grey,
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height * 0.69,
@@ -407,7 +439,7 @@ class _ClientListState extends State<ClientList> {
                 ),
               )
             : Container(
-                margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                 // color: Colors.grey,
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height * 0.69,

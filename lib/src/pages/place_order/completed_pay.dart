@@ -222,8 +222,8 @@ class _CompletedPayBody extends State<CompletedPayBody> {
                     Container(
                       margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
                             'MONTO PAGADO',
@@ -233,14 +233,19 @@ class _CompletedPayBody extends State<CompletedPayBody> {
                               fontSize: 16,
                             ),
                           ),
-                          Text(
-                            currentCoin != 'Dolares - USD'
-                                ? '${priceFormat(widget.total)} = \$ ${widget.total.toStringAsFixed(2)}'
-                                : '${priceFormat(widget.total)}',
-                            style: TextStyle(
-                              color: Colors.grey.shade500,
-                              fontFamily: 'Poppins-regular',
-                              fontSize: 12,
+                          Container(
+                            alignment: Alignment.center,
+                            child: Text(
+                              priceFormat(widget.total),
+                              textAlign: TextAlign.center,
+                              // currentCoin != 'Dolares - USD'
+                              //     ? '${priceFormat(widget.total)} = \$ ${widget.total.toStringAsFixed(2)}'
+                              //     : '${priceFormat(widget.total)}',
+                              style: TextStyle(
+                                color: myTheme.colorScheme.onPrimaryContainer,
+                                fontFamily: 'Poppins-regular',
+                                fontSize: 14,
+                              ),
                             ),
                           ),
                         ],

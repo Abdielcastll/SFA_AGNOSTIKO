@@ -123,7 +123,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
   var dateFormatter = DateFormat('dd-MM-yyyy');
   DateTime today = DateTime.now();
   String? selectedValueA;
-  String? selectedCoin;
+  String? selectedCoin = 'MXN';
   final List<String> items = [
     'Tarjeta de Debito',
     'Tarjeta de Credito',
@@ -199,31 +199,31 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
             .format(productPrice)
             .toString();
       } else if (currentCoin.contains('VED')) {
-        return '\$$correctAmount = ${NumberFormat.currency(
+        return NumberFormat.currency(
           locale: 'es_VE',
           decimalDigits: 2,
           symbol: "Bs.",
-        ).format(correctAmount * 4.58).toString()}';
+        ).format(correctAmount * 4.58).toString();
       } else if (currentCoin.contains('EUR')) {
-        return '\$$correctAmount = ${NumberFormat.currency(
+        return NumberFormat.currency(
           locale: 'es_ES',
           decimalDigits: 2,
           symbol: '€',
-        ).format(correctAmount * 0.89).toString()}';
+        ).format(correctAmount * 0.89).toString();
       } else if (currentCoin.contains('MXN')) {
-        return '\$$correctAmount = ${NumberFormat.currency(
+        return NumberFormat.currency(
           locale: 'es_MX',
           decimalDigits: 2,
           symbol: '\$',
-        ).format(correctAmount * 19.43)}';
+        ).format(correctAmount * 19.43);
       } else if (currentCoin.contains('BTC')) {
         return '฿ ${(correctAmount * 0.00011).toString()}';
       } else {
-        return '\$$correctAmount = ${NumberFormat.currency(
+        return NumberFormat.currency(
           locale: 'es_VE',
           decimalDigits: 2,
           symbol: "PPR.",
-        ).format(correctAmount * 4.58).toString()}';
+        ).format(correctAmount * 4.58).toString();
       }
     }
 
@@ -380,89 +380,89 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                       ),
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton2(
-                        isExpanded: true,
-                        // ignore: prefer_const_literals_to_create_immutables
-                        hint: Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                selectedCoin ?? 'Seleccione moneda',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  color: myTheme.colorScheme.primary
-                                      .withOpacity(0.3),
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                        items: itemsCoin
-                            .map((item) => DropdownMenuItem<String>(
-                                  value: item,
-                                  child: Text(
-                                    item,
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: myTheme.colorScheme.primary,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ))
-                            .toList(),
-                        value: selectedCoin,
-                        onChanged: (value) {
-                          // Pendiente
-                          // fieldText.clear();
+                  // Container(
+                  //   margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
+                  //   child: DropdownButtonHideUnderline(
+                  //     child: DropdownButton2(
+                  //       isExpanded: true,
+                  //       // ignore: prefer_const_literals_to_create_immutables
+                  //       hint: Row(
+                  //         children: [
+                  //           Expanded(
+                  //             child: Text(
+                  //               selectedCoin ?? 'Seleccione moneda',
+                  //               style: TextStyle(
+                  //                 fontSize: 12,
+                  //                 fontWeight: FontWeight.bold,
+                  //                 color: myTheme.colorScheme.primary
+                  //                     .withOpacity(0.3),
+                  //               ),
+                  //               overflow: TextOverflow.ellipsis,
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //       items: itemsCoin
+                  //           .map((item) => DropdownMenuItem<String>(
+                  //                 value: item,
+                  //                 child: Text(
+                  //                   item,
+                  //                   style: TextStyle(
+                  //                     fontSize: 14,
+                  //                     fontWeight: FontWeight.bold,
+                  //                     color: myTheme.colorScheme.primary,
+                  //                   ),
+                  //                   overflow: TextOverflow.ellipsis,
+                  //                 ),
+                  //               ))
+                  //           .toList(),
+                  //       value: selectedCoin,
+                  //       onChanged: (value) {
+                  //         // Pendiente
+                  //         // fieldText.clear();
 
-                          setState(
-                            () {
-                              selectedCoin = value as String;
-                            },
-                          );
-                        },
-                        icon: const Icon(
-                          Icons.arrow_forward_ios_outlined,
-                        ),
-                        iconSize: 11,
-                        iconEnabledColor:
-                            myTheme.colorScheme.primary.withOpacity(0.5),
-                        iconDisabledColor: Colors.grey,
-                        buttonHeight: 50,
-                        // buttonWidth: 200,
-                        buttonPadding:
-                            const EdgeInsets.only(left: 14, right: 14),
-                        buttonDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(
-                            color: myTheme.colorScheme.primary.withOpacity(0.3),
-                          ),
-                          color: Colors.white,
-                        ),
-                        buttonElevation: 0,
-                        itemHeight: 40,
-                        itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                        dropdownMaxHeight: 200,
-                        dropdownWidth: 200,
-                        dropdownPadding: null,
-                        dropdownDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
-                        ),
-                        dropdownElevation: 8,
-                        scrollbarRadius: const Radius.circular(10),
-                        scrollbarThickness: 6,
-                        scrollbarAlwaysShow: true,
-                        offset: const Offset(60, 0),
-                      ),
-                    ),
-                  ),
+                  //         setState(
+                  //           () {
+                  //             selectedCoin = value as String;
+                  //           },
+                  //         );
+                  //       },
+                  //       icon: const Icon(
+                  //         Icons.arrow_forward_ios_outlined,
+                  //       ),
+                  //       iconSize: 11,
+                  //       iconEnabledColor:
+                  //           myTheme.colorScheme.primary.withOpacity(0.5),
+                  //       iconDisabledColor: Colors.grey,
+                  //       buttonHeight: 50,
+                  //       // buttonWidth: 200,
+                  //       buttonPadding:
+                  //           const EdgeInsets.only(left: 14, right: 14),
+                  //       buttonDecoration: BoxDecoration(
+                  //         borderRadius: BorderRadius.circular(5),
+                  //         border: Border.all(
+                  //           color: myTheme.colorScheme.primary.withOpacity(0.3),
+                  //         ),
+                  //         color: Colors.white,
+                  //       ),
+                  //       buttonElevation: 0,
+                  //       itemHeight: 40,
+                  //       itemPadding: const EdgeInsets.only(left: 14, right: 14),
+                  //       dropdownMaxHeight: 200,
+                  //       dropdownWidth: 200,
+                  //       dropdownPadding: null,
+                  //       dropdownDecoration: BoxDecoration(
+                  //         borderRadius: BorderRadius.circular(10),
+                  //         color: Colors.white,
+                  //       ),
+                  //       dropdownElevation: 8,
+                  //       scrollbarRadius: const Radius.circular(10),
+                  //       scrollbarThickness: 6,
+                  //       scrollbarAlwaysShow: true,
+                  //       offset: const Offset(60, 0),
+                  //     ),
+                  //   ),
+                  // ),
 
                   // Fecha del registro del pago
                   Text(
@@ -531,7 +531,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                     ),
                   ),
                   // Monto Pagado
-                  selectedCoin != null
+                  selectedValueA != null
                       ? Container()
                       : Column(
                           children: [
@@ -579,7 +579,10 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                             const EdgeInsets.only(bottom: 5),
                                         alignment: Alignment.centerRight,
                                         child: Text(
-                                          '${priceFormat(priceFormatForPaidAmount(remaining, selectedCoin))}',
+                                          priceFormatForPaidAmount(
+                                              remaining, selectedCoin),
+                                          // priceFormat(priceFormatForPaidAmount(
+                                          //     remaining, selectedCoin)),
                                           style: TextStyle(
                                             color: myTheme
                                                 .colorScheme.onPrimaryContainer,
@@ -770,7 +773,9 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                         ),
                                       ),
                                       Text(
-                                        '${priceFormatForPaidAmount(widget.discount, selectedCoin).toString()}',
+                                        priceFormatForPaidAmount(
+                                                widget.discount, selectedCoin)
+                                            .toString(),
                                         style: TextStyle(
                                           fontFamily: 'Poppins-regular',
                                           color: myTheme.colorScheme.primary,
@@ -800,7 +805,9 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                         ),
                                       ),
                                       Text(
-                                        '${priceFormatForPaidAmount(widget.tax, selectedCoin).toString()}',
+                                        priceFormatForPaidAmount(
+                                                widget.tax, selectedCoin)
+                                            .toString(),
                                         style: TextStyle(
                                           fontFamily: 'Poppins-regular',
                                           color: myTheme.colorScheme.primary,
@@ -836,7 +843,12 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                         // Aqui va widget.InvoiceTotal pero hay
                                         // que consultar si primero se va a
                                         // pagar completo o por partes aca
-                                        '${priceFormatForPaidAmount(widget.subTotal + widget.tax - widget.discount, selectedCoin).toString()}',
+                                        priceFormatForPaidAmount(
+                                                widget.subTotal +
+                                                    widget.tax -
+                                                    widget.discount,
+                                                selectedCoin)
+                                            .toString(),
                                         style: TextStyle(
                                           fontFamily: 'Poppins-regular',
                                           color: myTheme.colorScheme.primary,
@@ -905,7 +917,8 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                       ),
                                       Text(
                                         // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(2), selectedCoin)}',
-                                        '${priceFormatForPaidAmount(remaining, selectedCoin)}',
+                                        priceFormatForPaidAmount(
+                                            remaining, selectedCoin),
                                         style: TextStyle(
                                           fontFamily: 'Poppins-regular',
                                           color: myTheme

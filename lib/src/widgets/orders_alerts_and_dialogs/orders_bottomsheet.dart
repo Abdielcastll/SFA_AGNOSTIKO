@@ -62,31 +62,31 @@ void modalBottomSheetForOrders(
               .format(productPrice)
               .toString();
         } else if (currentCoin.contains('VED')) {
-          return '\$$correctAmount = ${NumberFormat.currency(
+          return NumberFormat.currency(
             locale: 'es_VE',
             decimalDigits: 2,
             symbol: "Bs.",
-          ).format(correctAmount * 4.58).toString()}';
+          ).format(correctAmount * 4.58).toString();
         } else if (currentCoin.contains('EUR')) {
-          return '\$$correctAmount = ${NumberFormat.currency(
+          return NumberFormat.currency(
             locale: 'es_ES',
             decimalDigits: 2,
             symbol: '€',
-          ).format(correctAmount * 0.89).toString()}';
+          ).format(correctAmount * 0.89).toString();
         } else if (currentCoin.contains('MXN')) {
-          return '\$$correctAmount = ${NumberFormat.currency(
+          return NumberFormat.currency(
             locale: 'es_MX',
             decimalDigits: 2,
             symbol: '\$',
-          ).format(correctAmount * 19.43)}';
+          ).format(correctAmount * 19.43);
         } else if (currentCoin.contains('BTC')) {
           return '฿ ${(correctAmount * 0.00011).toStringAsFixed(3)}';
         } else {
-          return '\$$correctAmount = ${NumberFormat.currency(
+          return NumberFormat.currency(
             locale: 'es_VE',
             decimalDigits: 2,
             symbol: "PPR.",
-          ).format(correctAmount * 4.58).toString()}';
+          ).format(correctAmount * 4.58).toString();
         }
       }
 

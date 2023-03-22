@@ -8,6 +8,9 @@ import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 
 class DatabaseServiceStreams {
+  var prissa = FirebaseFirestore.instance
+      .collection('marcas')
+      .doc('fekpFNxAR5U9PZko1XWq');
   // Streams de productos
 
   // Stream de Productos completos
@@ -25,6 +28,7 @@ class DatabaseServiceStreams {
   Stream<List<ProductsWithPromotions>> get productsWithPromotions {
     return productsCollection
         .where('promocion', isNull: false)
+        // .where('marca', isEqualTo: prissa)
         .snapshots()
         .map(productsWithPromotionListFromSnapshot);
   }
@@ -45,6 +49,7 @@ class DatabaseServiceStreams {
   Stream<List<ProductsByDate>> get productsByDate {
     return productsCollection
         .orderBy('modificado', descending: true)
+        .where('marca', isEqualTo: prissa)
         .limit(10)
         .snapshots()
         .map(productsByDateListFromSnapshot);

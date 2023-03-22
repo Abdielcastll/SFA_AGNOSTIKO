@@ -71,6 +71,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
               itemCount: productsByDateList.length,
               itemBuilder: (BuildContext context, index) {
                 final product = productsByDateList[index];
+                print(product.brand);
                 if ((stockValues[product.code] ?? 000) > 0) {
                   return FutureBuilder<String?>(
                     future: FirebaseStorage.instance

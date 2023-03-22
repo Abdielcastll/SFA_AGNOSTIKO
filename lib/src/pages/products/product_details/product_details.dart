@@ -478,7 +478,7 @@ class ProductDetailsBody extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          '$stock en inventario',
+                          '$stock en Inventario',
                           style: TextStyle(
                             color: myTheme.colorScheme.primary,
                             fontFamily: 'Poppins-regular',

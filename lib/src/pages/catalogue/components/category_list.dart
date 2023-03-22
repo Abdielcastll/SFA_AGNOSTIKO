@@ -26,15 +26,36 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
   @override
   Widget build(BuildContext context) {
     final categories = Provider.of<CategorieSummary?>(context)?.summary ?? {};
+    List<MapEntry<String, dynamic>> listData = categories.entries.toList();
+    listData.sort(
+      (a, b) => a.value.toLowerCase().compareTo(
+            b.value.toLowerCase(),
+          ),
+    );
+    final Map<String, dynamic> sortedListData = Map.fromEntries(listData);
     final prices = Provider.of<Prices?>(context)?.prices ?? {};
     final pricesName = Provider.of<Prices?>(context)?.name ?? {};
     final products = Provider.of<List<Products>?>(context) ?? [];
-    List categoriesSummary = categories.values.toList();
-    List categorieKeys = categories.keys.toList();
+    List categoriesSummary = sortedListData.values.toList();
+    List categorieKeys = sortedListData.keys.toList();
     final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
     // print(categorieKeys);
     // print(categoriesSummary);
     // print(productsList);
+    print(products.length);
+    print('CANTIDAD PRODUCTOS DB');
+    print(sortedListData);
+    // categorieKeys.sort((a, b) {
+    //   return a.toLowerCase().compareTo(b.toLowerCase());
+    // });
+    // categoriesSummary.sort((a, b) {
+    //   return a.toLowerCase().compareTo(b.toLowerCase());
+    // });
+    // categories.sort((a, b) {
+    //   return a.toLowerCase().compareTo(b.toLowerCase());
+    // });
+    // print(categories);
+    // print(categoriesSummary);
 
     return Container(
       margin: EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 0),
@@ -67,14 +88,14 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
             child: ListView.builder(
               physics: BouncingScrollPhysics(),
               scrollDirection: Axis.horizontal,
-              itemCount: 3,
-              // categoriesSummary.length,
+              itemCount:
+                  // 1,
+                  categoriesSummary.length,
               itemBuilder: (BuildContext context, index) {
                 final categorie = categoriesSummary[index];
                 final key = categorieKeys[index];
                 return GestureDetector(
                   onTap: () async {
-                    String? mostRecentProduct = '';
                     List<Products>? filteredProducts = [];
                     filteredProducts.clear();
                     // print(categoriesCollection.doc(key));

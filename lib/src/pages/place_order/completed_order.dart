@@ -272,9 +272,10 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                             ),
                           ),
                           Text(
-                            currentCoin != 'Dolares - USD'
-                                ? '${priceFormat(widget.total)} = \$ ${widget.total.toStringAsFixed(2)}'
-                                : '${priceFormat(widget.total)}',
+                            priceFormat(widget.total),
+                            // currentCoin != 'Dolares - USD'
+                            //     ? '${priceFormat(widget.total)} = \$ ${widget.total.toStringAsFixed(2)}'
+                            //     : '${priceFormat(widget.total)}',
                             style: TextStyle(
                               color: Colors.grey.shade500,
                               fontFamily: 'Poppins-regular',
