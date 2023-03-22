@@ -186,6 +186,7 @@ class _CardInputViewState extends State<CardInputView> {
       print("Error: $e");
       print(stackTrace);
       Navigator.popUntil(context, (route) => route.isFirst == true);
+      Navigator.pop(context);
     }
     print("****************CARD READER CLOSED*****************");
   }
@@ -241,9 +242,9 @@ class _CardInputViewState extends State<CardInputView> {
         }
       }
     } on SocketException catch (e) {
-      return _processEMVException(e, "commError");
+      return _processEMVException(e, "Error de conexion");
     } catch (e) {
-      return _processEMVException(e, "internalError");
+      return _processEMVException(e, "Error interno");
     }
 
     if (!mounted) return;
@@ -407,34 +408,32 @@ class _CardInputViewState extends State<CardInputView> {
         this._isFallback = true;
       });
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("chipError"),
+        content: Text("Error de chip"),
       ));
       _startCardDetection(
         _supportedCardTypes.where((type) => type != CardType.IC).toList(),
       );
-    } else {
-      if (event.transactionInfo.onlineRequested &&
-          !event.transactionInfo.isContactless) {
-        // si la transacción terminó tras irse online, ya el 1st GENERATE AC
-        // debería haberse guardado y necesitamos guardar el 2nd GENERATE AC
-        // si no es Contactless
-        transactionArgs?.secondGenerateTags = await emvGetGenerateCommandTags();
-      } else {
-        // si la transacción terminó sin irse online, solo hubo 1st GENERATE AC
-        transactionArgs?.infoTags = await loadInfoTags();
-        transactionArgs?.firstGenerateTags = await emvGetGenerateCommandTags();
-      }
-      transactionArgs?.pan ??= (await EmvModule.instance.getTagValue(0x57))
-          ?.toHexStr()
-          .split('d')[0];
-      Navigator.pushReplacementNamed(context, EmvTransactionInfoView.route,
-          arguments: [
-            transactionArgs,
-            (ModalRoute.of(context)?.settings.arguments! as List)[1],
-            (ModalRoute.of(context)?.settings.arguments! as List)[2],
-            (ModalRoute.of(context)?.settings.arguments! as List)[3]
-          ]);
     }
+    if (event.transactionInfo.onlineRequested &&
+        !event.transactionInfo.isContactless) {
+      // si la transacción terminó tras irse online, ya el 1st GENERATE AC
+      // debería haberse guardado y necesitamos guardar el 2nd GENERATE AC
+      // si no es Contactless
+      transactionArgs?.secondGenerateTags = await emvGetGenerateCommandTags();
+    } else {
+      // si la transacción terminó sin irse online, solo hubo 1st GENERATE AC
+      transactionArgs?.infoTags = await loadInfoTags();
+      transactionArgs?.firstGenerateTags = await emvGetGenerateCommandTags();
+    }
+    transactionArgs?.pan ??=
+        (await EmvModule.instance.getTagValue(0x57))?.toHexStr().split('d')[0];
+    Navigator.pushReplacementNamed(context, EmvTransactionInfoView.route,
+        arguments: [
+          transactionArgs,
+          (ModalRoute.of(context)?.settings.arguments! as List)[1],
+          (ModalRoute.of(context)?.settings.arguments! as List)[2],
+          (ModalRoute.of(context)?.settings.arguments! as List)[3]
+        ]);
   }
 
   Future<void> _onMagneticCard(DUKPTEncryptedTracksData? tracksData) async {
@@ -483,7 +482,7 @@ class _CardInputViewState extends State<CardInputView> {
 
     Navigator.pop(context);
     showInfoDialog(context, "Result: $responseCode", onClose: () {
-      Navigator.popUntil(context, (route) => route.isFirst == true);
+      Navigator.pop(context);
     });
   }
 }
