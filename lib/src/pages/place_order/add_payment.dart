@@ -236,7 +236,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
       }
 
       coin ??= 'Dolares - USD';
-      double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+      double correctAmount = double.parse(productPrice.toStringAsFixed(4));
       if (coin!.contains('USD')) {
         return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
             .format(productPrice)
@@ -689,10 +689,11 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                 0,
                                 0,
                               ),
+                              // priceFormatForPaidAmount(remaining, selectedCoin),
                               hintText: priceFormatForPaidAmount(
                                       double.parse(remaining == 0
                                           ? '0.00'
-                                          : remaining.toStringAsFixed(2)),
+                                          : remaining.toStringAsFixed(4)),
                                       selectedCoin)
                                   .toString(),
                               hintStyle: TextStyle(
@@ -844,9 +845,13 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                         // que consultar si primero se va a
                                         // pagar completo o por partes aca
                                         priceFormatForPaidAmount(
-                                                widget.subTotal +
-                                                    widget.tax -
-                                                    widget.discount,
+                                                double.parse((widget.subTotal)
+                                                        .toStringAsFixed(2)) +
+                                                    double.parse((widget.tax)
+                                                        .toStringAsFixed(2)) -
+                                                    double.parse((widget
+                                                            .discount)
+                                                        .toStringAsFixed(2)),
                                                 selectedCoin)
                                             .toString(),
                                         style: TextStyle(
@@ -871,7 +876,6 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(2), selectedCoin)}',
                                           'Monto pagado:',
                                           style: TextStyle(
                                             fontFamily: 'Poppins-regular',
@@ -881,7 +885,6 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                           ),
                                         ),
                                         Text(
-                                          // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(2), selectedCoin)}',
                                           priceFormat(paymentsTotalAmount),
                                           style: TextStyle(
                                             fontFamily: 'Poppins-regular',
@@ -906,7 +909,6 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(2), selectedCoin)}',
                                         'Saldo:',
                                         style: TextStyle(
                                           fontFamily: 'Poppins-regular',

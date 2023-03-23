@@ -5,9 +5,14 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
+import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
+import 'package:pwa_sales2go_flutter/src/services/auth.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
+import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -39,8 +44,9 @@ void modalBottomSheetForOrders(
   currentClientIdType,
   client,
   orderDate,
-  correlativeNumber,
-) {
+  correlativeNumber, {
+  isRetail,
+}) {
   showModalBottomSheet(
     elevation: 0,
     backgroundColor: Colors.white,
@@ -95,6 +101,12 @@ void modalBottomSheetForOrders(
           doublePop() {
             Navigator.of(context).popUntil((route) => route.isFirst);
           }
+
+          print('Is user retail when opening this menu: $isRetail');
+
+          // final userRole = Provider.of<UserRole?>(context, listen: true);
+          // print(userRole);
+          // print('User Role on Orders bottomSheet');
 
           return SafeArea(
             child: Container(
@@ -415,6 +427,167 @@ void modalBottomSheetForOrders(
                                         color: myTheme.colorScheme.primary),
                                     child: TextButton(
                                       onPressed: () {
+                                        // isRetail
+                                        //     ? showDialog(
+                                        //         context: context,
+                                        //         builder:
+                                        //             (BuildContext context) {
+                                        //           print(
+                                        //               'Retomar proceso de Retail');
+
+                                        //           return AlertDialog(
+                                        //             shape:
+                                        //                 RoundedRectangleBorder(
+                                        //               borderRadius:
+                                        //                   BorderRadius.circular(
+                                        //                       20),
+                                        //             ),
+                                        //             title: Text(
+                                        //               '¿Quiere volver a activar el pedido?',
+                                        //               textAlign:
+                                        //                   TextAlign.center,
+                                        //               style: TextStyle(
+                                        //                 fontFamily:
+                                        //                     'Poppins-regular',
+                                        //                 color: myTheme
+                                        //                     .colorScheme
+                                        //                     .onPrimaryContainer,
+                                        //                 fontSize: 16,
+                                        //                 fontWeight:
+                                        //                     FontWeight.bold,
+                                        //               ),
+                                        //             ),
+                                        //             content: Row(
+                                        //               mainAxisAlignment:
+                                        //                   MainAxisAlignment
+                                        //                       .spaceEvenly,
+                                        //               children: [
+                                        //                 TextButton(
+                                        //                   onPressed: () {
+                                        //                     Navigator.pop(
+                                        //                         context);
+                                        //                   },
+                                        //                   child: Text(
+                                        //                     AppLocalizations.of(
+                                        //                             context)!
+                                        //                         .goBack,
+                                        //                     style: TextStyle(
+                                        //                       fontFamily:
+                                        //                           'Poppins-regular',
+                                        //                       color: myTheme
+                                        //                           .colorScheme
+                                        //                           .primary,
+                                        //                       fontSize: 14,
+                                        //                       fontWeight:
+                                        //                           FontWeight
+                                        //                               .bold,
+                                        //                     ),
+                                        //                   ),
+                                        //                 ),
+                                        //                 Container(
+                                        //                   width: 150,
+                                        //                   height: 40,
+                                        //                   decoration: BoxDecoration(
+                                        //                       borderRadius:
+                                        //                           BorderRadius
+                                        //                               .circular(
+                                        //                                   16),
+                                        //                       color: myTheme
+                                        //                           .colorScheme
+                                        //                           .primary),
+                                        //                   child: TextButton(
+                                        //                     onPressed:
+                                        //                         () async {
+                                        //                       // Mandar pedido a proceso de pago retail una vez mas
+                                        //                       final orderActive =
+                                        //                           Provider.of<
+                                        //                                   OrderProvider>(
+                                        //                               context,
+                                        //                               listen:
+                                        //                                   false);
+                                        //                       print(
+                                        //                           'Activando pedido');
+                                        //                       print(products);
+                                        //                       Clients?
+                                        //                           oldClient =
+                                        //                           Clients(
+                                        //                         active: client
+                                        //                             .active,
+                                        //                         clientDocumentId:
+                                        //                             client
+                                        //                                 .clientDocumentId,
+                                        //                         dispatchAdress:
+                                        //                             client
+                                        //                                 .dispatchAdress,
+                                        //                         email: client
+                                        //                             .email,
+                                        //                         fiscalAdress: client
+                                        //                             .fiscalAdress,
+                                        //                         id: client.id,
+                                        //                         idType: client
+                                        //                             .idType,
+                                        //                         madeBy: client
+                                        //                             .madeBy,
+                                        //                         masterDiscount:
+                                        //                             client
+                                        //                                 .masterDiscount,
+                                        //                         modified: client
+                                        //                             .modified,
+                                        //                         name:
+                                        //                             client.name,
+                                        //                         phone1: client
+                                        //                             .phone1,
+                                        //                         phone2: client
+                                        //                             .phone2,
+                                        //                         prices: client
+                                        //                             .prices,
+                                        //                         prospect: client
+                                        //                             .prospect,
+                                        //                         specialContributor:
+                                        //                             client
+                                        //                                 .specialContributor,
+                                        //                         zone:
+                                        //                             client.zone,
+                                        //                       );
+                                        //                       products.forEach(
+                                        //                           (value) {
+                                        //                         print(value[
+                                        //                             'codigo']);
+                                        //                       });
+                                        //                       // orderActive
+                                        //                       //     .setOrder(
+                                        //                       //         true,
+                                        //                       //         oldClient);
+
+                                        //                       // doublePop();
+                                        //                     },
+                                        //                     style: TextButton
+                                        //                         .styleFrom(
+                                        //                       foregroundColor:
+                                        //                           myTheme
+                                        //                               .colorScheme
+                                        //                               .primary,
+                                        //                     ),
+                                        //                     child: Text(
+                                        //                       'Aceptar',
+                                        //                       style: TextStyle(
+                                        //                         fontFamily:
+                                        //                             'Poppins-regular',
+                                        //                         color: Colors
+                                        //                             .white,
+                                        //                         fontSize: 14,
+                                        //                         fontWeight:
+                                        //                             FontWeight
+                                        //                                 .bold,
+                                        //                       ),
+                                        //                     ),
+                                        //                   ),
+                                        //                 ),
+                                        //               ],
+                                        //             ),
+                                        //           );
+                                        //         })
+                                        //     :
                                         showDialog(
                                           context: context,
                                           builder: (BuildContext context) {
@@ -517,6 +690,9 @@ void modalBottomSheetForOrders(
                                             myTheme.colorScheme.primary,
                                       ),
                                       child: Text(
+                                        // isRetail
+                                        //     ? "Retomar proceso"
+                                        //     :
                                         AppLocalizations.of(context)!
                                             .createInvoiceConfirmation,
                                         style: TextStyle(
