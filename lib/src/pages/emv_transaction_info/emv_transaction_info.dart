@@ -374,8 +374,11 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
 
     paymentBody.payments.add(PayMethod('Tarjeta', payed));
 
-    final totalPayed = paymentBody.payments.fold<double>(
-        0.0, (previousValue, element) => previousValue + element.amount);
+    final totalPayed =
+        paymentBody.payments.fold<double>(0.0, (previousValue, element) {
+      print(element.amount);
+      return previousValue + element.amount;
+    });
 
     final totalInvoice =
         paymentBody.subTotal + paymentBody.tax - paymentBody.discount;
