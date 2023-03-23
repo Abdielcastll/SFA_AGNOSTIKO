@@ -143,7 +143,7 @@ Future invoicePrintLayout(AddPaymentBodyAtt invoice, String currentCoin) async {
       "Total".toUpperCase(),
       priceFormatForPaidAmount(
           (invoice.subTotal - invoice.discount + invoice.tax)
-              .toStringAsFixed(2),
+              .toStringAsFixed(4),
           currentCoin),
       format: TextFormat(fontSize: 16, fontFamily: regularFont)));
 
@@ -190,7 +190,7 @@ priceFormatForPaidAmount(productPrice, coin) {
 
   coin ??= 'Dolares - USD';
 
-  double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+  double correctAmount = double.parse(productPrice.toStringAsFixed(4));
   if (coin!.contains('USD')) {
     return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
         .format(productPrice)

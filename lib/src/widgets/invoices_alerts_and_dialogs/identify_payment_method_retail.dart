@@ -559,7 +559,7 @@ identifyPaymentMethodRetail({
 
                                       if (amountExchanged <
                                           double.parse(
-                                              (remaining).toStringAsFixed(2))) {
+                                              (remaining).toStringAsFixed(4))) {
                                         showDialog(
                                             context: context,
                                             builder: (BuildContext context) {
@@ -1105,7 +1105,7 @@ identifyPaymentMethodRetail({
 
                                 if (amountExchanged <
                                     double.parse(
-                                        (remaining).toStringAsFixed(2))) {
+                                        (remaining).toStringAsFixed(4))) {
                                   showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
@@ -1814,7 +1814,7 @@ identifyPaymentMethodRetail({
 
                                         if (amountExchanged <
                                             double.parse((remaining)
-                                                .toStringAsFixed(2))) {
+                                                .toStringAsFixed(4))) {
                                           showDialog(
                                               context: context,
                                               builder: (BuildContext context) {
@@ -2326,7 +2326,7 @@ identifyPaymentMethodRetail({
 
                                   if (amountExchanged <
                                       double.parse(
-                                          (remaining).toStringAsFixed(2))) {
+                                          (remaining).toStringAsFixed(4))) {
                                     showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
@@ -3051,7 +3051,7 @@ identifyPaymentMethodRetail({
 
                                           if (amountExchanged <
                                               double.parse((remaining)
-                                                  .toStringAsFixed(2))) {
+                                                  .toStringAsFixed(4))) {
                                             showDialog(
                                                 context: context,
                                                 builder:
@@ -3391,7 +3391,7 @@ identifyPaymentMethodRetail({
 
                                           if (amountExchanged <
                                               double.parse((remaining)
-                                                  .toStringAsFixed(2))) {
+                                                  .toStringAsFixed(4))) {
                                             showDialog(
                                                 context: context,
                                                 builder:

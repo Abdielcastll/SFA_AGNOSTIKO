@@ -25,19 +25,19 @@ import '../../models/transaction_args.dart';
 import '../../pages/amount_input/amount_input.dart';
 
 priceToCurrencySelectedInput(productPrice, coin) {
-  double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+  double correctAmount = double.parse(productPrice.toStringAsFixed(4));
   if (coin!.contains('USD')) {
-    return double.parse(correctAmount.toStringAsFixed(2));
+    return double.parse(correctAmount.toStringAsFixed(4));
   } else if (coin.contains('VED')) {
-    return double.parse((correctAmount * 4.58).toStringAsFixed(2));
+    return double.parse((correctAmount * 4.58).toStringAsFixed(4));
   } else if (coin.contains('EUR')) {
-    return double.parse((correctAmount * 0.89).toStringAsFixed(2));
+    return double.parse((correctAmount * 0.89).toStringAsFixed(4));
   } else if (coin.contains('MXN')) {
-    return double.parse((correctAmount * 19.43).toStringAsFixed(2));
+    return double.parse((correctAmount * 19.43).toStringAsFixed(4));
   } else if (coin.contains('BTC')) {
-    return double.parse((correctAmount * 0.00011).toStringAsFixed(2));
+    return double.parse((correctAmount * 0.00011).toStringAsFixed(4));
   } else {
-    return double.parse((correctAmount * 4.58).toStringAsFixed(2));
+    return double.parse((correctAmount * 4.58).toStringAsFixed(4));
   }
 }
 
@@ -109,13 +109,13 @@ void modalBottomSheetForInvoices(
   if (remaining < 0) {
     leftoverAmount = 0.00;
   } else {
-    leftoverAmount = remaining.toStringAsFixed(2);
+    leftoverAmount = remaining.toStringAsFixed(4);
   }
 
   // double paidAmount = selectedCoin == null
-  //     ? double.parse(remaining.toStringAsFixed(2))
+  //     ? double.parse(remaining.toStringAsFixed(4))
   //     : priceToCurrencySelectedInput(
-  //         double.parse(remaining.toStringAsFixed(2)), selectedCoin);
+  //         double.parse(remaining.toStringAsFixed(4)), selectedCoin);
 
   showModalBottomSheet(
     elevation: 0,
@@ -457,7 +457,7 @@ void modalBottomSheetForInvoices(
                                                     ),
                                                     SizedBox(height: 30),
                                                     Text(
-                                                      '${AppLocalizations.of(context)!.upToPay}: ${priceFormat(double.parse(remaining.toStringAsFixed(2)) > 0.00 ? remaining : 0.00)}',
+                                                      '${AppLocalizations.of(context)!.upToPay}: ${priceFormat(double.parse(remaining.toStringAsFixed(4)) > 0.00 ? remaining : 0.00)}',
                                                       style: TextStyle(
                                                         fontFamily:
                                                             'Poppins-regular',
@@ -1310,7 +1310,7 @@ void modalBottomSheetForInvoices(
                                                                         height:
                                                                             5),
                                                                     Text(
-                                                                      // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(2), selectedCoin)}',
+                                                                      // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(4), selectedCoin)}',
                                                                       'Saldo: ${priceFormatForPaidAmount(remaining, selectedCoin)}',
                                                                       style:
                                                                           TextStyle(

@@ -127,7 +127,7 @@ Future createOrder(
 ) async {
   print('/// CREAR PEDIDO ///');
 
-  final String totalAsString = totalOfTheOrder.toStringAsFixed(2);
+  final String totalAsString = totalOfTheOrder.toStringAsFixed(4);
   // var correlativeNumber = await FirebaseFirestore.instance
   //     .collection('config')
   //     .doc('contador_pedidos')
@@ -202,7 +202,7 @@ Future createOrder(
       'fecha': Timestamp.fromDate(DateTime.now()),
       'fechaEntrega': Timestamp.fromDate(today),
       'idsProductos': productsIds,
-      'impuesto': double.parse(taxTotal!.toStringAsFixed(2)),
+      'impuesto': double.parse(taxTotal!.toStringAsFixed(4)),
       'nroCorrelativo': 'NaN',
       'ordenDeCompra': numberOrder ?? 0,
       'porcentajeDescuentoMaestro': client.masterDiscount,
@@ -286,7 +286,7 @@ Future createInvoice(
   final discount = masterDiscount;
   final date = orderDate;
   final tax = taxTotal;
-  final String totalAsString = totalOfTheOrder.toStringAsFixed(2);
+  final String totalAsString = totalOfTheOrder.toStringAsFixed(4);
 
   var correlativeNumber = await FirebaseFirestore.instance
       .collection('config')
@@ -573,19 +573,19 @@ Future registerBankCheckPayment({
   }
 
   priceReturnToOriginal(productPrice, coin) {
-    double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+    double correctAmount = double.parse(productPrice.toStringAsFixed(4));
     if (coin!.contains('USD')) {
       return correctAmount;
     } else if (coin.contains('VED')) {
-      return double.parse((correctAmount / 4.58).toStringAsFixed(2));
+      return double.parse((correctAmount / 4.58).toStringAsFixed(4));
     } else if (coin.contains('EUR')) {
-      return double.parse((correctAmount / 0.89).toStringAsFixed(2));
+      return double.parse((correctAmount / 0.89).toStringAsFixed(4));
     } else if (coin.contains('MXN')) {
-      return double.parse((correctAmount / 19.43).toStringAsFixed(2));
+      return double.parse((correctAmount / 19.43).toStringAsFixed(4));
     } else if (coin.contains('BTC')) {
-      return double.parse((correctAmount / 0.00011).toStringAsFixed(2));
+      return double.parse((correctAmount / 0.00011).toStringAsFixed(4));
     } else {
-      return double.parse((correctAmount / 4.58).toStringAsFixed(2));
+      return double.parse((correctAmount / 4.58).toStringAsFixed(4));
     }
   }
 
@@ -707,19 +707,19 @@ Future registerCriptoPayment(
     selectedCoinExchangeRate = exchangeRate['MXN'];
   }
   priceReturnToOriginal(productPrice, coin) {
-    double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+    double correctAmount = double.parse(productPrice.toStringAsFixed(4));
     if (coin!.contains('USD')) {
       return correctAmount;
     } else if (coin.contains('VED')) {
-      return double.parse((correctAmount / 4.58).toStringAsFixed(2));
+      return double.parse((correctAmount / 4.58).toStringAsFixed(4));
     } else if (coin.contains('EUR')) {
-      return double.parse((correctAmount / 0.89).toStringAsFixed(2));
+      return double.parse((correctAmount / 0.89).toStringAsFixed(4));
     } else if (coin.contains('MXN')) {
-      return double.parse((correctAmount / 19.43).toStringAsFixed(2));
+      return double.parse((correctAmount / 19.43).toStringAsFixed(4));
     } else if (coin.contains('BTC')) {
-      return double.parse((correctAmount / 0.00011).toStringAsFixed(2));
+      return double.parse((correctAmount / 0.00011).toStringAsFixed(4));
     } else {
-      return double.parse((correctAmount / 4.58).toStringAsFixed(2));
+      return double.parse((correctAmount / 4.58).toStringAsFixed(4));
     }
   }
 
@@ -859,23 +859,23 @@ Future registerDepositPayment({
     selectedCoinExchangeRate = exchangeRate['MXN'];
   }
   priceReturnToOriginal(productPrice, coin) {
-    double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+    double correctAmount = double.parse(productPrice.toStringAsFixed(4));
     if (coin!.contains('USD')) {
       return correctAmount;
     } else if (coin.contains('VED')) {
-      return double.parse((correctAmount / 4.58).toStringAsFixed(2));
+      return double.parse((correctAmount / 4.58).toStringAsFixed(4));
     } else if (coin.contains('EUR')) {
-      return double.parse((correctAmount / 0.89).toStringAsFixed(2));
+      return double.parse((correctAmount / 0.89).toStringAsFixed(4));
     } else if (coin.contains('MXN')) {
-      return double.parse((correctAmount / 19.43).toStringAsFixed(2));
+      return double.parse((correctAmount / 19.43).toStringAsFixed(4));
     } else if (coin.contains('BTC')) {
-      return double.parse((correctAmount / 0.00011).toStringAsFixed(2));
+      return double.parse((correctAmount / 0.00011).toStringAsFixed(4));
     } else {
-      return double.parse((correctAmount / 4.58).toStringAsFixed(2));
+      return double.parse((correctAmount / 4.58).toStringAsFixed(4));
     }
   }
   // final convertedAmount =
-  //     (doubleAmount / selectedCoinExchangeRate).toStringAsFixed(2);
+  //     (doubleAmount / selectedCoinExchangeRate).toStringAsFixed(4);
 
   print('Datos a Registrar: //////////////////////////////');
 
@@ -1127,24 +1127,24 @@ Future registerTransferPayment({
     selectedCoinExchangeRate = exchangeRate['MXN'];
   }
   priceReturnToOriginal(productPrice, coin) {
-    double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+    double correctAmount = double.parse(productPrice.toStringAsFixed(4));
     if (coin!.contains('USD')) {
       return correctAmount;
     } else if (coin.contains('VED')) {
-      return double.parse((correctAmount / 4.58).toStringAsFixed(2));
+      return double.parse((correctAmount / 4.58).toStringAsFixed(4));
     } else if (coin.contains('EUR')) {
-      return double.parse((correctAmount / 0.89).toStringAsFixed(2));
+      return double.parse((correctAmount / 0.89).toStringAsFixed(4));
     } else if (coin.contains('MXN')) {
-      return double.parse((correctAmount / 19.43).toStringAsFixed(2));
+      return double.parse((correctAmount / 19.43).toStringAsFixed(4));
     } else if (coin.contains('BTC')) {
-      return double.parse((correctAmount / 0.00011).toStringAsFixed(2));
+      return double.parse((correctAmount / 0.00011).toStringAsFixed(4));
     } else {
-      return double.parse((correctAmount / 4.58).toStringAsFixed(2));
+      return double.parse((correctAmount / 4.58).toStringAsFixed(4));
     }
   }
   // final doubleAmount = double.parse(amount);
   // final convertedAmount =
-  //     (doubleAmount / selectedCoinExchangeRate).toStringAsFixed(2);
+  //     (doubleAmount / selectedCoinExchangeRate).toStringAsFixed(4);
 
   print('Datos a registrar://///////////////////////////');
   const cancelled = false;
@@ -1281,7 +1281,7 @@ Future registerTransferInterPayment({
   }
   // final doubleAmount = double.parse(amount);
   // final convertedAmount =
-  //     (doubleAmount / selectedCoinExchangeRate).toStringAsFixed(2);
+  //     (doubleAmount / selectedCoinExchangeRate).toStringAsFixed(4);
 
   print('Datos a registrar://///////////////////////////');
   const cancelled = false;
@@ -1295,19 +1295,19 @@ Future registerTransferInterPayment({
   final referenceID = int.parse(referenceId!);
   final selectedExchangedRate = selectedCoinExchangeRate;
   priceReturnToOriginal(productPrice, coin) {
-    double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+    double correctAmount = double.parse(productPrice.toStringAsFixed(4));
     if (coin!.contains('USD')) {
       return correctAmount;
     } else if (coin.contains('VED')) {
-      return double.parse((correctAmount / 4.58).toStringAsFixed(2));
+      return double.parse((correctAmount / 4.58).toStringAsFixed(4));
     } else if (coin.contains('EUR')) {
-      return double.parse((correctAmount / 0.89).toStringAsFixed(2));
+      return double.parse((correctAmount / 0.89).toStringAsFixed(4));
     } else if (coin.contains('MXN')) {
-      return double.parse((correctAmount / 19.43).toStringAsFixed(2));
+      return double.parse((correctAmount / 19.43).toStringAsFixed(4));
     } else if (coin.contains('BTC')) {
-      return double.parse((correctAmount / 0.00011).toStringAsFixed(2));
+      return double.parse((correctAmount / 0.00011).toStringAsFixed(4));
     } else {
-      return double.parse((correctAmount / 4.58).toStringAsFixed(2));
+      return double.parse((correctAmount / 4.58).toStringAsFixed(4));
     }
   }
 
@@ -1391,7 +1391,7 @@ Future<int> completePaymentProcess(
   randomID,
 ) async {
   print('CREAR PEDIDO COMPLETADO');
-  final String totalAsString = totalOfTheOrder.toStringAsFixed(2);
+  final String totalAsString = totalOfTheOrder.toStringAsFixed(4);
   final List quantitiesList = [];
   final List productsIds = [];
   final List<Map<dynamic, dynamic>> products = [];
@@ -1445,7 +1445,7 @@ Future<int> completePaymentProcess(
       'fecha': Timestamp.fromDate(DateTime.now()),
       'fechaEntrega': Timestamp.fromDate(today),
       'idsProductos': productsIds,
-      'impuesto': double.parse(taxTotal!.toStringAsFixed(2)),
+      'impuesto': double.parse(taxTotal!.toStringAsFixed(4)),
       'nroCorrelativo': 'NaN',
       'ordenDeCompra': numberOrder ?? 0,
       'porcentajeDescuentoMaestro': client.masterDiscount,
@@ -1525,7 +1525,7 @@ Future<int> completePaymentProcess(
     'cliente': clientID,
     'descuentoMaestro': discount,
     'fecha': Timestamp.fromDate(DateTime.now()),
-    'impuesto': double.parse(tax!.toStringAsFixed(2)),
+    'impuesto': double.parse(tax!.toStringAsFixed(4)),
     'montoTotal': double.parse(totalAsString),
     'nroCorrelativo': correlativeNumber + 1,
     'pagada': isPaid,

@@ -143,7 +143,7 @@ class _ProductsInCartState extends State<ProductsInCart> {
       //                   Container(
       //                     margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
       //                     child: Text(
-      //                       'P/U: ${product.unitPrice.toStringAsFixed(2)}',
+      //                       'P/U: ${product.unitPrice.toStringAsFixed(4)}',
       //                       style: TextStyle(
       //                         color: Colors.grey,
       //                         fontFamily: 'Poppins-regular',
@@ -154,7 +154,7 @@ class _ProductsInCartState extends State<ProductsInCart> {
       //                   Container(
       //                     margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
       //                     child: Text(
-      //                       'Total: ${product.totalPrice.toStringAsFixed(2)}',
+      //                       'Total: ${product.totalPrice.toStringAsFixed(4)}',
       //                       style: TextStyle(
       //                         color: Colors.purple.shade600,
       //                         fontFamily: 'Poppins-regular',

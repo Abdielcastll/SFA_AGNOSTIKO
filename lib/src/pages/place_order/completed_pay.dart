@@ -97,7 +97,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
         Provider.of<CurrencyProvider>(context).currentCurrency ?? 'MXN';
 
     priceFormat(productPrice) {
-      double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+      double correctAmount = double.parse(productPrice.toStringAsFixed(4));
       if (currentCoin.contains('USD')) {
         return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
             .format(productPrice)
@@ -239,7 +239,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
                               priceFormat(widget.total),
                               textAlign: TextAlign.center,
                               // currentCoin != 'Dolares - USD'
-                              //     ? '${priceFormat(widget.total)} = \$ ${widget.total.toStringAsFixed(2)}'
+                              //     ? '${priceFormat(widget.total)} = \$ ${widget.total.toStringAsFixed(4)}'
                               //     : '${priceFormat(widget.total)}',
                               style: TextStyle(
                                 color: myTheme.colorScheme.onPrimaryContainer,
