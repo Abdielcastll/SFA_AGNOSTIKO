@@ -475,9 +475,10 @@ identifyPaymentMethod({
                             onPressed: () async {
                               // Crear en DB una visita
                               if (selectedCoin != null) {
-                                if (paidAmount != null ||
-                                    paidAmount != null ||
-                                    paidAmount! <= totalOfTheOrder!) {
+                                if (paidAmount != null || paidAmount != null
+                                    // ||
+                                    // paidAmount! <= totalOfTheOrder!
+                                    ) {
                                   if (selectedBank != null) {
                                     if (accountNumber != '' ||
                                         accountHolder != '') {
@@ -1358,9 +1359,10 @@ identifyPaymentMethod({
                               // Crear en DB una visita
 
                               if (selectedCoin != null) {
-                                if (paidAmount != null ||
-                                    paidAmount != null ||
-                                    paidAmount! <= totalOfTheOrder!) {
+                                if (paidAmount != null || paidAmount != null
+                                    // ||
+                                    // paidAmount! <= totalOfTheOrder!
+                                    ) {
                                   if (selectedBank != null) {
                                     if (accountNumber != '' ||
                                         voucherNumber != '') {
@@ -2491,9 +2493,10 @@ identifyPaymentMethod({
                                 // TODO: Temporalmente regresara a antes
 
                                 if (selectedCoin != null) {
-                                  if (paidAmount != null ||
-                                      paidAmount != null ||
-                                      paidAmount! <= totalOfTheOrder!) {
+                                  if (paidAmount != null || paidAmount != null
+                                      // ||
+                                      // paidAmount! <= totalOfTheOrder!
+                                      ) {
                                     if (selectedBank != null) {
                                       if (referenceId != '') {
                                         // if (paidAmount! >
@@ -2783,9 +2786,10 @@ identifyPaymentMethod({
                               } else if (selectedValueA ==
                                   'Transf-internacional') {
                                 if (selectedCoin != null) {
-                                  if (paidAmount != null ||
-                                      paidAmount != null ||
-                                      paidAmount! <= totalOfTheOrder!) {
+                                  if (paidAmount != null || paidAmount != null
+                                      // ||
+                                      // paidAmount! <= totalOfTheOrder!
+                                      ) {
                                     if (selectedBank != null) {
                                       if (referenceId != '') {
                                         // if (paidAmount! >

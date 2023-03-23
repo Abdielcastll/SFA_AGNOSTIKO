@@ -457,7 +457,7 @@ void modalBottomSheetForInvoices(
                                                     ),
                                                     SizedBox(height: 30),
                                                     Text(
-                                                      '${AppLocalizations.of(context)!.upToPay}: ${priceFormat(remaining > 0.00 ? remaining : 0.00)}',
+                                                      '${AppLocalizations.of(context)!.upToPay}: ${priceFormat(double.parse(remaining.toStringAsFixed(2)) > 0.00 ? remaining : 0.00)}',
                                                       style: TextStyle(
                                                         fontFamily:
                                                             'Poppins-regular',
