@@ -398,19 +398,19 @@ Future createInvoice(
 
 Future registerDebitCreditCardPayment(InvoiceData data) async {
   priceReturnToOriginal(productPrice, coin) {
-    double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+    double correctAmount = double.parse(productPrice.toStringAsFixed(4));
     if (coin!.contains('USD')) {
       return correctAmount;
     } else if (coin.contains('VED')) {
-      return double.parse((correctAmount / 4.58).toStringAsFixed(2));
+      return double.parse((correctAmount / 4.58).toString());
     } else if (coin.contains('EUR')) {
-      return double.parse((correctAmount / 0.89).toStringAsFixed(2));
+      return double.parse((correctAmount / 0.89).toString());
     } else if (coin.contains('MXN')) {
-      return double.parse((correctAmount / 19.43).toStringAsFixed(2));
+      return double.parse((correctAmount / 19.43).toString());
     } else if (coin.contains('BTC')) {
-      return double.parse((correctAmount / 0.00011).toStringAsFixed(2));
+      return double.parse((correctAmount / 0.00011).toString());
     } else {
-      return double.parse((correctAmount / 4.58).toStringAsFixed(2));
+      return double.parse((correctAmount / 4.58).toString());
     }
   }
 
@@ -989,22 +989,6 @@ Future registerMoneyPayment({
     selectedCoinExchangeRate = exchangeRate['BTC'];
   } else if (currency.toString().contains('MXN')) {
     selectedCoinExchangeRate = exchangeRate['MXN'];
-  }
-  priceReturnToOriginal(productPrice, coin) {
-    double correctAmount = double.parse(productPrice.toStringAsFixed(2));
-    if (coin!.contains('USD')) {
-      return correctAmount;
-    } else if (coin.contains('VED')) {
-      return double.parse((correctAmount / 4.58).toStringAsFixed(2));
-    } else if (coin.contains('EUR')) {
-      return double.parse((correctAmount / 0.89).toStringAsFixed(2));
-    } else if (coin.contains('MXN')) {
-      return double.parse((correctAmount / 19.43).toStringAsFixed(2));
-    } else if (coin.contains('BTC')) {
-      return double.parse((correctAmount / 0.00011).toStringAsFixed(2));
-    } else {
-      return double.parse((correctAmount / 4.58).toStringAsFixed(2));
-    }
   }
 
   // final doubleAmount = double.parse(amount);
