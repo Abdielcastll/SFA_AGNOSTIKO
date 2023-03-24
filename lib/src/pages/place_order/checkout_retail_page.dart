@@ -10,6 +10,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/examples/clients_example.dart';
 import 'package:pwa_sales2go_flutter/examples/products_example.dart';
+import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/objectbox.g.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
@@ -1039,22 +1040,28 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                             listen: false);
 
                                     if (selectedValue2 != null) {
-                                      var result = await createOrder(
-                                        widget.client,
-                                        userUid,
-                                        commentary,
-                                        masterDiscountTotal,
-                                        widget.cart,
-                                        selectedValue2,
-                                        selectedValue,
-                                        today,
-                                        taxTotal,
-                                        numberOrder,
-                                        widget.subTotal,
-                                        totalOfTheOrder,
-                                        discountByInput,
-                                      );
+                                      try {
+                                        await createOrder(
+                                          widget.client,
+                                          userUid,
+                                          commentary,
+                                          masterDiscountTotal,
+                                          widget.cart,
+                                          selectedValue2,
+                                          selectedValue,
+                                          today,
+                                          taxTotal,
+                                          numberOrder,
+                                          widget.subTotal,
+                                          totalOfTheOrder,
+                                          discountByInput,
+                                        );
+                                      } catch (e) {
+                                        print('ERROR AL GUARDAR PEDIDO');
+                                        print(e);
+                                      }
                                       orderActive.setOrder(false, Clients());
+                                      objectBox.delelteAllShoppingCart();
                                       completeOrder();
                                     } else {
                                       Fluttertoast.showToast(

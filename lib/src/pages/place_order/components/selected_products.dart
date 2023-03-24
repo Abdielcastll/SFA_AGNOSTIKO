@@ -277,13 +277,13 @@ class _SelectedProductsState extends State<SelectedProducts> {
         StreamBuilder<List<ShoppingCartProduct>?>(
           stream: streamShoppingCartProducts,
           builder: (context, snapshot) {
+            var subTotal = 0.0;
             if (!snapshot.hasData) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
             } else {
               final products = snapshot.data;
-              var subTotal = 0.0;
 
               products?.forEach((product) {
                 var totalAmount = (double.parse(product.totalAmount!) *
@@ -291,6 +291,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                     .toString();
                 var myInt = double.parse(totalAmount);
                 subTotal += myInt;
+                print(subTotal);
               });
 
               return SingleChildScrollView(

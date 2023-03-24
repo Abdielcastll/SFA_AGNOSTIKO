@@ -1,13 +1,16 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
+import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/auth.dart';
@@ -427,274 +430,411 @@ void modalBottomSheetForOrders(
                                         color: myTheme.colorScheme.primary),
                                     child: TextButton(
                                       onPressed: () {
-                                        // isRetail
-                                        //     ? showDialog(
-                                        //         context: context,
-                                        //         builder:
-                                        //             (BuildContext context) {
-                                        //           print(
-                                        //               'Retomar proceso de Retail');
+                                        isRetail
+                                            ? showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  print(
+                                                      'Retomar proceso de Retail');
 
-                                        //           return AlertDialog(
-                                        //             shape:
-                                        //                 RoundedRectangleBorder(
-                                        //               borderRadius:
-                                        //                   BorderRadius.circular(
-                                        //                       20),
-                                        //             ),
-                                        //             title: Text(
-                                        //               '¿Quiere volver a activar el pedido?',
-                                        //               textAlign:
-                                        //                   TextAlign.center,
-                                        //               style: TextStyle(
-                                        //                 fontFamily:
-                                        //                     'Poppins-regular',
-                                        //                 color: myTheme
-                                        //                     .colorScheme
-                                        //                     .onPrimaryContainer,
-                                        //                 fontSize: 16,
-                                        //                 fontWeight:
-                                        //                     FontWeight.bold,
-                                        //               ),
-                                        //             ),
-                                        //             content: Row(
-                                        //               mainAxisAlignment:
-                                        //                   MainAxisAlignment
-                                        //                       .spaceEvenly,
-                                        //               children: [
-                                        //                 TextButton(
-                                        //                   onPressed: () {
-                                        //                     Navigator.pop(
-                                        //                         context);
-                                        //                   },
-                                        //                   child: Text(
-                                        //                     AppLocalizations.of(
-                                        //                             context)!
-                                        //                         .goBack,
-                                        //                     style: TextStyle(
-                                        //                       fontFamily:
-                                        //                           'Poppins-regular',
-                                        //                       color: myTheme
-                                        //                           .colorScheme
-                                        //                           .primary,
-                                        //                       fontSize: 14,
-                                        //                       fontWeight:
-                                        //                           FontWeight
-                                        //                               .bold,
-                                        //                     ),
-                                        //                   ),
-                                        //                 ),
-                                        //                 Container(
-                                        //                   width: 150,
-                                        //                   height: 40,
-                                        //                   decoration: BoxDecoration(
-                                        //                       borderRadius:
-                                        //                           BorderRadius
-                                        //                               .circular(
-                                        //                                   16),
-                                        //                       color: myTheme
-                                        //                           .colorScheme
-                                        //                           .primary),
-                                        //                   child: TextButton(
-                                        //                     onPressed:
-                                        //                         () async {
-                                        //                       // Mandar pedido a proceso de pago retail una vez mas
-                                        //                       final orderActive =
-                                        //                           Provider.of<
-                                        //                                   OrderProvider>(
-                                        //                               context,
-                                        //                               listen:
-                                        //                                   false);
-                                        //                       print(
-                                        //                           'Activando pedido');
-                                        //                       print(products);
-                                        //                       Clients?
-                                        //                           oldClient =
-                                        //                           Clients(
-                                        //                         active: client
-                                        //                             .active,
-                                        //                         clientDocumentId:
-                                        //                             client
-                                        //                                 .clientDocumentId,
-                                        //                         dispatchAdress:
-                                        //                             client
-                                        //                                 .dispatchAdress,
-                                        //                         email: client
-                                        //                             .email,
-                                        //                         fiscalAdress: client
-                                        //                             .fiscalAdress,
-                                        //                         id: client.id,
-                                        //                         idType: client
-                                        //                             .idType,
-                                        //                         madeBy: client
-                                        //                             .madeBy,
-                                        //                         masterDiscount:
-                                        //                             client
-                                        //                                 .masterDiscount,
-                                        //                         modified: client
-                                        //                             .modified,
-                                        //                         name:
-                                        //                             client.name,
-                                        //                         phone1: client
-                                        //                             .phone1,
-                                        //                         phone2: client
-                                        //                             .phone2,
-                                        //                         prices: client
-                                        //                             .prices,
-                                        //                         prospect: client
-                                        //                             .prospect,
-                                        //                         specialContributor:
-                                        //                             client
-                                        //                                 .specialContributor,
-                                        //                         zone:
-                                        //                             client.zone,
-                                        //                       );
-                                        //                       products.forEach(
-                                        //                           (value) {
-                                        //                         print(value[
-                                        //                             'codigo']);
-                                        //                       });
-                                        //                       // orderActive
-                                        //                       //     .setOrder(
-                                        //                       //         true,
-                                        //                       //         oldClient);
-
-                                        //                       // doublePop();
-                                        //                     },
-                                        //                     style: TextButton
-                                        //                         .styleFrom(
-                                        //                       foregroundColor:
-                                        //                           myTheme
-                                        //                               .colorScheme
-                                        //                               .primary,
-                                        //                     ),
-                                        //                     child: Text(
-                                        //                       'Aceptar',
-                                        //                       style: TextStyle(
-                                        //                         fontFamily:
-                                        //                             'Poppins-regular',
-                                        //                         color: Colors
-                                        //                             .white,
-                                        //                         fontSize: 14,
-                                        //                         fontWeight:
-                                        //                             FontWeight
-                                        //                                 .bold,
-                                        //                       ),
-                                        //                     ),
-                                        //                   ),
-                                        //                 ),
-                                        //               ],
-                                        //             ),
-                                        //           );
-                                        //         })
-                                        //     :
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
-                                              ),
-                                              title: Text(
-                                                AppLocalizations.of(context)!
-                                                    .createInvoice,
-                                                style: TextStyle(
-                                                  fontFamily: 'Poppins-regular',
-                                                  color: myTheme
-                                                      .colorScheme.secondary,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              content: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceEvenly,
-                                                children: [
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                    child: Text(
-                                                      AppLocalizations.of(
-                                                              context)!
-                                                          .goBack,
+                                                  return AlertDialog(
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20),
+                                                    ),
+                                                    title: Text(
+                                                      '¿Quiere volver a activar el pedido?',
+                                                      textAlign:
+                                                          TextAlign.center,
                                                       style: TextStyle(
                                                         fontFamily:
                                                             'Poppins-regular',
                                                         color: myTheme
                                                             .colorScheme
-                                                            .primary,
-                                                        fontSize: 14,
+                                                            .onPrimaryContainer,
+                                                        fontSize: 16,
                                                         fontWeight:
                                                             FontWeight.bold,
                                                       ),
                                                     ),
-                                                  ),
-                                                  Container(
-                                                    width: 150,
-                                                    height: 40,
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(16),
+                                                    content: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceEvenly,
+                                                      children: [
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          child: Text(
+                                                            AppLocalizations.of(
+                                                                    context)!
+                                                                .goBack,
+                                                            style: TextStyle(
+                                                              fontFamily:
+                                                                  'Poppins-regular',
+                                                              color: myTheme
+                                                                  .colorScheme
+                                                                  .primary,
+                                                              fontSize: 14,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          width: 150,
+                                                          height: 40,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          16),
+                                                              color: myTheme
+                                                                  .colorScheme
+                                                                  .primary),
+                                                          child: TextButton(
+                                                            onPressed:
+                                                                () async {
+                                                              // Mandar pedido a proceso de pago retail una vez mas
+                                                              final orderActive =
+                                                                  Provider.of<
+                                                                          OrderProvider>(
+                                                                      context,
+                                                                      listen:
+                                                                          false);
+                                                              List<ShoppingCartProduct>
+                                                                  savedProducts =
+                                                                  [];
+                                                              print(
+                                                                  'Activando pedido');
+                                                              print(products);
+                                                              Clients?
+                                                                  oldClient =
+                                                                  Clients(
+                                                                active: client
+                                                                    .active,
+                                                                clientDocumentId:
+                                                                    client
+                                                                        .clientDocumentId,
+                                                                dispatchAdress:
+                                                                    client
+                                                                        .dispatchAdress,
+                                                                email: client
+                                                                    .email,
+                                                                fiscalAdress: client
+                                                                    .fiscalAdress,
+                                                                id: client.id,
+                                                                idType: client
+                                                                    .idType,
+                                                                madeBy: client
+                                                                    .madeBy,
+                                                                masterDiscount:
+                                                                    client
+                                                                        .masterDiscount,
+                                                                modified: client
+                                                                    .modified,
+                                                                name:
+                                                                    client.name,
+                                                                phone1: client
+                                                                    .phone1,
+                                                                phone2: client
+                                                                    .phone2,
+                                                                prices: client
+                                                                    .prices,
+                                                                prospect: client
+                                                                    .prospect,
+                                                                specialContributor:
+                                                                    client
+                                                                        .specialContributor,
+                                                                zone:
+                                                                    client.zone,
+                                                              );
+
+                                                              await products
+                                                                  .forEach(
+                                                                      (productValue) async {
+                                                                // print(value[
+                                                                //     'codigo']);
+                                                                String?
+                                                                    productCatalogueId;
+                                                                String?
+                                                                    promotion;
+                                                                int?
+                                                                    productAvaliableStock;
+                                                                await productsCollection
+                                                                    .where(
+                                                                        'codigo',
+                                                                        isEqualTo:
+                                                                            productValue[
+                                                                                'codigo'])
+                                                                    .get()
+                                                                    .then(
+                                                                        (productDoc) {
+                                                                  for (var element
+                                                                      in productDoc
+                                                                          .docs) {
+                                                                    productCatalogueId = element
+                                                                            .data()
+                                                                            .toString()
+                                                                            .contains(
+                                                                                'catalogo')
+                                                                        ? element
+                                                                            .get('catalogo')
+                                                                            .id
+                                                                        : '';
+                                                                    promotion = element
+                                                                            .data()
+                                                                            .toString()
+                                                                            .contains(
+                                                                                'promocion')
+                                                                        ? element
+                                                                            .get('promocion')
+                                                                            .id
+                                                                        : '';
+                                                                  }
+                                                                });
+                                                                print(
+                                                                    'test result $productCatalogueId');
+                                                                print(
+                                                                    'test result $promotion');
+                                                                await stockCollection
+                                                                    .doc(
+                                                                        'productos')
+                                                                    .get()
+                                                                    .then(
+                                                                        (stock) {
+                                                                  productAvaliableStock = stock
+                                                                          .data()
+                                                                          .toString()
+                                                                          .contains(
+                                                                              'valores')
+                                                                      ? stock.get(
+                                                                              'valores')[
+                                                                          '${productValue['codigo']}']
+                                                                      : 0;
+                                                                });
+                                                                print(
+                                                                    'test result: $productAvaliableStock');
+                                                                ShoppingCartProduct
+                                                                    productForCart =
+                                                                    ShoppingCartProduct(
+                                                                  availableStock:
+                                                                      productAvaliableStock,
+                                                                  code: productValue[
+                                                                      'codigo'],
+                                                                  listOfPricesId:
+                                                                      productValue[
+                                                                          'idListaDePrecios'],
+                                                                  name: productValue[
+                                                                      'nombre'],
+                                                                  productId:
+                                                                      productValue[
+                                                                          'codigo'],
+                                                                  productQuantity:
+                                                                      productValue[
+                                                                          'cantidad'],
+                                                                  promotion:
+                                                                      promotion,
+                                                                  totalAmount: productValue[
+                                                                          'precioUnitario']
+                                                                      // productValue[
+                                                                      //         'monto']
+                                                                      .toString(),
+                                                                  unitPrice: productValue[
+                                                                          'precioUnitario']
+                                                                      .toString(),
+                                                                  urlPicture:
+                                                                      productCatalogueId,
+                                                                );
+                                                                print(
+                                                                    'Producto en carro creado');
+                                                                print(
+                                                                    productForCart
+                                                                        .name);
+                                                                objectBox
+                                                                    .insertShoppingCartProduct(
+                                                                        productForCart);
+                                                                savedProducts.add(
+                                                                    productForCart);
+                                                              });
+                                                              print(
+                                                                  'LISTA DE PRODUCTOS $savedProducts');
+
+                                                              orderActive
+                                                                  .setOrder(
+                                                                      true,
+                                                                      oldClient);
+
+                                                              deleteOrder(
+                                                                  orderDocumentId,
+                                                                  client
+                                                                      .clientDocumentId);
+                                                              doublePop();
+                                                              Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                  settings:
+                                                                      const RouteSettings(
+                                                                          name:
+                                                                              "ORDER"),
+                                                                  builder:
+                                                                      (context) =>
+                                                                          const OrderPage(),
+                                                                ),
+                                                              );
+                                                            },
+                                                            style: TextButton
+                                                                .styleFrom(
+                                                              foregroundColor:
+                                                                  myTheme
+                                                                      .colorScheme
+                                                                      .primary,
+                                                            ),
+                                                            child: Text(
+                                                              'Aceptar',
+                                                              style: TextStyle(
+                                                                fontFamily:
+                                                                    'Poppins-regular',
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize: 14,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  );
+                                                })
+                                            : showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return AlertDialog(
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20),
+                                                    ),
+                                                    title: Text(
+                                                      AppLocalizations.of(
+                                                              context)!
+                                                          .createInvoice,
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            'Poppins-regular',
                                                         color: myTheme
                                                             .colorScheme
-                                                            .primary),
-                                                    child: TextButton(
-                                                      onPressed: () async {
-                                                        // Mandar pedido a Facturar
-                                                        await createInvoice(
-                                                          client,
-                                                          discountMaster,
-                                                          orderDate,
-                                                          tax,
-                                                          total,
-                                                          orderDocumentId,
-                                                          subTotal,
-                                                          userUID,
-                                                        );
-
-                                                        doublePop();
-                                                      },
-                                                      style:
-                                                          TextButton.styleFrom(
-                                                        foregroundColor: myTheme
-                                                            .colorScheme
-                                                            .primary,
-                                                      ),
-                                                      child: Text(
-                                                        AppLocalizations.of(
-                                                                context)!
-                                                            .createInvoiceConfirmation,
-                                                        style: TextStyle(
-                                                          fontFamily:
-                                                              'Poppins-regular',
-                                                          color: Colors.white,
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
+                                                            .secondary,
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.bold,
                                                       ),
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                            );
-                                          },
-                                        );
+                                                    content: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceEvenly,
+                                                      children: [
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          child: Text(
+                                                            AppLocalizations.of(
+                                                                    context)!
+                                                                .goBack,
+                                                            style: TextStyle(
+                                                              fontFamily:
+                                                                  'Poppins-regular',
+                                                              color: myTheme
+                                                                  .colorScheme
+                                                                  .primary,
+                                                              fontSize: 14,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          width: 150,
+                                                          height: 40,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          16),
+                                                              color: myTheme
+                                                                  .colorScheme
+                                                                  .primary),
+                                                          child: TextButton(
+                                                            onPressed:
+                                                                () async {
+                                                              // Mandar pedido a Facturar
+                                                              await createInvoice(
+                                                                client,
+                                                                discountMaster,
+                                                                orderDate,
+                                                                tax,
+                                                                total,
+                                                                orderDocumentId,
+                                                                subTotal,
+                                                                userUID,
+                                                              );
+
+                                                              doublePop();
+                                                            },
+                                                            style: TextButton
+                                                                .styleFrom(
+                                                              foregroundColor:
+                                                                  myTheme
+                                                                      .colorScheme
+                                                                      .primary,
+                                                            ),
+                                                            child: Text(
+                                                              AppLocalizations.of(
+                                                                      context)!
+                                                                  .createInvoiceConfirmation,
+                                                              style: TextStyle(
+                                                                fontFamily:
+                                                                    'Poppins-regular',
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize: 14,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  );
+                                                },
+                                              );
                                       },
                                       style: TextButton.styleFrom(
                                         foregroundColor:
                                             myTheme.colorScheme.primary,
                                       ),
                                       child: Text(
-                                        // isRetail
-                                        //     ? "Retomar proceso"
-                                        //     :
-                                        AppLocalizations.of(context)!
-                                            .createInvoiceConfirmation,
+                                        isRetail
+                                            ? "Retomar pedido"
+                                            : AppLocalizations.of(context)!
+                                                .createInvoiceConfirmation,
                                         style: TextStyle(
                                           fontFamily: 'Poppins-regular',
                                           color: Colors.white,
