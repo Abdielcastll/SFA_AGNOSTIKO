@@ -232,7 +232,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
     print("Retail: ${userRole?.isRetail}");
 
     priceFormat(productPrice) {
-      double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+      double correctAmount = double.parse(productPrice.toStringAsFixed(4));
       if (currentCoin!.contains('USD')) {
         return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
             .format(productPrice)

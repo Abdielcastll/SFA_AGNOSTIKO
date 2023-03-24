@@ -34,7 +34,7 @@ Future<Map<String, dynamic>> pharosGenerateSaleMsg(
   if (amountInCents == null) {
     throw StateError("El monto no puede ser un valor nulo");
   }
-  final amount = (amountInCents / 100).toDouble().toStringAsFixed(2);
+  final amount = (amountInCents / 100).toDouble().toStringAsFixed(4);
 
   final tags = await _getTagsPharos();
   String readingMethod = _getReadingMethod(transactionArgs);
