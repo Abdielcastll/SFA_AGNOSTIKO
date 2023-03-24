@@ -675,6 +675,28 @@ void modalBottomSheetForOrders(
                                                                   orderDocumentId,
                                                                   client
                                                                       .clientDocumentId);
+                                                              ScaffoldMessenger
+                                                                  .of(context)
+                                                                ..removeCurrentSnackBar()
+                                                                ..showSnackBar(
+                                                                  SnackBar(
+                                                                    backgroundColor: myTheme
+                                                                        .colorScheme
+                                                                        .primary,
+                                                                    duration: const Duration(
+                                                                        seconds:
+                                                                            2),
+                                                                    content:
+                                                                        const Text(
+                                                                      "Orden retomada dentro del carrito",
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontFamily:
+                                                                            'Poppins-regular',
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                );
                                                               doublePop();
                                                               Navigator.push(
                                                                 context,
