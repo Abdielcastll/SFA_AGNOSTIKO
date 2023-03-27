@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +9,7 @@ import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
@@ -113,9 +115,13 @@ class _OrderCardBodyState extends State<OrderCardBody> {
     final userUID = Provider.of<UserModel>(context).uid;
 
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
+    // Get if user is a retail seller
+    final userRole = Provider.of<UserRole?>(context, listen: true);
+    print('User Role ${userRole?.name}');
+    print("Retail: ${userRole?.isRetail}");
 
     priceFormat(productPrice) {
-      double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+      double correctAmount = double.parse(productPrice.toStringAsFixed(4));
       if (currentCoin!.contains('USD')) {
         return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
             .format(productPrice)
@@ -196,6 +202,7 @@ class _OrderCardBodyState extends State<OrderCardBody> {
                 currentClient,
                 widget.widget.date,
                 widget.widget.correlativeNumber,
+                isRetail: userRole?.isRetail,
               )
             : modalBottomSheetForOrders(
                 true,
@@ -226,6 +233,7 @@ class _OrderCardBodyState extends State<OrderCardBody> {
                 currentClient,
                 widget.widget.date,
                 widget.widget.correlativeNumber,
+                isRetail: userRole?.isRetail,
               );
       },
       child: Container(

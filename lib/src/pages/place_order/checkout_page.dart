@@ -112,20 +112,20 @@ class _CheckoutBodyState extends State<CheckoutBody> {
 
   double totalDiscountApplied() {
     var total =
-        (totalPriceOfTheOrder() * (discountByInput / 100)).toStringAsFixed(2);
+        (totalPriceOfTheOrder() * (discountByInput / 100)).toStringAsFixed(4);
     double doubleTotal = double.parse(total);
     return doubleTotal;
   }
 
   double totalWithDiscount() {
     var total =
-        (totalPriceOfTheOrder() - totalDiscountApplied()).toStringAsFixed(2);
+        (totalPriceOfTheOrder() - totalDiscountApplied()).toStringAsFixed(4);
     double doubleTotal = double.parse(total);
     return doubleTotal;
   }
 
   // double totalDiscountApplied() {
-  //   var total = (widget.subTotal - (discountByInput / 100)).toStringAsFixed(2);
+  //   var total = (widget.subTotal - (discountByInput / 100)).toStringAsFixed(4);
   //   double doubleTotal = double.parse(total);
   //   return doubleTotal;
   // }
@@ -168,7 +168,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
 
     priceFormat(productPrice) {
-      double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+      double correctAmount = double.parse(productPrice.toStringAsFixed(4));
       if (currentCoin!.contains('USD')) {
         return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
             .format(productPrice)

@@ -198,14 +198,14 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                                 print(e);
                               }),
                               builder: (context, snapshot) {
-                                final catalogueID = snapshot.data!.toString();
+                                final catalogueID = snapshot.data?.toString();
                                 if (snapshot.hasData) {
                                   return FutureBuilder<String?>(
                                     future: FirebaseStorage.instance
                                         .ref()
                                         .child('imagenes')
                                         .child('catalogos')
-                                        .child(catalogueID)
+                                        .child(catalogueID!)
                                         .child('1')
                                         .getDownloadURL()
                                         .catchError((e) {
@@ -216,14 +216,14 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                                     }),
                                     builder: (context, snapshot) {
                                       if (snapshot.hasData) {
-                                        final url = snapshot.data!.toString();
+                                        final url = snapshot.data?.toString();
                                         print('URL FOR CATEGORIE');
                                         print(url);
                                         return CachedNetworkImage(
                                           fit: BoxFit.cover,
                                           imageUrl:
                                               // 'assets/images/nocategorie.jpg',
-                                              url,
+                                              url!,
                                           placeholder: (context, url) =>
                                               Container(
                                             width: 300,
@@ -304,7 +304,7 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                           child: Text(
                             '$categorie',
                             textAlign: TextAlign.center,
-                            maxLines: 1,
+                            maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontFamily: 'Poppins-regular',

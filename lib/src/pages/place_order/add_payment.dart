@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_checkout.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/identify_payment_method.dart';
@@ -159,7 +160,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
   }
 
   priceToCurrencySelected(double productPrice, String coin) {
-    double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+    double correctAmount = double.parse(productPrice.toStringAsFixed(4));
     if (coin.contains('USD')) {
       return correctAmount;
     } else if (coin.contains('VED')) {
@@ -183,6 +184,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
     }
     print('paymentsTotalAmount: $paymentsTotalAmount');
     print('Remaining on retail: ${remaining}');
+    print('Amount on retail: ${amountToPay}');
 
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     String formattedDate = dateFormatter.format(today);
@@ -236,7 +238,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
       }
 
       coin ??= 'Dolares - USD';
-      double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+      double correctAmount = double.parse(productPrice.toStringAsFixed(4));
       if (coin!.contains('USD')) {
         return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
             .format(productPrice)
@@ -689,10 +691,11 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                 0,
                                 0,
                               ),
+                              // priceFormatForPaidAmount(remaining, selectedCoin),
                               hintText: priceFormatForPaidAmount(
                                       double.parse(remaining == 0
                                           ? '0.00'
-                                          : remaining.toStringAsFixed(2)),
+                                          : remaining.toStringAsFixed(4)),
                                       selectedCoin)
                                   .toString(),
                               hintStyle: TextStyle(
@@ -844,9 +847,13 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                         // que consultar si primero se va a
                                         // pagar completo o por partes aca
                                         priceFormatForPaidAmount(
-                                                widget.subTotal +
-                                                    widget.tax -
-                                                    widget.discount,
+                                                double.parse((widget.subTotal)
+                                                        .toStringAsFixed(4)) +
+                                                    double.parse((widget.tax)
+                                                        .toStringAsFixed(4)) -
+                                                    double.parse((widget
+                                                            .discount)
+                                                        .toStringAsFixed(4)),
                                                 selectedCoin)
                                             .toString(),
                                         style: TextStyle(
@@ -871,7 +878,6 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(2), selectedCoin)}',
                                           'Monto pagado:',
                                           style: TextStyle(
                                             fontFamily: 'Poppins-regular',
@@ -881,7 +887,6 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                           ),
                                         ),
                                         Text(
-                                          // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(2), selectedCoin)}',
                                           priceFormat(paymentsTotalAmount),
                                           style: TextStyle(
                                             fontFamily: 'Poppins-regular',
@@ -906,7 +911,6 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(2), selectedCoin)}',
                                         'Saldo:',
                                         style: TextStyle(
                                           fontFamily: 'Poppins-regular',
@@ -916,7 +920,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                         ),
                                       ),
                                       Text(
-                                        // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(2), selectedCoin)}',
+                                        // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(4), selectedCoin)}',
                                         priceFormatForPaidAmount(
                                             remaining, selectedCoin),
                                         style: TextStyle(
@@ -936,14 +940,15 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                     client: widget.client,
                                     invoiceDocumentID: widget.invoiceDocumentID,
                                     paidAmount: amountChanged
-                                        ? amountToPay
+                                        ? roundAmount(amountToPay)
                                         : priceToCurrencySelected(
-                                            amountToPay, selectedCoin!),
+                                            roundAmount(amountToPay),
+                                            selectedCoin!),
                                     totalOfTheOrder: getTotalAmount,
                                     date: today,
                                     context: context,
                                     remaining: double.parse(
-                                        widget.remaining.toStringAsFixed(2)),
+                                        widget.remaining.toStringAsFixed(4)),
                                     selectedCoin: selectedCoin!,
                                     updatePayed: updatePayed,
                                     paymentBody: AddPaymentBodyAtt(

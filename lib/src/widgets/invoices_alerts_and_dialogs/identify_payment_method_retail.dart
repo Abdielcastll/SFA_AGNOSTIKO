@@ -47,24 +47,24 @@ cropImage(filePath, imageFile) async {
 }
 
 priceReturnToOriginal(productPrice, coin) {
-  double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+  double correctAmount = double.parse(productPrice.toStringAsFixed(4));
   if (coin!.contains('USD')) {
     return correctAmount;
   } else if (coin.contains('VED')) {
-    return double.parse((correctAmount / 4.58).toStringAsFixed(2));
+    return double.parse((correctAmount / 4.58).toString());
   } else if (coin.contains('EUR')) {
-    return double.parse((correctAmount / 0.89).toStringAsFixed(2));
+    return double.parse((correctAmount / 0.89).toString());
   } else if (coin.contains('MXN')) {
-    return double.parse((correctAmount / 19.43).toStringAsFixed(2));
+    return double.parse((correctAmount / 19.43).toString());
   } else if (coin.contains('BTC')) {
-    return double.parse((correctAmount / 0.00011).toStringAsFixed(2));
+    return double.parse((correctAmount / 0.00011).toString());
   } else {
-    return double.parse((correctAmount / 4.58).toStringAsFixed(2));
+    return double.parse((correctAmount / 4.58).toString());
   }
 }
 
 priceToCurrencySelected(double productPrice, String coin) {
-  double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+  double correctAmount = double.parse(productPrice.toStringAsFixed(4));
   if (coin.contains('USD')) {
     return correctAmount;
   } else if (coin.contains('VED')) {
@@ -156,41 +156,6 @@ identifyPaymentMethodRetail({
 
   final totalPayed = paymentBody.payments.fold<double>(
       0.0, (previousValue, element) => previousValue + element.amount);
-  priceFormat(productPrice) {
-    double correctAmount = double.parse(productPrice.toStringAsFixed(2));
-    final sameCoin = currentCoin!.contains(selectedCoin);
-    if (currentCoin.contains('USD')) {
-      return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
-          .format(productPrice)
-          .toString();
-    } else if (currentCoin.contains('VED')) {
-      return NumberFormat.currency(
-        locale: 'es_VE',
-        decimalDigits: 2,
-        symbol: "Bs.",
-      ).format(sameCoin ? correctAmount : correctAmount * 4.58).toString();
-    } else if (currentCoin.contains('EUR')) {
-      return NumberFormat.currency(
-        locale: 'es_ES',
-        decimalDigits: 2,
-        symbol: '€',
-      ).format(sameCoin ? correctAmount : correctAmount * 0.89).toString();
-    } else if (currentCoin.contains('MXN')) {
-      return NumberFormat.currency(
-        locale: 'es_MX',
-        decimalDigits: 2,
-        symbol: '\$',
-      ).format(sameCoin ? correctAmount : correctAmount * 19.43);
-    } else if (currentCoin.contains('BTC')) {
-      return '฿ ${(sameCoin ? correctAmount : correctAmount * 0.00011).toString()}';
-    } else {
-      return NumberFormat.currency(
-        locale: 'es_VE',
-        decimalDigits: 2,
-        symbol: "PPR.",
-      ).format(sameCoin ? correctAmount : correctAmount * 4.58).toString();
-    }
-  }
 
   print('Metodo: $selectedValueA');
   print('currentCoin: $currentCoin');
@@ -544,12 +509,12 @@ identifyPaymentMethodRetail({
                             onPressed: () async {
                               // Crear en DB una visita
                               if (selectedCoin != null) {
-                                if (paidAmount <= totalOfTheOrder!) {
-                                  if (selectedBank != null) {
-                                    if (accountNumber != '' ||
-                                        accountHolder != '') {
-                                      print('Registrando pago en cheque');
-                                      /* if (exchangeAmount(
+                                // if (paidAmount <= totalOfTheOrder!) {
+                                if (selectedBank != null) {
+                                  if (accountNumber != '' ||
+                                      accountHolder != '') {
+                                    print('Registrando pago en cheque');
+                                    /* if (exchangeAmount(
                                               selectedCoin, paidAmount) >
                                           remaining) {
                                         Fluttertoast.showToast(
@@ -560,340 +525,341 @@ identifyPaymentMethodRetail({
                                           textColor: Colors.white,
                                         );
                                       } else { */
-                                      print('Cantidad permitida');
-                                      Fluttertoast.showToast(
-                                        msg: 'Registrando Cheque',
-                                        backgroundColor:
-                                            myTheme.colorScheme.primary,
-                                        textColor: Colors.white,
+                                    print('Cantidad permitida');
+                                    Fluttertoast.showToast(
+                                      msg: 'Registrando Cheque',
+                                      backgroundColor:
+                                          myTheme.colorScheme.primary,
+                                      textColor: Colors.white,
+                                    );
+
+                                    try {
+                                      await registerBankCheckPayment(
+                                        client: client,
+                                        invoiceDocumentID: invoiceDocumentID,
+                                        currency: selectedCoin,
+                                        amount: priceReturnToOriginal(
+                                            paidAmount, selectedCoin),
+                                        totalOfTheOrder: totalOfTheOrder,
+                                        currentCoin: currentCoin,
+                                        bank: selectedBank,
+                                        accountNumber: accountNumber,
+                                        accountHolder: accountHolder,
+                                        imageFile: imageFile,
+                                        date: date,
+                                        remaining: remaining,
                                       );
+                                      paymentBody.payments.add(PayMethod(
+                                          'Efectivo', amountExchanged));
 
-                                      try {
-                                        await registerBankCheckPayment(
-                                          client: client,
-                                          invoiceDocumentID: invoiceDocumentID,
-                                          currency: selectedCoin,
-                                          amount: priceReturnToOriginal(
-                                              paidAmount, selectedCoin),
-                                          totalOfTheOrder: totalOfTheOrder,
-                                          currentCoin: currentCoin,
-                                          bank: selectedBank,
-                                          accountNumber: accountNumber,
-                                          accountHolder: accountHolder,
-                                          imageFile: imageFile,
-                                          date: date,
-                                          remaining: remaining,
-                                        );
-                                        paymentBody.payments.add(PayMethod(
-                                            'Efectivo', amountExchanged));
+                                      print('amountExCHANGED $amountExchanged');
 
-                                        print(
-                                            'amountExCHANGED $amountExchanged');
+                                      print('IDENTIFY PAYMENTS');
+                                      print(paymentBody.payments.length);
 
-                                        print('IDENTIFY PAYMENTS');
-                                        print(paymentBody.payments.length);
-
-                                        if (amountExchanged < remaining) {
-                                          showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                  contentPadding:
-                                                      EdgeInsets.zero,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20),
-                                                  ),
-                                                  content:
-                                                      SingleChildScrollView(
-                                                    child: Stack(
-                                                      children: [
-                                                        Container(
-                                                          margin:
-                                                              EdgeInsets.all(
-                                                                  18),
-                                                          child: Center(
-                                                            child: Column(
-                                                              children: [
-                                                                Text(
-                                                                  "¡PAGO REGISTRADO!",
-                                                                  style:
-                                                                      TextStyle(
-                                                                    fontFamily:
-                                                                        'Poppins-regular',
-                                                                    fontSize:
-                                                                        18,
+                                      if (amountExchanged <
+                                          double.parse(
+                                              (remaining).toStringAsFixed(4))) {
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                contentPadding: EdgeInsets.zero,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                ),
+                                                content: SingleChildScrollView(
+                                                  child: Stack(
+                                                    children: [
+                                                      Container(
+                                                        margin:
+                                                            EdgeInsets.all(18),
+                                                        child: Center(
+                                                          child: Column(
+                                                            children: [
+                                                              Text(
+                                                                "¡PAGO REGISTRADO!",
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontFamily:
+                                                                      'Poppins-regular',
+                                                                  fontSize: 18,
+                                                                  color: myTheme
+                                                                      .colorScheme
+                                                                      .onPrimaryContainer,
+                                                                  // color: Colors.green,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              ),
+                                                              Container(
+                                                                margin: EdgeInsets
+                                                                    .fromLTRB(
+                                                                        0,
+                                                                        15,
+                                                                        0,
+                                                                        0),
+                                                                decoration: BoxDecoration(
+                                                                    shape: BoxShape
+                                                                        .circle,
                                                                     color: myTheme
                                                                         .colorScheme
-                                                                        .onPrimaryContainer,
-                                                                    // color: Colors.green,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
-                                                                ),
-                                                                Container(
-                                                                  margin: EdgeInsets
-                                                                      .fromLTRB(
-                                                                          0,
-                                                                          15,
-                                                                          0,
-                                                                          0),
-                                                                  decoration: BoxDecoration(
-                                                                      shape: BoxShape
-                                                                          .circle,
+                                                                        .primary
+                                                                        .withOpacity(
+                                                                            0.6)),
+                                                                width: 100,
+                                                                height: 100,
+                                                                child: Opacity(
+                                                                    opacity:
+                                                                        0.8,
+                                                                    child: Icon(
+                                                                      Icons
+                                                                          .check,
                                                                       color: myTheme
                                                                           .colorScheme
-                                                                          .primary
-                                                                          .withOpacity(
-                                                                              0.6)),
-                                                                  width: 100,
-                                                                  height: 100,
-                                                                  child: Opacity(
-                                                                      opacity: 0.8,
-                                                                      child: Icon(
-                                                                        Icons
-                                                                            .check,
-                                                                        color: myTheme
-                                                                            .colorScheme
-                                                                            .onPrimaryContainer,
-                                                                        size:
-                                                                            50,
-                                                                      )),
-                                                                ),
-                                                                Container(
-                                                                  margin: EdgeInsets
-                                                                      .fromLTRB(
-                                                                          0,
-                                                                          10,
-                                                                          0,
-                                                                          0),
-                                                                  alignment:
-                                                                      Alignment
+                                                                          .onPrimaryContainer,
+                                                                      size: 50,
+                                                                    )),
+                                                              ),
+                                                              Container(
+                                                                margin: EdgeInsets
+                                                                    .fromLTRB(
+                                                                        0,
+                                                                        10,
+                                                                        0,
+                                                                        0),
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                child: Column(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
                                                                           .center,
-                                                                  child: Column(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .center,
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .center,
-                                                                    children: [
-                                                                      Container(
-                                                                        margin: EdgeInsets.only(
-                                                                            top:
-                                                                                10),
-                                                                        child:
-                                                                            Text(
-                                                                          'Monto pagado: ${symbolMoney(selectedCoin)}: $paidAmount',
-                                                                          style:
-                                                                              TextStyle(
-                                                                            fontFamily:
-                                                                                'Poppins-regular',
-                                                                            fontSize:
-                                                                                12,
-                                                                            color:
-                                                                                myTheme.colorScheme.primary,
-                                                                            // color: Colors.green,
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                          ),
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    Container(
+                                                                      margin: EdgeInsets
+                                                                          .only(
+                                                                              top: 10),
+                                                                      child:
+                                                                          Text(
+                                                                        'Monto pagado: ${symbolMoney(selectedCoin)}: $paidAmount',
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontFamily:
+                                                                              'Poppins-regular',
+                                                                          fontSize:
+                                                                              12,
+                                                                          color: myTheme
+                                                                              .colorScheme
+                                                                              .primary,
+                                                                          // color: Colors.green,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
                                                                         ),
                                                                       ),
-                                                                      Container(
-                                                                        margin: EdgeInsets.only(
-                                                                            top:
-                                                                                10),
-                                                                        child:
-                                                                            Text(
-                                                                          '${client!.name}',
-                                                                          style:
-                                                                              TextStyle(
-                                                                            fontFamily:
-                                                                                'Poppins-regular',
-                                                                            fontSize:
-                                                                                12,
-                                                                            color:
-                                                                                myTheme.colorScheme.primary,
-                                                                            // color: Colors.green,
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                          ),
+                                                                    ),
+                                                                    Container(
+                                                                      margin: EdgeInsets
+                                                                          .only(
+                                                                              top: 10),
+                                                                      child:
+                                                                          Text(
+                                                                        '${client!.name}',
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontFamily:
+                                                                              'Poppins-regular',
+                                                                          fontSize:
+                                                                              12,
+                                                                          color: myTheme
+                                                                              .colorScheme
+                                                                              .primary,
+                                                                          // color: Colors.green,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
                                                                         ),
                                                                       ),
-                                                                      Container(
-                                                                        margin: EdgeInsets.only(
-                                                                            top:
-                                                                                10),
-                                                                        child:
-                                                                            Text(
-                                                                          'Fecha: $date',
-                                                                          style:
-                                                                              TextStyle(
-                                                                            fontFamily:
-                                                                                'Poppins-regular',
-                                                                            fontSize:
-                                                                                12,
-                                                                            color:
-                                                                                myTheme.colorScheme.primary,
-                                                                            // color: Colors.green,
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                          ),
+                                                                    ),
+                                                                    Container(
+                                                                      margin: EdgeInsets
+                                                                          .only(
+                                                                              top: 10),
+                                                                      child:
+                                                                          Text(
+                                                                        'Fecha: $date',
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontFamily:
+                                                                              'Poppins-regular',
+                                                                          fontSize:
+                                                                              12,
+                                                                          color: myTheme
+                                                                              .colorScheme
+                                                                              .primary,
+                                                                          // color: Colors.green,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
                                                                         ),
                                                                       ),
-                                                                      Container(
-                                                                        margin: EdgeInsets.only(
-                                                                            top:
-                                                                                10),
-                                                                        child:
-                                                                            Text(
-                                                                          '$selectedValueA',
-                                                                          style:
-                                                                              TextStyle(
-                                                                            fontFamily:
-                                                                                'Poppins-regular',
-                                                                            fontSize:
-                                                                                12,
-                                                                            color:
-                                                                                myTheme.colorScheme.primary,
-                                                                            // color: Colors.green,
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                          ),
+                                                                    ),
+                                                                    Container(
+                                                                      margin: EdgeInsets
+                                                                          .only(
+                                                                              top: 10),
+                                                                      child:
+                                                                          Text(
+                                                                        '$selectedValueA',
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontFamily:
+                                                                              'Poppins-regular',
+                                                                          fontSize:
+                                                                              12,
+                                                                          color: myTheme
+                                                                              .colorScheme
+                                                                              .primary,
+                                                                          // color: Colors.green,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
                                                                         ),
                                                                       ),
-                                                                    ],
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                              Container(
+                                                                margin: EdgeInsets
+                                                                    .only(
+                                                                        top:
+                                                                            50),
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                child:
+                                                                    ElevatedButton
+                                                                        .icon(
+                                                                  onPressed:
+                                                                      () {
+                                                                    print(
+                                                                        'paymentBody.payments:${paymentBody.payments}');
+                                                                    Navigator
+                                                                        .pushReplacement(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                          settings: const RouteSettings(
+                                                                              name:
+                                                                                  'PAGO-DIRECTO'),
+                                                                          builder: (BuildContext context) =>
+                                                                              AddPaymentPage(
+                                                                                remaining: paymentBody.remaining - amountExchanged,
+                                                                                subTotal: paymentBody.subTotal,
+                                                                                discountPercentage: paymentBody.discountPercentage,
+                                                                                discount: paymentBody.discount,
+                                                                                tax: paymentBody.tax,
+                                                                                percentageTax: paymentBody.percentageTax,
+                                                                                client: paymentBody.client,
+                                                                                invoiceDocumentID: paymentBody.invoiceDocumentID,
+                                                                                invoiceNumber: paymentBody.invoiceNumber,
+                                                                                amountPayed: (paymentBody.amountPaied ?? 0) + amountExchanged,
+                                                                                payments: paymentBody.payments,
+                                                                                // updatePayed: updatePayed,
+                                                                              )),
+                                                                    );
+                                                                    // Navigator.pop(
+                                                                    //     context);
+                                                                  },
+                                                                  style:
+                                                                      ButtonStyle(
+                                                                    backgroundColor:
+                                                                        MaterialStateProperty
+                                                                            .all(
+                                                                      myTheme
+                                                                          .colorScheme
+                                                                          .primary,
+                                                                    ),
+                                                                    shape: MaterialStateProperty
+                                                                        .all<
+                                                                            RoundedRectangleBorder>(
+                                                                      RoundedRectangleBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(18.0),
+                                                                      ),
+                                                                    ),
                                                                   ),
-                                                                ),
-                                                                Container(
-                                                                  margin: EdgeInsets
-                                                                      .only(
-                                                                          top:
-                                                                              50),
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .center,
-                                                                  child:
-                                                                      ElevatedButton
-                                                                          .icon(
-                                                                    onPressed:
-                                                                        () {
-                                                                      print(
-                                                                          'paymentBody.payments:${paymentBody.payments}');
-                                                                      Navigator
-                                                                          .pushReplacement(
-                                                                        context,
-                                                                        MaterialPageRoute(
-                                                                            settings:
-                                                                                const RouteSettings(name: 'PAGO-DIRECTO'),
-                                                                            builder: (BuildContext context) => AddPaymentPage(
-                                                                                  remaining: paymentBody.remaining - amountExchanged,
-                                                                                  subTotal: paymentBody.subTotal,
-                                                                                  discountPercentage: paymentBody.discountPercentage,
-                                                                                  discount: paymentBody.discount,
-                                                                                  tax: paymentBody.tax,
-                                                                                  percentageTax: paymentBody.percentageTax,
-                                                                                  client: paymentBody.client,
-                                                                                  invoiceDocumentID: paymentBody.invoiceDocumentID,
-                                                                                  invoiceNumber: paymentBody.invoiceNumber,
-                                                                                  amountPayed: (paymentBody.amountPaied ?? 0) + amountExchanged,
-                                                                                  payments: paymentBody.payments,
-                                                                                  // updatePayed: updatePayed,
-                                                                                )),
-                                                                      );
-                                                                      // Navigator.pop(
-                                                                      //     context);
-                                                                    },
+                                                                  icon: Icon(
+                                                                    MaterialIcons
+                                                                        .arrow_back_ios,
+                                                                    size: 12,
+                                                                  ),
+                                                                  label: Text(
+                                                                    'Aceptar',
                                                                     style:
-                                                                        ButtonStyle(
-                                                                      backgroundColor:
-                                                                          MaterialStateProperty
-                                                                              .all(
-                                                                        myTheme
-                                                                            .colorScheme
-                                                                            .primary,
-                                                                      ),
-                                                                      shape: MaterialStateProperty
-                                                                          .all<
-                                                                              RoundedRectangleBorder>(
-                                                                        RoundedRectangleBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(18.0),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    icon: Icon(
-                                                                      MaterialIcons
-                                                                          .arrow_back_ios,
-                                                                      size: 12,
-                                                                    ),
-                                                                    label: Text(
-                                                                      'Aceptar',
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontFamily:
-                                                                            'Poppins-regular',
-                                                                        fontSize:
-                                                                            12,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                      ),
+                                                                        TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontFamily:
+                                                                          'Poppins-regular',
+                                                                      fontSize:
+                                                                          12,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
                                                                     ),
                                                                   ),
-                                                                )
-                                                              ],
-                                                            ),
+                                                                ),
+                                                              )
+                                                            ],
                                                           ),
                                                         ),
-                                                      ],
-                                                    ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                );
-                                              });
-                                        } else {
-                                          Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (BuildContext context) =>
-                                                  CompletedPayPage(
-                                                      client: client,
-                                                      total: totalPayed +
-                                                          amountExchanged,
-                                                      method: "Cheque",
-                                                      date:
-                                                          '${date.day}-${date.month}-${date.year} ${(date as DateTime).hour}:${(date).minute}',
-                                                      address: '',
-                                                      coinsExchangeRates: const [],
-                                                      addPaymentBody:
-                                                          paymentBody),
-                                            ),
-                                          );
-                                        }
-                                      } catch (e) {
-                                        print(e);
-                                        Fluttertoast.showToast(
-                                            msg: e.toString());
+                                                ),
+                                              );
+                                            });
+                                      } else {
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                CompletedPayPage(
+                                                    client: client,
+                                                    total: totalPayed +
+                                                        amountExchanged,
+                                                    method: "Cheque",
+                                                    date:
+                                                        '${date.day}-${date.month}-${date.year} ${(date as DateTime).hour}:${(date).minute}',
+                                                    address: '',
+                                                    coinsExchangeRates: const [],
+                                                    addPaymentBody:
+                                                        paymentBody),
+                                          ),
+                                        );
                                       }
-
-                                      // Navigator.pop(context);
-                                      /* } */
-                                    } else {
-                                      Fluttertoast.showToast(
-                                          msg:
-                                              'Ingrese datos de cuenta validos');
+                                    } catch (e) {
+                                      print(e);
+                                      Fluttertoast.showToast(msg: e.toString());
                                     }
+
+                                    // Navigator.pop(context);
+                                    /* } */
                                   } else {
                                     Fluttertoast.showToast(
-                                        msg: 'Seleccione un banco por favor');
+                                        msg: 'Ingrese datos de cuenta validos');
                                   }
                                 } else {
                                   Fluttertoast.showToast(
-                                      msg: 'Monto a pagar no valido');
+                                      msg: 'Seleccione un banco por favor');
                                 }
+                                // } else {
+                                //   Fluttertoast.showToast(
+                                //       msg: 'Monto a pagar no valido');
+                                // }
                               } else {
                                 Fluttertoast.showToast(
                                     msg: 'Complete los datos porfavor');
@@ -1137,7 +1103,9 @@ identifyPaymentMethodRetail({
                                 print('IDENTIFY PAYMENTS');
                                 print(paymentBody?.payments.length);
 
-                                if (amountExchanged < remaining) {
+                                if (amountExchanged <
+                                    double.parse(
+                                        (remaining).toStringAsFixed(4))) {
                                   showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
@@ -1844,7 +1812,9 @@ identifyPaymentMethodRetail({
                                         print('IDENTIFY PAYMENTS');
                                         print(paymentBody.payments.length);
 
-                                        if (amountExchanged < remaining) {
+                                        if (amountExchanged <
+                                            double.parse((remaining)
+                                                .toStringAsFixed(4))) {
                                           showDialog(
                                               context: context,
                                               builder: (BuildContext context) {
@@ -2354,7 +2324,9 @@ identifyPaymentMethodRetail({
                                   print('IDENTIFY PAYMENTS');
                                   print(paymentBody.payments.length);
 
-                                  if (amountExchanged < remaining) {
+                                  if (amountExchanged <
+                                      double.parse(
+                                          (remaining).toStringAsFixed(4))) {
                                     showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
@@ -3077,7 +3049,9 @@ identifyPaymentMethodRetail({
                                           print('IDENTIFY PAYMENTS');
                                           print(paymentBody.payments.length);
 
-                                          if (amountExchanged < remaining) {
+                                          if (amountExchanged <
+                                              double.parse((remaining)
+                                                  .toStringAsFixed(4))) {
                                             showDialog(
                                                 context: context,
                                                 builder:
@@ -3415,7 +3389,9 @@ identifyPaymentMethodRetail({
                                           print('IDENTIFY PAYMENTS');
                                           print(paymentBody.payments.length);
 
-                                          if (amountExchanged < remaining) {
+                                          if (amountExchanged <
+                                              double.parse((remaining)
+                                                  .toStringAsFixed(4))) {
                                             showDialog(
                                                 context: context,
                                                 builder:

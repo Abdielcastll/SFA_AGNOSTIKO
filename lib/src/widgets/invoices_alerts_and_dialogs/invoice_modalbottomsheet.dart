@@ -28,19 +28,19 @@ import '../../models/transaction_args.dart';
 import '../../pages/amount_input/amount_input.dart';
 
 priceToCurrencySelectedInput(productPrice, coin) {
-  double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+  double correctAmount = double.parse(productPrice.toStringAsFixed(4));
   if (coin!.contains('USD')) {
-    return double.parse(correctAmount.toStringAsFixed(2));
+    return double.parse(correctAmount.toStringAsFixed(4));
   } else if (coin.contains('VED')) {
-    return double.parse((correctAmount * 4.58).toStringAsFixed(2));
+    return double.parse((correctAmount * 4.58).toStringAsFixed(4));
   } else if (coin.contains('EUR')) {
-    return double.parse((correctAmount * 0.89).toStringAsFixed(2));
+    return double.parse((correctAmount * 0.89).toStringAsFixed(4));
   } else if (coin.contains('MXN')) {
-    return double.parse((correctAmount * 19.43).toStringAsFixed(2));
+    return double.parse((correctAmount * 19.43).toStringAsFixed(4));
   } else if (coin.contains('BTC')) {
-    return double.parse((correctAmount * 0.00011).toStringAsFixed(2));
+    return double.parse((correctAmount * 0.00011).toStringAsFixed(4));
   } else {
-    return double.parse((correctAmount * 4.58).toStringAsFixed(2));
+    return double.parse((correctAmount * 4.58).toStringAsFixed(4));
   }
 }
 
@@ -75,7 +75,7 @@ void modalBottomSheetForInvoices(
   DateTime today = DateTime.now();
   String formattedDate = dateFormatter.format(today);
   String? selectedValueA;
-  String? selectedCoin;
+  String? selectedCoin = 'MXN';
 
   final paymentsValidPay =
       invoicePayments.where((element) => element['anulado'] == false).toList();
@@ -106,19 +106,19 @@ void modalBottomSheetForInvoices(
   print('invoiceTotal: $invoiceTotal');
   print('sumOfValidPayments: $sumOfValidPayments');
   final remaining =
-      double.parse((invoiceTotal - sumOfValidPayments).toStringAsFixed(2));
+      double.parse((invoiceTotal - sumOfValidPayments).toStringAsFixed(4));
   print('remaining: $remaining');
   final leftoverAmount;
   if (remaining < 0) {
     leftoverAmount = 0.00;
   } else {
-    leftoverAmount = remaining.toStringAsFixed(2);
+    leftoverAmount = remaining.toStringAsFixed(4);
   }
 
   // double paidAmount = selectedCoin == null
-  //     ? double.parse(remaining.toStringAsFixed(2))
+  //     ? double.parse(remaining.toStringAsFixed(4))
   //     : priceToCurrencySelectedInput(
-  //         double.parse(remaining.toStringAsFixed(2)), selectedCoin);
+  //         double.parse(remaining.toStringAsFixed(4)), selectedCoin);
 
   showModalBottomSheet(
     elevation: 0,
@@ -139,7 +139,7 @@ void modalBottomSheetForInvoices(
           Provider.of<CurrencyProvider>(context).currentCurrency;
 
       priceFormat(productPrice) {
-        double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+        double correctAmount = double.parse(productPrice.toStringAsFixed(4));
         if (currentCoin!.contains('USD')) {
           return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
               .format(productPrice)
@@ -174,7 +174,7 @@ void modalBottomSheetForInvoices(
       }
 
       priceFormatForPaidAmount(productPrice, coin) {
-        double correctAmount = double.parse(productPrice.toStringAsFixed(2));
+        double correctAmount = double.parse(productPrice.toStringAsFixed(4));
         if (coin!.contains('USD')) {
           return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
               .format(productPrice)
@@ -216,7 +216,8 @@ void modalBottomSheetForInvoices(
         } else if (coin.contains('EUR')) {
           return "€.";
         } else if (coin.contains('MXN')) {
-          return "MXN\$.";
+          return '\$';
+          // return "MXN\$.";
         } else if (coin.contains('BTC')) {
           return '฿.';
         } else {
@@ -226,8 +227,11 @@ void modalBottomSheetForInvoices(
 
       return StatefulBuilder(
         builder: (context, setState) {
-          // priceToCurrencySelectedInput(remaining, selectedCoin);
-          double paidAmount = remaining;
+          //
+          // double paidAmount = remaining;
+          double paidAmount =
+              priceToCurrencySelectedInput(remaining, selectedCoin);
+
           final fieldText = TextEditingController();
 
           return SafeArea(
@@ -457,7 +461,7 @@ void modalBottomSheetForInvoices(
                                                     ),
                                                     SizedBox(height: 30),
                                                     Text(
-                                                      '${AppLocalizations.of(context)!.upToPay}: ${priceFormat(remaining > 0.00 ? remaining : 0.00)}',
+                                                      '${AppLocalizations.of(context)!.upToPay}: ${priceFormat(double.parse(remaining.toStringAsFixed(4)) > 0.00 ? remaining : 0.00)}',
                                                       style: TextStyle(
                                                         fontFamily:
                                                             'Poppins-regular',
@@ -787,162 +791,162 @@ void modalBottomSheetForInvoices(
                                                           ),
                                                         ),
                                                       ),
-                                                      Container(
-                                                        margin:
-                                                            EdgeInsets.fromLTRB(
-                                                                10, 5, 10, 10),
-                                                        child:
-                                                            DropdownButtonHideUnderline(
-                                                          child:
-                                                              DropdownButton2(
-                                                            isExpanded: true,
-                                                            // ignore: prefer_const_literals_to_create_immutables
-                                                            hint: Row(
-                                                              children: [
-                                                                Expanded(
-                                                                  child: Text(
-                                                                    selectedCoin ??
-                                                                        'Seleccione moneda',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontSize:
-                                                                          12,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      color: myTheme
-                                                                          .colorScheme
-                                                                          .primary
-                                                                          .withOpacity(
-                                                                              0.3),
-                                                                    ),
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            items: itemsCoin
-                                                                .map((item) =>
-                                                                    DropdownMenuItem<
-                                                                        String>(
-                                                                      value:
-                                                                          item,
-                                                                      child:
-                                                                          Text(
-                                                                        item,
-                                                                        style:
-                                                                            TextStyle(
-                                                                          fontSize:
-                                                                              14,
-                                                                          fontWeight:
-                                                                              FontWeight.bold,
-                                                                          color: myTheme
-                                                                              .colorScheme
-                                                                              .primary,
-                                                                        ),
-                                                                        overflow:
-                                                                            TextOverflow.ellipsis,
-                                                                      ),
-                                                                    ))
-                                                                .toList(),
-                                                            value: selectedCoin,
-                                                            onChanged: (value) {
-                                                              setState(
-                                                                () {
-                                                                  selectedCoin =
-                                                                      value
-                                                                          as String;
-                                                                },
-                                                              );
-                                                              fieldText.clear();
-                                                              setState(() {
-                                                                paidAmount =
-                                                                    priceToCurrencySelectedInput(
-                                                                        remaining,
-                                                                        selectedCoin);
-                                                              });
+                                                      // Container(
+                                                      //   margin:
+                                                      //       EdgeInsets.fromLTRB(
+                                                      //           10, 5, 10, 10),
+                                                      //   child:
+                                                      //       DropdownButtonHideUnderline(
+                                                      //     child:
+                                                      //         DropdownButton2(
+                                                      //       isExpanded: true,
+                                                      //       // ignore: prefer_const_literals_to_create_immutables
+                                                      //       hint: Row(
+                                                      //         children: [
+                                                      //           Expanded(
+                                                      //             child: Text(
+                                                      //               selectedCoin ??
+                                                      //                   'Seleccione moneda',
+                                                      //               style:
+                                                      //                   TextStyle(
+                                                      //                 fontSize:
+                                                      //                     12,
+                                                      //                 fontWeight:
+                                                      //                     FontWeight
+                                                      //                         .bold,
+                                                      //                 color: myTheme
+                                                      //                     .colorScheme
+                                                      //                     .primary
+                                                      //                     .withOpacity(
+                                                      //                         0.3),
+                                                      //               ),
+                                                      //               overflow:
+                                                      //                   TextOverflow
+                                                      //                       .ellipsis,
+                                                      //             ),
+                                                      //           ),
+                                                      //         ],
+                                                      //       ),
+                                                      //       items: itemsCoin
+                                                      //           .map((item) =>
+                                                      //               DropdownMenuItem<
+                                                      //                   String>(
+                                                      //                 value:
+                                                      //                     item,
+                                                      //                 child:
+                                                      //                     Text(
+                                                      //                   item,
+                                                      //                   style:
+                                                      //                       TextStyle(
+                                                      //                     fontSize:
+                                                      //                         14,
+                                                      //                     fontWeight:
+                                                      //                         FontWeight.bold,
+                                                      //                     color: myTheme
+                                                      //                         .colorScheme
+                                                      //                         .primary,
+                                                      //                   ),
+                                                      //                   overflow:
+                                                      //                       TextOverflow.ellipsis,
+                                                      //                 ),
+                                                      //               ))
+                                                      //           .toList(),
+                                                      //       value: selectedCoin,
+                                                      //       onChanged: (value) {
+                                                      //         setState(
+                                                      //           () {
+                                                      //             selectedCoin =
+                                                      //                 value
+                                                      //                     as String;
+                                                      //           },
+                                                      //         );
+                                                      //         fieldText.clear();
+                                                      //         setState(() {
+                                                      //           paidAmount =
+                                                      //               priceToCurrencySelectedInput(
+                                                      //                   remaining,
+                                                      //                   selectedCoin);
+                                                      //         });
 
-                                                              print(
-                                                                  'Moneda cambiada');
-                                                              print(
-                                                                  'Nuevo valor:');
-                                                              print(paidAmount);
-                                                            },
-                                                            icon: const Icon(
-                                                              Icons
-                                                                  .arrow_forward_ios_outlined,
-                                                            ),
-                                                            iconSize: 11,
-                                                            iconEnabledColor:
-                                                                myTheme
-                                                                    .colorScheme
-                                                                    .primary
-                                                                    .withOpacity(
-                                                                        0.5),
-                                                            iconDisabledColor:
-                                                                Colors.grey,
-                                                            buttonHeight: 50,
-                                                            // buttonWidth: 200,
-                                                            buttonPadding:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    left: 14,
-                                                                    right: 14),
-                                                            buttonDecoration:
-                                                                BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5),
-                                                              border:
-                                                                  Border.all(
-                                                                color: myTheme
-                                                                    .colorScheme
-                                                                    .primary
-                                                                    .withOpacity(
-                                                                        0.3),
-                                                              ),
-                                                              color:
-                                                                  Colors.white,
-                                                            ),
-                                                            buttonElevation: 0,
-                                                            itemHeight: 40,
-                                                            itemPadding:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    left: 14,
-                                                                    right: 14),
-                                                            dropdownMaxHeight:
-                                                                200,
-                                                            dropdownWidth: 200,
-                                                            dropdownPadding:
-                                                                null,
-                                                            dropdownDecoration:
-                                                                BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10),
-                                                              color:
-                                                                  Colors.white,
-                                                            ),
-                                                            dropdownElevation:
-                                                                8,
-                                                            scrollbarRadius:
-                                                                const Radius
-                                                                    .circular(10),
-                                                            scrollbarThickness:
-                                                                6,
-                                                            scrollbarAlwaysShow:
-                                                                true,
-                                                            offset:
-                                                                const Offset(
-                                                                    0, 0),
-                                                          ),
-                                                        ),
-                                                      ),
+                                                      //         print(
+                                                      //             'Moneda cambiada');
+                                                      //         print(
+                                                      //             'Nuevo valor:');
+                                                      //         print(paidAmount);
+                                                      //       },
+                                                      //       icon: const Icon(
+                                                      //         Icons
+                                                      //             .arrow_forward_ios_outlined,
+                                                      //       ),
+                                                      //       iconSize: 11,
+                                                      //       iconEnabledColor:
+                                                      //           myTheme
+                                                      //               .colorScheme
+                                                      //               .primary
+                                                      //               .withOpacity(
+                                                      //                   0.5),
+                                                      //       iconDisabledColor:
+                                                      //           Colors.grey,
+                                                      //       buttonHeight: 50,
+                                                      //       // buttonWidth: 200,
+                                                      //       buttonPadding:
+                                                      //           const EdgeInsets
+                                                      //                   .only(
+                                                      //               left: 14,
+                                                      //               right: 14),
+                                                      //       buttonDecoration:
+                                                      //           BoxDecoration(
+                                                      //         borderRadius:
+                                                      //             BorderRadius
+                                                      //                 .circular(
+                                                      //                     5),
+                                                      //         border:
+                                                      //             Border.all(
+                                                      //           color: myTheme
+                                                      //               .colorScheme
+                                                      //               .primary
+                                                      //               .withOpacity(
+                                                      //                   0.3),
+                                                      //         ),
+                                                      //         color:
+                                                      //             Colors.white,
+                                                      //       ),
+                                                      //       buttonElevation: 0,
+                                                      //       itemHeight: 40,
+                                                      //       itemPadding:
+                                                      //           const EdgeInsets
+                                                      //                   .only(
+                                                      //               left: 14,
+                                                      //               right: 14),
+                                                      //       dropdownMaxHeight:
+                                                      //           200,
+                                                      //       dropdownWidth: 200,
+                                                      //       dropdownPadding:
+                                                      //           null,
+                                                      //       dropdownDecoration:
+                                                      //           BoxDecoration(
+                                                      //         borderRadius:
+                                                      //             BorderRadius
+                                                      //                 .circular(
+                                                      //                     10),
+                                                      //         color:
+                                                      //             Colors.white,
+                                                      //       ),
+                                                      //       dropdownElevation:
+                                                      //           8,
+                                                      //       scrollbarRadius:
+                                                      //           const Radius
+                                                      //               .circular(10),
+                                                      //       scrollbarThickness:
+                                                      //           6,
+                                                      //       scrollbarAlwaysShow:
+                                                      //           true,
+                                                      //       offset:
+                                                      //           const Offset(
+                                                      //               0, 0),
+                                                      //     ),
+                                                      //   ),
+                                                      // ),
                                                       // Fecha del registro del pago
                                                       Text(
                                                         AppLocalizations.of(
@@ -1310,7 +1314,7 @@ void modalBottomSheetForInvoices(
                                                                         height:
                                                                             5),
                                                                     Text(
-                                                                      // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(2), selectedCoin)}',
+                                                                      // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(4), selectedCoin)}',
                                                                       'Saldo: ${priceFormatForPaidAmount(remaining, selectedCoin)}',
                                                                       style:
                                                                           TextStyle(

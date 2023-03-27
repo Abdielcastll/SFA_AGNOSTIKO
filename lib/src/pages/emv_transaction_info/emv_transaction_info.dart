@@ -710,7 +710,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   double _amountBytesToDouble(Uint8List? amountBytes) {
     if (amountBytes != null) {
       final amountInt = int.parse(amountBytes.toHexStr());
-      return double.parse((amountInt / 100).toStringAsFixed(2));
+      return double.parse((amountInt / 100).toStringAsFixed(4));
     }
     return 0.0;
   }
