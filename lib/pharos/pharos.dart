@@ -2,6 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
+import 'package:pwa_sales2go_flutter/dialogs/circular_progress_dialog.dart';
+import 'package:pwa_sales2go_flutter/dialogs/info_dialog.dart';
+import 'package:pwa_sales2go_flutter/src/services/utils/comm.dart';
+
 import '../pharos/card_data.dart';
 import '../pharos/tags.dart';
 import '../pharos/key_init_request.dart';
@@ -125,6 +130,36 @@ Future<Map<String, dynamic>> pharosGenerateSaleMsg(
       isSale: isSale,
     ).toJson();
   }
+}
+
+onVoidExecute(
+    BuildContext context, int stan, String pleaseWait, String message) async {
+  final pharosVoidMsg = await pharosGenerateVoidMsg(stan.toString());
+  print("$pharosVoidMsg");
+  String? responseCode;
+  try {
+    showCircularProgressDialog(
+      context,
+      pleaseWait,
+    );
+    final response = await processVoidPharos(pharosVoidMsg);
+    responseCode = response.resultCode;
+  } catch (e) {
+    print("Error: $e");
+  }
+
+  Navigator.pop(context);
+
+  String infoDialogText;
+  if (responseCode == "00") {
+    infoDialogText = '$message aceptado';
+  } else {
+    infoDialogText = '$message rechazado';
+  }
+  await showInfoDialog(context, "$infoDialogText", onClose: () {
+    Navigator.pop(context);
+  });
+  return;
 }
 
 /// Genera mensaje de reverso para switch Pharos

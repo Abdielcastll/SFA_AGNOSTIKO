@@ -12,6 +12,7 @@ Future<bool> Function() cancelTransactionDialogFn(BuildContext context) {
   Future<bool> Function() showDialogFn = () async {
     final value = await showConfirmDialog(
       context,
+      title: 'Confirmar',
       message: "confirmCancelTransaction",
       onAccept: () async {
         // Importante cerrar estos procesos correctamente para no tener problemas

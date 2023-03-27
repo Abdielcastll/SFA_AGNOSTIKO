@@ -9,7 +9,7 @@ double exchangeAmount(String coin, double amount) {
   if (coin.contains('MXN')) {
     newAmount = amount / 19.43;
   }
-  return double.parse(newAmount.toStringAsFixed(4));
+  return double.parse(newAmount.toStringAsFixed(2));
 }
 
 double priceToCurrencySelected(double productPrice, String coin) {

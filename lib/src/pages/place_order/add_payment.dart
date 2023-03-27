@@ -193,7 +193,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
       if (productPrice is String) {
         productPrice = double.parse(productPrice.replaceAll('\$', ''));
       }
-      double correctAmount = double.parse(productPrice.toStringAsFixed(4));
+      double correctAmount = double.parse(productPrice.toStringAsFixed(2));
       if (currentCoin!.contains('USD')) {
         return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
             .format(productPrice)

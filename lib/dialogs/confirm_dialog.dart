@@ -4,6 +4,7 @@ import '../src/services/utils/keypad.dart';
 
 Future<bool?> showConfirmDialog(
   BuildContext context, {
+  required String title,
   required String message,
   required void Function() onAccept,
   required void Function() onCancel,
@@ -22,20 +23,32 @@ Future<bool?> showConfirmDialog(
         ),
         child: AlertDialog(
           contentPadding: EdgeInsets.only(left: 25, right: 25),
-          title: Center(child: Text("confirm")),
+          title: Center(child: Text(title)),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(20.0)),
           ),
-          content: Text(message),
+          content: Text(
+            message,
+            textAlign: TextAlign.center,
+          ),
           actions: <Widget>[
             ElevatedButton(
-              child: new Text("accept"),
+              child: Text("Aceptar"),
               onPressed: onAccept,
             ),
             ElevatedButton(
-              child: new Text("cancel"),
+              child: Text(
+                "Cancelar",
+                style: TextStyle(color: Colors.black),
+              ),
               onPressed: onCancel,
-            ),
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all(Colors.grey.shade400),
+                foregroundColor:
+                    MaterialStateProperty.all(Colors.grey.shade400),
+              ),
+            )
           ],
         ),
       );

@@ -12,6 +12,8 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/dialogs/confirm_dialog.dart';
+import 'package:pwa_sales2go_flutter/pharos/pharos.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
@@ -20,6 +22,7 @@ import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/identify_payment_method.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/onTapPayment.dart';
 
 import '../../models/transaction_args.dart';
 import '../../pages/amount_input/amount_input.dart';
@@ -386,10 +389,11 @@ void modalBottomSheetForInvoices(
                                                                         dateFormatter
                                                                             .format(unformattedDate);
                                                                     return ListTile(
-                                                                      onTap:
-                                                                          () {
-                                                                        // Ver o Editar detalles de pago
-                                                                      },
+                                                                      onTap: () => onTapPayment(
+                                                                          context,
+                                                                          payment,
+                                                                          AppLocalizations.of(context)!
+                                                                              .pleaseWait),
                                                                       leading:
                                                                           Icon(
                                                                         Icons

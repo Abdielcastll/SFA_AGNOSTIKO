@@ -396,7 +396,8 @@ Future createInvoice(
 
 //Registrar pagos de Tarjeta de Credito/Debito
 
-Future registerDebitCreditCardPayment(InvoiceData data) async {
+Future registerDebitCreditCardPayment(InvoiceData data, int? stan) async {
+  stan ??= 0;
   priceReturnToOriginal(productPrice, coin) {
     double correctAmount = double.parse(productPrice.toStringAsFixed(2));
     if (coin!.contains('USD')) {
@@ -472,6 +473,7 @@ Future registerDebitCreditCardPayment(InvoiceData data) async {
             'montoOriginal': priceReturnToOriginal(paidAmount, currentCoin),
             // 'nroNotaCredito': 0,
             'tasaDeCambio': selectedCoinExchangeRate,
+            'stan': stan,
           },
         ],
       ),

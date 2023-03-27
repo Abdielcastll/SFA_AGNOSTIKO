@@ -90,7 +90,8 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
           Future.delayed(Duration.zero, () {
             // TODO: REGISTRAR PAGO EN DB
             print('Pago Aprobado - Registrando pago de Tarjeta en DB');
-            registerDebitCreditCardPayment(transactionArgs!.invoice!);
+            registerDebitCreditCardPayment(
+                transactionArgs!.invoice!, transactionArgs!.stan);
           });
           break;
         case EmvTransactionResult.Denied:
@@ -304,13 +305,17 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                         ),
                       )),
                 ),
-              if (transactionArgs!.isFallback)
+              if (transactionArgs!.isFallback && transactionArgs!.stan != null)
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       vertical: 4.0, horizontal: 16.0),
                   child: OutlinedButton(
                       onPressed: () {
-                        onVoidExecute();
+                        onVoidExecute(
+                            context,
+                            transactionArgs!.stan ?? 0,
+                            AppLocalizations.of(context)!.pleaseWait,
+                            'Reverso');
                       },
                       style: TextButton.styleFrom(
                           foregroundColor: myTheme.colorScheme.primary,
@@ -425,35 +430,6 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                             as List)[1](payed); */
       // Navigator.pop(context, payed);
     }
-  }
-
-  onVoidExecute() async {
-    final pharosVoidMsg =
-        await pharosGenerateVoidMsg(transactionArgs!.stan.toString());
-    print("$pharosVoidMsg");
-    String? responseCode;
-    try {
-      showCircularProgressDialog(
-        context,
-        AppLocalizations.of(context)!.pleaseWait,
-      );
-      final response = await processVoidPharos(pharosVoidMsg);
-      responseCode = response.resultCode;
-    } catch (e) {
-      print("Error: $e");
-    }
-
-    Navigator.pop(context);
-
-    String infoDialogText;
-    if (responseCode == "00") {
-      infoDialogText = 'Reverso aceptado';
-    } else {
-      infoDialogText = 'Reverso rechazado';
-    }
-    showInfoDialog(context, "$infoDialogText", onClose: () {
-      Navigator.pop(context);
-    });
   }
 
   String? getMonth(String monthNum) {
