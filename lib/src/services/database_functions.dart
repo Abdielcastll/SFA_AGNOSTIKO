@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
@@ -1550,11 +1551,13 @@ Future registerClient({
   required String selectedIdType,
   required String selectedPricesList,
   required String newClientSalesZone,
+  required String uid,
   required bool isSpecialContributor,
   required int newClientMasterDiscount,
   required int newClientId,
-  required String uid,
   required File? image,
+  String? latitude,
+  String? longitude,
 }) async {
   print(' newClientName: $newClientName');
   print('  newClientId: $newClientId');
@@ -1566,13 +1569,34 @@ Future registerClient({
   print('  isSpecialContributor: $isSpecialContributor');
   print('  selectedIdType: $selectedIdType');
   print('  newClientSalesZone: $newClientSalesZone');
+  print('longitude: $latitude');
+  print('latitude: $longitude');
   print('Document: $selectedIdType$newClientId');
   final clientDocument = clientsCollection.doc('$selectedIdType$newClientId');
+  final storagePath = FirebaseStorage.instance
+      .ref()
+      .child('imagenes')
+      .child('clientes')
+      .child('$selectedIdType$newClientId')
+      .child('1');
+  // .child('$selectedIdType$newClientId');
   print(clientDocument);
   final lastModified = <String, dynamic>{
     'timestamp': Timestamp.now(),
     'usuario': FirebaseFirestore.instance.collection('usuarios').doc(uid)
   };
+  checkLocalization(la, lo) {
+    double? laDouble = double.tryParse(la);
+    double? loDouble = double.tryParse(lo);
+    if (laDouble == null && loDouble == null) {
+      return null;
+    } else {
+      return GeoPoint(laDouble!, loDouble!);
+    }
+  }
+
+  final localization = checkLocalization(latitude, longitude);
+  print('GeoPoint: $localization');
 
   List<String> listnumber = newClientName.split("");
   List<String> output = [];
@@ -1614,5 +1638,43 @@ Future registerClient({
     'zona': FirebaseFirestore.instance
         .collection('zonas')
         .doc('nKw5phIwZMrasraHpzrj'),
+    if (localization != null) 'localizacion': localization,
   });
+  if (image == null) {
+    print('No image avaliable');
+  } else {
+    print('Image avaliable: $image');
+    try {
+      await storagePath
+          .putFile(image)
+          .whenComplete(() => print('Imagen subida'));
+    } catch (e) {
+      print(e);
+      print('Error subiendo la imagen');
+    }
+  }
+}
+
+Future uploadReceiptImage(image, invoiceDocumentId, paymentIndex) async {
+  try {
+    final storagePath = FirebaseStorage.instance
+        .ref()
+        .child('imagenes')
+        .child('facturas')
+        .child('$invoiceDocumentId')
+        .child('pagos')
+        .child('pago-nro-$paymentIndex');
+    if (image == null) {
+      print('No image avaliable');
+    } else {
+      print('Image avaliable: $image');
+
+      await storagePath.putFile(image).whenComplete(
+            () => print('Imagen subida'),
+          );
+    }
+  } catch (e) {
+    print(e);
+    print('error on upload receipt image');
+  }
 }

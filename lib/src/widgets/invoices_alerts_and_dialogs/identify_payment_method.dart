@@ -59,12 +59,6 @@ priceReturnToOriginal(productPrice, coin) {
   }
 }
 
-testPrint() {
-  print('//////////////////////////////////');
-  print('TESTEO: PHOSPHOPHYLLITE');
-  print('//////////////////////////////////');
-}
-
 identifyPaymentMethod({
   required String selectedValueA,
   required Client client,
@@ -78,6 +72,7 @@ identifyPaymentMethod({
   Function? updatePayed,
   AddPaymentBodyAtt? paymentBody,
   noRetail = false,
+  int? paymentsValidPayQuantity,
 }) {
   File? imageFile;
   String accountHolder = '';
@@ -467,7 +462,7 @@ identifyPaymentMethod({
                       ),
                     ),
                   ),
-                  paidAmount! == 0
+                  paidAmount == 0
                       ? Container()
                       : Container(
                           // width: 125,
@@ -1836,21 +1831,6 @@ identifyPaymentMethod({
                                     double.parse(paidAmount.toString());
                               }
                               if (paidAmount != null) {
-                                // if (paidAmount! >
-                                //     priceToCurrencySelected(
-                                //         remaining, selectedCoin))
-                                // // if (paidAmount! > remaining! ||
-                                // //     paidAmount! > 0)
-                                // {
-                                //   Fluttertoast.showToast(
-                                //     msg:
-                                //         'La cantidad a pagar excede de la deuda pendiente',
-                                //     backgroundColor:
-                                //         myTheme.colorScheme.primary,
-                                //     textColor: Colors.white,
-                                //   );
-
-                                // } else {
                                 print('Cantidad permitida');
                                 Fluttertoast.showToast(
                                   msg: 'Registrando Pago en Efectivo',
@@ -1873,7 +1853,12 @@ identifyPaymentMethod({
                                   imageFile: imageFile,
                                   date: date,
                                   remaining: remaining,
-                                ).whenComplete(() {
+                                ).whenComplete(() async {
+                                  await uploadReceiptImage(
+                                      imageFile,
+                                      invoiceDocumentID,
+                                      paymentsValidPayQuantity! + 1);
+                                }).whenComplete(() {
                                   Navigator.pop(context);
                                   Navigator.pop(context);
 

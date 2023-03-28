@@ -2,8 +2,10 @@
 
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -43,13 +45,12 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
   TextEditingController? newClientAddress1 = TextEditingController();
   TextEditingController? newClientAddress2 = TextEditingController();
   TextEditingController? newClientMasterDiscount = TextEditingController();
-
   bool isSpecialContributor = false;
   String? selectedIdType = 'V';
   String? selectedPriceList = 'GENER-03';
   String? newClientSalesZone = 'Zona Test';
-  String? latitude = '';
-  String? longitude = '';
+  late String? latitude = '';
+  late String? longitude = '';
 
   File? imageFile;
 
@@ -75,6 +76,25 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
     if (croppedImage != null) {
       return croppedImage;
     }
+  }
+
+  Future<Position> _getCurrentLocation() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled');
+    }
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permission');
+    }
+    return await Geolocator.getCurrentPosition();
   }
 
   @override
@@ -463,7 +483,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                   margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
                   child: TextFieldForNewClient(
                     controller: newClientMasterDiscount,
-                    hintMessage: '0',
+                    hintMessage: '',
                     textInputType: TextInputType.phone,
                     maxLines: 1,
                     readOnly: false,
@@ -512,7 +532,12 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                           color: myTheme.colorScheme.primary,
                         ),
                         onPressed: () {
-                          // geolocator
+                          // Geolocator
+                          _getCurrentLocation().then((value) {
+                            latitude = '${value.latitude}';
+                            longitude = '${value.longitude}';
+                            setState(() {});
+                          });
                         },
                       ),
                     ),
@@ -607,7 +632,6 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                           newClientMasterDiscount!.text.toString(),
                         )) {
                       print(imageFile);
-
                       ScaffoldMessenger.of(context)
                         ..removeCurrentSnackBar()
                         ..showSnackBar(
@@ -635,8 +659,8 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                           newClientAddress1!.text.toString();
                       final String newClientAddress2ForFirebase =
                           newClientAddress2!.text.toString();
-                      final int newClientMasterDiscountForFirebase =
-                          int.parse(newClientMasterDiscount!.text.toString());
+                      final int newClientMasterDiscountForFirebase = int.parse(
+                          newClientMasterDiscount?.text.toString() ?? '0');
                       // final isSpecialContributorForFirebase = isSpecialContributor;
                       // final String selectedIdTypeForFirebase = selectedIdType!;
                       // final String newClientSalesZoneForFirebase =
@@ -646,21 +670,23 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                       print(imageFile);
 
                       await registerClient(
-                              isSpecialContributor: isSpecialContributor,
-                              newClientAddress1: newClientAddress1ForFirebase,
-                              newClientAddress2: newClientAddress2ForFirebase,
-                              newClientEmail: newClientEmailForFirebase,
-                              newClientId: newClientIdForFirebase,
-                              newClientMasterDiscount:
-                                  newClientMasterDiscountForFirebase,
-                              newClientName: newClientNameForFirebase,
-                              newClientSalesZone: newClientSalesZone!,
-                              newclientPhone: newclientPhoneForFirebase,
-                              selectedIdType: selectedIdType!,
-                              uid: userUid!,
-                              selectedPricesList: selectedPriceList!,
-                              image: imageFile)
-                          .whenComplete(() {
+                        isSpecialContributor: isSpecialContributor,
+                        newClientAddress1: newClientAddress1ForFirebase,
+                        newClientAddress2: newClientAddress2ForFirebase,
+                        newClientEmail: newClientEmailForFirebase,
+                        newClientId: newClientIdForFirebase,
+                        newClientMasterDiscount:
+                            newClientMasterDiscountForFirebase,
+                        newClientName: newClientNameForFirebase,
+                        newClientSalesZone: newClientSalesZone!,
+                        newclientPhone: newclientPhoneForFirebase,
+                        selectedIdType: selectedIdType!,
+                        uid: userUid!,
+                        selectedPricesList: selectedPriceList!,
+                        image: imageFile,
+                        latitude: latitude,
+                        longitude: longitude,
+                      ).whenComplete(() {
                         ScaffoldMessenger.of(context)
                           ..removeCurrentSnackBar()
                           ..showSnackBar(

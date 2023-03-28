@@ -76,6 +76,7 @@ void modalBottomSheetForInvoices(
 
   final paymentsValidPay =
       invoicePayments.where((element) => element['anulado'] == false).toList();
+  final int paymentsValidPayQuantity = paymentsValidPay.length;
   // print(paymentsValidPay);
   final pendingPayments = invoicePayments
       .where((element) =>
@@ -89,15 +90,15 @@ void modalBottomSheetForInvoices(
   print("pendingPayments: $pendingPayments");
 
   var sumOfPendingPayments = pendingPayments.fold(0, (i, element) {
-    return i + element['montoOriginal'];
+    return i + element['monto'];
   });
 
   var sumOfValidPayments = paymentsValidPay.fold(0, (i, element) {
-    return i + element['montoOriginal'];
+    return i + element['monto'];
   });
 
   var sumOfApprovedPayments = approvedPayments.fold(0, (i, element) {
-    return i + element['montoOriginal'];
+    return i + element['monto'];
   });
 
   print('invoiceTotal: $invoiceTotal');
@@ -413,7 +414,7 @@ void modalBottomSheetForInvoices(
                                                                             CrossAxisAlignment.start,
                                                                         children: [
                                                                           Text(
-                                                                            priceFormat(payment['montoOriginal']),
+                                                                            priceFormat(payment['monto']),
                                                                             style:
                                                                                 TextStyle(
                                                                               fontFamily: 'Poppins-regular',
@@ -1333,6 +1334,8 @@ void modalBottomSheetForInvoices(
                                                                         0,
                                                                       ),
                                                                       child: identifyPaymentMethod(
+                                                                          paymentsValidPayQuantity:
+                                                                              paymentsValidPayQuantity,
                                                                           selectedValueA:
                                                                               selectedValueA!,
                                                                           client:
