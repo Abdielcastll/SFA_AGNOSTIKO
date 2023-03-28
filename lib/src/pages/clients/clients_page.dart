@@ -3,10 +3,12 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
+import 'package:pwa_sales2go_flutter/src/pages/clients/add_new_client/add_new_client_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/components/client_list.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
+import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -71,6 +73,32 @@ class _ClientsPageState extends State<ClientsPage> {
         appBar: AppBarNavigation(
           message: AppLocalizations.of(context)!.clients,
           userZoneDocument: userZoneDocument,
+        ),
+        floatingActionButton: Wrap(
+          // direction: Axis.horizontal,
+          children: [
+            // Container(
+            // margin: const EdgeInsets.all(10.0),
+            // child:
+            FloatingActionButton(
+              elevation: 10,
+              backgroundColor: myTheme.colorScheme.primary,
+              onPressed: () {
+                // Redireccionar a crear cliente
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => AddClientPage(),
+                  ),
+                );
+              },
+              child: const Icon(
+                Icons.person_add_alt_sharp,
+                color: Colors.white,
+              ),
+            ),
+            // ),
+          ],
         ),
         body: const ClientsBody(),
       ),

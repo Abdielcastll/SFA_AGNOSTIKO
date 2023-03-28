@@ -11,6 +11,7 @@ import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/models/transaction_args.dart';
+import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 
@@ -182,7 +183,7 @@ Future createOrder(
   //   () async {
   return await FirebaseFirestore.instance
       .collection('clientes')
-      .doc(client!.clientDocumentId)
+      .doc(client.clientDocumentId)
       .collection('pedidos')
       .doc()
       .set(
@@ -368,30 +369,6 @@ Future createInvoice(
     }).whenComplete(() =>
             Fluttertoast.showToast(msg: 'Factura ${correlativeNumber + 1}'));
   });
-  ////////////////////////
-  // // Fluttertoast.showToast(msg: 'Factura ${correlativeNumber}');
-  // return await FirebaseFirestore.instance
-  //     .collection('clientes')
-  //     .doc(client.clientDocumentId)
-  //     .collection('facturas')
-  //     .doc()
-  //     .set({
-  //   'cliente': clientID,
-  //   'descuentoMaestro': discount,
-  //   'fecha': Timestamp.fromDate(DateTime.parse(date)),
-  //   'impuesto': tax,
-  //   'montoTotal': double.parse(totalAsString),
-  //   'nroCorrelativo': correlativeNumber,
-  //   'pagada': isPaid,
-  //   'pagos': payments,
-  //   'pedido': order,
-  //   'porcentajeDescuentoMaestro': discountPercentage,
-  //   'referenciaNotasCredito': referenceCreditNote,
-  //   'subtotal': subTotal,
-  //   'timestampRegistro': register,
-  //   'ultimaModificacion': lastModification,
-  //   'vendedor': seller,
-  // });
 }
 
 //Registrar pagos de Tarjeta de Credito/Debito
@@ -477,12 +454,12 @@ Future registerDebitCreditCardPayment(InvoiceData data) async {
       ),
     }).whenComplete(() {
       print(
-          'remaining de proceso: ${priceToCurrencySelected(remaining!, currency!)}');
-      print('Amount de proceso: ${priceToCurrencySelected(amount!, currency)}');
+          'remaining de proceso: ${priceToCurrencySelected(remaining, currency)}');
+      print('Amount de proceso: ${priceToCurrencySelected(amount, currency)}');
       print(
-          'restante total: ${priceToCurrencySelected(remaining!, currency!) - priceToCurrencySelected(amount!, currency)}');
-      var total = priceToCurrencySelected(remaining!, currency!) -
-          priceToCurrencySelected(amount!, currency);
+          'restante total: ${priceToCurrencySelected(remaining, currency) - priceToCurrencySelected(amount, currency)}');
+      var total = priceToCurrencySelected(remaining, currency) -
+          priceToCurrencySelected(amount, currency);
       try {
         if (total <= 0) {
           FirebaseFirestore.instance
@@ -634,12 +611,12 @@ Future registerBankCheckPayment({
       ),
     }).whenComplete(() {
       print(
-          'remaining de proceso: ${priceToCurrencySelected(remaining!, currency!)}');
+          'remaining de proceso: ${priceToCurrencySelected(remaining, currency!)}');
       print('Amount de proceso: ${priceToCurrencySelected(amount!, currency)}');
       print(
-          'restante total: ${priceToCurrencySelected(remaining!, currency!) - priceToCurrencySelected(amount!, currency)}');
-      var total = priceToCurrencySelected(remaining!, currency!) -
-          priceToCurrencySelected(amount!, currency);
+          'restante total: ${priceToCurrencySelected(remaining, currency) - priceToCurrencySelected(amount, currency)}');
+      var total = priceToCurrencySelected(remaining, currency) -
+          priceToCurrencySelected(amount, currency);
       try {
         if (total <= 0) {
           FirebaseFirestore.instance
@@ -922,9 +899,9 @@ Future registerDepositPayment({
           'remaining de proceso: ${priceToCurrencySelected(remaining!, currency!)}');
       print('Amount de proceso: ${priceToCurrencySelected(amount!, currency)}');
       print(
-          'restante total: ${priceToCurrencySelected(remaining!, currency!) - priceToCurrencySelected(amount!, currency)}');
-      var total = priceToCurrencySelected(remaining!, currency!) -
-          priceToCurrencySelected(amount!, currency);
+          'restante total: ${priceToCurrencySelected(remaining, currency) - priceToCurrencySelected(amount, currency)}');
+      var total = priceToCurrencySelected(remaining, currency) -
+          priceToCurrencySelected(amount, currency);
       try {
         if (total <= 0) {
           FirebaseFirestore.instance
@@ -1016,7 +993,7 @@ Future registerMoneyPayment({
   try {
     return await FirebaseFirestore.instance
         .collection('clientes')
-        .doc(client!.clientDocumentId)
+        .doc(client.clientDocumentId)
         .collection('facturas')
         .doc(invoiceDocumentID)
         .update({
@@ -1040,9 +1017,9 @@ Future registerMoneyPayment({
           'remaining de proceso: ${priceToCurrencySelected(remaining!, currency!)}');
       print('Amount de proceso: ${priceToCurrencySelected(amount!, currency)}');
       print(
-          'restante total: ${priceToCurrencySelected(remaining!, currency!) - priceToCurrencySelected(amount!, currency)}');
-      var total = priceToCurrencySelected(remaining!, currency!) -
-          priceToCurrencySelected(amount!, currency);
+          'restante total: ${priceToCurrencySelected(remaining, currency) - priceToCurrencySelected(amount, currency)}');
+      var total = priceToCurrencySelected(remaining, currency) -
+          priceToCurrencySelected(amount, currency);
       try {
         if (total <= 0) {
           print('Factura pagada completamente');
@@ -1196,9 +1173,9 @@ Future registerTransferPayment({
           'remaining de proceso: ${priceToCurrencySelected(remaining!, currency!)}');
       print('Amount de proceso: ${priceToCurrencySelected(amount!, currency)}');
       print(
-          'restante total: ${priceToCurrencySelected(remaining!, currency!) - priceToCurrencySelected(amount!, currency)}');
-      var total = priceToCurrencySelected(remaining!, currency!) -
-          priceToCurrencySelected(amount!, currency);
+          'restante total: ${priceToCurrencySelected(remaining, currency) - priceToCurrencySelected(amount, currency)}');
+      var total = priceToCurrencySelected(remaining, currency) -
+          priceToCurrencySelected(amount, currency);
       try {
         if (total <= 0) {
           FirebaseFirestore.instance
@@ -1349,9 +1326,9 @@ Future registerTransferInterPayment({
           'remaining de proceso: ${priceToCurrencySelected(remaining!, currency!)}');
       print('Amount de proceso: ${priceToCurrencySelected(amount!, currency)}');
       print(
-          'restante total: ${priceToCurrencySelected(remaining!, currency!) - priceToCurrencySelected(amount!, currency)}');
-      var total = priceToCurrencySelected(remaining!, currency!) -
-          priceToCurrencySelected(amount!, currency);
+          'restante total: ${priceToCurrencySelected(remaining, currency) - priceToCurrencySelected(amount, currency)}');
+      var total = priceToCurrencySelected(remaining, currency) -
+          priceToCurrencySelected(amount, currency);
       try {
         if (total <= 0) {
           FirebaseFirestore.instance
@@ -1525,7 +1502,7 @@ Future<int> completePaymentProcess(
     'cliente': clientID,
     'descuentoMaestro': discount,
     'fecha': Timestamp.fromDate(DateTime.now()),
-    'impuesto': double.parse(tax!.toStringAsFixed(4)),
+    'impuesto': double.parse(tax.toStringAsFixed(4)),
     'montoTotal': double.parse(totalAsString),
     'nroCorrelativo': correlativeNumber + 1,
     'pagada': isPaid,
@@ -1552,7 +1529,6 @@ Future<int> completePaymentProcess(
   return correlativeNumber + 1;
 }
 
-Future test() async {}
 // Obtener Rol
 Future<UserRole?> getUserRol(String rolId) async {
   final rol =
@@ -1561,4 +1537,82 @@ Future<UserRole?> getUserRol(String rolId) async {
   if (!rol.exists) return null;
 
   return UserRole.fromDocumentSnapshot(rol);
+}
+
+// Registrar cliente
+
+Future registerClient({
+  required String newClientName,
+  required String newclientPhone,
+  required String newClientEmail,
+  required String newClientAddress1,
+  required String newClientAddress2,
+  required String selectedIdType,
+  required String selectedPricesList,
+  required String newClientSalesZone,
+  required bool isSpecialContributor,
+  required int newClientMasterDiscount,
+  required int newClientId,
+  required String uid,
+  required File? image,
+}) async {
+  print(' newClientName: $newClientName');
+  print('  newClientId: $newClientId');
+  print('  newclientPhone: $newclientPhone');
+  print('  newClientEmail: $newClientEmail');
+  print('  newClientAddress1: $newClientAddress1');
+  print('  newClientAddress2: $newClientAddress2');
+  print('  newClientMasterDiscount: $newClientMasterDiscount');
+  print('  isSpecialContributor: $isSpecialContributor');
+  print('  selectedIdType: $selectedIdType');
+  print('  newClientSalesZone: $newClientSalesZone');
+  print('Document: $selectedIdType$newClientId');
+  final clientDocument = clientsCollection.doc('$selectedIdType$newClientId');
+  print(clientDocument);
+  final lastModified = <String, dynamic>{
+    'timestamp': Timestamp.now(),
+    'usuario': FirebaseFirestore.instance.collection('usuarios').doc(uid)
+  };
+
+  List<String> listnumber = newClientName.split("");
+  List<String> output = [];
+  for (int i = 0; i < listnumber.length; i++) {
+    if (i != listnumber.length - 1) {
+      output.add(listnumber[i]);
+    }
+    List<String> temp = [listnumber[i]];
+    for (int j = i + 1; j < listnumber.length; j++) {
+      temp.add(listnumber[j]);
+      output.add(temp.join());
+    }
+  }
+  print(output.toString());
+  print('TEST OUTPUT PHOS');
+
+  await clientDocument.set({
+    'activo': true,
+    'contribuyenteEspecial': isSpecialContributor,
+    'creadoPor': FirebaseFirestore.instance.collection('usuarios').doc(uid),
+    'descuentoMaestro': newClientMasterDiscount,
+    'direccionDespacho': newClientAddress2,
+    'direccionFiscal': newClientAddress1,
+    'email': newClientEmail,
+    'fechaRegistro': Timestamp.now(),
+    'listaDePrecios': FirebaseFirestore.instance
+        .collection('listas_de_precios')
+        .doc(selectedPricesList),
+    'modificado': Timestamp.now(),
+    'nombre': newClientName,
+    'nombreIndice': output,
+    'numeroId': newClientId,
+    'prospecto': false,
+    'telefono': newclientPhone,
+    'telefono2': newclientPhone,
+    'tipoId':
+        FirebaseFirestore.instance.collection('tipos_id').doc(selectedIdType),
+    'ultimaModificacion': Map<String, dynamic>.from(lastModified),
+    'zona': FirebaseFirestore.instance
+        .collection('zonas')
+        .doc('nKw5phIwZMrasraHpzrj'),
+  });
 }
