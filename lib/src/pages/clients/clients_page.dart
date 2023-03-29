@@ -81,6 +81,7 @@ class _ClientsPageState extends State<ClientsPage> {
             // margin: const EdgeInsets.all(10.0),
             // child:
             FloatingActionButton(
+              heroTag: 1,
               elevation: 10,
               backgroundColor: myTheme.colorScheme.primary,
               onPressed: () {
@@ -88,7 +89,8 @@ class _ClientsPageState extends State<ClientsPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => AddClientPage(),
+                    builder: (BuildContext context) =>
+                        AddClientPage(userZoneDocument: userZoneDocument),
                   ),
                 );
               },

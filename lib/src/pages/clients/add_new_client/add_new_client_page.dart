@@ -9,13 +9,20 @@ import 'package:geolocator/geolocator.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/src/models/idtype_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
+import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 
 class AddClientPage extends StatefulWidget {
-  const AddClientPage({super.key});
+  const AddClientPage({super.key, this.userZoneDocument});
+
+  final DocumentReference? userZoneDocument;
 
   @override
   State<AddClientPage> createState() => _AddClientPageState();
@@ -24,14 +31,42 @@ class AddClientPage extends StatefulWidget {
 class _AddClientPageState extends State<AddClientPage> {
   @override
   Widget build(BuildContext context) {
-    return AddClientPageBody();
+    return MultiProvider(providers: [
+      StreamProvider<ZoneSummary?>.value(
+        value: DatabaseServiceStreams().zoneSummary,
+        initialData: null,
+        catchError: (context, error) {
+          print('ERRROR ON STREAM PROVIDER OF ZONES SUMMARY IN ADD CLIENT');
+          print(error);
+        },
+      ),
+      StreamProvider<List<Prices>?>.value(
+        initialData: [],
+        catchError: (context, error) {
+          print('ERROR ON STREAM PROVIDER OF PRICES IN ADD CLIENT');
+          print(error);
+        },
+        value: pricesCollection.snapshots().map(priceListfromSnapshot),
+      ),
+      StreamProvider<IdTypeSummary?>.value(
+        initialData: null,
+        catchError: (context, error) {
+          print('ERROR ON STREAM PROVIDER ON IDTYPES IN ADD CLIENT');
+          print(error);
+        },
+        value: DatabaseServiceStreams().idTypeSummary,
+      ),
+    ], child: AddClientPageBody(userZoneDocument: widget.userZoneDocument));
   }
 }
 
 class AddClientPageBody extends StatefulWidget {
   const AddClientPageBody({
     super.key,
+    this.userZoneDocument,
   });
+
+  final DocumentReference? userZoneDocument;
 
   @override
   State<AddClientPageBody> createState() => _AddClientPageBodyState();
@@ -48,14 +83,18 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
   bool isSpecialContributor = false;
   String? selectedIdType = 'V';
   String? selectedPriceList = 'GENER-03';
-  String? newClientSalesZone = 'Zona Test';
   late String? latitude = '';
   late String? longitude = '';
 
   File? imageFile;
 
-  final List<String> idTypes = ['V', 'K', 'J'];
-  final List<String> pricesList = ['GENER-03', 'GENER-04', 'TPGBASE'];
+  // final List<String> idTypes = ['V', 'K', 'J'];
+  final List<String> pricesList = [
+    'GENER-03',
+    'GENER-04',
+    'GENER-11',
+    'TPGBASE'
+  ];
 
   getFromGallery(context) async {
     XFile? pickedFile =
@@ -99,6 +138,20 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
 
   @override
   Widget build(BuildContext context) {
+    final pricesSummary = Provider.of<List<Prices>?>(context) ?? [];
+    final idSummary = Provider.of<IdTypeSummary?>(context)?.summary ?? {};
+    final zonesSummary = Provider.of<ZoneSummary?>(context)?.summary ?? {};
+    List<String> idSummaryValues = List.from(idSummary.values);
+    String? newClientSalesZone = zonesSummary[widget.userZoneDocument?.id];
+
+    print('TEST ADD CLIENT PROVIDERS');
+    print(widget.userZoneDocument?.id);
+    print(pricesSummary);
+    print(idSummary);
+    print(idSummaryValues);
+    print(zonesSummary);
+    print(newClientSalesZone);
+
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
@@ -205,7 +258,8 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                 fontFamily: 'Poppins-regular',
                               ),
                             ),
-                            items: idTypes
+                            items: idSummaryValues
+                                // idTypes
                                 .map((item) => DropdownMenuItem<String>(
                                       value: item,
                                       child: Text(

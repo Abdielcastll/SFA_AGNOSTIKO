@@ -88,9 +88,8 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
             child: ListView.builder(
               physics: BouncingScrollPhysics(),
               scrollDirection: Axis.horizontal,
-              itemCount:
-                  // 1,
-                  categoriesSummary.length,
+              itemCount: 5,
+              // categoriesSummary.length,
               itemBuilder: (BuildContext context, index) {
                 final categorie = categoriesSummary[index];
                 final key = categorieKeys[index];
