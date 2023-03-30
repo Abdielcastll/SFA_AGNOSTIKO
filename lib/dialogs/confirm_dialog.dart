@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../src/services/utils/keypad.dart';
 
-Future<bool?> showConfirmDialog(
+Future<T?> showConfirmDialog<T>(
   BuildContext context, {
   required String title,
   required String message,
   required void Function() onAccept,
   required void Function() onCancel,
 }) {
-  return showDialog<bool?>(
+  return showDialog<T>(
     context: context,
     barrierDismissible: false,
     builder: (context) {

@@ -393,11 +393,25 @@ void modalBottomSheetForInvoices(
                                                                         dateFormatter
                                                                             .format(unformattedDate);
                                                                     return ListTile(
-                                                                      onTap: () => onTapPayment(
-                                                                          context,
-                                                                          payment,
-                                                                          AppLocalizations.of(context)!
-                                                                              .pleaseWait),
+                                                                      onTap:
+                                                                          () async {
+                                                                        final newPayments = await onTapPayment(
+                                                                            context,
+                                                                            payment,
+                                                                            AppLocalizations.of(context)!.pleaseWait,
+                                                                            client,
+                                                                            invoiceDocumentID,
+                                                                            index);
+
+                                                                        if (newPayments ==
+                                                                            null) {
+                                                                          return;
+                                                                        }
+                                                                        setState(
+                                                                          () => invoicePayments =
+                                                                              newPayments,
+                                                                        );
+                                                                      },
                                                                       leading:
                                                                           Icon(
                                                                         Icons
@@ -1199,7 +1213,9 @@ void modalBottomSheetForInvoices(
                                                                     0,
                                                                   ),
                                                                   hintText:
-                                                                      '$paidAmount',
+                                                                      paidAmount
+                                                                          .toStringAsFixed(
+                                                                              2),
                                                                   // ' ${priceToCurrencySelectedInput(remaining, selectedCoin)}',
                                                                   hintStyle:
                                                                       TextStyle(

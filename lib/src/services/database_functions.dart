@@ -1564,3 +1564,31 @@ Future<UserRole?> getUserRol(String rolId) async {
 
   return UserRole.fromDocumentSnapshot(rol);
 }
+
+Future<List> cancelPayment(
+    Client client, String invoiceId, int paymentIndex) async {
+  final invoiceSnapshot = await FirebaseFirestore.instance
+      .collection('clientes')
+      .doc(client.clientDocumentId)
+      .collection('facturas')
+      .doc(invoiceId)
+      .get();
+
+  List payments = invoiceSnapshot.get('pagos');
+
+  final payment = payments[paymentIndex];
+
+  payment['anulado'] = true;
+  payment['conciliado'] = false;
+
+  payments[paymentIndex] = payment;
+
+  await FirebaseFirestore.instance
+      .collection('clientes')
+      .doc(client.clientDocumentId)
+      .collection('facturas')
+      .doc(invoiceId)
+      .update({'pagos': payments});
+
+  return payments;
+}
