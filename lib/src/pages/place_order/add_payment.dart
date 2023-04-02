@@ -114,17 +114,8 @@ class AddPaymentBody extends StatefulWidget {
 class _AddPaymentBodyState extends State<AddPaymentBody> {
   late double remaining = widget.remaining;
   late double amountToPay = widget.remaining;
-  bool amountChanged = false;
   late List<PayMethod> payments = widget.payments;
-  double amountPayed = 0;
-  final fieldText = TextEditingController();
-
-  get getTotalAmount => widget.subTotal + widget.tax - widget.discount;
-
-  var dateFormatter = DateFormat('dd-MM-yyyy');
-  DateTime today = DateTime.now();
-  String? selectedValueA;
-  String? selectedCoin = 'MXN';
+  final TextEditingController fieldTextAmountToPay = TextEditingController();
   final List<String> items = [
     'Tarjeta de Debito',
     'Tarjeta de Credito',
@@ -136,6 +127,16 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
     // 'Criptomoneda',
     // 'Nota de credito',
   ];
+  get getTotalAmount => widget.subTotal + widget.tax - widget.discount;
+
+  bool amountChanged = false;
+  double moneyRecievedForRegisterMoney = 0;
+  double change = 0;
+  double amountPayed = 0;
+  var dateFormatter = DateFormat('dd-MM-yyyy');
+  DateTime today = DateTime.now();
+  String? selectedValueA;
+  String? selectedCoin = 'MXN';
   List<String> itemsCoin = [
     'USD',
     // 'BTC',
@@ -173,6 +174,23 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
       return correctAmount * 0.00011;
     } else {
       return correctAmount * 4.58;
+    }
+  }
+
+  symbolMoney(coin) {
+    if (coin!.contains('USD')) {
+      return "USD\$.";
+    } else if (coin.contains('VED')) {
+      return "BsS.";
+    } else if (coin.contains('EUR')) {
+      return "€.";
+    } else if (coin.contains('MXN')) {
+      return '\$';
+      // return "MXN\$.";
+    } else if (coin.contains('BTC')) {
+      return '฿.';
+    } else {
+      return "PPR";
     }
   }
 
@@ -346,39 +364,51 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                           );
                           print(selectedValueA);
                         },
-                        icon: const Icon(
-                          Icons.arrow_forward_ios_outlined,
-                        ),
-                        iconSize: 11,
-                        iconEnabledColor:
-                            myTheme.colorScheme.primary.withOpacity(0.5),
-                        iconDisabledColor: Colors.grey,
-                        buttonHeight: 50,
-                        // buttonWidth: 200,
-                        buttonPadding:
-                            const EdgeInsets.only(left: 14, right: 14),
-                        buttonDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(
-                            color: myTheme.colorScheme.primary.withOpacity(0.3),
+                        iconStyleData: IconStyleData(
+                          icon: const Icon(
+                            Icons.arrow_forward_ios_outlined,
                           ),
-                          color: Colors.white,
+                          iconSize: 11,
+                          iconEnabledColor:
+                              myTheme.colorScheme.primary.withOpacity(0.5),
+                          iconDisabledColor: Colors.grey,
                         ),
-                        buttonElevation: 0,
-                        itemHeight: 40,
-                        itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                        dropdownMaxHeight: 300,
-                        dropdownWidth: 200,
-                        dropdownPadding: null,
-                        dropdownDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
+                        buttonStyleData: ButtonStyleData(
+                          height: 50,
+
+                          // buttonWidth: 200,
+                          padding: const EdgeInsets.only(left: 14, right: 14),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(
+                              color:
+                                  myTheme.colorScheme.primary.withOpacity(0.3),
+                            ),
+                            color: Colors.white,
+                          ),
+                          elevation: 0,
                         ),
-                        dropdownElevation: 8,
-                        scrollbarRadius: const Radius.circular(10),
-                        scrollbarThickness: 6,
-                        scrollbarAlwaysShow: true,
-                        offset: const Offset(60, 0),
+                        menuItemStyleData: MenuItemStyleData(
+                          height: 40,
+                          padding: const EdgeInsets.only(left: 14, right: 14),
+                        ),
+                        dropdownStyleData: DropdownStyleData(
+                          maxHeight: 300,
+                          width: MediaQuery.of(context).size.width,
+                          padding: null,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
+                          ),
+                          elevation: 8,
+                          scrollbarTheme: ScrollbarThemeData(
+                            radius: const Radius.circular(10),
+                            thickness: MaterialStateProperty.all<double>(6),
+                            thumbVisibility:
+                                MaterialStateProperty.all<bool>(true),
+                          ),
+                          offset: const Offset(0, 0),
+                        ),
                       ),
                     ),
                   ),
@@ -649,19 +679,61 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                 setState(() {
                                   amountToPay = 0;
                                   print(amountToPay);
+                                  //CAMBIO
+                                  if (selectedValueA == 'Efectivo') {
+                                    change = moneyRecievedForRegisterMoney <
+                                            (amountChanged
+                                                ? roundAmount(amountToPay)
+                                                : priceToCurrencySelected(
+                                                    roundAmount(amountToPay),
+                                                    selectedCoin!))
+                                        ? 0
+                                        : double.parse(
+                                            (moneyRecievedForRegisterMoney -
+                                                    (amountChanged
+                                                        ? roundAmount(
+                                                            amountToPay)
+                                                        : priceToCurrencySelected(
+                                                            roundAmount(
+                                                                amountToPay),
+                                                            selectedCoin!)))
+                                                .toStringAsFixed(2));
+                                  }
                                 });
                               } else {
                                 setState(() {
                                   amountToPay = double.parse(value);
                                   print('amountToPay');
                                   print(amountToPay);
+                                  // CAMBIO
+                                  if (selectedValueA == 'Efectivo') {
+                                    change = moneyRecievedForRegisterMoney <
+                                            (amountChanged
+                                                ? roundAmount(amountToPay)
+                                                : priceToCurrencySelected(
+                                                    roundAmount(amountToPay),
+                                                    selectedCoin!))
+                                        ? 0
+                                        : double.parse(
+                                            (moneyRecievedForRegisterMoney -
+                                                    (amountChanged
+                                                        ? roundAmount(
+                                                            amountToPay)
+                                                        : priceToCurrencySelected(
+                                                            roundAmount(
+                                                                amountToPay),
+                                                            selectedCoin!)))
+                                                .toStringAsFixed(2));
+                                  }
                                 });
                               }
                               setState(() {
                                 amountChanged = true;
                               });
                             },
-                            controller: fieldText,
+                            readOnly:
+                                selectedValueA == 'Efectivo' ? true : false,
+                            controller: fieldTextAmountToPay,
                             style: TextStyle(
                               fontSize: 14,
                               fontFamily: 'Poppins-regular',
@@ -719,11 +791,215 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                             ),
                           ),
                         ),
+                  selectedValueA != 'Efectivo'
+                      ? Container()
+                      : Container(
+                          margin: EdgeInsets.only(top: 5),
+                          child: Text(
+                            'Recibido *',
+                            style: TextStyle(
+                              fontFamily: 'Poppins-regular',
+                              color: moneyRecievedForRegisterMoney <
+                                      (amountChanged
+                                          ? roundAmount(amountToPay)
+                                          : priceToCurrencySelected(
+                                              roundAmount(amountToPay),
+                                              selectedCoin!))
+                                  ? Colors.red
+                                  : myTheme.colorScheme.primary,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                  selectedValueA != 'Efectivo'
+                      ? Container()
+                      : Container(
+                          margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          height: 50,
+                          // width: 200,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: moneyRecievedForRegisterMoney <
+                                      (amountChanged
+                                          ? roundAmount(amountToPay)
+                                          : priceToCurrencySelected(
+                                              roundAmount(amountToPay),
+                                              selectedCoin!))
+                                  ? Colors.red
+                                  : myTheme.colorScheme.primary
+                                      .withOpacity(0.3),
+
+                              // color: Colors.transparent,
+                            ),
+                          ),
+                          child: TextField(
+                            onChanged: (value) {
+                              if (value.isEmpty) {
+                                setState(() {
+                                  moneyRecievedForRegisterMoney = 0;
+                                  if (selectedValueA == 'Efectivo') {
+                                    change = moneyRecievedForRegisterMoney <
+                                            (amountChanged
+                                                ? roundAmount(amountToPay)
+                                                : priceToCurrencySelected(
+                                                    roundAmount(amountToPay),
+                                                    selectedCoin!))
+                                        ? 0
+                                        : double.parse(
+                                            (moneyRecievedForRegisterMoney -
+                                                    (amountChanged
+                                                        ? roundAmount(
+                                                            amountToPay)
+                                                        : priceToCurrencySelected(
+                                                            roundAmount(
+                                                                amountToPay),
+                                                            selectedCoin!)))
+                                                .toStringAsFixed(2));
+                                  }
+                                });
+                              } else {
+                                setState(() {
+                                  moneyRecievedForRegisterMoney =
+                                      double.parse(value);
+                                  if (selectedValueA == 'Efectivo') {
+                                    change = moneyRecievedForRegisterMoney <
+                                            (amountChanged
+                                                ? roundAmount(amountToPay)
+                                                : priceToCurrencySelected(
+                                                    roundAmount(amountToPay),
+                                                    selectedCoin!))
+                                        ? 0
+                                        : double.parse(
+                                            (moneyRecievedForRegisterMoney -
+                                                    (amountChanged
+                                                        ? roundAmount(
+                                                            amountToPay)
+                                                        : priceToCurrencySelected(
+                                                            roundAmount(
+                                                                amountToPay),
+                                                            selectedCoin!)))
+                                                .toStringAsFixed(2));
+                                  }
+                                });
+                              }
+                              if (selectedValueA == 'Efectivo') {
+                                print(
+                                    "moneyRecievedForRegisterMoney: $moneyRecievedForRegisterMoney");
+                              }
+                            },
+                            // controller:
+                            //     fieldText,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'Poppins-regular',
+                              color: myTheme.colorScheme.primary,
+                            ),
+                            //TODO:
+
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.allow(
+                                RegExp(r'[0-9]+[,.]{0,1}[0-9]*'),
+                              ),
+                              TextInputFormatter.withFunction(
+                                (oldValue, newValue) => newValue.copyWith(
+                                  text: newValue.text.replaceAll(',', '.'),
+                                ),
+                              ),
+                            ],
+                            keyboardType: TextInputType.phone,
+
+                            maxLines: 1,
+                            maxLength: 50,
+                            textCapitalization: TextCapitalization.characters,
+
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              prefixIcon: Container(
+                                width: 40,
+                                height: 40,
+                                child: Center(
+                                  child: Text(
+                                    symbolMoney(selectedCoin),
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins-regular',
+                                      fontSize: 14,
+                                      color: myTheme.colorScheme.primary,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              contentPadding: EdgeInsets.fromLTRB(
+                                14,
+                                0,
+                                0,
+                                0,
+                              ),
+                              hintText: '$moneyRecievedForRegisterMoney',
+                              // ' ${priceToCurrencySelectedInput(remaining, selectedCoin)}',
+                              hintStyle: TextStyle(
+                                height: 1.85,
+                                fontFamily: 'Poppins-regular',
+                                fontSize: 14,
+                                color: myTheme.colorScheme.primary,
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                ),
+                              ),
+                              counterText: '',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                   selectedCoin != null
                       ? selectedValueA != null
                           ? Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
+                                moneyRecievedForRegisterMoney <
+                                        (amountChanged
+                                            ? roundAmount(amountToPay)
+                                            : priceToCurrencySelected(
+                                                roundAmount(amountToPay),
+                                                selectedCoin!))
+                                    ? selectedValueA != 'Efectivo'
+                                        ? Container()
+                                        : Container(
+                                            margin: EdgeInsets.fromLTRB(
+                                              50,
+                                              10,
+                                              50,
+                                              0,
+                                            ),
+                                            child: Text(
+                                              'LA CANTIDAD A PAGAR NO PUEDE SER MAYOR QUE LA CANTIDAD RECIBIDA',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontFamily: 'Poppins-regular',
+                                                color:
+                                                    myTheme.colorScheme.error,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          )
+                                    : Container(),
                                 Container(
                                   margin: const EdgeInsets.fromLTRB(
                                     50,
@@ -933,9 +1209,51 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                     ],
                                   ),
                                 ),
+                                selectedValueA != 'Efectivo'
+                                    ? Container()
+                                    : Container(
+                                        margin: const EdgeInsets.fromLTRB(
+                                          50,
+                                          10,
+                                          50,
+                                          0,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            selectedValueA != 'Efectivo'
+                                                ? Container()
+                                                : Text(
+                                                    // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(4), selectedCoin)}',
+                                                    'Cambio:',
+                                                    style: TextStyle(
+                                                      fontFamily:
+                                                          'Poppins-regular',
+                                                      color: Colors.green,
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                            Text(
+                                              // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(4), selectedCoin)}',
+                                              '\$ $change',
+                                              style: TextStyle(
+                                                fontFamily: 'Poppins-regular',
+                                                color: myTheme.colorScheme
+                                                    .onPrimaryContainer,
+                                                fontSize: 10,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                 Container(
                                   margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                                   child: identifyPaymentMethodRetail(
+                                    moneyRecievedForRegisterMoney:
+                                        moneyRecievedForRegisterMoney,
                                     selectedValueA: selectedValueA!,
                                     client: widget.client,
                                     invoiceDocumentID: widget.invoiceDocumentID,

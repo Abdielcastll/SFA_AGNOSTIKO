@@ -1558,8 +1558,9 @@ Future registerClient({
   required File? image,
   String? latitude,
   String? longitude,
+  userZoneDocument,
 }) async {
-  print(' newClientName: $newClientName');
+  print(' newClientName:${newClientName.trim().toUpperCase()}');
   print('  newClientId: $newClientId');
   print('  newclientPhone: $newclientPhone');
   print('  newClientEmail: $newClientEmail');
@@ -1572,12 +1573,13 @@ Future registerClient({
   print('longitude: $latitude');
   print('latitude: $longitude');
   print('Document: $selectedIdType$newClientId');
+  print('userZoneDocument: $userZoneDocument');
   final clientDocument = clientsCollection.doc('$selectedIdType$newClientId');
   final storagePath = FirebaseStorage.instance
       .ref()
       .child('imagenes')
       .child('clientes')
-      .child('$selectedIdType$newClientId')
+      .child(clientDocument.id)
       .child('1');
   // .child('$selectedIdType$newClientId');
   print(clientDocument);
@@ -1598,17 +1600,21 @@ Future registerClient({
   final localization = checkLocalization(latitude, longitude);
   print('GeoPoint: $localization');
 
-  List<String> listnumber = newClientName.split("");
+  List<String> listnumber = newClientName.split(' ');
   List<String> output = [];
+  print(listnumber);
   for (int i = 0; i < listnumber.length; i++) {
-    if (i != listnumber.length - 1) {
-      output.add(listnumber[i]);
+    print(listnumber[i]);
+    List<String> listnumberSplit = listnumber[i].toLowerCase().split('');
+    print(listnumberSplit);
+    List<String> temp = [];
+    for (int j = 0; j < listnumberSplit.length; j++) {
+      print(listnumberSplit[j]);
+      temp.add(listnumberSplit[j].toLowerCase());
+      output.add(temp.join().toLowerCase());
     }
-    List<String> temp = [listnumber[i]];
-    for (int j = i + 1; j < listnumber.length; j++) {
-      temp.add(listnumber[j]);
-      output.add(temp.join());
-    }
+    print('temp');
+    print(temp);
   }
   print(output.toString());
   print('TEST OUTPUT PHOS');
@@ -1635,13 +1641,12 @@ Future registerClient({
     'tipoId':
         FirebaseFirestore.instance.collection('tipos_id').doc(selectedIdType),
     'ultimaModificacion': Map<String, dynamic>.from(lastModified),
-    'zona': FirebaseFirestore.instance
-        .collection('zonas')
-        .doc('nKw5phIwZMrasraHpzrj'),
+    'zona': userZoneDocument,
     if (localization != null) 'localizacion': localization,
   });
   if (image == null) {
     print('No image avaliable');
+    return;
   } else {
     print('Image avaliable: $image');
     try {

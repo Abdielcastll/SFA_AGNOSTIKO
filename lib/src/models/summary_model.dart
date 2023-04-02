@@ -118,3 +118,13 @@ class IdTypeSummary {
 IdTypeSummary idTypeSummaryFromSnapshot(snapshot) {
   return IdTypeSummary(snapshot.get('nombres'));
 }
+// Resumen de nombres de precios
+
+class PricesSummary {
+  final summary;
+  PricesSummary(this.summary);
+}
+
+PricesSummary pricesSummaryFromSnapshot(snapshot) {
+  return PricesSummary(snapshot.get('nombres'));
+}

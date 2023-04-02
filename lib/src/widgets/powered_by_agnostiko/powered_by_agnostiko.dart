@@ -10,7 +10,8 @@ class PoweredByAgnostiko extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const LanguagePickerWidget(),
+        // Selector de Idioma
+        // const LanguagePickerWidget(),
         const SizedBox(height: 10),
         Container(
           alignment: Alignment.center,

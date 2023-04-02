@@ -65,3 +65,11 @@ Coin coinFromSnapshot(doc) {
         : 0,
   );
 }
+
+// CoinExchangeRates coinExchangeRate(doc) {
+//   return CoinExchangeRates(
+//     exchangeRatio: doc.data().toString().contains('tasaDeCambio')
+//         ? doc.get('tasaDeCambio')
+//         : 0,
+//   );
+// }

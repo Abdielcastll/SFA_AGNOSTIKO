@@ -503,15 +503,21 @@ class _ProductsBodyState extends State<ProductsBody> {
                                 }
                               }
                             },
-                            buttonHeight: 40,
-                            buttonWidth: 100,
-                            itemHeight: 40,
+                            buttonStyleData: const ButtonStyleData(
+                              height: 40,
+                              width: 100,
+                              elevation: 1,
+                            ),
+                            menuItemStyleData: const MenuItemStyleData(
+                              height: 40,
+                            ),
                             alignment: Alignment.center,
-                            buttonElevation: 1,
-                            dropdownElevation: 1,
-                            dropdownDecoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(14),
-                              color: Colors.white,
+                            dropdownStyleData: DropdownStyleData(
+                              elevation: 1,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(14),
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         )

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/main.dart';
+import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
+import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/auth.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -28,6 +32,10 @@ class _LogoutButtonState extends State<LogoutButton> {
           borderRadius: BorderRadius.circular(20),
           child: ElevatedButton.icon(
             onPressed: () {
+              final orderActive =
+                  Provider.of<OrderProvider>(context, listen: false);
+              objectBox.delelteAllShoppingCart();
+              orderActive.setOrder(false, Clients());
               _auth.signOut();
             },
             icon: const Icon(

@@ -103,7 +103,7 @@ void modalBottomSheetForInvoices(
 
   print('invoiceTotal: $invoiceTotal');
   print('sumOfValidPayments: $sumOfValidPayments');
-  final remaining =
+  double remaining =
       double.parse((invoiceTotal - sumOfValidPayments).toStringAsFixed(4));
   print('remaining: $remaining');
   final leftoverAmount;
@@ -223,12 +223,16 @@ void modalBottomSheetForInvoices(
         }
       }
 
+      double paidAmount = priceToCurrencySelectedInput(remaining, selectedCoin);
+
+      double moneyRecievedForRegisterMoney = 0;
+
+      double change = 0;
+
       return StatefulBuilder(
         builder: (context, setState) {
           //
           // double paidAmount = remaining;
-          double paidAmount =
-              priceToCurrencySelectedInput(remaining, selectedCoin);
 
           final fieldText = TextEditingController();
 
@@ -715,235 +719,96 @@ void modalBottomSheetForInvoices(
                                                                 },
                                                               );
                                                             },
-                                                            icon: const Icon(
-                                                              Icons
-                                                                  .arrow_forward_ios_outlined,
-                                                            ),
-                                                            iconSize: 11,
-                                                            iconEnabledColor:
-                                                                myTheme
-                                                                    .colorScheme
-                                                                    .primary
-                                                                    .withOpacity(
-                                                                        0.5),
-                                                            iconDisabledColor:
-                                                                Colors.grey,
-                                                            buttonHeight: 50,
-                                                            // buttonWidth: 200,
-                                                            buttonPadding:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    left: 14,
-                                                                    right: 14),
-                                                            buttonDecoration:
-                                                                BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5),
-                                                              border:
-                                                                  Border.all(
-                                                                color: myTheme
-                                                                    .colorScheme
-                                                                    .primary
-                                                                    .withOpacity(
-                                                                        0.3),
+                                                            iconStyleData:
+                                                                IconStyleData(
+                                                              icon: const Icon(
+                                                                Icons
+                                                                    .arrow_forward_ios_outlined,
                                                               ),
-                                                              color:
-                                                                  Colors.white,
+                                                              iconSize: 11,
+                                                              iconEnabledColor:
+                                                                  myTheme
+                                                                      .colorScheme
+                                                                      .primary
+                                                                      .withOpacity(
+                                                                          0.5),
+                                                              iconDisabledColor:
+                                                                  Colors.grey,
                                                             ),
-                                                            buttonElevation: 0,
-                                                            itemHeight: 40,
-                                                            itemPadding:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    left: 14,
-                                                                    right: 14),
-                                                            dropdownMaxHeight:
-                                                                300,
-                                                            dropdownWidth: 200,
-                                                            dropdownPadding:
-                                                                null,
-                                                            dropdownDecoration:
-                                                                BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10),
-                                                              color:
-                                                                  Colors.white,
+                                                            buttonStyleData:
+                                                                ButtonStyleData(
+                                                              height: 50,
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      left: 14,
+                                                                      right:
+                                                                          14),
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            5),
+                                                                border:
+                                                                    Border.all(
+                                                                  color: myTheme
+                                                                      .colorScheme
+                                                                      .primary
+                                                                      .withOpacity(
+                                                                          0.3),
+                                                                ),
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                              elevation: 0,
                                                             ),
-                                                            dropdownElevation:
-                                                                8,
-                                                            scrollbarRadius:
-                                                                const Radius
+                                                            menuItemStyleData:
+                                                                MenuItemStyleData(
+                                                              height: 40,
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      left: 14,
+                                                                      right:
+                                                                          14),
+                                                            ),
+                                                            dropdownStyleData:
+                                                                DropdownStyleData(
+                                                              maxHeight: 300,
+                                                              width: 200,
+                                                              padding: null,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                              elevation: 8,
+                                                              scrollbarTheme:
+                                                                  ScrollbarThemeData(
+                                                                radius: const Radius
                                                                     .circular(10),
-                                                            scrollbarThickness:
-                                                                6,
-                                                            scrollbarAlwaysShow:
-                                                                true,
-                                                            offset:
-                                                                const Offset(
-                                                                    0, 0),
+                                                                thickness:
+                                                                    MaterialStateProperty
+                                                                        .all<double>(
+                                                                            6),
+                                                                thumbVisibility:
+                                                                    MaterialStateProperty
+                                                                        .all<bool>(
+                                                                            true),
+                                                              ),
+                                                              offset:
+                                                                  const Offset(
+                                                                      0, 0),
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
-                                                      // Container(
-                                                      //   margin:
-                                                      //       EdgeInsets.fromLTRB(
-                                                      //           10, 5, 10, 10),
-                                                      //   child:
-                                                      //       DropdownButtonHideUnderline(
-                                                      //     child:
-                                                      //         DropdownButton2(
-                                                      //       isExpanded: true,
-                                                      //       // ignore: prefer_const_literals_to_create_immutables
-                                                      //       hint: Row(
-                                                      //         children: [
-                                                      //           Expanded(
-                                                      //             child: Text(
-                                                      //               selectedCoin ??
-                                                      //                   'Seleccione moneda',
-                                                      //               style:
-                                                      //                   TextStyle(
-                                                      //                 fontSize:
-                                                      //                     12,
-                                                      //                 fontWeight:
-                                                      //                     FontWeight
-                                                      //                         .bold,
-                                                      //                 color: myTheme
-                                                      //                     .colorScheme
-                                                      //                     .primary
-                                                      //                     .withOpacity(
-                                                      //                         0.3),
-                                                      //               ),
-                                                      //               overflow:
-                                                      //                   TextOverflow
-                                                      //                       .ellipsis,
-                                                      //             ),
-                                                      //           ),
-                                                      //         ],
-                                                      //       ),
-                                                      //       items: itemsCoin
-                                                      //           .map((item) =>
-                                                      //               DropdownMenuItem<
-                                                      //                   String>(
-                                                      //                 value:
-                                                      //                     item,
-                                                      //                 child:
-                                                      //                     Text(
-                                                      //                   item,
-                                                      //                   style:
-                                                      //                       TextStyle(
-                                                      //                     fontSize:
-                                                      //                         14,
-                                                      //                     fontWeight:
-                                                      //                         FontWeight.bold,
-                                                      //                     color: myTheme
-                                                      //                         .colorScheme
-                                                      //                         .primary,
-                                                      //                   ),
-                                                      //                   overflow:
-                                                      //                       TextOverflow.ellipsis,
-                                                      //                 ),
-                                                      //               ))
-                                                      //           .toList(),
-                                                      //       value: selectedCoin,
-                                                      //       onChanged: (value) {
-                                                      //         setState(
-                                                      //           () {
-                                                      //             selectedCoin =
-                                                      //                 value
-                                                      //                     as String;
-                                                      //           },
-                                                      //         );
-                                                      //         fieldText.clear();
-                                                      //         setState(() {
-                                                      //           paidAmount =
-                                                      //               priceToCurrencySelectedInput(
-                                                      //                   remaining,
-                                                      //                   selectedCoin);
-                                                      //         });
 
-                                                      //         print(
-                                                      //             'Moneda cambiada');
-                                                      //         print(
-                                                      //             'Nuevo valor:');
-                                                      //         print(paidAmount);
-                                                      //       },
-                                                      //       icon: const Icon(
-                                                      //         Icons
-                                                      //             .arrow_forward_ios_outlined,
-                                                      //       ),
-                                                      //       iconSize: 11,
-                                                      //       iconEnabledColor:
-                                                      //           myTheme
-                                                      //               .colorScheme
-                                                      //               .primary
-                                                      //               .withOpacity(
-                                                      //                   0.5),
-                                                      //       iconDisabledColor:
-                                                      //           Colors.grey,
-                                                      //       buttonHeight: 50,
-                                                      //       // buttonWidth: 200,
-                                                      //       buttonPadding:
-                                                      //           const EdgeInsets
-                                                      //                   .only(
-                                                      //               left: 14,
-                                                      //               right: 14),
-                                                      //       buttonDecoration:
-                                                      //           BoxDecoration(
-                                                      //         borderRadius:
-                                                      //             BorderRadius
-                                                      //                 .circular(
-                                                      //                     5),
-                                                      //         border:
-                                                      //             Border.all(
-                                                      //           color: myTheme
-                                                      //               .colorScheme
-                                                      //               .primary
-                                                      //               .withOpacity(
-                                                      //                   0.3),
-                                                      //         ),
-                                                      //         color:
-                                                      //             Colors.white,
-                                                      //       ),
-                                                      //       buttonElevation: 0,
-                                                      //       itemHeight: 40,
-                                                      //       itemPadding:
-                                                      //           const EdgeInsets
-                                                      //                   .only(
-                                                      //               left: 14,
-                                                      //               right: 14),
-                                                      //       dropdownMaxHeight:
-                                                      //           200,
-                                                      //       dropdownWidth: 200,
-                                                      //       dropdownPadding:
-                                                      //           null,
-                                                      //       dropdownDecoration:
-                                                      //           BoxDecoration(
-                                                      //         borderRadius:
-                                                      //             BorderRadius
-                                                      //                 .circular(
-                                                      //                     10),
-                                                      //         color:
-                                                      //             Colors.white,
-                                                      //       ),
-                                                      //       dropdownElevation:
-                                                      //           8,
-                                                      //       scrollbarRadius:
-                                                      //           const Radius
-                                                      //               .circular(10),
-                                                      //       scrollbarThickness:
-                                                      //           6,
-                                                      //       scrollbarAlwaysShow:
-                                                      //           true,
-                                                      //       offset:
-                                                      //           const Offset(
-                                                      //               0, 0),
-                                                      //     ),
-                                                      //   ),
-                                                      // ),
                                                       // Fecha del registro del pago
                                                       Text(
                                                         AppLocalizations.of(
@@ -1061,19 +926,227 @@ void modalBottomSheetForInvoices(
 
                                                       selectedCoin == null
                                                           ? Container()
-                                                          : Text(
-                                                              '${AppLocalizations.of(context)!.amount}*',
-                                                              style: TextStyle(
-                                                                fontFamily:
-                                                                    'Poppins-regular',
-                                                                color: myTheme
-                                                                    .colorScheme
-                                                                    .primary,
-                                                                fontSize: 14,
-                                                              ),
-                                                            ),
+                                                          : selectedValueA ==
+                                                                  null
+                                                              ? Container()
+                                                              : Text(
+                                                                  '${AppLocalizations.of(context)!.amount}*',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontFamily:
+                                                                        'Poppins-regular',
+                                                                    color: myTheme
+                                                                        .colorScheme
+                                                                        .primary,
+                                                                    fontSize:
+                                                                        14,
+                                                                  ),
+                                                                ),
 
                                                       selectedCoin == null
+                                                          ? Container()
+                                                          : selectedValueA ==
+                                                                  null
+                                                              ? Container()
+                                                              : Container(
+                                                                  margin: EdgeInsets
+                                                                      .fromLTRB(
+                                                                          10,
+                                                                          0,
+                                                                          10,
+                                                                          0),
+                                                                  height: 50,
+                                                                  // width: 200,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            10),
+                                                                    border:
+                                                                        Border
+                                                                            .all(
+                                                                      color: myTheme
+                                                                          .colorScheme
+                                                                          .primary
+                                                                          .withOpacity(
+                                                                              0.3),
+                                                                      // color: Colors.transparent,
+                                                                    ),
+                                                                  ),
+                                                                  child:
+                                                                      TextField(
+                                                                    onChanged:
+                                                                        (value) {
+                                                                      if (value
+                                                                          .isEmpty) {
+                                                                        setState(
+                                                                            () {
+                                                                          paidAmount =
+                                                                              0;
+                                                                          if (selectedValueA ==
+                                                                              'Efectivo') {
+                                                                            change = moneyRecievedForRegisterMoney < paidAmount
+                                                                                ? 0
+                                                                                : double.parse((moneyRecievedForRegisterMoney - paidAmount).toStringAsFixed(2));
+                                                                          }
+                                                                        });
+                                                                      } else {
+                                                                        setState(
+                                                                            () {
+                                                                          paidAmount =
+                                                                              double.parse(value);
+                                                                          if (selectedValueA ==
+                                                                              'Efectivo') {
+                                                                            change = moneyRecievedForRegisterMoney < paidAmount
+                                                                                ? 0
+                                                                                : double.parse((moneyRecievedForRegisterMoney - paidAmount).toStringAsFixed(2));
+                                                                          }
+                                                                        });
+                                                                      }
+                                                                    },
+                                                                    controller:
+                                                                        fieldText,
+                                                                    readOnly: selectedValueA ==
+                                                                            'Efectivo'
+                                                                        ? true
+                                                                        : false,
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontSize:
+                                                                          14,
+                                                                      fontFamily:
+                                                                          'Poppins-regular',
+                                                                      color: myTheme
+                                                                          .colorScheme
+                                                                          .primary,
+                                                                    ),
+                                                                    //TODO:
+
+                                                                    inputFormatters: <
+                                                                        TextInputFormatter>[
+                                                                      FilteringTextInputFormatter
+                                                                          .allow(
+                                                                        RegExp(
+                                                                            r'[0-9]+[,.]{0,1}[0-9]*'),
+                                                                      ),
+                                                                      TextInputFormatter
+                                                                          .withFunction(
+                                                                        (oldValue,
+                                                                                newValue) =>
+                                                                            newValue.copyWith(
+                                                                          text: newValue.text.replaceAll(
+                                                                              ',',
+                                                                              '.'),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                    keyboardType:
+                                                                        TextInputType
+                                                                            .phone,
+
+                                                                    maxLines: 1,
+                                                                    maxLength:
+                                                                        50,
+                                                                    textCapitalization:
+                                                                        TextCapitalization
+                                                                            .characters,
+
+                                                                    decoration:
+                                                                        InputDecoration(
+                                                                      prefixIcon:
+                                                                          Container(
+                                                                        width:
+                                                                            40,
+                                                                        height:
+                                                                            40,
+                                                                        child:
+                                                                            Center(
+                                                                          child:
+                                                                              Text(
+                                                                            symbolMoney(selectedCoin),
+                                                                            style:
+                                                                                TextStyle(
+                                                                              fontFamily: 'Poppins-regular',
+                                                                              fontSize: 14,
+                                                                              color: myTheme.colorScheme.primary,
+                                                                              fontWeight: FontWeight.bold,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      contentPadding:
+                                                                          EdgeInsets
+                                                                              .fromLTRB(
+                                                                        14,
+                                                                        0,
+                                                                        0,
+                                                                        0,
+                                                                      ),
+                                                                      hintText:
+                                                                          '$paidAmount',
+                                                                      // ' ${priceToCurrencySelectedInput(remaining, selectedCoin)}',
+                                                                      hintStyle:
+                                                                          TextStyle(
+                                                                        height:
+                                                                            1.85,
+                                                                        fontFamily:
+                                                                            'Poppins-regular',
+                                                                        fontSize:
+                                                                            14,
+                                                                        color: myTheme
+                                                                            .colorScheme
+                                                                            .primary,
+                                                                      ),
+                                                                      enabledBorder:
+                                                                          OutlineInputBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(5),
+                                                                        borderSide:
+                                                                            BorderSide(
+                                                                          color:
+                                                                              Colors.transparent,
+                                                                        ),
+                                                                      ),
+                                                                      counterText:
+                                                                          '',
+                                                                      border:
+                                                                          OutlineInputBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(5),
+                                                                        borderSide:
+                                                                            BorderSide(
+                                                                          color:
+                                                                              Colors.transparent,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                      selectedValueA !=
+                                                              'Efectivo'
+                                                          ? Container()
+                                                          : Container(
+                                                              margin: EdgeInsets
+                                                                  .only(top: 5),
+                                                              child: Text(
+                                                                'Recibido *',
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontFamily:
+                                                                      'Poppins-regular',
+                                                                  color: moneyRecievedForRegisterMoney <
+                                                                          paidAmount
+                                                                      ? Colors
+                                                                          .red
+                                                                      : myTheme
+                                                                          .colorScheme
+                                                                          .primary,
+                                                                  fontSize: 14,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                      selectedValueA !=
+                                                              'Efectivo'
                                                           ? Container()
                                                           : Container(
                                                               margin: EdgeInsets
@@ -1089,11 +1162,15 @@ void modalBottomSheetForInvoices(
                                                                             10),
                                                                 border:
                                                                     Border.all(
-                                                                  color: myTheme
-                                                                      .colorScheme
-                                                                      .primary
-                                                                      .withOpacity(
-                                                                          0.3),
+                                                                  color: moneyRecievedForRegisterMoney <
+                                                                          paidAmount
+                                                                      ? Colors
+                                                                          .red
+                                                                      : myTheme
+                                                                          .colorScheme
+                                                                          .primary
+                                                                          .withOpacity(
+                                                                              0.3),
                                                                   // color: Colors.transparent,
                                                                 ),
                                                               ),
@@ -1104,20 +1181,39 @@ void modalBottomSheetForInvoices(
                                                                       .isEmpty) {
                                                                     setState(
                                                                         () {
-                                                                      paidAmount =
+                                                                      moneyRecievedForRegisterMoney =
                                                                           0;
+                                                                      if (selectedValueA ==
+                                                                          'Efectivo') {
+                                                                        change = moneyRecievedForRegisterMoney <
+                                                                                paidAmount
+                                                                            ? 0
+                                                                            : double.parse((moneyRecievedForRegisterMoney - paidAmount).toStringAsFixed(2));
+                                                                      }
                                                                     });
                                                                   } else {
                                                                     setState(
                                                                         () {
-                                                                      paidAmount =
+                                                                      moneyRecievedForRegisterMoney =
                                                                           double.parse(
                                                                               value);
+                                                                      if (selectedValueA ==
+                                                                          'Efectivo') {
+                                                                        change = moneyRecievedForRegisterMoney <
+                                                                                paidAmount
+                                                                            ? 0
+                                                                            : double.parse((moneyRecievedForRegisterMoney - paidAmount).toStringAsFixed(2));
+                                                                      }
                                                                     });
                                                                   }
+                                                                  if (selectedValueA ==
+                                                                      'Efectivo') {
+                                                                    print(
+                                                                        "moneyRecievedForRegisterMoney: $moneyRecievedForRegisterMoney");
+                                                                  }
                                                                 },
-                                                                controller:
-                                                                    fieldText,
+                                                                // controller:
+                                                                //     fieldText,
                                                                 style:
                                                                     TextStyle(
                                                                   fontSize: 14,
@@ -1196,7 +1292,7 @@ void modalBottomSheetForInvoices(
                                                                     0,
                                                                   ),
                                                                   hintText:
-                                                                      '$paidAmount',
+                                                                      '$moneyRecievedForRegisterMoney',
                                                                   // ' ${priceToCurrencySelectedInput(remaining, selectedCoin)}',
                                                                   hintStyle:
                                                                       TextStyle(
@@ -1211,6 +1307,17 @@ void modalBottomSheetForInvoices(
                                                                         .primary,
                                                                   ),
                                                                   enabledBorder:
+                                                                      OutlineInputBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(5),
+                                                                    borderSide:
+                                                                        BorderSide(
+                                                                      color: Colors
+                                                                          .transparent,
+                                                                    ),
+                                                                  ),
+                                                                  focusedBorder:
                                                                       OutlineInputBorder(
                                                                     borderRadius:
                                                                         BorderRadius
@@ -1242,6 +1349,25 @@ void modalBottomSheetForInvoices(
                                                                   null
                                                               ? Column(
                                                                   children: [
+                                                                    moneyRecievedForRegisterMoney <
+                                                                            paidAmount
+                                                                        ? selectedValueA !=
+                                                                                'Efectivo'
+                                                                            ? Container()
+                                                                            : Container(
+                                                                                margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                                                                                child: Text(
+                                                                                  'LA CANTIDAD A PAGAR NO PUEDE SER MAYOR QUE LA CANTIDAD RECIBIDA',
+                                                                                  textAlign: TextAlign.center,
+                                                                                  style: TextStyle(
+                                                                                    fontFamily: 'Poppins-regular',
+                                                                                    color: myTheme.colorScheme.error,
+                                                                                    fontSize: 10,
+                                                                                    fontWeight: FontWeight.bold,
+                                                                                  ),
+                                                                                ),
+                                                                              )
+                                                                        : Container(),
                                                                     Container(
                                                                       margin: const EdgeInsets
                                                                           .fromLTRB(
@@ -1310,18 +1436,46 @@ void modalBottomSheetForInvoices(
                                                                     SizedBox(
                                                                         height:
                                                                             5),
-                                                                    Text(
-                                                                      // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(4), selectedCoin)}',
-                                                                      'Saldo: ${priceFormatForPaidAmount(remaining, selectedCoin)}',
-                                                                      style:
-                                                                          TextStyle(
-                                                                        fontFamily:
-                                                                            'Poppins-regular',
-                                                                        color: myTheme
-                                                                            .colorScheme
-                                                                            .onPrimaryContainer,
-                                                                        fontSize:
-                                                                            10,
+                                                                    Container(
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .bottomCenter,
+                                                                      margin: EdgeInsets
+                                                                          .fromLTRB(
+                                                                              0,
+                                                                              0,
+                                                                              0,
+                                                                              5),
+                                                                      child:
+                                                                          Row(
+                                                                        mainAxisAlignment: selectedValueA !=
+                                                                                'Efectivo'
+                                                                            ? MainAxisAlignment.center
+                                                                            : MainAxisAlignment.spaceAround,
+                                                                        children: [
+                                                                          Text(
+                                                                            // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(4), selectedCoin)}',
+                                                                            'Saldo: ${priceFormatForPaidAmount(remaining, selectedCoin)}',
+                                                                            style:
+                                                                                TextStyle(
+                                                                              fontFamily: 'Poppins-regular',
+                                                                              color: myTheme.colorScheme.onPrimaryContainer,
+                                                                              fontSize: 12,
+                                                                            ),
+                                                                          ),
+                                                                          selectedValueA != 'Efectivo'
+                                                                              ? Container()
+                                                                              : Text(
+                                                                                  // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(4), selectedCoin)}',
+                                                                                  'Cambio: \$ $change',
+                                                                                  style: TextStyle(
+                                                                                    fontFamily: 'Poppins-regular',
+                                                                                    color: Colors.green,
+                                                                                    fontSize: 12,
+                                                                                    fontWeight: FontWeight.bold,
+                                                                                  ),
+                                                                                ),
+                                                                        ],
                                                                       ),
                                                                     ),
                                                                     Divider(),
@@ -1334,6 +1488,8 @@ void modalBottomSheetForInvoices(
                                                                         0,
                                                                       ),
                                                                       child: identifyPaymentMethod(
+                                                                          moneyRecievedForRegisterMoney:
+                                                                              moneyRecievedForRegisterMoney,
                                                                           paymentsValidPayQuantity:
                                                                               paymentsValidPayQuantity,
                                                                           selectedValueA:

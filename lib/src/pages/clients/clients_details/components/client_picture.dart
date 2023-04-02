@@ -3,6 +3,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class ClientPicture extends StatelessWidget {
   const ClientPicture({
@@ -28,6 +29,7 @@ class ClientPicture extends StatelessWidget {
               .child('1')
               .getDownloadURL()
               .catchError((e) {
+            print('ERROR ON GETTING IMAGE IN CLIENT DETAILS');
             print(e);
           }),
           builder: (context, snapshot) {
@@ -74,18 +76,31 @@ class ClientPicture extends StatelessWidget {
           child: Stack(
             children: [
               SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: Text(
-                  name,
-                  textAlign: TextAlign.left,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      fontFamily: 'Poppins-regular',
-                      fontSize: 24,
-                      color: Colors.white),
-                ),
-              ),
+                  width: MediaQuery.of(context).size.width,
+                  child: Stack(
+                    children: <Widget>[
+                      // Stroked text as border.
+                      Text(
+                        name,
+                        style: TextStyle(
+                          fontSize: 24,
+                          foreground: Paint()
+                            ..style = PaintingStyle.stroke
+                            ..strokeWidth = 3
+                            ..color =
+                                myTheme.colorScheme.primary.withOpacity(0.5),
+                        ),
+                      ),
+                      // Solid text as fill.
+                      Text(
+                        name,
+                        style: const TextStyle(
+                          fontSize: 24,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  )),
             ],
           ),
         ),

@@ -290,42 +290,56 @@ void showCreateClientDialog(context, uid) {
                                       );
                                       // Mover la funcion en la base de datos para cambiar la lista
                                     },
-                                    icon: const Icon(
-                                      Icons.arrow_forward_ios_outlined,
-                                    ),
-                                    iconSize: 11,
-                                    iconEnabledColor: myTheme
-                                        .colorScheme.primary
-                                        .withOpacity(0.5),
-                                    iconDisabledColor: Colors.grey,
-                                    buttonHeight: 50,
-                                    buttonWidth: 200,
-                                    buttonPadding: const EdgeInsets.only(
-                                        left: 14, right: 14),
-                                    buttonDecoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      border: Border.all(
-                                        color: myTheme.colorScheme.primary
-                                            .withOpacity(0.3),
+                                    iconStyleData: IconStyleData(
+                                      icon: const Icon(
+                                        Icons.arrow_forward_ios_outlined,
                                       ),
-                                      color: Colors.white,
+                                      iconSize: 11,
+                                      iconEnabledColor: myTheme
+                                          .colorScheme.primary
+                                          .withOpacity(0.5),
+                                      iconDisabledColor: Colors.grey,
                                     ),
-                                    buttonElevation: 0,
-                                    itemHeight: 40,
-                                    itemPadding: const EdgeInsets.only(
-                                        left: 14, right: 14),
-                                    dropdownMaxHeight: 200,
-                                    dropdownWidth: 200,
-                                    dropdownPadding: null,
-                                    dropdownDecoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Colors.white,
+                                    buttonStyleData: ButtonStyleData(
+                                      height: 50,
+                                      width: 200,
+                                      padding: const EdgeInsets.only(
+                                          left: 14, right: 14),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        border: Border.all(
+                                          color: myTheme.colorScheme.primary
+                                              .withOpacity(0.3),
+                                        ),
+                                        color: Colors.white,
+                                      ),
+                                      elevation: 0,
                                     ),
-                                    dropdownElevation: 8,
-                                    scrollbarRadius: const Radius.circular(10),
-                                    scrollbarThickness: 6,
-                                    scrollbarAlwaysShow: true,
-                                    offset: const Offset(-20, 0),
+                                    menuItemStyleData: MenuItemStyleData(
+                                      height: 40,
+                                      padding: const EdgeInsets.only(
+                                          left: 14, right: 14),
+                                    ),
+                                    dropdownStyleData: DropdownStyleData(
+                                      maxHeight: 200,
+                                      width: 200,
+                                      padding: null,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.white,
+                                      ),
+                                      elevation: 8,
+                                      scrollbarTheme: ScrollbarThemeData(
+                                        radius: const Radius.circular(10),
+                                        thickness:
+                                            MaterialStateProperty.all<double>(
+                                                6),
+                                        thumbVisibility:
+                                            MaterialStateProperty.all<bool>(
+                                                true),
+                                      ),
+                                      offset: const Offset(-20, 0),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -414,58 +428,76 @@ void showCreateClientDialog(context, uid) {
                                                       // Mover la funcion en la base de datos para cambiar la lista
                                                     },
 
-                                                    icon: const Icon(
-                                                      Icons
-                                                          .arrow_forward_ios_outlined,
-                                                    ),
-                                                    iconSize: 11,
-                                                    iconEnabledColor: myTheme
-                                                        .colorScheme.primary
-                                                        .withOpacity(0.5),
-                                                    iconDisabledColor:
-                                                        Colors.grey,
-                                                    buttonHeight: 50,
-                                                    buttonWidth: 200,
-                                                    buttonPadding:
-                                                        const EdgeInsets.only(
-                                                            left: 14,
-                                                            right: 14),
-                                                    buttonDecoration:
-                                                        BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5),
-                                                      border: Border.all(
-                                                        color: myTheme
-                                                            .colorScheme.primary
-                                                            .withOpacity(0.3),
+                                                    iconStyleData:
+                                                        IconStyleData(
+                                                      icon: const Icon(
+                                                        Icons
+                                                            .arrow_forward_ios_outlined,
                                                       ),
-                                                      color: Colors.white,
+                                                      iconSize: 11,
+                                                      iconEnabledColor: myTheme
+                                                          .colorScheme.primary
+                                                          .withOpacity(0.5),
+                                                      iconDisabledColor:
+                                                          Colors.grey,
                                                     ),
-                                                    buttonElevation: 0,
-                                                    itemHeight: 40,
-                                                    itemPadding:
-                                                        const EdgeInsets.only(
-                                                            left: 14,
-                                                            right: 14),
-                                                    dropdownMaxHeight: 200,
-                                                    dropdownWidth: 200,
-                                                    dropdownPadding: null,
-                                                    dropdownDecoration:
-                                                        BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                      color: Colors.white,
+                                                    buttonStyleData:
+                                                        ButtonStyleData(
+                                                      height: 50,
+                                                      width: 200,
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 14,
+                                                              right: 14),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                        border: Border.all(
+                                                          color: myTheme
+                                                              .colorScheme
+                                                              .primary
+                                                              .withOpacity(0.3),
+                                                        ),
+                                                        color: Colors.white,
+                                                      ),
+                                                      elevation: 0,
                                                     ),
-                                                    dropdownElevation: 8,
-                                                    scrollbarRadius:
-                                                        const Radius.circular(
-                                                            10),
-                                                    scrollbarThickness: 6,
-                                                    scrollbarAlwaysShow: true,
-                                                    offset:
-                                                        const Offset(-20, 0),
+                                                    menuItemStyleData:
+                                                        MenuItemStyleData(
+                                                      height: 40,
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 14,
+                                                              right: 14),
+                                                    ),
+                                                    dropdownStyleData:
+                                                        DropdownStyleData(
+                                                      maxHeight: 200,
+                                                      width: 200,
+                                                      padding: null,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                        color: Colors.white,
+                                                      ),
+                                                      elevation: 8,
+                                                      scrollbarTheme:
+                                                          ScrollbarThemeData(
+                                                        radius: const Radius
+                                                            .circular(10),
+                                                        thickness:
+                                                            MaterialStateProperty
+                                                                .all<double>(6),
+                                                        thumbVisibility:
+                                                            MaterialStateProperty
+                                                                .all<bool>(
+                                                                    true),
+                                                      ),
+                                                      offset:
+                                                          const Offset(-20, 0),
+                                                    ),
                                                   ),
                                                 ),
                                               )

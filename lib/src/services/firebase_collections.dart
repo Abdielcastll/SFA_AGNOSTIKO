@@ -30,7 +30,7 @@ final coinCollection = FirebaseFirestore.instance.collection('monedas');
 
 // Collecion de precios
 final pricesCollection =
-    FirebaseFirestore.instance.collection('lista_de_precios');
+    FirebaseFirestore.instance.collection('listas_de_precios');
 
 // Collecion de lineas
 final linesCollection = FirebaseFirestore.instance.collection('lineas');

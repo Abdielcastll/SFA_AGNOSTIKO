@@ -431,58 +431,79 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                                           value as String;
                                                     });
                                                   },
-                                                  icon: Icon(
-                                                    Icons.arrow_drop_down,
-                                                    size: 16,
-                                                    color: myTheme
+                                                  iconStyleData: IconStyleData(
+                                                    icon: Icon(
+                                                      Icons.arrow_drop_down,
+                                                      size: 16,
+                                                      color: myTheme
+                                                          .colorScheme.primary,
+                                                    ),
+                                                    iconSize: 14,
+                                                    iconEnabledColor: myTheme
                                                         .colorScheme.primary,
+                                                    iconDisabledColor:
+                                                        Colors.grey,
                                                   ),
-                                                  iconSize: 14,
-                                                  iconEnabledColor: myTheme
-                                                      .colorScheme.primary,
-                                                  iconDisabledColor:
-                                                      Colors.grey,
-                                                  buttonHeight: 50,
-                                                  buttonWidth: 160,
-                                                  buttonPadding:
-                                                      const EdgeInsets.only(
-                                                          left: 14, right: 14),
-                                                  buttonDecoration:
-                                                      BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            14),
-                                                    border: Border.all(
-                                                      color: myTheme
-                                                          .colorScheme.primary,
+                                                  buttonStyleData:
+                                                      ButtonStyleData(
+                                                    height: 50,
+                                                    width: 160,
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 14,
+                                                            right: 14),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              14),
+                                                      border: Border.all(
+                                                        color: myTheme
+                                                            .colorScheme
+                                                            .primary,
+                                                      ),
+                                                      color: Colors.white,
                                                     ),
-                                                    color: Colors.white,
+                                                    elevation: 0,
                                                   ),
-                                                  buttonElevation: 0,
-                                                  itemHeight: 40,
-                                                  itemPadding:
-                                                      const EdgeInsets.only(
-                                                          left: 14, right: 14),
-                                                  dropdownMaxHeight: 200,
-                                                  dropdownWidth: 160,
-                                                  dropdownPadding: null,
-                                                  dropdownDecoration:
-                                                      BoxDecoration(
-                                                    border: Border.all(
-                                                      color: myTheme
-                                                          .colorScheme.primary,
+                                                  menuItemStyleData:
+                                                      MenuItemStyleData(
+                                                    height: 40,
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 14,
+                                                            right: 14),
+                                                  ),
+                                                  dropdownStyleData:
+                                                      DropdownStyleData(
+                                                    width: 160,
+                                                    padding: null,
+                                                    decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                        color: myTheme
+                                                            .colorScheme
+                                                            .primary,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              14),
+                                                      color: Colors.white,
                                                     ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            14),
-                                                    color: Colors.white,
+                                                    elevation: 0,
+                                                    scrollbarTheme:
+                                                        ScrollbarThemeData(
+                                                      radius:
+                                                          const Radius.circular(
+                                                              40),
+                                                      thickness:
+                                                          MaterialStateProperty
+                                                              .all<double>(6),
+                                                      thumbVisibility:
+                                                          MaterialStateProperty
+                                                              .all<bool>(true),
+                                                    ),
+                                                    maxHeight: 200,
+                                                    offset: const Offset(0, 0),
                                                   ),
-                                                  dropdownElevation: 0,
-                                                  scrollbarRadius:
-                                                      const Radius.circular(40),
-                                                  scrollbarThickness: 6,
-                                                  scrollbarAlwaysShow: true,
-                                                  offset: const Offset(0, 0),
                                                 ),
                                               ),
                                             ),
@@ -1128,176 +1149,6 @@ class _CheckoutBodyState extends State<CheckoutBody> {
               ),
             ),
           ),
-          // ElevatedButton(
-          //     onPressed: () {
-          //       showDialog(
-          //           context: context,
-          //           builder: (BuildContext context) {
-          //             return AlertDialog(
-          //               contentPadding: EdgeInsets.zero,
-          //               shape: RoundedRectangleBorder(
-          //                 borderRadius: BorderRadius.circular(20),
-          //               ),
-          //               content: SingleChildScrollView(
-          //                 child: Stack(
-          //                   children: [
-          //                     Container(
-          //                       height: 400,
-          //                       width: 300,
-          //                       child: Opacity(
-          //                         opacity: 1,
-          //                         child: ClipRRect(
-          //                           borderRadius: BorderRadius.circular(20),
-          //                           child: Image.asset(
-          //                             'assets/images/payment-background.png',
-          //                             fit: BoxFit.fill,
-          //                           ),
-          //                         ),
-          //                       ),
-          //                     ),
-          //                     Container(
-          //                       margin: EdgeInsets.all(18),
-          //                       child: Center(
-          //                         child: Column(
-          //                           children: [
-          //                             Text(
-          //                               "¡PAGO REGISTRADO!",
-          //                               style: TextStyle(
-          //                                 fontFamily: 'Poppins-regular',
-          //                                 fontSize: 18,
-          //                                 color: Colors.white,
-          //                                 // color: Colors.green,
-          //                                 fontWeight: FontWeight.bold,
-          //                               ),
-          //                             ),
-          //                             Container(
-          //                               margin:
-          //                                   EdgeInsets.fromLTRB(0, 15, 0, 0),
-          //                               width: 100,
-          //                               height: 100,
-          //                               child: Opacity(
-          //                                 opacity: 0.8,
-          //                                 child: Image.asset(
-          //                                   'assets/images/check.png',
-          //                                   fit: BoxFit.cover,
-          //                                 ),
-          //                               ),
-          //                             ),
-          //                             Container(
-          //                               margin:
-          //                                   EdgeInsets.fromLTRB(0, 10, 0, 0),
-          //                               alignment: Alignment.center,
-          //                               child: Column(
-          //                                 mainAxisAlignment:
-          //                                     MainAxisAlignment.center,
-          //                                 crossAxisAlignment:
-          //                                     CrossAxisAlignment.center,
-          //                                 children: [
-          //                                   Container(
-          //                                     margin: EdgeInsets.only(top: 10),
-          //                                     child: Text(
-          //                                       'Monto pagado: 00.00',
-          //                                       style: TextStyle(
-          //                                         fontFamily: 'Poppins-regular',
-          //                                         fontSize: 12,
-          //                                         color: myTheme
-          //                                             .colorScheme.primary,
-          //                                         // color: Colors.green,
-          //                                         fontWeight: FontWeight.bold,
-          //                                       ),
-          //                                     ),
-          //                                   ),
-          //                                   Container(
-          //                                     margin: EdgeInsets.only(top: 10),
-          //                                     child: Text(
-          //                                       'ZONA TEST CLIENTE DEFAULT 000A1',
-          //                                       style: TextStyle(
-          //                                         fontFamily: 'Poppins-regular',
-          //                                         fontSize: 12,
-          //                                         color: myTheme
-          //                                             .colorScheme.primary,
-          //                                         // color: Colors.green,
-          //                                         fontWeight: FontWeight.bold,
-          //                                       ),
-          //                                     ),
-          //                                   ),
-          //                                   Container(
-          //                                     margin: EdgeInsets.only(top: 10),
-          //                                     child: Text(
-          //                                       'Fecha: 00/00/0000',
-          //                                       style: TextStyle(
-          //                                         fontFamily: 'Poppins-regular',
-          //                                         fontSize: 12,
-          //                                         color: myTheme
-          //                                             .colorScheme.primary,
-          //                                         // color: Colors.green,
-          //                                         fontWeight: FontWeight.bold,
-          //                                       ),
-          //                                     ),
-          //                                   ),
-          //                                   Container(
-          //                                     margin: EdgeInsets.only(top: 10),
-          //                                     child: Text(
-          //                                       'Deposito',
-          //                                       style: TextStyle(
-          //                                         fontFamily: 'Poppins-regular',
-          //                                         fontSize: 12,
-          //                                         color: myTheme
-          //                                             .colorScheme.primary,
-          //                                         // color: Colors.green,
-          //                                         fontWeight: FontWeight.bold,
-          //                                       ),
-          //                                     ),
-          //                                   ),
-          //                                 ],
-          //                               ),
-          //                             ),
-          //                             Container(
-          //                               margin: EdgeInsets.only(top: 50),
-          //                               alignment: Alignment.center,
-          //                               child: ElevatedButton.icon(
-          //                                 onPressed: () {
-          //                                   Navigator.pop(context);
-          //                                 },
-          //                                 style: ButtonStyle(
-          //                                   backgroundColor:
-          //                                       MaterialStateProperty.all(
-          //                                     myTheme.colorScheme.primary,
-          //                                   ),
-          //                                   shape: MaterialStateProperty.all<
-          //                                       RoundedRectangleBorder>(
-          //                                     RoundedRectangleBorder(
-          //                                       borderRadius:
-          //                                           BorderRadius.circular(18.0),
-          //                                     ),
-          //                                   ),
-          //                                 ),
-          //                                 icon: Icon(
-          //                                   MaterialIcons.arrow_back_ios,
-          //                                   size: 12,
-          //                                 ),
-          //                                 label: Text(
-          //                                   'Aceptar',
-          //                                   style: TextStyle(
-          //                                     color: Colors.white,
-          //                                     fontFamily: 'Poppins-regular',
-          //                                     fontSize: 12,
-          //                                     fontWeight: FontWeight.bold,
-          //                                   ),
-          //                                 ),
-          //                               ),
-          //                             )
-          //                           ],
-          //                         ),
-          //                       ),
-          //                     ),
-          //                   ],
-          //                 ),
-          //               ),
-          //             );
-          //           });
-          //     },
-          //     child: Text('Test'))
         ],
       ),
     );

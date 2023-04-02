@@ -4,6 +4,7 @@ import 'package:flutterfire_ui/auth.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/discount.dart';
 import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
@@ -59,6 +60,7 @@ class _CataloguePageState extends State<CataloguePage> {
         //     return;
         //   },
         // ),
+
         StreamProvider<List<ProductsWithPromotions>?>.value(
           value: DatabaseServiceStreams().productsWithPromotions,
           initialData: const [],
@@ -139,21 +141,27 @@ class CatalogueBody extends StatefulWidget {
 class _CatalogueBodyState extends State<CatalogueBody> {
   @override
   Widget build(BuildContext context) {
-    final checkProducts = Provider.of<List<Products>?>(context) ?? [];
-    final productsLimit =
-        Provider.of<CounterLimitFirestore>(context).getProductsLimit;
-    final productsScrollLimit =
-        Provider.of<CounterLimitFirestore>(context).getScrollProductLimit;
-    return SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          children: const [
-            PromotionsWidget(),
-            NewProductsWidget(),
-            ListOfProductsButton(),
-            ListOfCategories(),
-            MostSelledProducts(),
-          ],
-        ));
+    final productsByDateProvider =
+        Provider.of<List<ProductsByDate>?>(context) ?? [];
+    // final productsLimit =
+    //     Provider.of<CounterLimitFirestore>(context).getProductsLimit;
+    // final productsScrollLimit =
+    //     Provider.of<CounterLimitFirestore>(context).getScrollProductLimit;
+
+    return productsByDateProvider.isEmpty
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              children: const [
+                PromotionsWidget(),
+                NewProductsWidget(),
+                ListOfProductsButton(),
+                ListOfCategories(),
+                MostSelledProducts(),
+              ],
+            ));
   }
 }

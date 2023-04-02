@@ -271,7 +271,10 @@ class _CompletedPayBody extends State<CompletedPayBody> {
             children: [
               ElevatedButton(
                 onPressed: () {
+                  final orderActive =
+                      Provider.of<OrderProvider>(context, listen: false);
                   objectBox.delelteAllShoppingCart();
+                  orderActive.setOrder(false, Clients());
                   Navigator.popUntil(context, (route) => route.isFirst);
                 },
                 style: ElevatedButton.styleFrom(

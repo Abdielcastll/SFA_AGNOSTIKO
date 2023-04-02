@@ -300,9 +300,13 @@ class _ClientListState extends State<ClientList> {
                       }
                     }
                   },
-                  buttonHeight: 40,
-                  buttonWidth: 140,
-                  itemHeight: 40,
+                  buttonStyleData: const ButtonStyleData(
+                    height: 40,
+                    width: 140,
+                  ),
+                  menuItemStyleData: const MenuItemStyleData(
+                    height: 40,
+                  ),
                   // dropdownElevation: 20,
                 ),
               )
@@ -314,7 +318,7 @@ class _ClientListState extends State<ClientList> {
                 margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                 // color: Colors.grey,
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 0.69,
+                height: MediaQuery.of(context).size.height * 0.68,
                 child: ListView.builder(
                   controller: widget.controller,
                   physics: const BouncingScrollPhysics(),
@@ -442,7 +446,7 @@ class _ClientListState extends State<ClientList> {
                 margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                 // color: Colors.grey,
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 0.69,
+                height: MediaQuery.of(context).size.height * 0.68,
                 child: ListView.builder(
                   controller: widget.controller,
                   physics: const BouncingScrollPhysics(),

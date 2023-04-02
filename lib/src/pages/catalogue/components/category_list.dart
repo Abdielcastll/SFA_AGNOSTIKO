@@ -26,13 +26,13 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
   @override
   Widget build(BuildContext context) {
     final categories = Provider.of<CategorieSummary?>(context)?.summary ?? {};
-    List<MapEntry<String, dynamic>> listData = categories.entries.toList();
+    List<MapEntry> listData = categories.entries.toList();
     listData.sort(
       (a, b) => a.value.toLowerCase().compareTo(
             b.value.toLowerCase(),
           ),
     );
-    final Map<String, dynamic> sortedListData = Map.fromEntries(listData);
+    final Map sortedListData = Map.fromEntries(listData);
     final prices = Provider.of<Prices?>(context)?.prices ?? {};
     final pricesName = Provider.of<Prices?>(context)?.name ?? {};
     final products = Provider.of<List<Products>?>(context) ?? [];
@@ -88,8 +88,9 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
             child: ListView.builder(
               physics: BouncingScrollPhysics(),
               scrollDirection: Axis.horizontal,
-              itemCount: 5,
-              // categoriesSummary.length,
+              itemCount:
+                  // 5,
+                  categoriesSummary.length,
               itemBuilder: (BuildContext context, index) {
                 final categorie = categoriesSummary[index];
                 final key = categorieKeys[index];
