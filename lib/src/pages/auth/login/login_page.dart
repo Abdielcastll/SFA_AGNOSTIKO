@@ -46,8 +46,8 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 125.0),
             Container(
               alignment: Alignment.center,
-              width: 400.0,
-              child: Image.asset('assets/images/logo.png'),
+              width: 250.0,
+              child: Image.asset('assets/images/logo_agnostiko_1.png'),
             ),
             const SizedBox(height: 50.0),
             Container(
