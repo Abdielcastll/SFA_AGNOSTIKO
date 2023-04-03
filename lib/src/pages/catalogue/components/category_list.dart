@@ -42,9 +42,9 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
     // print(categorieKeys);
     // print(categoriesSummary);
     // print(productsList);
-    print(products.length);
-    print('CANTIDAD PRODUCTOS DB');
-    print(sortedListData);
+    // print(products.length);
+    // print('CANTIDAD PRODUCTOS DB');
+    // print(sortedListData);
     // categorieKeys.sort((a, b) {
     //   return a.toLowerCase().compareTo(b.toLowerCase());
     // });
@@ -129,8 +129,8 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                           filteredProducts.add(product);
                         });
                       }
-                      print(filteredProducts);
-                      print(filteredProducts.first.name);
+                      // print(filteredProducts);
+                      // print(filteredProducts.first.name);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -174,18 +174,18 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                                   .then(
                                 (value) {
                                   var cataloguePath = value.docs;
-                                  print(
-                                      'PRINTING CATALOGUE PATHs IDs IN CATEGORY LIST');
+                                  // print(
+                                  //     'PRINTING CATALOGUE PATHs IDs IN CATEGORY LIST');
                                   for (var path in cataloguePath) {
-                                    print(path.id);
-                                    print(path.get('nombre'));
+                                    // print(path.id);
+                                    // print(path.get('nombre'));
                                     var catalogueId = path
                                             .data()
                                             .toString()
                                             .contains('catalogo')
                                         ? path.get('catalogo').id
                                         : 'NO CATALOGUE ID FOUND';
-                                    print(catalogueId);
+                                    // print(catalogueId);
 
                                     // print('TEST TO GET IMAGE');
 
@@ -193,9 +193,9 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                                   }
                                 },
                               ).catchError((e) {
-                                print(
-                                    'ERROR ON GETTING IMAGE PATH FROM FIREBASE COLLECTION IN CATEGORY LIST');
-                                print(e);
+                                // print(
+                                //     'ERROR ON GETTING IMAGE PATH FROM FIREBASE COLLECTION IN CATEGORY LIST');
+                                // print(e);
                               }),
                               builder: (context, snapshot) {
                                 final catalogueID = snapshot.data?.toString();
@@ -209,16 +209,16 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                                         .child('1')
                                         .getDownloadURL()
                                         .catchError((e) {
-                                      print(
-                                          'ERROR ON GETTING IMAGE FROM FIREBASE STORAGE IN CATEGORY LIST');
-                                      print(e);
+                                      // print(
+                                      //     'ERROR ON GETTING IMAGE FROM FIREBASE STORAGE IN CATEGORY LIST');
+                                      // print(e);
                                       return 'assets/images/nocategorie.jpg';
                                     }),
                                     builder: (context, snapshot) {
                                       if (snapshot.hasData) {
                                         final url = snapshot.data?.toString();
-                                        print('URL FOR CATEGORIE');
-                                        print(url);
+                                        // print('URL FOR CATEGORIE');
+                                        // print(url);
                                         return CachedNetworkImage(
                                           fit: BoxFit.cover,
                                           imageUrl:

@@ -2,11 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/order_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/account_balance/client_orders_completed.dart';
 import 'package:pwa_sales2go_flutter/src/pages/account_balance/client_orders_onprocess,.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/orders/orders_page.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
+import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -23,6 +27,8 @@ class ClientOrders extends StatefulWidget {
 class _ClientOrdersState extends State<ClientOrders> {
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<CurrentUserInfo?>(context);
+
     final scrollLimit =
         Provider.of<CounterLimitFirestore>(context).getScrollOrderBalance;
     final document = clientsCollection
@@ -44,6 +50,16 @@ class _ClientOrdersState extends State<ClientOrders> {
           initialData: const [],
           catchError: (context, error) {
             print(error);
+          },
+        ),
+        FutureProvider<UserRole?>.value(
+          value: user?.getUserRole(),
+          initialData: null,
+          catchError: (context, error) {
+            print(
+                'ERROR ON GETTING USER ROLE IN CLIENT ORDERS IN CLIENT DETAILS');
+            print(error);
+            return;
           },
         ),
       ],
@@ -109,6 +125,8 @@ class _ClientOrdersBodyState extends State<ClientOrdersBody> {
 
   @override
   Widget build(BuildContext context) {
+    final userRole = Provider.of<UserRole?>(context, listen: true);
+
     return SingleChildScrollView(
       child:
           // Center(

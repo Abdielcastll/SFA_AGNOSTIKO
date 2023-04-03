@@ -368,7 +368,8 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     print(paymentBody.amountPaied);
 
     final payed = transactionResult == EmvTransactionResult.Approved
-        ? exchangeAmount(paymentBody.currency, _amountDouble)
+        ? exchangeAmount(paymentBody.currency, _amountDouble,
+            transactionArgs!.invoice!.coinExchangeRatio)
         : 0.0;
     print(payed);
 

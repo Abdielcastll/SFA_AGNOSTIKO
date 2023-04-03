@@ -20,7 +20,7 @@ class NavigationPages extends StatefulWidget {
 }
 
 class _NavigationPagesState extends State<NavigationPages> {
-  int index = 0;
+  // int index = 0;
   final screens = [
     const CataloguePage(),
     const DiaryTabs(),
@@ -30,6 +30,8 @@ class _NavigationPagesState extends State<NavigationPages> {
 
   @override
   Widget build(BuildContext context) {
+    int index = Provider.of<CounterLimitFirestore>(context).currentScreen;
+
     return Scaffold(
       body: IndexedStack(
         index: index,
@@ -57,7 +59,12 @@ class _NavigationPagesState extends State<NavigationPages> {
           animationDuration: const Duration(seconds: 1),
           selectedIndex: index,
           onDestinationSelected: (int i) {
-            setState(() => index = i);
+            // setState(() => index = i);
+            setState(() {
+              final j =
+                  Provider.of<CounterLimitFirestore>(context, listen: false);
+              j.setNewScreen(i);
+            });
           },
           destinations: [
             NavigationDestination(

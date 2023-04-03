@@ -1,16 +1,17 @@
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 
-double exchangeAmount(String coin, double amount) {
+double exchangeAmount(String coin, double amount, double exchange) {
   var newAmount = amount;
-  if (coin.contains('VED')) {
-    newAmount = amount / 4.58;
-  }
-  if (coin.contains('EUR')) {
-    newAmount = amount / 0.89;
-  }
-  if (coin.contains('MXN')) {
-    newAmount = amount / 19.43;
-  }
+  newAmount = amount / exchange;
+  // if (coin.contains('VED')) {
+  //   newAmount = amount / 4.58;
+  // }
+  // if (coin.contains('EUR')) {
+  //   newAmount = amount / 0.89;
+  // }
+  // if (coin.contains('MXN')) {
+  //   newAmount = amount / 19.43;
+  // }
   return double.parse(newAmount.toStringAsFixed(4));
 }
 
@@ -33,7 +34,8 @@ double priceToCurrencySelected(double productPrice, String coin) {
 }
 
 double roundAmount(double amount) {
-  return double.parse(amount.toStringAsFixed(4));
+  double correctAmount = double.parse(amount.toStringAsFixed(4));
+  return double.parse(correctAmount.toStringAsFixed(2));
 }
 
 Map<String, dynamic>? getExchangesRates(List<Coin?> coins) {
@@ -79,4 +81,11 @@ String? getCoinCode({String? coin}) {
   List<String> currentCoinSplit = coin!.split(' ');
   String currentCoinLastPosition = currentCoinSplit.last;
   return currentCoinLastPosition;
+}
+
+priceFormatForDB(productPrice, coin, exchangRatio) {
+  double correctAmount = double.parse(productPrice.toStringAsFixed(4));
+  double convertedAmount =
+      double.parse((correctAmount * exchangRatio!).toStringAsFixed(4));
+  return convertedAmount;
 }

@@ -5,6 +5,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
+import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
@@ -16,6 +17,7 @@ import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -42,8 +44,9 @@ class ProductsPage extends StatefulWidget {
 class _ProductsPageState extends State<ProductsPage> {
   @override
   Widget build(BuildContext context) {
-    // print(widget.listOfProducts?.length);
-
+    final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
+    List<String> currentCoinSplit = currentCoin!.split(' ');
+    String currentCoinSelectedCode = currentCoinSplit.last;
     return Scaffold(
       appBar: AppBarNavigation(
         message: AppLocalizations.of(context)!.products,
@@ -107,6 +110,19 @@ class _ProductsPageState extends State<ProductsPage> {
             catchError: (context, error) {
               return;
             },
+          ),
+          StreamProvider<Coin?>.value(
+            initialData: Coin(),
+            catchError: (context, error) {
+              print(
+                  'ERROR ON STREAM PROVIDER OF COINEXCHANGE RATES IN ADD CLIENT');
+              print(error);
+              return;
+            },
+            value: coinCollection
+                .doc(currentCoinSelectedCode)
+                .snapshots()
+                .map(coinFromSnapshot),
           ),
         ],
         child: ProductsBody(
@@ -198,32 +214,14 @@ class _ProductsBodyState extends State<ProductsBody> {
     });
   }
 
-  // // Esta funcion se llama cada vez que el text field cambia
-  // void _searchProduct(String query) {
-  //   List<Products>? suggestions = [];
-  //   // si la barra de busqueda esta vacia o solo contiene espacios vacios,
-  //   // se hara display de todos los items
-  //   if (query.isEmpty) {
-  //     suggestions = widget.listOfProducts;
-  //   } else {
-  //     suggestions = widget.listOfProducts
-  //         ?.where((product) =>
-  //             product.name.toLowerCase().contains(query.toLowerCase()))
-  //         .toList();
-  //   }
-  //   // Refrescar la UI
-  //   setState(() => products = suggestions);
-  // }
-
-  // Future
-
   final List<String> items = ['10', '50', 'Todos'];
   String? selectedValue;
 
   @override
   Widget build(BuildContext context) {
+    // Orden activa
     final orderActive = Provider.of<OrderProvider>(context);
-
+    // Resumenes
     final qualitiesSummary =
         Provider.of<QualitySummary?>(context)?.summary ?? {};
     final categoriesSummary =
@@ -235,51 +233,58 @@ class _ProductsBodyState extends State<ProductsBody> {
         Provider.of<SubCategorieSummary?>(context)?.summary ?? {};
     final sizesSummary = Provider.of<SizeSummary?>(context)?.summary ?? {};
     final stockValues = Provider.of<StockModel?>(context)?.stock ?? {};
-    final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
+    // Moneda actual
+    final coinName = Provider.of<Coin?>(context)?.name ?? '';
+    final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 0;
+    final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 0;
+    final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
+    final coinCode = Provider.of<Coin?>(context)?.code ?? '';
+    // Scroll limits
     final productsLimit =
         Provider.of<CounterLimitFirestore>(context).getProductsLimit;
     final productsScrollLimit =
         Provider.of<CounterLimitFirestore>(context).getScrollProductLimit;
-
+    // Produtos
     final products = Provider.of<List<Products>?>(context) ?? [];
-    // print(widget.listOfProducts.length ?? 0);
 
     priceFormat(productPrice) {
       double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-      if (currentCoin!.contains('USD')) {
-        return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
-            .format(productPrice)
-            .toString();
-      } else if (currentCoin.contains('VED')) {
-        return NumberFormat.currency(
-          locale: 'es_VE',
-          decimalDigits: 2,
-          symbol: "Bs.",
-        ).format(correctAmount * 4.58).toString();
-      } else if (currentCoin.contains('EUR')) {
-        return NumberFormat.currency(
-          locale: 'es_ES',
-          decimalDigits: 2,
-          symbol: '€',
-        ).format(correctAmount * 0.89).toString();
-      } else if (currentCoin.contains('MXN')) {
-        return NumberFormat.currency(
-          locale: 'es_MX',
-          decimalDigits: 2,
-          symbol: '\$',
-        ).format(correctAmount * 19.43);
-      } else if (currentCoin.contains('BTC')) {
-        return '฿ ${(correctAmount * 0.00011).toString()}';
-      } else {
-        return NumberFormat.currency(
-          locale: 'es_VE',
-          decimalDigits: 2,
-          symbol: "PPR.",
-        ).format(correctAmount * 4.58).toString();
-      }
-    }
+      double convertedAmount = double.parse(
+          (correctAmount * coinExchangeRatio).toStringAsFixed(coinDecimals));
+      return '$coinSymbol $convertedAmount';
 
-    print(filteredProducts.length);
+      // if (currentCoin!.contains('USD')) {
+      //   return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
+      //       .format(productPrice)
+      //       .toString();
+      // } else if (currentCoin.contains('VED')) {
+      //   return NumberFormat.currency(
+      //     locale: 'es_VE',
+      //     decimalDigits: 2,
+      //     symbol: "Bs.",
+      //   ).format(correctAmount * 4.58).toString();
+      // } else if (currentCoin.contains('EUR')) {
+      //   return NumberFormat.currency(
+      //     locale: 'es_ES',
+      //     decimalDigits: 2,
+      //     symbol: '€',
+      //   ).format(correctAmount * 0.89).toString();
+      // } else if (currentCoin.contains('MXN')) {
+      //   return NumberFormat.currency(
+      //     locale: 'es_MX',
+      //     decimalDigits: 2,
+      //     symbol: '\$',
+      //   ).format(correctAmount * 19.43);
+      // } else if (currentCoin.contains('BTC')) {
+      //   return '฿ ${(correctAmount * 0.00011).toString()}';
+      // } else {
+      //   return NumberFormat.currency(
+      //     locale: 'es_VE',
+      //     decimalDigits: 2,
+      //     symbol: "PPR.",
+      //   ).format(correctAmount * 4.58).toString();
+      // }
+    }
 
     return Scaffold(
       backgroundColor: myTheme.colorScheme.surface,

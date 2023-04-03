@@ -65,21 +65,48 @@ class ProductDetails extends StatefulWidget {
 class _ProductDetailsState extends State<ProductDetails> {
   @override
   Widget build(BuildContext context) {
+    final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
+    List<String> currentCoinSplit = currentCoin!.split(' ');
+    String currentCoinSelectedCode = currentCoinSplit.last;
+    // print(currentCoinSelectedCode);
     return Scaffold(
       appBar: AppBar(elevation: 0, toolbarHeight: 40),
       backgroundColor: myTheme.colorScheme.surface,
       body: MultiProvider(
         providers: [
-          StreamProvider<List<Coin>?>.value(
-            initialData: const [],
+          StreamProvider<Coin?>.value(
+            initialData: Coin(),
             catchError: (context, error) {
               print(
                   'ERROR ON STREAM PROVIDER OF COINEXCHANGE RATES IN ADD CLIENT');
               print(error);
               return;
             },
-            value: coinCollection.snapshots().map(coinListfromSnapshot),
+            value: coinCollection
+                .doc(currentCoinSelectedCode)
+                .snapshots()
+                .map(coinFromSnapshot),
           ),
+          //     .map((doc) {
+          //   return Coin(
+          //     code: doc.data().toString().contains('codigo')
+          //         ? doc.get('codigo')
+          //         : 'N/A',
+          //     decimals: doc.data().toString().contains('decimales')
+          //         ? doc.get('decimales')
+          //         : 0,
+          //     name: doc.data().toString().contains('nombre')
+          //         ? doc.get('nombre')
+          //         : 'N/A',
+          //     symbol: doc.data().toString().contains('simbolo')
+          //         ? doc.get('simbolo')
+          //         : 'N/A',
+          //     exchangeRatio: doc.data().toString().contains('tasaDeCambio')
+          //         ? doc.get('tasaDeCambio')
+          //         : 0,
+          //   );
+          // }),
+          // value: coinCollection.snapshots().map(coinListfromSnapshot),
         ],
         child: ProductDetailsBody(
           code: widget.code,
@@ -138,12 +165,18 @@ class ProductDetailsBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     final orderActive = Provider.of<OrderProvider>(context);
-    final coins = Provider.of<List<Coin>?>(context) ?? [];
-    final exchangeRates = getExchangesRates(coins);
-    final coinCode = getCoinCode(coin: currentCoin);
-    final coinSymbols = getMoneySymbols(coins);
+    final coinName = Provider.of<Coin?>(context)?.name ?? '';
+    final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 0;
+    final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 0;
+    final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
+    final coinCode = Provider.of<Coin?>(context)?.code ?? '';
+    // final coins = Provider.of<List<Coin>?>(context) ?? [];
+
+    // final exchangeRates = getExchangesRates(coins);
+    // final coinCode = getCoinCode(coin: currentCoin);
+    // final coinSymbols = getMoneySymbols(coins);
+    print(coinCode);
 
     // print('EXCHANGE RATES IN PRODUCT DETAILS');
     // print(coins);
@@ -170,11 +203,11 @@ class ProductDetailsBody extends StatelessWidget {
     /////////////////////////////////////////
 
     final priceProduct = (double.parse(price ?? '0.0') *
-            double.parse(exchangeRates?['$coinCode'] ?? '0.0'))
-        .toStringAsFixed(2);
+            double.parse(coinExchangeRatio.toString()))
+        .toStringAsFixed(coinDecimals);
     // priceFormat(double.parse(price ?? '0')).toString();
 
-    return coins.isEmpty
+    return coinName.toString().isEmpty
         ? Center(
             child: CircularProgressIndicator(),
           )
@@ -516,7 +549,7 @@ class ProductDetailsBody extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                '${coinSymbols?[coinCode]} $priceProduct',
+                                '$coinSymbol $priceProduct',
                                 style: TextStyle(
                                   color: myTheme.colorScheme.primary,
                                   fontFamily: 'Poppins-regular',

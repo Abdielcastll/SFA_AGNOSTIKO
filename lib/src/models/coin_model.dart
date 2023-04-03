@@ -44,14 +44,6 @@ List<Coin> coinListfromSnapshot(QuerySnapshot snapshot) {
   }).toList();
 }
 
-List<CoinExchangeRates> coinRatesListfromSnapshot(QuerySnapshot snapshot) {
-  return snapshot.docs.map((doc) {
-    return CoinExchangeRates(
-      exchangeRatio: doc.get('tasaDeCambio'),
-    );
-  }).toList();
-}
-
 Coin coinFromSnapshot(doc) {
   return Coin(
     code: doc.data().toString().contains('codigo') ? doc.get('codigo') : 'N/A',
@@ -65,6 +57,7 @@ Coin coinFromSnapshot(doc) {
         : 0,
   );
 }
+
 
 // CoinExchangeRates coinExchangeRate(doc) {
 //   return CoinExchangeRates(

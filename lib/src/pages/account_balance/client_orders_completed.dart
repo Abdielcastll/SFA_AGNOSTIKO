@@ -127,6 +127,7 @@ class _ClientOrdersCompletedState extends State<ClientOrdersCompleted> {
                         discountMaster: orderDiscountMaster,
                         tax: orderTax,
                         correlativeNumber: order.correlativeNumber,
+                        showButton: false,
                       );
                     },
                   ),

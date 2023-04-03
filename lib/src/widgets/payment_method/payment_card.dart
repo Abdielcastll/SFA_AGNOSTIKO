@@ -63,13 +63,24 @@ Future<double?> _acceptAmount(
   }
 }
 
-paymentCard(double amount, Client client, String invoiceDocumentID,
-    double totalOfTheOrder, String currentCoin, DateTime date, double remaining,
-    {Function? updatePayed, AddPaymentBodyAtt? paymentBody, noRetail = false}) {
+paymentCard(
+    double amount,
+    Client client,
+    String invoiceDocumentID,
+    double totalOfTheOrder,
+    String currentCoin,
+    DateTime date,
+    double remaining,
+    coinExchangeRatio,
+    {Function? updatePayed,
+    AddPaymentBodyAtt? paymentBody,
+    noRetail = false}) {
   remaining = priceToCurrencySelected(remaining, currentCoin);
 
   final invoiceData = InvoiceData(client, invoiceDocumentID, 'USD', amount,
-      totalOfTheOrder, currentCoin, date, remaining);
+      totalOfTheOrder, currentCoin, date, remaining, coinExchangeRatio);
+  print(invoiceData.currentCoin);
+  print('GET COIN FROM PAYMENTCARD');
 
   return StatefulBuilder(
     builder: (context, setState) => Column(

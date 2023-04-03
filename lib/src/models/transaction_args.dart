@@ -67,7 +67,16 @@ class InvoiceData {
   String currentCoin;
   DateTime date;
   double remaining;
+  double coinExchangeRatio;
 
-  InvoiceData(this.client, this.invoiceDocumentID, this.currency, this.amount,
-      this.totalOfTheOrder, this.currentCoin, this.date, this.remaining);
+  InvoiceData(
+      this.client,
+      this.invoiceDocumentID,
+      this.currency,
+      this.amount,
+      this.totalOfTheOrder,
+      this.currentCoin,
+      this.date,
+      this.remaining,
+      this.coinExchangeRatio);
 }

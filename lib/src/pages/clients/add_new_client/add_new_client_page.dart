@@ -5,23 +5,17 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:flutter/services.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
-import 'package:pwa_sales2go_flutter/src/models/idtype_model.dart';
-import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
-import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
-import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/loading/loading_widget.dart';
 
 class AddClientPage extends StatefulWidget {
@@ -106,27 +100,38 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
   late String? longitude = '';
 
   File? imageFile;
-  LocationData? locationData;
 
-  // final List<String> idTypes = ['V', 'K', 'J'];
-  final List<String> pricesList = [
-    'GENER-03',
-    'GENER-04',
-    'GENER-11',
-    'TPGBASE'
-  ];
-
-  getFromGallery(context) async {
-    XFile? pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      return pickedFile;
-    } else {
-      return;
+  Future getFromGallery(context) async {
+    try {
+      XFile? pickedFile =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        return pickedFile;
+      } else {
+        return;
+      }
+    } on PlatformException catch (e) {
+      print('ERROR ESCOGIENDO IMAGEN');
+      print(e);
     }
   }
 
-  cropImage(filePath, imageFile) async {
+  Future getFromCamera(context) async {
+    try {
+      XFile? pickedFile =
+          await ImagePicker().pickImage(source: ImageSource.camera);
+      if (pickedFile != null) {
+        return pickedFile;
+      } else {
+        return;
+      }
+    } on PlatformException catch (e) {
+      print('ERROR ESCOGIENDO IMAGEN');
+      print(e);
+    }
+  }
+
+  Future cropImage(filePath, imageFile) async {
     CroppedFile? croppedImage = await ImageCropper().cropImage(
       sourcePath: filePath,
       maxHeight: 1080,
@@ -137,45 +142,9 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
     }
   }
 
-  // Future<Position> _getCurrentLocation() async {
-  //   bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  //   if (!serviceEnabled) {
-  //     return Future.error('Location services are disabled');
-  //   }
-  //   LocationPermission permission = await Geolocator.checkPermission();
-  //   if (permission == LocationPermission.denied) {
-  //     permission = await Geolocator.requestPermission();
-  //     if (permission == LocationPermission.denied) {
-  //       return Future.error('Location permissions are denied');
-  //     }
-  //   }
-  //   if (permission == LocationPermission.deniedForever) {
-  //     return Future.error(
-  //         'Location permissions are permanently denied, we cannot request permission');
-  //   }
-  //   return await Geolocator.getCurrentPosition();
-  // }
-
-  void getPermission() async {
-    if (await Permission.location.isGranted) {
-      // Obtener localizacion
-      getLocation();
-    } else {
-      Permission.location.request();
-    }
-  }
-
-  void getLocation() async {
-    setState(() {
-      isGeolocatorLoading = true;
-    });
-    locationData = await Location.instance.getLocation();
-    latitude = locationData!.latitude.toString();
-    longitude = locationData!.longitude.toString();
-    setState(() {
-      isGeolocatorLoading = false;
-    });
-  }
+  // Location location = Location();
+  // PermissionStatus? _permissionGranted;
+  // LocationData? _locationData;
 
   @override
   Widget build(BuildContext context) {
@@ -189,17 +158,17 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
     List<String> pricesSummaryValues = List.from(pricesSummary.values);
     String? newClientSalesZone = zonesSummary[widget.userZoneDocument?.id];
 
-    print('TEST ADD CLIENT PROVIDERS');
-    print(widget.userZoneDocument?.id);
-    print(pricesSummary);
-    print(idSummary);
-    print(idSummaryValues);
-    print(zonesSummary);
-    print(newClientSalesZone);
-    print('Monedas');
+    // print('TEST ADD CLIENT PROVIDERS');
+    // print(widget.userZoneDocument?.id);
+    // print(pricesSummary);
+    // print(idSummary);
+    // print(idSummaryValues);
+    // print(zonesSummary);
+    // print(newClientSalesZone);
+    // print('Monedas');
 
     for (var element in coinsExhangesRates) {
-      print(element.exchangeRatio);
+      // print(element.exchangeRatio);
     }
 
     return isGeolocatorLoading
@@ -332,7 +301,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                     setState(() {
                                       selectedIdType = value as String;
                                     });
-                                    print(selectedIdType);
+                                    // print(selectedIdType);
                                   },
                                   buttonStyleData: ButtonStyleData(
                                     height: 45,
@@ -616,95 +585,188 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                           readOnly: false,
                         ),
                       ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
-                        child: Row(
-                          // mainAxisAlignment: MainAxisAlignment.center,
-                          // ignore: prefer_const_literals_to_create_immutables
-                          children: [
-                            TextMessageForTextField(message: 'Geolocalización'),
-                            SizedBox(width: 5),
-                          ],
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          Container(
-                            width: 120,
-                            margin: EdgeInsets.fromLTRB(20, 0, 10, 0),
-                            child: TextFieldForNewClient(
-                              controller: null,
-                              hintMessage: latitude,
-                              textInputType: TextInputType.name,
-                              maxLines: 1,
-                              readOnly: true,
-                            ),
-                          ),
-                          Container(
-                            width: 120,
-                            margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                            child: TextFieldForNewClient(
-                              controller: null,
-                              hintMessage: longitude,
-                              textInputType: TextInputType.name,
-                              maxLines: 1,
-                              readOnly: true,
-                            ),
-                          ),
-                          Container(
-                            width: 50,
-                            child: IconButton(
-                              icon: Icon(
-                                Icons.place_sharp,
-                                color: myTheme.colorScheme.primary,
-                              ),
-                              onPressed: () {
-                                // Obtener Localización (latitud y longitud);
-                                getLocation();
-                                setState(() {});
+                      // LOCALIZACION, COMENTADO POR PROBLEMAS DE USO SIN GOOGLE
+                      // PLAY SERVICES
+                      // Container(
+                      //   margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
+                      //   child: Row(
+                      //     // mainAxisAlignment: MainAxisAlignment.center,
+                      //     // ignore: prefer_const_literals_to_create_immutables
+                      //     children: [
+                      //       TextMessageForTextField(message: 'Geolocalización'),
+                      //       SizedBox(width: 5),
+                      //     ],
+                      //   ),
+                      // ),
+                      // Row(
+                      //   children: [
+                      //     Container(
+                      //       width: 120,
+                      //       margin: EdgeInsets.fromLTRB(20, 0, 10, 0),
+                      //       child: TextFieldForNewClient(
+                      //         controller: null,
+                      //         hintMessage: latitude,
+                      //         textInputType: TextInputType.name,
+                      //         maxLines: 1,
+                      //         readOnly: true,
+                      //       ),
+                      //     ),
+                      //     Container(
+                      //       width: 120,
+                      //       margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                      //       child: TextFieldForNewClient(
+                      //         controller: null,
+                      //         hintMessage: longitude,
+                      //         textInputType: TextInputType.name,
+                      //         maxLines: 1,
+                      //         readOnly: true,
+                      //       ),
+                      //     ),
+                      //     Container(
+                      //       width: 50,
+                      //       child: IconButton(
+                      //         icon: Icon(
+                      //           Icons.place_sharp,
+                      //           color: myTheme.colorScheme.primary,
+                      //         ),
+                      //         onPressed: () async {
+                      //           // Obtener Localización (latitud y longitud);
+                      //           // bool _serviceEnabled;
 
-                                // _getCurrentLocation().then((value) {
-                                //   latitude = '${value.latitude}';
-                                //   longitude = '${value.longitude}';
-                                //   setState(() {});
-                                // });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
+                      //           // try {
+                      //           //   _serviceEnabled =
+                      //           //       await location.serviceEnabled();
+                      //           //   if (!_serviceEnabled) {
+                      //           //     _serviceEnabled =
+                      //           //         await location.requestService();
+                      //           //     if (!_serviceEnabled) {
+                      //           //       return;
+                      //           //     }
+                      //           //   }
+
+                      //           //   _permissionGranted =
+                      //           //       await location.hasPermission();
+                      //           //   if (_permissionGranted ==
+                      //           //       PermissionStatus.denied) {
+                      //           //     _permissionGranted =
+                      //           //         await location.requestPermission();
+                      //           //     if (_permissionGranted !=
+                      //           //         PermissionStatus.granted) {
+                      //           //       return;
+                      //           //     }
+                      //           //   }
+
+                      //           //   _locationData = await location.getLocation();
+                      //           //   // LocationData location = await getLocation();
+                      //           //   print('LOCATION++++++++++++++++++++++++++');
+                      //           //   print(
+                      //           //       "Location: ${_locationData?.latitude}, ${_locationData?.longitude}");
+                      //           // } catch (e) {
+                      //           //   print(e);
+                      //           //   print('ERROR TESTING GETLOCATION');
+                      //           // }
+                      //         },
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                       SizedBox(height: 10),
-                      Text(
-                        // AppLocalizations.of(context)!.selectFile,
-                        'Seleccionar Archivo',
-                        style: TextStyle(
-                          fontFamily: 'Poppins-regular',
-                          color: Colors.grey.shade400,
-                          fontSize: 14,
-                        ),
-                      ),
+                      // Text(
+                      //   // AppLocalizations.of(context)!.selectFile,
+                      //   'Seleccionar Archivo',
+                      //   textAlign: TextAlign.center,
+                      //   style: TextStyle(
+                      //     fontFamily: 'Poppins-regular',
+                      //     color: Colors.grey.shade400,
+                      //     fontSize: 14,
+                      //   ),
+                      // ),
                       SizedBox(
                         height: 10,
                       ),
                       InkWell(
                         onTap: () async {
-                          var pickedFile = await getFromGallery(context);
-                          if (pickedFile != null) {
-                            print('Imagen seleccionada');
-                            var croppedImage =
-                                await cropImage(pickedFile.path, imageFile);
-                            if (croppedImage != null) {
-                              print('Imagen recortada');
-                              setState(() {
-                                imageFile = File(croppedImage.path);
-                              });
-                            } else {
-                              print('Error croppeando');
-                            }
-                          } else {
-                            print('error seleccionando');
-                            return;
-                          }
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) {
+                              return Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  ListTile(
+                                    leading: Icon(
+                                      Icons.camera_alt,
+                                      color: myTheme
+                                          .colorScheme.onPrimaryContainer,
+                                    ),
+                                    title: Text(
+                                      'Camara',
+                                      style: TextStyle(
+                                        color: myTheme.colorScheme.primary,
+                                        fontFamily: 'Poppins-regular',
+                                      ),
+                                    ),
+                                    onTap: () async {
+                                      Navigator.of(context).pop();
+                                      var pickedFile =
+                                          await getFromCamera(context);
+                                      if (pickedFile != null) {
+                                        print('Imagen seleccionada');
+                                        var croppedImage = await cropImage(
+                                            pickedFile.path, imageFile);
+                                        if (croppedImage != null) {
+                                          print('Imagen recortada');
+                                          setState(() {
+                                            imageFile = File(croppedImage.path);
+                                          });
+                                        } else {
+                                          print('Error croppeando');
+                                        }
+                                      } else {
+                                        print('error seleccionando');
+                                        return;
+                                      }
+                                    },
+                                  ),
+                                  Divider(),
+                                  ListTile(
+                                    leading: Icon(
+                                      Icons.photo_camera_back_rounded,
+                                      color: myTheme
+                                          .colorScheme.onPrimaryContainer,
+                                    ),
+                                    title: Text(
+                                      'Galeria',
+                                      style: TextStyle(
+                                        color: myTheme.colorScheme.primary,
+                                        fontFamily: 'Poppins-regular',
+                                      ),
+                                    ),
+                                    onTap: () async {
+                                      Navigator.of(context).pop();
+                                      var pickedFile =
+                                          await getFromGallery(context);
+                                      if (pickedFile != null) {
+                                        print('Imagen seleccionada');
+                                        var croppedImage = await cropImage(
+                                            pickedFile.path, imageFile);
+                                        if (croppedImage != null) {
+                                          print('Imagen recortada');
+                                          setState(() {
+                                            imageFile = File(croppedImage.path);
+                                          });
+                                        } else {
+                                          print('Error croppeando');
+                                        }
+                                      } else {
+                                        print('error seleccionando');
+                                        return;
+                                      }
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                         },
                         child: Container(
                           margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
@@ -714,11 +776,12 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                             children: [
                               Icon(
                                 Icons.camera,
-                                color: myTheme.colorScheme.secondary,
+                                color: myTheme.colorScheme.onPrimaryContainer,
                               ),
+                              SizedBox(width: 10),
                               Text(
                                 // AppLocalizations.of(context)!.gallery,
-                                'Galeria',
+                                'Seleccione un archivo',
                                 style: TextStyle(
                                   color: myTheme.colorScheme.primary,
                                   fontFamily: 'Poppins-regular',
@@ -730,20 +793,60 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                       ),
                       imageFile == null
                           ? Container()
-                          : Container(
-                              margin: EdgeInsets.only(top: 5),
-                              height: 300,
-                              width: 300,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: myTheme.colorScheme.primary,
+                          : GestureDetector(
+                              onTap: () {
+                                ScaffoldMessenger.of(context)
+                                  ..removeCurrentSnackBar()
+                                  ..showSnackBar(
+                                    SnackBar(
+                                      backgroundColor: myTheme
+                                          .colorScheme.onPrimaryContainer,
+                                      duration: const Duration(seconds: 1),
+                                      content: Text(
+                                        "Toque la imagen dos veces para removerla ",
+                                        style: const TextStyle(
+                                          fontFamily: 'Poppins-regular',
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                              },
+                              onDoubleTap: () {
+                                setState(() => imageFile = null);
+                                ScaffoldMessenger.of(context)
+                                  ..removeCurrentSnackBar()
+                                  ..showSnackBar(
+                                    SnackBar(
+                                      backgroundColor: Colors.green,
+                                      duration: const Duration(seconds: 1),
+                                      content: Text(
+                                        "Imagen removida",
+                                        style: const TextStyle(
+                                          fontFamily: 'Poppins-regular',
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                              },
+                              child: Container(
+                                margin: EdgeInsets.fromLTRB(20, 5, 20, 0),
+                                // height: 300,
+                                // width: 300,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: myTheme.colorScheme.primary,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Image.file(
-                                imageFile!,
-                                height: 300,
-                                width: 300,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(9),
+                                  child: Image.file(
+                                    imageFile!,
+                                    fit: BoxFit.contain,
+                                    // height: 300,
+                                    // width: 300,
+                                  ),
+                                ),
                               ),
                             ),
                       SizedBox(height: 10),

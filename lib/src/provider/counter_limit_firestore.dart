@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 
 class CounterLimitFirestore extends ChangeNotifier {
+  int currentScreen = 0;
   int _productsLimit = 10;
   int _scrollProductLimit = 10;
   int _clientsLimit = 10;
@@ -51,10 +52,23 @@ class CounterLimitFirestore extends ChangeNotifier {
   int get getScrollBalanceLimit => _scrollBalanceLimit;
   int get getScrollOrderBalance => _orderBalanceLimit;
   int get getScrollOrderBalanceLimit => _scrollOrderBalanceLimit;
+  int get getCurrentScreen => currentScreen;
 
   Timestamp get currentDayVisits => _selectedDayVisits;
   Timestamp get currentDayOrder => _selectedDayOrder;
   Timestamp? get currentDayInvoice => _selectedDayInvoice;
+
+  void resetCurrentScreen() {
+    currentScreen = 0;
+    notifyListeners();
+    print('currentScreen: $currentScreen');
+  }
+
+  void setNewScreen(i) {
+    currentScreen = i;
+    notifyListeners();
+    print('currentScreen: $currentScreen');
+  }
 
   void setOrderBalanceLimit(int? newLimit, int? newScrollLimit) {
     if (newLimit != null) {

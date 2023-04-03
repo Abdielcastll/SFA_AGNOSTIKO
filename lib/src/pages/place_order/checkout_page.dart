@@ -12,6 +12,7 @@ import 'package:pwa_sales2go_flutter/examples/clients_example.dart';
 import 'package:pwa_sales2go_flutter/examples/products_example.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/discount.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
@@ -22,6 +23,7 @@ import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
+import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_checkout.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -47,14 +49,34 @@ class CheckoutPage extends StatefulWidget {
 class _CheckoutPageState extends State<CheckoutPage> {
   @override
   Widget build(BuildContext context) {
+    final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
+    List<String> currentCoinSplit = currentCoin!.split(' ');
+    String currentCoinSelectedCode = currentCoinSplit.last;
     return Scaffold(
       appBar: const AppBarCheckout(),
       backgroundColor: Colors.grey.shade100,
-      body: CheckoutBody(
-        client: widget.client,
-        subTotal: widget.subTotal,
-        cart: widget.cart,
-        coinsExchangeRates: widget.coinsExchangeRates,
+      body: MultiProvider(
+        providers: [
+          StreamProvider<Coin?>.value(
+            initialData: Coin(),
+            catchError: (context, error) {
+              print(
+                  'ERROR ON STREAM PROVIDER OF COINEXCHANGE RATES IN ADD CLIENT');
+              print(error);
+              return;
+            },
+            value: coinCollection
+                .doc(currentCoinSelectedCode)
+                .snapshots()
+                .map(coinFromSnapshot),
+          ),
+        ],
+        child: CheckoutBody(
+          client: widget.client,
+          subTotal: widget.subTotal,
+          cart: widget.cart,
+          coinsExchangeRates: widget.coinsExchangeRates,
+        ),
       ),
     );
   }
@@ -96,7 +118,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
   late List<double> coinsExchangeRates = widget.coinsExchangeRates;
 
   double priceWithIVA() {
-    var total = (widget.subTotal * 16) / 100;
+    var total = (totalPriceOfTheOrder() * 16) / 100;
     return total;
   }
 
@@ -106,20 +128,19 @@ class _CheckoutBodyState extends State<CheckoutBody> {
   }
 
   double totalPriceOfTheOrder() {
-    var total = (widget.subTotal + priceWithIVA()) - priceWithMasterDiscount();
+    var total =
+        (widget.subTotal - priceWithMasterDiscount() - totalDiscountApplied());
     return total;
   }
 
   double totalDiscountApplied() {
-    var total =
-        (totalPriceOfTheOrder() * (discountByInput / 100)).toStringAsFixed(4);
+    var total = ((widget.subTotal / 100) * discountByInput).toStringAsFixed(4);
     double doubleTotal = double.parse(total);
     return doubleTotal;
   }
 
-  double totalWithDiscount() {
-    var total =
-        (totalPriceOfTheOrder() - totalDiscountApplied()).toStringAsFixed(4);
+  double totalWithTheIVA() {
+    var total = (totalPriceOfTheOrder() + priceWithIVA()).toStringAsFixed(4);
     double doubleTotal = double.parse(total);
     return doubleTotal;
   }
@@ -142,7 +163,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
           orderNumber: numberOrder ?? 0000,
           date: dateFormatter.format(today),
           method: selectedValue2,
-          total: totalWithDiscount(),
+          total: totalWithTheIVA(),
           coinsExchangeRates: widget.coinsExchangeRates,
         ),
       ),
@@ -160,46 +181,57 @@ class _CheckoutBodyState extends State<CheckoutBody> {
     int? clientMasterDiscount = widget.client?.masterDiscount;
     double? masterDiscountTotal = priceWithMasterDiscount();
     double? taxTotal = priceWithIVA();
-    double? totalOfTheOrder = totalWithDiscount();
+    double? totalOfTheOrder = totalWithTheIVA();
     String? fiscalAddress = widget.client?.fiscalAdress;
     String? dispatchAddress =
         widget.client?.dispatchAdress ?? 'No Hay direccion disponible';
     String formattedDate = dateFormatter.format(today);
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
+    final coinName = Provider.of<Coin?>(context)?.name ?? '';
+    final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 0;
+    final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 0;
+    final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
+    final coinCode = Provider.of<Coin?>(context)?.code ?? '';
+    print(coinName);
+    print('TEStiNG COIN NAME');
 
     priceFormat(productPrice) {
       double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-      if (currentCoin!.contains('USD')) {
-        return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
-            .format(productPrice)
-            .toString();
-      } else if (currentCoin.contains('VED')) {
-        return NumberFormat.currency(
-          locale: 'es_VE',
-          decimalDigits: 2,
-          symbol: "Bs.",
-        ).format(correctAmount * 4.58).toString();
-      } else if (currentCoin.contains('EUR')) {
-        return NumberFormat.currency(
-          locale: 'es_ES',
-          decimalDigits: 2,
-          symbol: '€',
-        ).format(correctAmount * 0.89).toString();
-      } else if (currentCoin.contains('MXN')) {
-        return NumberFormat.currency(
-          locale: 'es_MX',
-          decimalDigits: 2,
-          symbol: '\$',
-        ).format(correctAmount * 19.43);
-      } else if (currentCoin.contains('BTC')) {
-        return '฿ ${(correctAmount * 0.00011).toString()}';
-      } else {
-        return NumberFormat.currency(
-          locale: 'es_VE',
-          decimalDigits: 2,
-          symbol: "PPR.",
-        ).format(correctAmount * 4.58).toString();
-      }
+      double convertedAmount = double.parse(
+          (correctAmount * coinExchangeRatio).toStringAsFixed(coinDecimals));
+      return '$coinSymbol$convertedAmount';
+      // double correctAmount = double.parse(productPrice.toStringAsFixed(4));
+      // if (currentCoin!.contains('USD')) {
+      //   return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
+      //       .format(productPrice)
+      //       .toString();
+      // } else if (currentCoin.contains('VED')) {
+      //   return NumberFormat.currency(
+      //     locale: 'es_VE',
+      //     decimalDigits: 2,
+      //     symbol: "Bs.",
+      //   ).format(correctAmount * 4.58).toString();
+      // } else if (currentCoin.contains('EUR')) {
+      //   return NumberFormat.currency(
+      //     locale: 'es_ES',
+      //     decimalDigits: 2,
+      //     symbol: '€',
+      //   ).format(correctAmount * 0.89).toString();
+      // } else if (currentCoin.contains('MXN')) {
+      //   return NumberFormat.currency(
+      //     locale: 'es_MX',
+      //     decimalDigits: 2,
+      //     symbol: '\$',
+      //   ).format(correctAmount * 19.43);
+      // } else if (currentCoin.contains('BTC')) {
+      //   return '฿ ${(correctAmount * 0.00011).toString()}';
+      // } else {
+      //   return NumberFormat.currency(
+      //     locale: 'es_VE',
+      //     decimalDigits: 2,
+      //     symbol: "PPR.",
+      //   ).format(correctAmount * 4.58).toString();
+      // }
     }
 
     return SingleChildScrollView(

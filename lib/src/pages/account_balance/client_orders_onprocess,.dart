@@ -4,6 +4,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/order_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/order_card.dart';
@@ -108,6 +109,19 @@ class _ClientsOrdersOnProcessState extends State<ClientsOrdersOnProcess> {
                           final orderTax = order.tax;
                           final orderSubTotal = order.subTotal;
                           final orderDiscountMaster = order.masterDiscount;
+                          // print('orderTotalAmount: $orderTotalAmount');
+                          // print('unformattedDate: $unformattedDate');
+                          // print('orderStatus: $orderStatus');
+                          // print('date: $date');
+                          // print('deliveryDate: $deliveryDate');
+                          // print('orderCommentary: $orderCommentary');
+                          // print('orderClientRefID: $orderClientRefID');
+                          // print('orderRefID: $orderRefID');
+                          // print('orderIsFailed: $orderIsFailed');
+                          // print('orderProducts: $orderProducts');
+                          // print('orderTax: $orderTax');
+                          // print('orderSubTotal: $orderSubTotal');
+                          // print('orderDiscountMaster: $orderDiscountMaster');
                           return OrderCard(
                             clientReferenceId: orderClientRefID,
                             date: deliveryDate,
@@ -121,6 +135,7 @@ class _ClientsOrdersOnProcessState extends State<ClientsOrdersOnProcess> {
                             subTotal: orderSubTotal,
                             discountMaster: orderDiscountMaster,
                             correlativeNumber: order.correlativeNumber,
+                            showButton: false,
                           );
                         },
                       ),

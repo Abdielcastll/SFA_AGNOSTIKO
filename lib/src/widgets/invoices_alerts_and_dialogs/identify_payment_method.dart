@@ -12,26 +12,46 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 
 import '../../pages/place_order/add_payment.dart';
 import '../payment_method/payment_card.dart';
 
-getFromGallery(context) async {
-  XFile? pickedFile =
-      await ImagePicker().pickImage(source: ImageSource.gallery);
-  if (pickedFile != null) {
-    return pickedFile;
-  } else {
-    return;
+Future getFromGallery(context) async {
+  try {
+    XFile? pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      return pickedFile;
+    } else {
+      return;
+    }
+  } on PlatformException catch (e) {
+    print('ERROR ESCOGIENDO IMAGEN');
+    print(e);
   }
 }
 
-cropImage(filePath, imageFile) async {
+Future getFromCamera(context) async {
+  try {
+    XFile? pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+    if (pickedFile != null) {
+      return pickedFile;
+    } else {
+      return;
+    }
+  } on PlatformException catch (e) {
+    print('ERROR ESCOGIENDO IMAGEN');
+    print(e);
+  }
+}
+
+Future cropImage(filePath, imageFile) async {
   CroppedFile? croppedImage = await ImageCropper().cropImage(
     sourcePath: filePath,
     maxHeight: 1080,
@@ -42,24 +62,12 @@ cropImage(filePath, imageFile) async {
   }
 }
 
-priceReturnToOriginal(productPrice, coin) {
-  double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-  if (coin!.contains('USD')) {
-    return correctAmount;
-  } else if (coin.contains('VED')) {
-    return double.parse((correctAmount / 4.58).toString());
-  } else if (coin.contains('EUR')) {
-    return double.parse((correctAmount / 0.89).toString());
-  } else if (coin.contains('MXN')) {
-    return double.parse((correctAmount / 19.43).toString());
-  } else if (coin.contains('BTC')) {
-    return double.parse((correctAmount / 0.00011).toString());
-  } else {
-    return double.parse((correctAmount / 4.58).toString());
-  }
-}
-
 identifyPaymentMethod({
+  String? coinName,
+  int? coinDecimals,
+  double? coinExchangeRatio,
+  String? coinSymbol,
+  String? coinCode,
   required String selectedValueA,
   required String invoiceDocumentID,
   required String selectedCoin,
@@ -97,33 +105,48 @@ identifyPaymentMethod({
     'HSBC',
     'WELLSFARGO',
   ];
-  // List<String> itemsCoin = [
-  //   'USD',
-  //   'BTC',
-  //   'EUR',
-  //   'VED',
-  // ];
-  // List<String> itemsCoinVED = [
-  //   'VED',
-  // ];
-  // final currentCoin = sharedPreferences!.getString('currentCoin');
+
   final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
 
-  symbolMoney(coin) {
-    if (coin!.contains('USD')) {
-      return "USD\$.";
-    } else if (coin.contains('VED')) {
-      return "BsS.";
-    } else if (coin.contains('EUR')) {
-      return "€.";
-    } else if (coin.contains('MXN')) {
-      return "MXN\$.";
-    } else if (coin.contains('BTC')) {
-      return '฿.';
-    } else {
-      return "PPR";
-    }
+  print('TEST INSIDE IDENTIFY PAYMENT METHOD DIST');
+  print(coinName);
+
+  priceReturnToOriginal(productPrice, coin) {
+    double correctAmount = double.parse(productPrice.toStringAsFixed(4));
+    double convertedAmount =
+        double.parse((correctAmount / coinExchangeRatio!).toString());
+    return convertedAmount;
+    // double correctAmount = double.parse(productPrice.toStringAsFixed(4));
+    // if (coin!.contains('USD')) {
+    //   return correctAmount;
+    // } else if (coin.contains('VED')) {
+    //   return double.parse((correctAmount / 4.58).toString());
+    // } else if (coin.contains('EUR')) {
+    //   return double.parse((correctAmount / 0.89).toString());
+    // } else if (coin.contains('MXN')) {
+    //   return double.parse((correctAmount / 19.43).toString());
+    // } else if (coin.contains('BTC')) {
+    //   return double.parse((correctAmount / 0.00011).toString());
+    // } else {
+    //   return double.parse((correctAmount / 4.58).toString());
+    // }
   }
+
+  // symbolMoney(coin) {
+  //   if (coin!.contains('USD')) {
+  //     return "USD\$.";
+  //   } else if (coin.contains('VED')) {
+  //     return "BsS.";
+  //   } else if (coin.contains('EUR')) {
+  //     return "€.";
+  //   } else if (coin.contains('MXN')) {
+  //     return "MXN\$.";
+  //   } else if (coin.contains('BTC')) {
+  //     return '฿.';
+  //   } else {
+  //     return "PPR";
+  //   }
+  // }
 
   print('Metodo: $selectedValueA');
   print('currentCoin: $currentCoin');
@@ -134,7 +157,7 @@ identifyPaymentMethod({
   if (selectedValueA == 'Tarjeta de Debito' ||
       selectedValueA == 'Tarjeta de Credito') {
     return paymentCard(paidAmount, client, invoiceDocumentID, totalOfTheOrder,
-        selectedCoin, date, remaining,
+        selectedCoin, date, remaining, coinExchangeRatio,
         updatePayed: updatePayed, paymentBody: paymentBody, noRetail: noRetail);
   }
 
@@ -384,23 +407,83 @@ identifyPaymentMethod({
               ),
               InkWell(
                 onTap: () async {
-                  var pickedFile = await getFromGallery(context);
-                  if (pickedFile != null) {
-                    print('Imagen seleccionada');
-                    var croppedImage =
-                        await cropImage(pickedFile.path, imageFile);
-                    if (croppedImage != null) {
-                      print('Imagen recortada');
-                      setState(() {
-                        imageFile = File(croppedImage.path);
-                      });
-                    } else {
-                      print('Error croppeando');
-                    }
-                  } else {
-                    print('error seleccionando');
-                    return;
-                  }
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ListTile(
+                            leading: Icon(
+                              Icons.camera_alt,
+                              color: myTheme.colorScheme.onPrimaryContainer,
+                            ),
+                            title: Text(
+                              'Camara',
+                              style: TextStyle(
+                                color: myTheme.colorScheme.primary,
+                                fontFamily: 'Poppins-regular',
+                              ),
+                            ),
+                            onTap: () async {
+                              Navigator.of(context).pop();
+                              var pickedFile = await getFromCamera(context);
+                              if (pickedFile != null) {
+                                print('Imagen seleccionada');
+                                var croppedImage =
+                                    await cropImage(pickedFile.path, imageFile);
+                                if (croppedImage != null) {
+                                  print('Imagen recortada');
+                                  setState(() {
+                                    imageFile = File(croppedImage.path);
+                                  });
+                                } else {
+                                  print('Error croppeando');
+                                }
+                              } else {
+                                print('error seleccionando');
+                                return;
+                              }
+                            },
+                          ),
+                          Divider(),
+                          ListTile(
+                            leading: Icon(
+                              Icons.photo_camera_back_rounded,
+                              color: myTheme.colorScheme.onPrimaryContainer,
+                            ),
+                            title: Text(
+                              'Galeria',
+                              style: TextStyle(
+                                color: myTheme.colorScheme.primary,
+                                fontFamily: 'Poppins-regular',
+                              ),
+                            ),
+                            onTap: () async {
+                              Navigator.of(context).pop();
+                              var pickedFile = await getFromGallery(context);
+                              if (pickedFile != null) {
+                                print('Imagen seleccionada');
+                                var croppedImage =
+                                    await cropImage(pickedFile.path, imageFile);
+                                if (croppedImage != null) {
+                                  print('Imagen recortada');
+                                  setState(() {
+                                    imageFile = File(croppedImage.path);
+                                  });
+                                } else {
+                                  print('Error croppeando');
+                                }
+                              } else {
+                                print('error seleccionando');
+                                return;
+                              }
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 },
                 child: Row(
                   // ignore: prefer_const_literals_to_create_immutables
@@ -426,18 +509,18 @@ identifyPaymentMethod({
               imageFile == null
                   ? Container()
                   : Container(
-                      height: 300,
-                      width: 300,
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: myTheme.colorScheme.primary,
                         ),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Image.file(
-                        imageFile!,
-                        height: 300,
-                        width: 300,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(9),
+                        child: Image.file(
+                          imageFile!,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
               Row(
@@ -509,6 +592,8 @@ identifyPaymentMethod({
                                       );
                                       try {
                                         await registerBankCheckPayment(
+                                          coinExchangeRatio: coinExchangeRatio,
+                                          originalAmount: paidAmount,
                                           client: client,
                                           invoiceDocumentID: invoiceDocumentID,
                                           currency: selectedCoin,
@@ -620,7 +705,7 @@ identifyPaymentMethod({
                                                                               EdgeInsets.only(top: 10),
                                                                           child:
                                                                               Text(
-                                                                            'Monto pagado: ${symbolMoney(selectedCoin)}: $paidAmount',
+                                                                            'Monto pagado: $coinSymbol $paidAmount',
                                                                             style:
                                                                                 TextStyle(
                                                                               fontFamily: 'Poppins-regular',
@@ -889,23 +974,83 @@ identifyPaymentMethod({
               ),
               InkWell(
                 onTap: () async {
-                  var pickedFile = await getFromGallery(context);
-                  if (pickedFile != null) {
-                    print('Imagen seleccionada');
-                    var croppedImage =
-                        await cropImage(pickedFile.path, imageFile);
-                    if (croppedImage != null) {
-                      print('Imagen recortada');
-                      setState(() {
-                        imageFile = File(croppedImage.path);
-                      });
-                    } else {
-                      print('Error croppeando');
-                    }
-                  } else {
-                    print('error seleccionando');
-                    return;
-                  }
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ListTile(
+                            leading: Icon(
+                              Icons.camera_alt,
+                              color: myTheme.colorScheme.onPrimaryContainer,
+                            ),
+                            title: Text(
+                              'Camara',
+                              style: TextStyle(
+                                color: myTheme.colorScheme.primary,
+                                fontFamily: 'Poppins-regular',
+                              ),
+                            ),
+                            onTap: () async {
+                              Navigator.of(context).pop();
+                              var pickedFile = await getFromCamera(context);
+                              if (pickedFile != null) {
+                                print('Imagen seleccionada');
+                                var croppedImage =
+                                    await cropImage(pickedFile.path, imageFile);
+                                if (croppedImage != null) {
+                                  print('Imagen recortada');
+                                  setState(() {
+                                    imageFile = File(croppedImage.path);
+                                  });
+                                } else {
+                                  print('Error croppeando');
+                                }
+                              } else {
+                                print('error seleccionando');
+                                return;
+                              }
+                            },
+                          ),
+                          Divider(),
+                          ListTile(
+                            leading: Icon(
+                              Icons.photo_camera_back_rounded,
+                              color: myTheme.colorScheme.onPrimaryContainer,
+                            ),
+                            title: Text(
+                              'Galeria',
+                              style: TextStyle(
+                                color: myTheme.colorScheme.primary,
+                                fontFamily: 'Poppins-regular',
+                              ),
+                            ),
+                            onTap: () async {
+                              Navigator.of(context).pop();
+                              var pickedFile = await getFromGallery(context);
+                              if (pickedFile != null) {
+                                print('Imagen seleccionada');
+                                var croppedImage =
+                                    await cropImage(pickedFile.path, imageFile);
+                                if (croppedImage != null) {
+                                  print('Imagen recortada');
+                                  setState(() {
+                                    imageFile = File(croppedImage.path);
+                                  });
+                                } else {
+                                  print('Error croppeando');
+                                }
+                              } else {
+                                print('error seleccionando');
+                                return;
+                              }
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 },
                 child: Row(
                   // ignore: prefer_const_literals_to_create_immutables
@@ -931,18 +1076,18 @@ identifyPaymentMethod({
               imageFile == null
                   ? Container()
                   : Container(
-                      height: 300,
-                      width: 300,
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: myTheme.colorScheme.primary,
                         ),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Image.file(
-                        imageFile!,
-                        height: 300,
-                        width: 300,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(9),
+                        child: Image.file(
+                          imageFile!,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
               Container(
@@ -995,17 +1140,17 @@ identifyPaymentMethod({
                                 backgroundColor: myTheme.colorScheme.primary,
                                 textColor: Colors.white,
                               );
-                              await registerCriptoPayment(
-                                client!,
-                                invoiceDocumentID,
-                                'BTC',
-                                priceReturnToOriginal(paidAmount, selectedCoin),
-                                totalOfTheOrder,
-                                transactionId,
-                                imageFile,
-                                date,
-                                remaining,
-                              );
+                              // await registerCriptoPayment(
+                              //   client!,
+                              //   invoiceDocumentID,
+                              //   'BTC',
+                              //   priceReturnToOriginal(paidAmount, selectedCoin),
+                              //   totalOfTheOrder,
+                              //   transactionId,
+                              //   imageFile,
+                              //   date,
+                              //   remaining,
+                              // );
                               Navigator.pop(context);
                               Navigator.pop(context);
                               // }
@@ -1274,23 +1419,83 @@ identifyPaymentMethod({
               ),
               InkWell(
                 onTap: () async {
-                  var pickedFile = await getFromGallery(context);
-                  if (pickedFile != null) {
-                    print('Imagen seleccionada');
-                    var croppedImage =
-                        await cropImage(pickedFile.path, imageFile);
-                    if (croppedImage != null) {
-                      print('Imagen recortada');
-                      setState(() {
-                        imageFile = File(croppedImage.path);
-                      });
-                    } else {
-                      print('Error croppeando');
-                    }
-                  } else {
-                    print('error seleccionando');
-                    return;
-                  }
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ListTile(
+                            leading: Icon(
+                              Icons.camera_alt,
+                              color: myTheme.colorScheme.onPrimaryContainer,
+                            ),
+                            title: Text(
+                              'Camara',
+                              style: TextStyle(
+                                color: myTheme.colorScheme.primary,
+                                fontFamily: 'Poppins-regular',
+                              ),
+                            ),
+                            onTap: () async {
+                              Navigator.of(context).pop();
+                              var pickedFile = await getFromCamera(context);
+                              if (pickedFile != null) {
+                                print('Imagen seleccionada');
+                                var croppedImage =
+                                    await cropImage(pickedFile.path, imageFile);
+                                if (croppedImage != null) {
+                                  print('Imagen recortada');
+                                  setState(() {
+                                    imageFile = File(croppedImage.path);
+                                  });
+                                } else {
+                                  print('Error croppeando');
+                                }
+                              } else {
+                                print('error seleccionando');
+                                return;
+                              }
+                            },
+                          ),
+                          Divider(),
+                          ListTile(
+                            leading: Icon(
+                              Icons.photo_camera_back_rounded,
+                              color: myTheme.colorScheme.onPrimaryContainer,
+                            ),
+                            title: Text(
+                              'Galeria',
+                              style: TextStyle(
+                                color: myTheme.colorScheme.primary,
+                                fontFamily: 'Poppins-regular',
+                              ),
+                            ),
+                            onTap: () async {
+                              Navigator.of(context).pop();
+                              var pickedFile = await getFromGallery(context);
+                              if (pickedFile != null) {
+                                print('Imagen seleccionada');
+                                var croppedImage =
+                                    await cropImage(pickedFile.path, imageFile);
+                                if (croppedImage != null) {
+                                  print('Imagen recortada');
+                                  setState(() {
+                                    imageFile = File(croppedImage.path);
+                                  });
+                                } else {
+                                  print('Error croppeando');
+                                }
+                              } else {
+                                print('error seleccionando');
+                                return;
+                              }
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 },
                 child: Row(
                   // ignore: prefer_const_literals_to_create_immutables
@@ -1316,18 +1521,18 @@ identifyPaymentMethod({
               imageFile == null
                   ? Container()
                   : Container(
-                      height: 300,
-                      width: 300,
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: myTheme.colorScheme.primary,
                         ),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Image.file(
-                        imageFile!,
-                        height: 300,
-                        width: 300,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(9),
+                        child: Image.file(
+                          imageFile!,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
               Container(
@@ -1402,6 +1607,8 @@ identifyPaymentMethod({
                                       );
                                       try {
                                         await registerDepositPayment(
+                                          coinExchangeRatio: coinExchangeRatio,
+                                          originalAmount: paidAmount,
                                           client: client,
                                           invoiceDocumentID: invoiceDocumentID,
                                           currency: selectedCoin,
@@ -1516,7 +1723,7 @@ identifyPaymentMethod({
                                                                                 10),
                                                                         child:
                                                                             Text(
-                                                                          'Monto pagado: ${symbolMoney(selectedCoin)}: $paidAmount',
+                                                                          'Monto pagado: $coinSymbol $paidAmount',
                                                                           style:
                                                                               TextStyle(
                                                                             fontFamily:
@@ -1752,23 +1959,83 @@ identifyPaymentMethod({
               ),
               InkWell(
                 onTap: () async {
-                  var pickedFile = await getFromGallery(context);
-                  if (pickedFile != null) {
-                    print('Imagen seleccionada');
-                    var croppedImage =
-                        await cropImage(pickedFile.path, imageFile);
-                    if (croppedImage != null) {
-                      print('Imagen recortada');
-                      setState(() {
-                        imageFile = File(croppedImage.path);
-                      });
-                    } else {
-                      print('Error croppeando');
-                    }
-                  } else {
-                    print('error seleccionando');
-                    return;
-                  }
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ListTile(
+                            leading: Icon(
+                              Icons.camera_alt,
+                              color: myTheme.colorScheme.onPrimaryContainer,
+                            ),
+                            title: Text(
+                              'Camara',
+                              style: TextStyle(
+                                color: myTheme.colorScheme.primary,
+                                fontFamily: 'Poppins-regular',
+                              ),
+                            ),
+                            onTap: () async {
+                              Navigator.of(context).pop();
+                              var pickedFile = await getFromCamera(context);
+                              if (pickedFile != null) {
+                                print('Imagen seleccionada');
+                                var croppedImage =
+                                    await cropImage(pickedFile.path, imageFile);
+                                if (croppedImage != null) {
+                                  print('Imagen recortada');
+                                  setState(() {
+                                    imageFile = File(croppedImage.path);
+                                  });
+                                } else {
+                                  print('Error croppeando');
+                                }
+                              } else {
+                                print('error seleccionando');
+                                return;
+                              }
+                            },
+                          ),
+                          Divider(),
+                          ListTile(
+                            leading: Icon(
+                              Icons.photo_camera_back_rounded,
+                              color: myTheme.colorScheme.onPrimaryContainer,
+                            ),
+                            title: Text(
+                              'Galeria',
+                              style: TextStyle(
+                                color: myTheme.colorScheme.primary,
+                                fontFamily: 'Poppins-regular',
+                              ),
+                            ),
+                            onTap: () async {
+                              Navigator.of(context).pop();
+                              var pickedFile = await getFromGallery(context);
+                              if (pickedFile != null) {
+                                print('Imagen seleccionada');
+                                var croppedImage =
+                                    await cropImage(pickedFile.path, imageFile);
+                                if (croppedImage != null) {
+                                  print('Imagen recortada');
+                                  setState(() {
+                                    imageFile = File(croppedImage.path);
+                                  });
+                                } else {
+                                  print('Error croppeando');
+                                }
+                              } else {
+                                print('error seleccionando');
+                                return;
+                              }
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 },
                 child: Row(
                   // ignore: prefer_const_literals_to_create_immutables
@@ -1794,18 +2061,18 @@ identifyPaymentMethod({
               imageFile == null
                   ? Container()
                   : Container(
-                      height: 300,
-                      width: 300,
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: myTheme.colorScheme.primary,
                         ),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Image.file(
-                        imageFile!,
-                        height: 300,
-                        width: 300,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(9),
+                        child: Image.file(
+                          imageFile!,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
               Container(
@@ -1873,6 +2140,8 @@ identifyPaymentMethod({
                                     // print(priceToCurrencySelected(
                                     //     remaining, selectedCoin));
                                     await registerMoneyPayment(
+                                      coinExchangeRatio: coinExchangeRatio,
+                                      originalAmount: paidAmount,
                                       client: client,
                                       invoiceDocumentID: invoiceDocumentID,
                                       currency: selectedCoin,
@@ -1969,7 +2238,7 @@ identifyPaymentMethod({
                                                                             top:
                                                                                 10),
                                                                     child: Text(
-                                                                      'Monto pagado: ${symbolMoney(selectedCoin)}: $paidAmount',
+                                                                      'Monto pagado: $coinSymbol $paidAmount',
                                                                       style:
                                                                           TextStyle(
                                                                         fontFamily:
@@ -2426,23 +2695,83 @@ identifyPaymentMethod({
               ),
               InkWell(
                 onTap: () async {
-                  var pickedFile = await getFromGallery(context);
-                  if (pickedFile != null) {
-                    print('Imagen seleccionada');
-                    var croppedImage =
-                        await cropImage(pickedFile.path, imageFile);
-                    if (croppedImage != null) {
-                      print('Imagen recortada');
-                      setState(() {
-                        imageFile = File(croppedImage.path);
-                      });
-                    } else {
-                      print('Error croppeando');
-                    }
-                  } else {
-                    print('error seleccionando');
-                    return;
-                  }
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ListTile(
+                            leading: Icon(
+                              Icons.camera_alt,
+                              color: myTheme.colorScheme.onPrimaryContainer,
+                            ),
+                            title: Text(
+                              'Camara',
+                              style: TextStyle(
+                                color: myTheme.colorScheme.primary,
+                                fontFamily: 'Poppins-regular',
+                              ),
+                            ),
+                            onTap: () async {
+                              Navigator.of(context).pop();
+                              var pickedFile = await getFromCamera(context);
+                              if (pickedFile != null) {
+                                print('Imagen seleccionada');
+                                var croppedImage =
+                                    await cropImage(pickedFile.path, imageFile);
+                                if (croppedImage != null) {
+                                  print('Imagen recortada');
+                                  setState(() {
+                                    imageFile = File(croppedImage.path);
+                                  });
+                                } else {
+                                  print('Error croppeando');
+                                }
+                              } else {
+                                print('error seleccionando');
+                                return;
+                              }
+                            },
+                          ),
+                          Divider(),
+                          ListTile(
+                            leading: Icon(
+                              Icons.photo_camera_back_rounded,
+                              color: myTheme.colorScheme.onPrimaryContainer,
+                            ),
+                            title: Text(
+                              'Galeria',
+                              style: TextStyle(
+                                color: myTheme.colorScheme.primary,
+                                fontFamily: 'Poppins-regular',
+                              ),
+                            ),
+                            onTap: () async {
+                              Navigator.of(context).pop();
+                              var pickedFile = await getFromGallery(context);
+                              if (pickedFile != null) {
+                                print('Imagen seleccionada');
+                                var croppedImage =
+                                    await cropImage(pickedFile.path, imageFile);
+                                if (croppedImage != null) {
+                                  print('Imagen recortada');
+                                  setState(() {
+                                    imageFile = File(croppedImage.path);
+                                  });
+                                } else {
+                                  print('Error croppeando');
+                                }
+                              } else {
+                                print('error seleccionando');
+                                return;
+                              }
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 },
                 child: Row(
                   // ignore: prefer_const_literals_to_create_immutables
@@ -2468,18 +2797,18 @@ identifyPaymentMethod({
               imageFile == null
                   ? Container()
                   : Container(
-                      height: 300,
-                      width: 300,
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: myTheme.colorScheme.primary,
                         ),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Image.file(
-                        imageFile!,
-                        height: 300,
-                        width: 300,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(9),
+                        child: Image.file(
+                          imageFile!,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
               Container(
@@ -2556,6 +2885,9 @@ identifyPaymentMethod({
                                         );
                                         try {
                                           await registerTransferPayment(
+                                            coinExchangeRatio:
+                                                coinExchangeRatio,
+                                            originalAmount: paidAmount,
                                             client: client,
                                             invoiceDocumentID:
                                                 invoiceDocumentID,
@@ -2671,7 +3003,7 @@ identifyPaymentMethod({
                                                                               EdgeInsets.only(top: 10),
                                                                           child:
                                                                               Text(
-                                                                            'Monto pagado: ${symbolMoney(selectedCoin)}: $paidAmount',
+                                                                            'Monto pagado: $coinSymbol $paidAmount',
                                                                             style:
                                                                                 TextStyle(
                                                                               fontFamily: 'Poppins-regular',
@@ -2854,6 +3186,9 @@ identifyPaymentMethod({
                                         );
                                         try {
                                           await registerTransferInterPayment(
+                                            coinExchangeRatio:
+                                                coinExchangeRatio,
+                                            originalAmount: paidAmount,
                                             client: client,
                                             invoiceDocumentID:
                                                 invoiceDocumentID,
@@ -2969,7 +3304,7 @@ identifyPaymentMethod({
                                                                               EdgeInsets.only(top: 10),
                                                                           child:
                                                                               Text(
-                                                                            'Monto pagado: ${symbolMoney(selectedCoin)}: $paidAmount',
+                                                                            'Monto pagado: $coinSymbol $paidAmount',
                                                                             style:
                                                                                 TextStyle(
                                                                               fontFamily: 'Poppins-regular',

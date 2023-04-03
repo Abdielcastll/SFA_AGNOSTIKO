@@ -209,6 +209,7 @@ class _OrdersOnProcessState extends State<OrdersOnProcess> {
                             subTotal: orderSubTotal,
                             discountMaster: orderDiscountMaster,
                             correlativeNumber: order.correlativeNumber,
+                            showButton: true,
                           );
                         },
                       ),

@@ -11,7 +11,6 @@ import firebase_auth
 import firebase_core
 import firebase_database
 import firebase_storage
-import geolocator_apple
 import location
 import mobile_scanner
 import objectbox_flutter_libs
@@ -28,7 +27,6 @@ func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   FLTFirebaseCorePlugin.register(with: registry.registrar(forPlugin: "FLTFirebaseCorePlugin"))
   FLTFirebaseDatabasePlugin.register(with: registry.registrar(forPlugin: "FLTFirebaseDatabasePlugin"))
   FLTFirebaseStoragePlugin.register(with: registry.registrar(forPlugin: "FLTFirebaseStoragePlugin"))
-  GeolocatorPlugin.register(with: registry.registrar(forPlugin: "GeolocatorPlugin"))
   LocationPlugin.register(with: registry.registrar(forPlugin: "LocationPlugin"))
   MobileScannerPlugin.register(with: registry.registrar(forPlugin: "MobileScannerPlugin"))
   ObjectboxFlutterLibsPlugin.register(with: registry.registrar(forPlugin: "ObjectboxFlutterLibsPlugin"))

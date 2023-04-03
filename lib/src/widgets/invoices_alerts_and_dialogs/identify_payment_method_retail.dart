@@ -80,13 +80,12 @@ priceToCurrencySelected(double productPrice, String coin) {
   }
 }
 
-testPrint() {
-  print('//////////////////////////////////');
-  print('TESTEO: PHOSPHOPHYLLITE');
-  print('//////////////////////////////////');
-}
-
 identifyPaymentMethodRetail({
+  String? coinName,
+  int? coinDecimals,
+  double? coinExchangeRatio,
+  String? coinSymbol,
+  String? coinCode,
   required String selectedValueA,
   required String invoiceDocumentID,
   required String selectedCoin,
@@ -137,23 +136,8 @@ identifyPaymentMethodRetail({
   // final currentCoin = sharedPreferences!.getString('currentCoin');
   final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
 
-  symbolMoney(coin) {
-    if (coin!.contains('USD')) {
-      return "USD\$.";
-    } else if (coin.contains('VED')) {
-      return "BsS.";
-    } else if (coin.contains('EUR')) {
-      return "€.";
-    } else if (coin.contains('MXN')) {
-      return "MXN\$.";
-    } else if (coin.contains('BTC')) {
-      return '฿.';
-    } else {
-      return "PPR";
-    }
-  }
-
-  final amountExchanged = exchangeAmount(selectedCoin, paidAmount);
+  final amountExchanged =
+      exchangeAmount(selectedCoin, paidAmount, coinExchangeRatio ?? 1);
 
   final totalPayed = paymentBody.payments.fold<double>(
       0.0, (previousValue, element) => previousValue + element.amount);
@@ -171,7 +155,7 @@ identifyPaymentMethodRetail({
       paidAmount = double.parse(paidAmount.toString().replaceAll('\$', ''));
     }
     return paymentCard(paidAmount, client, invoiceDocumentID, totalOfTheOrder,
-        selectedCoin, date, remaining,
+        selectedCoin, date, remaining, coinExchangeRatio,
         updatePayed: updatePayed, paymentBody: paymentBody, noRetail: noRetail);
   }
 
@@ -546,6 +530,8 @@ identifyPaymentMethodRetail({
 
                                     try {
                                       await registerBankCheckPayment(
+                                        originalAmount: paidAmount,
+                                        coinExchangeRatio: coinExchangeRatio,
                                         client: client,
                                         invoiceDocumentID: invoiceDocumentID,
                                         currency: selectedCoin,
@@ -658,7 +644,7 @@ identifyPaymentMethodRetail({
                                                                               top: 10),
                                                                       child:
                                                                           Text(
-                                                                        'Monto pagado: ${symbolMoney(selectedCoin)}: $paidAmount',
+                                                                        'Monto pagado: $coinSymbol $paidAmount',
                                                                         style:
                                                                             TextStyle(
                                                                           fontFamily:
@@ -1096,23 +1082,23 @@ identifyPaymentMethodRetail({
                               );
 
                               try {
-                                await registerCriptoPayment(
-                                  client!,
-                                  invoiceDocumentID,
-                                  'BTC',
-                                  paidAmount,
-                                  totalOfTheOrder,
-                                  transactionId,
-                                  imageFile,
-                                  date,
-                                  remaining,
-                                );
+                                // await registerCriptoPayment(
+                                //   client!,
+                                //   invoiceDocumentID,
+                                //   'BTC',
+                                //   paidAmount,
+                                //   totalOfTheOrder,
+                                //   transactionId,
+                                //   imageFile,
+                                //   date,
+                                //   remaining,
+                                // );
 
-                                paymentBody.payments.add(
-                                    PayMethod('Criptomoneda', amountExchanged));
+                                // paymentBody.payments.add(
+                                //     PayMethod('Criptomoneda', amountExchanged));
 
-                                print('IDENTIFY PAYMENTS');
-                                print(paymentBody?.payments.length);
+                                // print('IDENTIFY PAYMENTS');
+                                // print(paymentBody?.payments.length);
 
                                 if (amountExchanged <
                                     double.parse(
@@ -1208,7 +1194,7 @@ identifyPaymentMethodRetail({
                                                                         top:
                                                                             10),
                                                                 child: Text(
-                                                                  'Monto pagado: ${symbolMoney(selectedCoin)}: $paidAmount',
+                                                                  'Monto pagado: $coinSymbol $paidAmount',
                                                                   style:
                                                                       TextStyle(
                                                                     fontFamily:
@@ -1809,6 +1795,8 @@ identifyPaymentMethodRetail({
 
                                       try {
                                         await registerDepositPayment(
+                                          originalAmount: paidAmount,
+                                          coinExchangeRatio: coinExchangeRatio,
                                           client: client,
                                           invoiceDocumentID: invoiceDocumentID,
                                           currency: selectedCoin,
@@ -1926,7 +1914,7 @@ identifyPaymentMethodRetail({
                                                                                 10),
                                                                         child:
                                                                             Text(
-                                                                          'Monto pagado: ${symbolMoney(selectedCoin)}: $paidAmount',
+                                                                          'Monto pagado: $coinSymbol $paidAmount',
                                                                           style:
                                                                               TextStyle(
                                                                             fontFamily:
@@ -2329,6 +2317,8 @@ identifyPaymentMethodRetail({
                                     //Registrar efectivo en la DB
                                     try {
                                       await registerMoneyPayment(
+                                        originalAmount: paidAmount,
+                                        coinExchangeRatio: coinExchangeRatio,
                                         client: client,
                                         invoiceDocumentID: invoiceDocumentID,
                                         currency: selectedCoin,
@@ -2436,7 +2426,7 @@ identifyPaymentMethodRetail({
                                                                               top: 10),
                                                                       child:
                                                                           Text(
-                                                                        'Monto pagado: ${symbolMoney(selectedCoin)}: $paidAmount',
+                                                                        'Monto pagado: $coinSymbol $paidAmount',
                                                                         style:
                                                                             TextStyle(
                                                                           fontFamily:
@@ -3068,6 +3058,9 @@ identifyPaymentMethodRetail({
 
                                         try {
                                           await registerTransferPayment(
+                                            originalAmount: paidAmount,
+                                            coinExchangeRatio:
+                                                coinExchangeRatio,
                                             client: client,
                                             invoiceDocumentID:
                                                 invoiceDocumentID,
@@ -3186,7 +3179,7 @@ identifyPaymentMethodRetail({
                                                                               EdgeInsets.only(top: 10),
                                                                           child:
                                                                               Text(
-                                                                            'Monto pagado: ${symbolMoney(selectedCoin)}: $paidAmount',
+                                                                            'Monto pagado: $coinSymbol $paidAmount',
                                                                             style:
                                                                                 TextStyle(
                                                                               fontFamily: 'Poppins-regular',
@@ -3408,6 +3401,9 @@ identifyPaymentMethodRetail({
 
                                         try {
                                           await registerTransferInterPayment(
+                                            originalAmount: paidAmount,
+                                            coinExchangeRatio:
+                                                coinExchangeRatio,
                                             client: client,
                                             invoiceDocumentID:
                                                 invoiceDocumentID,
@@ -3509,7 +3505,7 @@ identifyPaymentMethodRetail({
                                                                               EdgeInsets.only(top: 10),
                                                                           child:
                                                                               Text(
-                                                                            'Monto pagado: ${symbolMoney(selectedCoin)}: $paidAmount',
+                                                                            'Monto pagado: $coinSymbol $paidAmount',
                                                                             style:
                                                                                 TextStyle(
                                                                               fontFamily: 'Poppins-regular',

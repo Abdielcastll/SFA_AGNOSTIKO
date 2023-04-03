@@ -213,6 +213,7 @@ class _CompletedOrdersState extends State<CompletedOrders> {
                         discountMaster: orderDiscountMaster,
                         tax: orderTax,
                         correlativeNumber: order.correlativeNumber,
+                        showButton: true,
                       );
                     },
                   ),

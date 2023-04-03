@@ -11,12 +11,14 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/checkout_retail_page.dart';
+import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -226,6 +228,13 @@ class _SelectedProductsState extends State<SelectedProducts> {
   @override
   Widget build(BuildContext context) {
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
+    final coinName = Provider.of<Coin?>(context)?.name ?? '';
+    final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 0;
+    final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 0;
+    final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
+    final coinCode = Provider.of<Coin?>(context)?.code ?? '';
+    print(coinName);
+    print('TEStiNG COIN NAME');
     print("clientPriceList: $clientPriceList");
     final userRole = Provider.of<UserRole?>(context, listen: true);
     print('User Role ${userRole?.name}');
@@ -233,37 +242,41 @@ class _SelectedProductsState extends State<SelectedProducts> {
 
     priceFormat(productPrice) {
       double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-      if (currentCoin!.contains('USD')) {
-        return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
-            .format(productPrice)
-            .toString();
-      } else if (currentCoin.contains('VED')) {
-        return NumberFormat.currency(
-          locale: 'es_VE',
-          decimalDigits: 2,
-          symbol: "Bs.",
-        ).format(correctAmount * 4.58).toString();
-      } else if (currentCoin.contains('EUR')) {
-        return NumberFormat.currency(
-          locale: 'es_ES',
-          decimalDigits: 2,
-          symbol: '€',
-        ).format(correctAmount * 0.89).toString();
-      } else if (currentCoin.contains('MXN')) {
-        return NumberFormat.currency(
-          locale: 'es_MX',
-          decimalDigits: 2,
-          symbol: '\$',
-        ).format(correctAmount * 19.43);
-      } else if (currentCoin.contains('BTC')) {
-        return '฿ ${(correctAmount * 0.00011).toString()}';
-      } else {
-        return NumberFormat.currency(
-          locale: 'es_VE',
-          decimalDigits: 2,
-          symbol: "PPR.",
-        ).format(correctAmount * 4.58).toString();
-      }
+      double convertedAmount = double.parse(
+          (correctAmount * coinExchangeRatio).toStringAsFixed(coinDecimals));
+      return '$coinSymbol$convertedAmount';
+      // double correctAmount = double.parse(productPrice.toStringAsFixed(4));
+      // if (currentCoin!.contains('USD')) {
+      //   return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
+      //       .format(productPrice)
+      //       .toString();
+      // } else if (currentCoin.contains('VED')) {
+      //   return NumberFormat.currency(
+      //     locale: 'es_VE',
+      //     decimalDigits: 2,
+      //     symbol: "Bs.",
+      //   ).format(correctAmount * 4.58).toString();
+      // } else if (currentCoin.contains('EUR')) {
+      //   return NumberFormat.currency(
+      //     locale: 'es_ES',
+      //     decimalDigits: 2,
+      //     symbol: '€',
+      //   ).format(correctAmount * 0.89).toString();
+      // } else if (currentCoin.contains('MXN')) {
+      //   return NumberFormat.currency(
+      //     locale: 'es_MX',
+      //     decimalDigits: 2,
+      //     symbol: '\$',
+      //   ).format(correctAmount * 19.43);
+      // } else if (currentCoin.contains('BTC')) {
+      //   return '฿ ${(correctAmount * 0.00011).toString()}';
+      // } else {
+      //   return NumberFormat.currency(
+      //     locale: 'es_VE',
+      //     decimalDigits: 2,
+      //     symbol: "PPR.",
+      //   ).format(correctAmount * 4.58).toString();
+      // }
     }
 
     return Column(
@@ -374,7 +387,11 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                   product.urlPicture.toString())
                                               .child('1')
                                               .getDownloadURL()
-                                              .catchError((e) {}),
+                                              .catchError((e) {
+                                            print(e);
+                                            print(
+                                                'ERROR OBTENIENDO IMG DE PRODUCTO EN ARRITO');
+                                          }),
                                           builder: (context, snapshot) {
                                             if (snapshot.hasData) {
                                               final url =
@@ -540,7 +557,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                                   child:
                                                                       IconButton(
                                                                     iconSize:
-                                                                        20,
+                                                                        16,
                                                                     splashRadius:
                                                                         1,
                                                                     icon: Icon(
@@ -594,7 +611,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                               : SizedBox(
                                                                   width: 30,
                                                                   child: IconButton(
-                                                                      iconSize: 20,
+                                                                      iconSize: 16,
                                                                       splashRadius: 1,
                                                                       icon: const Icon(
                                                                         Icons
@@ -617,7 +634,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                                   const TextStyle(
                                                                 letterSpacing:
                                                                     0.4,
-                                                                fontSize: 14,
+                                                                fontSize: 10,
                                                                 fontFamily:
                                                                     'Poppins-regular',
                                                               ),
@@ -631,7 +648,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                                   child:
                                                                       IconButton(
                                                                     iconSize:
-                                                                        20,
+                                                                        15,
                                                                     splashRadius:
                                                                         1,
                                                                     icon: Icon(
@@ -686,7 +703,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                                   child:
                                                                       IconButton(
                                                                     iconSize:
-                                                                        20,
+                                                                        15,
                                                                     splashRadius:
                                                                         1,
                                                                     icon:
@@ -712,7 +729,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                       'U/P: ${priceFormat(productPrice)}',
                                                       style: const TextStyle(
                                                         letterSpacing: 0.4,
-                                                        fontSize: 12,
+                                                        fontSize: 10,
                                                         fontFamily:
                                                             'Poppins-regular',
                                                       ),
@@ -795,10 +812,15 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                     borderRadius: BorderRadius.circular(16),
                                     child: ElevatedButton.icon(
                                       onPressed: () {
+                                        final test =
+                                            Provider.of<CounterLimitFirestore>(
+                                                context,
+                                                listen: false);
                                         Navigator.popUntil(
                                           context,
                                           (route) => route.isFirst,
                                         );
+                                        test.setNewScreen(0);
                                       },
                                       icon: const Icon(
                                         MaterialCommunityIcons.tag_plus,

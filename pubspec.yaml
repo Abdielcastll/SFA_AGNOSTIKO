@@ -50,9 +50,6 @@ dependencies:
   flutterfire_ui: ^0.4.2+3
   # Flutter packages
   location: ^4.4.0
-  geocoding: ^2.1.0
-  permission_handler: ^10.2.0
-  geolocator: ^9.0.2
   photo_view: ^0.14.0
   full_screen_image: ^2.0.0
   shared_preferences: ^2.0.15

@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
+import 'package:pwa_sales2go_flutter/src/pages/clients/add_new_client/add_new_client_page.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
+import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_checkout.dart';
@@ -54,22 +57,42 @@ class AddPaymentPage extends StatefulWidget {
 class _AddPaymentPageState extends State<AddPaymentPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBarCheckout(),
-      backgroundColor: Colors.grey.shade100,
-      body: AddPaymentBody(
-        remaining: widget.remaining,
-        subTotal: widget.subTotal,
-        discount: widget.discount,
-        discountPercentage: widget.discountPercentage,
-        tax: widget.tax,
-        percentageTax: widget.percentageTax,
-        client: widget.client,
-        invoiceDocumentID: widget.invoiceDocumentID,
-        amountPayed: widget.amountPayed,
-        invoiceNumber: widget.invoiceNumber,
-        payments: widget.payments,
-        // updatePayed: widget.updatePayed,
+    final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
+    List<String> currentCoinSplit = currentCoin!.split(' ');
+    String currentCoinSelectedCode = currentCoinSplit.last;
+    return MultiProvider(
+      providers: [
+        StreamProvider<Coin?>.value(
+          initialData: Coin(),
+          catchError: (context, error) {
+            print(
+                'ERROR ON STREAM PROVIDER OF COINEXCHANGE RATES IN ADD CLIENT');
+            print(error);
+            return;
+          },
+          value: coinCollection
+              .doc(currentCoinSelectedCode)
+              .snapshots()
+              .map(coinFromSnapshot),
+        ),
+      ],
+      child: Scaffold(
+        appBar: AppBarCheckout(),
+        backgroundColor: Colors.grey.shade100,
+        body: AddPaymentBody(
+          remaining: widget.remaining,
+          subTotal: widget.subTotal,
+          discount: widget.discount,
+          discountPercentage: widget.discountPercentage,
+          tax: widget.tax,
+          percentageTax: widget.percentageTax,
+          client: widget.client,
+          invoiceDocumentID: widget.invoiceDocumentID,
+          amountPayed: widget.amountPayed,
+          invoiceNumber: widget.invoiceNumber,
+          payments: widget.payments,
+          // updatePayed: widget.updatePayed,
+        ),
       ),
     );
   }
@@ -160,42 +183,33 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
     super.initState();
   }
 
-  priceToCurrencySelected(double productPrice, String coin) {
-    double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-    if (coin.contains('USD')) {
-      return correctAmount;
-    } else if (coin.contains('VED')) {
-      return correctAmount * 4.58;
-    } else if (coin.contains('EUR')) {
-      return correctAmount * 0.89;
-    } else if (coin.contains('MXN')) {
-      return correctAmount * 19.43;
-    } else if (coin.contains('BTC')) {
-      return correctAmount * 0.00011;
-    } else {
-      return correctAmount * 4.58;
-    }
-  }
-
-  symbolMoney(coin) {
-    if (coin!.contains('USD')) {
-      return "USD\$.";
-    } else if (coin.contains('VED')) {
-      return "BsS.";
-    } else if (coin.contains('EUR')) {
-      return "€.";
-    } else if (coin.contains('MXN')) {
-      return '\$';
-      // return "MXN\$.";
-    } else if (coin.contains('BTC')) {
-      return '฿.';
-    } else {
-      return "PPR";
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final coinName = Provider.of<Coin?>(context)?.name ?? '';
+    final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 0;
+    final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 0;
+    final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
+    final coinCode = Provider.of<Coin?>(context)?.code ?? '';
+    priceToCurrencySelected(double productPrice, String coin) {
+      double correctAmount = double.parse(productPrice.toStringAsFixed(4));
+      return correctAmount * coinExchangeRatio;
+      // if (coin.contains('USD')) {
+      //   return correctAmount;
+      // } else if (coin.contains('VED')) {
+      //   return correctAmount * 4.58;
+      // } else if (coin.contains('EUR')) {
+      //   return correctAmount * 0.89;
+      // } else if (coin.contains('MXN')) {
+      //   return correctAmount * 19.43;
+      // } else if (coin.contains('BTC')) {
+      //   return correctAmount * 0.00011;
+      // } else {
+      //   return correctAmount * 4.58;
+      // }
+    }
+
+    print('Test coinName');
+    print(coinName);
     double? paymentsTotalAmount = 0;
     for (var payment in widget.payments) {
       paymentsTotalAmount = paymentsTotalAmount! + payment.amount;
@@ -214,80 +228,86 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
         productPrice = double.parse(productPrice.replaceAll('\$', ''));
       }
       double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-      if (currentCoin!.contains('USD')) {
-        return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
-            .format(productPrice)
-            .toString();
-      } else if (currentCoin.contains('VED')) {
-        return NumberFormat.currency(
-          locale: 'es_VE',
-          decimalDigits: 2,
-          symbol: "Bs.",
-        ).format(correctAmount * 4.58).toString();
-      } else if (currentCoin.contains('EUR')) {
-        return NumberFormat.currency(
-          locale: 'es_ES',
-          decimalDigits: 2,
-          symbol: '€',
-        ).format(correctAmount * 0.89).toString();
-      } else if (currentCoin.contains('MXN')) {
-        return NumberFormat.currency(
-          locale: 'es_MX',
-          decimalDigits: 2,
-          symbol: '\$',
-        ).format(correctAmount * 19.43);
-      } else if (currentCoin.contains('BTC')) {
-        return '฿ ${(correctAmount * 0.00011).toString()}';
-      } else {
-        return NumberFormat.currency(
-          locale: 'es_VE',
-          decimalDigits: 2,
-          symbol: "PPR.",
-        ).format(correctAmount * 4.58).toString();
-      }
+      double convertedAmount = double.parse(
+          (correctAmount * coinExchangeRatio).toStringAsFixed(coinDecimals));
+      // return convertedAmount;
+      return '$coinSymbol $convertedAmount';
+      // if (currentCoin!.contains('USD')) {
+      //   return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
+      //       .format(productPrice)
+      //       .toString();
+      // } else if (currentCoin.contains('VED')) {
+      //   return NumberFormat.currency(
+      //     locale: 'es_VE',
+      //     decimalDigits: 2,
+      //     symbol: "Bs.",
+      //   ).format(correctAmount * 4.58).toString();
+      // } else if (currentCoin.contains('EUR')) {
+      //   return NumberFormat.currency(
+      //     locale: 'es_ES',
+      //     decimalDigits: 2,
+      //     symbol: '€',
+      //   ).format(correctAmount * 0.89).toString();
+      // } else if (currentCoin.contains('MXN')) {
+      //   return NumberFormat.currency(
+      //     locale: 'es_MX',
+      //     decimalDigits: 2,
+      //     symbol: '\$',
+      //   ).format(correctAmount * 19.43);
+      // } else if (currentCoin.contains('BTC')) {
+      //   return '฿ ${(correctAmount * 0.00011).toString()}';
+      // } else {
+      //   return NumberFormat.currency(
+      //     locale: 'es_VE',
+      //     decimalDigits: 2,
+      //     symbol: "PPR.",
+      //   ).format(correctAmount * 4.58).toString();
+      // }
     }
 
     priceFormatForPaidAmount(productPrice, coin) {
-      print('Coin $coin');
-      print('productPrice $productPrice');
-
       if (productPrice is String) {
         productPrice = double.parse(productPrice.replaceAll('\$', ''));
       }
 
       coin ??= 'Dolares - USD';
       double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-      if (coin!.contains('USD')) {
-        return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
-            .format(productPrice)
-            .toString();
-      } else if (coin.contains('VED')) {
-        return NumberFormat.currency(
-          locale: 'es_VE',
-          decimalDigits: 2,
-          symbol: "Bs.",
-        ).format(correctAmount * 4.58).toString();
-      } else if (coin.contains('EUR')) {
-        return NumberFormat.currency(
-          locale: 'es_ES',
-          decimalDigits: 2,
-          symbol: '€',
-        ).format(correctAmount * 0.89).toString();
-      } else if (coin.contains('MXN')) {
-        return NumberFormat.currency(
-          locale: 'es_MX',
-          decimalDigits: 2,
-          symbol: '\$',
-        ).format(correctAmount * 19.43);
-      } else if (coin.contains('BTC')) {
-        return '฿ ${(correctAmount * 0.00011).toString()}';
-      } else {
-        return NumberFormat.currency(
-          locale: 'es_VE',
-          decimalDigits: 2,
-          symbol: "PPR.",
-        ).format(correctAmount * 4.58).toString();
-      }
+      double convertedAmount = double.parse(
+          (correctAmount * coinExchangeRatio).toStringAsFixed(coinDecimals));
+      // return convertedAmount;
+      return '$convertedAmount';
+      // double correctAmount = double.parse(productPrice.toStringAsFixed(4));
+      // if (coin!.contains('USD')) {
+      //   return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
+      //       .format(productPrice)
+      //       .toString();
+      // } else if (coin.contains('VED')) {
+      //   return NumberFormat.currency(
+      //     locale: 'es_VE',
+      //     decimalDigits: 2,
+      //     symbol: "Bs.",
+      //   ).format(correctAmount * 4.58).toString();
+      // } else if (coin.contains('EUR')) {
+      //   return NumberFormat.currency(
+      //     locale: 'es_ES',
+      //     decimalDigits: 2,
+      //     symbol: '€',
+      //   ).format(correctAmount * 0.89).toString();
+      // } else if (coin.contains('MXN')) {
+      //   return NumberFormat.currency(
+      //     locale: 'es_MX',
+      //     decimalDigits: 2,
+      //     symbol: '\$',
+      //   ).format(correctAmount * 19.43);
+      // } else if (coin.contains('BTC')) {
+      //   return '฿ ${(correctAmount * 0.00011).toString()}';
+      // } else {
+      //   return NumberFormat.currency(
+      //     locale: 'es_VE',
+      //     decimalDigits: 2,
+      //     symbol: "PPR.",
+      //   ).format(correctAmount * 4.58).toString();
+      // }
     }
 
     return WillPopScope(
@@ -647,13 +667,20 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                         ),
                   selectedCoin == null
                       ? Container()
-                      : Text(
-                          '${AppLocalizations.of(context)!.amount}*',
-                          style: TextStyle(
-                            fontFamily: 'Poppins-regular',
-                            color: myTheme.colorScheme.primary,
-                            fontSize: 14,
-                          ),
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '${AppLocalizations.of(context)!.amount}*',
+                              style: TextStyle(
+                                fontFamily: 'Poppins-regular',
+                                color: myTheme.colorScheme.primary,
+                                fontSize: 14,
+                              ),
+                            ),
+                            SizedBox(width: 5),
+                            PointTextWidget(),
+                          ],
                         ),
 
                   selectedCoin == null
@@ -731,8 +758,8 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                 amountChanged = true;
                               });
                             },
-                            readOnly:
-                                selectedValueA == 'Efectivo' ? true : false,
+                            // readOnly:
+                            //     selectedValueA == 'Efectivo' ? true : false,
                             controller: fieldTextAmountToPay,
                             style: TextStyle(
                               fontSize: 14,
@@ -757,6 +784,32 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                             textCapitalization: TextCapitalization.characters,
 
                             decoration: InputDecoration(
+                              prefixIcon: Container(
+                                width: 40,
+                                height: 40,
+                                child: Center(
+                                  child: Text(
+                                    '$coinSymbol',
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins-regular',
+                                      fontSize: 14,
+                                      color: moneyRecievedForRegisterMoney <
+                                              0.000001
+                                          ? myTheme.colorScheme.primary
+                                          : moneyRecievedForRegisterMoney <
+                                                  (amountChanged
+                                                      ? roundAmount(amountToPay)
+                                                      : priceToCurrencySelected(
+                                                          roundAmount(
+                                                              amountToPay),
+                                                          selectedCoin!))
+                                              ? Colors.red
+                                              : myTheme.colorScheme.primary,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
                               contentPadding: EdgeInsets.fromLTRB(
                                 14,
                                 0,
@@ -799,14 +852,16 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                             'Recibido *',
                             style: TextStyle(
                               fontFamily: 'Poppins-regular',
-                              color: moneyRecievedForRegisterMoney <
-                                      (amountChanged
-                                          ? roundAmount(amountToPay)
-                                          : priceToCurrencySelected(
-                                              roundAmount(amountToPay),
-                                              selectedCoin!))
-                                  ? Colors.red
-                                  : myTheme.colorScheme.primary,
+                              color: moneyRecievedForRegisterMoney < 0.000001
+                                  ? myTheme.colorScheme.primary
+                                  : moneyRecievedForRegisterMoney <
+                                          (amountChanged
+                                              ? roundAmount(amountToPay)
+                                              : priceToCurrencySelected(
+                                                  roundAmount(amountToPay),
+                                                  selectedCoin!))
+                                      ? Colors.red
+                                      : myTheme.colorScheme.primary,
                               fontSize: 14,
                             ),
                           ),
@@ -820,15 +875,17 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: moneyRecievedForRegisterMoney <
-                                      (amountChanged
-                                          ? roundAmount(amountToPay)
-                                          : priceToCurrencySelected(
-                                              roundAmount(amountToPay),
-                                              selectedCoin!))
-                                  ? Colors.red
-                                  : myTheme.colorScheme.primary
-                                      .withOpacity(0.3),
+                              color: moneyRecievedForRegisterMoney < 0.000001
+                                  ? myTheme.colorScheme.primary
+                                  : moneyRecievedForRegisterMoney <
+                                          (amountChanged
+                                              ? roundAmount(amountToPay)
+                                              : priceToCurrencySelected(
+                                                  roundAmount(amountToPay),
+                                                  selectedCoin!))
+                                      ? Colors.red
+                                      : myTheme.colorScheme.primary
+                                          .withOpacity(0.3),
 
                               // color: Colors.transparent,
                             ),
@@ -893,7 +950,16 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                             style: TextStyle(
                               fontSize: 14,
                               fontFamily: 'Poppins-regular',
-                              color: myTheme.colorScheme.primary,
+                              color: moneyRecievedForRegisterMoney < 0.000001
+                                  ? myTheme.colorScheme.primary
+                                  : moneyRecievedForRegisterMoney <
+                                          (amountChanged
+                                              ? roundAmount(amountToPay)
+                                              : priceToCurrencySelected(
+                                                  roundAmount(amountToPay),
+                                                  selectedCoin!))
+                                      ? Colors.red
+                                      : myTheme.colorScheme.primary,
                             ),
                             //TODO:
 
@@ -921,11 +987,22 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                 height: 40,
                                 child: Center(
                                   child: Text(
-                                    symbolMoney(selectedCoin),
+                                    '$coinSymbol',
                                     style: TextStyle(
                                       fontFamily: 'Poppins-regular',
                                       fontSize: 14,
-                                      color: myTheme.colorScheme.primary,
+                                      color: moneyRecievedForRegisterMoney <
+                                              0.000001
+                                          ? myTheme.colorScheme.primary
+                                          : moneyRecievedForRegisterMoney <
+                                                  (amountChanged
+                                                      ? roundAmount(amountToPay)
+                                                      : priceToCurrencySelected(
+                                                          roundAmount(
+                                                              amountToPay),
+                                                          selectedCoin!))
+                                              ? Colors.red
+                                              : myTheme.colorScheme.primary,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -937,12 +1014,12 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                 0,
                                 0,
                               ),
-                              hintText: '$moneyRecievedForRegisterMoney',
+                              hintText: 'Ingrese el monto a recibir',
                               // ' ${priceToCurrencySelectedInput(remaining, selectedCoin)}',
                               hintStyle: TextStyle(
                                 height: 1.85,
                                 fontFamily: 'Poppins-regular',
-                                fontSize: 14,
+                                fontSize: 11,
                                 color: myTheme.colorScheme.primary,
                               ),
                               enabledBorder: OutlineInputBorder(
@@ -972,34 +1049,37 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                           ? Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                moneyRecievedForRegisterMoney <
-                                        (amountChanged
-                                            ? roundAmount(amountToPay)
-                                            : priceToCurrencySelected(
-                                                roundAmount(amountToPay),
-                                                selectedCoin!))
-                                    ? selectedValueA != 'Efectivo'
-                                        ? Container()
-                                        : Container(
-                                            margin: EdgeInsets.fromLTRB(
-                                              50,
-                                              10,
-                                              50,
-                                              0,
-                                            ),
-                                            child: Text(
-                                              'LA CANTIDAD A PAGAR NO PUEDE SER MAYOR QUE LA CANTIDAD RECIBIDA',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontFamily: 'Poppins-regular',
-                                                color:
-                                                    myTheme.colorScheme.error,
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          )
-                                    : Container(),
+                                moneyRecievedForRegisterMoney < 0.000001
+                                    ? Container()
+                                    : moneyRecievedForRegisterMoney <
+                                            (amountChanged
+                                                ? roundAmount(amountToPay)
+                                                : priceToCurrencySelected(
+                                                    roundAmount(amountToPay),
+                                                    selectedCoin!))
+                                        ? selectedValueA != 'Efectivo'
+                                            ? Container()
+                                            : Container(
+                                                margin: EdgeInsets.fromLTRB(
+                                                  50,
+                                                  10,
+                                                  50,
+                                                  0,
+                                                ),
+                                                child: Text(
+                                                  'EL MONTO A PAGAR NO PUEDE SER MAYOR QUE LA CANTIDAD RECIBIDA',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    fontFamily:
+                                                        'Poppins-regular',
+                                                    color: myTheme
+                                                        .colorScheme.error,
+                                                    fontSize: 10,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              )
+                                        : Container(),
                                 Container(
                                   margin: const EdgeInsets.fromLTRB(
                                     50,
@@ -1052,9 +1132,9 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                         ),
                                       ),
                                       Text(
-                                        priceFormatForPaidAmount(
-                                                widget.discount, selectedCoin)
-                                            .toString(),
+                                        double.parse(priceFormatForPaidAmount(
+                                                widget.discount, selectedCoin))
+                                            .toStringAsFixed(2),
                                         style: TextStyle(
                                           fontFamily: 'Poppins-regular',
                                           color: myTheme.colorScheme.primary,
@@ -1192,7 +1272,8 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                           fontFamily: 'Poppins-regular',
                                           color: myTheme
                                               .colorScheme.onPrimaryContainer,
-                                          fontSize: 10,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                       Text(
@@ -1203,7 +1284,8 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                           fontFamily: 'Poppins-regular',
                                           color: myTheme
                                               .colorScheme.onPrimaryContainer,
-                                          fontSize: 10,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                     ],
@@ -1238,12 +1320,12 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                                   ),
                                             Text(
                                               // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(4), selectedCoin)}',
-                                              '\$ $change',
+                                              '\$ ${change.toStringAsFixed(2)}',
                                               style: TextStyle(
                                                 fontFamily: 'Poppins-regular',
-                                                color: myTheme.colorScheme
-                                                    .onPrimaryContainer,
-                                                fontSize: 10,
+                                                color: Colors.green,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
                                               ),
                                             ),
                                           ],
@@ -1252,6 +1334,11 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                 Container(
                                   margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                                   child: identifyPaymentMethodRetail(
+                                    coinName: coinName,
+                                    coinDecimals: coinDecimals,
+                                    coinExchangeRatio: coinExchangeRatio,
+                                    coinSymbol: coinSymbol,
+                                    coinCode: coinCode,
                                     moneyRecievedForRegisterMoney:
                                         moneyRecievedForRegisterMoney,
                                     selectedValueA: selectedValueA!,
