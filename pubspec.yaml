@@ -90,9 +90,11 @@ dev_dependencies:
 
 flutter_icons:
   android: true
-  image_path: "assets/images/app_icon.png"
+  image_path: "assets/images/agnostiko_logo.png"
+  # image_path: "assets/images/app_icon.png"
   adaptive_icon_background: "#ffffff"
-  adaptive_icon_foreground: "assets/images/logo_foreground.png"
+  adaptive_icon_foreground: "assets/images/agnostiko_logo.png"
+  # adaptive_icon_foreground: "assets/images/logo_foreground.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
