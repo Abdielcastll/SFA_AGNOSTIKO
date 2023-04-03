@@ -428,11 +428,17 @@ Future registerDebitCreditCardPayment(InvoiceData data, int? stan) async {
           'Amount de proceso: ${priceFormatForDB(amount, currency, data.coinExchangeRatio)}');
       print(
           'restante total: ${priceFormatForDB(remaining, currency, data.coinExchangeRatio) - priceFormatForDB(amount, currency, data.coinExchangeRatio)}');
-      var total =
-          priceFormatForDB(remaining, currency, data.coinExchangeRatio) -
-              priceFormatForDB(amount, currency, data.coinExchangeRatio);
+      // var total = priceFormatForDB(remaining, currency, coinExchangeRatio) -
+      //     priceFormatForDB(amount, currency, coinExchangeRatio);
+      var total = remaining - amount;
+      print(remaining);
+      print(amount);
+      // var total =
+      //     double.parse((remaining * coinExchangeRatio!).toStringAsFixed(4)) -
+      //         double.parse((amount * coinExchangeRatio).toStringAsFixed(4));
+      print('total: ${total.toStringAsFixed(2)}');
       try {
-        if (total <= 0) {
+        if (double.parse(total.toStringAsFixed(2)) <= 0) {
           FirebaseFirestore.instance
               .collection('clientes')
               .doc(client.clientDocumentId)
@@ -552,10 +558,17 @@ Future registerBankCheckPayment({
           'Amount de proceso: ${priceFormatForDB(amount!, currency, coinExchangeRatio)}');
       print(
           'restante total: ${priceFormatForDB(remaining, currency, coinExchangeRatio) - priceFormatForDB(amount, currency, coinExchangeRatio)}');
-      var total = priceFormatForDB(remaining, currency, coinExchangeRatio) -
-          priceFormatForDB(amount, currency, coinExchangeRatio);
+      // var total = priceFormatForDB(remaining, currency, coinExchangeRatio) -
+      //     priceFormatForDB(amount, currency, coinExchangeRatio);
+      var total = remaining - amount;
+      // var total =
+      //     double.parse((remaining * coinExchangeRatio!).toStringAsFixed(4)) -
+      //         double.parse((amount * coinExchangeRatio).toStringAsFixed(4));
+      print(remaining);
+      print(amount);
+      print('total: ${total.toStringAsFixed(2)}');
       try {
-        if (total <= 0) {
+        if (double.parse(total.toStringAsFixed(2)) <= 0) {
           FirebaseFirestore.instance
               .collection('clientes')
               .doc(client.clientDocumentId)
@@ -788,10 +801,18 @@ Future registerDepositPayment({
           'Amount de proceso: ${priceFormatForDB(amount!, currency, coinExchangeRatio)}');
       print(
           'restante total: ${priceFormatForDB(remaining, currency, coinExchangeRatio) - priceFormatForDB(amount, currency, coinExchangeRatio)}');
-      var total = priceFormatForDB(remaining, currency, coinExchangeRatio) -
-          priceFormatForDB(amount, currency, coinExchangeRatio);
+      // var total = priceFormatForDB(remaining, currency, coinExchangeRatio) -
+      //     priceFormatForDB(amount, currency, coinExchangeRatio);
+      var total = remaining - amount;
+      print(remaining);
+      print(amount);
+      print('total: ${total.toStringAsFixed(2)}');
+
+      // var total =
+      //     double.parse((remaining * coinExchangeRatio!).toStringAsFixed(4)) -
+      //         double.parse((amount * coinExchangeRatio).toStringAsFixed(4));
       try {
-        if (total <= 0) {
+        if (double.parse(total.toStringAsFixed(2)) <= 0) {
           FirebaseFirestore.instance
               .collection('clientes')
               .doc(client.clientDocumentId)
@@ -884,10 +905,18 @@ Future registerMoneyPayment({
           'Amount de proceso: ${priceFormatForDB(amount!, currency, exchangeRate)}');
       print(
           'restante total: ${priceFormatForDB(remaining, currency, exchangeRate) - priceFormatForDB(amount, currency, exchangeRate)}');
-      var total = priceFormatForDB(remaining, currency, exchangeRate) -
-          priceFormatForDB(amount, currency, exchangeRate);
+      // var total = priceFormatForDB(remaining, currency, exchangeRate) -
+      //     priceFormatForDB(amount, currency, exchangeRate);
+      var total = remaining - amount;
+//  var total = remaining - double.parse(amount.toStringAsFixed(2));
+      // var total = double.parse((remaining * exchangeRate!).toStringAsFixed(4)) -
+      //     double.parse((amount * exchangeRate).toStringAsFixed(4));
+      print(remaining);
+      print(amount);
+      print('total: ${total.toStringAsFixed(4)}');
+
       try {
-        if (total <= 0) {
+        if (double.parse(total.toStringAsFixed(2)) <= 0) {
           print('Factura pagada completamente');
           FirebaseFirestore.instance
               .collection('clientes')
@@ -1003,10 +1032,19 @@ Future registerTransferPayment({
           'Amount de proceso: ${priceFormatForDB(amount!, currency, coinExchangeRatio)}');
       print(
           'restante total: ${priceFormatForDB(remaining, currency, coinExchangeRatio) - priceFormatForDB(amount, currency, coinExchangeRatio)}');
-      var total = priceFormatForDB(remaining, currency, coinExchangeRatio) -
-          priceFormatForDB(amount, currency, coinExchangeRatio);
+      // var total = priceFormatForDB(remaining, currency, coinExchangeRatio) -
+      //     priceFormatForDB(amount, currency, coinExchangeRatio);
+      var total = remaining - amount;
+
+      // var total =
+      //     double.parse((remaining * coinExchangeRatio!).toStringAsFixed(4)) -
+      //         double.parse((amount * coinExchangeRatio).toStringAsFixed(4));
+      print(remaining);
+      print(amount);
+      print('total: ${total.toStringAsFixed(2)}');
+
       try {
-        if (total <= 0) {
+        if (double.parse(total.toStringAsFixed(2)) <= 0) {
           FirebaseFirestore.instance
               .collection('clientes')
               .doc(client.clientDocumentId)
@@ -1120,10 +1158,18 @@ Future registerTransferInterPayment({
           'Amount de proceso: ${priceFormatForDB(amount!, currency, coinExchangeRatio)}');
       print(
           'restante total: ${priceFormatForDB(remaining, currency, coinExchangeRatio) - priceFormatForDB(amount, currency, coinExchangeRatio)}');
-      var total = priceFormatForDB(remaining, currency, coinExchangeRatio) -
-          priceFormatForDB(amount, currency, coinExchangeRatio);
+      // var total = priceFormatForDB(remaining, currency, coinExchangeRatio) -
+      //     priceFormatForDB(amount, currency, coinExchangeRatio);
+      var total = remaining - amount;
+      print(remaining);
+      print(amount);
+      // var total =
+      //     double.parse((remaining * coinExchangeRatio!).toStringAsFixed(4)) -
+      //         double.parse((amount * coinExchangeRatio).toStringAsFixed(4));
+      print('total: ${total.toStringAsFixed(2)}');
+
       try {
-        if (total <= 0) {
+        if (double.parse(total.toStringAsFixed(2)) <= 0) {
           FirebaseFirestore.instance
               .collection('clientes')
               .doc(client.clientDocumentId)

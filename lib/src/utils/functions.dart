@@ -35,7 +35,7 @@ double exchangeAmount(String coin, double amount, double exchange) {
 
 double roundAmount(double amount) {
   double correctAmount = double.parse(amount.toStringAsFixed(4));
-  return double.parse(correctAmount.toStringAsFixed(2));
+  return double.parse(correctAmount.toStringAsFixed(4));
 }
 
 Map<String, dynamic>? getExchangesRates(List<Coin?> coins) {

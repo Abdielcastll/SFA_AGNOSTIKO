@@ -641,7 +641,7 @@ identifyPaymentMethodRetail({
 
                                       if (amountExchanged <
                                           double.parse(
-                                              (remaining).toStringAsFixed(4))) {
+                                              (remaining).toStringAsFixed(2))) {
                                         showDialog(
                                             context: context,
                                             builder: (BuildContext context) {

@@ -126,8 +126,13 @@ class _CheckoutBodyState extends State<CheckoutBody> {
   }
 
   double priceWithMasterDiscount() {
-    var total = (widget.subTotal / 100) * widget.client?.masterDiscount;
-    return total;
+    // var total = double.parse(
+    //     (double.parse((widget.subTotal / 100).toStringAsFixed(4)) *
+    //             widget.client?.masterDiscount)
+    //         .toString());
+    double total = ((widget.subTotal / 100) * widget.client?.masterDiscount);
+    var doubleTotal = double.parse(total.toStringAsFixed(2));
+    return doubleTotal;
   }
 
   double totalPriceOfTheOrder() {
@@ -137,11 +142,11 @@ class _CheckoutBodyState extends State<CheckoutBody> {
   }
 
   double totalDiscountApplied() {
-    // var total = double.parse(
-    //     ((widget.subTotal / 100) * discountByInput).toStringAsFixed(4));
-    var total = (widget.subTotal / 100) * discountByInput;
+    var total = double.parse(
+        ((widget.subTotal / 100) * discountByInput).toStringAsFixed(4));
+    // var total = (widget.subTotal / 100) * discountByInput;
     double doubleTotal = double.parse(total.toStringAsFixed(2));
-    return total;
+    return doubleTotal;
   }
 
   double totalWithTheIVA() {
@@ -199,7 +204,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
     double? totalOfTheOrder = totalWithTheIVA();
     String? fiscalAddress = widget.client?.fiscalAdress;
     String? dispatchAddress =
-        widget.client?.dispatchAdress ?? 'No Hay direccion disponible';
+        widget.client?.dispatchAdress ?? 'No Hay direcciofn disponible';
     String formattedDate = dateFormatter.format(today);
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     final coinName = Provider.of<Coin?>(context)?.name ?? '';
@@ -301,6 +306,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       // margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerLeft,
                       child: Text(
+                        // Descuento Maestro
                         '${AppLocalizations.of(context)!.masterDiscount} ($clientMasterDiscount%)',
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
@@ -315,6 +321,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         '- ${priceFormat(masterDiscountTotal)}',
+                        // '- $masterDiscountTotal',
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
