@@ -143,8 +143,9 @@ class _CheckoutBodyState extends State<CheckoutBody> {
   }
 
   double totalWithTheIVA() {
-    var total = (totalPriceOfTheOrder() + priceWithIVA()).toStringAsFixed(4);
-    double doubleTotal = double.parse(total);
+    var total = double.parse(
+        (totalPriceOfTheOrder() + priceWithIVA()).toStringAsFixed(4));
+    double doubleTotal = double.parse(total.toStringAsFixed(2));
     return doubleTotal;
   }
 

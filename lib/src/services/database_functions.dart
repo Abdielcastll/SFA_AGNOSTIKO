@@ -641,55 +641,55 @@ Future registerCriptoPayment(
   print('transactionID: $transactionID');
   print('exancheRates: $exancheRates');
 
-  try {
-    print('Pago registrado correctamente');
-    return await FirebaseFirestore.instance
-        .collection('clientes')
-        .doc(client.clientDocumentId)
-        .collection('facturas')
-        .doc(invoiceDocumentID)
-        .update({
-      'pagos': FieldValue.arrayUnion(
-        [
-          <String, dynamic>{
-            'anulado': nulled,
-            'codigoMoneda': codeCurrency,
-            'conciliado': concillied,
-            'fecha': paymentDate,
-            'metodo': method,
-            'monto': paymentAmount,
-            'montoOriginal': originalAmount,
-            'idTransaccion': transactionID,
-            'tasaDeCambio': selectedCoinExchangeRate,
-          },
-        ],
-      ),
-    }).whenComplete(() {
-      print(
-          'remaining de proceso: ${priceToCurrencySelected(remaining!, currency!)}');
-      print('Amount de proceso: ${priceToCurrencySelected(amount!, currency)}');
-      print(
-          'restante total: ${priceToCurrencySelected(remaining!, currency!) - priceToCurrencySelected(amount!, currency)}');
-      var total = priceToCurrencySelected(remaining!, currency!) -
-          priceToCurrencySelected(amount!, currency);
-      try {
-        if (total <= 0) {
-          FirebaseFirestore.instance
-              .collection('clientes')
-              .doc(client.clientDocumentId)
-              .collection('facturas')
-              .doc(invoiceDocumentID)
-              .update({
-            'pagada': true,
-          });
-        }
-      } catch (e) {
-        print(e);
-      }
-    });
-  } catch (e) {
-    print(e);
-  }
+  // try {
+  //   print('Pago registrado correctamente');
+  //   return await FirebaseFirestore.instance
+  //       .collection('clientes')
+  //       .doc(client.clientDocumentId)
+  //       .collection('facturas')
+  //       .doc(invoiceDocumentID)
+  //       .update({
+  //     'pagos': FieldValue.arrayUnion(
+  //       [
+  //         <String, dynamic>{
+  //           'anulado': nulled,
+  //           'codigoMoneda': codeCurrency,
+  //           'conciliado': concillied,
+  //           'fecha': paymentDate,
+  //           'metodo': method,
+  //           'monto': paymentAmount,
+  //           'montoOriginal': originalAmount,
+  //           'idTransaccion': transactionID,
+  //           'tasaDeCambio': selectedCoinExchangeRate,
+  //         },
+  //       ],
+  //     ),
+  //   }).whenComplete(() {
+  //     print(
+  //         'remaining de proceso: ${priceToCurrencySelected(remaining!, currency!)}');
+  //     print('Amount de proceso: ${priceToCurrencySelected(amount!, currency)}');
+  //     print(
+  //         'restante total: ${priceToCurrencySelected(remaining!, currency!) - priceToCurrencySelected(amount!, currency)}');
+  //     var total = priceToCurrencySelected(remaining!, currency!) -
+  //         priceToCurrencySelected(amount!, currency);
+  //     try {
+  //       if (total <= 0) {
+  //         FirebaseFirestore.instance
+  //             .collection('clientes')
+  //             .doc(client.clientDocumentId)
+  //             .collection('facturas')
+  //             .doc(invoiceDocumentID)
+  //             .update({
+  //           'pagada': true,
+  //         });
+  //       }
+  //     } catch (e) {
+  //       print(e);
+  //     }
+  //   });
+  // } catch (e) {
+  //   print(e);
+  // }
 }
 
 //Registro de deposito

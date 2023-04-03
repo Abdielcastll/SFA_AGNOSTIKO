@@ -75,7 +75,7 @@ paymentCard(
     {Function? updatePayed,
     AddPaymentBodyAtt? paymentBody,
     noRetail = false}) {
-  remaining = priceToCurrencySelected(remaining, currentCoin);
+  remaining = priceFormatForDB(remaining, currentCoin, coinExchangeRatio);
 
   final invoiceData = InvoiceData(client, invoiceDocumentID, 'USD', amount,
       totalOfTheOrder, currentCoin, date, remaining, coinExchangeRatio);

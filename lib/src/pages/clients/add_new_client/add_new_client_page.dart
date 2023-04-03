@@ -4,11 +4,12 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
@@ -99,6 +100,79 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
   late String? latitude = '';
   late String? longitude = '';
 
+  // Future<Position> _getCurrentLocation() async {
+  //   bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  //   if (!serviceEnabled) {
+  //     return Future.error('Location services are disabled');
+  //   }
+  //   LocationPermission permission = await Geolocator.checkPermission();
+  //   if (permission == LocationPermission.denied) {
+  //     permission = await Geolocator.requestPermission();
+  //     if (permission == LocationPermission.denied) {
+  //       return Future.error('Location permissions are denied');
+  //     }
+  //   }
+  //   if (permission == LocationPermission.deniedForever) {
+  //     return Future.error(
+  //         'Location permissions are permanently denied, we cannot request permission');
+  //   }
+  //   return await Geolocator.getCurrentPosition(
+  //     forceAndroidLocationManager: true,
+  //   );
+  // }
+
+  Future<Position?> determinePosition() async {
+    bool serviceEnabled;
+
+    LocationPermission permission;
+
+    // Geolocator.openLocationSettings();
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+
+      if (permission != LocationPermission.whileInUse &&
+          permission != LocationPermission.always) {
+        return Future.error(
+            'Location permissions are denied (actual value: $permission).');
+      }
+    }
+
+    if (kDebugMode) {
+      print('Location permission: $permission');
+    }
+
+    /* await Geolocator.getCurrentPosition(
+
+      desiredAccuracy: LocationAccuracy.high, forceAndroidLocationManager: true); */
+
+    /* final pos = await Geolocator.getCurrentPosition(
+
+      desiredAccuracy: LocationAccuracy.lowest,
+
+      forceAndroidLocationManager: true,
+
+      timeLimit: const Duration(seconds: 60));
+
+  print(pos); */
+
+    return await Geolocator.getLastKnownPosition(
+        forceAndroidLocationManager: true);
+  }
+
   File? imageFile;
 
   Future getFromGallery(context) async {
@@ -141,10 +215,6 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
       return croppedImage;
     }
   }
-
-  // Location location = Location();
-  // PermissionStatus? _permissionGranted;
-  // LocationData? _locationData;
 
   @override
   Widget build(BuildContext context) {
@@ -587,89 +657,71 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                       ),
                       // LOCALIZACION, COMENTADO POR PROBLEMAS DE USO SIN GOOGLE
                       // PLAY SERVICES
-                      // Container(
-                      //   margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
-                      //   child: Row(
-                      //     // mainAxisAlignment: MainAxisAlignment.center,
-                      //     // ignore: prefer_const_literals_to_create_immutables
-                      //     children: [
-                      //       TextMessageForTextField(message: 'Geolocalización'),
-                      //       SizedBox(width: 5),
-                      //     ],
-                      //   ),
-                      // ),
-                      // Row(
-                      //   children: [
-                      //     Container(
-                      //       width: 120,
-                      //       margin: EdgeInsets.fromLTRB(20, 0, 10, 0),
-                      //       child: TextFieldForNewClient(
-                      //         controller: null,
-                      //         hintMessage: latitude,
-                      //         textInputType: TextInputType.name,
-                      //         maxLines: 1,
-                      //         readOnly: true,
-                      //       ),
-                      //     ),
-                      //     Container(
-                      //       width: 120,
-                      //       margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                      //       child: TextFieldForNewClient(
-                      //         controller: null,
-                      //         hintMessage: longitude,
-                      //         textInputType: TextInputType.name,
-                      //         maxLines: 1,
-                      //         readOnly: true,
-                      //       ),
-                      //     ),
-                      //     Container(
-                      //       width: 50,
-                      //       child: IconButton(
-                      //         icon: Icon(
-                      //           Icons.place_sharp,
-                      //           color: myTheme.colorScheme.primary,
-                      //         ),
-                      //         onPressed: () async {
-                      //           // Obtener Localización (latitud y longitud);
-                      //           // bool _serviceEnabled;
-
-                      //           // try {
-                      //           //   _serviceEnabled =
-                      //           //       await location.serviceEnabled();
-                      //           //   if (!_serviceEnabled) {
-                      //           //     _serviceEnabled =
-                      //           //         await location.requestService();
-                      //           //     if (!_serviceEnabled) {
-                      //           //       return;
-                      //           //     }
-                      //           //   }
-
-                      //           //   _permissionGranted =
-                      //           //       await location.hasPermission();
-                      //           //   if (_permissionGranted ==
-                      //           //       PermissionStatus.denied) {
-                      //           //     _permissionGranted =
-                      //           //         await location.requestPermission();
-                      //           //     if (_permissionGranted !=
-                      //           //         PermissionStatus.granted) {
-                      //           //       return;
-                      //           //     }
-                      //           //   }
-
-                      //           //   _locationData = await location.getLocation();
-                      //           //   // LocationData location = await getLocation();
-                      //           //   print('LOCATION++++++++++++++++++++++++++');
-                      //           //   print(
-                      //           //       "Location: ${_locationData?.latitude}, ${_locationData?.longitude}");
-                      //           // } catch (e) {
-                      //           //   print(e);
-                      //           //   print('ERROR TESTING GETLOCATION');
-                      //           // }
-                      //         },
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
+                        child: Row(
+                          // mainAxisAlignment: MainAxisAlignment.center,
+                          // ignore: prefer_const_literals_to_create_immutables
+                          children: [
+                            TextMessageForTextField(message: 'Geolocalización'),
+                            SizedBox(width: 5),
+                          ],
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                            width: 120,
+                            margin: EdgeInsets.fromLTRB(20, 0, 10, 0),
+                            child: TextFieldForNewClient(
+                              controller: null,
+                              hintMessage: latitude,
+                              textInputType: TextInputType.name,
+                              maxLines: 1,
+                              readOnly: true,
+                            ),
+                          ),
+                          Container(
+                            width: 120,
+                            margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                            child: TextFieldForNewClient(
+                              controller: null,
+                              hintMessage: longitude,
+                              textInputType: TextInputType.name,
+                              maxLines: 1,
+                              readOnly: true,
+                            ),
+                          ),
+                          Container(
+                            width: 50,
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.place_sharp,
+                                color: myTheme.colorScheme.primary,
+                              ),
+                              onPressed: () async {
+                                // Obtener Localización (latitud y longitud);
+                                determinePosition().then((value) {
+                                  latitude = '${value?.latitude}';
+                                  longitude = '${value?.longitude}';
+                                  print(latitude);
+                                  print(longitude);
+                                  print('GEOLOCATOR');
+                                  setState(() {});
+                                });
+                                // _getCurrentLocation().then((value) {
+                                //   latitude = '${value.latitude}';
+                                //   longitude = '${value.longitude}';
+                                //   print(latitude);
+                                //   print(longitude);
+                                //   print('GEOLOCATOR');
+                                //   setState(() {});
+                                // });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
                       SizedBox(height: 10),
                       // Text(
                       //   // AppLocalizations.of(context)!.selectFile,

@@ -60,38 +60,86 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     List<String> currentCoinSplit = currentCoin!.split(' ');
     String currentCoinSelectedCode = currentCoinSplit.last;
-    return MultiProvider(
-      providers: [
-        StreamProvider<Coin?>.value(
-          initialData: Coin(),
-          catchError: (context, error) {
-            print(
-                'ERROR ON STREAM PROVIDER OF COINEXCHANGE RATES IN ADD CLIENT');
-            print(error);
-            return;
-          },
-          value: coinCollection
-              .doc(currentCoinSelectedCode)
-              .snapshots()
-              .map(coinFromSnapshot),
-        ),
-      ],
-      child: Scaffold(
-        appBar: AppBarCheckout(),
-        backgroundColor: Colors.grey.shade100,
-        body: AddPaymentBody(
-          remaining: widget.remaining,
-          subTotal: widget.subTotal,
-          discount: widget.discount,
-          discountPercentage: widget.discountPercentage,
-          tax: widget.tax,
-          percentageTax: widget.percentageTax,
-          client: widget.client,
-          invoiceDocumentID: widget.invoiceDocumentID,
-          amountPayed: widget.amountPayed,
-          invoiceNumber: widget.invoiceNumber,
-          payments: widget.payments,
-          // updatePayed: widget.updatePayed,
+    bool _canPop = false;
+
+    return WillPopScope(
+      onWillPop: () async {
+        if (_canPop) {
+          return true;
+        } else {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text("Advertencia"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Salir de este proceso hara que deba continuarlo desde el menu de facturas como registro manual)",
+                  ),
+                  Text(
+                    " ¿Esta seguro que quiere salir?",
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("No"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _canPop = true;
+                    });
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("Yes"),
+                ),
+              ],
+            ),
+          );
+          return false;
+        }
+      },
+      child: MultiProvider(
+        providers: [
+          StreamProvider<Coin?>.value(
+            initialData: Coin(),
+            catchError: (context, error) {
+              print(
+                  'ERROR ON STREAM PROVIDER OF COINEXCHANGE RATES IN ADD CLIENT');
+              print(error);
+              return;
+            },
+            value: coinCollection
+                .doc(currentCoinSelectedCode)
+                .snapshots()
+                .map(coinFromSnapshot),
+          ),
+        ],
+        child: Scaffold(
+          appBar: AppBarCheckout(),
+          backgroundColor: Colors.grey.shade100,
+          body: AddPaymentBody(
+            remaining: widget.remaining,
+            subTotal: widget.subTotal,
+            discount: widget.discount,
+            discountPercentage: widget.discountPercentage,
+            tax: widget.tax,
+            percentageTax: widget.percentageTax,
+            client: widget.client,
+            invoiceDocumentID: widget.invoiceDocumentID,
+            amountPayed: widget.amountPayed,
+            invoiceNumber: widget.invoiceNumber,
+            payments: widget.payments,
+            // updatePayed: widget.updatePayed,
+          ),
         ),
       ),
     );
@@ -192,7 +240,9 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
     final coinCode = Provider.of<Coin?>(context)?.code ?? '';
     priceToCurrencySelected(double productPrice, String coin) {
       double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-      return correctAmount * coinExchangeRatio;
+      double convertedAmount = double.parse(
+          (correctAmount * coinExchangeRatio).toStringAsFixed(coinDecimals));
+      return convertedAmount;
       // if (coin.contains('USD')) {
       //   return correctAmount;
       // } else if (coin.contains('VED')) {
@@ -758,8 +808,8 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                 amountChanged = true;
                               });
                             },
-                            // readOnly:
-                            //     selectedValueA == 'Efectivo' ? true : false,
+                            readOnly:
+                                selectedValueA == 'Efectivo' ? true : false,
                             controller: fieldTextAmountToPay,
                             style: TextStyle(
                               fontSize: 14,
@@ -848,22 +898,30 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                       ? Container()
                       : Container(
                           margin: EdgeInsets.only(top: 5),
-                          child: Text(
-                            'Recibido *',
-                            style: TextStyle(
-                              fontFamily: 'Poppins-regular',
-                              color: moneyRecievedForRegisterMoney < 0.000001
-                                  ? myTheme.colorScheme.primary
-                                  : moneyRecievedForRegisterMoney <
-                                          (amountChanged
-                                              ? roundAmount(amountToPay)
-                                              : priceToCurrencySelected(
-                                                  roundAmount(amountToPay),
-                                                  selectedCoin!))
-                                      ? Colors.red
-                                      : myTheme.colorScheme.primary,
-                              fontSize: 14,
-                            ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Recibido',
+                                style: TextStyle(
+                                  fontFamily: 'Poppins-regular',
+                                  color: moneyRecievedForRegisterMoney <
+                                          0.000001
+                                      ? myTheme.colorScheme.primary
+                                      : moneyRecievedForRegisterMoney <
+                                              (amountChanged
+                                                  ? roundAmount(amountToPay)
+                                                  : priceToCurrencySelected(
+                                                      roundAmount(amountToPay),
+                                                      selectedCoin!))
+                                          ? Colors.red
+                                          : myTheme.colorScheme.primary,
+                                  fontSize: 14,
+                                ),
+                              ),
+                              SizedBox(width: 5),
+                              PointTextWidget(),
+                            ],
                           ),
                         ),
                   selectedValueA != 'Efectivo'
@@ -1204,12 +1262,12 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                         // pagar completo o por partes aca
                                         priceFormatForPaidAmount(
                                                 double.parse((widget.subTotal)
-                                                        .toStringAsFixed(4)) +
+                                                        .toStringAsFixed(2)) +
                                                     double.parse((widget.tax)
-                                                        .toStringAsFixed(4)) -
+                                                        .toStringAsFixed(2)) -
                                                     double.parse((widget
                                                             .discount)
-                                                        .toStringAsFixed(4)),
+                                                        .toStringAsFixed(2)),
                                                 selectedCoin)
                                             .toString(),
                                         style: TextStyle(
