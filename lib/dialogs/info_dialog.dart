@@ -25,7 +25,7 @@ Future<void> showInfoDialog(
             onWillPop: () async => false,
             child: AlertDialog(
               contentPadding: EdgeInsets.only(left: 25, right: 25),
-              title: Center(child: Text("info")),
+              title: Center(child: Text("Info")),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(20.0)),
               ),

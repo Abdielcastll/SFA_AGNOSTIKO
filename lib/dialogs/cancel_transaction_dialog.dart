@@ -9,9 +9,10 @@ import 'confirm_dialog.dart';
 /// Si se acepta, este Dialog cancela cualquier proceso de detección de tarjetas
 /// o transacción que se esté llevando a cabo.
 Future<bool> Function() cancelTransactionDialogFn(BuildContext context) {
-  Future<bool> Function() showDialogFn = () async {
+  showDialogFn() async {
     final value = await showConfirmDialog(
       context,
+      title: 'Confirmar',
       message: "confirmCancelTransaction",
       onAccept: () async {
         // Importante cerrar estos procesos correctamente para no tener problemas
@@ -25,7 +26,7 @@ Future<bool> Function() cancelTransactionDialogFn(BuildContext context) {
       },
     );
     return value == true;
-  };
+  }
 
   return showDialogFn;
 }
