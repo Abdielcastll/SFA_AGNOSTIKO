@@ -374,7 +374,8 @@ Future createInvoice(
 
 //Registrar pagos de Tarjeta de Credito/Debito
 
-Future registerDebitCreditCardPayment(InvoiceData data) async {
+Future registerDebitCreditCardPayment(InvoiceData data, int? stan) async {
+  stan ??= 0;
   priceReturnToOriginal(productPrice, coin) {
     double correctAmount = double.parse(productPrice.toStringAsFixed(4));
     return double.parse((correctAmount / data.coinExchangeRatio).toString());
@@ -416,6 +417,7 @@ Future registerDebitCreditCardPayment(InvoiceData data) async {
             'monto': priceReturnToOriginal(paidAmount, currentCoin),
             'montoOriginal': paidAmount,
             'tasaDeCambio': data.coinExchangeRatio,
+            'stan': stan,
           },
         ],
       ),
@@ -1472,4 +1474,32 @@ Future uploadReceiptImage(image, invoiceDocumentId, paymentIndex) async {
     print(e);
     print('error on upload receipt image');
   }
+}
+
+Future<List> cancelPayment(
+    Client client, String invoiceId, int paymentIndex) async {
+  final invoiceSnapshot = await FirebaseFirestore.instance
+      .collection('clientes')
+      .doc(client.clientDocumentId)
+      .collection('facturas')
+      .doc(invoiceId)
+      .get();
+
+  List payments = invoiceSnapshot.get('pagos');
+
+  final payment = payments[paymentIndex];
+
+  payment['anulado'] = true;
+  payment['conciliado'] = false;
+
+  payments[paymentIndex] = payment;
+
+  await FirebaseFirestore.instance
+      .collection('clientes')
+      .doc(client.clientDocumentId)
+      .collection('facturas')
+      .doc(invoiceId)
+      .update({'pagos': payments});
+
+  return payments;
 }
