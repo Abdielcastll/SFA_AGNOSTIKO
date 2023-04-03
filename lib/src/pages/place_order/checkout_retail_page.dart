@@ -137,9 +137,11 @@ class _CheckoutBodyState extends State<CheckoutBody> {
   }
 
   double totalDiscountApplied() {
-    var total = ((widget.subTotal / 100) * discountByInput).toStringAsFixed(4);
-    double doubleTotal = double.parse(total);
-    return doubleTotal;
+    // var total = double.parse(
+    //     ((widget.subTotal / 100) * discountByInput).toStringAsFixed(4));
+    var total = (widget.subTotal / 100) * discountByInput;
+    double doubleTotal = double.parse(total.toStringAsFixed(2));
+    return total;
   }
 
   double totalWithTheIVA() {

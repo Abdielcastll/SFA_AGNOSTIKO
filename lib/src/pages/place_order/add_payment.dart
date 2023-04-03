@@ -183,8 +183,11 @@ class AddPaymentBody extends StatefulWidget {
 }
 
 class _AddPaymentBodyState extends State<AddPaymentBody> {
-  late double remaining = widget.remaining;
-  late double amountToPay = widget.remaining;
+  late double remainingNet = double.parse(widget.remaining.toStringAsFixed(4));
+  late double remaining = double.parse(remainingNet.toStringAsFixed(4));
+  late double amountToPayNet =
+      double.parse(widget.remaining.toStringAsFixed(4));
+  late double amountToPay = double.parse(remainingNet.toStringAsFixed(4));
   late List<PayMethod> payments = widget.payments;
   final TextEditingController fieldTextAmountToPay = TextEditingController();
   final List<String> items = [
@@ -843,18 +846,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                     style: TextStyle(
                                       fontFamily: 'Poppins-regular',
                                       fontSize: 14,
-                                      color: moneyRecievedForRegisterMoney <
-                                              0.000001
-                                          ? myTheme.colorScheme.primary
-                                          : moneyRecievedForRegisterMoney <
-                                                  (amountChanged
-                                                      ? roundAmount(amountToPay)
-                                                      : priceToCurrencySelected(
-                                                          roundAmount(
-                                                              amountToPay),
-                                                          selectedCoin!))
-                                              ? Colors.red
-                                              : myTheme.colorScheme.primary,
+                                      color: myTheme.colorScheme.primary,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
