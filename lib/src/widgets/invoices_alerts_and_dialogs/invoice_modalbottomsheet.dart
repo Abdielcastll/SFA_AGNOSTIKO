@@ -449,8 +449,23 @@ void modalBottomSheetForInvoices(
                                                                               .format(unformattedDate);
                                                                       return ListTile(
                                                                         onTap:
-                                                                            () {
-                                                                          // Ver o Editar detalles de pago
+                                                                            () async {
+                                                                          final newPayments = await onTapPayment(
+                                                                              context,
+                                                                              payment,
+                                                                              AppLocalizations.of(context)!.pleaseWait,
+                                                                              client,
+                                                                              invoiceDocumentID,
+                                                                              index);
+
+                                                                          if (newPayments ==
+                                                                              null) {
+                                                                            return;
+                                                                          }
+                                                                          setState(
+                                                                            () =>
+                                                                                invoicePayments = newPayments,
+                                                                          );
                                                                         },
                                                                         leading:
                                                                             Icon(
