@@ -1499,7 +1499,7 @@ Future<List> cancelPayment(
       .doc(client.clientDocumentId)
       .collection('facturas')
       .doc(invoiceId)
-      .update({'pagos': payments});
+      .update({'pagos': payments, 'pagada': false});
 
   return payments;
 }
