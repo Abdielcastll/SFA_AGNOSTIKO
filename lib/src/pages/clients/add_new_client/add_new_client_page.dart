@@ -703,9 +703,9 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                 // Obtener Localización (latitud y longitud);
                                 determinePosition().then((value) {
                                   latitude =
-                                      '${value?.latitude.toStringAsFixed(2)}';
+                                      '${value?.latitude.toStringAsFixed(4)}';
                                   longitude =
-                                      '${value?.longitude.toStringAsFixed(2)}';
+                                      '${value?.longitude.toStringAsFixed(4)}';
                                   print(latitude);
                                   print(longitude);
                                   print('GEOLOCATOR');
