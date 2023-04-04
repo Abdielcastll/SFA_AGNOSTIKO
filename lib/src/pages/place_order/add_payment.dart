@@ -1099,7 +1099,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                                 0,
                                               ),
                                               child: Text(
-                                                'EL MONTO A PAGAR NO PUEDE SER MAYOR QUE LA CANTIDAD RECIBIDA',
+                                                'EL MONTO RECIBIDO NO PUEDE SER MENOR QUE EL MONTO TOTAL',
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                   fontFamily: 'Poppins-regular',

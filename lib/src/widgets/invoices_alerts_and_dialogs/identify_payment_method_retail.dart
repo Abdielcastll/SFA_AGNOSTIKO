@@ -517,7 +517,8 @@ identifyPaymentMethodRetail({
                       ),
                     ),
                     Text(
-                      AppLocalizations.of(context)!.gallery,
+                      // AppLocalizations.of(context)!.gallery,
+                      'Subir Imagen',
                       style: TextStyle(
                         color: myTheme.colorScheme.primary,
                         fontFamily: 'Poppins-regular',
@@ -631,8 +632,10 @@ identifyPaymentMethodRetail({
                                         date: date,
                                         remaining: remaining,
                                       );
-                                      paymentBody.payments.add(
-                                          PayMethod('Cheque', amountExchanged));
+                                      paymentBody.payments.add(PayMethod(
+                                          'Cheque',
+                                          double.parse(amountExchanged
+                                              .toStringAsFixed(4))));
 
                                       print('amountExCHANGED $amountExchanged');
 
@@ -641,7 +644,7 @@ identifyPaymentMethodRetail({
 
                                       if (amountExchanged <
                                           double.parse(
-                                              (remaining).toStringAsFixed(2))) {
+                                              (remaining).toStringAsFixed(4))) {
                                         showDialog(
                                             context: context,
                                             builder: (BuildContext context) {
@@ -1151,7 +1154,8 @@ identifyPaymentMethodRetail({
                       ),
                     ),
                     Text(
-                      AppLocalizations.of(context)!.gallery,
+                      // AppLocalizations.of(context)!.gallery,
+                      'Subir Imagen',
                       style: TextStyle(
                         color: myTheme.colorScheme.primary,
                         fontFamily: 'Poppins-regular',
@@ -1908,7 +1912,8 @@ identifyPaymentMethodRetail({
                       ),
                     ),
                     Text(
-                      AppLocalizations.of(context)!.gallery,
+                      // AppLocalizations.of(context)!.gallery,
+                      'Subir Imagen',
                       style: TextStyle(
                         color: myTheme.colorScheme.primary,
                         fontFamily: 'Poppins-regular',
@@ -2029,7 +2034,9 @@ identifyPaymentMethodRetail({
                                         // Navigator.pop(context);
 
                                         paymentBody.payments.add(PayMethod(
-                                            'Deposito', amountExchanged));
+                                            'Deposito',
+                                            double.parse(amountExchanged
+                                                .toStringAsFixed(4))));
 
                                         print('IDENTIFY PAYMENTS');
                                         print(paymentBody.payments.length);
@@ -2496,7 +2503,8 @@ identifyPaymentMethodRetail({
                       ),
                     ),
                     Text(
-                      AppLocalizations.of(context)!.gallery,
+                      // AppLocalizations.of(context)!.gallery,
+                      'Subir Imagen',
                       style: TextStyle(
                         color: myTheme.colorScheme.primary,
                         fontFamily: 'Poppins-regular',
@@ -2611,7 +2619,9 @@ identifyPaymentMethodRetail({
                                       );
 
                                       paymentBody.payments.add(PayMethod(
-                                          'Efectivo', amountExchanged));
+                                          'Efectivo',
+                                          double.parse(amountExchanged
+                                              .toStringAsFixed(4))));
 
                                       print('IDENTIFY PAYMENTS');
                                       print(paymentBody.payments.length);
@@ -3300,7 +3310,8 @@ identifyPaymentMethodRetail({
                       ),
                     ),
                     Text(
-                      AppLocalizations.of(context)!.gallery,
+                      // AppLocalizations.of(context)!.gallery,
+                      'Subir Imagen',
                       style: TextStyle(
                         color: myTheme.colorScheme.primary,
                         fontFamily: 'Poppins-regular',
@@ -3423,8 +3434,8 @@ identifyPaymentMethodRetail({
 
                                           paymentBody.payments.add(PayMethod(
                                               'Transferencia',
-                                              amountExchanged));
-
+                                              double.parse(amountExchanged
+                                                  .toStringAsFixed(4))));
                                           print('IDENTIFY PAYMENTS');
                                           print(paymentBody.payments.length);
 
@@ -3766,8 +3777,8 @@ identifyPaymentMethodRetail({
 // Navigator.pop(context);
                                           paymentBody.payments.add(PayMethod(
                                               'Transferencia-internacional',
-                                              amountExchanged));
-
+                                              double.parse(amountExchanged
+                                                  .toStringAsFixed(4))));
                                           print('IDENTIFY PAYMENTS');
                                           print(paymentBody.payments.length);
 

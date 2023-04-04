@@ -1398,20 +1398,6 @@ Future registerClient({
   String? longitude,
   userZoneDocument,
 }) async {
-  print(' newClientName:${newClientName.trim().toUpperCase()}');
-  print('  newClientId: $newClientId');
-  print('  newclientPhone: $newclientPhone');
-  print('  newClientEmail: $newClientEmail');
-  print('  newClientAddress1: $newClientAddress1');
-  print('  newClientAddress2: $newClientAddress2');
-  print('  newClientMasterDiscount: $newClientMasterDiscount');
-  print('  isSpecialContributor: $isSpecialContributor');
-  print('  selectedIdType: $selectedIdType');
-  print('  newClientSalesZone: $newClientSalesZone');
-  print('longitude: $latitude');
-  print('latitude: $longitude');
-  print('Document: $selectedIdType$newClientId');
-  print('userZoneDocument: $userZoneDocument');
   final clientDocument = clientsCollection.doc('$selectedIdType$newClientId');
   final storagePath = FirebaseStorage.instance
       .ref()
@@ -1455,47 +1441,87 @@ Future registerClient({
     print(temp);
   }
   print(output.toString());
-  print('TEST OUTPUT PHOS');
+  print('TEST OUTPUT PHOS IN CLIENT CREATION');
 
-  await clientDocument.set({
-    'activo': true,
-    'contribuyenteEspecial': isSpecialContributor,
-    'creadoPor': FirebaseFirestore.instance.collection('usuarios').doc(uid),
-    'descuentoMaestro': newClientMasterDiscount,
-    'direccionDespacho': newClientAddress2,
-    'direccionFiscal': newClientAddress1,
-    'email': newClientEmail,
-    'fechaRegistro': Timestamp.now(),
-    'listaDePrecios': FirebaseFirestore.instance
-        .collection('listas_de_precios')
-        .doc(selectedPricesList),
-    'modificado': Timestamp.now(),
-    'nombre': newClientName,
-    'nombreIndice': output,
-    'numeroId': newClientId,
-    'prospecto': false,
-    'telefono': newclientPhone,
-    'telefono2': newclientPhone,
-    'tipoId':
-        FirebaseFirestore.instance.collection('tipos_id').doc(selectedIdType),
-    'ultimaModificacion': Map<String, dynamic>.from(lastModified),
-    'zona': userZoneDocument,
-    if (localization != null) 'localizacion': localization,
-  });
-  if (image == null) {
-    print('No image avaliable');
-    return;
-  } else {
-    print('Image avaliable: $image');
-    try {
-      await storagePath
-          .putFile(image)
-          .whenComplete(() => print('Imagen subida'));
-    } catch (e) {
-      print(e);
-      print('Error subiendo la imagen');
-    }
-  }
+  // print('  isSpecialContributor: $isSpecialContributor');
+  // print(' newClientName:${newClientName.trim().toUpperCase()}');
+  // print('  newClientId: $newClientId');
+  // print('  newclientPhone: $newclientPhone');
+  // print('  newClientEmail: $newClientEmail');
+  // print('  newClientAddress1: $newClientAddress1');
+  // print('  newClientAddress2: $newClientAddress2');
+  // print('  newClientMasterDiscount: $newClientMasterDiscount');
+  // print('  selectedIdType: $selectedIdType');
+  // print('  newClientSalesZone: $newClientSalesZone');
+  // print('longitude: $latitude');
+  // print('latitude: $longitude');
+  // print('Document: $selectedIdType$newClientId');
+  // print('userZoneDocument: $userZoneDocument');
+  print('  activo: true,');
+  print(' contribuyenteEspecial: $isSpecialContributor,');
+  print(
+      ' creadoPor: ${FirebaseFirestore.instance.collection('usuarios').doc(uid)}');
+  print(' descuentoMaestro: $newClientMasterDiscount,');
+  print(' direccionDespacho: $newClientAddress2,');
+  print(' direccionFiscal: $newClientAddress1,');
+  print(' email:$newClientEmail,');
+  print(' fechaRegistro: ${Timestamp.now()},');
+  print(
+      ' listaDePrecios: ${FirebaseFirestore.instance.collection('listas_de_precios.doc(selectedPricesList')}');
+
+  print(' modificado: ${Timestamp.now()}');
+  print(' nombre: $newClientName,');
+  print(' nombreIndice: $output,');
+  print(' numeroId: $newClientId,');
+  //  print(' prospecto: $false,');
+  print(' telefono: $newclientPhone,');
+  print(' telefono2: $newclientPhone,');
+  print(
+      ' tipoId:${FirebaseFirestore.instance.collection('tipos_id').doc(selectedIdType)}');
+  //  print('    ');
+  print(' ultimaModificacion: ${Map<String, dynamic>.from(lastModified)},');
+  print(' zona: $userZoneDocument,');
+  print('localizacion: $localization,');
+
+  // await clientDocument.set({
+  //   'activo': true,
+  //   'contribuyenteEspecial': isSpecialContributor,
+  //   'creadoPor': FirebaseFirestore.instance.collection('usuarios').doc(uid),
+  //   'descuentoMaestro': newClientMasterDiscount,
+  //   'direccionDespacho': newClientAddress2,
+  //   'direccionFiscal': newClientAddress1,
+  //   'email': newClientEmail,
+  //   'fechaRegistro': Timestamp.now(),
+  //   'listaDePrecios': FirebaseFirestore.instance
+  //       .collection('listas_de_precios')
+  //       .doc(selectedPricesList),
+  //   'modificado': Timestamp.now(),
+  //   'nombre': newClientName,
+  //   'nombreIndice': output,
+  //   'numeroId': newClientId,
+  //   'prospecto': false,
+  //   'telefono': newclientPhone,
+  //   'telefono2': newclientPhone,
+  //   'tipoId':
+  //       FirebaseFirestore.instance.collection('tipos_id').doc(selectedIdType),
+  //   'ultimaModificacion': Map<String, dynamic>.from(lastModified),
+  //   'zona': userZoneDocument,
+  //   if (localization != null) 'localizacion': localization,
+  // });
+  // if (image == null) {
+  //   print('No image avaliable');
+  //   return;
+  // } else {
+  //   print('Image avaliable: $image');
+  //   try {
+  //     await storagePath
+  //         .putFile(image)
+  //         .whenComplete(() => print('Imagen subida'));
+  //   } catch (e) {
+  //     print(e);
+  //     print('Error subiendo la imagen');
+  //   }
+  // }
 }
 
 Future uploadReceiptImage(image, invoiceDocumentId, paymentIndex) async {

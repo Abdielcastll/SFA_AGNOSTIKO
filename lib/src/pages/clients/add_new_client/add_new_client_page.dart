@@ -833,7 +833,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                               SizedBox(width: 10),
                               Text(
                                 // AppLocalizations.of(context)!.gallery,
-                                'Seleccione un archivo',
+                                'Subir Imagen',
                                 style: TextStyle(
                                   color: myTheme.colorScheme.primary,
                                   fontFamily: 'Poppins-regular',

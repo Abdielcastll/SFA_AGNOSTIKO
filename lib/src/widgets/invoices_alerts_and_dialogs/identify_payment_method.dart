@@ -497,7 +497,8 @@ identifyPaymentMethod({
                       ),
                     ),
                     Text(
-                      AppLocalizations.of(context)!.gallery,
+                      // AppLocalizations.of(context)!.gallery,
+                      'Subir Imagen',
                       style: TextStyle(
                         color: myTheme.colorScheme.primary,
                         fontFamily: 'Poppins-regular',
@@ -1064,7 +1065,8 @@ identifyPaymentMethod({
                       ),
                     ),
                     Text(
-                      AppLocalizations.of(context)!.gallery,
+                      // AppLocalizations.of(context)!.gallery,
+                      'Subir Imagen',
                       style: TextStyle(
                         color: myTheme.colorScheme.primary,
                         fontFamily: 'Poppins-regular',
@@ -1509,7 +1511,8 @@ identifyPaymentMethod({
                       ),
                     ),
                     Text(
-                      AppLocalizations.of(context)!.gallery,
+                      // AppLocalizations.of(context)!.gallery,
+                      'Subir Imagen',
                       style: TextStyle(
                         color: myTheme.colorScheme.primary,
                         fontFamily: 'Poppins-regular',
@@ -2049,7 +2052,8 @@ identifyPaymentMethod({
                       ),
                     ),
                     Text(
-                      AppLocalizations.of(context)!.gallery,
+                      // AppLocalizations.of(context)!.gallery,
+                      'Subir Imagen',
                       style: TextStyle(
                         color: myTheme.colorScheme.primary,
                         fontFamily: 'Poppins-regular',
@@ -2785,7 +2789,8 @@ identifyPaymentMethod({
                       ),
                     ),
                     Text(
-                      AppLocalizations.of(context)!.gallery,
+                      // AppLocalizations.of(context)!.gallery,
+                      'Subir Imagen',
                       style: TextStyle(
                         color: myTheme.colorScheme.primary,
                         fontFamily: 'Poppins-regular',
