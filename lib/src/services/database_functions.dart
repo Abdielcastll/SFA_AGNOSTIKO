@@ -1483,45 +1483,45 @@ Future registerClient({
   print(' zona: $userZoneDocument,');
   print('localizacion: $localization,');
 
-  // await clientDocument.set({
-  //   'activo': true,
-  //   'contribuyenteEspecial': isSpecialContributor,
-  //   'creadoPor': FirebaseFirestore.instance.collection('usuarios').doc(uid),
-  //   'descuentoMaestro': newClientMasterDiscount,
-  //   'direccionDespacho': newClientAddress2,
-  //   'direccionFiscal': newClientAddress1,
-  //   'email': newClientEmail,
-  //   'fechaRegistro': Timestamp.now(),
-  //   'listaDePrecios': FirebaseFirestore.instance
-  //       .collection('listas_de_precios')
-  //       .doc(selectedPricesList),
-  //   'modificado': Timestamp.now(),
-  //   'nombre': newClientName,
-  //   'nombreIndice': output,
-  //   'numeroId': newClientId,
-  //   'prospecto': false,
-  //   'telefono': newclientPhone,
-  //   'telefono2': newclientPhone,
-  //   'tipoId':
-  //       FirebaseFirestore.instance.collection('tipos_id').doc(selectedIdType),
-  //   'ultimaModificacion': Map<String, dynamic>.from(lastModified),
-  //   'zona': userZoneDocument,
-  //   if (localization != null) 'localizacion': localization,
-  // });
-  // if (image == null) {
-  //   print('No image avaliable');
-  //   return;
-  // } else {
-  //   print('Image avaliable: $image');
-  //   try {
-  //     await storagePath
-  //         .putFile(image)
-  //         .whenComplete(() => print('Imagen subida'));
-  //   } catch (e) {
-  //     print(e);
-  //     print('Error subiendo la imagen');
-  //   }
-  // }
+  await clientDocument.set({
+    'activo': true,
+    'contribuyenteEspecial': isSpecialContributor,
+    'creadoPor': FirebaseFirestore.instance.collection('usuarios').doc(uid),
+    'descuentoMaestro': newClientMasterDiscount,
+    'direccionDespacho': newClientAddress2,
+    'direccionFiscal': newClientAddress1,
+    'email': newClientEmail,
+    'fechaRegistro': Timestamp.now(),
+    'listaDePrecios': FirebaseFirestore.instance
+        .collection('listas_de_precios')
+        .doc(selectedPricesList),
+    'modificado': Timestamp.now(),
+    'nombre': newClientName,
+    'nombreIndice': output,
+    'numeroId': newClientId,
+    'prospecto': false,
+    'telefono': newclientPhone,
+    'telefono2': newclientPhone,
+    'tipoId':
+        FirebaseFirestore.instance.collection('tipos_id').doc(selectedIdType),
+    'ultimaModificacion': Map<String, dynamic>.from(lastModified),
+    'zona': userZoneDocument,
+    if (localization != null) 'localizacion': localization,
+  });
+  if (image == null) {
+    print('No image avaliable');
+    return;
+  } else {
+    print('Image avaliable: $image');
+    try {
+      await storagePath
+          .putFile(image)
+          .whenComplete(() => print('Imagen subida'));
+    } catch (e) {
+      print(e);
+      print('Error subiendo la imagen');
+    }
+  }
 }
 
 Future uploadReceiptImage(image, invoiceDocumentId, paymentIndex) async {
