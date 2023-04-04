@@ -711,30 +711,12 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                   print('GEOLOCATOR');
                                   setState(() {});
                                 });
-                                // _getCurrentLocation().then((value) {
-                                //   latitude = '${value.latitude}';
-                                //   longitude = '${value.longitude}';
-                                //   print(latitude);
-                                //   print(longitude);
-                                //   print('GEOLOCATOR');
-                                //   setState(() {});
-                                // });
                               },
                             ),
                           ),
                         ],
                       ),
                       SizedBox(height: 10),
-                      // Text(
-                      //   // AppLocalizations.of(context)!.selectFile,
-                      //   'Seleccionar Archivo',
-                      //   textAlign: TextAlign.center,
-                      //   style: TextStyle(
-                      //     fontFamily: 'Poppins-regular',
-                      //     color: Colors.grey.shade400,
-                      //     fontSize: 14,
-                      //   ),
-                      // ),
                       SizedBox(
                         height: 10,
                       ),

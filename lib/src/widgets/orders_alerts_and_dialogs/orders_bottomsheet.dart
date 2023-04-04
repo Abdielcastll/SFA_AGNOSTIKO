@@ -308,9 +308,11 @@ void modalBottomSheetForOrders(
                                               ),
                                             ),
                                             content: Column(
+                                              mainAxisSize: MainAxisSize.min,
                                               children: [
                                                 SingleChildScrollView(
                                                   child: Container(
+                                                    // color: Colors.red,
                                                     width: 300,
                                                     height: 300,
                                                     child: Scrollbar(
