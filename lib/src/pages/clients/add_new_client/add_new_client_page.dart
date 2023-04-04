@@ -702,8 +702,10 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                               onPressed: () async {
                                 // Obtener Localización (latitud y longitud);
                                 determinePosition().then((value) {
-                                  latitude = '${value?.latitude}';
-                                  longitude = '${value?.longitude}';
+                                  latitude =
+                                      '${value?.latitude.toStringAsFixed(2)}';
+                                  longitude =
+                                      '${value?.longitude.toStringAsFixed(2)}';
                                   print(latitude);
                                   print(longitude);
                                   print('GEOLOCATOR');
