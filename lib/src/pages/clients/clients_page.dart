@@ -69,7 +69,7 @@ class _ClientsPageState extends State<ClientsPage> {
         ),
       ],
       child: Scaffold(
-        backgroundColor: Colors.grey[200],
+        backgroundColor: myTheme.colorScheme.surface,
         appBar: AppBarNavigation(
           message: AppLocalizations.of(context)!.clients,
           userZoneDocument: userZoneDocument,

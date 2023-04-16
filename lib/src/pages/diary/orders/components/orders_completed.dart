@@ -46,9 +46,9 @@ class _CompletedOrdersState extends State<CompletedOrders> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          margin: const EdgeInsets.fromLTRB(10.0, 0.0, 0, 0),
+          margin: const EdgeInsets.fromLTRB(10.0, 0.0, 10, 0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TextButton(
                 style: ButtonStyle(
@@ -62,19 +62,23 @@ class _CompletedOrdersState extends State<CompletedOrders> {
                   children: [
                     Icon(
                       MaterialCommunityIcons.order_alphabetical_ascending,
-                      color: Colors.grey.shade500,
+                      color: myTheme.colorScheme.secondary,
                       size: 25,
                     ),
                     const SizedBox(width: 5),
-                    Text(
-                      isDescending
-                          ? AppLocalizations.of(context)!.ascendingFilter
-                          : AppLocalizations.of(context)!.descendingFilter,
-                      style: TextStyle(
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
+                      child: Text(
+                        isDescending
+                            ? AppLocalizations.of(context)!.ascendingFilter
+                            : AppLocalizations.of(context)!.descendingFilter,
+                        style: TextStyle(
                           fontFamily: 'Poppins-regular',
-                          color: Colors.grey.shade500,
+                          color: myTheme.colorScheme.secondary,
                           fontSize: 14,
-                          fontWeight: FontWeight.bold),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -88,58 +92,72 @@ class _CompletedOrdersState extends State<CompletedOrders> {
                 height: 40,
                 padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                      color: myTheme.colorScheme.secondary.withOpacity(0.3)),
+                      color: myTheme.colorScheme.primary.withOpacity(0.3)),
                 ),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(currentDay !=
-                            Timestamp.fromDate(DateTime(
-                              DateTime.now().year + 99,
-                              DateTime.now().month + 99,
-                              DateTime.now().day + 99,
-                              0,
-                              0,
-                              0,
-                              0,
-                              0,
-                            ))
-                        ? formattedDate
-                        : 'Todos'),
-                    IconButton(
-                      onPressed: () async {
-                        final currentDayProvider =
-                            Provider.of<CounterLimitFirestore>(context,
-                                listen: false);
-
-                        DateTime? newDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2010),
-                          lastDate: DateTime(2030),
-                        );
-                        if (newDate == null) {
-                          return;
-                        }
-                        setState(() {
-                          today = newDate;
-                          formattedDate = dateFormatter.format(newDate);
-                          final newDay = Timestamp.fromDate(newDate);
-                          currentDayProvider.setNewDayOrder(newDay);
-                        });
-                      },
-                      splashRadius: 5,
-                      icon: Icon(
-                        Icons.calendar_month,
-                        color: myTheme.colorScheme.primary.withOpacity(0.8),
-                        size: 20,
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
+                      child: Text(
+                        currentDay !=
+                                Timestamp.fromDate(DateTime(
+                                  DateTime.now().year + 99,
+                                  DateTime.now().month + 99,
+                                  DateTime.now().day + 99,
+                                  0,
+                                  0,
+                                  0,
+                                  0,
+                                  0,
+                                ))
+                            ? formattedDate
+                            : '00-00-0000',
+                        style: TextStyle(
+                          fontSize: 14,
+                          // fontWeight: FontWeight.bold,
+                          fontFamily: 'Poppins-regular',
+                          color: myTheme.colorScheme.primary,
+                        ),
                       ),
                     ),
                     Container(
-                      width: 40,
+                      width: 20,
+                      child: IconButton(
+                        onPressed: () async {
+                          final currentDayProvider =
+                              Provider.of<CounterLimitFirestore>(context,
+                                  listen: false);
+
+                          DateTime? newDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2010),
+                            lastDate: DateTime(2030),
+                          );
+                          if (newDate == null) {
+                            return;
+                          }
+                          setState(() {
+                            today = newDate;
+                            formattedDate = dateFormatter.format(newDate);
+                            final newDay = Timestamp.fromDate(newDate);
+                            currentDayProvider.setNewDayOrder(newDay);
+                          });
+                        },
+                        splashRadius: 5,
+                        icon: Icon(
+                          MaterialCommunityIcons.calendar_edit,
+                          color: myTheme.colorScheme.primary.withOpacity(0.8),
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                       child: IconButton(
                         onPressed: () {
                           final currentDayProvider =
@@ -160,8 +178,9 @@ class _CompletedOrdersState extends State<CompletedOrders> {
                           });
                         },
                         icon: Icon(
-                          Icons.disabled_by_default_outlined,
-                          color: myTheme.colorScheme.primary,
+                          MaterialCommunityIcons.calendar_remove,
+                          color: myTheme.colorScheme.onPrimaryContainer,
+                          size: 20,
                         ),
                       ),
                     ),

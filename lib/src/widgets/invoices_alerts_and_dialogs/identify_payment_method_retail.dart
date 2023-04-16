@@ -156,8 +156,8 @@ identifyPaymentMethodRetail({
   // final currentCoin = sharedPreferences!.getString('currentCoin');
   final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
 
-  final amountExchanged =
-      exchangeAmount(selectedCoin, paidAmount, coinExchangeRatio ?? 1);
+  final amountExchanged = exchangeAmount(
+      coin: selectedCoin, amount: paidAmount, exchange: coinExchangeRatio ?? 1);
 
   final totalPayed = paymentBody.payments.fold<double>(
       0.0, (previousValue, element) => previousValue + element.amount);
@@ -2615,7 +2615,6 @@ identifyPaymentMethodRetail({
                                         totalOfTheOrder: totalOfTheOrder,
                                         imageFile: imageFile,
                                         date: date,
-                                        remaining: remaining,
                                       );
 
                                       paymentBody.payments.add(PayMethod(

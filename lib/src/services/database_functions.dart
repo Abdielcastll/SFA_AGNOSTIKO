@@ -129,30 +129,10 @@ Future createOrder(
 ) async {
   print('/// CREAR PEDIDO ///');
 
-  final String totalAsString = totalOfTheOrder.toStringAsFixed(4);
-  // var correlativeNumber = await FirebaseFirestore.instance
-  //     .collection('config')
-  //     .doc('contador_pedidos')
-  //     .get()
-  //     .then((value) {
-  //   return value['numero'];
-  // });
-  // configDoc.get().then((value) => print('testing: ${value['numero']}'));
-  // await FirebaseFirestore.instance
-  //     .collection('config')
-  //     .doc('contador_pedidos')
-  //     .update({'numero': correlativeNumber + 1});
-  // print(configDoc);
-  // print(correlativeNumber);
   final List quantitiesList = [];
   final List productsIds = [];
   final List<Map<dynamic, dynamic>> products = [];
-  final Map<String, double> exchangeRate = {
-    'BTC': 0.00011,
-    'EUR': 0.89,
-    'VED': 4.58,
-    'MXN': 19.43
-  };
+
   shoppingCart.forEach((element) {
     quantitiesList.add(element.productQuantity);
     productsIds.add(element.code);
@@ -174,20 +154,34 @@ Future createOrder(
       'Cliente: ${FirebaseFirestore.instance.collection('clientes').doc(client!.clientDocumentId)}');
   print('IDs: $productsIds');
   print('Productos: $products');
-  // print('Ordernes: ${correlativeNumber}');
-  // print('nueva: ${correlativeNumber + 1}');
 
-  // return await FirebaseFirestore.instance
-  //     .collection('config')
-  //     .doc('contador_pedidos')
-  //     .update({'numero': correlativeNumber + 1}).whenComplete(
-  //   () async {
-  return await FirebaseFirestore.instance
+  // GET EXCHANGE RATES
+
+  List<Coin> coins = [];
+  await coinCollection.get().then((element) {
+    return element.docs.forEach((doc) {
+      Coin coin = Coin(
+        code: doc.data().toString().contains('codigo')
+            ? doc.get('codigo')
+            : 'USD',
+        exchangeRatio: doc.data().toString().contains('tasaDeCambio')
+            ? doc.get('tasaDeCambio')
+            : 1,
+      );
+      coins.add(coin);
+    });
+  });
+
+  final exchangeRates = getExchangesRates(coins);
+  print('exchangeRates: $exchangeRates');
+
+  DocumentReference<Map<String, dynamic>> path = FirebaseFirestore.instance
       .collection('clientes')
       .doc(client.clientDocumentId)
       .collection('pedidos')
-      .doc()
-      .set(
+      .doc();
+  print('path de la factura: ${path.id}');
+  return await path.set(
     {
       'cantidadesProductos': quantitiesList,
       'cliente': FirebaseFirestore.instance
@@ -204,55 +198,20 @@ Future createOrder(
       'fecha': Timestamp.fromDate(DateTime.now()),
       'fechaEntrega': Timestamp.fromDate(today),
       'idsProductos': productsIds,
-      'impuesto': double.parse(taxTotal!.toStringAsFixed(4)),
-      'nroCorrelativo': 'NaN',
+      'impuesto': taxTotal,
       'ordenDeCompra': numberOrder ?? 0,
       'porcentajeDescuentoMaestro': client.masterDiscount,
       'porcentajeDescuentoAplicado': discountPercentage,
       'productos': products,
       'subtotal': subTotal,
-      'tasasDeCambio': exchangeRate,
+      'tasasDeCambio': exchangeRates,
       'timestampRegistro': Timestamp.fromDate(DateTime.now()),
-      'totalAPagar': double.parse(totalAsString),
+      'totalAPagar': totalOfTheOrder,
       'ultimaModificacion': Timestamp.fromDate(DateTime.now()),
       'vendedor':
           FirebaseFirestore.instance.collection('usuarios').doc(userUid),
     },
   );
-  // },
-  // return await FirebaseFirestore.instance
-  //     .collection('clientes')
-  //     .doc(client!.clientDocumentId)
-  //     .collection('pedidos')
-  //     .doc()
-  //     .set({
-  //   'cantidadesProductos': quantitiesList,
-  //   'cliente': FirebaseFirestore.instance
-  //       .collection('clientes')
-  //       .doc(client.clientDocumentId),
-  //   'comentario': commentary,
-  //   'descuentoMaestro': masterDiscount,
-  //   'tipoDeNegociacion': negotiation,
-  //   'direccionEntrega': deliveryAddress == 'Fiscal'
-  //       ? client.fiscalAdress
-  //       : client.dispatchAdress,
-  //   'facturacionFallida': false,
-  //   'facturado': false,
-  //   'fecha': Timestamp.fromDate(DateTime.now()),
-  //   'fechaEntrega': Timestamp.fromDate(today),
-  //   'idsProductos': productsIds,
-  //   'impuesto': taxTotal,
-  //   'nroCorrelativo': correlativeNumber + 1,
-  //   'ordenDeCompra': numberOrder ?? 0,
-  //   'porcentajeDescuentoMaestro': client.masterDiscount,
-  //   'productos': products,
-  //   'subtotal': subTotal,
-  //   'tasasDeCambio': exchangeRate,
-  //   'timestampRegistro': Timestamp.fromDate(DateTime.now()),
-  //   'totalAPagar': double.parse(totalAsString),
-  //   'ultimaModificacion': Timestamp.fromDate(DateTime.now()),
-  //   'vendedor': FirebaseFirestore.instance.collection('usuarios').doc(userUid),
-  // });
 }
 
 Future deleteOrder(
@@ -285,10 +244,7 @@ Future createInvoice(
   final clientID = FirebaseFirestore.instance
       .collection('clientes')
       .doc(client.clientDocumentId);
-  final discount = masterDiscount;
   final date = orderDate;
-  final tax = taxTotal;
-  final String totalAsString = totalOfTheOrder.toStringAsFixed(4);
 
   var correlativeNumber = await FirebaseFirestore.instance
       .collection('config')
@@ -315,10 +271,10 @@ Future createInvoice(
   final seller = FirebaseFirestore.instance.collection('usuarios').doc(userID);
 
   print(clientID);
-  print(discount);
+  print(masterDiscount);
   print(date);
-  print(tax);
-  print(totalAsString);
+  print(taxTotal);
+  print(totalOfTheOrder);
   print(isPaid);
   print(payments);
   print(order);
@@ -347,10 +303,10 @@ Future createInvoice(
         .doc()
         .set({
       'cliente': clientID,
-      'descuentoMaestro': discount,
+      'descuentoMaestro': masterDiscount,
       'fecha': Timestamp.fromDate(DateTime.now()),
-      'impuesto': tax,
-      'montoTotal': double.parse(totalAsString),
+      'impuesto': taxTotal,
+      'montoTotal': totalOfTheOrder,
       'nroCorrelativo': correlativeNumber + 1,
       'pagada': isPaid,
       'pagos': payments,
@@ -376,10 +332,10 @@ Future createInvoice(
 
 Future registerDebitCreditCardPayment(InvoiceData data, int? stan) async {
   stan ??= 0;
-  priceReturnToOriginal(productPrice, coin) {
-    double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-    return double.parse((correctAmount / data.coinExchangeRatio).toString());
-  }
+  // priceReturnToOriginal(productPrice, coin) {
+  //   double correctAmount = double.parse(productPrice.toStringAsFixed(4));
+  //   return double.parse((correctAmount / data.coinExchangeRatio).toString());
+  // }
 
   Client client = data.client;
   var invoiceDocumentID = data.invoiceDocumentID;
@@ -389,8 +345,9 @@ Future registerDebitCreditCardPayment(InvoiceData data, int? stan) async {
   var currentCoin = data.currentCoin;
   var date = data.date;
   var remaining = data.remaining;
+  var coinExchangeRatio = data.coinExchangeRatio;
 
-  print('/// Registrar pago en factura: $invoiceDocumentID ///');
+  print('/// Registrar pago por TARJETA en factura: $invoiceDocumentID ///');
 
   const cancelled = false;
   final selectedCurrency = currency.toString();
@@ -414,55 +371,58 @@ Future registerDebitCreditCardPayment(InvoiceData data, int? stan) async {
             'conciliado': concillied,
             'fecha': timestampDate,
             'metodo': method,
-            'monto': priceReturnToOriginal(paidAmount, currentCoin),
+            // 'monto': priceReturnToOriginal(paidAmount, currentCoin),
+            'monto': priceDividedbyItsExchangeRatio(
+                amount: paidAmount, exchange: coinExchangeRatio),
             'montoOriginal': paidAmount,
             'tasaDeCambio': data.coinExchangeRatio,
             'stan': stan,
           },
         ],
       ),
-    }).whenComplete(() {
-      print(
-          'remaining de proceso: ${priceFormatForDB(remaining, currency, data.coinExchangeRatio)}');
-      print(
-          'Amount de proceso: ${priceFormatForDB(amount, currency, data.coinExchangeRatio)}');
-      print(
-          'restante total: ${priceFormatForDB(remaining, currency, data.coinExchangeRatio) - priceFormatForDB(amount, currency, data.coinExchangeRatio)}');
-      // var total = priceFormatForDB(remaining, currency, coinExchangeRatio) -
-      //     priceFormatForDB(amount, currency, coinExchangeRatio);
-      var total = remaining - amount;
-      print(remaining);
-      print(amount);
-      // var total =
-      //     double.parse((remaining * coinExchangeRatio!).toStringAsFixed(4)) -
-      //         double.parse((amount * coinExchangeRatio).toStringAsFixed(4));
-      print('total: ${total.toStringAsFixed(2)}');
-      try {
-        if (double.parse(total.toStringAsFixed(2)) <= 0) {
-          FirebaseFirestore.instance
-              .collection('clientes')
-              .doc(client.clientDocumentId)
-              .collection('facturas')
-              .doc(invoiceDocumentID)
-              .update({
-            'pagada': true,
-          });
-        }
-      } catch (e) {
-        print(e);
-      }
     });
+    // .whenComplete(() {
+    //   //   print(
+    //   //       'remaining de proceso: ${priceFormatForDB(remaining, currency, data.coinExchangeRatio)}');
+    //   //   print(
+    //   //       'Amount de proceso: ${priceFormatForDB(amount, currency, data.coinExchangeRatio)}');
+    //   //   print(
+    //   //       'restante total: ${priceFormatForDB(remaining, currency, data.coinExchangeRatio) - priceFormatForDB(amount, currency, data.coinExchangeRatio)}');
+    //   //   // var total = priceFormatForDB(remaining, currency, coinExchangeRatio) -
+    //   //   //     priceFormatForDB(amount, currency, coinExchangeRatio);
+    //   //   var total = remaining - amount;
+    //   //   print(remaining);
+    //   //   print(amount);
+    //   //   // var total =
+    //   //   //     double.parse((remaining * coinExchangeRatio!).toStringAsFixed(4)) -
+    //   //   //         double.parse((amount * coinExchangeRatio).toStringAsFixed(4));
+    //   //   print('total: ${total.toStringAsFixed(2)}');
+    //   //   try {
+    //   //     if (double.parse(total.toStringAsFixed(2)) <= 0) {
+    //   //       FirebaseFirestore.instance
+    //   //           .collection('clientes')
+    //   //           .doc(client.clientDocumentId)
+    //   //           .collection('facturas')
+    //   //           .doc(invoiceDocumentID)
+    //   //           .update({
+    //   //         'pagada': true,
+    //   //       });
+    //   //     }
+    //   //   } catch (e) {
+    //   //     print(e);
+    //   //   }
+    // });
   } catch (e) {
     print(e);
   }
 
-  if (paidAmount > remaining) {
-    Fluttertoast.showToast(
-      msg: 'La cantidad pagada excede de la deuda pendiente',
-      backgroundColor: myTheme.colorScheme.secondary,
-      textColor: Colors.white,
-    );
-  }
+  // if (paidAmount > remaining) {
+  //   Fluttertoast.showToast(
+  //     msg: 'La cantidad pagada excede de la deuda pendiente',
+  //     backgroundColor: myTheme.colorScheme.secondary,
+  //     textColor: Colors.white,
+  //   );
+  // }
 }
 
 //Registrar pagos de cheques
@@ -483,20 +443,6 @@ Future registerBankCheckPayment({
   DateTime? date,
   double? remaining,
 }) async {
-  // print('/// Registrar cheque en factura: $invoiceDocumentID ///');
-  print('client: $client');
-  print('invoiceDocumentID: $invoiceDocumentID');
-  print('currency: $currency');
-  print('amount: $amount');
-  print('totalOfTheOrder: $totalOfTheOrder');
-  print('currentCoin: $currentCoin');
-  print('bank: $bank');
-  print('accountNumber: $accountNumber');
-  print('accountHolder: $accountHolder');
-  print('imageFile: $imageFile');
-  print('date: $date');
-  print('remaining: $remaining');
-
   String? banksDocumentsID;
   await FirebaseFirestore.instance
       .collection('bancos')
@@ -513,16 +459,13 @@ Future registerBankCheckPayment({
   const concillied = false;
   final timestampDate = Timestamp.fromDate(date!);
   const method = 'Cheque';
-  final paidAmount = double.parse(amount.toString());
+  final paidAmount = amount;
   final selectedBank =
       FirebaseFirestore.instance.collection('bancos').doc(banksDocumentsID);
   final account = accountNumber;
   final holder = accountHolder;
   const nroCN = 0;
   final selectedExchangedRate = coinExchangeRatio;
-
-  print('Se completo la factura??:');
-  print(remaining! - paidAmount <= 0 ? 'Completado' : "Sigue pendiente");
 
   try {
     return await FirebaseFirestore.instance
@@ -551,36 +494,6 @@ Future registerBankCheckPayment({
           },
         ],
       ),
-    }).whenComplete(() {
-      print(
-          'remaining de proceso: ${priceFormatForDB(remaining, currency!, coinExchangeRatio)}');
-      print(
-          'Amount de proceso: ${priceFormatForDB(amount!, currency, coinExchangeRatio)}');
-      print(
-          'restante total: ${priceFormatForDB(remaining, currency, coinExchangeRatio) - priceFormatForDB(amount, currency, coinExchangeRatio)}');
-      // var total = priceFormatForDB(remaining, currency, coinExchangeRatio) -
-      //     priceFormatForDB(amount, currency, coinExchangeRatio);
-      var total = remaining - amount;
-      // var total =
-      //     double.parse((remaining * coinExchangeRatio!).toStringAsFixed(4)) -
-      //         double.parse((amount * coinExchangeRatio).toStringAsFixed(4));
-      print(remaining);
-      print(amount);
-      print('total: ${total.toStringAsFixed(2)}');
-      try {
-        if (double.parse(total.toStringAsFixed(2)) <= 0) {
-          FirebaseFirestore.instance
-              .collection('clientes')
-              .doc(client.clientDocumentId)
-              .collection('facturas')
-              .doc(invoiceDocumentID)
-              .update({
-            'pagada': true,
-          });
-        }
-      } catch (e) {
-        print(e);
-      }
     });
   } catch (e) {
     print(e);
@@ -843,94 +756,30 @@ Future registerMoneyPayment({
   double? totalOfTheOrder,
   File? imageFile,
   DateTime? date,
-  double? remaining,
 }) async {
-  // print('/// Registrar pago en efectivo en factura: $invoiceDocumentID ///');
-
-  // print('Datos recibidos://////////////////////////');
-
-  print('invoiceDocumentID: $invoiceDocumentID');
-  print('client: ${client!.name}');
-  print('selectedCoin: $currency');
-  print('paidAmount: $amount');
-  print('totalOfTheOrder: $totalOfTheOrder');
-  print('imageFile: $imageFile');
-  print('date: $date');
-  print('remaining: $remaining');
-  print('coinExchangeRatio: $coinExchangeRatio');
-
-  const nulled = false;
-  final codeCurrency = currency.toString();
-  const concillied = false;
-  final paymentDate = Timestamp.fromDate(date!);
-  const method = 'Efectivo';
-  final paymentAmount = double.parse(amount.toString());
-  final exchangeRate = coinExchangeRatio;
-
-  print('Datos a registrar:///////////////////');
-  print('nulled: $nulled');
-  print('codeCurrency: $codeCurrency');
-  print('concillied: $concillied');
-  print('paymentDate: $paymentDate');
-  print('method: $method');
-  print('paymentAmount: $paymentAmount');
-  print('originalAmount: $originalAmount');
-  print('exancheRates: $exchangeRate');
-
+  print('Registrando dinero');
   try {
     return await FirebaseFirestore.instance
         .collection('clientes')
-        .doc(client.clientDocumentId)
+        .doc(client!.clientDocumentId)
         .collection('facturas')
         .doc(invoiceDocumentID)
         .update({
       'pagos': FieldValue.arrayUnion(
         [
           <String, dynamic>{
-            'anulado': nulled,
-            'codigoMoneda': codeCurrency,
-            'conciliado': concillied,
-            'fecha': paymentDate,
-            'metodo': method,
-            'monto': paymentAmount,
+            'anulado': false,
+            'codigoMoneda': currency,
+            'conciliado': false,
+            'fecha': Timestamp.now(),
+            'metodo': 'Efectivo',
+            'monto': amount,
             'montoOriginal': originalAmount,
-            'tasaDeCambio': exchangeRate,
+            'tasaDeCambio': coinExchangeRatio,
           },
         ],
       ),
-    }).whenComplete(() {
-      print(
-          'remaining de proceso: ${priceFormatForDB(remaining!, currency!, exchangeRate)}');
-      print(
-          'Amount de proceso: ${priceFormatForDB(amount!, currency, exchangeRate)}');
-      print(
-          'restante total: ${priceFormatForDB(remaining, currency, exchangeRate) - priceFormatForDB(amount, currency, exchangeRate)}');
-      // var total = priceFormatForDB(remaining, currency, exchangeRate) -
-      //     priceFormatForDB(amount, currency, exchangeRate);
-      var total = remaining - amount;
-//  var total = remaining - double.parse(amount.toStringAsFixed(2));
-      // var total = double.parse((remaining * exchangeRate!).toStringAsFixed(4)) -
-      //     double.parse((amount * exchangeRate).toStringAsFixed(4));
-      print(remaining);
-      print(amount);
-      print('total: ${total.toStringAsFixed(4)}');
-
-      try {
-        if (double.parse(total.toStringAsFixed(2)) <= 0) {
-          print('Factura pagada completamente');
-          FirebaseFirestore.instance
-              .collection('clientes')
-              .doc(client.clientDocumentId)
-              .collection('facturas')
-              .doc(invoiceDocumentID)
-              .update({
-            'pagada': true,
-          });
-        }
-      } catch (e) {
-        print(e);
-      }
-    }).whenComplete(() => print('Operación completada satisfactoriamente'));
+    });
   } catch (e) {
     print(e);
   }
@@ -1405,7 +1254,6 @@ Future registerClient({
       .child('clientes')
       .child(clientDocument.id)
       .child('1');
-  // .child('$selectedIdType$newClientId');
   print(clientDocument);
   final lastModified = <String, dynamic>{
     'timestamp': Timestamp.now(),
@@ -1574,4 +1422,37 @@ Future<List> cancelPayment(
       .update({'pagos': payments, 'pagada': false});
 
   return payments;
+}
+
+checkIfInvoiceIsCompleted(
+    {double? remaining, double? paidAmount, client, invoiceDocumentID}) {
+  try {
+    double total = remaining! - paidAmount!;
+    print('Verificando si lo que faltaba - lo pagado es igual a 0');
+    print('remaining: $remaining');
+    print('amount: $paidAmount ');
+    print('total: ${total.toStringAsFixed(2)}');
+    if (total <= 0) {
+      print('Factura pagada completamente');
+      Fluttertoast.showToast(
+        msg: 'Factura pagada completamente',
+        backgroundColor: myTheme.colorScheme.onPrimaryContainer,
+        textColor: Colors.white,
+      );
+      FirebaseFirestore.instance
+          .collection('clientes')
+          .doc(client.clientDocumentId)
+          .collection('facturas')
+          .doc(invoiceDocumentID)
+          .update({
+        'pagada': true,
+      });
+    } else {
+      print('Factura sigue pendiente');
+    }
+
+    return total;
+  } catch (e) {
+    print(e);
+  }
 }

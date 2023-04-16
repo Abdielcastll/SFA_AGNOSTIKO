@@ -97,7 +97,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                 builder: (BuildContext context) =>
                                     ProductDetails(
                                   code: product.code,
-                                  price: (prices[product.code] ?? 0).toString(),
+                                  price: (prices[product.code] ?? 0),
                                   line: linesSummary[product.line],
                                   imageUrl: url!,
                                   isProductNew: true,
@@ -227,7 +227,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                 builder: (BuildContext context) =>
                                     ProductDetails(
                                   code: product.code,
-                                  price: (prices[product.code] ?? 0).toString(),
+                                  price: (prices[product.code] ?? 0),
                                   line: linesSummary[product.line],
                                   imageUrl: 'https://i.imgur.com/BPbj6Gy.jpg',
                                   isProductNew: true,

@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
@@ -155,7 +157,13 @@ class _CatalogueBodyState extends State<CatalogueBody> {
         : SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Column(
-              children: const [
+              children: [
+                IconButton(
+                    onPressed: () {
+                      double t = 2 + 0.30;
+                      print(t.toStringAsFixed(2));
+                    },
+                    icon: Icon(Icons.numbers)),
                 PromotionsWidget(),
                 NewProductsWidget(),
                 ListOfProductsButton(),

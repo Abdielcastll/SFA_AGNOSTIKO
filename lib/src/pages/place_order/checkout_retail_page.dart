@@ -36,13 +36,11 @@ class CheckoutRetailPage extends StatefulWidget {
     required this.client,
     required this.cart,
     required this.subTotal,
-    this.coinsExchangeRates,
   }) : super(key: key);
 
   final Clients? client;
   final List<ShoppingCartProduct> cart;
   final double subTotal;
-  final coinsExchangeRates;
 
   @override
   State<CheckoutRetailPage> createState() => _CheckoutRetailPageState();
@@ -77,7 +75,6 @@ class _CheckoutRetailPageState extends State<CheckoutRetailPage> {
           client: widget.client,
           subTotal: widget.subTotal,
           cart: widget.cart,
-          coinsExchangeRates: widget.coinsExchangeRates,
         ),
       ),
     );
@@ -90,13 +87,11 @@ class CheckoutBody extends StatefulWidget {
     required this.client,
     required this.subTotal,
     required this.cart,
-    this.coinsExchangeRates,
   }) : super(key: key);
 
   final Clients? client;
   final double subTotal;
   final List<ShoppingCartProduct> cart;
-  final coinsExchangeRates;
 
   @override
   State<CheckoutBody> createState() => _CheckoutBodyState();
@@ -117,8 +112,6 @@ class _CheckoutBodyState extends State<CheckoutBody> {
   final List<String> items = ['Fiscal', 'Despacho'];
 
   final List<String> items2 = ['Factura', 'Consignacion', 'Nota de entrega'];
-
-  late List<double> coinsExchangeRates = widget.coinsExchangeRates;
 
   double priceWithIVA() {
     var total = (totalPriceOfTheOrder() * 16) / 100;
@@ -175,7 +168,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
           date: dateFormatter.format(today),
           method: selectedValue2,
           total: totalWithTheIVA(),
-          coinsExchangeRates: widget.coinsExchangeRates,
+          completedMessage: '¡Pedido guardado!',
         ),
       ),
     );

@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
@@ -17,6 +18,7 @@ import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/orders_alerts_and_dialogs/orders_bottomsheet.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -61,9 +63,9 @@ class OrderCard extends StatefulWidget {
 class _OrderCardState extends State<OrderCard> {
   @override
   Widget build(BuildContext context) {
-    final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
-    List<String> currentCoinSplit = currentCoin!.split(' ');
-    String currentCoinSelectedCode = currentCoinSplit.last;
+    // final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
+    // List<String> currentCoinSplit = currentCoin!.split(' ');
+    // String currentCoinSelectedCode = currentCoinSplit.last;
     return MultiProvider(
       providers: [
         StreamProvider<Client?>.value(
@@ -78,19 +80,19 @@ class _OrderCardState extends State<OrderCard> {
           initialData: null,
           value: DatabaseServiceStreams().zoneSummary,
         ),
-        StreamProvider<Coin?>.value(
-          initialData: Coin(),
-          catchError: (context, error) {
-            print(
-                'ERROR ON STREAM PROVIDER OF COINEXCHANGE RATES IN ADD CLIENT');
-            print(error);
-            return;
-          },
-          value: coinCollection
-              .doc(currentCoinSelectedCode)
-              .snapshots()
-              .map(coinFromSnapshot),
-        ),
+        // StreamProvider<Coin?>.value(
+        //   initialData: Coin(),
+        //   catchError: (context, error) {
+        //     print(
+        //         'ERROR ON STREAM PROVIDER OF COINEXCHANGE RATES IN ADD CLIENT');
+        //     print(error);
+        //     return;
+        //   },
+        //   value: coinCollection
+        //       .doc(currentCoinSelectedCode)
+        //       .snapshots()
+        //       .map(coinFromSnapshot),
+        // ),
       ],
       child: OrderCardBody(widget: widget),
     );
@@ -126,11 +128,9 @@ class _OrderCardBodyState extends State<OrderCardBody> {
         Provider.of<Client?>(context)?.dispatchAdress ?? '';
     final currentClientZones = Provider.of<Client?>(context)?.zone ?? '';
     final currentClientPrices = Provider.of<Client?>(context)?.prices ?? '';
-    final currentClientRefID =
-        Provider.of<Client?>(context)?.clientDocumentId ?? '';
-    final zonesSummary = Provider.of<ZoneSummary?>(context)?.summary ?? '';
     final currentDiscountMaster =
         Provider.of<Client?>(context)?.masterDiscount ?? {};
+    final zonesSummary = Provider.of<ZoneSummary?>(context)?.summary ?? '';
     final userUID = Provider.of<UserModel>(context).uid;
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     final coinName = Provider.of<Coin?>(context)?.name ?? '';
@@ -143,44 +143,50 @@ class _OrderCardBodyState extends State<OrderCardBody> {
     // print('User Role ${userRole?.name}');
     // print("Retail: ${userRole?.isRetail}");
 
-    priceFormat(productPrice) {
-      double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-      double convertedAmount = double.parse(
-          (correctAmount * coinExchangeRatio).toStringAsFixed(coinDecimals));
-      return '$convertedAmount';
-      // double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-      // if (currentCoin!.contains('USD')) {
-      //   return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
-      //       .format(productPrice)
-      //       .toString();
-      // } else if (currentCoin.contains('VED')) {
-      //   return NumberFormat.currency(
-      //     locale: 'es_VE',
-      //     decimalDigits: 2,
-      //     symbol: "Bs.",
-      //   ).format(correctAmount * 4.58).toString();
-      // } else if (currentCoin.contains('EUR')) {
-      //   return NumberFormat.currency(
-      //     locale: 'es_ES',
-      //     decimalDigits: 2,
-      //     symbol: '€',
-      //   ).format(correctAmount * 0.89).toString();
-      // } else if (currentCoin.contains('MXN')) {
-      //   return NumberFormat.currency(
-      //     locale: 'es_MX',
-      //     decimalDigits: 2,
-      //     symbol: '\$',
-      //   ).format(correctAmount * 19.43);
-      // } else if (currentCoin.contains('BTC')) {
-      //   return '฿ ${(correctAmount * 0.00011).toStringAsFixed(8)}';
-      // } else {
-      //   return NumberFormat.currency(
-      //     locale: 'es_VE',
-      //     decimalDigits: 2,
-      //     symbol: "PPR.",
-      //   ).format(correctAmount * 4.58).toString();
-      // }
-    }
+    final total = priceMultipliedByItsExchangeRatio(
+        productPrice: widget.widget.total,
+        coinDecimals: coinDecimals,
+        coinExchangeRatio: coinExchangeRatio);
+    // print('Total: $total');
+
+    // priceFormat(productPrice) {
+    //   double correctAmount = double.parse(productPrice.toStringAsFixed(4));
+    //   double convertedAmount = double.parse(
+    //       (correctAmount * coinExchangeRatio).toStringAsFixed(coinDecimals));
+    //   return '$convertedAmount';
+    //   // double correctAmount = double.parse(productPrice.toStringAsFixed(4));
+    //   // if (currentCoin!.contains('USD')) {
+    //   //   return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
+    //   //       .format(productPrice)
+    //   //       .toString();
+    //   // } else if (currentCoin.contains('VED')) {
+    //   //   return NumberFormat.currency(
+    //   //     locale: 'es_VE',
+    //   //     decimalDigits: 2,
+    //   //     symbol: "Bs.",
+    //   //   ).format(correctAmount * 4.58).toString();
+    //   // } else if (currentCoin.contains('EUR')) {
+    //   //   return NumberFormat.currency(
+    //   //     locale: 'es_ES',
+    //   //     decimalDigits: 2,
+    //   //     symbol: '€',
+    //   //   ).format(correctAmount * 0.89).toString();
+    //   // } else if (currentCoin.contains('MXN')) {
+    //   //   return NumberFormat.currency(
+    //   //     locale: 'es_MX',
+    //   //     decimalDigits: 2,
+    //   //     symbol: '\$',
+    //   //   ).format(correctAmount * 19.43);
+    //   // } else if (currentCoin.contains('BTC')) {
+    //   //   return '฿ ${(correctAmount * 0.00011).toStringAsFixed(8)}';
+    //   // } else {
+    //   //   return NumberFormat.currency(
+    //   //     locale: 'es_VE',
+    //   //     decimalDigits: 2,
+    //   //     symbol: "PPR.",
+    //   //   ).format(correctAmount * 4.58).toString();
+    //   // }
+    // }
 
     identifyStatusColor() {
       if (widget.widget.status == AppLocalizations.of(context)!.onProcess &&
@@ -197,177 +203,184 @@ class _OrderCardBodyState extends State<OrderCardBody> {
       }
     }
 
-    return GestureDetector(
-      onTap: () {
-        widget.widget.status == AppLocalizations.of(context)!.onProcess
-            ? modalBottomSheetForOrders(
-                false,
-                context,
-                widget.widget.commentary,
-                widget.widget.clientReferenceId,
-                widget.widget.products,
-                widget.widget.subTotal,
-                widget.widget.discountMaster,
-                widget.widget.tax,
-                widget.widget.total,
-                currentClientName,
-                currentClientIdType,
-                currentClientId,
-                currentClientSpecial,
-                currentClientPhone,
-                currentClientEmail,
-                currentClientAddress,
-                currentClientDispatchAdress,
-                zonesSummary[currentClientZones],
-                currentClientPrices,
-                currentDiscountMaster,
-                widget.widget.clientReferenceId,
-                userUID,
-                widget.widget.orderDocumentId,
-                currentClientId,
-                currentClientIdType,
-                currentClient,
-                widget.widget.date,
-                widget.widget.correlativeNumber,
-                isRetail: userRole?.isRetail,
-                showButton: widget.widget.showButton,
-              )
-            : modalBottomSheetForOrders(
-                true,
-                context,
-                widget.widget.commentary,
-                widget.widget.clientReferenceId,
-                widget.widget.products,
-                widget.widget.subTotal,
-                widget.widget.discountMaster,
-                widget.widget.tax,
-                widget.widget.total,
-                currentClientName,
-                currentClientIdType,
-                currentClientId,
-                currentClientSpecial,
-                currentClientPhone,
-                currentClientEmail,
-                currentClientAddress,
-                currentClientDispatchAdress,
-                zonesSummary[currentClientZones],
-                currentClientPrices,
-                currentDiscountMaster,
-                widget.widget.clientReferenceId,
-                userUID,
-                widget.widget.orderDocumentId,
-                currentClientId,
-                currentClientIdType,
-                currentClient,
-                widget.widget.date,
-                widget.widget.correlativeNumber,
-                isRetail: userRole?.isRetail,
-                showButton: widget.widget.showButton,
-              );
-      },
-      child: Container(
-        margin: EdgeInsets.only(top: 5, left: 14, right: 14, bottom: 5),
-        padding: EdgeInsets.fromLTRB(14, 5, 0, 5),
-        width: 360.0,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: 200,
-                  child: Text(
-                    // '$currentClientName #${widget.widget.correlativeNumber}',
-                    '$currentClientName',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontFamily: 'Poppins-regular',
-                    ),
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                  child: Row(
-                    children: [
-                      Text(
-                        '$coinSymbol ',
-                        style: TextStyle(
-                          color: identifyStatusColor(),
-                          fontSize: 16,
-                          fontFamily: 'Poppins-regular',
-                        ),
-                      ),
-                      Text(
-                        '${priceFormat(widget.widget.total)}',
-                        style: TextStyle(
-                          color: identifyStatusColor(),
-                          fontSize: 16,
-                          fontFamily: 'Poppins-regular',
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+    return currentClientName == ''
+        ? Container(
+            margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+            child: Center(
+              child: SpinKitCircle(
+                color: myTheme.colorScheme.primary,
+                size: 50,
+              ),
             ),
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.end,
+          )
+        : GestureDetector(
+            onTap: () {
+              widget.widget.status == AppLocalizations.of(context)!.onProcess
+                  ? modalBottomSheetForOrders(
+                      false,
+                      context,
+                      widget.widget.commentary,
+                      widget.widget.clientReferenceId,
+                      widget.widget.products,
+                      widget.widget.subTotal,
+                      widget.widget.discountMaster,
+                      widget.widget.tax,
+                      widget.widget.total,
+                      currentClientName,
+                      currentClientIdType,
+                      currentClientId,
+                      currentClientSpecial,
+                      currentClientPhone,
+                      currentClientEmail,
+                      currentClientAddress,
+                      currentClientDispatchAdress,
+                      zonesSummary[currentClientZones],
+                      currentClientPrices,
+                      currentDiscountMaster,
+                      widget.widget.clientReferenceId,
+                      userUID,
+                      widget.widget.orderDocumentId,
+                      currentClientId,
+                      currentClientIdType,
+                      currentClient,
+                      widget.widget.date,
+                      widget.widget.correlativeNumber,
+                      isRetail: userRole?.isRetail,
+                      showButton: widget.widget.showButton,
+                    )
+                  : modalBottomSheetForOrders(
+                      true,
+                      context,
+                      widget.widget.commentary,
+                      widget.widget.clientReferenceId,
+                      widget.widget.products,
+                      widget.widget.subTotal,
+                      widget.widget.discountMaster,
+                      widget.widget.tax,
+                      widget.widget.total,
+                      currentClientName,
+                      currentClientIdType,
+                      currentClientId,
+                      currentClientSpecial,
+                      currentClientPhone,
+                      currentClientEmail,
+                      currentClientAddress,
+                      currentClientDispatchAdress,
+                      zonesSummary[currentClientZones],
+                      currentClientPrices,
+                      currentDiscountMaster,
+                      widget.widget.clientReferenceId,
+                      userUID,
+                      widget.widget.orderDocumentId,
+                      currentClientId,
+                      currentClientIdType,
+                      currentClient,
+                      widget.widget.date,
+                      widget.widget.correlativeNumber,
+                      isRetail: userRole?.isRetail,
+                      showButton: widget.widget.showButton,
+                    );
+            },
+            child: Container(
+              margin: EdgeInsets.only(top: 5, left: 14, right: 14, bottom: 5),
+              padding: EdgeInsets.fromLTRB(14, 5, 0, 0),
+              // width: 360.0,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(
-                    height: 13,
-                    width: 150,
-                    child: Text(
-                      'ID: ${currentClientIdType.toString()}-${currentClientId.toString()}',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey.shade500,
-                        fontFamily: 'Poppins-regular',
-                      ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: 200,
+                          child: Text(
+                            '$currentClientName',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontFamily: 'Poppins-regular',
+                            ),
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Text(
+                          '$coinSymbol ${total.toStringAsFixed(2)}',
+                          style: TextStyle(
+                            color: identifyStatusColor(),
+                            fontSize: 13,
+                            fontFamily: 'Poppins-regular',
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+                  SizedBox(height: 15),
                   Container(
-                    height: 13,
-                    width: 95,
-                    child: Text(
-                      '${widget.widget.date}',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey.shade500,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    height: 13,
-                    width: 70,
-                    child: Text(
-                      '${widget.widget.status}',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: identifyStatusColor(),
-                      ),
+                    margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Container(
+                          // height: 13,
+                          width: 150,
+                          child: Text(
+                            currentClientId == 0
+                                ? 'Sin Identificación'
+                                : 'ID: ${currentClientIdType.toString()}-${currentClientId.toString()}',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 10,
+                              // color: Colors.grey.shade500,
+                              color: myTheme.colorScheme.secondary,
+                              fontFamily: 'Poppins-regular',
+                            ),
+                          ),
+                        ),
+                        Container(
+                          // height: 13,
+                          width: 95,
+                          child: Text(
+                            '${widget.widget.date}',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 10,
+                              // color: Colors.grey.shade500,
+                              color: myTheme.colorScheme.secondary,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          // height: 13,
+                          // width: 70,
+                          margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                          child: Text(
+                            '${widget.widget.status}',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: identifyStatusColor(),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
-      ),
-    );
+          );
   }
 }

@@ -91,7 +91,15 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
             // TODO: REGISTRAR PAGO EN DB
             print('Pago Aprobado - Registrando pago de Tarjeta en DB');
             registerDebitCreditCardPayment(
-                transactionArgs!.invoice!, transactionArgs!.stan);
+                    transactionArgs!.invoice!, transactionArgs!.stan)
+                .whenComplete(() {
+              checkIfInvoiceIsCompleted(
+                paidAmount: transactionArgs!.invoice!.amount,
+                remaining: transactionArgs!.invoice!.remaining,
+                client: transactionArgs!.invoice!.client,
+                invoiceDocumentID: transactionArgs!.invoice!.invoiceDocumentID,
+              );
+            });
           });
           break;
         case EmvTransactionResult.Denied:
@@ -373,8 +381,10 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     print(paymentBody.amountPaied);
 
     final payed = transactionResult == EmvTransactionResult.Approved
-        ? exchangeAmount(paymentBody.currency, _amountDouble,
-            transactionArgs!.invoice!.coinExchangeRatio)
+        ? exchangeAmount(
+            coin: paymentBody.currency,
+            amount: _amountDouble,
+            exchange: transactionArgs!.invoice!.coinExchangeRatio)
         : 0.0;
     print(payed);
 

@@ -17,18 +17,22 @@ import '../../pages/place_order/add_payment.dart';
 import '../../services/utils/emv.dart';
 
 Future<double?> _acceptAmount(
-    BuildContext context, double amount, InvoiceData invoiceData,
-    {Function? updatePayed,
-    AddPaymentBodyAtt? paymentBody,
-    noRetail = false}) async {
+  BuildContext context,
+  double amount,
+  InvoiceData invoiceData, {
+  Function? updatePayed,
+  AddPaymentBodyAtt? paymentBody,
+  noRetail = false,
+}) async {
   var platformInfo = await getPlatformInfo();
   var transactionArgs = TransactionArgs(
-      platformInfo: platformInfo,
-      entryMode: EntryMode.Magstripe,
-      showNumericKeyboard: !platformInfo.hasKeypad,
-      supportedCardTypes: platformInfo.supportedCardTypes,
-      emvTransactionType: EmvTransactionType.Goods,
-      invoice: invoiceData);
+    platformInfo: platformInfo,
+    entryMode: EntryMode.Magstripe,
+    showNumericKeyboard: !platformInfo.hasKeypad,
+    supportedCardTypes: platformInfo.supportedCardTypes,
+    emvTransactionType: EmvTransactionType.Goods,
+    invoice: invoiceData,
+  );
 
   transactionArgs.amountInCents = (amount * 100).toInt();
 
@@ -75,8 +79,11 @@ paymentCard(
     {Function? updatePayed,
     AddPaymentBodyAtt? paymentBody,
     noRetail = false}) {
-  remaining = priceFormatForDB(remaining, currentCoin, coinExchangeRatio);
-
+  remaining = priceFormatForDB(
+    remaining,
+    currentCoin,
+    coinExchangeRatio,
+  );
   final invoiceData = InvoiceData(client, invoiceDocumentID, 'USD', amount,
       totalOfTheOrder, currentCoin, date, remaining, coinExchangeRatio);
   print(invoiceData.currentCoin);

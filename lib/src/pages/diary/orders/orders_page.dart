@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/order_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
@@ -12,6 +13,7 @@ import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/filter_or
 import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/orders_completed.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/orders_on_process.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
+import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -43,6 +45,10 @@ class _OrdersPageState extends State<OrdersPage> {
     DateTime tomorrow = DateTime(currentDayDateTime.year,
         currentDayDateTime.month, currentDayDateTime.day + 1);
 
+    final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
+    List<String> currentCoinSplit = currentCoin!.split(' ');
+    String currentCoinSelectedCode = currentCoinSplit.last;
+
     return MultiProvider(
       providers: [
         FutureProvider<UserRole?>.value(
@@ -55,16 +61,18 @@ class _OrdersPageState extends State<OrdersPage> {
         ),
         StreamProvider<List<Orders>?>.value(
           value: currentDay !=
-                  Timestamp.fromDate(DateTime(
-                    DateTime.now().year + 99,
-                    DateTime.now().month + 99,
-                    DateTime.now().day + 99,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                  ))
+                  Timestamp.fromDate(
+                    DateTime(
+                      DateTime.now().year + 99,
+                      DateTime.now().month + 99,
+                      DateTime.now().day + 99,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                    ),
+                  )
               ? FirebaseFirestore.instance
                   .collectionGroup('pedidos')
                   .where('vendedor', isEqualTo: userDoc)
@@ -76,15 +84,27 @@ class _OrdersPageState extends State<OrdersPage> {
               : FirebaseFirestore.instance
                   .collectionGroup('pedidos')
                   .where('vendedor', isEqualTo: userDoc)
-                  // .where('fecha', isGreaterThanOrEqualTo: currentDay)
-                  // .where('fecha', isLessThan: tomorrow)
                   .orderBy('fecha')
                   .snapshots()
                   .map(ordersFromSnapshot),
           initialData: const [],
           catchError: (context, error) {
+            print('ERROR ON GETTING ORDERS IN ORDERS PAGE PROVIDER');
             print(error);
           },
+        ),
+        StreamProvider<Coin?>.value(
+          initialData: Coin(),
+          catchError: (context, error) {
+            print(
+                'ERROR ON STREAM PROVIDER OF COINEXCHANGE RATES IN ADD CLIENT');
+            print(error);
+            return;
+          },
+          value: coinCollection
+              .doc(currentCoinSelectedCode)
+              .snapshots()
+              .map(coinFromSnapshot),
         ),
       ],
       child: SafeArea(
@@ -112,11 +132,7 @@ class _OrdersBodyState extends State<OrdersBody> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child:
-          // Center(
-          //   child: CircularProgressIndicator(),
-          // ),
-          Column(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -141,25 +157,34 @@ class _OrdersBodyState extends State<OrdersBody> {
                   ),
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.fromLTRB(30, 0, 0, 0),
-                child: Text(
-                  'Ver completados',
-                  style: TextStyle(
-                    fontSize: 15,
-                    // fontWeight: FontWeight.bold,
-                    fontFamily: 'Poppins-regular',
+              Row(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+                    child: Text(
+                      'Ver completados',
+                      style: TextStyle(
+                        fontSize: 14,
+                        // fontWeight: FontWeight.bold,
+                        fontFamily: 'Poppins-regular',
+                        color: myTheme.colorScheme.primary,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              Checkbox(
-                activeColor: myTheme.colorScheme.primary,
-                value: seeCompleted,
-                onChanged: (value) {
-                  setState(() {
-                    seeCompleted = !seeCompleted;
-                  });
-                },
+                  Checkbox(
+                    checkColor: Colors.white,
+                    shape: CircleBorder(),
+                    fillColor:
+                        MaterialStateProperty.all(myTheme.colorScheme.primary),
+                    activeColor: myTheme.colorScheme.primary,
+                    value: seeCompleted,
+                    onChanged: (value) {
+                      setState(() {
+                        seeCompleted = !seeCompleted;
+                      });
+                    },
+                  ),
+                ],
               ),
             ],
           ),

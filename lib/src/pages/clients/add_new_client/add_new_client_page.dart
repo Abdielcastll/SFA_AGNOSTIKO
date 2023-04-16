@@ -155,13 +155,13 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
       print('Location permission: $permission');
     }
 
-    /* await Geolocator.getCurrentPosition(
-
-      desiredAccuracy: LocationAccuracy.high, forceAndroidLocationManager: true); */
+    // await Geolocator.getCurrentPosition(
+    //     desiredAccuracy: LocationAccuracy.high,
+    //     forceAndroidLocationManager: true);
 
     /* final pos = await Geolocator.getCurrentPosition(
 
-      desiredAccuracy: LocationAccuracy.lowest,
+      desiredAccuracy: LocationAccuracy.high,
 
       forceAndroidLocationManager: true,
 
@@ -218,6 +218,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
 
   @override
   Widget build(BuildContext context) {
+    determinePosition();
     final pricesSummary = Provider.of<PricesSummary?>(context)?.summary ?? {};
     final idSummary = Provider.of<IdTypeSummary?>(context)?.summary ?? {};
     final zonesSummary = Provider.of<ZoneSummary?>(context)?.summary ?? {};

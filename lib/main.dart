@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/helper/object_box.dart';
@@ -38,10 +39,65 @@ import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:geolocator/geolocator.dart';
 
 // 1/17/23 BUGFIXES
 
 late ObjectBox objectBox;
+
+Future<Position?> determinePosition() async {
+  print('++++++++++++++++++++++++++++++');
+  print('LAUNCHING GEOLOCATOR');
+  bool serviceEnabled;
+
+  LocationPermission permission;
+
+  // Geolocator.openLocationSettings();
+
+  serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
+  if (!serviceEnabled) {
+    return Future.error('Location services are disabled.');
+  }
+
+  permission = await Geolocator.checkPermission();
+
+  if (permission == LocationPermission.deniedForever) {
+    return Future.error(
+        'Location permissions are permanently denied, we cannot request permissions.');
+  }
+
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+
+    if (permission != LocationPermission.whileInUse &&
+        permission != LocationPermission.always) {
+      return Future.error(
+          'Location permissions are denied (actual value: $permission).');
+    }
+  }
+
+  if (kDebugMode) {
+    print('Location permission: $permission');
+  }
+
+  await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+      forceAndroidLocationManager: true);
+
+  /* final pos = await Geolocator.getCurrentPosition(
+
+      desiredAccuracy: LocationAccuracy.high,
+
+      forceAndroidLocationManager: true,
+
+      timeLimit: const Duration(seconds: 60));
+
+  print(pos); */
+
+  // return await Geolocator.getLastKnownPosition(
+  //     forceAndroidLocationManager: true);
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,6 +108,7 @@ Future<void> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   sharedPreferences = await SharedPreferences.getInstance();
+  determinePosition();
   runApp(const SfaAgnostiko());
 }
 

@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -20,6 +21,7 @@ import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/invoice_modalbottomsheet.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -64,22 +66,23 @@ class InvoiceCard extends StatefulWidget {
 class _InvoiceCardState extends State<InvoiceCard> {
   @override
   Widget build(BuildContext context) {
-    final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
-    List<String> currentCoinSplit = currentCoin!.split(' ');
-    String currentCoinSelectedCode = currentCoinSplit.last;
+    // final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
+    // List<String> currentCoinSplit = currentCoin!.split(' ');
+    // String currentCoinSelectedCode = currentCoinSplit.last;
     return MultiProvider(providers: [
-      StreamProvider<Coin?>.value(
-        initialData: Coin(),
-        catchError: (context, error) {
-          print('ERROR ON STREAM PROVIDER OF COINEXCHANGE RATES IN ADD CLIENT');
-          print(error);
-          return;
-        },
-        value: coinCollection
-            .doc(currentCoinSelectedCode)
-            .snapshots()
-            .map(coinFromSnapshot),
-      ),
+      // StreamProvider<Coin?>.value(
+      //   initialData: Coin(),
+      //   catchError: (context, error) {
+      //     print(
+      //         'ERROR ON STREAM PROVIDER OF COINEXCHANGE RATES IN INVOICE CARD');
+      //     print(error);
+      //     return;
+      //   },
+      //   value: coinCollection
+      //       .doc(currentCoinSelectedCode)
+      //       .snapshots()
+      //       .map(coinFromSnapshot),
+      // ),
       StreamProvider<Client?>.value(
         initialData: null,
         value: FirebaseFirestore.instance
@@ -116,51 +119,58 @@ class InvoiceCardBody extends StatelessWidget {
     final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
     final coinCode = Provider.of<Coin?>(context)?.code ?? '';
 
-    priceFormat(productPrice) {
-      double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-      double convertedAmount = double.parse(
-          (correctAmount * coinExchangeRatio).toStringAsFixed(coinDecimals));
-      return '$convertedAmount';
-      // double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-      // if (currentCoin!.contains('USD')) {
-      //   return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
-      //       .format(productPrice)
-      //       .toString();
-      // } else if (currentCoin.contains('VED')) {
-      //   return NumberFormat.currency(
-      //     locale: 'es_VE',
-      //     decimalDigits: 2,
-      //     symbol: "Bs.",
-      //   ).format(correctAmount * 4.58).toString();
-      // } else if (currentCoin.contains('EUR')) {
-      //   return NumberFormat.currency(
-      //     locale: 'es_ES',
-      //     decimalDigits: 2,
-      //     symbol: '€',
-      //   ).format(correctAmount * 0.89).toString();
-      // } else if (currentCoin.contains('MXN')) {
-      //   return NumberFormat.currency(
-      //     locale: 'es_MX',
-      //     decimalDigits: 2,
-      //     symbol: '\$',
-      //   ).format(correctAmount * 19.43);
-      // } else if (currentCoin.contains('BTC')) {
-      //   return '฿ ${(correctAmount * 0.00011).toStringAsFixed(6)}';
-      // } else {
-      //   return NumberFormat.currency(
-      //     locale: 'es_VE',
-      //     decimalDigits: 2,
-      //     symbol: "PPR.",
-      //   ).format(correctAmount * 4.58).toString();
-      // }
-    }
+    final double total = priceMultipliedByItsExchangeRatio(
+        productPrice: widget.invoiceBalance,
+        coinDecimals: coinDecimals,
+        coinExchangeRatio: coinExchangeRatio);
 
-    Color? identifyColor() {
+    // priceFormat(productPrice) {
+    //   double correctAmount = double.parse(productPrice.toStringAsFixed(4));
+    //   double convertedAmount = double.parse(
+    //       (correctAmount * coinExchangeRatio).toStringAsFixed(coinDecimals));
+    //   return '$convertedAmount';
+    //   // double correctAmount = double.parse(productPrice.toStringAsFixed(4));
+    //   // if (currentCoin!.contains('USD')) {
+    //   //   return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
+    //   //       .format(productPrice)
+    //   //       .toString();
+    //   // } else if (currentCoin.contains('VED')) {
+    //   //   return NumberFormat.currency(
+    //   //     locale: 'es_VE',
+    //   //     decimalDigits: 2,
+    //   //     symbol: "Bs.",
+    //   //   ).format(correctAmount * 4.58).toString();
+    //   // } else if (currentCoin.contains('EUR')) {
+    //   //   return NumberFormat.currency(
+    //   //     locale: 'es_ES',
+    //   //     decimalDigits: 2,
+    //   //     symbol: '€',
+    //   //   ).format(correctAmount * 0.89).toString();
+    //   // } else if (currentCoin.contains('MXN')) {
+    //   //   return NumberFormat.currency(
+    //   //     locale: 'es_MX',
+    //   //     decimalDigits: 2,
+    //   //     symbol: '\$',
+    //   //   ).format(correctAmount * 19.43);
+    //   // } else if (currentCoin.contains('BTC')) {
+    //   //   return '฿ ${(correctAmount * 0.00011).toStringAsFixed(6)}';
+    //   // } else {
+    //   //   return NumberFormat.currency(
+    //   //     locale: 'es_VE',
+    //   //     decimalDigits: 2,
+    //   //     symbol: "PPR.",
+    //   //   ).format(correctAmount * 4.58).toString();
+    //   // }
+    // }
+
+    Color identifyColor() {
       if (widget.invoiceStatus == AppLocalizations.of(context)!.onProcess) {
         return Colors.amber.shade600;
       } else if (widget.invoiceStatus ==
           AppLocalizations.of(context)!.invoiced) {
         return Colors.green.shade600;
+      } else {
+        return myTheme.colorScheme.secondary;
       }
     }
 
@@ -182,177 +192,191 @@ class InvoiceCardBody extends StatelessWidget {
     final currentClientRefID =
         Provider.of<Client?>(context)?.clientDocumentId ?? '';
     final zonesSummary = Provider.of<ZoneSummary?>(context)?.summary ?? '';
-
     final currentDiscountMaster =
         Provider.of<Client?>(context)?.masterDiscount ?? {};
-    final userUID = Provider.of<UserModel>(context).uid;
 
-    return GestureDetector(
-      onTap: () {
-        widget.invoiceStatus == AppLocalizations.of(context)!.onProcess
-            ? modalBottomSheetForInvoices(
-                false,
-                context,
-                currentClientSpecialContributor,
-                currentDiscountMaster,
-                currentClientAddress,
-                currentClientEmail,
-                currentClientPrices,
-                currentClientName,
-                currentClientPhone,
-                currentClientPhone2,
-                zonesSummary[currentClientZones],
-                currentClientId,
-                currentClientIdType,
-                currentClientRefID,
-                widget.invoicePayments,
-                widget.invoiceNumber,
-                widget.invoiceTotal,
-                currentClient,
-                widget.invoiceDocumentID,
-                currentClientDispatchAdress,
-                widget.invoiceSubtotal,
-                widget.invoicePercetageTax,
-                widget.invoiceTax,
-                widget.discountPercentage,
-                widget.discount,
-              )
-            : modalBottomSheetForInvoices(
-                true,
-                context,
-                currentClientSpecialContributor,
-                currentDiscountMaster,
-                currentClientAddress,
-                currentClientEmail,
-                currentClientPrices,
-                currentClientName,
-                currentClientPhone,
-                currentClientPhone2,
-                zonesSummary[currentClientZones],
-                currentClientId,
-                currentClientIdType,
-                currentClientRefID,
-                widget.invoicePayments,
-                widget.invoiceNumber,
-                widget.invoiceTotal,
-                currentClient,
-                widget.invoiceDocumentID,
-                currentClientDispatchAdress,
-                widget.invoiceSubtotal,
-                widget.invoicePercetageTax,
-                widget.invoiceTax,
-                widget.discountPercentage,
-                widget.discount,
-              );
-      },
-      child: Padding(
-        padding: EdgeInsets.only(top: 5, left: 16, right: 16, bottom: 5),
-        child: Container(
-          width: 360.0,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: 14, top: 10),
-                    child: Container(
-                      width: 200,
-                      child: Text(
-                        // '$currentClientName #${widget.invoiceNumber}',
-                        '$currentClientName',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: "Poppins-regular",
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-                    child: Text(
-                      '$coinSymbol ${priceFormat(widget.invoiceBalance)}',
-                      style: TextStyle(
-                        color: identifyColor(),
-                        fontSize: 15,
-                        fontFamily: "Poppins-regular",
-                      ),
-                    ),
-                  ),
-                ],
+    return currentClientName == ''
+        ? Container(
+            margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+            child: Center(
+              child: SpinKitCircle(
+                color: myTheme.colorScheme.primary,
+                size: 50,
               ),
-              Container(
-                margin: EdgeInsets.fromLTRB(5, 5, 0, 15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+            ),
+          )
+        : GestureDetector(
+            onTap: () {
+              widget.invoiceStatus == AppLocalizations.of(context)!.onProcess
+                  ? modalBottomSheetForInvoices(
+                      false,
+                      context,
+                      currentClientSpecialContributor,
+                      currentDiscountMaster,
+                      currentClientAddress,
+                      currentClientEmail,
+                      currentClientPrices,
+                      currentClientName,
+                      currentClientPhone,
+                      currentClientPhone2,
+                      zonesSummary[currentClientZones],
+                      currentClientId,
+                      currentClientIdType,
+                      currentClientRefID,
+                      widget.invoicePayments,
+                      widget.invoiceNumber,
+                      widget.invoiceTotal,
+                      currentClient,
+                      widget.invoiceDocumentID,
+                      currentClientDispatchAdress,
+                      widget.invoiceSubtotal,
+                      widget.invoicePercetageTax,
+                      widget.invoiceTax,
+                      widget.discountPercentage,
+                      widget.discount,
+                    )
+                  : modalBottomSheetForInvoices(
+                      true,
+                      context,
+                      currentClientSpecialContributor,
+                      currentDiscountMaster,
+                      currentClientAddress,
+                      currentClientEmail,
+                      currentClientPrices,
+                      currentClientName,
+                      currentClientPhone,
+                      currentClientPhone2,
+                      zonesSummary[currentClientZones],
+                      currentClientId,
+                      currentClientIdType,
+                      currentClientRefID,
+                      widget.invoicePayments,
+                      widget.invoiceNumber,
+                      widget.invoiceTotal,
+                      currentClient,
+                      widget.invoiceDocumentID,
+                      currentClientDispatchAdress,
+                      widget.invoiceSubtotal,
+                      widget.invoicePercetageTax,
+                      widget.invoiceTax,
+                      widget.discountPercentage,
+                      widget.discount,
+                    );
+            },
+            child: Padding(
+              padding: EdgeInsets.only(top: 5, left: 16, right: 16, bottom: 5),
+              child: Container(
+                padding: EdgeInsets.fromLTRB(14, 10, 14, 0),
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: Column(
                   children: [
                     Container(
-                      height: 13,
-                      // width: 150,
-                      child: Text(
-                        'ID: $currentClientIdType-$currentClientId',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontFamily: "Poppins-regular",
-                          color: Colors.grey.shade500,
-                        ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: 200,
+                            child: Text(
+                              '$currentClientName',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 13,
+                                fontFamily: "Poppins-regular",
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Container(
+                            child: Text(
+                              '$coinSymbol ${total.toStringAsFixed(2)}',
+                              style: TextStyle(
+                                color: identifyColor(),
+                                fontSize: 13,
+                                fontFamily: "Poppins-regular",
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    Container(
-                      height: 13,
-                      child: Text(
-                        '${widget.invoiceDate}',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontFamily: "Poppins-regular",
-                          color: Colors.grey.shade500,
-                        ),
-                      ),
+                    SizedBox(
+                      height: 20,
                     ),
                     Container(
-                      height: 13,
-                      child: Text(
-                        'F#${widget.invoiceNumber}',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontFamily: "Poppins-regular",
-                          color: Colors.grey.shade500,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 13,
-                      // width: 70,
-                      child: Text(
-                        '${widget.invoiceStatus}',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontFamily: "Poppins-regular",
-                          color: identifyColor(),
-                        ),
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            height: 13,
+                            // width: 150,
+                            child: Text(
+                              currentClientId == 0
+                                  ? "Sin Identificacion"
+                                  : 'ID: $currentClientIdType-$currentClientId',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontFamily: "Poppins-regular",
+                                color: myTheme.colorScheme.secondary,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            height: 13,
+                            child: Text(
+                              '${widget.invoiceDate}',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontFamily: "Poppins-regular",
+                                color: myTheme.colorScheme.secondary,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            height: 13,
+                            child: Text(
+                              'F#${widget.invoiceNumber}',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontFamily: "Poppins-regular",
+                                color: myTheme.colorScheme.secondary,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            height: 13,
+                            // width: 70,
+                            child: Text(
+                              '${widget.invoiceStatus}',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontFamily: "Poppins-regular",
+                                color: identifyColor(),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
   }
 }

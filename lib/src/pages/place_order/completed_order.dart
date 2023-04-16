@@ -8,6 +8,7 @@ import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 
 class CompletedOrderPage extends StatelessWidget {
   const CompletedOrderPage({
@@ -17,8 +18,8 @@ class CompletedOrderPage extends StatelessWidget {
     required this.method,
     required this.date,
     required this.address,
-    required this.coinsExchangeRates,
     this.orderNumber,
+    required this.completedMessage,
   }) : super(key: key);
 
   final client;
@@ -27,7 +28,7 @@ class CompletedOrderPage extends StatelessWidget {
   final date;
   final address;
   final orderNumber;
-  final coinsExchangeRates;
+  final String completedMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +69,7 @@ class CompletedOrderPage extends StatelessWidget {
             date: date,
             address: address,
             orderNumber: orderNumber,
-            coinsExchangeRates: coinsExchangeRates,
+            completedMessage: completedMessage,
           ),
         ),
       ),
@@ -85,7 +86,7 @@ class CompletedOrderBody extends StatefulWidget {
     required this.date,
     required this.address,
     required this.orderNumber,
-    required this.coinsExchangeRates,
+    required this.completedMessage,
   }) : super(key: key);
   final client;
   final total;
@@ -93,15 +94,13 @@ class CompletedOrderBody extends StatefulWidget {
   final date;
   final address;
   final orderNumber;
-  final coinsExchangeRates;
+  final String completedMessage;
 
   @override
   State<CompletedOrderBody> createState() => _CompletedOrderBody();
 }
 
 class _CompletedOrderBody extends State<CompletedOrderBody> {
-  late List<double> coinsExchangeRates = widget.coinsExchangeRates;
-
   @override
   Widget build(BuildContext context) {
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
@@ -110,42 +109,11 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
     final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 0;
     final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
     final coinCode = Provider.of<Coin?>(context)?.code ?? '';
-    priceFormat(productPrice) {
-      double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-      double convertedAmount = double.parse(
-          (correctAmount * coinExchangeRatio).toStringAsFixed(coinDecimals));
-      return '$coinSymbol $convertedAmount'; // if (currentCoin!.contains('USD')) {
-      //   return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
-      //       .format(productPrice)
-      //       .toString();
-      // } else if (currentCoin.contains('VED')) {
-      //   return NumberFormat.currency(
-      //     locale: 'es_VE',
-      //     decimalDigits: 2,
-      //     symbol: "Bs.",
-      //   ).format(correctAmount * 4.58).toString();
-      // } else if (currentCoin.contains('EUR')) {
-      //   return NumberFormat.currency(
-      //     locale: 'es_ES',
-      //     decimalDigits: 2,
-      //     symbol: '€',
-      //   ).format(correctAmount * 0.89).toString();
-      // } else if (currentCoin.contains('MXN')) {
-      //   return NumberFormat.currency(
-      //     locale: 'es_MX',
-      //     decimalDigits: 2,
-      //     symbol: '\$',
-      //   ).format(correctAmount * 19.43);
-      // } else if (currentCoin.contains('BTC')) {
-      //   return '฿ ${(correctAmount * 0.00011).toString()}';
-      // } else {
-      //   return NumberFormat.currency(
-      //     locale: 'es_VE',
-      //     decimalDigits: 2,
-      //     symbol: "PPR.",
-      //   ).format(correctAmount * 4.58).toString();
-      // }
-    }
+
+    final total = priceMultipliedByItsExchangeRatio(
+        productPrice: widget.total,
+        coinDecimals: coinDecimals,
+        coinExchangeRatio: coinExchangeRatio);
 
     return Column(
       children: [
@@ -153,7 +121,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
           color: Colors.transparent,
           margin: const EdgeInsets.fromLTRB(15, 40, 20, 0),
           child: Text(
-            '¡Pedido Completado!',
+            widget.completedMessage,
             textAlign: TextAlign.center,
             style: TextStyle(
               color: myTheme.colorScheme.secondary,
@@ -300,10 +268,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                             ),
                           ),
                           Text(
-                            priceFormat(widget.total),
-                            // currentCoin != 'Dolares - USD'
-                            //     ? '${priceFormat(widget.total)} = \$ ${widget.total.toStringAsFixed(4)}'
-                            //     : '${priceFormat(widget.total)}',
+                            '$coinSymbol ${total.toStringAsFixed(2)}',
                             style: TextStyle(
                               color: Colors.grey.shade500,
                               fontFamily: 'Poppins-regular',

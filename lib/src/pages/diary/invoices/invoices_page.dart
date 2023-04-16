@@ -5,12 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/examples/example_invoices_list.dart';
 import 'package:pwa_sales2go_flutter/src/models/account_balance_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/credit_on_process.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/filter_invoices.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/invoice_completed.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/invoices_on_process.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
+import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -30,12 +32,15 @@ class _InvoicesPageState extends State<InvoicesPage> {
   Widget build(BuildContext context) {
     final userUid = Provider.of<CurrentUserInfo?>(context)?.uid ?? {};
     final userDoc = usersCollection.doc(userUid);
-    print(userDoc);
     final currentDay =
         Provider.of<CounterLimitFirestore?>(context)?.currentDayInvoice;
     final currentDayDateTime = currentDay!.toDate();
     DateTime tomorrow = DateTime(currentDayDateTime.year,
         currentDayDateTime.month, currentDayDateTime.day + 1);
+
+    final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
+    List<String> currentCoinSplit = currentCoin!.split(' ');
+    String currentCoinSelectedCode = currentCoinSplit.last;
     return MultiProvider(
       providers: [
         StreamProvider<List<Invoices>?>.value(
@@ -61,8 +66,6 @@ class _InvoicesPageState extends State<InvoicesPage> {
               : FirebaseFirestore.instance
                   .collectionGroup('facturas')
                   .where('vendedor', isEqualTo: userDoc)
-                  // .where('fecha', isGreaterThanOrEqualTo: currentDay)
-                  // .where('fecha', isLessThan: tomorrow)
                   .orderBy('fecha', descending: true)
                   .snapshots()
                   .map(accountInvoicesFromSnapshot),
@@ -71,7 +74,21 @@ class _InvoicesPageState extends State<InvoicesPage> {
             print(error);
             return;
           },
-        )
+        ),
+        StreamProvider<Coin?>.value(
+          initialData: Coin(),
+          catchError: (context, error) {
+            print(
+                'ERROR ON STREAM PROVIDER OF COINEXCHANGE RATES IN INVOICE PAGE');
+            print(error);
+            return;
+          },
+          value: coinCollection
+              .doc(currentCoinSelectedCode)
+              .snapshots()
+              .map(coinFromSnapshot),
+        ),
+
         //     // : StreamProvider<List<CreditNotes>?>.value(
         //     //     value: FirebaseFirestore.instance
         //     //         .collectionGroup('notas_credito')
@@ -120,31 +137,7 @@ class _InvoicesBodyState extends State<InvoicesBody> {
           // Center(
           //   child: CircularProgressIndicator(),
           // ),
-          Container(
-            margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              // ignore: prefer_const_literals_to_create_immutables
-              children: [
-                // Checkbox(
-                //   checkColor: Colors.white,
-                //   value: widget.isNotesChecked,
-                //   onChanged: (bool? value) {
-                //     setState(() {
-                //       widget.isNotesChecked = value!;
-                //     });
-                //   },
-                // ),
-                // Text(
-                //   'Notas',
-                //   style: TextStyle(
-                //     fontFamily: 'Poppins-regular',
-                //     fontSize: 14,
-                //   ),
-                // ),
-              ],
-            ),
-          ),
+
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -171,13 +164,18 @@ class _InvoicesBodyState extends State<InvoicesBody> {
                 child: Text(
                   'Ver completados',
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 14,
                     // fontWeight: FontWeight.bold,
                     fontFamily: 'Poppins-regular',
+                    color: myTheme.colorScheme.primary,
                   ),
                 ),
               ),
               Checkbox(
+                checkColor: Colors.white,
+                shape: CircleBorder(),
+                fillColor:
+                    MaterialStateProperty.all(myTheme.colorScheme.primary),
                 activeColor: myTheme.colorScheme.primary,
                 value: seeCompleted,
                 onChanged: (value) {
@@ -193,7 +191,7 @@ class _InvoicesBodyState extends State<InvoicesBody> {
           //     : CreditNotesOnProcess(),
           // widget.isNotesChecked == false ? InvoicesList() : Container(),
           // InvoicesList(),
-          seeCompleted == true ? InvoicesList() : InvoicesOnProcess(),
+          seeCompleted == true ? InvoicesCompleted() : InvoicesOnProcess(),
         ],
       ),
     );

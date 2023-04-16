@@ -8,7 +8,7 @@ import 'package:pwa_sales2go_flutter/src/pages/diary/visits/components/visits_co
 import 'package:pwa_sales2go_flutter/src/pages/diary/visits/components/visits_on_process.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/visits_alerts_and_dialogs/create_client_dialog.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/visits_alerts_and_dialogs/create_visit_dialog.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VisitsPage extends StatefulWidget {
@@ -56,14 +56,12 @@ class _VisitsPageState extends State<VisitsPage> {
               .doc(user?.uid)
               .collection('visitas')
               .orderBy('fecha', descending: true)
-              // .where('fecha',
-              //     isGreaterThanOrEqualTo: currentDayProvider.currentDayVisits)
-              // .where('fecha', isLessThan: tomorrow)
               .snapshots()
               .map(visitsFromSnasphot),
       initialData: const [],
       catchError: (context, error) {
-        // print(error);
+        print('ERROR ON VISITS PROVIDER ON VISIT PAGE');
+        print(error);
         return [];
       },
       child: SafeArea(
@@ -73,9 +71,9 @@ class _VisitsPageState extends State<VisitsPage> {
             direction: Axis.vertical,
             children: [
               Container(
-                margin: const EdgeInsets.all(10.0),
+                // margin: const EdgeInsets.all(10.0),
                 child: FloatingActionButton(
-                  elevation: 0,
+                  elevation: 10,
                   backgroundColor: myTheme.colorScheme.primary,
                   onPressed: () {
                     // ShowDialog de a;adir visita
@@ -110,9 +108,6 @@ class _VisitsBodyState extends State<VisitsBody> {
 
   @override
   Widget build(BuildContext context) {
-    final counterDiaryProvider = Provider.of<CounterLimitFirestore>(context);
-    final newDay = counterDiaryProvider.currentDayVisits;
-
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -139,25 +134,33 @@ class _VisitsBodyState extends State<VisitsBody> {
                   ),
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.fromLTRB(30, 0, 0, 0),
-                child: const Text(
-                  'Ver completados',
-                  style: TextStyle(
-                    fontSize: 15,
-                    // fontWeight: FontWeight.bold,
-                    fontFamily: 'Poppins-regular',
+              Row(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+                    child: Text(
+                      'Ver completados',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'Poppins-regular',
+                        color: myTheme.colorScheme.primary,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              Checkbox(
-                activeColor: myTheme.colorScheme.primary,
-                value: seeCompleted,
-                onChanged: (value) {
-                  setState(() {
-                    seeCompleted = !seeCompleted;
-                  });
-                },
+                  Checkbox(
+                    checkColor: Colors.white,
+                    shape: CircleBorder(),
+                    fillColor:
+                        MaterialStateProperty.all(myTheme.colorScheme.primary),
+                    activeColor: myTheme.colorScheme.primary,
+                    value: seeCompleted,
+                    onChanged: (value) {
+                      setState(() {
+                        seeCompleted = !seeCompleted;
+                      });
+                    },
+                  ),
+                ],
               ),
             ],
           ),

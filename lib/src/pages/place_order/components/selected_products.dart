@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -24,6 +26,7 @@ import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/checkout_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/mobile_scanner/mobile_scanner.dart';
 
 class SelectedProducts extends StatefulWidget {
@@ -194,29 +197,6 @@ class _SelectedProductsState extends State<SelectedProducts> {
             objectBox.insertShoppingCartProduct(result);
           }
         }
-
-        // productsInCart?.forEach((element) {
-        //   if (element.code == code) {
-        //     print('Kaede 1');
-        //   } else {
-        //     print('Kaede 2');
-        //   }
-        // });
-
-        // final result = ShoppingCartProduct(
-        //   availableStock: stock,
-        //   productQuantity: productQuantity,
-        //   code: code,
-        //   listOfPricesId: pricesList,
-        //   name: name,
-        //   productId: code,
-        //   unitPrice: productPrice.toString(),
-        //   totalAmount: productTotalAmount.toString(),
-        //   urlPicture: catalogue.toString(),
-        // );
-        // print(result);
-        // scannedProducts.add(result);
-        // objectBox.insertManyShoppingCartProducts(scannedProducts);
       });
     } catch (e) {
       print(e);
@@ -233,60 +213,14 @@ class _SelectedProductsState extends State<SelectedProducts> {
     final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 0;
     final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
     final coinCode = Provider.of<Coin?>(context)?.code ?? '';
-    print(coinName);
     print('TEStiNG COIN NAME');
+    print(coinName);
     print("clientPriceList: $clientPriceList");
     final userRole = Provider.of<UserRole?>(context, listen: true);
     print('User Role ${userRole?.name}');
     print("Retail: ${userRole?.isRetail}");
-
-    priceFormat(productPrice) {
-      double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-      double convertedAmount = double.parse(
-          (correctAmount * coinExchangeRatio).toStringAsFixed(coinDecimals));
-      return '$coinSymbol$convertedAmount';
-      // double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-      // if (currentCoin!.contains('USD')) {
-      //   return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
-      //       .format(productPrice)
-      //       .toString();
-      // } else if (currentCoin.contains('VED')) {
-      //   return NumberFormat.currency(
-      //     locale: 'es_VE',
-      //     decimalDigits: 2,
-      //     symbol: "Bs.",
-      //   ).format(correctAmount * 4.58).toString();
-      // } else if (currentCoin.contains('EUR')) {
-      //   return NumberFormat.currency(
-      //     locale: 'es_ES',
-      //     decimalDigits: 2,
-      //     symbol: '€',
-      //   ).format(correctAmount * 0.89).toString();
-      // } else if (currentCoin.contains('MXN')) {
-      //   return NumberFormat.currency(
-      //     locale: 'es_MX',
-      //     decimalDigits: 2,
-      //     symbol: '\$',
-      //   ).format(correctAmount * 19.43);
-      // } else if (currentCoin.contains('BTC')) {
-      //   return '฿ ${(correctAmount * 0.00011).toString()}';
-      // } else {
-      //   return NumberFormat.currency(
-      //     locale: 'es_VE',
-      //     decimalDigits: 2,
-      //     symbol: "PPR.",
-      //   ).format(correctAmount * 4.58).toString();
-      // }
-    }
-
     return Column(
       children: [
-        // Container(
-        //   padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
-        //   alignment: Alignment.topLeft,
-        //   color: Colors.amber,
-        //   // child: cartStatus(),
-        // ),
         StreamBuilder<List<ShoppingCartProduct>?>(
           stream: streamShoppingCartProducts,
           builder: (context, snapshot) {
@@ -297,29 +231,29 @@ class _SelectedProductsState extends State<SelectedProducts> {
               );
             } else {
               final products = snapshot.data;
-
               products?.forEach((product) {
                 var totalAmount = (double.parse(product.totalAmount!) *
                         product.productQuantity!)
                     .toString();
                 var myInt = double.parse(totalAmount);
                 subTotal += myInt;
-                print(subTotal);
               });
+              final double subTotalConverted =
+                  priceMultipliedByItsExchangeRatio(
+                      productPrice: subTotal,
+                      coinDecimals: coinDecimals,
+                      coinExchangeRatio: coinExchangeRatio);
+              print('subTotal: $subTotal');
+              print('subTotalConverted: $subTotalConverted');
 
               return SingleChildScrollView(
                 child: Container(
-                  // color: Colors.green,
-                  // margin: EdgeInsets.only(bottom: 10),
                   padding: EdgeInsets.only(bottom: 10),
-                  // height: MediaQuery.of(context).size.height * 0.70,
-
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       products!.isEmpty
                           ? Container(
-                              // color: Colors.amber,
                               height: MediaQuery.of(context).size.height * 0.46,
                               width: MediaQuery.of(context).size.width,
                               child: Column(
@@ -356,12 +290,22 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                 itemCount: products.length,
                                 itemBuilder: (context, index) {
                                   final product = products[index];
+                                  final productPrice = double.parse(
+                                      product.unitPrice.toString());
+                                  final double productPriceConverted =
+                                      priceMultipliedByItsExchangeRatio(
+                                          productPrice: productPrice,
+                                          coinDecimals: coinDecimals,
+                                          coinExchangeRatio: coinExchangeRatio);
                                   final double productTotalByQuantity = double
                                           .parse(product.unitPrice.toString()) *
                                       int.parse(
                                           product.productQuantity.toString());
-                                  final productPrice = double.parse(
-                                      product.unitPrice.toString());
+                                  final double productTotalByQuantityConverted =
+                                      priceMultipliedByItsExchangeRatio(
+                                          productPrice: productTotalByQuantity,
+                                          coinDecimals: coinDecimals,
+                                          coinExchangeRatio: coinExchangeRatio);
 
                                   return Container(
                                     margin: const EdgeInsets.fromLTRB(
@@ -485,7 +429,8 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                           children: [
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.start,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
@@ -500,11 +445,9 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                     '${product.name}',
                                                     style: const TextStyle(
                                                       letterSpacing: 0.4,
-                                                      fontSize: 12,
+                                                      fontSize: 10,
                                                       fontFamily:
                                                           'Poppins-regular',
-                                                      fontWeight:
-                                                          FontWeight.bold,
                                                     ),
                                                   ),
                                                 ),
@@ -512,7 +455,6 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                   margin:
                                                       const EdgeInsets.fromLTRB(
                                                           15, 0, 0, 0),
-                                                  color: Colors.transparent,
                                                   height: 30,
                                                   width: 30,
                                                   child: Material(
@@ -527,9 +469,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                             .delete_outline_rounded,
                                                         size: 20,
                                                         color: myTheme
-                                                            .colorScheme
-                                                            .onBackground
-                                                            .withOpacity(0.7),
+                                                            .colorScheme.error,
                                                       ),
                                                     ),
                                                   ),
@@ -552,14 +492,23 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                         children: [
                                                           product.productQuantity! >
                                                                   1
-                                                              ? SizedBox(
+                                                              ? Container(
                                                                   width: 30,
+                                                                  margin: EdgeInsets
+                                                                      .fromLTRB(
+                                                                    0,
+                                                                    0,
+                                                                    0,
+                                                                    0,
+                                                                  ),
+                                                                  // color: Colors
+                                                                  //     .red,
                                                                   child:
                                                                       IconButton(
                                                                     iconSize:
-                                                                        16,
+                                                                        15,
                                                                     splashRadius:
-                                                                        1,
+                                                                        15,
                                                                     icon: Icon(
                                                                       Icons
                                                                           .remove,
@@ -608,11 +557,18 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                                     },
                                                                   ),
                                                                 )
-                                                              : SizedBox(
+                                                              : Container(
+                                                                  margin: EdgeInsets
+                                                                      .fromLTRB(
+                                                                    0,
+                                                                    0,
+                                                                    0,
+                                                                    0,
+                                                                  ),
                                                                   width: 30,
                                                                   child: IconButton(
-                                                                      iconSize: 16,
-                                                                      splashRadius: 1,
+                                                                      iconSize: 15,
+                                                                      splashRadius: 15,
                                                                       icon: const Icon(
                                                                         Icons
                                                                             .remove,
@@ -624,17 +580,22 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                                       }),
                                                                 ),
                                                           Container(
+                                                            alignment: Alignment
+                                                                .center,
                                                             margin:
                                                                 const EdgeInsets
-                                                                        .fromLTRB(
-                                                                    0, 5, 0, 0),
+                                                                    .fromLTRB(
+                                                              0,
+                                                              0,
+                                                              0,
+                                                              0,
+                                                            ),
+                                                            width: 30,
                                                             child: Text(
-                                                              'U: ${product.productQuantity}',
+                                                              '${product.productQuantity}',
                                                               style:
                                                                   const TextStyle(
-                                                                letterSpacing:
-                                                                    0.4,
-                                                                fontSize: 10,
+                                                                fontSize: 12,
                                                                 fontFamily:
                                                                     'Poppins-regular',
                                                               ),
@@ -643,14 +604,23 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                           product.productQuantity! <
                                                                   product
                                                                       .availableStock!
-                                                              ? SizedBox(
+                                                              ? Container(
+                                                                  margin: EdgeInsets
+                                                                      .fromLTRB(
+                                                                    0,
+                                                                    0,
+                                                                    0,
+                                                                    0,
+                                                                  ),
                                                                   width: 30,
+                                                                  // color: Colors
+                                                                  //     .red,
                                                                   child:
                                                                       IconButton(
                                                                     iconSize:
                                                                         15,
                                                                     splashRadius:
-                                                                        1,
+                                                                        15,
                                                                     icon: Icon(
                                                                       Icons.add,
                                                                       color: myTheme
@@ -698,14 +668,21 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                                     },
                                                                   ),
                                                                 )
-                                                              : SizedBox(
+                                                              : Container(
+                                                                  margin: EdgeInsets
+                                                                      .fromLTRB(
+                                                                    0,
+                                                                    0,
+                                                                    0,
+                                                                    0,
+                                                                  ),
                                                                   width: 30,
                                                                   child:
                                                                       IconButton(
                                                                     iconSize:
                                                                         15,
                                                                     splashRadius:
-                                                                        1,
+                                                                        15,
                                                                     icon:
                                                                         const Icon(
                                                                       Icons.add,
@@ -724,9 +701,9 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                   ),
                                                   Container(
                                                     margin: const EdgeInsets
-                                                        .fromLTRB(2, 5, 0, 0),
+                                                        .fromLTRB(0, 0, 0, 0),
                                                     child: Text(
-                                                      'U/P: ${priceFormat(productPrice)}',
+                                                      'U/P:$coinSymbol${productPriceConverted.toStringAsFixed(2)}',
                                                       style: const TextStyle(
                                                         letterSpacing: 0.4,
                                                         fontSize: 10,
@@ -738,14 +715,15 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                   Container(
                                                     width: 60,
                                                     alignment:
-                                                        Alignment.topRight,
+                                                        Alignment.centerRight,
                                                     margin: const EdgeInsets
                                                         .fromLTRB(10, 0, 0, 0),
                                                     child: Text(
-                                                      '${priceFormat(productTotalByQuantity)}',
+                                                      '$coinSymbol ${productTotalByQuantityConverted.toStringAsFixed(2)}',
+                                                      textAlign: TextAlign.end,
                                                       style: const TextStyle(
                                                           letterSpacing: 0.4,
-                                                          fontSize: 12,
+                                                          fontSize: 10,
                                                           fontFamily:
                                                               'Poppins-regular',
                                                           fontWeight:
@@ -788,7 +766,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                     ),
                                   ),
                                   Text(
-                                    priceFormat(subTotal),
+                                    '$coinSymbol ${subTotalConverted.toStringAsFixed(2)}',
                                     style: const TextStyle(
                                       fontFamily: 'Poppins-regular',
                                       fontSize: 14,
@@ -872,29 +850,9 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                 products: products,
                                               ),
                                             ));
-                                        // scanBarCode2();
 
-                                        // scanBarcode().whenComplete(
-                                        //   () {
-                                        //     if (scanResult != '-1') {
-                                        //       print("scanResult: $scanResult");
-                                        //       Fluttertoast.showToast(
-                                        //           msg: 'scanResult: $scanResult');
-                                        //     }
-                                        //   },
-                                        // ).whenComplete(
-                                        //   () {
-                                        //     try {
-                                        //       print(
-                                        //           'Escaneando producto de la DB: ///////////////////');
                                         addProductFromBarcodeResult(
                                             scanResult.toString(), products);
-                                        //     } catch (e) {
-                                        //       print('ERROR //////////////////');
-                                        //       print(e);
-                                        //     }
-                                        //   },
-                                        // );
                                       },
                                       child: const Icon(FontAwesome.barcode),
                                     ),
@@ -902,10 +860,6 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                 ),
                               ],
                             ),
-                            // Container(
-                            //   height: 10,
-                            //   color: Colors.black,
-                            // ),
                             products.isEmpty
                                 ? Container(
                                     margin: const EdgeInsets.fromLTRB(
@@ -968,18 +922,11 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                       borderRadius: BorderRadius.circular(16),
                                       child: ElevatedButton(
                                         onPressed: () {
-                                          // print('Selected product Test prints');
-                                          // print(
-                                          //     'widget.client: ${widget.client!.name}');
-                                          // print(
-                                          //     'products: ${products.map((e) => e.name)}');
-                                          // print('subTotal: ${subTotal}');
                                           userRole?.isRetail == false
                                               ? Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
                                                     builder: (context) =>
-                                                        //CheckoutPage
                                                         CheckoutPage(
                                                       client: widget.client,
                                                       cart: products,
