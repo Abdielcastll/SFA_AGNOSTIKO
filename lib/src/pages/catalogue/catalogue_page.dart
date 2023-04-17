@@ -157,13 +157,7 @@ class _CatalogueBodyState extends State<CatalogueBody> {
         : SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Column(
-              children: [
-                IconButton(
-                    onPressed: () {
-                      double t = 2 + 0.30;
-                      print(t.toStringAsFixed(2));
-                    },
-                    icon: Icon(Icons.numbers)),
+              children: const [
                 PromotionsWidget(),
                 NewProductsWidget(),
                 ListOfProductsButton(),
