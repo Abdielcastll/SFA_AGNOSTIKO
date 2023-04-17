@@ -396,18 +396,22 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       return previousValue + element.amount;
     });
 
-    final totalInvoice =
-        paymentBody.subTotal + paymentBody.tax - paymentBody.discount;
-
+    // final totalInvoice =
+    //     paymentBody.subTotal + paymentBody.tax - paymentBody.discount;
+    final totalInvoice = transactionArgs!.invoice!.totalOfTheOrder;
+// paidAmount < remainingConverted
+    // if (transactionResult == EmvTransactionResult.Approved &&
+    //     totalPayed >= totalInvoice) {
     if (transactionResult == EmvTransactionResult.Approved &&
-        totalPayed >= totalInvoice) {
+        transactionArgs!.invoice!.amount >=
+            transactionArgs!.invoice!.remaining) {
       final date = transactionArgs!.invoice!.date;
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (BuildContext context) => CompletedPayPage(
               client: transactionArgs!.invoice!.client,
-              total: totalPayed,
+              total: transactionArgs!.invoice!.totalOfTheOrder,
               method: "Tarjeta",
               date:
                   '${date.day}-${date.month}-${date.year} ${date.hour}:${date.minute}',
@@ -417,26 +421,27 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
         ),
       );
     } else {
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(
-      //     settings: const RouteSettings(name: 'PAGO-DIRECTO'),
-      //     builder: (BuildContext context) => AddPaymentPage(
-      //       remaining: paymentBody.remaining - payed,
-      //       subTotal: paymentBody.subTotal,
-      //       discountPercentage: paymentBody.discountPercentage,
-      //       discount: paymentBody.discount,
-      //       tax: paymentBody.tax,
-      //       percentageTax: paymentBody.percentageTax,
-      //       client: paymentBody.client,
-      //       invoiceDocumentID: paymentBody.invoiceDocumentID,
-      //       invoiceNumber: paymentBody.invoiceNumber,
-      //       payments: paymentBody.payments,
-      //       amountPayed: (paymentBody.amountPaied ?? 0) + payed,
-      //       // updatePayed: updatePayed,
-      //     ),
-      //   ),
-      // );
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          settings: const RouteSettings(name: 'PAGO-DIRECTO'),
+          builder: (BuildContext context) => AddPaymentPage(
+            remaining: paymentBody.remaining - payed,
+            subTotal: paymentBody.subTotal,
+            discountPercentage: paymentBody.discountPercentage,
+            discount: paymentBody.discount,
+            tax: paymentBody.tax,
+            percentageTax: paymentBody.percentageTax,
+            client: paymentBody.client,
+            invoiceDocumentID: paymentBody.invoiceDocumentID,
+            invoiceNumber: paymentBody.invoiceNumber,
+            payments: paymentBody.payments,
+            amountPayed: (paymentBody.amountPaied ?? 0) + payed,
+            invoiceTotal: transactionArgs!.invoice!.totalOfTheOrder,
+            // updatePayed: updatePayed,
+          ),
+        ),
+      );
       /* (ModalRoute.of(context)?.settings.arguments!
                             as List)[1](payed); */
       // Navigator.pop(context, payed);

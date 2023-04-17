@@ -1,22 +1,11 @@
 // ignore_for_file: prefer_const_constructors
-import 'dart:math' as math;
 
-import 'dart:io';
-import 'package:agnostiko/agnostiko.dart';
-import 'package:agnostiko/emv/src/emv_transaction.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:pwa_sales2go_flutter/dialogs/confirm_dialog.dart';
-import 'package:pwa_sales2go_flutter/pharos/pharos.dart';
-import 'package:pwa_sales2go_flutter/src/global/global.dart';
-import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/add_new_client/add_new_client_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
@@ -28,9 +17,6 @@ import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/identify_payment_method.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/onTapPayment.dart';
-
-import '../../models/transaction_args.dart';
-import '../../pages/amount_input/amount_input.dart';
 
 void modalBottomSheetForInvoices(
   bool completed,
