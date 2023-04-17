@@ -332,10 +332,6 @@ Future createInvoice(
 
 Future registerDebitCreditCardPayment(InvoiceData data, int? stan) async {
   stan ??= 0;
-  // priceReturnToOriginal(productPrice, coin) {
-  //   double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-  //   return double.parse((correctAmount / data.coinExchangeRatio).toString());
-  // }
 
   Client client = data.client;
   var invoiceDocumentID = data.invoiceDocumentID;
@@ -381,48 +377,9 @@ Future registerDebitCreditCardPayment(InvoiceData data, int? stan) async {
         ],
       ),
     });
-    // .whenComplete(() {
-    //   //   print(
-    //   //       'remaining de proceso: ${priceFormatForDB(remaining, currency, data.coinExchangeRatio)}');
-    //   //   print(
-    //   //       'Amount de proceso: ${priceFormatForDB(amount, currency, data.coinExchangeRatio)}');
-    //   //   print(
-    //   //       'restante total: ${priceFormatForDB(remaining, currency, data.coinExchangeRatio) - priceFormatForDB(amount, currency, data.coinExchangeRatio)}');
-    //   //   // var total = priceFormatForDB(remaining, currency, coinExchangeRatio) -
-    //   //   //     priceFormatForDB(amount, currency, coinExchangeRatio);
-    //   //   var total = remaining - amount;
-    //   //   print(remaining);
-    //   //   print(amount);
-    //   //   // var total =
-    //   //   //     double.parse((remaining * coinExchangeRatio!).toStringAsFixed(4)) -
-    //   //   //         double.parse((amount * coinExchangeRatio).toStringAsFixed(4));
-    //   //   print('total: ${total.toStringAsFixed(2)}');
-    //   //   try {
-    //   //     if (double.parse(total.toStringAsFixed(2)) <= 0) {
-    //   //       FirebaseFirestore.instance
-    //   //           .collection('clientes')
-    //   //           .doc(client.clientDocumentId)
-    //   //           .collection('facturas')
-    //   //           .doc(invoiceDocumentID)
-    //   //           .update({
-    //   //         'pagada': true,
-    //   //       });
-    //   //     }
-    //   //   } catch (e) {
-    //   //     print(e);
-    //   //   }
-    // });
   } catch (e) {
     print(e);
   }
-
-  // if (paidAmount > remaining) {
-  //   Fluttertoast.showToast(
-  //     msg: 'La cantidad pagada excede de la deuda pendiente',
-  //     backgroundColor: myTheme.colorScheme.secondary,
-  //     textColor: Colors.white,
-  //   );
-  // }
 }
 
 //Registrar pagos de cheques
@@ -707,37 +664,6 @@ Future registerDepositPayment({
           },
         ],
       ),
-    }).whenComplete(() {
-      print(
-          'remaining de proceso: ${priceFormatForDB(remaining!, currency!, coinExchangeRatio)}');
-      print(
-          'Amount de proceso: ${priceFormatForDB(amount!, currency, coinExchangeRatio)}');
-      print(
-          'restante total: ${priceFormatForDB(remaining, currency, coinExchangeRatio) - priceFormatForDB(amount, currency, coinExchangeRatio)}');
-      // var total = priceFormatForDB(remaining, currency, coinExchangeRatio) -
-      //     priceFormatForDB(amount, currency, coinExchangeRatio);
-      var total = remaining - amount;
-      print(remaining);
-      print(amount);
-      print('total: ${total.toStringAsFixed(2)}');
-
-      // var total =
-      //     double.parse((remaining * coinExchangeRatio!).toStringAsFixed(4)) -
-      //         double.parse((amount * coinExchangeRatio).toStringAsFixed(4));
-      try {
-        if (double.parse(total.toStringAsFixed(2)) <= 0) {
-          FirebaseFirestore.instance
-              .collection('clientes')
-              .doc(client.clientDocumentId)
-              .collection('facturas')
-              .doc(invoiceDocumentID)
-              .update({
-            'pagada': true,
-          });
-        }
-      } catch (e) {
-        print(e);
-      }
     });
   } catch (e) {
     print(e);
@@ -874,38 +800,6 @@ Future registerTransferPayment({
           },
         ],
       ),
-    }).whenComplete(() {
-      print(
-          'remaining de proceso: ${priceFormatForDB(remaining!, currency!, coinExchangeRatio)}');
-      print(
-          'Amount de proceso: ${priceFormatForDB(amount!, currency, coinExchangeRatio)}');
-      print(
-          'restante total: ${priceFormatForDB(remaining, currency, coinExchangeRatio) - priceFormatForDB(amount, currency, coinExchangeRatio)}');
-      // var total = priceFormatForDB(remaining, currency, coinExchangeRatio) -
-      //     priceFormatForDB(amount, currency, coinExchangeRatio);
-      var total = remaining - amount;
-
-      // var total =
-      //     double.parse((remaining * coinExchangeRatio!).toStringAsFixed(4)) -
-      //         double.parse((amount * coinExchangeRatio).toStringAsFixed(4));
-      print(remaining);
-      print(amount);
-      print('total: ${total.toStringAsFixed(2)}');
-
-      try {
-        if (double.parse(total.toStringAsFixed(2)) <= 0) {
-          FirebaseFirestore.instance
-              .collection('clientes')
-              .doc(client.clientDocumentId)
-              .collection('facturas')
-              .doc(invoiceDocumentID)
-              .update({
-            'pagada': true,
-          });
-        }
-      } catch (e) {
-        print(e);
-      }
     });
   } catch (e) {
     print(e);
@@ -1000,37 +894,6 @@ Future registerTransferInterPayment({
           },
         ],
       ),
-    }).whenComplete(() {
-      print(
-          'remaining de proceso: ${priceFormatForDB(remaining!, currency!, coinExchangeRatio)}');
-      print(
-          'Amount de proceso: ${priceFormatForDB(amount!, currency, coinExchangeRatio)}');
-      print(
-          'restante total: ${priceFormatForDB(remaining, currency, coinExchangeRatio) - priceFormatForDB(amount, currency, coinExchangeRatio)}');
-      // var total = priceFormatForDB(remaining, currency, coinExchangeRatio) -
-      //     priceFormatForDB(amount, currency, coinExchangeRatio);
-      var total = remaining - amount;
-      print(remaining);
-      print(amount);
-      // var total =
-      //     double.parse((remaining * coinExchangeRatio!).toStringAsFixed(4)) -
-      //         double.parse((amount * coinExchangeRatio).toStringAsFixed(4));
-      print('total: ${total.toStringAsFixed(2)}');
-
-      try {
-        if (double.parse(total.toStringAsFixed(2)) <= 0) {
-          FirebaseFirestore.instance
-              .collection('clientes')
-              .doc(client.clientDocumentId)
-              .collection('facturas')
-              .doc(invoiceDocumentID)
-              .update({
-            'pagada': true,
-          });
-        }
-      } catch (e) {
-        print(e);
-      }
     });
   } catch (e) {
     print(e);

@@ -3,6 +3,7 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
@@ -31,9 +32,8 @@ class AddPaymentPage extends StatefulWidget {
     required this.client,
     required this.invoiceNumber,
     required this.payments,
+    required this.invoiceTotal,
     this.amountPayed,
-
-    // required this.updatePayed,
   });
 
   final double remaining;
@@ -47,20 +47,19 @@ class AddPaymentPage extends StatefulWidget {
   final int invoiceNumber;
   List<PayMethod> payments;
   double? amountPayed;
-
-  // final Function(double) updatePayed;
+  double? invoiceTotal;
 
   @override
   State<AddPaymentPage> createState() => _AddPaymentPageState();
 }
 
 class _AddPaymentPageState extends State<AddPaymentPage> {
+  bool _canPop = false;
   @override
   Widget build(BuildContext context) {
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     List<String> currentCoinSplit = currentCoin!.split(' ');
     String currentCoinSelectedCode = currentCoinSplit.last;
-    bool _canPop = false;
 
     return WillPopScope(
       onWillPop: () async {
@@ -76,10 +75,21 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                 children: [
                   Text(
                     "Salir de este proceso hara que deba continuarlo desde el menu de facturas como registro manual)",
+                    style: TextStyle(
+                      color: myTheme.colorScheme.primary,
+                      fontFamily: 'Poppins-regular',
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   Text(
                     " ¿Esta seguro que quiere salir?",
                     textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: myTheme.colorScheme.primary,
+                      fontFamily: 'Poppins-regular',
+                      fontSize: 14,
+                    ),
                   ),
                 ],
               ),
@@ -138,7 +148,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
             amountPayed: widget.amountPayed,
             invoiceNumber: widget.invoiceNumber,
             payments: widget.payments,
-            // updatePayed: widget.updatePayed,
+            invoiceTotal: widget.invoiceTotal,
           ),
         ),
       ),
@@ -159,9 +169,8 @@ class AddPaymentBody extends StatefulWidget {
     required this.client,
     required this.invoiceNumber,
     required this.payments,
+    required this.invoiceTotal,
     this.amountPayed,
-
-    // required this.updatePayed,
   });
 
   final double remaining;
@@ -175,30 +184,16 @@ class AddPaymentBody extends StatefulWidget {
   final int invoiceNumber;
   List<PayMethod> payments;
   double? amountPayed;
-
-  // final Function(double) updatePayed;
+  double? invoiceTotal;
 
   @override
   State<AddPaymentBody> createState() => _AddPaymentBodyState();
 }
 
 class _AddPaymentBodyState extends State<AddPaymentBody> {
-  late double remaining = widget.remaining;
-
-  late double amountToPay = widget.remaining;
   late List<PayMethod> payments = widget.payments;
   final TextEditingController fieldTextAmountToPay = TextEditingController();
-  final List<String> items = [
-    'Tarjeta de Debito',
-    'Tarjeta de Credito',
-    'Efectivo',
-    'Cheque',
-    'Deposito',
-    'Transferencia',
-    'Transf-internacional',
-    // 'Criptomoneda',
-    // 'Nota de credito',
-  ];
+
   get getTotalAmount => widget.subTotal + widget.tax - widget.discount;
 
   bool amountChanged = false;
@@ -209,13 +204,6 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
   DateTime today = DateTime.now();
   String? selectedValueA;
   String? selectedCoin = 'MXN';
-  List<String> itemsCoin = [
-    'USD',
-    // 'BTC',
-    // 'EUR',
-    // 'VED',
-    'MXN',
-  ];
 
   updatePayed(double amount) {
     print('payed $amount');
@@ -239,136 +227,131 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
     final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 0;
     final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
     final coinCode = Provider.of<Coin?>(context)?.code ?? '';
-    priceToCurrencySelected(double productPrice, String coin) {
-      double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-      double convertedAmount = double.parse(
-          (correctAmount * coinExchangeRatio).toStringAsFixed(coinDecimals));
-      return convertedAmount;
-      // if (coin.contains('USD')) {
-      //   return correctAmount;
-      // } else if (coin.contains('VED')) {
-      //   return correctAmount * 4.58;
-      // } else if (coin.contains('EUR')) {
-      //   return correctAmount * 0.89;
-      // } else if (coin.contains('MXN')) {
-      //   return correctAmount * 19.43;
-      // } else if (coin.contains('BTC')) {
-      //   return correctAmount * 0.00011;
-      // } else {
-      //   return correctAmount * 4.58;
-      // }
-    }
-
-    print('Test coinName');
+    double subTotalConverted = priceMultipliedByItsExchangeRatio(
+        coinDecimals: coinDecimals,
+        coinExchangeRatio: coinExchangeRatio,
+        productPrice: widget.subTotal);
+    print('subtotal: ${widget.subTotal}');
+    print('subTotalConverted: $subTotalConverted');
+    double discountMasterConverted = priceMultipliedByItsExchangeRatio(
+        coinDecimals: coinDecimals,
+        coinExchangeRatio: coinExchangeRatio,
+        productPrice: widget.discount);
+    print('discountMaster: ${widget.discount}');
+    print('discountMasterConverted: $discountMasterConverted');
+    double taxConverted = priceMultipliedByItsExchangeRatio(
+        coinDecimals: coinDecimals,
+        coinExchangeRatio: coinExchangeRatio,
+        productPrice: widget.tax);
+    print('tax: ${widget.tax}');
+    print('taxConverted: $taxConverted');
+    double totalConverted = priceMultipliedByItsExchangeRatio(
+        coinDecimals: coinDecimals,
+        coinExchangeRatio: coinExchangeRatio,
+        productPrice: widget.invoiceTotal);
+    print('total: ${widget.invoiceTotal}');
+    print('totalConverted: $totalConverted');
+    double balanceConverted = priceMultipliedByItsExchangeRatio(
+        coinDecimals: coinDecimals,
+        coinExchangeRatio: coinExchangeRatio,
+        productPrice: widget.remaining);
+    print('balance: ${widget.remaining}');
+    print('balanceConverted: $balanceConverted');
+    double remainingConverted = priceMultipliedByItsExchangeRatio(
+      productPrice: widget.remaining,
+      coinDecimals: coinDecimals,
+      coinExchangeRatio: coinExchangeRatio,
+    );
+    double paidAmount = priceMultipliedByItsExchangeRatio(
+        productPrice: widget.remaining,
+        coinDecimals: coinDecimals,
+        coinExchangeRatio: coinExchangeRatio);
+    print('remaining: ${widget.remaining}');
+    print('Remaining converted: $remainingConverted');
+    print('PaidAmount inicial: $paidAmount');
+    final List<String> items = [
+      // 'Tarjeta de Debito',
+      // 'Tarjeta de Credito',
+      'Efectivo',
+      'Cheque',
+      'Deposito',
+      'Transferencia',
+      'Transf-internacional',
+      // 'Criptomoneda',
+      // 'Nota de credito',
+    ];
+    List<String> itemsCoin = [
+      'USD',
+      'MXN',
+    ];
+    print('TEST COINNAME');
     print(coinName);
     double? paymentsTotalAmount = 0;
     for (var payment in widget.payments) {
       paymentsTotalAmount = paymentsTotalAmount! + payment.amount;
     }
+    double paymentsTotalAmountConverted = priceMultipliedByItsExchangeRatio(
+        coinDecimals: coinDecimals,
+        coinExchangeRatio: coinExchangeRatio,
+        productPrice: paymentsTotalAmount);
     print('paymentsTotalAmount: $paymentsTotalAmount');
-    print('Remaining on retail: ${remaining}');
-    print('Amount on retail: ${amountToPay}');
+    print('paymentsTotalAmountConverted: $paymentsTotalAmountConverted');
 
-    final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
+    // final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     String formattedDate = dateFormatter.format(today);
-
-    print('Current coin $currentCoin');
-
-    priceFormat(productPrice) {
-      if (productPrice is String) {
-        productPrice = double.parse(productPrice.replaceAll('\$', ''));
-      }
-      double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-      double convertedAmount = double.parse(
-          (correctAmount * coinExchangeRatio).toStringAsFixed(coinDecimals));
-      // return convertedAmount;
-      return '$coinSymbol $convertedAmount';
-      // if (currentCoin!.contains('USD')) {
-      //   return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
-      //       .format(productPrice)
-      //       .toString();
-      // } else if (currentCoin.contains('VED')) {
-      //   return NumberFormat.currency(
-      //     locale: 'es_VE',
-      //     decimalDigits: 2,
-      //     symbol: "Bs.",
-      //   ).format(correctAmount * 4.58).toString();
-      // } else if (currentCoin.contains('EUR')) {
-      //   return NumberFormat.currency(
-      //     locale: 'es_ES',
-      //     decimalDigits: 2,
-      //     symbol: '€',
-      //   ).format(correctAmount * 0.89).toString();
-      // } else if (currentCoin.contains('MXN')) {
-      //   return NumberFormat.currency(
-      //     locale: 'es_MX',
-      //     decimalDigits: 2,
-      //     symbol: '\$',
-      //   ).format(correctAmount * 19.43);
-      // } else if (currentCoin.contains('BTC')) {
-      //   return '฿ ${(correctAmount * 0.00011).toString()}';
-      // } else {
-      //   return NumberFormat.currency(
-      //     locale: 'es_VE',
-      //     decimalDigits: 2,
-      //     symbol: "PPR.",
-      //   ).format(correctAmount * 4.58).toString();
-      // }
-    }
-
-    priceFormatForPaidAmount(productPrice, coin) {
-      if (productPrice is String) {
-        productPrice = double.parse(productPrice.replaceAll('\$', ''));
-      }
-
-      coin ??= 'Dolares - USD';
-      double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-      double convertedAmount = double.parse(
-          (correctAmount * coinExchangeRatio).toStringAsFixed(coinDecimals));
-      // return convertedAmount;
-      return '$convertedAmount';
-      // double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-      // if (coin!.contains('USD')) {
-      //   return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
-      //       .format(productPrice)
-      //       .toString();
-      // } else if (coin.contains('VED')) {
-      //   return NumberFormat.currency(
-      //     locale: 'es_VE',
-      //     decimalDigits: 2,
-      //     symbol: "Bs.",
-      //   ).format(correctAmount * 4.58).toString();
-      // } else if (coin.contains('EUR')) {
-      //   return NumberFormat.currency(
-      //     locale: 'es_ES',
-      //     decimalDigits: 2,
-      //     symbol: '€',
-      //   ).format(correctAmount * 0.89).toString();
-      // } else if (coin.contains('MXN')) {
-      //   return NumberFormat.currency(
-      //     locale: 'es_MX',
-      //     decimalDigits: 2,
-      //     symbol: '\$',
-      //   ).format(correctAmount * 19.43);
-      // } else if (coin.contains('BTC')) {
-      //   return '฿ ${(correctAmount * 0.00011).toString()}';
-      // } else {
-      //   return NumberFormat.currency(
-      //     locale: 'es_VE',
-      //     decimalDigits: 2,
-      //     symbol: "PPR.",
-      //   ).format(correctAmount * 4.58).toString();
-      // }
-    }
 
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
-      child: Column(children: [
+      child: paymentForm(
+          context,
+          items,
+          formattedDate,
+          paidAmount,
+          coinSymbol,
+          subTotalConverted,
+          discountMasterConverted,
+          taxConverted,
+          totalConverted,
+          paymentsTotalAmount!,
+          balanceConverted,
+          coinName,
+          coinDecimals,
+          coinExchangeRatio,
+          coinCode,
+          remainingConverted),
+    );
+  }
+
+  Widget paymentForm(
+      BuildContext context,
+      List<String> items,
+      String formattedDate,
+      double paidAmount,
+      coinSymbol,
+      double subTotalConverted,
+      double discountMasterConverted,
+      double taxConverted,
+      double totalConverted,
+      double paymentsTotalAmount,
+      double balanceConverted,
+      coinName,
+      coinDecimals,
+      coinExchangeRatio,
+      coinCode,
+      double remainingConverted) {
+    return StatefulBuilder(
+      builder: (context, setState) => Column(children: [
         Container(
           margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
           child: Center(
             child: Text(
               'Añadir Pago',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: myTheme.colorScheme.onPrimaryContainer,
+                fontFamily: 'Poppins-regular',
+              ),
             ),
           ),
         ),
@@ -377,31 +360,26 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
             child: Column(
               children: [
                 Text(
-                  // Metodo de pago
                   AppLocalizations.of(context)!.paymentMethod,
                   style: TextStyle(
-                    fontFamily: 'Poppins-regular',
-                    color: Color.fromARGB(255, 0, 24, 143),
-                    fontSize: 14,
-                  ),
+                      fontFamily: 'Poppins-regular',
+                      color: myTheme.colorScheme.onPrimaryContainer),
                 ),
                 Container(
                   margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton2(
                       isExpanded: true,
-                      // ignore: prefer_const_literals_to_create_immutables
                       hint: Row(
                         children: [
                           Expanded(
                             child: Text(
                               selectedValueA ?? 'Seleccione medio de pago',
                               style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromRGBO(46, 62, 174, 1)
-                                    .withOpacity(0.3),
-                              ),
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: myTheme.colorScheme.onPrimaryContainer,
+                                  fontFamily: 'Poppins-regular'),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
@@ -517,7 +495,6 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                 //       onChanged: (value) {
                 //         // Pendiente
                 //         // fieldText.clear();
-
                 //         setState(
                 //           () {
                 //             selectedCoin = value as String;
@@ -560,8 +537,6 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                 //     ),
                 //   ),
                 // ),
-
-                // Fecha del registro del pago
                 Text(
                   AppLocalizations.of(context)!.date,
                   style: TextStyle(
@@ -598,7 +573,8 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                         margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
                         child: IconButton(
                           onPressed: () async {
-                            if (selectedValueA?.contains('Tarjeta') == true) {
+                            if (selectedValueA?.contains('Tarjeta') == true ||
+                                selectedValueA == null) {
                               today = DateTime.now();
                               return;
                             }
@@ -618,8 +594,18 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                           },
                           splashRadius: 5,
                           icon: Icon(
-                            Icons.calendar_month,
-                            color: myTheme.colorScheme.primary,
+                            selectedValueA?.toLowerCase().contains('tarjeta') ==
+                                        true ||
+                                    selectedValueA == null
+                                ? MaterialCommunityIcons.calendar_today
+                                : MaterialCommunityIcons.calendar_edit,
+                            color: selectedValueA
+                                            ?.toLowerCase()
+                                            .contains('tarjeta') ==
+                                        true ||
+                                    selectedValueA == null
+                                ? myTheme.colorScheme.secondary
+                                : myTheme.colorScheme.primary,
                             size: 20,
                           ),
                         ),
@@ -674,8 +660,9 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                       margin: const EdgeInsets.only(bottom: 5),
                                       alignment: Alignment.centerRight,
                                       child: Text(
-                                        priceFormatForPaidAmount(
-                                            remaining, selectedCoin),
+                                        // priceFormatForPaidAmount(
+                                        //     remaining, selectedCoin),
+                                        '$coinSymbol ${balanceConverted.toStringAsFixed(2)}',
                                         // priceFormat(priceFormatForPaidAmount(
                                         //     remaining, selectedCoin)),
                                         style: TextStyle(
@@ -691,7 +678,8 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                       margin: const EdgeInsets.only(bottom: 5),
                                       alignment: Alignment.centerRight,
                                       child: Text(
-                                        priceFormat(paymentsTotalAmount),
+                                        // priceFormat(paymentsTotalAmount),
+                                        '$coinSymbol ${paymentsTotalAmount.toStringAsFixed(2)}',
                                         style: TextStyle(
                                           color: myTheme
                                               .colorScheme.onPrimaryContainer,
@@ -742,60 +730,91 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                         child: TextField(
                           onChanged: (value) {
                             // VERIFICAR SI SE VUELVE NULLABLE
-
                             if (value.isEmpty) {
                               setState(() {
-                                amountToPay = 0;
-                                print(amountToPay);
-                                //CAMBIO
+                                paidAmount = 0;
                                 if (selectedValueA == 'Efectivo') {
-                                  change = moneyRecievedForRegisterMoney <
-                                          (amountChanged
-                                              ? roundAmount(amountToPay)
-                                              : priceToCurrencySelected(
-                                                  roundAmount(amountToPay),
-                                                  selectedCoin!))
-                                      ? 0
-                                      : double.parse(
-                                          (moneyRecievedForRegisterMoney -
-                                                  (amountChanged
-                                                      ? roundAmount(amountToPay)
-                                                      : priceToCurrencySelected(
-                                                          roundAmount(
-                                                              amountToPay),
-                                                          selectedCoin!)))
-                                              .toStringAsFixed(2));
+                                  change =
+                                      moneyRecievedForRegisterMoney < paidAmount
+                                          ? 0
+                                          : double.parse(
+                                              (moneyRecievedForRegisterMoney -
+                                                      paidAmount)
+                                                  .toStringAsFixed(2),
+                                            );
                                 }
                               });
+                              print(
+                                  'paidAmount setstate: ${paidAmount.toStringAsFixed(2)}');
                             } else {
                               setState(() {
-                                amountToPay = double.parse(value);
-                                print('amountToPay');
-                                print(amountToPay);
-                                // CAMBIO
+                                paidAmount = double.parse(value);
                                 if (selectedValueA == 'Efectivo') {
-                                  change = moneyRecievedForRegisterMoney <
-                                          (amountChanged
-                                              ? roundAmount(amountToPay)
-                                              : priceToCurrencySelected(
-                                                  roundAmount(amountToPay),
-                                                  selectedCoin!))
-                                      ? 0
-                                      : double.parse(
-                                          (moneyRecievedForRegisterMoney -
-                                                  (amountChanged
-                                                      ? roundAmount(amountToPay)
-                                                      : priceToCurrencySelected(
-                                                          roundAmount(
-                                                              amountToPay),
-                                                          selectedCoin!)))
-                                              .toStringAsFixed(2));
+                                  change =
+                                      moneyRecievedForRegisterMoney < paidAmount
+                                          ? 0
+                                          : double.parse(
+                                              (moneyRecievedForRegisterMoney -
+                                                      paidAmount)
+                                                  .toStringAsFixed(2));
                                 }
                               });
+                              print('paidAmount setstate: $paidAmount');
                             }
-                            setState(() {
-                              amountChanged = true;
-                            });
+
+                            // if (value.isEmpty) {
+                            //   // setState(() {
+                            //   //   amountToPay = 0;
+                            //   //   print(amountToPay);
+                            //   //   //CAMBIO
+                            //   //   if (selectedValueA == 'Efectivo') {
+                            //   //     change = moneyRecievedForRegisterMoney <
+                            //   //             (amountChanged
+                            //   //                 ? roundAmount(amountToPay)
+                            //   //                 : priceToCurrencySelected(
+                            //   //                     roundAmount(amountToPay),
+                            //   //                     selectedCoin!))
+                            //   //         ? 0
+                            //   //         : double.parse(
+                            //   //             (moneyRecievedForRegisterMoney -
+                            //   //                     (amountChanged
+                            //   //                         ? roundAmount(amountToPay)
+                            //   //                         : priceToCurrencySelected(
+                            //   //                             roundAmount(
+                            //   //                                 amountToPay),
+                            //   //                             selectedCoin!)))
+                            //   //                 .toStringAsFixed(2));
+                            //   //   }
+                            //   // });
+                            // } else {
+                            //   // setState(() {
+                            //   //   amountToPay = double.parse(value);
+                            //   //   print('amountToPay');
+                            //   //   print(amountToPay);
+                            //   //   // CAMBIO
+                            //   //   if (selectedValueA == 'Efectivo') {
+                            //   //     change = moneyRecievedForRegisterMoney <
+                            //   //             (amountChanged
+                            //   //                 ? roundAmount(amountToPay)
+                            //   //                 : priceToCurrencySelected(
+                            //   //                     roundAmount(amountToPay),
+                            //   //                     selectedCoin!))
+                            //   //         ? 0
+                            //   //         : double.parse(
+                            //   //             (moneyRecievedForRegisterMoney -
+                            //   //                     (amountChanged
+                            //   //                         ? roundAmount(amountToPay)
+                            //   //                         : priceToCurrencySelected(
+                            //   //                             roundAmount(
+                            //   //                                 amountToPay),
+                            //   //                             selectedCoin!)))
+                            //   //                 .toStringAsFixed(2));
+                            //   //   }
+                            //   // });
+                            // }
+                            // // setState(() {
+                            // //   amountChanged = true;
+                            // // });
                           },
                           readOnly: selectedValueA == 'Efectivo' ? true : false,
                           controller: fieldTextAmountToPay,
@@ -804,7 +823,6 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                             fontFamily: 'Poppins-regular',
                             color: myTheme.colorScheme.primary,
                           ),
-                          //TODO:
                           inputFormatters: <TextInputFormatter>[
                             FilteringTextInputFormatter.allow(
                               RegExp(r'[0-9]+[,.]{0,1}[0-9]*'),
@@ -816,11 +834,9 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                             ),
                           ],
                           keyboardType: TextInputType.phone,
-
                           maxLines: 1,
                           maxLength: 50,
                           textCapitalization: TextCapitalization.characters,
-
                           decoration: InputDecoration(
                             prefixIcon: Container(
                               width: 40,
@@ -844,12 +860,13 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                               0,
                             ),
                             // priceFormatForPaidAmount(remaining, selectedCoin),
-                            hintText: priceFormatForPaidAmount(
-                                    double.parse(remaining == 0
-                                        ? '0.00'
-                                        : remaining.toStringAsFixed(4)),
-                                    selectedCoin)
-                                .toString(),
+                            hintText:
+                                '${paidAmount.toStringAsFixed(2)}', // priceFormatForPaidAmount(
+                            //         double.parse(remaining == 0
+                            //             ? '0.00'
+                            //             : remaining.toStringAsFixed(4)),
+                            //         selectedCoin)
+                            //     .toString(),
                             hintStyle: TextStyle(
                               fontFamily: 'Poppins-regular',
                               fontSize: 14,
@@ -882,14 +899,9 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                               'Recibido',
                               style: TextStyle(
                                 fontFamily: 'Poppins-regular',
-                                color: moneyRecievedForRegisterMoney < 0.000001
+                                color: moneyRecievedForRegisterMoney < 0.00001
                                     ? myTheme.colorScheme.primary
-                                    : moneyRecievedForRegisterMoney <
-                                            (amountChanged
-                                                ? roundAmount(amountToPay)
-                                                : priceToCurrencySelected(
-                                                    roundAmount(amountToPay),
-                                                    selectedCoin!))
+                                    : moneyRecievedForRegisterMoney < paidAmount
                                         ? Colors.red
                                         : myTheme.colorScheme.primary,
                                 fontSize: 14,
@@ -909,19 +921,11 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
-                            color: moneyRecievedForRegisterMoney < 0.000001
+                            color: moneyRecievedForRegisterMoney < 0.00001
                                 ? myTheme.colorScheme.primary
-                                : moneyRecievedForRegisterMoney <
-                                        (amountChanged
-                                            ? roundAmount(amountToPay)
-                                            : priceToCurrencySelected(
-                                                roundAmount(amountToPay),
-                                                selectedCoin!))
+                                : moneyRecievedForRegisterMoney < paidAmount
                                     ? Colors.red
-                                    : myTheme.colorScheme.primary
-                                        .withOpacity(0.3),
-
-                            // color: Colors.transparent,
+                                    : myTheme.colorScheme.primary,
                           ),
                         ),
                         child: TextField(
@@ -930,66 +934,93 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                               setState(() {
                                 moneyRecievedForRegisterMoney = 0;
                                 if (selectedValueA == 'Efectivo') {
-                                  change = moneyRecievedForRegisterMoney <
-                                          (amountChanged
-                                              ? roundAmount(amountToPay)
-                                              : priceToCurrencySelected(
-                                                  roundAmount(amountToPay),
-                                                  selectedCoin!))
-                                      ? 0
-                                      : double.parse(
-                                          (moneyRecievedForRegisterMoney -
-                                                  (amountChanged
-                                                      ? roundAmount(amountToPay)
-                                                      : priceToCurrencySelected(
-                                                          roundAmount(
-                                                              amountToPay),
-                                                          selectedCoin!)))
-                                              .toStringAsFixed(2));
+                                  change =
+                                      moneyRecievedForRegisterMoney < paidAmount
+                                          ? 0.00001
+                                          : double.parse(
+                                              (moneyRecievedForRegisterMoney -
+                                                      paidAmount)
+                                                  .toStringAsFixed(2));
                                 }
                               });
+                              print(
+                                  'moneyRecievedForRegisterMoney: $moneyRecievedForRegisterMoney');
                             } else {
                               setState(() {
                                 moneyRecievedForRegisterMoney =
                                     double.parse(value);
                                 if (selectedValueA == 'Efectivo') {
-                                  change = moneyRecievedForRegisterMoney <
-                                          (amountChanged
-                                              ? roundAmount(amountToPay)
-                                              : priceToCurrencySelected(
-                                                  roundAmount(amountToPay),
-                                                  selectedCoin!))
-                                      ? 0
-                                      : double.parse(
-                                          (moneyRecievedForRegisterMoney -
-                                                  (amountChanged
-                                                      ? roundAmount(amountToPay)
-                                                      : priceToCurrencySelected(
-                                                          roundAmount(
-                                                              amountToPay),
-                                                          selectedCoin!)))
-                                              .toStringAsFixed(2));
+                                  change =
+                                      moneyRecievedForRegisterMoney < paidAmount
+                                          ? 0.00001
+                                          : double.parse(
+                                              (moneyRecievedForRegisterMoney -
+                                                      paidAmount!)
+                                                  .toStringAsFixed(2));
                                 }
                               });
-                            }
-                            if (selectedValueA == 'Efectivo') {
                               print(
-                                  "moneyRecievedForRegisterMoney: $moneyRecievedForRegisterMoney");
+                                  'moneyRecievedForRegisterMoney: $moneyRecievedForRegisterMoney');
                             }
+                            // if (value.isEmpty) {
+                            //   setState(() {
+                            //     moneyRecievedForRegisterMoney = 0;
+                            //     if (selectedValueA == 'Efectivo') {
+                            //       change = moneyRecievedForRegisterMoney <
+                            //               (amountChanged
+                            //                   ? roundAmount(amountToPay)
+                            //                   : priceToCurrencySelected(
+                            //                       roundAmount(amountToPay),
+                            //                       selectedCoin!))
+                            //           ? 0
+                            //           : double.parse(
+                            //               (moneyRecievedForRegisterMoney -
+                            //                       (amountChanged
+                            //                           ? roundAmount(amountToPay)
+                            //                           : priceToCurrencySelected(
+                            //                               roundAmount(
+                            //                                   amountToPay),
+                            //                               selectedCoin!)))
+                            //                   .toStringAsFixed(2));
+                            //     }
+                            //   });
+                            // } else {
+                            //   setState(() {
+                            //     moneyRecievedForRegisterMoney =
+                            //         double.parse(value);
+                            //     if (selectedValueA == 'Efectivo') {
+                            //       change = moneyRecievedForRegisterMoney <
+                            //               (amountChanged
+                            //                   ? roundAmount(amountToPay)
+                            //                   : priceToCurrencySelected(
+                            //                       roundAmount(amountToPay),
+                            //                       selectedCoin!))
+                            //           ? 0
+                            //           : double.parse(
+                            //               (moneyRecievedForRegisterMoney -
+                            //                       (amountChanged
+                            //                           ? roundAmount(amountToPay)
+                            //                           : priceToCurrencySelected(
+                            //                               roundAmount(
+                            //                                   amountToPay),
+                            //                               selectedCoin!)))
+                            //                   .toStringAsFixed(2));
+                            //     }
+                            //   });
+                            // }
+                            // if (selectedValueA == 'Efectivo') {
+                            //   print(
+                            //       "moneyRecievedForRegisterMoney: $moneyRecievedForRegisterMoney");
+                            // }
                           },
                           // controller:
                           //     fieldText,
                           style: TextStyle(
                             fontSize: 14,
                             fontFamily: 'Poppins-regular',
-                            color: moneyRecievedForRegisterMoney < 0.000001
+                            color: moneyRecievedForRegisterMoney < 0.00001
                                 ? myTheme.colorScheme.primary
-                                : moneyRecievedForRegisterMoney <
-                                        (amountChanged
-                                            ? roundAmount(amountToPay)
-                                            : priceToCurrencySelected(
-                                                roundAmount(amountToPay),
-                                                selectedCoin!))
+                                : moneyRecievedForRegisterMoney < paidAmount
                                     ? Colors.red
                                     : myTheme.colorScheme.primary,
                           ),
@@ -1023,18 +1054,13 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                   style: TextStyle(
                                     fontFamily: 'Poppins-regular',
                                     fontSize: 14,
-                                    color: moneyRecievedForRegisterMoney <
-                                            0.000001
-                                        ? myTheme.colorScheme.primary
-                                        : moneyRecievedForRegisterMoney <
-                                                (amountChanged
-                                                    ? roundAmount(amountToPay)
-                                                    : priceToCurrencySelected(
-                                                        roundAmount(
-                                                            amountToPay),
-                                                        selectedCoin!))
-                                            ? Colors.red
-                                            : myTheme.colorScheme.primary,
+                                    color:
+                                        moneyRecievedForRegisterMoney < 0.00001
+                                            ? myTheme.colorScheme.primary
+                                            : moneyRecievedForRegisterMoney <
+                                                    paidAmount
+                                                ? Colors.red
+                                                : myTheme.colorScheme.primary,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -1083,21 +1109,12 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                             children: [
                               moneyRecievedForRegisterMoney < 0.000001
                                   ? Container()
-                                  : moneyRecievedForRegisterMoney <
-                                          (amountChanged
-                                              ? roundAmount(amountToPay)
-                                              : priceToCurrencySelected(
-                                                  roundAmount(amountToPay),
-                                                  selectedCoin!))
+                                  : moneyRecievedForRegisterMoney < paidAmount
                                       ? selectedValueA != 'Efectivo'
                                           ? Container()
                                           : Container(
                                               margin: EdgeInsets.fromLTRB(
-                                                50,
-                                                10,
-                                                50,
-                                                0,
-                                              ),
+                                                  15, 5, 15, 0),
                                               child: Text(
                                                 'EL MONTO RECIBIDO NO PUEDE SER MENOR QUE EL MONTO TOTAL',
                                                 textAlign: TextAlign.center,
@@ -1111,6 +1128,36 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                               ),
                                             )
                                       : Container(),
+                              // moneyRecievedForRegisterMoney < 0.000001
+                              //     ? Container()
+                              //     : moneyRecievedForRegisterMoney <
+                              //             (amountChanged
+                              //                 ? roundAmount(amountToPay)
+                              //                 : priceToCurrencySelected(
+                              //                     roundAmount(amountToPay),
+                              //                     selectedCoin!))
+                              //         ? selectedValueA != 'Efectivo'
+                              //             ? Container()
+                              //             : Container(
+                              //                 margin: EdgeInsets.fromLTRB(
+                              //                   50,
+                              //                   10,
+                              //                   50,
+                              //                   0,
+                              //                 ),
+                              //                 child: Text(
+                              //                   'EL MONTO RECIBIDO NO PUEDE SER MENOR QUE EL MONTO TOTAL',
+                              //                   textAlign: TextAlign.center,
+                              //                   style: TextStyle(
+                              //                     fontFamily: 'Poppins-regular',
+                              //                     color:
+                              //                         myTheme.colorScheme.error,
+                              //                     fontSize: 10,
+                              //                     fontWeight: FontWeight.bold,
+                              //                   ),
+                              //                 ),
+                              //               )
+                              //         : Container(),
                               Container(
                                 margin: const EdgeInsets.fromLTRB(
                                   50,
@@ -1131,9 +1178,10 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                       ),
                                     ),
                                     Text(
-                                      priceFormatForPaidAmount(
-                                              widget.subTotal, selectedCoin)
-                                          .toString(),
+                                      // priceFormatForPaidAmount(
+                                      //         widget.subTotal, selectedCoin)
+                                      //     .toString(),
+                                      '$coinSymbol ${subTotalConverted.toStringAsFixed(2)}',
                                       style: TextStyle(
                                         fontFamily: 'Poppins-regular',
                                         color: myTheme.colorScheme.primary,
@@ -1163,9 +1211,10 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                       ),
                                     ),
                                     Text(
-                                      double.parse(priceFormatForPaidAmount(
-                                              widget.discount, selectedCoin))
-                                          .toStringAsFixed(2),
+                                      // double.parse(priceFormatForPaidAmount(
+                                      //         widget.discount, selectedCoin))
+                                      //     .toStringAsFixed(2),
+                                      ' - $coinSymbol ${discountMasterConverted.toStringAsFixed(2)}',
                                       style: TextStyle(
                                         fontFamily: 'Poppins-regular',
                                         color: myTheme.colorScheme.primary,
@@ -1195,9 +1244,10 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                       ),
                                     ),
                                     Text(
-                                      priceFormatForPaidAmount(
-                                              widget.tax, selectedCoin)
-                                          .toString(),
+                                      // priceFormatForPaidAmount(
+                                      //         widget.tax, selectedCoin)
+                                      //     .toString(),
+                                      '$coinSymbol ${taxConverted.toStringAsFixed(2)}',
                                       style: TextStyle(
                                         fontFamily: 'Poppins-regular',
                                         color: myTheme.colorScheme.primary,
@@ -1233,15 +1283,16 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                       // Aqui va widget.InvoiceTotal pero hay
                                       // que consultar si primero se va a
                                       // pagar completo o por partes aca
-                                      priceFormatForPaidAmount(
-                                              double.parse((widget.subTotal)
-                                                      .toStringAsFixed(2)) -
-                                                  double.parse((widget.discount)
-                                                      .toStringAsFixed(2)) +
-                                                  double.parse((widget.tax)
-                                                      .toStringAsFixed(2)),
-                                              selectedCoin)
-                                          .toString(),
+                                      // priceFormatForPaidAmount(
+                                      //         double.parse((widget.subTotal)
+                                      //                 .toStringAsFixed(2)) -
+                                      //             double.parse((widget.discount)
+                                      //                 .toStringAsFixed(2)) +
+                                      //             double.parse((widget.tax)
+                                      //                 .toStringAsFixed(2)),
+                                      //         selectedCoin)
+                                      //     .toString(),
+                                      '$coinSymbol ${totalConverted.toStringAsFixed(2)}',
                                       // priceFormatForPaidAmount(total, coin)
                                       // priceFormatForPaidAmount(
                                       //     remaining, selectedCoin),
@@ -1276,7 +1327,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                         ),
                                       ),
                                       Text(
-                                        priceFormat(paymentsTotalAmount),
+                                        '$coinSymbol ${paymentsTotalAmount.toStringAsFixed(2)}',
                                         style: TextStyle(
                                           fontFamily: 'Poppins-regular',
                                           color: myTheme
@@ -1311,8 +1362,9 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                     ),
                                     Text(
                                       // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(4), selectedCoin)}',
-                                      priceFormatForPaidAmount(
-                                          remaining, selectedCoin),
+                                      // priceFormatForPaidAmount(
+                                      //     remaining, selectedCoin),
+                                      '$coinSymbol ${balanceConverted.toStringAsFixed(2)}',
                                       style: TextStyle(
                                         fontFamily: 'Poppins-regular',
                                         color: myTheme
@@ -1340,7 +1392,6 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                           selectedValueA != 'Efectivo'
                                               ? Container()
                                               : Text(
-                                                  // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(4), selectedCoin)}',
                                                   'Cambio:',
                                                   style: TextStyle(
                                                     fontFamily:
@@ -1351,9 +1402,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                                   ),
                                                 ),
                                           Text(
-                                            // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(4), selectedCoin)}',
                                             '\$ ${change.toStringAsFixed(2)}',
-                                            // priceFormat(change),
                                             style: TextStyle(
                                               fontFamily: 'Poppins-regular',
                                               color: Colors.green,
@@ -1364,6 +1413,8 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                         ],
                                       ),
                                     ),
+                              Divider(),
+
                               Container(
                                 margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                                 child: identifyPaymentMethodRetail(
@@ -1377,35 +1428,36 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                   selectedValueA: selectedValueA!,
                                   client: widget.client,
                                   invoiceDocumentID: widget.invoiceDocumentID,
-                                  paidAmount: amountChanged
-                                      ? roundAmount(amountToPay)
-                                      : priceToCurrencySelected(
-                                          roundAmount(amountToPay),
-                                          selectedCoin!),
+                                  // paidAmount: amountChanged
+                                  //     ? roundAmount(amountToPay)
+                                  //     : priceToCurrencySelected(
+                                  //         roundAmount(amountToPay),
+                                  //         selectedCoin!),
+                                  paidAmount: paidAmount,
                                   totalOfTheOrder: getTotalAmount,
                                   date: today,
                                   context: context,
-                                  remaining: double.parse(
-                                      widget.remaining.toStringAsFixed(4)),
+                                  // remaining: double.parse(
+                                  //     widget.remaining.toStringAsFixed(4)),
+                                  remaining: widget.remaining,
+                                  remainingConverted: remainingConverted,
                                   selectedCoin: selectedCoin!,
                                   updatePayed: updatePayed,
                                   paymentBody: AddPaymentBodyAtt(
-                                      client: widget.client,
-                                      discount: widget.discount,
-                                      discountPercentage:
-                                          widget.discountPercentage,
-                                      invoiceDocumentID:
-                                          widget.invoiceDocumentID,
-                                      percentageTax: widget.percentageTax,
-                                      // remaining: widget.remaining,
-                                      remaining: remaining,
-                                      subTotal: widget.subTotal,
-                                      tax: widget.tax,
-                                      invoiceNumber: widget.invoiceNumber,
-                                      currency: selectedCoin!)
-                                    ..payments = widget.payments,
+                                    client: widget.client,
+                                    discount: widget.discount,
+                                    discountPercentage:
+                                        widget.discountPercentage,
+                                    invoiceDocumentID: widget.invoiceDocumentID,
+                                    percentageTax: widget.percentageTax,
+                                    remaining: widget.remaining,
+                                    subTotal: widget.subTotal,
+                                    tax: widget.tax,
+                                    invoiceNumber: widget.invoiceNumber,
+                                    currency: selectedCoin!,
+                                  )..payments = widget.payments,
                                 ),
-                              )
+                              ),
                             ],
                           )
                         : Container()

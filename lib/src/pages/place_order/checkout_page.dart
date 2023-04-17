@@ -125,8 +125,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
     final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 0;
     final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
     final coinCode = Provider.of<Coin?>(context)?.code ?? '';
-    print(coinName);
     print('TEStiNG COIN NAME');
+    print(coinName);
 
     double subTotalConverted = priceMultipliedByItsExchangeRatio(
         coinDecimals: coinDecimals,
@@ -236,7 +236,6 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerRight,
                       child: Text(
-                        // priceFormat(widget.subTotal),
                         '$coinSymbol ${subTotalConverted.toStringAsFixed(2)}',
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
@@ -673,7 +672,6 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerRight,
                       child: Text(
-                        // priceFormat(totalOfTheOrder),
                         '$coinSymbol ${totalPriceOfTheOrderConverted.toStringAsFixed(2)}',
                         style: TextStyle(
                           color: myTheme.colorScheme.onPrimaryContainer,

@@ -32,27 +32,6 @@ import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/onT
 import '../../models/transaction_args.dart';
 import '../../pages/amount_input/amount_input.dart';
 
-// priceToCurrencySelectedInput(productPrice, coin, decimals, exchangeRate) {
-//   double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-//   double convertedAmount =
-//       double.parse((correctAmount * exchangeRate).toStringAsFixed(decimals));
-//   return convertedAmount;
-//   // double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-//   // if (coin!.contains('USD')) {
-//   //   return double.parse(correctAmount.toStringAsFixed(2));
-//   // } else if (coin.contains('VED')) {
-//   //   return double.parse((correctAmount * 4.58).toStringAsFixed(2));
-//   // } else if (coin.contains('EUR')) {
-//   //   return double.parse((correctAmount * 0.89).toStringAsFixed(2));
-//   // } else if (coin.contains('MXN')) {
-//   //   return double.parse((correctAmount * 19.43).toStringAsFixed(2));
-//   // } else if (coin.contains('BTC')) {
-//   //   return double.parse((correctAmount * 0.00011).toStringAsFixed(2));
-//   // } else {
-//   //   return double.parse((correctAmount * 4.58).toStringAsFixed(2));
-//   // }
-// }
-
 void modalBottomSheetForInvoices(
   bool completed,
   context,
@@ -114,7 +93,6 @@ void modalBottomSheetForInvoices(
 
   print('invoiceTotal: $invoiceTotal');
   print('sumOfValidPayments: $sumOfValidPayments');
-  print('sumOfValidPaymentsFixed2: ${sumOfValidPayments.toStringAsFixed(2)}');
   print('sumOfApprovedPayments: $sumOfApprovedPayments');
 
   double remaining =
@@ -278,6 +256,7 @@ void modalBottomSheetForInvoices(
                                                 sumOfApprovedPayments,
                                             sumOfPendingPayments:
                                                 sumOfPendingPayments,
+                                            completed: completed,
                                           );
                                         });
                                   },
@@ -1292,6 +1271,7 @@ class SeePaymentsALertDialog extends StatelessWidget {
     required this.remaining,
     required this.sumOfApprovedPayments,
     required this.sumOfPendingPayments,
+    required this.completed,
   });
 
   var invoicePayments;
@@ -1307,6 +1287,7 @@ class SeePaymentsALertDialog extends StatelessWidget {
   final remaining;
   final sumOfApprovedPayments;
   final sumOfPendingPayments;
+  final bool completed;
 
   @override
   Widget build(BuildContext context) {
@@ -1502,7 +1483,9 @@ class SeePaymentsALertDialog extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '$coinSymbol ${remainingConverted.toStringAsFixed(2)}',
+                      completed
+                          ? '$coinSymbol 0.00'
+                          : '$coinSymbol ${remainingConverted.abs().toStringAsFixed(2)}',
                       style: TextStyle(
                         fontFamily: 'Poppins-regular',
                         color: Colors.black,
