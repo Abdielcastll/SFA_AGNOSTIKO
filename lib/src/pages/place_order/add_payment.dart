@@ -270,8 +270,8 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
     print('Remaining converted: $remainingConverted');
     print('PaidAmount inicial: $paidAmount');
     final List<String> items = [
-      // 'Tarjeta de Debito',
-      // 'Tarjeta de Credito',
+      'Tarjeta de Debito',
+      'Tarjeta de Credito',
       'Efectivo',
       'Cheque',
       'Deposito',
