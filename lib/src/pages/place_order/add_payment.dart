@@ -1364,7 +1364,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                       // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(4), selectedCoin)}',
                                       // priceFormatForPaidAmount(
                                       //     remaining, selectedCoin),
-                                      '$coinSymbol ${balanceConverted.toStringAsFixed(2)}',
+                                      '$coinSymbol ${balanceConverted.abs().toStringAsFixed(2)}',
                                       style: TextStyle(
                                         fontFamily: 'Poppins-regular',
                                         color: myTheme
