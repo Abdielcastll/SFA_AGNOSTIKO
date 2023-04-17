@@ -1223,6 +1223,7 @@ Future<dynamic> showDialogForRegisterPayment(
                                           percentageTax: percentageTax,
                                           remaining: remaining,
                                           subTotal: subTotal,
+                                          currencyExchange: coinExchangeRatio!,
                                           tax: tax),
                                     ),
                                   )

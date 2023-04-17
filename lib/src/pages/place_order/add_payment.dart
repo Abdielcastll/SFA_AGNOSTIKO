@@ -1444,18 +1444,20 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                   selectedCoin: selectedCoin!,
                                   updatePayed: updatePayed,
                                   paymentBody: AddPaymentBodyAtt(
-                                    client: widget.client,
-                                    discount: widget.discount,
-                                    discountPercentage:
-                                        widget.discountPercentage,
-                                    invoiceDocumentID: widget.invoiceDocumentID,
-                                    percentageTax: widget.percentageTax,
-                                    remaining: widget.remaining,
-                                    subTotal: widget.subTotal,
-                                    tax: widget.tax,
-                                    invoiceNumber: widget.invoiceNumber,
-                                    currency: selectedCoin!,
-                                  )..payments = widget.payments,
+                                      client: widget.client,
+                                      discount: widget.discount,
+                                      discountPercentage:
+                                          widget.discountPercentage,
+                                      invoiceDocumentID:
+                                          widget.invoiceDocumentID,
+                                      percentageTax: widget.percentageTax,
+                                      remaining: widget.remaining,
+                                      subTotal: widget.subTotal,
+                                      tax: widget.tax,
+                                      invoiceNumber: widget.invoiceNumber,
+                                      currency: selectedCoin!,
+                                      currencyExchange: coinExchangeRatio)
+                                    ..payments = widget.payments,
                                 ),
                               ),
                             ],
@@ -1482,6 +1484,7 @@ class AddPaymentBodyAtt {
   final String invoiceDocumentID;
   final int invoiceNumber;
   final String currency;
+  final double currencyExchange;
   List<PayMethod> payments = [];
   double? amountPaied;
 
@@ -1495,6 +1498,7 @@ class AddPaymentBodyAtt {
       required this.client,
       required this.invoiceDocumentID,
       required this.invoiceNumber,
+      required this.currencyExchange,
       required this.currency});
 }
 

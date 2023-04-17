@@ -374,12 +374,6 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     final paymentBody = (ModalRoute.of(context)?.settings.arguments! as List)[2]
         as AddPaymentBodyAtt;
 
-    print('EMV INFO PAYMENTS');
-    print(paymentBody.payments.length);
-    print(paymentBody.remaining);
-    print(paymentBody.currency);
-    print(paymentBody.amountPaied);
-
     // final payed = transactionResult == EmvTransactionResult.Approved
     //     ? exchangeAmount(
     //         coin: paymentBody.currency,
@@ -387,11 +381,20 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     //         exchange: transactionArgs!.invoice!.coinExchangeRatio)
     //     : 0.0;
     final payed = transactionResult == EmvTransactionResult.Approved
-        ? _amountDouble
+        ? exchangeAmount(
+            coin: paymentBody.currency,
+            amount: _amountDouble,
+            exchange: transactionArgs!.invoice!.coinExchangeRatio)
         : 0.0;
+
+    print('EMV INFO PAYMENTS');
+    print(paymentBody.payments.length);
+    print(paymentBody.remaining);
+    print(paymentBody.currency);
+    print(paymentBody.amountPaied);
     print(payed);
 
-    paymentBody.payments.add(PayMethod('Tarjeta', payed));
+    paymentBody.payments.add(PayMethod('Tarjeta', _amountDouble));
 
     final totalPayed =
         paymentBody.payments.fold<double>(0.0, (previousValue, element) {
@@ -427,6 +430,10 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
         ),
       );
     } else {
+      print(paymentBody.remaining);
+      print(paymentBody.amountPaied);
+      print(payed);
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
