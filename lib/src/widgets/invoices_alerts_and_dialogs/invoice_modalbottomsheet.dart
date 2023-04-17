@@ -733,10 +733,10 @@ Future<dynamic> showDialogForRegisterPayment(
                                     }
                                   },
                                   controller: fieldText,
-                                  // readOnly: selectedValueA == 'Efectivo' ||
-                                  //         selectedValueA == null
-                                  //     ? true
-                                  //     : false,
+                                  readOnly: selectedValueA == 'Efectivo' ||
+                                          selectedValueA == null
+                                      ? true
+                                      : false,
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontFamily: 'Poppins-regular',
