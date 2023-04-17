@@ -264,6 +264,7 @@ class _ClientListState extends State<ClientList> {
                     });
                   }
                 });
+                if (selectedClientsCollection.length == 0) {}
               }),
             ),
           ),

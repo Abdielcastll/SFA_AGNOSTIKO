@@ -402,12 +402,15 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     // final totalInvoice =
     //     paymentBody.subTotal + paymentBody.tax - paymentBody.discount;
     final totalInvoice = transactionArgs!.invoice!.totalOfTheOrder;
-// paidAmount < remainingConverted
+    final remainingConverted = priceMultipliedByItsExchangeRatio(
+        coinDecimals: 2,
+        coinExchangeRatio: transactionArgs!.invoice!.coinExchangeRatio,
+        productPrice: transactionArgs!.invoice!.remaining);
+    // paidAmount < remainingConverted
     // if (transactionResult == EmvTransactionResult.Approved &&
     //     totalPayed >= totalInvoice) {
     if (transactionResult == EmvTransactionResult.Approved &&
-        transactionArgs!.invoice!.amount >=
-            transactionArgs!.invoice!.remaining) {
+        transactionArgs!.invoice!.amount >= remainingConverted) {
       final date = transactionArgs!.invoice!.date;
       Navigator.pushReplacement(
         context,

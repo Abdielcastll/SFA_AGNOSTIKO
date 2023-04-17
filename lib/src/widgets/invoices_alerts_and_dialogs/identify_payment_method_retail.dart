@@ -143,8 +143,8 @@ identifyPaymentMethodRetail({
       totalOfTheOrder,
       selectedCoin,
       date,
-      // remaining,
-      remainingConverted,
+      remaining,
+      // remainingConverted,
       coinExchangeRatio,
       updatePayed: updatePayed,
       paymentBody: paymentBody,
@@ -1302,7 +1302,6 @@ identifyPaymentMethodRetail({
             child: DropdownButtonHideUnderline(
               child: DropdownButton2(
                 isExpanded: true,
-                // ignore: prefer_const_literals_to_create_immutables
                 hint: Row(
                   children: [
                     Expanded(
