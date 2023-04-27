@@ -25,6 +25,7 @@ import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_checkout.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -34,13 +35,11 @@ class CheckoutPage extends StatefulWidget {
     required this.client,
     required this.cart,
     required this.subTotal,
-    this.coinsExchangeRates,
   }) : super(key: key);
 
   final Clients? client;
   final List<ShoppingCartProduct> cart;
   final double subTotal;
-  final coinsExchangeRates;
 
   @override
   State<CheckoutPage> createState() => _CheckoutPageState();
@@ -75,7 +74,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
           client: widget.client,
           subTotal: widget.subTotal,
           cart: widget.cart,
-          coinsExchangeRates: widget.coinsExchangeRates,
         ),
       ),
     );
@@ -88,13 +86,11 @@ class CheckoutBody extends StatefulWidget {
     required this.client,
     required this.subTotal,
     required this.cart,
-    this.coinsExchangeRates,
   }) : super(key: key);
 
   final Clients? client;
   final double subTotal;
   final List<ShoppingCartProduct> cart;
-  final coinsExchangeRates;
 
   @override
   State<CheckoutBody> createState() => _CheckoutBodyState();
@@ -115,73 +111,10 @@ class _CheckoutBodyState extends State<CheckoutBody> {
 
   final List<String> items2 = ['Factura', 'Consignacion', 'Nota de entrega'];
 
-  late List<double> coinsExchangeRates = widget.coinsExchangeRates;
-
-  double priceWithIVA() {
-    var total = (totalPriceOfTheOrder() * 16) / 100;
-    return total;
-  }
-
-  double priceWithMasterDiscount() {
-    var total = (widget.subTotal / 100) * widget.client?.masterDiscount;
-    return total;
-  }
-
-  double totalPriceOfTheOrder() {
-    var total =
-        (widget.subTotal - priceWithMasterDiscount() - totalDiscountApplied());
-    return total;
-  }
-
-  double totalDiscountApplied() {
-    var total = ((widget.subTotal / 100) * discountByInput).toStringAsFixed(4);
-    double doubleTotal = double.parse(total);
-    return doubleTotal;
-  }
-
-  double totalWithTheIVA() {
-    var total = (totalPriceOfTheOrder() + priceWithIVA()).toStringAsFixed(2);
-    double doubleTotal = double.parse(total);
-    return doubleTotal;
-  }
-
-  // double totalDiscountApplied() {
-  //   var total = (widget.subTotal - (discountByInput / 100)).toStringAsFixed(4);
-  //   double doubleTotal = double.parse(total);
-  //   return doubleTotal;
-  // }
-
-  completeOrder() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => CompletedOrderPage(
-          client: widget.client?.name,
-          address: selectedValue == 'Fiscal'
-              ? widget.client!.fiscalAdress
-              : widget.client!.dispatchAdress,
-          orderNumber: numberOrder ?? 0000,
-          date: dateFormatter.format(today),
-          method: selectedValue2,
-          total: totalWithTheIVA(),
-          coinsExchangeRates: widget.coinsExchangeRates,
-        ),
-      ),
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     final userUid = Provider.of<UserModel>(context).uid;
     int? clientMasterDiscount = widget.client?.masterDiscount;
-    double? masterDiscountTotal = priceWithMasterDiscount();
-    double? taxTotal = priceWithIVA();
-    double? totalOfTheOrder = totalWithTheIVA();
     String? fiscalAddress = widget.client?.fiscalAdress;
     String? dispatchAddress =
         widget.client?.dispatchAdress ?? 'No Hay direccion disponible';
@@ -192,46 +125,82 @@ class _CheckoutBodyState extends State<CheckoutBody> {
     final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 0;
     final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
     final coinCode = Provider.of<Coin?>(context)?.code ?? '';
-    print(coinName);
     print('TEStiNG COIN NAME');
+    print(coinName);
 
-    priceFormat(productPrice) {
-      double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-      double convertedAmount = double.parse(
-          (correctAmount * coinExchangeRatio).toStringAsFixed(coinDecimals));
-      return '$coinSymbol$convertedAmount';
-      // double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-      // if (currentCoin!.contains('USD')) {
-      //   return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
-      //       .format(productPrice)
-      //       .toString();
-      // } else if (currentCoin.contains('VED')) {
-      //   return NumberFormat.currency(
-      //     locale: 'es_VE',
-      //     decimalDigits: 2,
-      //     symbol: "Bs.",
-      //   ).format(correctAmount * 4.58).toString();
-      // } else if (currentCoin.contains('EUR')) {
-      //   return NumberFormat.currency(
-      //     locale: 'es_ES',
-      //     decimalDigits: 2,
-      //     symbol: '€',
-      //   ).format(correctAmount * 0.89).toString();
-      // } else if (currentCoin.contains('MXN')) {
-      //   return NumberFormat.currency(
-      //     locale: 'es_MX',
-      //     decimalDigits: 2,
-      //     symbol: '\$',
-      //   ).format(correctAmount * 19.43);
-      // } else if (currentCoin.contains('BTC')) {
-      //   return '฿ ${(correctAmount * 0.00011).toString()}';
-      // } else {
-      //   return NumberFormat.currency(
-      //     locale: 'es_VE',
-      //     decimalDigits: 2,
-      //     symbol: "PPR.",
-      //   ).format(correctAmount * 4.58).toString();
-      // }
+    double subTotalConverted = priceMultipliedByItsExchangeRatio(
+        coinDecimals: coinDecimals,
+        coinExchangeRatio: coinExchangeRatio,
+        productPrice: widget.subTotal);
+    print('subTotal: ${widget.subTotal}');
+    print('subTotalConverted: $subTotalConverted');
+
+    double subTotalWithMasterDiscount = double.parse(
+        (widget.subTotal * (widget.client?.masterDiscount / 100))
+            .toStringAsFixed(4));
+    double subTotalWithMasterDiscountConverted =
+        priceMultipliedByItsExchangeRatio(
+            coinDecimals: coinDecimals,
+            coinExchangeRatio: coinExchangeRatio,
+            productPrice: subTotalWithMasterDiscount);
+    print('subTotalWithMasterDiscount: $subTotalWithMasterDiscount');
+    print(
+        'subTotalWithMasterDiscountConverted: $subTotalWithMasterDiscountConverted');
+
+    double subTotalWithDiscountApplied = double.parse(
+        (widget.subTotal * (discountByInput / 100)).toStringAsFixed(4));
+    double subTotalWithDiscountAppliedConverted =
+        priceMultipliedByItsExchangeRatio(
+            coinDecimals: coinDecimals,
+            coinExchangeRatio: coinExchangeRatio,
+            productPrice: subTotalWithDiscountApplied);
+    print('subTotalWithDiscountApplied: $subTotalWithDiscountApplied');
+    print(
+        'subTotalWithDiscountAppliedConverted: $subTotalWithDiscountAppliedConverted');
+
+    double getIVA = double.parse(
+      ((widget.subTotal -
+                  subTotalWithMasterDiscount -
+                  subTotalWithDiscountApplied) *
+              (16 / 100))
+          .toStringAsFixed(4),
+    );
+    double getIVAConverted = priceMultipliedByItsExchangeRatio(
+        coinDecimals: coinDecimals,
+        coinExchangeRatio: coinExchangeRatio,
+        productPrice: getIVA);
+    print('getIVA: $getIVA');
+    print('getIVAConverted: $getIVAConverted');
+
+    double totalPriceOfTheOrder = double.parse((widget.subTotal -
+            subTotalWithMasterDiscount -
+            subTotalWithDiscountApplied +
+            getIVA)
+        .toStringAsFixed(4));
+    double totalPriceOfTheOrderConverted = priceMultipliedByItsExchangeRatio(
+        coinDecimals: coinDecimals,
+        coinExchangeRatio: coinExchangeRatio,
+        productPrice: totalPriceOfTheOrder);
+    print('totalPriceOfTheOrder: $totalPriceOfTheOrder');
+    print('totalPriceOfTheOrderConverted: $totalPriceOfTheOrderConverted');
+
+    completeOrder() {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CompletedOrderPage(
+            client: widget.client?.name,
+            address: selectedValue == 'Fiscal'
+                ? widget.client!.fiscalAdress
+                : widget.client!.dispatchAdress,
+            orderNumber: numberOrder ?? 0000,
+            date: dateFormatter.format(today),
+            method: selectedValue2,
+            total: totalPriceOfTheOrder,
+            completedMessage: '¡Pedido Completado!',
+          ),
+        ),
+      );
     }
 
     return SingleChildScrollView(
@@ -267,7 +236,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerRight,
                       child: Text(
-                        priceFormat(widget.subTotal),
+                        '$coinSymbol ${subTotalConverted.toStringAsFixed(2)}',
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
@@ -298,38 +267,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerRight,
                       child: Text(
-                        priceFormat(masterDiscountTotal),
-                        style: TextStyle(
-                          color: myTheme.colorScheme.primary,
-                          fontFamily: 'Poppins-regular',
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 5),
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        '${AppLocalizations.of(context)!.tax} (16%)',
-                        style: TextStyle(
-                          color: myTheme.colorScheme.primary,
-                          fontFamily: 'Poppins-regular',
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 5),
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        priceFormat(taxTotal),
+                        '- $coinSymbol ${subTotalWithMasterDiscountConverted.toStringAsFixed(2)}',
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
@@ -373,7 +311,6 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                   discountsStrings.add(discountString);
                                 }
                                 print('Descuentos: $discountsStrings');
-                                // List<String> items3 = ['0', '5', '10', '15'];
                                 await showDialog(
                                   context: context,
                                   builder: (BuildContext context) =>
@@ -673,8 +610,39 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerRight,
                       child: Text(
-                        '- ${priceFormat(totalDiscountApplied())}',
-                        // 'test',
+                        // '- ${priceFormat(totalDiscountApplied())}',
+                        '- $coinSymbol ${subTotalWithDiscountAppliedConverted.toStringAsFixed(2)}',
+                        style: TextStyle(
+                          color: myTheme.colorScheme.primary,
+                          fontFamily: 'Poppins-regular',
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 5),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '${AppLocalizations.of(context)!.tax} (16%)',
+                        style: TextStyle(
+                          color: myTheme.colorScheme.primary,
+                          fontFamily: 'Poppins-regular',
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 5),
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        '+ $coinSymbol ${getIVAConverted.toStringAsFixed(2)}',
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
@@ -704,7 +672,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerRight,
                       child: Text(
-                        priceFormat(totalOfTheOrder),
+                        '$coinSymbol ${totalPriceOfTheOrderConverted.toStringAsFixed(2)}',
                         style: TextStyle(
                           color: myTheme.colorScheme.onPrimaryContainer,
                           fontFamily: 'Poppins-regular',
@@ -718,7 +686,6 @@ class _CheckoutBodyState extends State<CheckoutBody> {
               ],
             ),
           ),
-
           Container(
             margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
             width: MediaQuery.of(context).size.width,
@@ -802,7 +769,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       ),
                       buttonStyleData: ButtonStyleData(
                         height: 50,
-                        width: 150,
+                        width: MediaQuery.of(context).size.width,
                         padding: const EdgeInsets.only(left: 14, right: 14),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
@@ -819,7 +786,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       ),
                       dropdownStyleData: DropdownStyleData(
                         maxHeight: 200,
-                        width: 200,
+                        width: MediaQuery.of(context).size.width * 0.9,
                         padding: null,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
@@ -904,56 +871,53 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Container(
-                      margin: const EdgeInsets.fromLTRB(10, 5, 0, 0),
                       width: 120,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: Colors.transparent,
+                      margin: const EdgeInsets.fromLTRB(15, 5, 0, 10),
+                      child: TextField(
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: myTheme.colorScheme.primary,
                         ),
-                      ),
-                      child: Container(
-                        margin: const EdgeInsets.fromLTRB(10, 5, 0, 10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(
-                            color: Colors.transparent,
-                          ),
-                        ),
-                        child: TextField(
-                          style: TextStyle(
+                        keyboardType: TextInputType.phone,
+                        maxLines: 1,
+                        maxLength: 10,
+                        textCapitalization: TextCapitalization.none,
+                        decoration: InputDecoration(
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(14, 0, 14, 0),
+                          hintText: '0000',
+                          counterText: "",
+                          hintStyle: TextStyle(
                             fontSize: 14,
-                            color: myTheme.colorScheme.primary,
+                            color: myTheme.colorScheme.primary.withOpacity(0.4),
                           ),
-                          keyboardType: TextInputType.phone,
-                          maxLines: 1,
-                          maxLength: 10,
-                          textCapitalization: TextCapitalization.none,
-                          decoration: InputDecoration(
-                            contentPadding:
-                                const EdgeInsets.fromLTRB(14, 0, 14, 0),
-                            hintText: '0000',
-                            counterText: "",
-                            hintStyle: TextStyle(
-                              fontSize: 14,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide(
                               color:
                                   myTheme.colorScheme.primary.withOpacity(0.4),
                             ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(16),
-                              borderSide: BorderSide(
-                                color: myTheme.colorScheme.primary
-                                    .withOpacity(0.3),
-                              ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide(
+                              color:
+                                  myTheme.colorScheme.primary.withOpacity(0.4),
                             ),
                           ),
-                          onChanged: (value) {
-                            setState(() {
-                              numberOrder = value;
-                            });
-                          },
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide(
+                              color:
+                                  myTheme.colorScheme.primary.withOpacity(0.4),
+                            ),
+                          ),
                         ),
+                        onChanged: (value) {
+                          setState(() {
+                            numberOrder = value;
+                          });
+                        },
                       ),
                     ),
                     Icon(
@@ -1132,7 +1096,6 @@ class _CheckoutBodyState extends State<CheckoutBody> {
               ],
             ),
           ),
-
           Container(
             margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
             padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -1191,218 +1154,6 @@ class _CheckoutBodyState extends State<CheckoutBody> {
               ],
             ),
           ),
-
-          // Container(
-          //   margin: const EdgeInsets.fromLTRB(20, 0, 20, 10),
-          //   decoration: BoxDecoration(
-          //     borderRadius: BorderRadius.circular(20),
-          //   ),
-          //   width: MediaQuery.of(context).size.width,
-          //   height: 50,
-          //   child: ClipRRect(
-          //     borderRadius: BorderRadius.circular(16),
-          //     child: ElevatedButton(
-          //       onPressed: () async {
-          //         // Boton de procesar pago
-          //         showDialog(
-          //             context: context,
-          //             builder: (BuildContext context) {
-          //               return AlertDialog(
-          //                 shape: RoundedRectangleBorder(
-          //                   borderRadius: BorderRadius.all(
-          //                     Radius.circular(16.0),
-          //                   ),
-          //                 ),
-          //                 title: Center(
-          //                   child: Text(
-          //                     'Confirmación',
-          //                   ),
-          //                 ),
-          //                 content: Container(
-          //                   child: SingleChildScrollView(
-          //                     child: Column(
-          //                       mainAxisAlignment: MainAxisAlignment.center,
-          //                       crossAxisAlignment: CrossAxisAlignment.center,
-          //                       // ignore: prefer_const_literals_to_create_immutables
-          //                       children: [
-          //                         Center(
-          //                           child: Text(
-          //                             '¿Pasar a procesar pago?',
-          //                             textAlign: TextAlign.center,
-          //                           ),
-          //                         ),
-          //                       ],
-          //                     ),
-          //                   ),
-          //                 ),
-          //                 actions: [
-          //                   Row(
-          //                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-          //                     children: [
-          //                       ElevatedButton.icon(
-          //                         onPressed: () {
-          //                           // Cancelar
-          //                           Navigator.pop(context);
-          //                         },
-          //                         style: ButtonStyle(
-          //                           backgroundColor: MaterialStateProperty.all(
-          //                             myTheme.colorScheme.primary,
-          //                           ),
-          //                           shape: MaterialStateProperty.all<
-          //                               RoundedRectangleBorder>(
-          //                             RoundedRectangleBorder(
-          //                               borderRadius:
-          //                                   BorderRadius.circular(18.0),
-          //                             ),
-          //                           ),
-          //                         ),
-          //                         icon: Icon(
-          //                           MaterialCommunityIcons.backspace,
-          //                           size: 16,
-          //                         ),
-          //                         label: Text(
-          //                           'Cancelar',
-          //                           style: TextStyle(
-          //                             color: Colors.white,
-          //                             fontFamily: 'Poppins-regular',
-          //                             fontSize: 14,
-          //                             fontWeight: FontWeight.bold,
-          //                           ),
-          //                         ),
-          //                       ),
-          //                       ElevatedButton.icon(
-          //                         onPressed: () async {
-          //                           // Aceptar e Iniciar el proceso de pago
-          //                           // Por pago directo
-          //                           final randomID = FirebaseFirestore.instance
-          //                               .collection('clientes')
-          //                               .doc(widget.client!.clientDocumentId)
-          //                               .collection('pedidos')
-          //                               .doc()
-          //                               .id;
-          //                           print('PAGO DIRECTO');
-          //                           await completePaymentProcess(
-          //                                   widget.client,
-          //                                   userUid,
-          //                                   commentary,
-          //                                   masterDiscountTotal,
-          //                                   widget.cart,
-          //                                   selectedValue2,
-          //                                   selectedValue,
-          //                                   today,
-          //                                   taxTotal,
-          //                                   numberOrder,
-          //                                   widget.subTotal,
-          //                                   totalOfTheOrder,
-          //                                   discountByInput,
-          //                                   randomID)
-          //                               .whenComplete(() {
-          //                             Client currentClient = Client(
-          //                               active: widget.client!.active,
-          //                               specialContributor:
-          //                                   widget.client!.specialContributor,
-          //                               madeBy: widget.client!.madeBy,
-          //                               masterDiscount:
-          //                                   widget.client!.masterDiscount,
-          //                               fiscalAdress:
-          //                                   widget.client!.fiscalAdress,
-          //                               dispatchAdress:
-          //                                   widget.client!.dispatchAdress,
-          //                               email: widget.client!.email,
-          //                               prices: widget.client!.prices,
-          //                               modified: widget.client!.modified,
-          //                               name: widget.client!.name,
-          //                               id: widget.client!.id,
-          //                               prospect: widget.client!.prospect,
-          //                               phone1: widget.client!.phone1,
-          //                               phone2: widget.client!.phone2,
-          //                               idType: widget.client!.idType,
-          //                               zone: widget.client!.zone,
-          //                               clientDocumentId:
-          //                                   widget.client!.clientDocumentId,
-          //                             );
-          //                             Navigator.push(
-          //                               context,
-          //                               MaterialPageRoute(
-          //                                 settings: RouteSettings(
-          //                                     name: 'PAGO-DIRECTO'),
-          //                                 builder: (BuildContext context) =>
-          //                                     AddPaymentPage(
-          //                                   remaining: totalOfTheOrder,
-          //                                   subTotal: widget.subTotal,
-          //                                   discountPercentage:
-          //                                       widget.client?.masterDiscount,
-          //                                   discount: (widget.subTotal / 100) *
-          //                                       widget.client?.masterDiscount,
-          //                                   tax: taxTotal,
-          //                                   percentageTax: 16,
-          //                                   client: currentClient,
-          //                                   invoiceDocumentID: randomID,
-          //                                 ),
-          //                               ),
-          //                             );
-          //                           });
-          //                           print('PAGO REGISTRADO');
-          //                         },
-          //                         style: ButtonStyle(
-          //                           backgroundColor: MaterialStateProperty.all(
-          //                             myTheme.colorScheme.onPrimaryContainer,
-          //                           ),
-          //                           shape: MaterialStateProperty.all<
-          //                               RoundedRectangleBorder>(
-          //                             RoundedRectangleBorder(
-          //                               borderRadius:
-          //                                   BorderRadius.circular(18.0),
-          //                             ),
-          //                           ),
-          //                         ),
-          //                         icon: Icon(
-          //                           MaterialCommunityIcons
-          //                               .contactless_payment_circle,
-          //                           size: 20,
-          //                         ),
-          //                         label: Text(
-          //                           'Continuar',
-          //                           style: TextStyle(
-          //                             color: Colors.white,
-          //                             fontFamily: 'Poppins-regular',
-          //                             fontSize: 14,
-          //                             fontWeight: FontWeight.bold,
-          //                           ),
-          //                         ),
-          //                       ),
-          //                     ],
-          //                   )
-          //                 ],
-          //               );
-          //             });
-          //       },
-          //       style: ElevatedButton.styleFrom(
-          //         backgroundColor: myTheme.colorScheme.onPrimaryContainer,
-          //       ),
-          //       child: Row(
-          //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //         children: [
-          //           Text(
-          //             'PROCESAR PAGO ',
-          //             style: TextStyle(
-          //               fontFamily: 'Poppins-regular',
-          //               fontSize: 14,
-          //             ),
-          //           ),
-          //           Container(
-          //             margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
-          //             child: Icon(
-          //               MaterialIcons.payment,
-          //               size: 14,
-          //               color: Colors.grey.shade300,
-          //             ),
-          //           ),
-          //         ],
-          //       ),
-          //     ),
-          //   ),
-          // ),
           Container(
             margin: const EdgeInsets.fromLTRB(20, 0, 20, 30),
             decoration: BoxDecoration(
@@ -1438,7 +1189,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                 children: [
                                   Center(
                                     child: Text(
-                                      '¿Seguro que quiere guardar el pedido y pagar de forma manual?',
+                                      '¿Ha verificado todos los datos para proseguir con el pedido?',
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -1483,8 +1234,6 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                 ),
                                 ElevatedButton.icon(
                                   onPressed: () async {
-                                    // Guardar pedido con el flujo
-                                    // Por Distribución
                                     print('GUARDAR PEDIDO');
                                     final orderActive =
                                         Provider.of<OrderProvider>(context,
@@ -1495,15 +1244,15 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                         widget.client,
                                         userUid,
                                         commentary,
-                                        masterDiscountTotal,
+                                        subTotalWithMasterDiscount,
                                         widget.cart,
                                         selectedValue2,
                                         selectedValue,
                                         today,
-                                        taxTotal,
+                                        getIVA,
                                         numberOrder,
                                         widget.subTotal,
-                                        totalOfTheOrder,
+                                        totalPriceOfTheOrder,
                                         discountByInput,
                                       );
                                       orderActive.setOrder(false, Clients());

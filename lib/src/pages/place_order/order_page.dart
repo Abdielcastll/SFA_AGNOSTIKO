@@ -48,13 +48,10 @@ class OrderPage extends StatelessWidget {
             value: user?.getUserRole(),
             initialData: null,
             catchError: (context, error) {
+              print('ERROR ON GETTING USER ROLE IN ORDER PAGE');
               print(error);
               return;
             },
-            // builder: (context, child) {
-
-            //   return NavigationPages();
-            // });
             child: MultiProvider(
               providers: [
                 StreamProvider<Coin?>.value(

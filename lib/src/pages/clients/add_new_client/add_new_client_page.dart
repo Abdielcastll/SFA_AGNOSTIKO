@@ -155,13 +155,13 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
       print('Location permission: $permission');
     }
 
-    /* await Geolocator.getCurrentPosition(
-
-      desiredAccuracy: LocationAccuracy.high, forceAndroidLocationManager: true); */
+    // await Geolocator.getCurrentPosition(
+    //     desiredAccuracy: LocationAccuracy.high,
+    //     forceAndroidLocationManager: true);
 
     /* final pos = await Geolocator.getCurrentPosition(
 
-      desiredAccuracy: LocationAccuracy.lowest,
+      desiredAccuracy: LocationAccuracy.high,
 
       forceAndroidLocationManager: true,
 
@@ -218,6 +218,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
 
   @override
   Widget build(BuildContext context) {
+    determinePosition();
     final pricesSummary = Provider.of<PricesSummary?>(context)?.summary ?? {};
     final idSummary = Provider.of<IdTypeSummary?>(context)?.summary ?? {};
     final zonesSummary = Provider.of<ZoneSummary?>(context)?.summary ?? {};
@@ -711,30 +712,12 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                   print('GEOLOCATOR');
                                   setState(() {});
                                 });
-                                // _getCurrentLocation().then((value) {
-                                //   latitude = '${value.latitude}';
-                                //   longitude = '${value.longitude}';
-                                //   print(latitude);
-                                //   print(longitude);
-                                //   print('GEOLOCATOR');
-                                //   setState(() {});
-                                // });
                               },
                             ),
                           ),
                         ],
                       ),
                       SizedBox(height: 10),
-                      // Text(
-                      //   // AppLocalizations.of(context)!.selectFile,
-                      //   'Seleccionar Archivo',
-                      //   textAlign: TextAlign.center,
-                      //   style: TextStyle(
-                      //     fontFamily: 'Poppins-regular',
-                      //     color: Colors.grey.shade400,
-                      //     fontSize: 14,
-                      //   ),
-                      // ),
                       SizedBox(
                         height: 10,
                       ),

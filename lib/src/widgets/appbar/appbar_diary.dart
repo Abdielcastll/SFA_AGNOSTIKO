@@ -31,11 +31,11 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
         Provider.of<OrderProvider>(context).clientForTheOrder;
 
     return AppBar(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          bottom: Radius.circular(20),
-        ),
-      ),
+      // shape: RoundedRectangleBorder(
+      //   borderRadius: BorderRadius.vertical(
+      //     bottom: Radius.circular(20),
+      //   ),
+      // ),
 
       title: orderActive.orderActive == false
           ? Padding(
@@ -486,11 +486,10 @@ class DiaryTabBar extends StatelessWidget implements PreferredSizeWidget {
     return TabBar(
       splashBorderRadius: BorderRadius.circular(20),
       splashFactory: InkSplash.splashFactory,
-
       labelColor: Colors.white,
-      indicatorColor: myTheme.colorScheme.secondary,
+      indicatorColor: myTheme.colorScheme.onPrimaryContainer,
       unselectedLabelColor: Colors.grey.shade400,
-      indicatorWeight: 3,
+      indicatorWeight: 4,
       indicatorPadding: EdgeInsets.symmetric(horizontal: 20),
       indicatorSize: TabBarIndicatorSize.tab,
       // isScrollable: true,

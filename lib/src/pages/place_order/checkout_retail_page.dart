@@ -27,6 +27,7 @@ import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_checkout.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -36,13 +37,11 @@ class CheckoutRetailPage extends StatefulWidget {
     required this.client,
     required this.cart,
     required this.subTotal,
-    this.coinsExchangeRates,
   }) : super(key: key);
 
   final Clients? client;
   final List<ShoppingCartProduct> cart;
   final double subTotal;
-  final coinsExchangeRates;
 
   @override
   State<CheckoutRetailPage> createState() => _CheckoutRetailPageState();
@@ -77,7 +76,6 @@ class _CheckoutRetailPageState extends State<CheckoutRetailPage> {
           client: widget.client,
           subTotal: widget.subTotal,
           cart: widget.cart,
-          coinsExchangeRates: widget.coinsExchangeRates,
         ),
       ),
     );
@@ -90,13 +88,11 @@ class CheckoutBody extends StatefulWidget {
     required this.client,
     required this.subTotal,
     required this.cart,
-    this.coinsExchangeRates,
   }) : super(key: key);
 
   final Clients? client;
   final double subTotal;
   final List<ShoppingCartProduct> cart;
-  final coinsExchangeRates;
 
   @override
   State<CheckoutBody> createState() => _CheckoutBodyState();
@@ -106,7 +102,6 @@ class _CheckoutBodyState extends State<CheckoutBody> {
   String? selectedValue = 'Fiscal';
   String? selectedValue2 = 'Factura';
   String? selectedDiscount = '0';
-  // double amountPayed = 0;
   String commentary = '';
   bool isFiscalSelected = true;
   var numberOrder;
@@ -118,90 +113,10 @@ class _CheckoutBodyState extends State<CheckoutBody> {
 
   final List<String> items2 = ['Factura', 'Consignacion', 'Nota de entrega'];
 
-  late List<double> coinsExchangeRates = widget.coinsExchangeRates;
-
-  double priceWithIVA() {
-    var total = (totalPriceOfTheOrder() * 16) / 100;
-    return total;
-  }
-
-  double priceWithMasterDiscount() {
-    // var total = double.parse(
-    //     (double.parse((widget.subTotal / 100).toStringAsFixed(4)) *
-    //             widget.client?.masterDiscount)
-    //         .toString());
-    double total = ((widget.subTotal / 100) * widget.client?.masterDiscount);
-    var doubleTotal = double.parse(total.toStringAsFixed(2));
-    return doubleTotal;
-  }
-
-  double totalPriceOfTheOrder() {
-    var total =
-        (widget.subTotal - priceWithMasterDiscount() - totalDiscountApplied());
-    return total;
-  }
-
-  double totalDiscountApplied() {
-    var total = double.parse(
-        ((widget.subTotal / 100) * discountByInput).toStringAsFixed(4));
-    // var total = (widget.subTotal / 100) * discountByInput;
-    double doubleTotal = double.parse(total.toStringAsFixed(2));
-    return doubleTotal;
-  }
-
-  double totalWithTheIVA() {
-    var total = double.parse(
-        (totalPriceOfTheOrder() + priceWithIVA()).toStringAsFixed(4));
-    double doubleTotal = double.parse(total.toStringAsFixed(2));
-    return doubleTotal;
-  }
-
-  // double totalDiscountApplied() {
-  //   var total = (widget.subTotal - (discountByInput / 100)).toStringAsFixed(4);
-  //   double doubleTotal = double.parse(total);
-  //   return doubleTotal;
-  // }
-
-  completeOrder() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => CompletedOrderPage(
-          client: widget.client?.name,
-          address: selectedValue == 'Fiscal'
-              ? widget.client!.fiscalAdress
-              : widget.client!.dispatchAdress,
-          orderNumber: numberOrder ?? 0000,
-          date: dateFormatter.format(today),
-          method: selectedValue2,
-          total: totalWithTheIVA(),
-          coinsExchangeRates: widget.coinsExchangeRates,
-        ),
-      ),
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  // updatePayed(double amount) {
-  //   print('payed $amount');
-  //   if (amount != null && amount != 0) {
-  //     setState(() {
-  //       amountPayed += amount;
-  //     });
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     final userUid = Provider.of<UserModel>(context).uid;
     int? clientMasterDiscount = widget.client?.masterDiscount;
-    double? masterDiscountTotal = priceWithMasterDiscount();
-    double? taxTotal = priceWithIVA();
-    double? totalOfTheOrder = totalWithTheIVA();
     String? fiscalAddress = widget.client?.fiscalAdress;
     String? dispatchAddress =
         widget.client?.dispatchAdress ?? 'No Hay direcciofn disponible';
@@ -212,47 +127,82 @@ class _CheckoutBodyState extends State<CheckoutBody> {
     final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 0;
     final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
     final coinCode = Provider.of<Coin?>(context)?.code ?? '';
-    print(coinName);
     print('TEStiNG COIN NAME');
+    print(coinName);
 
-    priceFormat(productPrice) {
-      double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-      double convertedAmount = double.parse(
-          (correctAmount * coinExchangeRatio).toStringAsFixed(coinDecimals));
-      return '$coinSymbol$convertedAmount';
-      // double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-      // if (currentCoin!.contains('USD')) {
-      //   return NumberFormat.simpleCurrency(
-      //     locale: 'en-US',
-      //     decimalDigits: 2,
-      //   ).format(productPrice).toString();
-      // } else if (currentCoin.contains('VED')) {
-      //   return NumberFormat.currency(
-      //     locale: 'es_VE',
-      //     decimalDigits: 2,
-      //     symbol: "Bs.",
-      //   ).format(correctAmount * 4.58).toString();
-      // } else if (currentCoin.contains('EUR')) {
-      //   return NumberFormat.currency(
-      //     locale: 'es_ES',
-      //     decimalDigits: 2,
-      //     symbol: '€',
-      //   ).format(correctAmount * 0.89).toString();
-      // } else if (currentCoin.contains('MXN')) {
-      //   return NumberFormat.currency(
-      //     locale: 'es_MX',
-      //     decimalDigits: 2,
-      //     symbol: '\$',
-      //   ).format(correctAmount * 19.43);
-      // } else if (currentCoin.contains('BTC')) {
-      //   return '฿ ${(correctAmount * 0.00011).toString()}';
-      // } else {
-      //   return NumberFormat.currency(
-      //     locale: 'es_VE',
-      //     decimalDigits: 2,
-      //     symbol: "PPR.",
-      //   ).format(correctAmount * 4.58).toString();
-      // }
+    double subTotalConverted = priceMultipliedByItsExchangeRatio(
+        coinDecimals: coinDecimals,
+        coinExchangeRatio: coinExchangeRatio,
+        productPrice: widget.subTotal);
+    print('subTotal: ${widget.subTotal}');
+    print('subTotalConverted: $subTotalConverted');
+
+    double subTotalWithMasterDiscount = double.parse(
+        (widget.subTotal * (widget.client?.masterDiscount / 100))
+            .toStringAsFixed(4));
+    double subTotalWithMasterDiscountConverted =
+        priceMultipliedByItsExchangeRatio(
+            coinDecimals: coinDecimals,
+            coinExchangeRatio: coinExchangeRatio,
+            productPrice: subTotalWithMasterDiscount);
+    print('subTotalWithMasterDiscount: $subTotalWithMasterDiscount');
+    print(
+        'subTotalWithMasterDiscountConverted: $subTotalWithMasterDiscountConverted');
+
+    double subTotalWithDiscountApplied = double.parse(
+        (widget.subTotal * (discountByInput / 100)).toStringAsFixed(4));
+    double subTotalWithDiscountAppliedConverted =
+        priceMultipliedByItsExchangeRatio(
+            coinDecimals: coinDecimals,
+            coinExchangeRatio: coinExchangeRatio,
+            productPrice: subTotalWithDiscountApplied);
+    print('subTotalWithDiscountApplied: $subTotalWithDiscountApplied');
+    print(
+        'subTotalWithDiscountAppliedConverted: $subTotalWithDiscountAppliedConverted');
+
+    double getIVA = double.parse(
+      ((widget.subTotal -
+                  subTotalWithMasterDiscount -
+                  subTotalWithDiscountApplied) *
+              (16 / 100))
+          .toStringAsFixed(4),
+    );
+    double getIVAConverted = priceMultipliedByItsExchangeRatio(
+        coinDecimals: coinDecimals,
+        coinExchangeRatio: coinExchangeRatio,
+        productPrice: getIVA);
+    print('getIVA: $getIVA');
+    print('getIVAConverted: $getIVAConverted');
+
+    double totalPriceOfTheOrder = double.parse((widget.subTotal -
+            subTotalWithMasterDiscount -
+            subTotalWithDiscountApplied +
+            getIVA)
+        .toStringAsFixed(4));
+    double totalPriceOfTheOrderConverted = priceMultipliedByItsExchangeRatio(
+        coinDecimals: coinDecimals,
+        coinExchangeRatio: coinExchangeRatio,
+        productPrice: totalPriceOfTheOrder);
+    print('totalPriceOfTheOrder: $totalPriceOfTheOrder');
+    print('totalPriceOfTheOrderConverted: $totalPriceOfTheOrderConverted');
+
+    completeOrder() {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CompletedOrderPage(
+            client: widget.client?.name,
+            address: selectedValue == 'Fiscal'
+                ? widget.client!.fiscalAdress
+                : widget.client!.dispatchAdress,
+            orderNumber: numberOrder ?? 0000,
+            date: dateFormatter.format(today),
+            method: selectedValue2,
+            total: totalPriceOfTheOrder,
+            completedMessage: '¡Pedido guardado!',
+          ),
+        ),
+      );
     }
 
     return SingleChildScrollView(
@@ -272,7 +222,6 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      // margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerLeft,
                       child: Text(
                         AppLocalizations.of(context)!.subtotal,
@@ -288,7 +237,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       margin: const EdgeInsets.only(right: 10),
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        priceFormat(widget.subTotal),
+                        '$coinSymbol ${subTotalConverted.toStringAsFixed(2)}',
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
@@ -303,10 +252,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      // margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        // Descuento Maestro
                         '${AppLocalizations.of(context)!.masterDiscount} ($clientMasterDiscount%)',
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
@@ -320,8 +267,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       margin: const EdgeInsets.only(right: 10),
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        '- ${priceFormat(masterDiscountTotal)}',
-                        // '- $masterDiscountTotal',
+                        '- $coinSymbol ${subTotalWithMasterDiscountConverted.toStringAsFixed(2)}',
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
@@ -662,8 +608,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       margin: const EdgeInsets.only(right: 10),
                       alignment: Alignment.centerRight,
                       child: Text(
-                        '- ${priceFormat(totalDiscountApplied())}',
-                        // 'test',
+                        '- $coinSymbol ${subTotalWithDiscountAppliedConverted.toStringAsFixed(2)}',
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
@@ -694,7 +639,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       margin: const EdgeInsets.only(bottom: 10, right: 10),
                       alignment: Alignment.centerRight,
                       child: Text(
-                        priceFormat(taxTotal),
+                        '+ $coinSymbol ${getIVAConverted.toStringAsFixed(2)}',
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
@@ -724,7 +669,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       margin: const EdgeInsets.only(bottom: 5, right: 10),
                       alignment: Alignment.centerRight,
                       child: Text(
-                        priceFormat(totalOfTheOrder),
+                        '$coinSymbol ${totalPriceOfTheOrderConverted.toStringAsFixed(2)}',
                         style: TextStyle(
                           color: myTheme.colorScheme.onPrimaryContainer,
                           fontFamily: 'Poppins-regular',
@@ -822,21 +767,18 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                               'Confirmación',
                             ),
                           ),
-                          content: Container(
-                            child: SingleChildScrollView(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                // ignore: prefer_const_literals_to_create_immutables
-                                children: [
-                                  Center(
-                                    child: Text(
-                                      '¿Pasar a procesar pago?',
-                                      textAlign: TextAlign.center,
-                                    ),
+                          content: SingleChildScrollView(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Center(
+                                  child: Text(
+                                    '¿Pasar a procesar pago?',
+                                    textAlign: TextAlign.center,
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
                           actions: [
@@ -876,9 +818,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                 ),
                                 ElevatedButton.icon(
                                   onPressed: () async {
-                                    // Aceptar e Iniciar el proceso de pago
-                                    // Por pago directo
                                     print('Iniciar proceso de pago directo');
+
                                     final firebaseID = FirebaseFirestore
                                         .instance
                                         .collection('clientes')
@@ -886,23 +827,26 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                         .collection('pedidos')
                                         .doc()
                                         .id;
+
                                     print(firebaseID);
+
                                     final invoiceNumber =
                                         await completePaymentProcess(
-                                            widget.client,
-                                            userUid,
-                                            commentary,
-                                            masterDiscountTotal,
-                                            widget.cart,
-                                            selectedValue2,
-                                            selectedValue,
-                                            today,
-                                            taxTotal,
-                                            numberOrder,
-                                            widget.subTotal,
-                                            totalOfTheOrder,
-                                            discountByInput,
-                                            firebaseID);
+                                      widget.client,
+                                      userUid,
+                                      commentary,
+                                      subTotalWithMasterDiscount,
+                                      widget.cart,
+                                      selectedValue2,
+                                      selectedValue,
+                                      today,
+                                      getIVA,
+                                      numberOrder,
+                                      widget.subTotal,
+                                      totalPriceOfTheOrder,
+                                      discountByInput,
+                                      firebaseID,
+                                    );
 
                                     Client currentClient = Client(
                                       active: widget.client!.active,
@@ -935,15 +879,16 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                             RouteSettings(name: 'PAGO-DIRECTO'),
                                         builder: (BuildContext context) =>
                                             AddPaymentPage(
-                                          remaining: totalOfTheOrder,
+                                          invoiceTotal: totalPriceOfTheOrder,
+                                          remaining: totalPriceOfTheOrder,
                                           subTotal: widget.subTotal,
                                           discountPercentage: discountByInput,
                                           // discountPercentage:
                                           //     widget.client?.masterDiscount,
-                                          discount: totalDiscountApplied(),
+                                          discount: subTotalWithDiscountApplied,
                                           // discount: (widget.subTotal / 100) *
                                           //     widget.client?.masterDiscount,
-                                          tax: taxTotal,
+                                          tax: getIVA,
                                           percentageTax: 16,
                                           client: currentClient,
                                           invoiceDocumentID: firebaseID,
@@ -953,8 +898,6 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                         ),
                                       ),
                                     );
-
-                                    print('PAGO REGISTRADO');
                                   },
                                   style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(
@@ -1026,7 +969,6 @@ class _CheckoutBodyState extends State<CheckoutBody> {
               borderRadius: BorderRadius.circular(16),
               child: ElevatedButton(
                 onPressed: () async {
-                  // Pop-up de confirmacion para guardar pedido
                   showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -1041,21 +983,18 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                               'Confirmación',
                             ),
                           ),
-                          content: Container(
-                            child: SingleChildScrollView(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                // ignore: prefer_const_literals_to_create_immutables
-                                children: [
-                                  Center(
-                                    child: Text(
-                                      '¿Seguro que quiere guardar el pedido y pagar de forma manual?',
-                                      textAlign: TextAlign.center,
-                                    ),
+                          content: SingleChildScrollView(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Center(
+                                  child: Text(
+                                    '¿Seguro que quiere guardar el pedido y pagar de forma manual?',
+                                    textAlign: TextAlign.center,
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
                           actions: [
@@ -1064,7 +1003,6 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                               children: [
                                 ElevatedButton.icon(
                                   onPressed: () {
-                                    // Cancelar
                                     Navigator.pop(context);
                                   },
                                   style: ButtonStyle(
@@ -1095,8 +1033,6 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                 ),
                                 ElevatedButton.icon(
                                   onPressed: () async {
-                                    // Guardar pedido con el flujo
-                                    // Por Distribución
                                     print('GUARDAR PEDIDO');
                                     final orderActive =
                                         Provider.of<OrderProvider>(context,
@@ -1104,19 +1040,19 @@ class _CheckoutBodyState extends State<CheckoutBody> {
 
                                     if (selectedValue2 != null) {
                                       try {
-                                        await createOrder(
+                                        var result = await createOrder(
                                           widget.client,
                                           userUid,
                                           commentary,
-                                          masterDiscountTotal,
+                                          subTotalWithMasterDiscount,
                                           widget.cart,
                                           selectedValue2,
                                           selectedValue,
                                           today,
-                                          taxTotal,
+                                          getIVA,
                                           numberOrder,
                                           widget.subTotal,
-                                          totalOfTheOrder,
+                                          totalPriceOfTheOrder,
                                           discountByInput,
                                         );
                                       } catch (e) {

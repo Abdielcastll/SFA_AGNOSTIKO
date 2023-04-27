@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
@@ -19,6 +20,7 @@ import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 
 void modalBottomSheetForOrders(
   bool completed,
@@ -55,7 +57,6 @@ void modalBottomSheetForOrders(
   print('Print data de orderCard');
   print('+++++++++++++++++++++++++');
   print('completed: $completed,');
-  print('  context: $context,');
   print('  commentary: $commentary,');
   print('  clientID: $clientID,');
   print('  products: $products,');
@@ -82,8 +83,8 @@ void modalBottomSheetForOrders(
   print('  client: $client,');
   print('  orderDate: $orderDate,');
   print('  correlativeNumber: $correlativeNumber,');
-  print('isRetai: $isRetail');
-  print(showButton);
+  // print('isRetai: $isRetail');
+  // print(showButton);
   showModalBottomSheet(
     elevation: 0,
     backgroundColor: Colors.white,
@@ -91,7 +92,7 @@ void modalBottomSheetForOrders(
     context: context,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(
-        top: Radius.circular(20),
+        top: Radius.circular(16),
       ),
     ),
     builder: (context) {
@@ -124,59 +125,12 @@ void modalBottomSheetForOrders(
                 Provider.of<Coin?>(context)?.exchangeRatio ?? 0;
             final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
             final coinCode = Provider.of<Coin?>(context)?.code ?? '';
-            priceFormat(productPrice) {
-              double correctAmount =
-                  double.parse(productPrice.toStringAsFixed(4));
-              double convertedAmount = double.parse(
-                  (correctAmount * coinExchangeRatio)
-                      .toStringAsFixed(coinDecimals));
-              return convertedAmount;
-              // double correctAmount =
-              //     double.parse(productPrice.toStringAsFixed(4));
-              // if (currentCoin!.contains('USD')) {
-              //   return NumberFormat.simpleCurrency(
-              //           locale: 'en-US', decimalDigits: 2)
-              //       .format(productPrice)
-              //       .toString();
-              // } else if (currentCoin.contains('VED')) {
-              //   return NumberFormat.currency(
-              //     locale: 'es_VE',
-              //     decimalDigits: 2,
-              //     symbol: "Bs.",
-              //   ).format(correctAmount * 4.58).toString();
-              // } else if (currentCoin.contains('EUR')) {
-              //   return NumberFormat.currency(
-              //     locale: 'es_ES',
-              //     decimalDigits: 2,
-              //     symbol: '€',
-              //   ).format(correctAmount * 0.89).toString();
-              // } else if (currentCoin.contains('MXN')) {
-              //   return NumberFormat.currency(
-              //     locale: 'es_MX',
-              //     decimalDigits: 2,
-              //     symbol: '\$',
-              //   ).format(correctAmount * 19.43);
-              // } else if (currentCoin.contains('BTC')) {
-              //   return '฿ ${(correctAmount * 0.00011).toStringAsFixed(3)}';
-              // } else {
-              //   return NumberFormat.currency(
-              //     locale: 'es_VE',
-              //     decimalDigits: 2,
-              //     symbol: "PPR.",
-              //   ).format(correctAmount * 4.58).toString();
-              // }
-            }
 
             doublePop() {
               Navigator.of(context).popUntil((route) => route.isFirst);
             }
 
             print('Is user retail when opening this menu: $isRetail');
-
-            // final userRole = Provider.of<UserRole?>(context, listen: true);
-            // print(userRole);
-            // print('User Role on Orders bottomSheet');
-
             return SafeArea(
               child: Container(
                 padding:
@@ -186,21 +140,21 @@ void modalBottomSheetForOrders(
                     children: [
                       Container(
                         alignment: Alignment.centerLeft,
-                        margin: const EdgeInsets.fromLTRB(10, 20, 0, 0),
+                        // margin: const EdgeInsets.fromLTRB(10, 5, 0, 0),
                         child: Text(
                           AppLocalizations.of(context)!.commentary,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: myTheme.colorScheme.primary,
+                            color: myTheme.colorScheme.onPrimaryContainer,
                           ),
                         ),
                       ),
                       Container(
-                        width: 350,
+                        // width: 350,
                         height: 40,
                         alignment: Alignment.centerLeft,
-                        margin: const EdgeInsets.fromLTRB(10, 15, 0, 10),
+                        margin: const EdgeInsets.fromLTRB(10, 10, 0, 10),
                         padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16),
@@ -224,19 +178,14 @@ void modalBottomSheetForOrders(
                         ),
                       ),
                       const SizedBox(height: 25),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                width: 150,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16),
-                                    color: myTheme.colorScheme.primary),
-                                child: TextButton(
+                      Container(
+                        child: Column(
+                          children: [
+                            Container(),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                ElevatedButton.icon(
                                   onPressed: () {
                                     Navigator.push(
                                       context,
@@ -263,11 +212,20 @@ void modalBottomSheetForOrders(
                                       ),
                                     );
                                   },
-                                  style: TextButton.styleFrom(
-                                    foregroundColor:
-                                        myTheme.colorScheme.primary,
+                                  icon: Icon(Icons.person),
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                      myTheme.colorScheme.primary,
+                                    ),
+                                    shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(18.0),
+                                      ),
+                                    ),
                                   ),
-                                  child: Text(
+                                  label: Text(
                                     AppLocalizations.of(context)!.seeClient,
                                     style: TextStyle(
                                       fontFamily: 'Poppins-regular',
@@ -277,736 +235,410 @@ void modalBottomSheetForOrders(
                                     ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(width: 15),
-                              Container(
-                                width: 150,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16),
-                                  color: myTheme.colorScheme.primary,
+                                // const SizedBox(width: 15),
+                                Container(
+                                  child: ElevatedButton.icon(
+                                    onPressed: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return SeeProductsAlertDialog(
+                                              products: products,
+                                              discountMaster: discountMaster,
+                                              subTotal: subTotal,
+                                              tax: tax,
+                                              total: total,
+                                              coinDecimals: coinDecimals,
+                                              coinExchangeRatio:
+                                                  coinExchangeRatio,
+                                              coinSymbol: coinSymbol,
+                                            );
+                                          });
+                                    },
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                        myTheme.colorScheme.primary,
+                                      ),
+                                      shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(18.0),
+                                        ),
+                                      ),
+                                    ),
+                                    icon: Icon(Icons.shopping_basket_rounded),
+                                    label: Text(
+                                      AppLocalizations.of(context)!.seeProducts,
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins-regular',
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                                child: TextButton(
-                                  onPressed: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                            ),
-                                            title: Text(
-                                              AppLocalizations.of(context)!
-                                                  .order,
-                                              style: TextStyle(
-                                                fontFamily: 'Poppins-regular',
-                                                color: myTheme
-                                                    .colorScheme.secondary,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            content: Column(
-                                              children: [
-                                                SingleChildScrollView(
-                                                  child: Container(
-                                                    width: 300,
-                                                    height: 300,
-                                                    child: Scrollbar(
-                                                      child: ListView.builder(
-                                                        itemCount:
-                                                            products.length,
-                                                        itemBuilder:
-                                                            (context, index) {
-                                                          final product =
-                                                              products[index];
-                                                          return ListTile(
-                                                            leading: Icon(
-                                                              Icons.photo,
-                                                              color: Colors.grey
-                                                                  .shade400,
-                                                            ),
-                                                            title: Text(
-                                                              '${product['nombre']}',
-                                                              style: TextStyle(
-                                                                fontFamily:
-                                                                    'Poppins-regular',
-                                                                color: Colors
-                                                                    .grey
-                                                                    .shade400,
-                                                                fontSize: 14,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                            ),
-                                                            subtitle: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  Column(
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  // color: Colors.red,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      completed
+                                          ? Container()
+                                          : !showButton
+                                              ? Container()
+                                              : Container(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.75,
+                                                  margin:
+                                                      const EdgeInsets.fromLTRB(
+                                                          0, 0, 0, 0),
+                                                  child: ElevatedButton.icon(
+                                                    onPressed: () {
+                                                      isRetail
+                                                          ? showDialog(
+                                                              context: context,
+                                                              builder:
+                                                                  (BuildContext
+                                                                      context) {
+                                                                print(
+                                                                    'Retomar proceso de Retail');
+                                                                return AlertDialog(
+                                                                  shape:
+                                                                      RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            20),
+                                                                  ),
+                                                                  title: Text(
+                                                                    '¿Quiere volver a activar el pedido?',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontFamily:
+                                                                          'Poppins-regular',
+                                                                      color: myTheme
+                                                                          .colorScheme
+                                                                          .onPrimaryContainer,
+                                                                      fontSize:
+                                                                          16,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                    ),
+                                                                  ),
+                                                                  content: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceEvenly,
                                                                     children: [
-                                                                      Text(
-                                                                        '${product['codigo']} x ${product['cantidad']}',
-                                                                        style:
-                                                                            TextStyle(
-                                                                          fontFamily:
-                                                                              'Poppins-regular',
-                                                                          color: Colors
-                                                                              .grey
-                                                                              .shade400,
-                                                                          fontSize:
-                                                                              12,
+                                                                      TextButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                        },
+                                                                        child:
+                                                                            Text(
+                                                                          AppLocalizations.of(context)!
+                                                                              .goBack,
+                                                                          style:
+                                                                              TextStyle(
+                                                                            fontFamily:
+                                                                                'Poppins-regular',
+                                                                            color:
+                                                                                myTheme.colorScheme.primary,
+                                                                            fontSize:
+                                                                                14,
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                          ),
                                                                         ),
                                                                       ),
-                                                                      Text(
-                                                                        '${AppLocalizations.of(context)!.payable}:',
-                                                                        style:
-                                                                            TextStyle(
-                                                                          fontFamily:
-                                                                              'Poppins-regular',
-                                                                          color: Colors
-                                                                              .grey
-                                                                              .shade400,
-                                                                          fontSize:
-                                                                              12,
-                                                                          fontWeight:
-                                                                              FontWeight.bold,
-                                                                        ),
-                                                                      ),
-                                                                      Text(
-                                                                        '$coinSymbol ${priceFormat(product['monto'])}',
-                                                                        style:
-                                                                            TextStyle(
-                                                                          fontFamily:
-                                                                              'Poppins-regular',
-                                                                          color: Colors
-                                                                              .grey
-                                                                              .shade400,
-                                                                          fontSize:
-                                                                              12,
-                                                                          fontWeight:
-                                                                              FontWeight.bold,
+                                                                      Container(
+                                                                        width:
+                                                                            150,
+                                                                        height:
+                                                                            40,
+                                                                        decoration: BoxDecoration(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(16),
+                                                                            color: myTheme.colorScheme.primary),
+                                                                        child:
+                                                                            TextButton(
+                                                                          onPressed:
+                                                                              () async {
+                                                                            // Mandar pedido a proceso de pago retail una vez mas
+                                                                            final orderActive =
+                                                                                Provider.of<OrderProvider>(context, listen: false);
+                                                                            List<ShoppingCartProduct>
+                                                                                savedProducts =
+                                                                                [];
+                                                                            print('Activando pedido');
+                                                                            print(products);
+                                                                            Clients?
+                                                                                oldClient =
+                                                                                Clients(
+                                                                              active: client.active,
+                                                                              clientDocumentId: client.clientDocumentId,
+                                                                              dispatchAdress: client.dispatchAdress,
+                                                                              email: client.email,
+                                                                              fiscalAdress: client.fiscalAdress,
+                                                                              id: client.id,
+                                                                              idType: client.idType,
+                                                                              madeBy: client.madeBy,
+                                                                              masterDiscount: client.masterDiscount,
+                                                                              modified: client.modified,
+                                                                              name: client.name,
+                                                                              phone1: client.phone1,
+                                                                              phone2: client.phone2,
+                                                                              prices: client.prices,
+                                                                              prospect: client.prospect,
+                                                                              specialContributor: client.specialContributor,
+                                                                              zone: client.zone,
+                                                                            );
+                                                                            await products.forEach((productValue) async {
+                                                                              // print(value[
+                                                                              //     'codigo']);
+                                                                              String? productCatalogueId;
+                                                                              String? promotion;
+                                                                              int? productAvaliableStock;
+                                                                              await productsCollection.where('codigo', isEqualTo: productValue['codigo']).get().then((productDoc) {
+                                                                                for (var element in productDoc.docs) {
+                                                                                  productCatalogueId = element.data().toString().contains('catalogo') ? element.get('catalogo').id : '';
+                                                                                  promotion = element.data().toString().contains('promocion') ? element.get('promocion').id : '';
+                                                                                }
+                                                                              });
+                                                                              print('test result $productCatalogueId');
+                                                                              print('test result $promotion');
+                                                                              await stockCollection.doc('productos').get().then((stock) {
+                                                                                productAvaliableStock = stock.data().toString().contains('valores') ? stock.get('valores')['${productValue['codigo']}'] : 0;
+                                                                              });
+                                                                              print('test result: $productAvaliableStock');
+                                                                              ShoppingCartProduct productForCart = ShoppingCartProduct(
+                                                                                availableStock: productAvaliableStock,
+                                                                                code: productValue['codigo'],
+                                                                                listOfPricesId: productValue['idListaDePrecios'],
+                                                                                name: productValue['nombre'],
+                                                                                productId: productValue['codigo'],
+                                                                                productQuantity: productValue['cantidad'],
+                                                                                promotion: promotion,
+                                                                                totalAmount: productValue['precioUnitario']
+                                                                                    // productValue[
+                                                                                    //         'monto']
+                                                                                    .toString(),
+                                                                                unitPrice: productValue['precioUnitario'].toString(),
+                                                                                urlPicture: productCatalogueId,
+                                                                              );
+                                                                              print('Producto en carro creado');
+                                                                              print(productForCart.name);
+                                                                              objectBox.insertShoppingCartProduct(productForCart);
+                                                                              savedProducts.add(productForCart);
+                                                                            });
+                                                                            print('LISTA DE PRODUCTOS $savedProducts');
+                                                                            orderActive.setOrder(true,
+                                                                                oldClient);
+                                                                            deleteOrder(orderDocumentId,
+                                                                                client.clientDocumentId);
+                                                                            ScaffoldMessenger.of(context)
+                                                                              ..removeCurrentSnackBar()
+                                                                              ..showSnackBar(
+                                                                                SnackBar(
+                                                                                  backgroundColor: myTheme.colorScheme.primary,
+                                                                                  duration: const Duration(seconds: 2),
+                                                                                  content: const Text(
+                                                                                    "Orden retomada dentro del carrito",
+                                                                                    style: TextStyle(
+                                                                                      fontFamily: 'Poppins-regular',
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              );
+                                                                            doublePop();
+                                                                            Navigator.push(
+                                                                              context,
+                                                                              MaterialPageRoute(
+                                                                                settings: const RouteSettings(name: "ORDER"),
+                                                                                builder: (context) => const OrderPage(),
+                                                                              ),
+                                                                            );
+                                                                          },
+                                                                          style:
+                                                                              TextButton.styleFrom(
+                                                                            foregroundColor:
+                                                                                myTheme.colorScheme.primary,
+                                                                          ),
+                                                                          child:
+                                                                              Text(
+                                                                            'Aceptar',
+                                                                            style:
+                                                                                TextStyle(
+                                                                              fontFamily: 'Poppins-regular',
+                                                                              color: Colors.white,
+                                                                              fontSize: 14,
+                                                                              fontWeight: FontWeight.bold,
+                                                                            ),
+                                                                          ),
                                                                         ),
                                                                       ),
                                                                     ],
                                                                   ),
-                                                                ]),
-                                                          );
-                                                        },
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(height: 30),
-                                                Text(
-                                                  '${AppLocalizations.of(context)!.subtotal}: $coinSymbol ${priceFormat(subTotal)}',
-                                                  style: TextStyle(
-                                                    fontFamily:
-                                                        'Poppins-regular',
-                                                    color: Colors.black,
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  '${AppLocalizations.of(context)!.masterDiscount}: $coinSymbol ${priceFormat(discountMaster).toStringAsFixed(2)}',
-                                                  style: TextStyle(
-                                                    fontFamily:
-                                                        'Poppins-regular',
-                                                    color: Colors.black,
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  '${AppLocalizations.of(context)!.tax}: $coinSymbol ${priceFormat(tax)}',
-                                                  style: TextStyle(
-                                                    fontFamily:
-                                                        'Poppins-regular',
-                                                    color: Colors.black,
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  '${AppLocalizations.of(context)!.totalToPay}: $coinSymbol ${priceFormat(total)}',
-                                                  style: TextStyle(
-                                                    fontFamily:
-                                                        'Poppins-regular',
-                                                    color: Colors.green,
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                SizedBox(height: 30),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.end,
-                                                  children: [
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        Navigator.pop(context);
-                                                      },
-                                                      child: Text(
-                                                        AppLocalizations.of(
-                                                                context)!
-                                                            .goBack,
-                                                        style: TextStyle(
-                                                          fontFamily:
-                                                              'Poppins-regular',
-                                                          color: myTheme
-                                                              .colorScheme
-                                                              .primary,
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        });
-                                  },
-                                  style: TextButton.styleFrom(
-                                    foregroundColor:
-                                        myTheme.colorScheme.primary,
-                                  ),
-                                  child: Text(
-                                    AppLocalizations.of(context)!.seeProducts,
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins-regular',
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              completed
-                                  ? Container()
-                                  : !showButton
-                                      ? Container()
-                                      : Container(
-                                          width: 260,
-                                          height: 40,
-                                          margin: const EdgeInsets.fromLTRB(
-                                              0, 0, 10, 0),
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(16),
-                                              color:
-                                                  myTheme.colorScheme.primary),
-                                          child: TextButton(
-                                            onPressed: () {
-                                              isRetail
-                                                  ? showDialog(
-                                                      context: context,
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        print(
-                                                            'Retomar proceso de Retail');
-
-                                                        return AlertDialog(
-                                                          shape:
-                                                              RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20),
-                                                          ),
-                                                          title: Text(
-                                                            '¿Quiere volver a activar el pedido?',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                              fontFamily:
-                                                                  'Poppins-regular',
-                                                              color: myTheme
-                                                                  .colorScheme
-                                                                  .onPrimaryContainer,
-                                                              fontSize: 16,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            ),
-                                                          ),
-                                                          content: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceEvenly,
-                                                            children: [
-                                                              TextButton(
-                                                                onPressed: () {
-                                                                  Navigator.pop(
-                                                                      context);
-                                                                },
-                                                                child: Text(
-                                                                  AppLocalizations.of(
-                                                                          context)!
-                                                                      .goBack,
-                                                                  style:
-                                                                      TextStyle(
-                                                                    fontFamily:
-                                                                        'Poppins-regular',
-                                                                    color: myTheme
-                                                                        .colorScheme
-                                                                        .primary,
-                                                                    fontSize:
-                                                                        14,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Container(
-                                                                width: 150,
-                                                                height: 40,
-                                                                decoration: BoxDecoration(
+                                                                );
+                                                              })
+                                                          : showDialog(
+                                                              context: context,
+                                                              builder:
+                                                                  (BuildContext
+                                                                      context) {
+                                                                return AlertDialog(
+                                                                  shape:
+                                                                      RoundedRectangleBorder(
                                                                     borderRadius:
                                                                         BorderRadius.circular(
-                                                                            16),
-                                                                    color: myTheme
-                                                                        .colorScheme
-                                                                        .primary),
-                                                                child:
-                                                                    TextButton(
-                                                                  onPressed:
-                                                                      () async {
-                                                                    // Mandar pedido a proceso de pago retail una vez mas
-                                                                    final orderActive = Provider.of<
-                                                                            OrderProvider>(
-                                                                        context,
-                                                                        listen:
-                                                                            false);
-                                                                    List<ShoppingCartProduct>
-                                                                        savedProducts =
-                                                                        [];
-                                                                    print(
-                                                                        'Activando pedido');
-                                                                    print(
-                                                                        products);
-                                                                    Clients?
-                                                                        oldClient =
-                                                                        Clients(
-                                                                      active: client
-                                                                          .active,
-                                                                      clientDocumentId:
-                                                                          client
-                                                                              .clientDocumentId,
-                                                                      dispatchAdress:
-                                                                          client
-                                                                              .dispatchAdress,
-                                                                      email: client
-                                                                          .email,
-                                                                      fiscalAdress:
-                                                                          client
-                                                                              .fiscalAdress,
-                                                                      id: client
-                                                                          .id,
-                                                                      idType: client
-                                                                          .idType,
-                                                                      madeBy: client
-                                                                          .madeBy,
-                                                                      masterDiscount:
-                                                                          client
-                                                                              .masterDiscount,
-                                                                      modified:
-                                                                          client
-                                                                              .modified,
-                                                                      name: client
-                                                                          .name,
-                                                                      phone1: client
-                                                                          .phone1,
-                                                                      phone2: client
-                                                                          .phone2,
-                                                                      prices: client
-                                                                          .prices,
-                                                                      prospect:
-                                                                          client
-                                                                              .prospect,
-                                                                      specialContributor:
-                                                                          client
-                                                                              .specialContributor,
-                                                                      zone: client
-                                                                          .zone,
-                                                                    );
-
-                                                                    await products
-                                                                        .forEach(
-                                                                            (productValue) async {
-                                                                      // print(value[
-                                                                      //     'codigo']);
-                                                                      String?
-                                                                          productCatalogueId;
-                                                                      String?
-                                                                          promotion;
-                                                                      int?
-                                                                          productAvaliableStock;
-                                                                      await productsCollection
-                                                                          .where(
-                                                                              'codigo',
-                                                                              isEqualTo: productValue['codigo'])
-                                                                          .get()
-                                                                          .then((productDoc) {
-                                                                        for (var element
-                                                                            in productDoc.docs) {
-                                                                          productCatalogueId = element.data().toString().contains('catalogo')
-                                                                              ? element.get('catalogo').id
-                                                                              : '';
-                                                                          promotion = element.data().toString().contains('promocion')
-                                                                              ? element.get('promocion').id
-                                                                              : '';
-                                                                        }
-                                                                      });
-                                                                      print(
-                                                                          'test result $productCatalogueId');
-                                                                      print(
-                                                                          'test result $promotion');
-                                                                      await stockCollection
-                                                                          .doc(
-                                                                              'productos')
-                                                                          .get()
-                                                                          .then(
-                                                                              (stock) {
-                                                                        productAvaliableStock = stock.data().toString().contains('valores')
-                                                                            ? stock.get('valores')['${productValue['codigo']}']
-                                                                            : 0;
-                                                                      });
-                                                                      print(
-                                                                          'test result: $productAvaliableStock');
-                                                                      ShoppingCartProduct
-                                                                          productForCart =
-                                                                          ShoppingCartProduct(
-                                                                        availableStock:
-                                                                            productAvaliableStock,
-                                                                        code: productValue[
-                                                                            'codigo'],
-                                                                        listOfPricesId:
-                                                                            productValue['idListaDePrecios'],
-                                                                        name: productValue[
-                                                                            'nombre'],
-                                                                        productId:
-                                                                            productValue['codigo'],
-                                                                        productQuantity:
-                                                                            productValue['cantidad'],
-                                                                        promotion:
-                                                                            promotion,
-                                                                        totalAmount: productValue['precioUnitario']
-                                                                            // productValue[
-                                                                            //         'monto']
-                                                                            .toString(),
-                                                                        unitPrice:
-                                                                            productValue['precioUnitario'].toString(),
-                                                                        urlPicture:
-                                                                            productCatalogueId,
-                                                                      );
-                                                                      print(
-                                                                          'Producto en carro creado');
-                                                                      print(productForCart
-                                                                          .name);
-                                                                      objectBox
-                                                                          .insertShoppingCartProduct(
-                                                                              productForCart);
-                                                                      savedProducts
-                                                                          .add(
-                                                                              productForCart);
-                                                                    });
-                                                                    print(
-                                                                        'LISTA DE PRODUCTOS $savedProducts');
-
-                                                                    orderActive
-                                                                        .setOrder(
-                                                                            true,
-                                                                            oldClient);
-
-                                                                    deleteOrder(
-                                                                        orderDocumentId,
-                                                                        client
-                                                                            .clientDocumentId);
-                                                                    ScaffoldMessenger.of(
-                                                                        context)
-                                                                      ..removeCurrentSnackBar()
-                                                                      ..showSnackBar(
-                                                                        SnackBar(
-                                                                          backgroundColor: myTheme
-                                                                              .colorScheme
-                                                                              .primary,
-                                                                          duration:
-                                                                              const Duration(seconds: 2),
-                                                                          content:
-                                                                              const Text(
-                                                                            "Orden retomada dentro del carrito",
-                                                                            style:
-                                                                                TextStyle(
-                                                                              fontFamily: 'Poppins-regular',
+                                                                            20),
+                                                                  ),
+                                                                  title: Text(
+                                                                    AppLocalizations.of(
+                                                                            context)!
+                                                                        .createInvoice,
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontFamily:
+                                                                          'Poppins-regular',
+                                                                      color: myTheme
+                                                                          .colorScheme
+                                                                          .primary,
+                                                                      fontSize:
+                                                                          16,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                    ),
+                                                                  ),
+                                                                  content: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceEvenly,
+                                                                    children: [
+                                                                      IconButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                        },
+                                                                        icon:
+                                                                            Icon(
+                                                                          Icons
+                                                                              .arrow_back_ios,
+                                                                          size:
+                                                                              15,
+                                                                        ),
+                                                                        style:
+                                                                            ButtonStyle(
+                                                                          backgroundColor:
+                                                                              MaterialStateProperty.all(
+                                                                            myTheme.colorScheme.onPrimaryContainer,
+                                                                          ),
+                                                                          shape:
+                                                                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                                                            RoundedRectangleBorder(
+                                                                              borderRadius: BorderRadius.circular(18.0),
                                                                             ),
                                                                           ),
                                                                         ),
-                                                                      );
-                                                                    doublePop();
-                                                                    Navigator
-                                                                        .push(
-                                                                      context,
-                                                                      MaterialPageRoute(
-                                                                        settings:
-                                                                            const RouteSettings(name: "ORDER"),
-                                                                        builder:
-                                                                            (context) =>
-                                                                                const OrderPage(),
                                                                       ),
-                                                                    );
-                                                                  },
-                                                                  style: TextButton
-                                                                      .styleFrom(
-                                                                    foregroundColor: myTheme
-                                                                        .colorScheme
-                                                                        .primary,
+                                                                      Container(
+                                                                        child: ElevatedButton
+                                                                            .icon(
+                                                                          onPressed:
+                                                                              () async {
+                                                                            // Mandar pedido a Facturar
+                                                                            await createInvoice(
+                                                                              client,
+                                                                              discountMaster,
+                                                                              orderDate,
+                                                                              tax,
+                                                                              total,
+                                                                              orderDocumentId,
+                                                                              subTotal,
+                                                                              userUID,
+                                                                            );
+                                                                            doublePop();
+                                                                          },
+                                                                          style:
+                                                                              ButtonStyle(
+                                                                            backgroundColor:
+                                                                                MaterialStateProperty.all(
+                                                                              myTheme.colorScheme.onPrimaryContainer,
+                                                                            ),
+                                                                            shape:
+                                                                                MaterialStateProperty.all<RoundedRectangleBorder>(
+                                                                              RoundedRectangleBorder(
+                                                                                borderRadius: BorderRadius.circular(18.0),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          icon:
+                                                                              Icon(Icons.inventory_outlined),
+                                                                          label:
+                                                                              Text(
+                                                                            AppLocalizations.of(context)!.createInvoiceConfirmation,
+                                                                            style:
+                                                                                TextStyle(
+                                                                              fontFamily: 'Poppins-regular',
+                                                                              color: Colors.white,
+                                                                              fontSize: 14,
+                                                                              fontWeight: FontWeight.bold,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
                                                                   ),
-                                                                  child: Text(
-                                                                    'Aceptar',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontFamily:
-                                                                          'Poppins-regular',
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontSize:
-                                                                          14,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        );
-                                                      })
-                                                  : showDialog(
-                                                      context: context,
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return AlertDialog(
-                                                          shape:
-                                                              RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20),
-                                                          ),
-                                                          title: Text(
-                                                            AppLocalizations.of(
-                                                                    context)!
-                                                                .createInvoice,
-                                                            style: TextStyle(
-                                                              fontFamily:
-                                                                  'Poppins-regular',
-                                                              color: myTheme
-                                                                  .colorScheme
-                                                                  .secondary,
-                                                              fontSize: 16,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            ),
-                                                          ),
-                                                          content: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceEvenly,
-                                                            children: [
-                                                              TextButton(
-                                                                onPressed: () {
-                                                                  Navigator.pop(
-                                                                      context);
-                                                                },
-                                                                child: Text(
-                                                                  AppLocalizations.of(
-                                                                          context)!
-                                                                      .goBack,
-                                                                  style:
-                                                                      TextStyle(
-                                                                    fontFamily:
-                                                                        'Poppins-regular',
-                                                                    color: myTheme
-                                                                        .colorScheme
-                                                                        .primary,
-                                                                    fontSize:
-                                                                        14,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Container(
-                                                                width: 150,
-                                                                height: 40,
-                                                                decoration: BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            16),
-                                                                    color: myTheme
-                                                                        .colorScheme
-                                                                        .primary),
-                                                                child:
-                                                                    TextButton(
-                                                                  onPressed:
-                                                                      () async {
-                                                                    // Mandar pedido a Facturar
-                                                                    await createInvoice(
-                                                                      client,
-                                                                      discountMaster,
-                                                                      orderDate,
-                                                                      tax,
-                                                                      total,
-                                                                      orderDocumentId,
-                                                                      subTotal,
-                                                                      userUID,
-                                                                    );
-
-                                                                    doublePop();
-                                                                  },
-                                                                  style: TextButton
-                                                                      .styleFrom(
-                                                                    foregroundColor: myTheme
-                                                                        .colorScheme
-                                                                        .primary,
-                                                                  ),
-                                                                  child: Text(
-                                                                    AppLocalizations.of(
-                                                                            context)!
-                                                                        .createInvoiceConfirmation,
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontFamily:
-                                                                          'Poppins-regular',
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontSize:
-                                                                          14,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        );
-                                                      },
-                                                    );
-                                            },
-                                            style: TextButton.styleFrom(
-                                              foregroundColor:
-                                                  myTheme.colorScheme.primary,
-                                            ),
-                                            child: Text(
-                                              isRetail
-                                                  ? "Retomar pedido"
-                                                  : AppLocalizations.of(
-                                                          context)!
-                                                      .createInvoiceConfirmation,
-                                              style: TextStyle(
-                                                fontFamily: 'Poppins-regular',
-                                                color: Colors.white,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                              Container(
-                                margin: const EdgeInsets.only(top: 5.0),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16),
-                                    color: Colors.red),
-                                child: IconButton(
-                                  onPressed: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                            ),
-                                            title: Text(
-                                              AppLocalizations.of(context)!
-                                                  .orderDelete,
-                                              style: TextStyle(
-                                                fontFamily: 'Poppins-regular',
-                                                color: myTheme
-                                                    .colorScheme.secondary,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            content: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                TextButton(
-                                                  onPressed: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                  child: Text(
-                                                    AppLocalizations.of(
-                                                            context)!
-                                                        .goBack,
-                                                    style: TextStyle(
-                                                      fontFamily:
-                                                          'Poppins-regular',
-                                                      color: myTheme
-                                                          .colorScheme.primary,
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Container(
-                                                  width: 150,
-                                                  height: 40,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            16),
-                                                    color: myTheme
-                                                        .colorScheme.primary,
-                                                  ),
-                                                  child: TextButton(
-                                                    onPressed: () async {
-                                                      // Eliminar Visita en proceso de DB
-                                                      var result = deleteOrder(
-                                                        orderDocumentId,
-                                                        clientReferenceId,
-                                                      );
-                                                      Navigator.pop(context);
-                                                      Navigator.pop(context);
+                                                                );
+                                                              },
+                                                            );
                                                     },
-                                                    style: TextButton.styleFrom(
-                                                      foregroundColor: myTheme
-                                                          .colorScheme.primary,
+                                                    icon: Icon(Icons
+                                                        .inventory_outlined),
+                                                    style: ButtonStyle(
+                                                      backgroundColor:
+                                                          MaterialStateProperty
+                                                              .all(
+                                                        myTheme.colorScheme
+                                                            .onPrimaryContainer,
+                                                      ),
+                                                      shape: MaterialStateProperty
+                                                          .all<
+                                                              RoundedRectangleBorder>(
+                                                        RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      18.0),
+                                                        ),
+                                                      ),
                                                     ),
-                                                    child: Text(
-                                                      AppLocalizations.of(
-                                                              context)!
-                                                          .visitDelete,
+                                                    label: Text(
+                                                      isRetail
+                                                          ? "Retomar pedido"
+                                                          : AppLocalizations.of(
+                                                                  context)!
+                                                              .createInvoiceConfirmation,
                                                       style: TextStyle(
                                                         fontFamily:
                                                             'Poppins-regular',
@@ -1018,22 +650,65 @@ void modalBottomSheetForOrders(
                                                     ),
                                                   ),
                                                 ),
-                                              ],
-                                            ),
-                                          );
-                                        });
-                                  },
-                                  style: TextButton.styleFrom(
-                                    foregroundColor: Colors.red,
+                                    ],
                                   ),
-                                  icon: const Icon(
-                                      Icons.delete_forever_outlined,
-                                      color: Colors.white),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                completed
+                                    ? Container()
+                                    : Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            alignment: Alignment.center,
+                                            // margin: const EdgeInsets.only(right: 20),
+                                            child: CircleAvatar(
+                                              backgroundColor:
+                                                  myTheme.colorScheme.error,
+                                              child: IconButton(
+                                                onPressed: () {
+                                                  showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return DeleteOrderAlertDialog(
+                                                          clientReferenceId:
+                                                              clientReferenceId,
+                                                          orderDocumentId:
+                                                              orderDocumentId,
+                                                        );
+                                                      });
+                                                },
+                                                style: ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                          Colors.red),
+                                                  shape:
+                                                      MaterialStateProperty.all<
+                                                          RoundedRectangleBorder>(
+                                                    RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              18.0),
+                                                    ),
+                                                  ),
+                                                ),
+                                                icon: const Icon(
+                                                    MaterialCommunityIcons
+                                                        .delete_circle_outline,
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -1045,6 +720,345 @@ void modalBottomSheetForOrders(
       );
     },
   );
+}
+
+class DeleteOrderAlertDialog extends StatelessWidget {
+  const DeleteOrderAlertDialog({
+    super.key,
+    required this.orderDocumentId,
+    required this.clientReferenceId,
+  });
+
+  final orderDocumentId;
+  final clientReferenceId;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      title: Text(
+        AppLocalizations.of(context)!.orderDelete,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontFamily: 'Poppins-regular',
+          color: myTheme.colorScheme.primary,
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(
+                myTheme.colorScheme.primary,
+              ),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                ),
+              ),
+            ),
+            icon: Icon(Icons.arrow_back_ios, size: 15),
+          ),
+          Container(
+            child: ElevatedButton(
+              onPressed: () async {
+                // Eliminar Visita en proceso de DB
+                var result = deleteOrder(
+                  orderDocumentId,
+                  clientReferenceId,
+                );
+                Navigator.pop(context);
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context)
+                  ..removeCurrentSnackBar()
+                  ..showSnackBar(
+                    SnackBar(
+                      backgroundColor: myTheme.colorScheme.onPrimaryContainer,
+                      duration: const Duration(seconds: 2),
+                      content: const Text(
+                        "Pedido seleccionado eliminado",
+                        style: TextStyle(
+                          fontFamily: 'Poppins-regular',
+                        ),
+                      ),
+                    ),
+                  );
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                  myTheme.colorScheme.onPrimaryContainer,
+                ),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18.0),
+                  ),
+                ),
+              ),
+              child: Text(
+                AppLocalizations.of(context)!.visitDelete,
+                style: TextStyle(
+                  fontFamily: 'Poppins-regular',
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SeeProductsAlertDialog extends StatelessWidget {
+  const SeeProductsAlertDialog({
+    super.key,
+    required this.products,
+    required this.subTotal,
+    required this.discountMaster,
+    required this.tax,
+    required this.total,
+    required this.coinDecimals,
+    required this.coinExchangeRatio,
+    required this.coinSymbol,
+  });
+  final products;
+  final double subTotal;
+  final double discountMaster;
+  final double tax;
+  final double total;
+  final int coinDecimals;
+  final double coinExchangeRatio;
+  final String coinSymbol;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      title: Text(
+        AppLocalizations.of(context)!.order,
+        style: TextStyle(
+          fontFamily: 'Poppins-regular',
+          color: myTheme.colorScheme.onPrimaryContainer,
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SingleChildScrollView(
+            child: Container(
+              // color: Colors.red,
+              width: 300,
+              height: 300,
+              child: Scrollbar(
+                thumbVisibility: true,
+                child: ListView.builder(
+                  itemCount: products.length,
+                  itemBuilder: (context, index) {
+                    final product = products[index];
+                    return ListTile(
+                      leading: Icon(
+                        Icons.photo,
+                        color: myTheme.colorScheme.secondary,
+                      ),
+                      title: Text(
+                        '${product['nombre']}',
+                        style: TextStyle(
+                          fontFamily: 'Poppins-regular',
+                          color: myTheme.colorScheme.secondary,
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      subtitle: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Column(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                  child: Text(
+                                    '${product['codigo']} x ${product['cantidad']}',
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins-regular',
+                                      color: myTheme.colorScheme.secondary,
+                                      fontSize: 11,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  '${AppLocalizations.of(context)!.payable}:',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins-regular',
+                                    color: myTheme.colorScheme.secondary,
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  '$coinSymbol ${priceMultipliedByItsExchangeRatio(productPrice: product['monto'], coinDecimals: coinDecimals, coinExchangeRatio: coinExchangeRatio).toStringAsFixed(2)}',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins-regular',
+                                    color: myTheme.colorScheme.primary,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ]),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 60),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '${AppLocalizations.of(context)!.subtotal}: ',
+                style: TextStyle(
+                  fontFamily: 'Poppins-regular',
+                  color: Colors.black,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                '$coinSymbol ${priceMultipliedByItsExchangeRatio(productPrice: subTotal, coinDecimals: coinDecimals, coinExchangeRatio: coinExchangeRatio).toStringAsFixed(2)}',
+                style: TextStyle(
+                  fontFamily: 'Poppins-regular',
+                  color: Colors.black,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '${AppLocalizations.of(context)!.masterDiscount}: ',
+                style: TextStyle(
+                  fontFamily: 'Poppins-regular',
+                  color: Colors.black,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                '$coinSymbol ${priceMultipliedByItsExchangeRatio(productPrice: discountMaster, coinDecimals: coinDecimals, coinExchangeRatio: coinExchangeRatio).toStringAsFixed(2)}',
+                style: TextStyle(
+                  fontFamily: 'Poppins-regular',
+                  color: Colors.black,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '${AppLocalizations.of(context)!.tax}: ',
+                style: TextStyle(
+                  fontFamily: 'Poppins-regular',
+                  color: Colors.black,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                '$coinSymbol ${priceMultipliedByItsExchangeRatio(productPrice: tax, coinDecimals: coinDecimals, coinExchangeRatio: coinExchangeRatio).toStringAsFixed(2)}',
+                style: TextStyle(
+                  fontFamily: 'Poppins-regular',
+                  color: Colors.black,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Total a Pagar',
+                style: TextStyle(
+                  fontFamily: 'Poppins-regular',
+                  color: Colors.green,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                '$coinSymbol ${priceMultipliedByItsExchangeRatio(productPrice: total, coinDecimals: coinDecimals, coinExchangeRatio: coinExchangeRatio).toStringAsFixed(2)}',
+                style: TextStyle(
+                  fontFamily: 'Poppins-regular',
+                  color: Colors.green,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          // SizedBox(height: 30),
+        ],
+      ),
+      actions: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            ElevatedButton.icon(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                  myTheme.colorScheme.primary,
+                ),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18.0),
+                  ),
+                ),
+              ),
+              icon: Icon(
+                Icons.arrow_back_ios,
+                size: 15,
+              ),
+              label: Text(
+                AppLocalizations.of(context)!.goBack,
+                style: TextStyle(
+                  fontFamily: 'Poppins-regular',
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
 }
 
 class TextBoxWidget extends StatelessWidget {

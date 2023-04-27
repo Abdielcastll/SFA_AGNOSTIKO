@@ -28,33 +28,35 @@ List<Coin> coinListfromSnapshot(QuerySnapshot snapshot) {
   return snapshot.docs.map((doc) {
     return Coin(
       code:
-          doc.data().toString().contains('codigo') ? doc.get('codigo') : 'N/A',
+          doc.data().toString().contains('codigo') ? doc.get('codigo') : 'USD',
       decimals: doc.data().toString().contains('decimales')
           ? doc.get('decimales')
           : 0,
-      name:
-          doc.data().toString().contains('nombre') ? doc.get('nombre') : 'N/A',
-      symbol: doc.data().toString().contains('simbolo')
-          ? doc.get('simbolo')
-          : 'N/A',
+      name: doc.data().toString().contains('nombre')
+          ? doc.get('nombre')
+          : 'Dolares',
+      symbol:
+          doc.data().toString().contains('simbolo') ? doc.get('simbolo') : '\$',
       exchangeRatio: doc.data().toString().contains('tasaDeCambio')
           ? doc.get('tasaDeCambio')
-          : 0,
+          : 1,
     );
   }).toList();
 }
 
 Coin coinFromSnapshot(doc) {
   return Coin(
-    code: doc.data().toString().contains('codigo') ? doc.get('codigo') : 'N/A',
+    code: doc.data().toString().contains('codigo') ? doc.get('codigo') : 'USD',
     decimals:
-        doc.data().toString().contains('decimales') ? doc.get('decimales') : 0,
-    name: doc.data().toString().contains('nombre') ? doc.get('nombre') : 'N/A',
+        doc.data().toString().contains('decimales') ? doc.get('decimales') : 2,
+    name: doc.data().toString().contains('nombre')
+        ? doc.get('nombre')
+        : 'Dolares',
     symbol:
-        doc.data().toString().contains('simbolo') ? doc.get('simbolo') : 'N/A',
+        doc.data().toString().contains('simbolo') ? doc.get('simbolo') : '\$',
     exchangeRatio: doc.data().toString().contains('tasaDeCambio')
         ? doc.get('tasaDeCambio')
-        : 0,
+        : 1,
   );
 }
 

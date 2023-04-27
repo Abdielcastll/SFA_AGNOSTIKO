@@ -9,7 +9,6 @@ import 'package:pwa_sales2go_flutter/src/models/account_balance_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/invoice_card.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/loading/loading_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InvoicesOnProcess extends StatefulWidget {
@@ -41,9 +40,9 @@ class _InvoicesOnProcessState extends State<InvoicesOnProcess> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            margin: const EdgeInsets.fromLTRB(10.0, 0.0, 0, 0),
+            margin: const EdgeInsets.fromLTRB(10.0, 0.0, 10, 0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TextButton(
                   style: ButtonStyle(
@@ -57,19 +56,22 @@ class _InvoicesOnProcessState extends State<InvoicesOnProcess> {
                     children: [
                       Icon(
                         MaterialCommunityIcons.order_alphabetical_ascending,
-                        color: Colors.grey.shade500,
+                        color: myTheme.colorScheme.secondary,
                         size: 25,
                       ),
                       const SizedBox(width: 5),
-                      Text(
-                        isDescending
-                            ? AppLocalizations.of(context)!.ascendingFilter
-                            : AppLocalizations.of(context)!.descendingFilter,
-                        style: TextStyle(
-                            fontFamily: 'Poppins-regular',
-                            color: Colors.grey.shade500,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
+                        child: Text(
+                          isDescending
+                              ? AppLocalizations.of(context)!.ascendingFilter
+                              : AppLocalizations.of(context)!.descendingFilter,
+                          style: TextStyle(
+                              fontFamily: 'Poppins-regular',
+                              color: myTheme.colorScheme.secondary,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ],
                   ),
@@ -83,57 +85,69 @@ class _InvoicesOnProcessState extends State<InvoicesOnProcess> {
                   height: 40,
                   padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                        color: myTheme.colorScheme.secondary.withOpacity(0.3)),
+                        color: myTheme.colorScheme.primary.withOpacity(0.3)),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(currentDay !=
-                              Timestamp.fromDate(DateTime(
-                                DateTime.now().year + 99,
-                                DateTime.now().month + 99,
-                                DateTime.now().day + 99,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                              ))
-                          ? formattedDate
-                          : 'Todos'),
-                      IconButton(
-                        onPressed: () async {
-                          final currentDayProvider =
-                              Provider.of<CounterLimitFirestore>(context,
-                                  listen: false);
-
-                          DateTime? newDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2010),
-                            lastDate: DateTime(2500),
-                          );
-                          if (newDate == null) {
-                            return;
-                          }
-                          setState(() {
-                            today = newDate;
-                            formattedDate = dateFormatter.format(newDate);
-                            final newDay = Timestamp.fromDate(newDate);
-                            currentDayProvider.setNewDayInvoice(newDay);
-                          });
-                        },
-                        splashRadius: 5,
-                        icon: Icon(
-                          Icons.calendar_month,
-                          color: myTheme.colorScheme.primary.withOpacity(0.8),
-                          size: 20,
+                      Text(
+                        currentDay !=
+                                Timestamp.fromDate(DateTime(
+                                  DateTime.now().year + 99,
+                                  DateTime.now().month + 99,
+                                  DateTime.now().day + 99,
+                                  0,
+                                  0,
+                                  0,
+                                  0,
+                                  0,
+                                ))
+                            ? formattedDate
+                            : '00-00-0000',
+                        style: TextStyle(
+                          fontSize: 14,
+                          // fontWeight: FontWeight.bold,
+                          fontFamily: 'Poppins-regular',
+                          color: myTheme.colorScheme.primary,
                         ),
                       ),
                       Container(
+                        width: 20,
+                        child: IconButton(
+                          onPressed: () async {
+                            final currentDayProvider =
+                                Provider.of<CounterLimitFirestore>(context,
+                                    listen: false);
+
+                            DateTime? newDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2010),
+                              lastDate: DateTime(2500),
+                            );
+                            if (newDate == null) {
+                              return;
+                            }
+                            setState(() {
+                              today = newDate;
+                              formattedDate = dateFormatter.format(newDate);
+                              final newDay = Timestamp.fromDate(newDate);
+                              currentDayProvider.setNewDayInvoice(newDay);
+                            });
+                          },
+                          splashRadius: 5,
+                          icon: Icon(
+                            MaterialCommunityIcons.calendar_edit,
+                            color: myTheme.colorScheme.primary.withOpacity(0.8),
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                         width: 40,
                         child: IconButton(
                           onPressed: () {
@@ -155,7 +169,7 @@ class _InvoicesOnProcessState extends State<InvoicesOnProcess> {
                             });
                           },
                           icon: Icon(
-                            Icons.disabled_by_default_outlined,
+                            MaterialCommunityIcons.calendar_remove,
                             color: myTheme.colorScheme.primary,
                           ),
                         ),
@@ -218,32 +232,40 @@ class _InvoicesOnProcessState extends State<InvoicesOnProcess> {
                   ),
                 )
               : Container(
-                  margin: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                  margin: const EdgeInsets.fromLTRB(0, 100, 0, 0),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        height: 200,
-                        width: 200,
-                        child: Image.asset(
-                          'assets/images/nodiary.png',
-                          fit: BoxFit.cover,
+                        margin: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color:
+                                // Colors.red.withOpacity(0.3)),
+                                myTheme.colorScheme.primary.withOpacity(0.3)),
+                        width: 120,
+                        height: 120,
+                        child: Opacity(
+                          opacity: 0.8,
+                          child: Icon(
+                            MaterialCommunityIcons.archive_check_outline,
+                            color: myTheme.colorScheme.onPrimaryContainer,
+                            size: 60,
+                          ),
                         ),
                       ),
                       Container(
-                        // color: Colors.green,
-                        // height: 150,
-                        // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                         alignment: Alignment.center,
                         child: Center(
-                          child: Text(
-                            'No hay facturas este día',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontFamily: 'Poppins-regular',
-                              fontSize: 14,
-                              color: myTheme.colorScheme.onPrimaryContainer,
+                          child: Container(
+                            width: 250,
+                            child: Text(
+                              'No hay facturas registradas este día este día',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontFamily: 'Poppins-regular',
+                                fontSize: 16,
+                                color: myTheme.colorScheme.onPrimaryContainer,
+                              ),
                             ),
                           ),
                         ),

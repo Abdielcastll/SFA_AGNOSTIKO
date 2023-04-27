@@ -2,6 +2,7 @@
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
@@ -36,27 +37,25 @@ void modalBottomSheetForCompleted(
     context: context,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(
-        top: Radius.circular(20),
+        top: Radius.circular(16),
       ),
     ),
     builder: (context) {
-      return FractionallySizedBox(
-        heightFactor: 0.6,
-        child: StatefulBuilder(
-          builder: (context, setState) {
-            return SafeArea(
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return SafeArea(
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+              child: SingleChildScrollView(
                 child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
                       alignment: Alignment.centerLeft,
-                      margin: EdgeInsets.fromLTRB(10, 20, 0, 0),
+                      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                       child: Text(
                         AppLocalizations.of(context)!.commentary,
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                           color: myTheme.colorScheme.onPrimaryContainer,
                           fontFamily: 'Poppins-regular',
@@ -68,10 +67,10 @@ void modalBottomSheetForCompleted(
                       height: 40,
                       alignment: Alignment.centerLeft,
                       margin: EdgeInsets.fromLTRB(10, 15, 0, 10),
-                      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                      padding: EdgeInsets.fromLTRB(14, 0, 0, 0),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.grey.shade100,
                         border: Border.all(
                           color: myTheme.colorScheme.primary.withOpacity(0.5),
                         ),
@@ -83,158 +82,65 @@ void modalBottomSheetForCompleted(
                         style: TextStyle(
                           fontFamily: 'Poppins-regular',
                           fontSize: 14,
-                          color: myTheme.colorScheme.primary.withOpacity(0.5),
+                          color: myTheme.colorScheme.primary,
                         ),
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            color: Colors.red,
-                          ),
-                          child: IconButton(
-                            onPressed: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      title: Text(
-                                        AppLocalizations.of(context)!
-                                            .visitDeleteConfirmation,
-                                        style: TextStyle(
-                                          fontFamily: 'Poppins-regular',
-                                          color: myTheme.colorScheme.secondary,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      content: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: Text(
-                                              AppLocalizations.of(context)!
-                                                  .goBack,
-                                              style: TextStyle(
-                                                fontFamily: 'Poppins-regular',
-                                                color:
-                                                    myTheme.colorScheme.primary,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            width: 150,
-                                            height: 40,
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(16),
-                                                color: myTheme
-                                                    .colorScheme.primary),
-                                            child: TextButton(
-                                              onPressed: () async {
-                                                // Eliminar Visita en proceso de DB
-                                                var result = deleteVisit(
-                                                  visitDocumentId,
-                                                  userUID,
-                                                );
-                                                Navigator.pop(context);
-                                                Navigator.pop(context);
-                                              },
-                                              style: TextButton.styleFrom(
-                                                foregroundColor:
-                                                    myTheme.colorScheme.primary,
-                                              ),
-                                              child: Text(
-                                                AppLocalizations.of(context)!
-                                                    .visitDelete,
-                                                style: TextStyle(
-                                                  fontFamily: 'Poppins-regular',
-                                                  color: Colors.white,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  });
-                            },
-                            style: TextButton.styleFrom(
-                              foregroundColor: Colors.red,
-                            ),
-                            icon: Icon(Icons.delete_forever_outlined,
-                                color: Colors.white),
-                          ),
-                        ),
-                        Container(
-                          width: 150,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            color: myTheme.colorScheme.primary,
-                          ),
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      ClientDetails(
-                                    specialContribuyer: specialContributor,
-                                    masterDiscount: currentDiscountMaster,
-                                    fiscalAddress: currentClientAddress,
-                                    email: currentClientEmail,
-                                    listOfPrices: currentClientPrices,
-                                    name: currentClientName,
-                                    tlf1: currentClientPhone,
-                                    tlf2: currentClientPhone,
-                                    zone: currentClientZones,
-                                    nameId: currentClientId,
-                                    typeId: currentClientIdType,
-                                    clientDocumentReferenceID:
-                                        clientReferenceId,
-                                    dispatchAddress:
-                                        currentClientDispatchAdress,
-                                  ),
-                                ),
-                              );
-                            },
-                            style: TextButton.styleFrom(
-                              foregroundColor: myTheme.colorScheme.primary,
-                            ),
-                            child: Text(
-                              AppLocalizations.of(context)!.seeClient,
-                              style: TextStyle(
-                                fontFamily: 'Poppins-regular',
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
+                    Container(
+                      margin: EdgeInsets.fromLTRB(14, 0, 0, 0),
+                      width: MediaQuery.of(context).size.width,
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => ClientDetails(
+                                specialContribuyer: specialContributor,
+                                masterDiscount: currentDiscountMaster,
+                                fiscalAddress: currentClientAddress,
+                                email: currentClientEmail,
+                                listOfPrices: currentClientPrices,
+                                name: currentClientName,
+                                tlf1: currentClientPhone,
+                                tlf2: currentClientPhone,
+                                zone: currentClientZones,
+                                nameId: currentClientId,
+                                typeId: currentClientIdType,
+                                clientDocumentReferenceID: clientReferenceId,
+                                dispatchAddress: currentClientDispatchAdress,
                               ),
                             ),
+                          );
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                            myTheme.colorScheme.primary,
+                          ),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                            ),
                           ),
                         ),
-                      ],
+                        icon: Icon(Icons.person),
+                        label: Text(
+                          AppLocalizations.of(context)!.seeClient,
+                          style: TextStyle(
+                            fontFamily: 'Poppins-regular',
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       );
     },
   );

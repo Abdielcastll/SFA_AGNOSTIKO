@@ -107,12 +107,10 @@ class _SelectClientState extends State<SelectClient> {
               itemBuilder: (context, index) {
                 final client =
                     widget.mutatedList?[index] ?? starterClient[index];
-
                 final clientName = client.name;
                 final clientFiscalAddress = client.fiscalAdress;
                 return Container(
                   padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                  // height: 100,
                   child: ListTile(
                     tileColor: Colors.white,
                     selectedTileColor: Colors.blue,
@@ -129,7 +127,7 @@ class _SelectClientState extends State<SelectClient> {
                       ),
                     ),
                     subtitle: Container(
-                      margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                      margin: const EdgeInsets.fromLTRB(0, 5, 0, 10),
                       child: Text(
                         clientFiscalAddress,
                         maxLines: 3,

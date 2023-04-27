@@ -91,7 +91,15 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
             // TODO: REGISTRAR PAGO EN DB
             print('Pago Aprobado - Registrando pago de Tarjeta en DB');
             registerDebitCreditCardPayment(
-                transactionArgs!.invoice!, transactionArgs!.stan);
+                    transactionArgs!.invoice!, transactionArgs!.stan)
+                .whenComplete(() {
+              checkIfInvoiceIsCompleted(
+                paidAmount: transactionArgs!.invoice!.amount,
+                remaining: transactionArgs!.invoice!.remaining,
+                client: transactionArgs!.invoice!.client,
+                invoiceDocumentID: transactionArgs!.invoice!.invoiceDocumentID,
+              );
+            });
           });
           break;
         case EmvTransactionResult.Denied:
@@ -371,19 +379,27 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     final paymentBody = (ModalRoute.of(context)?.settings.arguments! as List)[2]
         as AddPaymentBodyAtt;
 
+    // final payed = transactionResult == EmvTransactionResult.Approved
+    //     ? exchangeAmount(
+    //         coin: paymentBody.currency,
+    //         amount: _amountDouble,
+    //         exchange: transactionArgs!.invoice!.coinExchangeRatio)
+    //     : 0.0;
+    final payed = transactionResult == EmvTransactionResult.Approved
+        ? exchangeAmount(
+            coin: paymentBody.currency,
+            amount: _amountDouble,
+            exchange: transactionArgs!.invoice!.coinExchangeRatio)
+        : 0.0;
+
     print('EMV INFO PAYMENTS');
     print(paymentBody.payments.length);
     print(paymentBody.remaining);
     print(paymentBody.currency);
     print(paymentBody.amountPaied);
-
-    final payed = transactionResult == EmvTransactionResult.Approved
-        ? exchangeAmount(paymentBody.currency, _amountDouble,
-            transactionArgs!.invoice!.coinExchangeRatio)
-        : 0.0;
     print(payed);
 
-    paymentBody.payments.add(PayMethod('Tarjeta', payed));
+    paymentBody.payments.add(PayMethod('Tarjeta', _amountDouble));
 
     final totalPayed =
         paymentBody.payments.fold<double>(0.0, (previousValue, element) {
@@ -391,18 +407,25 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       return previousValue + element.amount;
     });
 
-    final totalInvoice =
-        paymentBody.subTotal + paymentBody.tax - paymentBody.discount;
-
+    // final totalInvoice =
+    //     paymentBody.subTotal + paymentBody.tax - paymentBody.discount;
+    final totalInvoice = transactionArgs!.invoice!.totalOfTheOrder;
+    final remainingConverted = priceMultipliedByItsExchangeRatio(
+        coinDecimals: 2,
+        coinExchangeRatio: transactionArgs!.invoice!.coinExchangeRatio,
+        productPrice: transactionArgs!.invoice!.remaining);
+    // paidAmount < remainingConverted
+    // if (transactionResult == EmvTransactionResult.Approved &&
+    //     totalPayed >= totalInvoice) {
     if (transactionResult == EmvTransactionResult.Approved &&
-        totalPayed >= totalInvoice) {
+        transactionArgs!.invoice!.amount >= remainingConverted) {
       final date = transactionArgs!.invoice!.date;
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (BuildContext context) => CompletedPayPage(
               client: transactionArgs!.invoice!.client,
-              total: totalPayed,
+              total: transactionArgs!.invoice!.totalOfTheOrder,
               method: "Tarjeta",
               date:
                   '${date.day}-${date.month}-${date.year} ${date.hour}:${date.minute}',
@@ -412,6 +435,10 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
         ),
       );
     } else {
+      print(paymentBody.remaining);
+      print(paymentBody.amountPaied);
+      print(payed);
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -428,6 +455,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
             invoiceNumber: paymentBody.invoiceNumber,
             payments: paymentBody.payments,
             amountPayed: (paymentBody.amountPaied ?? 0) + payed,
+            invoiceTotal: transactionArgs!.invoice!.totalOfTheOrder,
             // updatePayed: updatePayed,
           ),
         ),

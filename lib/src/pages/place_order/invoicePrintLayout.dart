@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/models/transaction_args.dart';
+import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 import 'dart:ui' as ui;
 
 import '../../services/utils/parameters.dart';
@@ -158,8 +159,12 @@ Future invoicePrintLayout(AddPaymentBodyAtt invoice, String currentCoin) async {
   listOfTextLine.add(PrinterText.emptyLine(16));
 
   for (final pay in invoice.payments) {
-    listOfTextLine.add(PrinterSplitText(pay.name.toUpperCase(),
-        priceFormatForPaidAmount(pay.amount, currentCoin),
+    listOfTextLine.add(PrinterSplitText(
+        pay.name.toUpperCase(),
+        priceFormatForPaidAmount(
+            exchangeAmount(
+                amount: pay.amount, exchange: invoice.currencyExchange),
+            currentCoin),
         format: TextFormat(fontSize: 16, fontFamily: regularFont)));
   }
 

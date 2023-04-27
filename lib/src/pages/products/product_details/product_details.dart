@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -43,8 +45,8 @@ class ProductDetails extends StatefulWidget {
     required this.showListButton,
   }) : super(key: key);
 
+  final double? price;
   final String? code;
-  final String? price;
   final String? line;
   final String? name;
   final String imageUrl;
@@ -87,26 +89,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                 .snapshots()
                 .map(coinFromSnapshot),
           ),
-          //     .map((doc) {
-          //   return Coin(
-          //     code: doc.data().toString().contains('codigo')
-          //         ? doc.get('codigo')
-          //         : 'N/A',
-          //     decimals: doc.data().toString().contains('decimales')
-          //         ? doc.get('decimales')
-          //         : 0,
-          //     name: doc.data().toString().contains('nombre')
-          //         ? doc.get('nombre')
-          //         : 'N/A',
-          //     symbol: doc.data().toString().contains('simbolo')
-          //         ? doc.get('simbolo')
-          //         : 'N/A',
-          //     exchangeRatio: doc.data().toString().contains('tasaDeCambio')
-          //         ? doc.get('tasaDeCambio')
-          //         : 0,
-          //   );
-          // }),
-          // value: coinCollection.snapshots().map(coinListfromSnapshot),
         ],
         child: ProductDetailsBody(
           code: widget.code,
@@ -148,8 +130,8 @@ class ProductDetailsBody extends StatelessWidget {
     required this.showListButton,
   }) : super(key: key);
 
+  final double? price;
   final String? code;
-  final String? price;
   final String? line;
   final String? name;
   final String imageUrl;
@@ -166,46 +148,27 @@ class ProductDetailsBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final orderActive = Provider.of<OrderProvider>(context);
-    final coinName = Provider.of<Coin?>(context)?.name ?? '';
-    final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 0;
-    final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 0;
-    final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
-    final coinCode = Provider.of<Coin?>(context)?.code ?? '';
-    // final coins = Provider.of<List<Coin>?>(context) ?? [];
+    final coinName = Provider.of<Coin?>(context)?.name ?? 'Dolares';
+    final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 2;
+    final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 1;
+    final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '\$';
 
-    // final exchangeRates = getExchangesRates(coins);
-    // final coinCode = getCoinCode(coin: currentCoin);
-    // final coinSymbols = getMoneySymbols(coins);
-    print(coinCode);
+    print(coinName);
+    print(coinDecimals);
+    print(coinExchangeRatio);
+    print(coinSymbol);
+    // final coinCode = Provider.of<Coin?>(context)?.code ?? '';
 
-    // print('EXCHANGE RATES IN PRODUCT DETAILS');
-    // print(coins);
-    // print(exchangeRates);
-    // print(currentCoin);
-    // print(coinCode);
-    // print('simbolos');
-    // print(coinSymbols);
-//
-    /////////////////////////////////////////
-    // print('code:$code');
-    // print('price:$price');
-    // print('line:$line');
-    // print('name:$name');
-    // print('imageUrl:$imageUrl');
-    // print('isProductNew:$isProductNew');
-    // print('stock:$stock');
-    // print('list:$list');
-    // print('isProductInAPromotion:$isProductInAPromotion');
-    // print('prices:$prices');
-    // print('pricesName:$pricesName');
-    // print('catalogueID:$catalogueID');
-    // print('userZoneDocument:$userZoneDocument');
-    /////////////////////////////////////////
-
-    final priceProduct = (double.parse(price ?? '0.0') *
-            double.parse(coinExchangeRatio.toString()))
-        .toStringAsFixed(coinDecimals);
-    // priceFormat(double.parse(price ?? '0')).toString();
+    // final priceProduct = (double.parse(price ?? '0.0') *
+    //         double.parse(coinExchangeRatio.toString()))
+    //     .toStringAsFixed(coinDecimals);
+    final double priceProduct = priceMultipliedByItsExchangeRatio(
+        productPrice: price,
+        coinDecimals: coinDecimals,
+        coinExchangeRatio: coinExchangeRatio);
+    print('price: $price');
+    print('priceProduct: $priceProduct');
+    print('priceProductFixedDecimals: ${priceProduct.toStringAsFixed(2)}');
 
     return coinName.toString().isEmpty
         ? Center(
@@ -441,9 +404,6 @@ class ProductDetailsBody extends StatelessWidget {
                                                   msg:
                                                       'No hay stock disponible para este producto');
                                             }
-                                            Fluttertoast.showToast(
-                                                msg:
-                                                    'Producto añadido correctamente');
                                           },
                                           icon: Icon(
                                             Icons.add_shopping_cart_rounded,
@@ -549,7 +509,7 @@ class ProductDetailsBody extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                '$coinSymbol $priceProduct',
+                                '$coinSymbol ${priceProduct.toStringAsFixed(2)}',
                                 style: TextStyle(
                                   color: myTheme.colorScheme.primary,
                                   fontFamily: 'Poppins-regular',

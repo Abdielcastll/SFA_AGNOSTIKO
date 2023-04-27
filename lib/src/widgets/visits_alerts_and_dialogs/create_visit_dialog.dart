@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -58,9 +59,6 @@ void showCreateClientDialog(context, uid) {
           final zonesList = zonesSummary.values.toList();
           final List<String> zonesStrings = List<String>.from(zonesList);
           final zonesKeys = zonesSummary.keys.toList();
-          // print(zonesStrings);
-
-          // print('Zona seleccionada: $selectedValueA');
 
           return StatefulBuilder(builder: (context, setState) {
             final clients = Provider.of<List<ClientName>?>(context) ?? [];
@@ -102,14 +100,14 @@ void showCreateClientDialog(context, uid) {
                 AppLocalizations.of(context)!.newVisit,
                 style: TextStyle(
                   fontFamily: 'Poppins-regular',
-                  color: myTheme.colorScheme.secondary,
+                  color: myTheme.colorScheme.onPrimaryContainer,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               content: SingleChildScrollView(
                 child: Container(
-                  height: MediaQuery.of(context).size.height * 0.60,
+                  // height: MediaQuery.of(context).size.height * 0.60,
                   width: 300,
                   child: isLoading == true
                       ? LoadingWidget(
@@ -123,7 +121,7 @@ void showCreateClientDialog(context, uid) {
                                 child: Text(
                                   AppLocalizations.of(context)!.date,
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     fontWeight: FontWeight.bold,
                                     color: myTheme.colorScheme.primary,
                                     fontFamily: 'Poppins-regular',
@@ -134,7 +132,7 @@ void showCreateClientDialog(context, uid) {
                                 margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
                                 padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16),
+                                  borderRadius: BorderRadius.circular(20),
                                   border: Border.all(
                                     color: myTheme.colorScheme.primary
                                         .withOpacity(0.3),
@@ -150,8 +148,8 @@ void showCreateClientDialog(context, uid) {
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
-                                        color: myTheme.colorScheme.primary
-                                            .withOpacity(0.7),
+                                        color: myTheme.colorScheme.primary,
+                                        fontFamily: 'Poppins-regular',
                                       ),
                                     ),
                                     Container(
@@ -182,7 +180,7 @@ void showCreateClientDialog(context, uid) {
                                         },
                                         splashRadius: 5,
                                         icon: Icon(
-                                          Icons.calendar_month,
+                                          MaterialCommunityIcons.calendar_edit,
                                           color: myTheme.colorScheme.primary,
                                           size: 20,
                                         ),
@@ -193,13 +191,14 @@ void showCreateClientDialog(context, uid) {
                               ),
                               Container(
                                 alignment: Alignment.centerLeft,
-                                margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                margin: EdgeInsets.fromLTRB(14, 5, 0, 0),
                                 child: Text(
                                   AppLocalizations.of(context)!.seller,
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     fontWeight: FontWeight.bold,
                                     color: myTheme.colorScheme.primary,
+                                    fontFamily: 'Poppins-regular',
                                   ),
                                 ),
                               ),
@@ -207,7 +206,7 @@ void showCreateClientDialog(context, uid) {
                                 margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
                                 padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16),
+                                  borderRadius: BorderRadius.circular(20),
                                   border: Border.all(
                                     color: myTheme.colorScheme.primary
                                         .withOpacity(0.3),
@@ -223,8 +222,8 @@ void showCreateClientDialog(context, uid) {
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
-                                        color: myTheme.colorScheme.primary
-                                            .withOpacity(0.7),
+                                        color: myTheme.colorScheme.primary,
+                                        fontFamily: 'Poppins-regular',
                                       ),
                                     ),
                                   ],
@@ -232,11 +231,11 @@ void showCreateClientDialog(context, uid) {
                               ),
                               Container(
                                 alignment: Alignment.centerLeft,
-                                margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                margin: EdgeInsets.fromLTRB(14, 0, 0, 0),
                                 child: Text(
                                   AppLocalizations.of(context)!.salesArea,
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     fontWeight: FontWeight.bold,
                                     color: myTheme.colorScheme.primary,
                                     fontFamily: 'Poppins-regular',
@@ -253,7 +252,9 @@ void showCreateClientDialog(context, uid) {
                                       children: [
                                         Expanded(
                                           child: Text(
-                                            selectedValueA ?? '',
+                                            selectedValueA ??
+                                                'EJ: Caracas este',
+                                            textAlign: TextAlign.left,
                                             style: TextStyle(
                                               fontSize: 12,
                                               fontWeight: FontWeight.bold,
@@ -274,7 +275,8 @@ void showCreateClientDialog(context, uid) {
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.bold,
                                                   color: myTheme
-                                                      .colorScheme.primary,
+                                                      .colorScheme.primary
+                                                      .withOpacity(0.7),
                                                 ),
                                                 overflow: TextOverflow.ellipsis,
                                               ),
@@ -302,11 +304,10 @@ void showCreateClientDialog(context, uid) {
                                     ),
                                     buttonStyleData: ButtonStyleData(
                                       height: 50,
-                                      width: 200,
-                                      padding: const EdgeInsets.only(
-                                          left: 14, right: 14),
+                                      // width: 200,
+                                      padding: const EdgeInsets.only(right: 14),
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
+                                        borderRadius: BorderRadius.circular(20),
                                         border: Border.all(
                                           color: myTheme.colorScheme.primary
                                               .withOpacity(0.3),
@@ -322,7 +323,7 @@ void showCreateClientDialog(context, uid) {
                                     ),
                                     dropdownStyleData: DropdownStyleData(
                                       maxHeight: 200,
-                                      width: 200,
+                                      // width: 200,
                                       padding: null,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
@@ -338,7 +339,7 @@ void showCreateClientDialog(context, uid) {
                                             MaterialStateProperty.all<bool>(
                                                 true),
                                       ),
-                                      offset: const Offset(-20, 0),
+                                      offset: const Offset(0, 0),
                                     ),
                                   ),
                                 ),
@@ -349,12 +350,12 @@ void showCreateClientDialog(context, uid) {
                                         Container(
                                           alignment: Alignment.centerLeft,
                                           margin:
-                                              EdgeInsets.fromLTRB(10, 5, 0, 0),
+                                              EdgeInsets.fromLTRB(14, 5, 0, 0),
                                           child: Text(
                                             AppLocalizations.of(context)!
                                                 .clients,
                                             style: TextStyle(
-                                              fontSize: 16,
+                                              fontSize: 14,
                                               fontWeight: FontWeight.bold,
                                               color:
                                                   myTheme.colorScheme.primary,
@@ -403,7 +404,7 @@ void showCreateClientDialog(context, uid) {
                                                                 item,
                                                                 style:
                                                                     TextStyle(
-                                                                  fontSize: 14,
+                                                                  fontSize: 12,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold,
@@ -444,7 +445,7 @@ void showCreateClientDialog(context, uid) {
                                                     buttonStyleData:
                                                         ButtonStyleData(
                                                       height: 50,
-                                                      width: 200,
+                                                      // width: 200,
                                                       padding:
                                                           const EdgeInsets.only(
                                                               left: 14,
@@ -452,7 +453,7 @@ void showCreateClientDialog(context, uid) {
                                                       decoration: BoxDecoration(
                                                         borderRadius:
                                                             BorderRadius
-                                                                .circular(5),
+                                                                .circular(20),
                                                         border: Border.all(
                                                           color: myTheme
                                                               .colorScheme
@@ -496,221 +497,74 @@ void showCreateClientDialog(context, uid) {
                                                                     true),
                                                       ),
                                                       offset:
-                                                          const Offset(-20, 0),
+                                                          const Offset(0, 0),
                                                     ),
                                                   ),
                                                 ),
                                               )
-                                            : Container(),
-                                        clientsFiltered.isNotEmpty
-                                            ? Container(
-                                                child: Row(
-                                                children: [
-                                                  Container(
-                                                    child: Checkbox(
-                                                      value: isAllSelected,
-                                                      onChanged: (value) {
-                                                        setState(() {
-                                                          selectedValueB = null;
-                                                          isAllSelected =
-                                                              !isAllSelected;
-                                                        });
-                                                      },
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                      child: Text(
-                                                    'Seleccionar todos',
+                                            : Container(
+                                                width: 200,
+                                                margin: EdgeInsets.fromLTRB(
+                                                    14, 10, 14, 5),
+                                                // alignment: Alignment.center,
+                                                child: Center(
+                                                  child: Text(
+                                                    'Todos los clientes de la zona han sido seleccionados',
+                                                    textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                       fontFamily:
                                                           'Poppins-regular',
-                                                      color: myTheme
-                                                          .colorScheme.primary,
+                                                      color: myTheme.colorScheme
+                                                          .onPrimaryContainer,
                                                       fontSize: 14,
                                                     ),
-                                                  )),
-                                                ],
-                                              ))
-                                            : Container(),
-                                        // SizedBox(height: 10),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: Text(
-                                                AppLocalizations.of(context)!
-                                                    .goBack,
-                                                style: TextStyle(
-                                                  fontFamily: 'Poppins-regular',
-                                                  color: myTheme
-                                                      .colorScheme.primary,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.bold,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            selectedValueB != null
-                                                ? Container(
-                                                    width: 100,
-                                                    height: 40,
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(16),
-                                                        color: myTheme
-                                                            .colorScheme
-                                                            .primary),
-                                                    child: TextButton(
-                                                      onPressed: () async {
-                                                        // Crear en DB una visita//
-                                                        if (selectedValueA !=
-                                                                null &&
-                                                            selectedValueB !=
-                                                                null) {
-                                                          setState(() {
-                                                            isLoading = true;
-                                                          });
-                                                          var result =
-                                                              await createVisitData(
-                                                            uid,
-                                                            clientDocID,
-                                                            today,
-                                                          );
-                                                          if (result == null) {
-                                                            setState(() {
-                                                              isLoading = false;
-                                                              Navigator.pop(
-                                                                  context);
-                                                            });
-                                                            Fluttertoast
-                                                                .showToast(
-                                                              msg: AppLocalizations
-                                                                      .of(context)!
-                                                                  .visitCreated,
-                                                            );
-                                                          } else if (result !=
-                                                              null) {
-                                                            Fluttertoast
-                                                                .showToast(
-                                                              msg: AppLocalizations
-                                                                      .of(context)!
-                                                                  .createVisitError,
-                                                            );
-                                                            Navigator.pop(
-                                                                context);
-                                                          }
-                                                        }
-                                                      },
-                                                      style:
-                                                          TextButton.styleFrom(
-                                                        foregroundColor: myTheme
+                                        clientsFiltered.isNotEmpty
+                                            ? Center(
+                                                child: Row(
+                                                  children: [
+                                                    Container(
+                                                      child: Checkbox(
+                                                        checkColor:
+                                                            Colors.white,
+                                                        shape: CircleBorder(),
+                                                        fillColor:
+                                                            MaterialStateProperty
+                                                                .all(myTheme
+                                                                    .colorScheme
+                                                                    .primary),
+                                                        activeColor: myTheme
                                                             .colorScheme
                                                             .primary,
-                                                      ),
-                                                      child: Text(
-                                                        AppLocalizations.of(
-                                                                context)!
-                                                            .createVisit,
-                                                        style: TextStyle(
-                                                          fontFamily:
-                                                              'Poppins-regular',
-                                                          color: Colors.white,
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
+                                                        value: isAllSelected,
+                                                        onChanged: (value) {
+                                                          setState(() {
+                                                            selectedValueB =
+                                                                null;
+                                                            isAllSelected =
+                                                                !isAllSelected;
+                                                          });
+                                                        },
                                                       ),
                                                     ),
-                                                  )
-                                                : Container(),
-                                            isAllSelected == true
-                                                ? Container(
-                                                    width: 100,
-                                                    height: 40,
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(16),
+                                                    Container(
+                                                        child: Text(
+                                                      'Seleccionar todos',
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            'Poppins-regular',
                                                         color: myTheme
                                                             .colorScheme
-                                                            .primary),
-                                                    child: TextButton(
-                                                      onPressed: () async {
-                                                        // Crear en DB visitas//
-                                                        if (clientsFiltered
-                                                            .isNotEmpty) {
-                                                          print(
-                                                              clientsFiltered);
-                                                          setState(() {
-                                                            isLoading = true;
-                                                          });
-
-                                                          for (var client
-                                                              in clientsFiltered) {
-                                                            await createVisitData(
-                                                                uid,
-                                                                client
-                                                                    .clientDocumentId,
-                                                                today);
-                                                          }
-                                                          // var result =
-                                                          //     await createVisitData(
-                                                          //   uid,
-                                                          //   clientDocID,
-                                                          //   today,
-                                                          // );
-                                                          // if (result == null) {
-                                                          setState(() {
-                                                            isLoading = false;
-                                                            Navigator.pop(
-                                                                context);
-                                                          });
-                                                          Fluttertoast
-                                                              .showToast(
-                                                            msg:
-                                                                'Visitas creadas',
-                                                          );
-                                                          // } else if (result !=
-                                                          //     null) {
-                                                          //   Fluttertoast
-                                                          //       .showToast(
-                                                          //     msg: AppLocalizations
-                                                          //             .of(context)!
-                                                          //         .createVisitError,
-                                                          //   );
-                                                          //   Navigator.pop(
-                                                          //       context);
-                                                          // }
-                                                        }
-                                                      },
-                                                      style:
-                                                          TextButton.styleFrom(
-                                                        foregroundColor: myTheme
-                                                            .colorScheme
                                                             .primary,
+                                                        fontSize: 14,
                                                       ),
-                                                      child: Text(
-                                                        AppLocalizations.of(
-                                                                context)!
-                                                            .createVisit,
-                                                        style: TextStyle(
-                                                          fontFamily:
-                                                              'Poppins-regular',
-                                                          color: Colors.white,
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  )
-                                                : Container(),
-                                          ],
-                                        ),
+                                                    )),
+                                                  ],
+                                                ),
+                                              )
+                                            : Container(),
                                       ],
                                     )
                                   : Container(),
@@ -719,6 +573,135 @@ void showCreateClientDialog(context, uid) {
                         ),
                 ),
               ),
+              actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        AppLocalizations.of(context)!.goBack,
+                        style: TextStyle(
+                          fontFamily: 'Poppins-regular',
+                          color: myTheme.colorScheme.primary,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    selectedValueB != null
+                        ? Container(
+                            child: ElevatedButton.icon(
+                              onPressed: () async {
+                                // Crear en DB una visita//
+                                if (selectedValueA != null &&
+                                    selectedValueB != null) {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  var result = await createVisitData(
+                                    uid,
+                                    clientDocID,
+                                    today,
+                                  );
+                                  if (result == null) {
+                                    setState(() {
+                                      isLoading = false;
+                                      Navigator.pop(context);
+                                    });
+                                    Fluttertoast.showToast(
+                                      msg: AppLocalizations.of(context)!
+                                          .visitCreated,
+                                    );
+                                  } else if (result != null) {
+                                    Fluttertoast.showToast(
+                                      msg: AppLocalizations.of(context)!
+                                          .createVisitError,
+                                    );
+                                    Navigator.pop(context);
+                                  }
+                                }
+                              },
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                  myTheme.colorScheme.onPrimaryContainer,
+                                ),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                ),
+                              ),
+                              icon: Icon(
+                                  MaterialCommunityIcons.truck_fast_outline),
+                              label: Text(
+                                AppLocalizations.of(context)!.createVisit,
+                                style: TextStyle(
+                                  fontFamily: 'Poppins-regular',
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  // fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          )
+                        : Container(),
+                    isAllSelected == true
+                        ? Container(
+                            child: ElevatedButton.icon(
+                              onPressed: () async {
+                                // Crear en DB visitas//
+                                if (clientsFiltered.isNotEmpty) {
+                                  print(clientsFiltered);
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+
+                                  for (var client in clientsFiltered) {
+                                    await createVisitData(
+                                        uid, client.clientDocumentId, today);
+                                  }
+
+                                  setState(() {
+                                    isLoading = false;
+                                    Navigator.pop(context);
+                                  });
+                                  Fluttertoast.showToast(
+                                    msg: 'Visitas creadas',
+                                  );
+                                }
+                              },
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                  myTheme.colorScheme.onPrimaryContainer,
+                                ),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                ),
+                              ),
+                              icon: Icon(
+                                  MaterialCommunityIcons.truck_fast_outline),
+                              label: Text(
+                                AppLocalizations.of(context)!.createVisit,
+                                style: TextStyle(
+                                  fontFamily: 'Poppins-regular',
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  // fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          )
+                        : Container(),
+                  ],
+                ),
+              ],
             );
           });
         }),
