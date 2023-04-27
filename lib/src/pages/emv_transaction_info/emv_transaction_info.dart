@@ -356,6 +356,11 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   }
 
   onAccept() {
+    if (transactionArgs!.emvTransactionType == EmvTransactionType.Refund) {
+      Navigator.pushReplacementNamed(context, 'wrapper');
+      return;
+    }
+
     final noRetail = (ModalRoute.of(context)?.settings.arguments! as List)[3];
 
     if (noRetail) {

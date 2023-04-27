@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -264,14 +266,15 @@ class _CardInputViewState extends State<CardInputView> {
     transactionArgs?.pan ??=
         (await EmvModule.instance.getTagValue(0x57))?.toHexStr().split('d')[0];
     // en caso de error, nos movemos a la pantalla de cierre
+    final arguments = (ModalRoute.of(context)?.settings.arguments! as List);
     Navigator.pushReplacementNamed(
       context,
       EmvTransactionInfoView.route,
       arguments: [
         transactionArgs,
-        (ModalRoute.of(context)?.settings.arguments! as List)[1],
-        (ModalRoute.of(context)?.settings.arguments! as List)[2],
-        (ModalRoute.of(context)?.settings.arguments! as List)[3]
+        if (arguments.length >= 2) arguments[1] else null,
+        if (arguments.length >= 3) arguments[2] else null,
+        if (arguments.length >= 4) arguments[3] else null
       ],
     );
   }
