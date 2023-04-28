@@ -259,7 +259,7 @@ class _InvoicesOnProcessState extends State<InvoicesOnProcess> {
                           child: Container(
                             width: 250,
                             child: Text(
-                              'No hay facturas registradas este día este día',
+                              'No hay facturas registradas este día',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontFamily: 'Poppins-regular',

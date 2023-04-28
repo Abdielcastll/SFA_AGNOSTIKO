@@ -330,17 +330,16 @@ Future createInvoice(
 
 //Registrar pagos de Tarjeta de Credito/Debito
 
-Future registerDebitCreditCardPayment(InvoiceData data, int? stan) async {
+Future registerDebitCreditCardPayment(
+    InvoiceData data, int? stan, int referenceNumber, String currencyCode,
+    {refund = false}) async {
   stan ??= 0;
 
   Client client = data.client;
   var invoiceDocumentID = data.invoiceDocumentID;
   var currency = data.currency;
   var amount = data.amount;
-  var totalOfTheOrder = data.totalOfTheOrder;
-  var currentCoin = data.currentCoin;
   var date = data.date;
-  var remaining = data.remaining;
   var coinExchangeRatio = data.coinExchangeRatio;
 
   print('/// Registrar pago por TARJETA en factura: $invoiceDocumentID ///');
@@ -352,6 +351,25 @@ Future registerDebitCreditCardPayment(InvoiceData data, int? stan) async {
   const method = 'Tarjeta Debito/Credito';
   final paidAmount = amount;
 
+  final newPay = <String, dynamic>{
+    'anulado': cancelled,
+    'codigoMoneda': selectedCurrency,
+    'conciliado': concillied,
+    'fecha': timestampDate,
+    'metodo': method,
+    // 'monto': priceReturnToOriginal(paidAmount, currentCoin),
+    'monto': priceDividedbyItsExchangeRatio(
+        amount: paidAmount, exchange: coinExchangeRatio),
+    'montoOriginal': paidAmount,
+    'tasaDeCambio': data.coinExchangeRatio,
+    'stan': stan,
+    'referenceNumber': referenceNumber,
+    'currencyCode': currencyCode,
+  };
+
+  if (refund) {
+    newPay.addAll({'refund': true});
+  }
   try {
     return await FirebaseFirestore.instance
         .collection('clientes')
@@ -360,21 +378,7 @@ Future registerDebitCreditCardPayment(InvoiceData data, int? stan) async {
         .doc(invoiceDocumentID)
         .update({
       'pagos': FieldValue.arrayUnion(
-        [
-          <String, dynamic>{
-            'anulado': cancelled,
-            'codigoMoneda': selectedCurrency,
-            'conciliado': concillied,
-            'fecha': timestampDate,
-            'metodo': method,
-            // 'monto': priceReturnToOriginal(paidAmount, currentCoin),
-            'monto': priceDividedbyItsExchangeRatio(
-                amount: paidAmount, exchange: coinExchangeRatio),
-            'montoOriginal': paidAmount,
-            'tasaDeCambio': data.coinExchangeRatio,
-            'stan': stan,
-          },
-        ],
+        [newPay],
       ),
     });
   } catch (e) {

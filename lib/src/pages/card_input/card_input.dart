@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -264,14 +266,15 @@ class _CardInputViewState extends State<CardInputView> {
     transactionArgs?.pan ??=
         (await EmvModule.instance.getTagValue(0x57))?.toHexStr().split('d')[0];
     // en caso de error, nos movemos a la pantalla de cierre
+    final arguments = (ModalRoute.of(context)?.settings.arguments! as List);
     Navigator.pushReplacementNamed(
       context,
       EmvTransactionInfoView.route,
       arguments: [
         transactionArgs,
-        (ModalRoute.of(context)?.settings.arguments! as List)[1],
-        (ModalRoute.of(context)?.settings.arguments! as List)[2],
-        (ModalRoute.of(context)?.settings.arguments! as List)[3]
+        if (arguments.length >= 2) arguments[1] else null,
+        if (arguments.length >= 3) arguments[2] else null,
+        if (arguments.length >= 4) arguments[3] else null
       ],
     );
   }
@@ -333,7 +336,10 @@ class _CardInputViewState extends State<CardInputView> {
       transactionArgs.infoTags = await loadInfoTags();
       transactionArgs.firstGenerateTags = await emvGetGenerateCommandTags();
 
-      final currency = getCurrencyFromPaymentBody();
+      final currency =
+          transactionArgs.currencyCode ?? getCurrencyFromPaymentBody();
+
+      transactionArgs.currencyCode = currency;
 
       final pharosMsg = await pharosGenerateSaleMsg(transactionArgs, currency);
       print("PHAROS MSG: ${jsonEncode(pharosMsg)}");
@@ -341,6 +347,7 @@ class _CardInputViewState extends State<CardInputView> {
       try {
         final response = await processSalePharos(pharosMsg);
         responseCode = response.resultCode;
+        transactionArgs.referenceNumber = response.referenceNumber;
         await emvCompleteOnline(EmvOnlineResponse(
           authorisationResponseCode: responseCode,
         ));
@@ -354,17 +361,17 @@ class _CardInputViewState extends State<CardInputView> {
 
           String infoDialogText;
           if (responseCode == "00") {
-            infoDialogText = "voidAccepted";
+            infoDialogText = "Reverso aceptado";
           } else {
-            infoDialogText = "voidRejected";
+            infoDialogText = "Reverso rechazado";
           }
 
           String exception;
 
           if (transactionArgs.emvTransactionType == EmvTransactionType.Refund) {
-            exception = "refundFailed";
+            exception = "Devolucion procesada";
           } else {
-            exception = "saleFailed";
+            exception = "Devolucion rechazada";
           }
 
           showInfoDialog(context, "$exception. $infoDialogText",
@@ -427,12 +434,14 @@ class _CardInputViewState extends State<CardInputView> {
     }
     transactionArgs?.pan ??=
         (await EmvModule.instance.getTagValue(0x57))?.toHexStr().split('d')[0];
+
+    final arguments = (ModalRoute.of(context)?.settings.arguments! as List);
     Navigator.pushReplacementNamed(context, EmvTransactionInfoView.route,
         arguments: [
           transactionArgs,
-          (ModalRoute.of(context)?.settings.arguments! as List)[1],
-          (ModalRoute.of(context)?.settings.arguments! as List)[2],
-          (ModalRoute.of(context)?.settings.arguments! as List)[3]
+          if (arguments.length >= 2) arguments[1] else null,
+          if (arguments.length >= 3) arguments[2] else null,
+          if (arguments.length >= 4) arguments[3] else null
         ]);
   }
 

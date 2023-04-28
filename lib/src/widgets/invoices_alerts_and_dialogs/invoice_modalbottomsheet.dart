@@ -1405,11 +1405,13 @@ class SeePaymentsALertDialog extends StatelessWidget {
                                   },
                                   leading: Icon(
                                     Icons.money_off_csred,
-                                    color: payment['anulado'] == false
-                                        ? payment['conciliado'] == false
-                                            ? Colors.amber.shade600
-                                            : Colors.green.shade600
-                                        : myTheme.colorScheme.error,
+                                    color: payment['refund'] == true
+                                        ? Colors.blue.shade800
+                                        : payment['anulado'] == false
+                                            ? payment['conciliado'] == false
+                                                ? Colors.amber.shade600
+                                                : Colors.green.shade600
+                                            : myTheme.colorScheme.error,
                                   ),
                                   title: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
@@ -1420,11 +1422,14 @@ class SeePaymentsALertDialog extends StatelessWidget {
                                         '$coinSymbol ${paymentAmount.toStringAsFixed(2)}',
                                         style: TextStyle(
                                           fontFamily: 'Poppins-regular',
-                                          color: payment['anulado'] == false
-                                              ? payment['conciliado'] == false
-                                                  ? Colors.amber.shade600
-                                                  : Colors.green.shade600
-                                              : myTheme.colorScheme.error,
+                                          color: payment['refund'] == true
+                                              ? Colors.blue.shade800
+                                              : payment['anulado'] == false
+                                                  ? payment['conciliado'] ==
+                                                          false
+                                                      ? Colors.amber.shade600
+                                                      : Colors.green.shade600
+                                                  : myTheme.colorScheme.error,
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,
                                         ),

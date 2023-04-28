@@ -13,7 +13,7 @@ Future<bool> Function() cancelTransactionDialogFn(BuildContext context) {
     final value = await showConfirmDialog(
       context,
       title: 'Confirmar',
-      message: "confirmCancelTransaction",
+      message: "¿Seguro que desea cancelar?",
       onAccept: () async {
         // Importante cerrar estos procesos correctamente para no tener problemas
         await closeCardReader();

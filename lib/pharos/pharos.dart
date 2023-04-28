@@ -52,6 +52,8 @@ Future<Map<String, dynamic>> pharosGenerateSaleMsg(
   bool isSale =
       (transactionArgs.emvTransactionType != EmvTransactionType.Refund);
 
+  int referenceNumber = int.parse(transactionArgs.referenceNumber ?? '0');
+
   if (tag5F20 != null) {
     cardHolderName = AsciiCodec().decode(tag5F20);
   }
@@ -88,17 +90,18 @@ Future<Map<String, dynamic>> pharosGenerateSaleMsg(
       tags: tags,
     );
     return PharosCardSaleRequest(
-      stan: stan.toString(),
-      date: dateStr,
-      card: card,
-      amount: amount,
-      currency: currency,
-      orderNumber: orderNumber,
-      terminalCode: terminalCode,
-      merchantCode: merchantCode,
-      isSale: isSale,
-      ksn: ksn,
-    ).toJson();
+            stan: stan.toString(),
+            date: dateStr,
+            card: card,
+            amount: amount,
+            currency: currency,
+            orderNumber: orderNumber,
+            terminalCode: terminalCode,
+            merchantCode: merchantCode,
+            isSale: isSale,
+            ksn: ksn,
+            referenceNumber: referenceNumber)
+        .toJson();
   } else {
     final pan = transactionArgs.pan;
     if (pan == null) {
@@ -132,7 +135,7 @@ Future<Map<String, dynamic>> pharosGenerateSaleMsg(
   }
 }
 
-onVoidExecute(
+Future<bool> onVoidExecute(
     BuildContext context, int stan, String pleaseWait, String message) async {
   final pharosVoidMsg = await pharosGenerateVoidMsg(stan.toString());
   print("$pharosVoidMsg");
@@ -149,17 +152,20 @@ onVoidExecute(
   }
 
   Navigator.pop(context);
-
+  bool res;
   String infoDialogText;
   if (responseCode == "00") {
     infoDialogText = '$message aceptado';
+    res = true;
   } else {
     infoDialogText = '$message rechazado';
+    res = false;
   }
   await showInfoDialog(context, "$infoDialogText", onClose: () {
     Navigator.pop(context);
   });
-  return;
+
+  return res;
 }
 
 /// Genera mensaje de reverso para switch Pharos
