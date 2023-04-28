@@ -135,8 +135,6 @@ class _ClientOrdersBodyState extends State<ClientOrdersBody> {
 
   @override
   Widget build(BuildContext context) {
-    final userRole = Provider.of<UserRole?>(context, listen: true);
-
     return SingleChildScrollView(
       child:
           // Center(

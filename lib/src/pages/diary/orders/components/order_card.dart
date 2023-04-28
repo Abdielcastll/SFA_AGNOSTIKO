@@ -204,7 +204,7 @@ class _OrderCardBodyState extends State<OrderCardBody> {
                       currentClient,
                       widget.widget.date,
                       widget.widget.correlativeNumber,
-                      isRetail: userRole?.isRetail,
+                      isRetail: userRole?.isRetail ?? true,
                       showButton: widget.widget.showButton,
                     )
                   : modalBottomSheetForOrders(
@@ -236,7 +236,7 @@ class _OrderCardBodyState extends State<OrderCardBody> {
                       currentClient,
                       widget.widget.date,
                       widget.widget.correlativeNumber,
-                      isRetail: userRole?.isRetail,
+                      isRetail: userRole?.isRetail ?? true,
                       showButton: widget.widget.showButton,
                     );
             },
