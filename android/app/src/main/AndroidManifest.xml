@@ -9,7 +9,7 @@
     
 
    <application
-        android:label="SFA Agnostiko"
+        android:label="Field Sales"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
          <activity

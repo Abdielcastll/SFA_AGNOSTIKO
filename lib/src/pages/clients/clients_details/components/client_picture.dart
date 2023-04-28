@@ -17,6 +17,8 @@ class ClientPicture extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('documentReferenceId: $documentReferenceId');
+
     return Stack(
       alignment: AlignmentDirectional.bottomStart,
       children: [

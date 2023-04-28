@@ -1110,7 +1110,8 @@ Future registerClient({
   String? longitude,
   userZoneDocument,
 }) async {
-  final clientDocument = clientsCollection.doc('$selectedIdType$newClientId');
+  // CAMBIOS A LA DIRECCION EN LA DB
+  final clientDocument = clientsCollection.doc();
   final storagePath = FirebaseStorage.instance
       .ref()
       .child('imagenes')

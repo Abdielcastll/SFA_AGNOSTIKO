@@ -28,6 +28,9 @@ class _ClientOrdersState extends State<ClientOrders> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<CurrentUserInfo?>(context);
+    final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
+    List<String> currentCoinSplit = currentCoin!.split(' ');
+    String currentCoinSelectedCode = currentCoinSplit.last;
 
     final scrollLimit =
         Provider.of<CounterLimitFirestore>(context).getScrollOrderBalance;
@@ -40,17 +43,24 @@ class _ClientOrdersState extends State<ClientOrders> {
     return MultiProvider(
       providers: [
         StreamProvider<List<Orders>?>.value(
-          value: document
-              // FirebaseFirestore.instance
-              //     .collectionGroup('pedidos')
-              // .orderBy('fecha')
-              //     .where(field)
-              //     .snapshots()
-              .map(ordersFromSnapshot),
+          value: document.map(ordersFromSnapshot),
           initialData: const [],
           catchError: (context, error) {
             print(error);
           },
+        ),
+        StreamProvider<Coin?>.value(
+          initialData: Coin(),
+          catchError: (context, error) {
+            print(
+                'ERROR ON STREAM PROVIDER OF COINEXCHANGE RATES IN ADD CLIENT');
+            print(error);
+            return;
+          },
+          value: coinCollection
+              .doc(currentCoinSelectedCode)
+              .snapshots()
+              .map(coinFromSnapshot),
         ),
         FutureProvider<UserRole?>.value(
           value: user?.getUserRole(),

@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -11,6 +13,7 @@ import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -227,8 +230,8 @@ class _StatusBarResumeState extends State<StatusBarResume> {
   @override
   Widget build(BuildContext context) {
     final coinName = Provider.of<Coin?>(context)?.name ?? '';
-    final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 0;
-    final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 0;
+    final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 2;
+    final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 1;
     final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
     final coinCode = Provider.of<Coin?>(context)?.code ?? '';
     final invoices = Provider.of<List<Invoices>?>(context) ?? [];
@@ -260,45 +263,6 @@ class _StatusBarResumeState extends State<StatusBarResume> {
     }
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
 
-    priceFormat(productPrice) {
-      double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-      double convertedAmount = double.parse(
-          (correctAmount * coinExchangeRatio).toStringAsFixed(coinDecimals));
-      return '$coinSymbol $convertedAmount';
-
-      // if (currentCoin!.contains('USD')) {
-      //   return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
-      //       .format(productPrice)
-      //       .toString();
-      // } else if (currentCoin.contains('VED')) {
-      //   return NumberFormat.currency(
-      //     locale: 'es_VE',
-      //     decimalDigits: 2,
-      //     symbol: "Bs.",
-      //   ).format(correctAmount * 4.58).toString();
-      // } else if (currentCoin.contains('EUR')) {
-      //   return NumberFormat.currency(
-      //     locale: 'es_ES',
-      //     decimalDigits: 2,
-      //     symbol: '€',
-      //   ).format(correctAmount * 0.89).toString();
-      // } else if (currentCoin.contains('MXN')) {
-      //   return NumberFormat.currency(
-      //     locale: 'es_MX',
-      //     decimalDigits: 2,
-      //     symbol: '\$',
-      //   ).format(correctAmount * 19.43);
-      // } else if (currentCoin.contains('BTC')) {
-      //   return '฿ ${(correctAmount * 0.00011).toString()}';
-      // } else {
-      //   return NumberFormat.currency(
-      //     locale: 'es_VE',
-      //     decimalDigits: 2,
-      //     symbol: "PPR.",
-      //   ).format(correctAmount * 4.58).toString();
-      // }
-    }
-
     return Container(
       margin: const EdgeInsets.fromLTRB(10, 20, 10, 5),
       child: Row(
@@ -318,7 +282,7 @@ class _StatusBarResumeState extends State<StatusBarResume> {
                 height: 40,
                 width: 70,
                 decoration: BoxDecoration(
-                  color: Colors.amber,
+                  color: Colors.amber.shade300,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 alignment: Alignment.center,
@@ -347,7 +311,7 @@ class _StatusBarResumeState extends State<StatusBarResume> {
                 height: 40,
                 width: 70,
                 decoration: BoxDecoration(
-                  color: Colors.green,
+                  color: Colors.green.shade300,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 alignment: Alignment.center,
@@ -377,12 +341,16 @@ class _StatusBarResumeState extends State<StatusBarResume> {
                 height: 40,
                 // width: 70,
                 decoration: BoxDecoration(
-                  color: Colors.blue,
+                  color: Colors.blue.shade300,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 alignment: Alignment.center,
                 child: Text(
-                  priceFormat(totalAmount),
+                  '$coinSymbol ${priceMultipliedByItsExchangeRatio(
+                    productPrice: totalAmount,
+                    coinDecimals: coinDecimals,
+                    coinExchangeRatio: coinExchangeRatio,
+                  ).toStringAsFixed(2)}',
                   style: const TextStyle(
                     fontFamily: 'Poppins-regular',
                     fontWeight: FontWeight.bold,
@@ -406,12 +374,16 @@ class _StatusBarResumeState extends State<StatusBarResume> {
                 height: 40,
                 width: 70,
                 decoration: BoxDecoration(
-                  color: Colors.red,
+                  color: Colors.red.shade300,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 alignment: Alignment.center,
                 child: Text(
-                  priceFormat(0),
+                  '$coinSymbol ${priceMultipliedByItsExchangeRatio(
+                    productPrice: 0,
+                    coinDecimals: coinDecimals,
+                    coinExchangeRatio: coinExchangeRatio,
+                  ).toStringAsFixed(2)}',
                   style: const TextStyle(
                     fontFamily: 'Poppins-regular',
                     fontWeight: FontWeight.bold,
@@ -468,10 +440,10 @@ class _ShowInvoicesState extends State<ShowInvoices> {
       if (_controller.position.atEdge) {
         bool isTop = _controller.position.pixels == 0;
         if (isTop) {
-          int newValor =
-              int.parse(productsLimitProvider.getScrollBalanceLimit.toString());
+          // int newValor =
+          // int.parse(productsLimitProvider.getScrollBalanceLimit.toString());
           print('Top balance page');
-          productsLimitProvider.setBalanceLimit(10, 10);
+          // productsLimitProvider.setBalanceLimit(10, 10);
         } else {
           if (productsLimitProvider.getScrollBalanceLimit == 0) {
             productsLimitProvider.setBalanceLimit(0, 0);
@@ -499,6 +471,11 @@ class _ShowInvoicesState extends State<ShowInvoices> {
 
   @override
   Widget build(BuildContext context) {
+    final coinName = Provider.of<Coin?>(context)?.name ?? '';
+    final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 2;
+    final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 1;
+    final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
+    final coinCode = Provider.of<Coin?>(context)?.code ?? '';
     final invoices = Provider.of<List<Invoices>?>(context) ?? [];
     final invoicesList = invoices;
     var invoicesOnProcessList =
@@ -506,45 +483,10 @@ class _ShowInvoicesState extends State<ShowInvoices> {
     var dateFormatter = DateFormat('yyyy-MM-dd');
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
 
-    priceFormat(productPrice) {
-      double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-      if (currentCoin!.contains('USD')) {
-        return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
-            .format(productPrice)
-            .toString();
-      } else if (currentCoin.contains('VED')) {
-        return NumberFormat.currency(
-          locale: 'es_VE',
-          decimalDigits: 2,
-          symbol: "Bs.",
-        ).format(correctAmount * 4.58).toString();
-      } else if (currentCoin.contains('EUR')) {
-        return NumberFormat.currency(
-          locale: 'es_ES',
-          decimalDigits: 2,
-          symbol: '€',
-        ).format(correctAmount * 0.89).toString();
-      } else if (currentCoin.contains('MXN')) {
-        return NumberFormat.currency(
-          locale: 'es_MX',
-          decimalDigits: 2,
-          symbol: '\$',
-        ).format(correctAmount * 19.43);
-      } else if (currentCoin.contains('BTC')) {
-        return '฿ ${(correctAmount * 0.00011).toString()}';
-      } else {
-        return NumberFormat.currency(
-          locale: 'es_VE',
-          decimalDigits: 2,
-          symbol: "PPR.",
-        ).format(correctAmount * 4.58).toString();
-      }
-    }
-
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.51,
-      margin: const EdgeInsets.fromLTRB(10, 20, 10, 5),
+      margin: const EdgeInsets.fromLTRB(10, 0, 10, 5),
       child: ListView.builder(
         controller: _controller,
         physics: const BouncingScrollPhysics(),
@@ -561,7 +503,17 @@ class _ShowInvoicesState extends State<ShowInvoices> {
           final date = DateTime.parse(unFormattedDate.toDate().toString());
           final noteDate = dateFormatter.format(date);
           final noteOriginalAmount = note.totalAmount ?? 0;
-          final noteBalance = 00;
+
+          final paymentsValidPay = note.payments
+              .where((element) => element['anulado'] == false)
+              .toList();
+          var sumOfValidPayments = paymentsValidPay.fold(0, (i, element) {
+            return i + element['monto'];
+          });
+          double remaining = double.parse(
+              (noteOriginalAmount - sumOfValidPayments).toStringAsFixed(4));
+          // final noteBalance = 00;
+          final noteBalance = remaining;
 
           return ListTile(
             leading: leadingIcon(note.isPaid),
@@ -585,13 +537,60 @@ class _ShowInvoicesState extends State<ShowInvoices> {
                 ),
               ],
             ),
-            subtitle: Text(
-              'Monto original: ${priceFormat(noteOriginalAmount)} - Saldo: ${priceFormat(noteBalance)}',
-              style: const TextStyle(
-                fontFamily: 'Poppins-regular',
-                fontSize: 12,
-                color: Colors.grey,
-              ),
+            subtitle: Column(
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      "Monto original: ",
+                      style: TextStyle(
+                        fontFamily: 'Poppins-regular',
+                        fontSize: 12,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    Text(
+                      '$coinSymbol ${priceMultipliedByItsExchangeRatio(
+                        productPrice: noteOriginalAmount,
+                        coinDecimals: coinDecimals,
+                        coinExchangeRatio: coinExchangeRatio,
+                      ).toStringAsFixed(2)}',
+                      style: TextStyle(
+                        fontFamily: 'Poppins-regular',
+                        fontSize: 12,
+                        color: myTheme.colorScheme.onPrimaryContainer,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 3),
+                Row(
+                  children: [
+                    Text(
+                      'Saldo: ',
+                      style: const TextStyle(
+                        fontFamily: 'Poppins-regular',
+                        fontSize: 12,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    Text(
+                      noteBalance < 0.001
+                          ? '0.00'
+                          : '$coinSymbol ${priceMultipliedByItsExchangeRatio(
+                              productPrice: noteBalance,
+                              coinDecimals: coinDecimals,
+                              coinExchangeRatio: coinExchangeRatio,
+                            ).toStringAsFixed(2)}',
+                      style: TextStyle(
+                        fontFamily: 'Poppins-regular',
+                        fontSize: 12,
+                        color: Colors.amber.shade600,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           );
         },
@@ -636,6 +635,11 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
 
   @override
   Widget build(BuildContext context) {
+    final coinName = Provider.of<Coin?>(context)?.name ?? '';
+    final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 2;
+    final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 1;
+    final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
+    final coinCode = Provider.of<Coin?>(context)?.code ?? '';
     final creditNotes = Provider.of<List<CreditNotes>?>(context) ?? [];
     final creditNotesList = creditNotes;
     var creditOnProcessList = creditNotes
@@ -646,45 +650,10 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
     var dateFormatter = DateFormat('yyyy-MM-dd');
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
 
-    priceFormat(productPrice) {
-      double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-      if (currentCoin!.contains('USD')) {
-        return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
-            .format(productPrice)
-            .toString();
-      } else if (currentCoin.contains('VED')) {
-        return NumberFormat.currency(
-          locale: 'es_VE',
-          decimalDigits: 2,
-          symbol: "Bs.",
-        ).format(correctAmount * 4.58).toString();
-      } else if (currentCoin.contains('EUR')) {
-        return NumberFormat.currency(
-          locale: 'es_ES',
-          decimalDigits: 2,
-          symbol: '€',
-        ).format(correctAmount * 0.89).toString();
-      } else if (currentCoin.contains('MXN')) {
-        return NumberFormat.currency(
-          locale: 'es_MX',
-          decimalDigits: 2,
-          symbol: '\$',
-        ).format(correctAmount * 19.43);
-      } else if (currentCoin.contains('BTC')) {
-        return '฿ ${(correctAmount * 0.00011).toString()}';
-      } else {
-        return NumberFormat.currency(
-          locale: 'es_VE',
-          decimalDigits: 2,
-          symbol: "PPR.",
-        ).format(correctAmount * 4.58).toString();
-      }
-    }
-
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      margin: const EdgeInsets.fromLTRB(10, 20, 10, 5),
+      height: MediaQuery.of(context).size.height * 0.51,
+      margin: const EdgeInsets.fromLTRB(10, 0, 10, 5),
       child: ListView.builder(
         physics: const BouncingScrollPhysics(),
         itemCount: widget.isCheckedOnProcess == true
@@ -815,7 +784,11 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
                                 ),
                                 const SizedBox(height: 20),
                                 Text(
-                                  'Monto: ${priceFormat(noteOriginalAmount)}',
+                                  'Monto: $coinSymbol ${priceMultipliedByItsExchangeRatio(
+                                    productPrice: noteOriginalAmount,
+                                    coinDecimals: coinDecimals,
+                                    coinExchangeRatio: coinExchangeRatio,
+                                  )}',
                                   style: const TextStyle(
                                     fontFamily: 'Poppins-regular',
                                     color: Colors.grey,
@@ -824,7 +797,11 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
                                   ),
                                 ),
                                 Text(
-                                  'Usado: ${priceFormat(noteBalance)}',
+                                  'Usado: $coinSymbol ${priceMultipliedByItsExchangeRatio(
+                                    productPrice: noteBalance,
+                                    coinDecimals: coinDecimals,
+                                    coinExchangeRatio: coinExchangeRatio,
+                                  )}',
                                   style: const TextStyle(
                                     fontFamily: 'Poppins-regular',
                                     color: Colors.grey,
@@ -833,7 +810,11 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
                                   ),
                                 ),
                                 Text(
-                                  'Saldo NC: ${priceFormat(balanceNC)}',
+                                  'Saldo NC: $coinSymbol ${priceMultipliedByItsExchangeRatio(
+                                    productPrice: balanceNC,
+                                    coinDecimals: coinDecimals,
+                                    coinExchangeRatio: coinExchangeRatio,
+                                  )}',
                                   style: const TextStyle(
                                     fontFamily: 'Poppins-regular',
                                     color: Colors.grey,
@@ -890,7 +871,15 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
               ],
             ),
             subtitle: Text(
-              'Monto original: \$ ${priceFormat(noteOriginalAmount)} - Saldo: \$ ${priceFormat(noteBalance)}',
+              'Monto original: $coinSymbol ${priceMultipliedByItsExchangeRatio(
+                productPrice: noteOriginalAmount,
+                coinDecimals: coinDecimals,
+                coinExchangeRatio: coinExchangeRatio,
+              )} - Saldo:  $coinSymbol ${priceMultipliedByItsExchangeRatio(
+                productPrice: noteBalance,
+                coinDecimals: coinDecimals,
+                coinExchangeRatio: coinExchangeRatio,
+              )}',
               style: const TextStyle(
                 fontFamily: 'Poppins-regular',
                 fontSize: 12,

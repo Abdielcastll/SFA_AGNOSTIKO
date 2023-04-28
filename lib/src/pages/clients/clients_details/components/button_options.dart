@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/account_balance/account_balance.dart';
 import 'package:pwa_sales2go_flutter/src/pages/account_balance/account_tabs.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
@@ -46,6 +47,10 @@ class ButtonOptions extends StatelessWidget {
     final orderActive = Provider.of<OrderProvider>(context);
     final currentClientForTheOrder =
         Provider.of<OrderProvider>(context).clientForTheOrder;
+    // final userRole = Provider.of<CurrentUserInfo>(context).role;
+
+    // print('userRole IN CLIENT DETAILS: $userRole');
+
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Row(

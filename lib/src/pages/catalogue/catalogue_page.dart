@@ -43,6 +43,10 @@ class _CataloguePageState extends State<CataloguePage> {
     final productsLimit =
         Provider.of<CounterLimitFirestore>(context).getProductsLimit;
     final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
+    final userRole = Provider.of<CurrentUserInfo>(context).role;
+
+    print('zoneDocument: $userZoneDocument');
+    print('userRole: $userRole');
     getDiscounts();
     return MultiProvider(
       providers: [

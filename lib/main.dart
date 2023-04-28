@@ -172,14 +172,14 @@ class SfaAgnostiko extends StatelessWidget {
                             GlobalWidgetsLocalizations.delegate,
                             GlobalCupertinoLocalizations.delegate,
                           ],
-                          title: 'SFA Agnostiko',
+                          title: 'Field Sales',
                           theme: myTheme,
                           initialRoute:
                               //'wrapper' for mobile to avoid checking terminal
                               // token, SplashScreenView.route to activate
                               // in terminals
-                              //'wrapper',
-                              SplashScreenView.route,
+                              'wrapper',
+                          // SplashScreenView.route,
                           routes: {
                             SplashScreenView.route: (BuildContext context) =>
                                 SplashScreenView(),

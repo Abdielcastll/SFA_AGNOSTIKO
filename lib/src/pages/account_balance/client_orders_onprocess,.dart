@@ -83,7 +83,8 @@ class _ClientsOrdersOnProcessState extends State<ClientsOrdersOnProcess> {
               ? SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   child: Container(
-                    height: MediaQuery.of(context).size.height * 0.65,
+                    height: MediaQuery.of(context).size.height * 0.61,
+                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 5),
                     child: Scrollbar(
                       child: ListView.builder(
                         controller: widget.controller,
@@ -143,32 +144,40 @@ class _ClientsOrdersOnProcessState extends State<ClientsOrdersOnProcess> {
                   ),
                 )
               : Container(
-                  margin: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                  margin: const EdgeInsets.fromLTRB(0, 100, 0, 0),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        height: 200,
-                        width: 200,
-                        child: Image.asset(
-                          'assets/images/nodiary.png',
-                          fit: BoxFit.cover,
+                        margin: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color:
+                                // Colors.red.withOpacity(0.3)),
+                                myTheme.colorScheme.primary.withOpacity(0.3)),
+                        width: 120,
+                        height: 120,
+                        child: Opacity(
+                          opacity: 0.8,
+                          child: Icon(
+                            MaterialCommunityIcons.calendar_remove_outline,
+                            color: myTheme.colorScheme.onPrimaryContainer,
+                            size: 60,
+                          ),
                         ),
                       ),
                       Container(
-                        // color: Colors.green,
-                        // height: 150,
-                        // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                         alignment: Alignment.center,
                         child: Center(
-                          child: Text(
-                            'No hay ordenes en proceso',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontFamily: 'Poppins-regular',
-                              fontSize: 14,
-                              color: myTheme.colorScheme.onPrimaryContainer,
+                          child: Container(
+                            width: 250,
+                            child: Text(
+                              'No hay ordenes registradas',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontFamily: 'Poppins-regular',
+                                fontSize: 16,
+                                color: myTheme.colorScheme.onPrimaryContainer,
+                              ),
                             ),
                           ),
                         ),
