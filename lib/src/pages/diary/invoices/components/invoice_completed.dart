@@ -253,7 +253,7 @@ class _InvoicesCompletedState extends State<InvoicesCompleted> {
                         child: Container(
                           width: 250,
                           child: Text(
-                            'No hay ordenes registradas este día este día',
+                            'No hay ordenes registradas este día',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontFamily: 'Poppins-regular',

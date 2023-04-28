@@ -27,6 +27,8 @@ class TransactionArgs {
   String? clearTrack1;
   String? clearTrack2;
   int? stan;
+  String? referenceNumber;
+  String? currencyCode;
 
   Stream<dynamic>? emvStream;
 
@@ -55,6 +57,7 @@ class TransactionArgs {
       this.expDate,
       this.cvv,
       this.stan,
+      this.referenceNumber,
       this.invoice});
 }
 

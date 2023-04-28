@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/dialogs/circular_progress_dialog.dart';
 import 'package:pwa_sales2go_flutter/dialogs/info_dialog.dart';
 import 'package:pwa_sales2go_flutter/pharos/pharos.dart';
+import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/diary_tabs.dart';
@@ -84,31 +85,68 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       final transactionInfo = transactionArgs?.transactionInfo;
       final transactionResult = transactionInfo?.result;
       this.transactionResult = transactionResult;
-      switch (transactionResult) {
-        case EmvTransactionResult.Approved:
-          transactionResultStr = approvedStr;
-          Future.delayed(Duration.zero, () {
-            // TODO: REGISTRAR PAGO EN DB
-            print('Pago Aprobado - Registrando pago de Tarjeta en DB');
-            registerDebitCreditCardPayment(
-                    transactionArgs!.invoice!, transactionArgs!.stan)
-                .whenComplete(() {
-              checkIfInvoiceIsCompleted(
-                paidAmount: transactionArgs!.invoice!.amount,
-                remaining: transactionArgs!.invoice!.remaining,
-                client: transactionArgs!.invoice!.client,
-                invoiceDocumentID: transactionArgs!.invoice!.invoiceDocumentID,
-              );
+
+      if (transactionArgs!.emvTransactionType != EmvTransactionType.Refund) {
+        switch (transactionResult) {
+          case EmvTransactionResult.Approved:
+            final referenceNumber =
+                int.parse(transactionArgs!.referenceNumber!);
+            print('referenceNumber');
+            print(referenceNumber);
+            transactionResultStr = approvedStr;
+            Future.delayed(Duration.zero, () {
+              // TODO: REGISTRAR PAGO EN DB
+              print('Pago Aprobado - Registrando pago de Tarjeta en DB');
+              registerDebitCreditCardPayment(
+                      transactionArgs!.invoice!,
+                      transactionArgs!.stan,
+                      referenceNumber,
+                      transactionArgs!.currencyCode!)
+                  .whenComplete(() {
+                checkIfInvoiceIsCompleted(
+                  paidAmount: transactionArgs!.invoice!.amount,
+                  remaining: transactionArgs!.invoice!.remaining,
+                  client: transactionArgs!.invoice!.client,
+                  invoiceDocumentID:
+                      transactionArgs!.invoice!.invoiceDocumentID,
+                );
+              });
             });
-          });
-          break;
-        case EmvTransactionResult.Denied:
-          print('Pago denegado');
-          transactionResultStr = declinedStr;
-          break;
-        default:
-          print('Pago Fallido');
-          break;
+            break;
+          case EmvTransactionResult.Denied:
+            print('Pago denegado');
+            transactionResultStr = declinedStr;
+            break;
+          default:
+            print('Pago Fallido');
+            break;
+        }
+      } else {
+        switch (transactionResult) {
+          case EmvTransactionResult.Approved:
+            final referenceNumber =
+                int.parse(transactionArgs!.referenceNumber!);
+            print('referenceNumber');
+            print(referenceNumber);
+
+            transactionResultStr = approvedStr;
+
+            registerDebitCreditCardPayment(
+                transactionArgs!.invoice!,
+                transactionArgs!.stan,
+                referenceNumber,
+                transactionArgs!.currencyCode!,
+                refund: true);
+            // cancelPayment(client, invoiceId, paymentIndex);
+            break;
+          case EmvTransactionResult.Denied:
+            print('Devolucion denegada');
+            transactionResultStr = declinedStr;
+            break;
+          default:
+            print('Devolucion Fallida');
+            break;
+        }
       }
 
       transactionOnlineStr =
@@ -313,7 +351,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                         ),
                       )),
                 ),
-              if (transactionArgs!.isFallback && transactionArgs!.stan != null)
+              /* if (transactionArgs!.isFallback && transactionArgs!.stan != null)
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       vertical: 4.0, horizontal: 16.0),
@@ -337,7 +375,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                           fontWeight: FontWeight.bold,
                         ),
                       )),
-                ),
+                ), */
               Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
@@ -365,7 +403,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
 
   onAccept() {
     if (transactionArgs!.emvTransactionType == EmvTransactionType.Refund) {
-      Navigator.pushReplacementNamed(context, 'wrapper');
+      Navigator.popUntil(context, (route) => route.isFirst == true);
       return;
     }
 
@@ -499,9 +537,6 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   void printTicket() async {
     final emv = EmvModule.instance;
 
-    final paymentBody = (ModalRoute.of(context)?.settings.arguments! as List)[2]
-        as AddPaymentBodyAtt;
-
     List<PrinterObject> listOfTextLine = [];
     final terminalParameters = await loadTerminalParameters();
 
@@ -587,11 +622,23 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
 
     listOfTextLine.add(PrinterText.emptyLine(16));
 
-    listOfTextLine.add(
-      PrinterText("Venta #${paymentBody.invoiceNumber}".toUpperCase(),
-          format: TextFormat(fontSize: 16, fontFamily: regularFont),
-          alignment: TextAlignment.Center),
-    );
+    if (transactionArgs!.emvTransactionType == EmvTransactionType.Refund) {
+      listOfTextLine.add(
+        PrinterText("Devolución".toUpperCase(),
+            format: TextFormat(fontSize: 16, fontFamily: regularFont),
+            alignment: TextAlignment.Center),
+      );
+    } else {
+      final paymentBody = (ModalRoute.of(context)?.settings.arguments!
+          as List)[2] as AddPaymentBodyAtt;
+
+      listOfTextLine.add(
+        PrinterText("Venta #${paymentBody.invoiceNumber}".toUpperCase(),
+            format: TextFormat(fontSize: 16, fontFamily: regularFont),
+            alignment: TextAlignment.Center),
+      );
+    }
+
     listOfTextLine.add(PrinterText(
         transactionResult == EmvTransactionResult.Approved
             ? 'PAGO APROBADO'
@@ -620,7 +667,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     listOfTextLine.add(PrinterText(
         "Stan: ${transactionArgs!.stan}".toUpperCase(),
         format: TextFormat(fontSize: 16, fontFamily: regularFont)));
-    listOfTextLine.add(PrinterText("Aprobación: 123456".toUpperCase(),
+    listOfTextLine.add(PrinterText(
+        "Numero de Referencia: ${int.parse(transactionArgs!.referenceNumber!)}"
+            .toUpperCase(),
         format: TextFormat(fontSize: 16, fontFamily: regularFont)));
     listOfTextLine.add(PrinterText("ARQC: E47BF856EDEB5B31".toUpperCase(),
         format: TextFormat(fontSize: 16, fontFamily: regularFont)));
