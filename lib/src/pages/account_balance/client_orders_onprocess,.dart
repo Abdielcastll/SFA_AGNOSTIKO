@@ -110,6 +110,8 @@ class _ClientsOrdersOnProcessState extends State<ClientsOrdersOnProcess> {
                           final orderTax = order.tax;
                           final orderSubTotal = order.subTotal;
                           final orderDiscountMaster = order.masterDiscount;
+                          final orderExchangeRates = order.exchangeRate;
+
                           // print('orderTotalAmount: $orderTotalAmount');
                           // print('unformattedDate: $unformattedDate');
                           // print('orderStatus: $orderStatus');
@@ -137,6 +139,7 @@ class _ClientsOrdersOnProcessState extends State<ClientsOrdersOnProcess> {
                             discountMaster: orderDiscountMaster,
                             correlativeNumber: order.correlativeNumber,
                             showButton: false,
+                            coinsExchangeRates: orderExchangeRates,
                           );
                         },
                       ),

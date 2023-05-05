@@ -224,6 +224,8 @@ class _OrdersOnProcessState extends State<OrdersOnProcess> {
                           final orderTax = order.tax;
                           final orderSubTotal = order.subTotal;
                           final orderDiscountMaster = order.masterDiscount;
+                          final orderExchangeRates = order.exchangeRate;
+                          print(orderExchangeRates);
                           return OrderCard(
                             clientReferenceId: orderClientRefID,
                             date: deliveryDate,
@@ -238,6 +240,7 @@ class _OrdersOnProcessState extends State<OrdersOnProcess> {
                             discountMaster: orderDiscountMaster,
                             correlativeNumber: order.correlativeNumber,
                             showButton: true,
+                            coinsExchangeRates: orderExchangeRates,
                           );
                         },
                       ),

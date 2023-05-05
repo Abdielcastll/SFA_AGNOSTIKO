@@ -53,6 +53,7 @@ void modalBottomSheetForOrders(
   correlativeNumber, {
   isRetail,
   showButton,
+  coinExchangeRateFromDB,
 }) {
   print('Print data de orderCard');
   print('+++++++++++++++++++++++++');
@@ -249,9 +250,11 @@ void modalBottomSheetForOrders(
                                               tax: tax,
                                               total: total,
                                               coinDecimals: coinDecimals,
-                                              coinExchangeRatio:
-                                                  coinExchangeRatio,
+                                              coinExchangeRatio: double.parse(
+                                                  coinExchangeRatio.toString()),
                                               coinSymbol: coinSymbol,
+                                              coinExchangeRateFromDB:
+                                                  coinExchangeRateFromDB,
                                             );
                                           });
                                     },
@@ -679,6 +682,8 @@ void modalBottomSheetForOrders(
                                                               clientReferenceId,
                                                           orderDocumentId:
                                                               orderDocumentId,
+                                                          coinExchangeRateFromDB:
+                                                              coinExchangeRateFromDB,
                                                         );
                                                       });
                                                 },
@@ -727,10 +732,12 @@ class DeleteOrderAlertDialog extends StatelessWidget {
     super.key,
     required this.orderDocumentId,
     required this.clientReferenceId,
+    required this.coinExchangeRateFromDB,
   });
 
   final orderDocumentId;
   final clientReferenceId;
+  final coinExchangeRateFromDB;
 
   @override
   Widget build(BuildContext context) {
@@ -830,6 +837,7 @@ class SeeProductsAlertDialog extends StatelessWidget {
     required this.coinDecimals,
     required this.coinExchangeRatio,
     required this.coinSymbol,
+    required this.coinExchangeRateFromDB,
   });
   final products;
   final double subTotal;
@@ -839,6 +847,7 @@ class SeeProductsAlertDialog extends StatelessWidget {
   final int coinDecimals;
   final double coinExchangeRatio;
   final String coinSymbol;
+  final coinExchangeRateFromDB;
 
   @override
   Widget build(BuildContext context) {
@@ -909,7 +918,7 @@ class SeeProductsAlertDialog extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  '$coinSymbol ${priceMultipliedByItsExchangeRatio(productPrice: product['monto'], coinDecimals: coinDecimals, coinExchangeRatio: coinExchangeRatio).toStringAsFixed(2)}',
+                                  '$coinSymbol ${priceMultipliedByItsExchangeRatio(productPrice: product['monto'], coinDecimals: coinDecimals, coinExchangeRatio: coinExchangeRateFromDB).toStringAsFixed(2)}',
                                   style: TextStyle(
                                     fontFamily: 'Poppins-regular',
                                     color: myTheme.colorScheme.primary,
@@ -940,7 +949,7 @@ class SeeProductsAlertDialog extends StatelessWidget {
                 ),
               ),
               Text(
-                '$coinSymbol ${priceMultipliedByItsExchangeRatio(productPrice: subTotal, coinDecimals: coinDecimals, coinExchangeRatio: coinExchangeRatio).toStringAsFixed(2)}',
+                '$coinSymbol ${priceMultipliedByItsExchangeRatio(productPrice: subTotal, coinDecimals: coinDecimals, coinExchangeRatio: coinExchangeRateFromDB).toStringAsFixed(2)}',
                 style: TextStyle(
                   fontFamily: 'Poppins-regular',
                   color: Colors.black,
@@ -963,7 +972,7 @@ class SeeProductsAlertDialog extends StatelessWidget {
                 ),
               ),
               Text(
-                '$coinSymbol ${priceMultipliedByItsExchangeRatio(productPrice: discountMaster, coinDecimals: coinDecimals, coinExchangeRatio: coinExchangeRatio).toStringAsFixed(2)}',
+                '$coinSymbol ${priceMultipliedByItsExchangeRatio(productPrice: discountMaster, coinDecimals: coinDecimals, coinExchangeRatio: coinExchangeRateFromDB).toStringAsFixed(2)}',
                 style: TextStyle(
                   fontFamily: 'Poppins-regular',
                   color: Colors.black,
@@ -986,7 +995,7 @@ class SeeProductsAlertDialog extends StatelessWidget {
                 ),
               ),
               Text(
-                '$coinSymbol ${priceMultipliedByItsExchangeRatio(productPrice: tax, coinDecimals: coinDecimals, coinExchangeRatio: coinExchangeRatio).toStringAsFixed(2)}',
+                '$coinSymbol ${priceMultipliedByItsExchangeRatio(productPrice: tax, coinDecimals: coinDecimals, coinExchangeRatio: coinExchangeRateFromDB).toStringAsFixed(2)}',
                 style: TextStyle(
                   fontFamily: 'Poppins-regular',
                   color: Colors.black,
@@ -1009,7 +1018,7 @@ class SeeProductsAlertDialog extends StatelessWidget {
                 ),
               ),
               Text(
-                '$coinSymbol ${priceMultipliedByItsExchangeRatio(productPrice: total, coinDecimals: coinDecimals, coinExchangeRatio: coinExchangeRatio).toStringAsFixed(2)}',
+                '$coinSymbol ${priceMultipliedByItsExchangeRatio(productPrice: total, coinDecimals: coinDecimals, coinExchangeRatio: coinExchangeRateFromDB).toStringAsFixed(2)}',
                 style: TextStyle(
                   fontFamily: 'Poppins-regular',
                   color: Colors.green,

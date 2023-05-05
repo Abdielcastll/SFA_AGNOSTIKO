@@ -1070,7 +1070,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                       children: [
                                         Center(
                                           child: Text(
-                                            'Los datos introducidos seran usandos para registar un cliente',
+                                            'Este registro de cliente será guardado',
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               color:
@@ -1082,7 +1082,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                         ),
                                         Center(
                                           child: Text(
-                                            '¿Continuar?',
+                                            '¿Desea continuar?',
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               color:

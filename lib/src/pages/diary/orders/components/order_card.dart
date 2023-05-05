@@ -114,6 +114,11 @@ class OrderCardBody extends StatefulWidget {
 class _OrderCardBodyState extends State<OrderCardBody> {
   @override
   Widget build(BuildContext context) {
+    final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
+    List<String> currentCoinSplit = currentCoin!.split(' ');
+    String currentCoinSelectedCode = currentCoinSplit.last;
+    print(currentCoinSelectedCode);
+    print('TEST COIN');
     final currentClient = Provider.of<Client?>(context) ?? [];
     final currentClientName = Provider.of<Client?>(context)?.name ?? '';
     final currentClientAddress =
@@ -132,7 +137,6 @@ class _OrderCardBodyState extends State<OrderCardBody> {
         Provider.of<Client?>(context)?.masterDiscount ?? {};
     final zonesSummary = Provider.of<ZoneSummary?>(context)?.summary ?? '';
     final userUID = Provider.of<UserModel>(context).uid;
-    final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     final coinName = Provider.of<Coin?>(context)?.name ?? '';
     final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 0;
     final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 0;
@@ -146,7 +150,8 @@ class _OrderCardBodyState extends State<OrderCardBody> {
     final total = priceMultipliedByItsExchangeRatio(
         productPrice: widget.widget.total,
         coinDecimals: coinDecimals,
-        coinExchangeRatio: coinExchangeRatio);
+        coinExchangeRatio: double.parse(
+            (widget.widget.coinsExchangeRates?['MXN'] ?? 1).toString()));
     identifyStatusColor() {
       if (widget.widget.status == AppLocalizations.of(context)!.onProcess &&
           widget.widget.isInvoicesFailed == false) {
@@ -206,7 +211,9 @@ class _OrderCardBodyState extends State<OrderCardBody> {
                       widget.widget.correlativeNumber,
                       isRetail: userRole?.isRetail ?? true,
                       showButton: widget.widget.showButton,
-                    )
+                      coinExchangeRateFromDB: double.parse(
+                          (widget.widget.coinsExchangeRates?['MXN'] ?? 1)
+                              .toString()))
                   : modalBottomSheetForOrders(
                       true,
                       context,
@@ -238,7 +245,8 @@ class _OrderCardBodyState extends State<OrderCardBody> {
                       widget.widget.correlativeNumber,
                       isRetail: userRole?.isRetail ?? true,
                       showButton: widget.widget.showButton,
-                    );
+                      coinExchangeRateFromDB:
+                          double.parse((widget.widget.coinsExchangeRates?['MXN'] ?? 1).toString()));
             },
             child: Container(
               margin: EdgeInsets.only(top: 5, left: 14, right: 14, bottom: 5),

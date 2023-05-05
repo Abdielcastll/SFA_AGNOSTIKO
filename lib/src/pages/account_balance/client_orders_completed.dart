@@ -114,6 +114,8 @@ class _ClientOrdersCompletedState extends State<ClientOrdersCompleted> {
                       final orderSubTotal = order.subTotal;
                       final orderDiscountMaster = order.masterDiscount;
                       final orderTax = order.tax;
+                      final orderExchangeRates = order.exchangeRate;
+
                       // print(order);
                       return OrderCard(
                         clientReferenceId: orderClientRefID,
@@ -129,6 +131,7 @@ class _ClientOrdersCompletedState extends State<ClientOrdersCompleted> {
                         tax: orderTax,
                         correlativeNumber: order.correlativeNumber,
                         showButton: false,
+                        coinsExchangeRates: orderExchangeRates,
                       );
                     },
                   ),

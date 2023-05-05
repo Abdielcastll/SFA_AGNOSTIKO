@@ -33,9 +33,9 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
     final orderActive = Provider.of<OrderProvider>(context);
     final currentClientForTheOrder =
         Provider.of<OrderProvider>(context).clientForTheOrder;
-    final userRole = Provider.of<CurrentUserInfo>(context).role;
+    // final userRole = Provider.of<CurrentUserInfo>(context).role;
 
-    // print('userRole IN APPBAR NAVIGATION: $userRole');
+    // // print('userRole IN APPBAR NAVIGATION: $userRole');
 
     return AppBar(
       // shape: RoundedRectangleBorder(

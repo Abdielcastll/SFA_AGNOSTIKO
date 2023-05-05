@@ -33,8 +33,6 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userRole = Provider.of<CurrentUserInfo>(context).role;
-
     // print('userRole IN APPBAR NAVIGATION: $userRole');
 
     final orderActive = Provider.of<OrderProvider>(context);

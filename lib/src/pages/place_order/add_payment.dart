@@ -14,7 +14,6 @@ import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_checkout.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/identify_payment_method.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/identify_payment_method_retail.dart';
 
 import '../../models/clients_model.dart';
@@ -1420,7 +1419,8 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                 child: identifyPaymentMethodRetail(
                                   coinName: coinName,
                                   coinDecimals: coinDecimals,
-                                  coinExchangeRatio: coinExchangeRatio,
+                                  coinExchangeRatio: double.parse(
+                                      coinExchangeRatio.toString()),
                                   coinSymbol: coinSymbol,
                                   coinCode: coinCode,
                                   moneyRecievedForRegisterMoney:
@@ -1428,11 +1428,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                   selectedValueA: selectedValueA!,
                                   client: widget.client,
                                   invoiceDocumentID: widget.invoiceDocumentID,
-                                  // paidAmount: amountChanged
-                                  //     ? roundAmount(amountToPay)
-                                  //     : priceToCurrencySelected(
-                                  //         roundAmount(amountToPay),
-                                  //         selectedCoin!),
+
                                   paidAmount: paidAmount,
                                   totalOfTheOrder: getTotalAmount,
                                   date: today,
@@ -1456,7 +1452,8 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                       tax: widget.tax,
                                       invoiceNumber: widget.invoiceNumber,
                                       currency: selectedCoin!,
-                                      currencyExchange: coinExchangeRatio)
+                                      currencyExchange: double.parse(
+                                          coinExchangeRatio.toString()))
                                     ..payments = widget.payments,
                                 ),
                               ),

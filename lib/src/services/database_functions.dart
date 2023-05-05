@@ -172,7 +172,7 @@ Future createOrder(
     });
   });
 
-  final exchangeRates = getExchangesRates(coins);
+  final exchangeRates = getExchangesRatesTest(coins);
   print('exchangeRates: $exchangeRates');
 
   DocumentReference<Map<String, dynamic>> path = FirebaseFirestore.instance
@@ -269,6 +269,25 @@ Future createInvoice(
     'usuario': FirebaseFirestore.instance.collection('usuarios').doc(userID),
   };
   final seller = FirebaseFirestore.instance.collection('usuarios').doc(userID);
+  // GET EXCHANGE RATES
+
+  List<Coin> coins = [];
+  await coinCollection.get().then((element) {
+    return element.docs.forEach((doc) {
+      Coin coin = Coin(
+        code: doc.data().toString().contains('codigo')
+            ? doc.get('codigo')
+            : 'USD',
+        exchangeRatio: doc.data().toString().contains('tasaDeCambio')
+            ? doc.get('tasaDeCambio')
+            : 1,
+      );
+      coins.add(coin);
+    });
+  });
+
+  final exchangeRates = getExchangesRatesTest(coins);
+  print('exchangeRates: $exchangeRates');
 
   print(clientID);
   print(masterDiscount);
@@ -318,6 +337,7 @@ Future createInvoice(
       'timestampRegistro': register,
       'ultimaModificacion': lastModification,
       'vendedor': seller,
+      'tasasDeCambio': exchangeRates,
     }).whenComplete(() async {
       return await FirebaseFirestore.instance
           .collection('config')
@@ -927,12 +947,26 @@ Future<int> completePaymentProcess(
   final List quantitiesList = [];
   final List productsIds = [];
   final List<Map<dynamic, dynamic>> products = [];
-  final Map<String, double> exchangeRate = {
-    'BTC': 0.00011,
-    'EUR': 0.89,
-    'VED': 4.58,
-    'MXN': 19.43
-  };
+  // GET EXCHANGE RATES
+
+  List<Coin> coins = [];
+  await coinCollection.get().then((element) {
+    return element.docs.forEach((doc) {
+      Coin coin = Coin(
+        code: doc.data().toString().contains('codigo')
+            ? doc.get('codigo')
+            : 'USD',
+        exchangeRatio: doc.data().toString().contains('tasaDeCambio')
+            ? doc.get('tasaDeCambio')
+            : 1,
+      );
+      coins.add(coin);
+    });
+  });
+
+  final exchangeRates = getExchangesRatesTest(coins);
+  print('exchangeRates: $exchangeRates');
+
   shoppingCart.forEach((element) {
     quantitiesList.add(element.productQuantity);
     productsIds.add(element.code);
@@ -984,7 +1018,7 @@ Future<int> completePaymentProcess(
       'porcentajeDescuentoAplicado': discountPercentage,
       'productos': products,
       'subtotal': subTotal,
-      'tasasDeCambio': exchangeRate,
+      'tasasDeCambio': exchangeRates,
       'timestampRegistro': Timestamp.fromDate(DateTime.now()),
       'totalAPagar': double.parse(totalAsString),
       'ultimaModificacion': Timestamp.fromDate(DateTime.now()),
@@ -1070,6 +1104,7 @@ Future<int> completePaymentProcess(
     'timestampRegistro': register,
     'ultimaModificacion': lastModification,
     'vendedor': seller,
+    'tasasDeCambio': exchangeRates,
   }).whenComplete(() async {
     return await FirebaseFirestore.instance
         .collection('config')

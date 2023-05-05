@@ -42,6 +42,7 @@ class InvoiceCard extends StatefulWidget {
     this.invoiceSubtotal,
     this.discount,
     this.discountPercentage,
+    required this.invoiceExchangeRatefromDB,
   }) : super(key: key);
 
   final invoiceClient;
@@ -58,6 +59,7 @@ class InvoiceCard extends StatefulWidget {
   final invoiceSubtotal;
   final discountPercentage;
   final discount;
+  final invoiceExchangeRatefromDB;
 
   @override
   State<InvoiceCard> createState() => _InvoiceCardState();
@@ -122,7 +124,7 @@ class InvoiceCardBody extends StatelessWidget {
     final double total = priceMultipliedByItsExchangeRatio(
         productPrice: widget.invoiceBalance,
         coinDecimals: coinDecimals,
-        coinExchangeRatio: coinExchangeRatio);
+        coinExchangeRatio: widget.invoiceExchangeRatefromDB?['MXN'] ?? 1);
 
     // priceFormat(productPrice) {
     //   double correctAmount = double.parse(productPrice.toStringAsFixed(4));
@@ -207,6 +209,8 @@ class InvoiceCardBody extends StatelessWidget {
           )
         : GestureDetector(
             onTap: () {
+              print(widget.invoiceExchangeRatefromDB);
+
               widget.invoiceStatus == AppLocalizations.of(context)!.onProcess
                   ? modalBottomSheetForInvoices(
                       false,

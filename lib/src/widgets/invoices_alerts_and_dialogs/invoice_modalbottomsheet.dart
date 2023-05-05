@@ -313,7 +313,8 @@ void modalBottomSheetForInvoices(
                                         change,
                                         paidAmount: paidAmount,
                                         coinDecimals: coinDecimals,
-                                        coinExchangeRatio: coinExchangeRatio,
+                                        coinExchangeRatio: double.parse(
+                                            coinExchangeRatio.toString()),
                                         coinSymbol: coinSymbol,
                                         remaining: remaining,
                                         coinName: coinName,
@@ -1382,7 +1383,7 @@ class SeePaymentsALertDialog extends StatelessWidget {
                                     priceMultipliedByItsExchangeRatio(
                                   productPrice: payment['monto'],
                                   coinDecimals: coinDecimals,
-                                  coinExchangeRatio: coinExchangeRatio,
+                                  coinExchangeRatio: payment['tasaDeCambio'],
                                 );
 
                                 return ListTile(
