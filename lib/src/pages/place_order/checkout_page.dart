@@ -1248,6 +1248,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                         widget.subTotal,
                                         totalPriceOfTheOrder,
                                         discountByInput,
+                                        false,
                                       );
                                       orderActive.setOrder(false, Clients());
                                       completeOrder();

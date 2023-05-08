@@ -4,7 +4,6 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
@@ -219,6 +218,10 @@ class _ProductsBodyState extends State<ProductsBody> {
   final List<String> items = ['10', '50', 'Todos'];
   String? selectedValue;
 
+  //Test
+  String? phosTest = 'Phos';
+  //Test
+
   @override
   Widget build(BuildContext context) {
     // Orden activa
@@ -301,7 +304,10 @@ class _ProductsBodyState extends State<ProductsBody> {
             body: SingleChildScrollView(
               child: Column(
                 children: [
-                  // Text(filteredProducts.length.toString()),
+                  // TEST
+                  Text('Phos test: $phosTest'),
+                  testPhos(),
+                  // TEST
                   Container(
                     margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
                     height: 40,
@@ -1363,6 +1369,18 @@ class _ProductsBodyState extends State<ProductsBody> {
               ),
             ),
           );
+  }
+
+  ElevatedButton testPhos() {
+    return ElevatedButton.icon(
+      icon: Icon(Icons.text_snippet),
+      onPressed: () {
+        setState(() {
+          phosTest = 'Kaede';
+        });
+      },
+      label: Text('Cambiar texto de prueba Phos a Kaede'),
+    );
   }
 }
 

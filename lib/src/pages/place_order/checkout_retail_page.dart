@@ -1056,6 +1056,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                           widget.subTotal,
                                           totalPriceOfTheOrder,
                                           discountByInput,
+                                          true,
                                         );
                                       } catch (e) {
                                         print('ERROR AL GUARDAR PEDIDO');

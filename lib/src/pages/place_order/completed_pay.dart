@@ -127,7 +127,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
       double correctAmount = double.parse(productPrice.toStringAsFixed(4));
       double convertedAmount = double.parse(
           (correctAmount * coinExchangeRatio).toStringAsFixed(coinDecimals));
-      return '$coinSymbol $convertedAmount';
+      return convertedAmount;
 
       // if (currentCoin.contains('USD')) {
       //   return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
@@ -267,7 +267,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
                           Container(
                             alignment: Alignment.center,
                             child: Text(
-                              priceFormat(widget.total),
+                              '$coinSymbol ${priceFormat(widget.total).toStringAsFixed(2)}',
                               textAlign: TextAlign.center,
                               // currentCoin != 'Dolares - USD'
                               //     ? '${priceFormat(widget.total)} = \$ ${widget.total.toStringAsFixed(4)}'

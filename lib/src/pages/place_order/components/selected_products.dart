@@ -101,7 +101,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
           return value['valores'];
         },
       );
-      print(stockProducts);
+      // print(stockProducts);
       final priceProducts = await FirebaseFirestore.instance
           .collection('listas_de_precios')
           .doc(clientPriceList.toString())
