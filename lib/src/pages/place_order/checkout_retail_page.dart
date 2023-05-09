@@ -18,6 +18,7 @@ import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/discount.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/completed_order.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/components/selected_client.dart';
@@ -53,6 +54,7 @@ class _CheckoutRetailPageState extends State<CheckoutRetailPage> {
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     List<String> currentCoinSplit = currentCoin!.split(' ');
     String currentCoinSelectedCode = currentCoinSplit.last;
+
     return Scaffold(
       appBar: const AppBarCheckout(),
       backgroundColor: Colors.grey.shade100,
@@ -1054,6 +1056,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                           widget.subTotal,
                                           totalPriceOfTheOrder,
                                           discountByInput,
+                                          true,
                                         );
                                       } catch (e) {
                                         print('ERROR AL GUARDAR PEDIDO');

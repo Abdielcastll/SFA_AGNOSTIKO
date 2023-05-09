@@ -209,7 +209,9 @@ class _InvoicesOnProcessState extends State<InvoicesOnProcess> {
                           final invoiceNumber = invoice.correlativeNumber;
                           final invoiceTotal = invoice.totalAmount;
                           final invoiceDocumentID = invoice.invoiceDocumentID;
-
+                          final invoiceExchangeRate =
+                              invoice.invoiceExchangeRate;
+                          print('invoiceExchangeRate: $invoiceExchangeRate');
                           return InvoiceCard(
                             invoiceClient: invoiceClient,
                             invoiceDate: invoiceDate,
@@ -225,6 +227,7 @@ class _InvoicesOnProcessState extends State<InvoicesOnProcess> {
                             discountPercentage:
                                 invoice.masterDiscountPercentage,
                             discount: invoice.masterDiscountAmount,
+                            invoiceExchangeRatefromDB: invoiceExchangeRate,
                           );
                         },
                       ),

@@ -384,7 +384,7 @@ class _ClientListState extends State<ClientList> {
                   margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                   // color: Colors.grey,
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height * 0.68,
+                  height: MediaQuery.of(context).size.height * 0.57,
                   child: ListView.builder(
                     controller: widget.controller,
                     physics: const BouncingScrollPhysics(),

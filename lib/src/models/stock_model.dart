@@ -7,8 +7,11 @@ class StockModel {
 }
 
 StockModel stockListfromSnapshot(doc) {
+  final Map<String, dynamic> valores = {
+    '0': 0,
+  };
   return StockModel(
-    doc.data().toString().contains('valores') ? doc.get('valores') : 0,
+    doc.data().toString().contains('valores') ? doc.get('valores') : valores,
     // (doc.get('valores')) ?? 'NaN',
   );
 }

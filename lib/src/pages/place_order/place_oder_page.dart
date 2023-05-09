@@ -20,7 +20,7 @@ class PlaceOrderPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // print('userZoneDocument: $userZoneDocument');
+    print('userZoneDocument: $userZoneDocument');
 
     return Scaffold(
       appBar: AppBar(
@@ -39,10 +39,16 @@ class PlaceOrderPage extends StatelessWidget {
       body: MultiProvider(
         providers: [
           StreamProvider<List<Clients>?>.value(
-            value: clientsCollection
-                .where('zona', isEqualTo: userZoneDocument)
-                .snapshots()
-                .map(clientListfromSnapshot),
+            value: userZoneDocument == 'NaN'
+                ? clientsCollection.snapshots().map(clientListfromSnapshot)
+                : clientsCollection
+                    .where('zona', isEqualTo: userZoneDocument)
+                    .snapshots()
+                    .map(clientListfromSnapshot),
+            // clientsCollection
+            //     .where('zona', isEqualTo: userZoneDocument)
+            //     .snapshots()
+            //     .map(clientListfromSnapshot),
             initialData: const [],
             catchError: (context, error) {
               return;

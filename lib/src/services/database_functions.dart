@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -126,12 +127,15 @@ Future createOrder(
   double subTotal,
   double totalOfTheOrder,
   int? discountPercentage,
+  bool? reduceStock,
 ) async {
   print('/// CREAR PEDIDO ///');
 
   final List quantitiesList = [];
   final List productsIds = [];
   final List<Map<dynamic, dynamic>> products = [];
+
+  final Map<String, dynamic> productsStock = {};
 
   shoppingCart.forEach((element) {
     quantitiesList.add(element.productQuantity);
@@ -147,14 +151,83 @@ Future createOrder(
       'precioUnitario': double.parse(element.unitPrice ?? '0.0'),
       'urlFoto': '',
     });
-    print('Cantidad de producto: ${element.code}: ${element.productQuantity}');
+    final productQuantity = <String, dynamic>{
+      // '${element.code}':
+      //     (element.availableStock! - (element.productQuantity)!.toInt()),
+      '${element.code}': element.productQuantity,
+    };
+    productsStock.addEntries(productQuantity.entries);
+    // print('Cantidad de producto: ${element.code}: ${element.productQuantity}');
   });
+  print('productsStock: $productsStock');
   print('Cantidades: $quantitiesList');
-  print(
-      'Cliente: ${FirebaseFirestore.instance.collection('clientes').doc(client!.clientDocumentId)}');
-  print('IDs: $productsIds');
-  print('Productos: $products');
+  // print(
+  //     'Cliente: ${FirebaseFirestore.instance.collection('clientes').doc(client!.clientDocumentId)}');
+  // print('IDs: $productsIds');
+  // print('Productos: $products');
 
+  // REDUCE STOCK ON DATABASE
+
+  if (reduceStock == false) {
+    final DocumentReference stockPath =
+        FirebaseFirestore.instance.collection('stock').doc('productos');
+    // final Map<String, dynamic> originalStock = {
+    //   '026229570704': 398,
+    //   '1AC1K0003': 100,
+    //   '1AC1K003': 100,
+    //   'P1S0001': 46,
+    //   'P1S0002': 65,
+    //   'P1S0003': 102,
+    //   'P1S0004': 48,
+    //   'P1S0005': 51,
+    //   'P1S0006': 23,
+    //   'P1S0007': 12,
+    //   'P1S0008': 41,
+    //   'P1S0009': 20,
+    //   'P1S0010': 12,
+    //   'P1S9911': 154,
+    //   'P1S0012': 37,
+    //   'P1S0013': 321,
+    //   'P1S0014': 560,
+    //   'P1S0015': 500,
+    //   'P1S0016': 480,
+    //   'P1S0017': 410,
+    //   'P1S0018': 359,
+    //   'P1S0019': 387,
+    //   'P1S0020': 326,
+    //   'P1S0021': 403,
+    //   'P1S0022': 369,
+    //   'P1S0023': 247,
+    //   'P1S0024': 501,
+    //   'P1S0025': 58,
+    //   'P1S0026': 26,
+    //   'P1S0027': 87,
+    //   'P1S0028': 49,
+    //   'P1S0029': 5,
+    //   'P1S0030': 3,
+    // };
+    Map<String, dynamic> currentStock = {};
+
+    await stockPath.get().then(
+      (doc) {
+        currentStock = doc.data().toString().contains('valores')
+            ? doc.get('valores')
+            : {'0': 0};
+      },
+    );
+    productsStock.forEach((key, value) async {
+      int newValue = (currentStock[key] - value);
+      if (newValue <= 0) {
+        await stockPath.update({
+          'valores.$key': 0,
+        });
+      } else {
+        await stockPath.update({
+          'valores.$key': (currentStock[key] - value),
+        });
+      }
+    });
+  }
   // GET EXCHANGE RATES
 
   List<Coin> coins = [];
@@ -172,15 +245,16 @@ Future createOrder(
     });
   });
 
-  final exchangeRates = getExchangesRates(coins);
+  final exchangeRates = getExchangesRatesTest(coins);
   print('exchangeRates: $exchangeRates');
 
   DocumentReference<Map<String, dynamic>> path = FirebaseFirestore.instance
       .collection('clientes')
-      .doc(client.clientDocumentId)
+      .doc(client!.clientDocumentId)
       .collection('pedidos')
       .doc();
   print('path de la factura: ${path.id}');
+
   return await path.set(
     {
       'cantidadesProductos': quantitiesList,
@@ -269,6 +343,25 @@ Future createInvoice(
     'usuario': FirebaseFirestore.instance.collection('usuarios').doc(userID),
   };
   final seller = FirebaseFirestore.instance.collection('usuarios').doc(userID);
+  // GET EXCHANGE RATES
+
+  List<Coin> coins = [];
+  await coinCollection.get().then((element) {
+    return element.docs.forEach((doc) {
+      Coin coin = Coin(
+        code: doc.data().toString().contains('codigo')
+            ? doc.get('codigo')
+            : 'USD',
+        exchangeRatio: doc.data().toString().contains('tasaDeCambio')
+            ? doc.get('tasaDeCambio')
+            : 1,
+      );
+      coins.add(coin);
+    });
+  });
+
+  final exchangeRates = getExchangesRatesTest(coins);
+  print('exchangeRates: $exchangeRates');
 
   print(clientID);
   print(masterDiscount);
@@ -318,6 +411,7 @@ Future createInvoice(
       'timestampRegistro': register,
       'ultimaModificacion': lastModification,
       'vendedor': seller,
+      'tasasDeCambio': exchangeRates,
     }).whenComplete(() async {
       return await FirebaseFirestore.instance
           .collection('config')
@@ -927,12 +1021,29 @@ Future<int> completePaymentProcess(
   final List quantitiesList = [];
   final List productsIds = [];
   final List<Map<dynamic, dynamic>> products = [];
-  final Map<String, double> exchangeRate = {
-    'BTC': 0.00011,
-    'EUR': 0.89,
-    'VED': 4.58,
-    'MXN': 19.43
-  };
+  final Map<String, dynamic> productsStock = {};
+
+  // print('Cantidad de producto: ${element.code}: ${element.productQuantity}');
+  // GET EXCHANGE RATES
+
+  List<Coin> coins = [];
+  await coinCollection.get().then((element) {
+    return element.docs.forEach((doc) {
+      Coin coin = Coin(
+        code: doc.data().toString().contains('codigo')
+            ? doc.get('codigo')
+            : 'USD',
+        exchangeRatio: doc.data().toString().contains('tasaDeCambio')
+            ? doc.get('tasaDeCambio')
+            : 1,
+      );
+      coins.add(coin);
+    });
+  });
+
+  final exchangeRates = getExchangesRatesTest(coins);
+  print('exchangeRates: $exchangeRates');
+
   shoppingCart.forEach((element) {
     quantitiesList.add(element.productQuantity);
     productsIds.add(element.code);
@@ -947,13 +1058,81 @@ Future<int> completePaymentProcess(
       'precioUnitario': double.parse(element.unitPrice ?? '0.0'),
       'urlFoto': '',
     });
-    print('Cantidad de producto: ${element.code}: ${element.productQuantity}');
+    final productQuantity = <String, dynamic>{
+      // '${element.code}':
+      //     (element.availableStock! - (element.productQuantity)!.toInt()),
+      '${element.code}': element.productQuantity,
+    };
+    productsStock.addEntries(productQuantity.entries);
+    // print('Cantidad de producto: ${element.code}: ${element.productQuantity}');
   });
   print('Cantidades: $quantitiesList');
   print(
       'Cliente: ${FirebaseFirestore.instance.collection('clientes').doc(client!.clientDocumentId)}');
   print('IDs: $productsIds');
   print('Productos: $products');
+
+  // REDUCE STOCK ON DATABASE
+
+  final DocumentReference stockPath =
+      FirebaseFirestore.instance.collection('stock').doc('productos');
+  // final Map<String, dynamic> originalStock = {
+  //   '026229570704': 398,
+  //   '1AC1K0003': 100,
+  //   '1AC1K003': 100,
+  //   'P1S0001': 46,
+  //   'P1S0002': 65,
+  //   'P1S0003': 102,
+  //   'P1S0004': 48,
+  //   'P1S0005': 51,
+  //   'P1S0006': 23,
+  //   'P1S0007': 12,
+  //   'P1S0008': 41,
+  //   'P1S0009': 20,
+  //   'P1S0010': 12,
+  //   'P1S9911': 154,
+  //   'P1S0012': 37,
+  //   'P1S0013': 321,
+  //   'P1S0014': 560,
+  //   'P1S0015': 500,
+  //   'P1S0016': 480,
+  //   'P1S0017': 410,
+  //   'P1S0018': 359,
+  //   'P1S0019': 387,
+  //   'P1S0020': 326,
+  //   'P1S0021': 403,
+  //   'P1S0022': 369,
+  //   'P1S0023': 247,
+  //   'P1S0024': 501,
+  //   'P1S0025': 58,
+  //   'P1S0026': 26,
+  //   'P1S0027': 87,
+  //   'P1S0028': 49,
+  //   'P1S0029': 5,
+  //   'P1S0030': 3,
+  // };
+  Map<String, dynamic> currentStock = {};
+
+  await stockPath.get().then(
+    (doc) {
+      currentStock = doc.data().toString().contains('valores')
+          ? doc.get('valores')
+          : {'0': 0};
+    },
+  );
+  print('Modifying stock');
+  productsStock.forEach((key, value) async {
+    int newValue = (currentStock[key] - value);
+    if (newValue <= 0) {
+      await stockPath.update({
+        'valores.$key': 0,
+      });
+    } else {
+      await stockPath.update({
+        'valores.$key': (currentStock[key] - value),
+      });
+    }
+  });
 
   await FirebaseFirestore.instance
       .collection('clientes')
@@ -984,7 +1163,7 @@ Future<int> completePaymentProcess(
       'porcentajeDescuentoAplicado': discountPercentage,
       'productos': products,
       'subtotal': subTotal,
-      'tasasDeCambio': exchangeRate,
+      'tasasDeCambio': exchangeRates,
       'timestampRegistro': Timestamp.fromDate(DateTime.now()),
       'totalAPagar': double.parse(totalAsString),
       'ultimaModificacion': Timestamp.fromDate(DateTime.now()),
@@ -1070,6 +1249,7 @@ Future<int> completePaymentProcess(
     'timestampRegistro': register,
     'ultimaModificacion': lastModification,
     'vendedor': seller,
+    'tasasDeCambio': exchangeRates,
   }).whenComplete(() async {
     return await FirebaseFirestore.instance
         .collection('config')
@@ -1114,7 +1294,8 @@ Future registerClient({
   String? longitude,
   userZoneDocument,
 }) async {
-  final clientDocument = clientsCollection.doc('$selectedIdType$newClientId');
+  // CAMBIOS A LA DIRECCION EN LA DB
+  final clientDocument = clientsCollection.doc();
   final storagePath = FirebaseStorage.instance
       .ref()
       .child('imagenes')

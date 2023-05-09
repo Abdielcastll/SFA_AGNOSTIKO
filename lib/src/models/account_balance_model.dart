@@ -18,6 +18,7 @@ class Invoices {
   final lastModified;
   final seller;
   final invoiceDocumentID;
+  final invoiceExchangeRate;
 
   Invoices({
     this.clientIdReference,
@@ -37,6 +38,7 @@ class Invoices {
     this.lastModified,
     this.seller,
     this.invoiceDocumentID,
+    this.invoiceExchangeRate,
   });
 }
 
@@ -89,6 +91,14 @@ List<Invoices> accountInvoicesFromSnapshot(QuerySnapshot snapshot) {
           ? doc.get('vendedor').id
           : 'NaN',
       invoiceDocumentID: doc.reference.id,
+      invoiceExchangeRate: doc.data().toString().contains('tasasDeCambio')
+          ? doc.get('tasasDeCambio')
+          : {
+              'BTC': 1,
+              'MXN': 1,
+              'VED': 1,
+              'EUR': 1,
+            },
     );
   }).toList();
 }

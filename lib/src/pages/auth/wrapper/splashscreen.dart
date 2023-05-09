@@ -45,7 +45,7 @@ class _SplashScreenWidgetState extends State<SplashScreenWidget> {
               ),
               SizedBox(height: 20),
               Text(
-                'SFA Agnostiko',
+                'Field Sales',
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,

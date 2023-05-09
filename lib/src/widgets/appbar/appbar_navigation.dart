@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/place_oder_page.dart';
 import 'package:pwa_sales2go_flutter/src/provider/locale_provider.dart';
@@ -32,6 +33,8 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    // print('userRole IN APPBAR NAVIGATION: $userRole');
+
     final orderActive = Provider.of<OrderProvider>(context);
     final user = Provider.of<UserModel>(context);
     final currentClientForTheOrder =
@@ -90,6 +93,7 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
             orderActive.orderActive == false
+                // TODO: Buscar una mejor manera de identificar si es admin
                 ? Container(
                     margin: EdgeInsets.fromLTRB(0, 0, 16, 8),
                     child: IconButton(
@@ -178,7 +182,28 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
                                           onPressed: () async {
                                             // Escoger lista de clientes
                                             // var client =
-                                            Clients? defaultClient;
+                                            print('SELECTING DEFAULT CLIENT');
+                                            Clients? defaultClient = Clients(
+                                              active: true,
+                                              specialContributor: false,
+                                              madeBy: '',
+                                              masterDiscount: 0,
+                                              fiscalAdress: 'Sin direccion',
+                                              dispatchAdress: 'Sin Direccion',
+                                              email: '',
+                                              prices: 'TPGBASE',
+                                              modified: Timestamp.now(),
+                                              name:
+                                                  'Usuario Default Administrador',
+                                              id: 0,
+                                              prospect: false,
+                                              phone1: '',
+                                              phone2: '',
+                                              idType: '',
+                                              zone: 'NaN',
+                                              clientDocumentId:
+                                                  'hEIOO4qTPYTqYChVeqxo',
+                                            );
                                             await clientsCollection
                                                 .where('zona',
                                                     isEqualTo: userZoneDocument)
@@ -191,13 +216,15 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
                                                     .toString()
                                                     .contains(
                                                         '000A Cliente Default')) {
+                                                  print(
+                                                      'SENDING DATA BASE DEFAULT CLIENT');
                                                   defaultClient = Clients(
                                                     active: snapshot
                                                             .data()
                                                             .toString()
                                                             .contains('activo')
                                                         ? snapshot.get('activo')
-                                                        : 'NaN',
+                                                        : false,
                                                     specialContributor: snapshot
                                                             .data()
                                                             .toString()
@@ -222,7 +249,7 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
                                                                 'descuentoMaestro')
                                                         ? snapshot.get(
                                                             'descuentoMaestro')
-                                                        : 'NaN',
+                                                        : 0,
                                                     fiscalAdress: snapshot
                                                             .data()
                                                             .toString()
@@ -254,7 +281,7 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
                                                             .get(
                                                                 'listaDePrecios')
                                                             .id
-                                                        : 'NaN',
+                                                        : 'TPGBASE',
                                                     modified: snapshot
                                                             .data()
                                                             .toString()
@@ -262,7 +289,7 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
                                                                 'modificado')
                                                         ? snapshot
                                                             .get('modificado')
-                                                        : 'NaN',
+                                                        : Timestamp.now(),
                                                     name: snapshot
                                                             .data()
                                                             .toString()
@@ -276,7 +303,7 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
                                                                 'numeroId')
                                                         ? snapshot
                                                             .get('numeroId')
-                                                        : 'NaN',
+                                                        : 0,
                                                     prospect: snapshot
                                                             .data()
                                                             .toString()
@@ -320,51 +347,87 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
                                                     clientDocumentId:
                                                         snapshot.reference.id,
                                                   );
+                                                } else {
+                                                  print(
+                                                      'SENDING ERROR DEFAULT CLIENT');
+                                                  defaultClient = Clients(
+                                                    active: true,
+                                                    specialContributor: false,
+                                                    madeBy: 'NaN',
+                                                    masterDiscount: 0,
+                                                    fiscalAdress: 'NaN',
+                                                    dispatchAdress: 'NaN',
+                                                    email: 'NaN',
+                                                    prices: 'TPGBASE',
+                                                    modified: Timestamp.now(),
+                                                    name:
+                                                        'Usuario Default Administrador',
+                                                    id: 0,
+                                                    prospect: false,
+                                                    phone1: '0',
+                                                    phone2: '0',
+                                                    idType: 'V',
+                                                    zone: 'NaN',
+                                                    clientDocumentId:
+                                                        'hEIOO4qTPYTqYChVeqxo',
+                                                  );
                                                 }
                                               }).toList();
+                                            }).catchError((e) {
+                                              print(
+                                                  'ERROR ON GETTING CLIENT DEFAULT ON APPBAR NAVIGATION');
+                                              print(e);
+                                              print(
+                                                  'SENDING ERROR DEFAULT CLIENT');
                                             });
 
-                                            print(defaultClient?.zone);
+                                            print(
+                                                'defaultClient?.zone: ${defaultClient?.zone}');
                                             orderActive.setOrder(
                                                 true, defaultClient);
                                             Navigator.pop(context);
-                                            // ignore: use_build_context_synchronously
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
+                                            if (defaultClient == null) {
+                                              print(
+                                                  'ERROR ON GETTING DEFAULT CLIENT');
+                                            } else {
+                                              // ignore: use_build_context_synchronously
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
                                                   settings: const RouteSettings(
                                                       name: "ORDER"),
                                                   builder: (context) =>
                                                       StreamProvider<
                                                           CurrentUserInfo?>.value(
-                                                        value: usersCollection
-                                                            .doc(user.uid)
-                                                            .snapshots()
-                                                            .map(AuthService()
-                                                                .userDataFromsnapshot),
-                                                        initialData:
-                                                            CurrentUserInfo(
-                                                          name: '',
-                                                          dni: '',
-                                                          zone: '',
-                                                          zoneDocument: '',
-                                                          email: '',
-                                                          role: '',
-                                                          uid: '',
-                                                        ),
-                                                        catchError:
-                                                            (context, error) {
-                                                          print(error);
-                                                          return;
-                                                        },
-                                                        // builder: (context, child) {
+                                                    value: usersCollection
+                                                        .doc(user.uid)
+                                                        .snapshots()
+                                                        .map(AuthService()
+                                                            .userDataFromsnapshot),
+                                                    initialData:
+                                                        CurrentUserInfo(
+                                                      name: '',
+                                                      dni: '',
+                                                      zone: '',
+                                                      zoneDocument: '',
+                                                      email: '',
+                                                      role: '',
+                                                      uid: '',
+                                                    ),
+                                                    catchError:
+                                                        (context, error) {
+                                                      print(error);
+                                                      return;
+                                                    },
+                                                    // builder: (context, child) {
 
-                                                        //   return NavigationPages();
-                                                        // });
-                                                        child:
-                                                            const OrderPage(),
-                                                      )),
-                                            );
+                                                    //   return NavigationPages();
+                                                    // });
+                                                    child: const OrderPage(),
+                                                  ),
+                                                ),
+                                              );
+                                            }
                                           },
                                           child: Container(
                                             margin: const EdgeInsets.fromLTRB(
@@ -417,13 +480,11 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
                                 uid: '',
                               ),
                               catchError: (context, error) {
+                                print(
+                                    'ERROR GETTING CURRENT USER INFO IN APPBAR NAVIGATION');
                                 print(error);
                                 return;
                               },
-                              // builder: (context, child) {
-
-                              //   return NavigationPages();
-                              // });
                               child: const OrderPage(),
                             ),
                           ),

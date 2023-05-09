@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -9,6 +10,7 @@ import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/place_oder_page.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
+import 'package:pwa_sales2go_flutter/src/services/auth.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -26,9 +28,14 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserModel>(context);
+
     final orderActive = Provider.of<OrderProvider>(context);
     final currentClientForTheOrder =
         Provider.of<OrderProvider>(context).clientForTheOrder;
+    // final userRole = Provider.of<CurrentUserInfo>(context).role;
+
+    // // print('userRole IN APPBAR NAVIGATION: $userRole');
 
     return AppBar(
       // shape: RoundedRectangleBorder(
@@ -167,10 +174,195 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
                                                     (states) =>
                                                         Colors.transparent),
                                           ),
+                                          // onPressed: () async {
+                                          //   // Escoger lista de clientes
+                                          //   // var client =
+                                          //   Clients? defaultClient;
+                                          //   await clientsCollection
+                                          //       .where('zona',
+                                          //           isEqualTo: userZoneDocument)
+                                          //       .where('numeroId', isEqualTo: 0)
+                                          //       .get()
+                                          //       .then((value) {
+                                          //     return value.docs.map((snapshot) {
+                                          //       if (snapshot
+                                          //           .get('nombre')
+                                          //           .toString()
+                                          //           .contains(
+                                          //               '000A Cliente Default')) {
+                                          //         defaultClient = Clients(
+                                          //           active: snapshot
+                                          //                   .data()
+                                          //                   .toString()
+                                          //                   .contains('activo')
+                                          //               ? snapshot.get('activo')
+                                          //               : 'NaN',
+                                          //           specialContributor: snapshot
+                                          //                   .data()
+                                          //                   .toString()
+                                          //                   .contains(
+                                          //                       'contribuyenteEspecial')
+                                          //               ? snapshot.get(
+                                          //                   'contribuyenteEspecial')
+                                          //               : false,
+                                          //           madeBy: snapshot
+                                          //                   .data()
+                                          //                   .toString()
+                                          //                   .contains(
+                                          //                       'creadoPor')
+                                          //               ? snapshot
+                                          //                   .get('creadoPor')
+                                          //                   .id
+                                          //               : 'NaN',
+                                          //           masterDiscount: snapshot
+                                          //                   .data()
+                                          //                   .toString()
+                                          //                   .contains(
+                                          //                       'descuentoMaestro')
+                                          //               ? snapshot.get(
+                                          //                   'descuentoMaestro')
+                                          //               : 'NaN',
+                                          //           fiscalAdress: snapshot
+                                          //                   .data()
+                                          //                   .toString()
+                                          //                   .contains(
+                                          //                       'direccionFiscal')
+                                          //               ? snapshot.get(
+                                          //                   'direccionFiscal')
+                                          //               : 'NaN',
+                                          //           dispatchAdress: snapshot
+                                          //                   .data()
+                                          //                   .toString()
+                                          //                   .contains(
+                                          //                       'direccionDespacho')
+                                          //               ? snapshot.get(
+                                          //                   'direccionDespacho')
+                                          //               : 'No hay direccion de despacho',
+                                          //           email: snapshot
+                                          //                   .data()
+                                          //                   .toString()
+                                          //                   .contains('email')
+                                          //               ? snapshot.get('email')
+                                          //               : 'NaN',
+                                          //           prices: snapshot
+                                          //                   .data()
+                                          //                   .toString()
+                                          //                   .contains(
+                                          //                       'listaDePrecios')
+                                          //               ? snapshot
+                                          //                   .get(
+                                          //                       'listaDePrecios')
+                                          //                   .id
+                                          //               : 'NaN',
+                                          //           modified: snapshot
+                                          //                   .data()
+                                          //                   .toString()
+                                          //                   .contains(
+                                          //                       'modificado')
+                                          //               ? snapshot
+                                          //                   .get('modificado')
+                                          //               : 'NaN',
+                                          //           name: snapshot
+                                          //                   .data()
+                                          //                   .toString()
+                                          //                   .contains('nombre')
+                                          //               ? snapshot.get('nombre')
+                                          //               : 'NaN',
+                                          //           id: snapshot
+                                          //                   .data()
+                                          //                   .toString()
+                                          //                   .contains(
+                                          //                       'numeroId')
+                                          //               ? snapshot
+                                          //                   .get('numeroId')
+                                          //               : 'NaN',
+                                          //           prospect: snapshot
+                                          //                   .data()
+                                          //                   .toString()
+                                          //                   .contains(
+                                          //                       'prospecto')
+                                          //               ? snapshot
+                                          //                   .get('prospecto')
+                                          //               : false,
+                                          //           phone1: snapshot
+                                          //                   .data()
+                                          //                   .toString()
+                                          //                   .contains(
+                                          //                       'telefono')
+                                          //               ? snapshot
+                                          //                   .get('telefono')
+                                          //               : 'NaN',
+                                          //           phone2: snapshot
+                                          //                   .data()
+                                          //                   .toString()
+                                          //                   .contains(
+                                          //                       'telefono2')
+                                          //               ? snapshot
+                                          //                   .get('telefono2')
+                                          //               : 'NaN',
+                                          //           idType: snapshot
+                                          //                   .data()
+                                          //                   .toString()
+                                          //                   .contains('tipoId')
+                                          //               ? snapshot
+                                          //                   .get('tipoId')
+                                          //                   .id
+                                          //               : 'NaN',
+                                          //           zone: snapshot
+                                          //                   .data()
+                                          //                   .toString()
+                                          //                   .contains('zona')
+                                          //               ? snapshot
+                                          //                   .get('zona')
+                                          //                   .id
+                                          //               : 'NaN',
+                                          //           clientDocumentId:
+                                          //               snapshot.reference.id,
+                                          //         );
+                                          //       }
+                                          //     }).toList();
+                                          //   });
+
+                                          //   print(defaultClient?.zone);
+                                          //   orderActive.setOrder(
+                                          //       true, defaultClient);
+                                          //   Navigator.pop(context);
+                                          //   Navigator.push(
+                                          //     context,
+                                          //     MaterialPageRoute(
+                                          //       settings: const RouteSettings(
+                                          //           name: "ORDER"),
+                                          //       builder: (context) =>
+                                          //           const OrderPage(),
+                                          //     ),
+                                          //   );
+                                          // },
+
                                           onPressed: () async {
                                             // Escoger lista de clientes
                                             // var client =
-                                            Clients? defaultClient;
+                                            print('SELECTING DEFAULT CLIENT');
+                                            Clients? defaultClient = Clients(
+                                              active: true,
+                                              specialContributor: false,
+                                              madeBy: '',
+                                              masterDiscount: 0,
+                                              fiscalAdress: 'Sin direccion',
+                                              dispatchAdress: 'Sin Direccion',
+                                              email: '',
+                                              prices: 'TPGBASE',
+                                              modified: Timestamp.now(),
+                                              name:
+                                                  'Usuario Default Administrador',
+                                              id: 0,
+                                              prospect: false,
+                                              phone1: '',
+                                              phone2: '',
+                                              idType: '',
+                                              zone: 'NaN',
+                                              clientDocumentId:
+                                                  'hEIOO4qTPYTqYChVeqxo',
+                                            );
                                             await clientsCollection
                                                 .where('zona',
                                                     isEqualTo: userZoneDocument)
@@ -183,13 +375,15 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
                                                     .toString()
                                                     .contains(
                                                         '000A Cliente Default')) {
+                                                  print(
+                                                      'SENDING DATA BASE DEFAULT CLIENT');
                                                   defaultClient = Clients(
                                                     active: snapshot
                                                             .data()
                                                             .toString()
                                                             .contains('activo')
                                                         ? snapshot.get('activo')
-                                                        : 'NaN',
+                                                        : false,
                                                     specialContributor: snapshot
                                                             .data()
                                                             .toString()
@@ -214,7 +408,7 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
                                                                 'descuentoMaestro')
                                                         ? snapshot.get(
                                                             'descuentoMaestro')
-                                                        : 'NaN',
+                                                        : 0,
                                                     fiscalAdress: snapshot
                                                             .data()
                                                             .toString()
@@ -246,7 +440,7 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
                                                             .get(
                                                                 'listaDePrecios')
                                                             .id
-                                                        : 'NaN',
+                                                        : 'TPGBASE',
                                                     modified: snapshot
                                                             .data()
                                                             .toString()
@@ -254,7 +448,7 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
                                                                 'modificado')
                                                         ? snapshot
                                                             .get('modificado')
-                                                        : 'NaN',
+                                                        : Timestamp.now(),
                                                     name: snapshot
                                                             .data()
                                                             .toString()
@@ -268,7 +462,7 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
                                                                 'numeroId')
                                                         ? snapshot
                                                             .get('numeroId')
-                                                        : 'NaN',
+                                                        : 0,
                                                     prospect: snapshot
                                                             .data()
                                                             .toString()
@@ -312,23 +506,87 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
                                                     clientDocumentId:
                                                         snapshot.reference.id,
                                                   );
+                                                } else {
+                                                  print(
+                                                      'SENDING ERROR DEFAULT CLIENT');
+                                                  defaultClient = Clients(
+                                                    active: true,
+                                                    specialContributor: false,
+                                                    madeBy: 'NaN',
+                                                    masterDiscount: 0,
+                                                    fiscalAdress: 'NaN',
+                                                    dispatchAdress: 'NaN',
+                                                    email: 'NaN',
+                                                    prices: 'TPGBASE',
+                                                    modified: Timestamp.now(),
+                                                    name:
+                                                        'Usuario Default Administrador',
+                                                    id: 0,
+                                                    prospect: false,
+                                                    phone1: '0',
+                                                    phone2: '0',
+                                                    idType: 'V',
+                                                    zone: 'NaN',
+                                                    clientDocumentId:
+                                                        'hEIOO4qTPYTqYChVeqxo',
+                                                  );
                                                 }
                                               }).toList();
+                                            }).catchError((e) {
+                                              print(
+                                                  'ERROR ON GETTING CLIENT DEFAULT ON APPBAR NAVIGATION');
+                                              print(e);
+                                              print(
+                                                  'SENDING ERROR DEFAULT CLIENT');
                                             });
 
-                                            print(defaultClient?.zone);
+                                            print(
+                                                'defaultClient?.zone: ${defaultClient?.zone}');
                                             orderActive.setOrder(
                                                 true, defaultClient);
                                             Navigator.pop(context);
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                settings: const RouteSettings(
-                                                    name: "ORDER"),
-                                                builder: (context) =>
-                                                    const OrderPage(),
-                                              ),
-                                            );
+                                            if (defaultClient == null) {
+                                              print(
+                                                  'ERROR ON GETTING DEFAULT CLIENT');
+                                            } else {
+                                              // ignore: use_build_context_synchronously
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  settings: const RouteSettings(
+                                                      name: "ORDER"),
+                                                  builder: (context) =>
+                                                      StreamProvider<
+                                                          CurrentUserInfo?>.value(
+                                                    value: usersCollection
+                                                        .doc(user.uid)
+                                                        .snapshots()
+                                                        .map(AuthService()
+                                                            .userDataFromsnapshot),
+                                                    initialData:
+                                                        CurrentUserInfo(
+                                                      name: '',
+                                                      dni: '',
+                                                      zone: '',
+                                                      zoneDocument: '',
+                                                      email: '',
+                                                      role: '',
+                                                      uid: '',
+                                                    ),
+                                                    catchError:
+                                                        (context, error) {
+                                                      print(error);
+                                                      return;
+                                                    },
+                                                    // builder: (context, child) {
+
+                                                    //   return NavigationPages();
+                                                    // });
+                                                    child: const OrderPage(),
+                                                  ),
+                                                ),
+                                              );
+                                            }
                                           },
                                           child: Container(
                                             margin: const EdgeInsets.fromLTRB(

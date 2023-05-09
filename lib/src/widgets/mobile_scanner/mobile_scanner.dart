@@ -37,7 +37,7 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
           return value['valores'];
         },
       );
-      print(stockProducts);
+      // print(stockProducts);
       final priceProducts = await FirebaseFirestore.instance
           .collection('listas_de_precios')
           .doc(widget.clientPriceList.toString())

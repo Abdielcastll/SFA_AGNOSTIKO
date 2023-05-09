@@ -40,22 +40,22 @@ class ContactInfo extends StatelessWidget {
                       fontSize: 11,
                     ),
                   ),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Material(
-                      color: Colors.white,
-                      child: IconButton(
-                        onPressed: () {},
-                        splashColor:
-                            myTheme.colorScheme.secondary.withOpacity(0.5),
-                        icon: Icon(
-                          Feather.edit,
-                          size: 20,
-                          color: myTheme.colorScheme.primary,
-                        ),
-                      ),
-                    ),
-                  )
+                  // ClipRRect(
+                  //   borderRadius: BorderRadius.circular(20),
+                  //   child: Material(
+                  //     color: Colors.white,
+                  //     child: IconButton(
+                  //       onPressed: () {},
+                  //       splashColor:
+                  //           myTheme.colorScheme.secondary.withOpacity(0.5),
+                  //       icon: Icon(
+                  //         Feather.edit,
+                  //         size: 20,
+                  //         color: myTheme.colorScheme.primary,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),

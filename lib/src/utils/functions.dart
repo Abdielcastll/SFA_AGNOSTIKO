@@ -29,6 +29,24 @@ Map<String, dynamic>? getExchangesRates(List<Coin?> coins) {
   return coinExchangeList;
 }
 
+Map<String, dynamic>? getExchangesRatesTest(List<Coin?> coins) {
+  List? coinList = [];
+  Map<String, dynamic>? coinExchangeList = <String, dynamic>{'USD': 1};
+  coinList.add('Dolares - USD');
+  coins.map((coin) {
+    coinList.add('${coin?.code}');
+    final exchangeRate = <String, dynamic>{
+      '${coin?.code}': coin?.exchangeRatio,
+    };
+    coinExchangeList.addEntries(exchangeRate.entries);
+  }).toList();
+
+  List? coinListSymbols = [];
+  coinListSymbols.add('USD');
+  coins.map((coin) => coinListSymbols.add(coin?.symbol)).toList();
+  return coinExchangeList;
+}
+
 Map<String, dynamic>? getMoneySymbols(coins) {
   List? coinList = [];
   Map<String, dynamic>? coinSymbols = <String, dynamic>{'USD': '\$'};

@@ -205,7 +205,8 @@ class _InvoicesCompletedState extends State<InvoicesCompleted> {
                         final invoiceNumber = invoice.correlativeNumber;
                         final invoiceTotal = invoice.totalAmount;
                         final invoiceDocumentID = invoice.invoiceDocumentID;
-
+                        final invoiceExchangeRate = invoice.invoiceExchangeRate;
+                        print('invoiceExchangeRate: $invoiceExchangeRate');
                         return InvoiceCard(
                           invoiceClient: invoiceClient,
                           invoiceOrder: invoiceOrder,
@@ -219,6 +220,7 @@ class _InvoicesCompletedState extends State<InvoicesCompleted> {
                           invoiceSubtotal: invoice.subTotalAmount,
                           invoicePercetageTax: invoice.taxPercentage,
                           invoiceTax: invoice.taxAmount,
+                          invoiceExchangeRatefromDB: invoiceExchangeRate,
                         );
                       },
                     ),

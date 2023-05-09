@@ -114,6 +114,11 @@ class OrderCardBody extends StatefulWidget {
 class _OrderCardBodyState extends State<OrderCardBody> {
   @override
   Widget build(BuildContext context) {
+    final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
+    List<String> currentCoinSplit = currentCoin!.split(' ');
+    String currentCoinSelectedCode = currentCoinSplit.last;
+    print(currentCoinSelectedCode);
+    print('TEST COIN');
     final currentClient = Provider.of<Client?>(context) ?? [];
     final currentClientName = Provider.of<Client?>(context)?.name ?? '';
     final currentClientAddress =
@@ -132,11 +137,10 @@ class _OrderCardBodyState extends State<OrderCardBody> {
         Provider.of<Client?>(context)?.masterDiscount ?? {};
     final zonesSummary = Provider.of<ZoneSummary?>(context)?.summary ?? '';
     final userUID = Provider.of<UserModel>(context).uid;
-    final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     final coinName = Provider.of<Coin?>(context)?.name ?? '';
     final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 0;
     final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 0;
-    final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
+    final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '\$';
     final coinCode = Provider.of<Coin?>(context)?.code ?? '';
     // Get if user is a retail seller
     final userRole = Provider.of<UserRole?>(context, listen: true);
@@ -146,48 +150,8 @@ class _OrderCardBodyState extends State<OrderCardBody> {
     final total = priceMultipliedByItsExchangeRatio(
         productPrice: widget.widget.total,
         coinDecimals: coinDecimals,
-        coinExchangeRatio: coinExchangeRatio);
-    // print('Total: $total');
-
-    // priceFormat(productPrice) {
-    //   double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-    //   double convertedAmount = double.parse(
-    //       (correctAmount * coinExchangeRatio).toStringAsFixed(coinDecimals));
-    //   return '$convertedAmount';
-    //   // double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-    //   // if (currentCoin!.contains('USD')) {
-    //   //   return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
-    //   //       .format(productPrice)
-    //   //       .toString();
-    //   // } else if (currentCoin.contains('VED')) {
-    //   //   return NumberFormat.currency(
-    //   //     locale: 'es_VE',
-    //   //     decimalDigits: 2,
-    //   //     symbol: "Bs.",
-    //   //   ).format(correctAmount * 4.58).toString();
-    //   // } else if (currentCoin.contains('EUR')) {
-    //   //   return NumberFormat.currency(
-    //   //     locale: 'es_ES',
-    //   //     decimalDigits: 2,
-    //   //     symbol: '€',
-    //   //   ).format(correctAmount * 0.89).toString();
-    //   // } else if (currentCoin.contains('MXN')) {
-    //   //   return NumberFormat.currency(
-    //   //     locale: 'es_MX',
-    //   //     decimalDigits: 2,
-    //   //     symbol: '\$',
-    //   //   ).format(correctAmount * 19.43);
-    //   // } else if (currentCoin.contains('BTC')) {
-    //   //   return '฿ ${(correctAmount * 0.00011).toStringAsFixed(8)}';
-    //   // } else {
-    //   //   return NumberFormat.currency(
-    //   //     locale: 'es_VE',
-    //   //     decimalDigits: 2,
-    //   //     symbol: "PPR.",
-    //   //   ).format(correctAmount * 4.58).toString();
-    //   // }
-    // }
-
+        coinExchangeRatio: double.parse(
+            (widget.widget.coinsExchangeRates?['MXN'] ?? 1).toString()));
     identifyStatusColor() {
       if (widget.widget.status == AppLocalizations.of(context)!.onProcess &&
           widget.widget.isInvoicesFailed == false) {
@@ -245,9 +209,11 @@ class _OrderCardBodyState extends State<OrderCardBody> {
                       currentClient,
                       widget.widget.date,
                       widget.widget.correlativeNumber,
-                      isRetail: userRole?.isRetail,
+                      isRetail: userRole?.isRetail ?? true,
                       showButton: widget.widget.showButton,
-                    )
+                      coinExchangeRateFromDB: double.parse(
+                          (widget.widget.coinsExchangeRates?['MXN'] ?? 1)
+                              .toString()))
                   : modalBottomSheetForOrders(
                       true,
                       context,
@@ -277,9 +243,10 @@ class _OrderCardBodyState extends State<OrderCardBody> {
                       currentClient,
                       widget.widget.date,
                       widget.widget.correlativeNumber,
-                      isRetail: userRole?.isRetail,
+                      isRetail: userRole?.isRetail ?? true,
                       showButton: widget.widget.showButton,
-                    );
+                      coinExchangeRateFromDB:
+                          double.parse((widget.widget.coinsExchangeRates?['MXN'] ?? 1).toString()));
             },
             child: Container(
               margin: EdgeInsets.only(top: 5, left: 14, right: 14, bottom: 5),

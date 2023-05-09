@@ -101,7 +101,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
           return value['valores'];
         },
       );
-      print(stockProducts);
+      // print(stockProducts);
       final priceProducts = await FirebaseFirestore.instance
           .collection('listas_de_precios')
           .doc(clientPriceList.toString())
@@ -141,7 +141,6 @@ class _SelectedProductsState extends State<SelectedProducts> {
         print('productTotalAmount:$productTotalAmount');
 
         if (productsInCart!.isEmpty) {
-          print('Kaede empty');
           final result = ShoppingCartProduct(
             availableStock: stock,
             productQuantity: productQuantity,
@@ -219,6 +218,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
     final userRole = Provider.of<UserRole?>(context, listen: true);
     print('User Role ${userRole?.name}');
     print("Retail: ${userRole?.isRetail}");
+
     return Column(
       children: [
         StreamBuilder<List<ShoppingCartProduct>?>(

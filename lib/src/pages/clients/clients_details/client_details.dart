@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/account_balance/account_balance.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/components/address_info.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/components/button_options.dart';
