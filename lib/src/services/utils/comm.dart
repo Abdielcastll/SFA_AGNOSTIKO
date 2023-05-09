@@ -42,7 +42,7 @@ Future<PharosSaleResponse> processSalePharos(
           ),
           headers: header,
           body: jsonEncode(pharosMsg))
-      .timeout(const Duration(seconds: 30));
+      .timeout(const Duration(seconds: 60));
   final pharosResponseJson = jsonDecode(response.body.toString());
   final saleResponse = PharosSaleResponse.fromJson(pharosResponseJson);
   print("Pharos Sale response : ${response.body.toString()}");
