@@ -193,38 +193,37 @@ priceFormatForPaidAmount(productPrice, coin) {
     productPrice = double.parse(productPrice.replaceAll('\$', ''));
   }
 
-  coin ??= 'Dolares - USD';
+  coin ??= 'Pesos Mexicanos - MXN';
 
   double correctAmount = double.parse(productPrice.toStringAsFixed(4));
-  if (coin!.contains('USD')) {
-    return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
-        .format(productPrice)
-        .toString();
+  if (coin!.contains('MXN')) {
+    return NumberFormat.currency(
+      locale: 'es_MX',
+      decimalDigits: 2,
+      symbol: '\$',
+    ).format(productPrice).toString();
   } else if (coin.contains('VED')) {
     return NumberFormat.currency(
       locale: 'es_VE',
       decimalDigits: 2,
       symbol: "Bs.",
-    ).format(correctAmount * 4.58).toString();
+    ).format(correctAmount / 4.58).toString();
   } else if (coin.contains('EUR')) {
     return NumberFormat.currency(
       locale: 'es_ES',
       decimalDigits: 2,
       symbol: '€',
-    ).format(correctAmount * 0.89).toString();
-  } else if (coin.contains('MXN')) {
-    return NumberFormat.currency(
-      locale: 'es_MX',
-      decimalDigits: 2,
-      symbol: '\$',
-    ).format(correctAmount * 19.43);
+    ).format(correctAmount / 0.89).toString();
+  } else if (coin.contains('USD')) {
+    return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
+        .format(correctAmount / 19.43);
   } else if (coin.contains('BTC')) {
-    return '฿ ${(correctAmount * 0.00011).toString()}';
+    return '฿ ${(correctAmount / 0.00011).toString()}';
   } else {
     return NumberFormat.currency(
       locale: 'es_VE',
       decimalDigits: 2,
       symbol: "PPR.",
-    ).format(correctAmount * 4.58).toString();
+    ).format(correctAmount / 4.58).toString();
   }
 }
