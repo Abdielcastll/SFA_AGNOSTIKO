@@ -668,7 +668,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
         "Stan: ${transactionArgs!.stan}".toUpperCase(),
         format: TextFormat(fontSize: 16, fontFamily: regularFont)));
     listOfTextLine.add(PrinterText(
-        "Numero de Referencia: ${int.parse(transactionArgs!.referenceNumber!)}"
+        "Numero de Referencia: ${int.parse(transactionArgs!.referenceNumber ?? '0')}"
             .toUpperCase(),
         format: TextFormat(fontSize: 16, fontFamily: regularFont)));
     listOfTextLine.add(PrinterText("ARQC: E47BF856EDEB5B31".toUpperCase(),

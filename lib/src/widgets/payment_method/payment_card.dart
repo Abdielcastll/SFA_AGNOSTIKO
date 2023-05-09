@@ -24,6 +24,22 @@ Future<double?> _acceptAmount(
   AddPaymentBodyAtt? paymentBody,
   noRetail = false,
 }) async {
+  print(invoiceData.totalOfTheOrder);
+  print(paymentBody?.remaining);
+  print(amount);
+  var remaining = double.parse(
+      (paymentBody?.remaining ?? invoiceData.totalOfTheOrder)
+          .toStringAsFixed(2));
+  if (amount > remaining) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: const Text(
+        "El monto a pagar excede el saldo de la factura.",
+      ),
+      backgroundColor: Colors.red.shade700,
+    ));
+    return null;
+  }
+
   var platformInfo = await getPlatformInfo();
   var transactionArgs = TransactionArgs(
     platformInfo: platformInfo,
@@ -59,7 +75,7 @@ Future<double?> _acceptAmount(
   } else {
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text(
-        "deviceWithoutCardReader",
+        "El dispositivo no cuenta con lector de tarjeta.",
       ),
     ));
     Navigator.popUntil(context, (route) => route.isFirst == true);
@@ -84,8 +100,8 @@ paymentCard(
     currentCoin,
     coinExchangeRatio,
   );
-  final invoiceData = InvoiceData(client, invoiceDocumentID, 'USD', amount,
-      totalOfTheOrder, currentCoin, date, remaining, coinExchangeRatio);
+  final invoiceData = InvoiceData(client, invoiceDocumentID, currentCoin,
+      amount, totalOfTheOrder, currentCoin, date, remaining, coinExchangeRatio);
   print(invoiceData.currentCoin);
   print('GET COIN FROM PAYMENTCARD');
 

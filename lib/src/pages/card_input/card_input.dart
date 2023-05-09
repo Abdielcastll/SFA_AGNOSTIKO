@@ -38,6 +38,9 @@ class CardInputView extends StatefulWidget {
 class _CardInputViewState extends State<CardInputView> {
   TransactionArgs? transactionArgs;
 
+  Timer? countdownTimer;
+  Duration timerDuration = const Duration(seconds: 30);
+
   bool _isFallback = false;
 
   /// Flag para evitar el reingreso a la pantalla de PIN
@@ -48,6 +51,47 @@ class _CardInputViewState extends State<CardInputView> {
 
   List<CardType> _supportedCardTypes = [];
   List<CardType> _expectedCardTypes = [];
+
+  @override
+  void initState() {
+    startTimer();
+    super.initState();
+  }
+
+  void startTimer() {
+    countdownTimer =
+        Timer.periodic(const Duration(seconds: 1), (_) => setCountDown());
+  }
+
+  // Step 4
+  void stopTimer() {
+    setState(() => countdownTimer!.cancel());
+  }
+
+  // Step 5
+  void resetTimer() {
+    stopTimer();
+    setState(() => timerDuration = const Duration(seconds: 30));
+  }
+
+  // Step 6
+  void setCountDown() async {
+    const reduceSecondsBy = 1;
+    final seconds = timerDuration.inSeconds - reduceSecondsBy;
+    if (seconds < 0) {
+      setState(() {
+        countdownTimer!.cancel();
+      });
+      await closeCardReader();
+      showInfoDialog(context, 'Tiempo de espera agotado.',
+          onClose: () =>
+              _processEMVException('Timeout', 'Tiempo de espera agotado.'));
+    } else {
+      setState(() {
+        timerDuration = Duration(seconds: seconds);
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -183,7 +227,7 @@ class _CardInputViewState extends State<CardInputView> {
           .toList());
     } catch (e, stackTrace) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("cardDetectionError"),
+        content: Text("Error al detectar la tarjeta"),
       ));
       print("Error: $e");
       print(stackTrace);
