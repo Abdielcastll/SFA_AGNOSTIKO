@@ -690,120 +690,154 @@ Future<dynamic> showDialogForRegisterPayment(
                         ? Container()
                         : selectedValueA == null
                             ? Container()
-                            : Container(
-                                margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16),
-                                  border: Border.all(
-                                    color: myTheme.colorScheme.primary
-                                        .withOpacity(0.3),
-                                    // color: Colors.transparent,
-                                  ),
-                                ),
-                                child: TextField(
-                                  onChanged: (value) {
-                                    if (value.isEmpty) {
-                                      setState(() {
-                                        paidAmount = 0;
-                                        if (selectedValueA == 'Efectivo') {
-                                          change = moneyRecievedForRegisterMoney <
-                                                  paidAmount!
-                                              ? 0
-                                              : double.parse(
-                                                  (moneyRecievedForRegisterMoney -
-                                                          paidAmount!)
-                                                      .toStringAsFixed(2));
-                                        }
-                                      });
-                                      print('paidAmount setstate: $paidAmount');
-                                    } else {
-                                      setState(() {
-                                        paidAmount = double.parse(value);
-                                        if (selectedValueA == 'Efectivo') {
-                                          change = moneyRecievedForRegisterMoney <
-                                                  paidAmount!
-                                              ? 0
-                                              : double.parse(
-                                                  (moneyRecievedForRegisterMoney -
-                                                          paidAmount!)
-                                                      .toStringAsFixed(2));
-                                        }
-                                      });
-                                      print('paidAmount setstate: $paidAmount');
-                                    }
-                                  },
-                                  controller: fieldText,
-                                  readOnly: selectedValueA == 'Efectivo' ||
-                                          selectedValueA == null
-                                      ? true
-                                      : false,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontFamily: 'Poppins-regular',
-                                    color: myTheme.colorScheme.primary,
-                                  ),
-                                  inputFormatters: <TextInputFormatter>[
-                                    FilteringTextInputFormatter.allow(
-                                      RegExp(r'[0-9]+[,.]{0,1}[0-9]*'),
-                                    ),
-                                    TextInputFormatter.withFunction(
-                                      (oldValue, newValue) => newValue.copyWith(
-                                        text:
-                                            newValue.text.replaceAll(',', '.'),
+                            : Column(
+                                children: [
+                                  Container(
+                                      margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(16),
+                                        border: Border.all(
+                                          color: myTheme.colorScheme.primary
+                                              .withOpacity(0.3),
+                                          // color: Colors.transparent,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                  keyboardType: TextInputType.phone,
-                                  maxLines: 1,
-                                  maxLength: 50,
-                                  textCapitalization:
-                                      TextCapitalization.characters,
-                                  decoration: InputDecoration(
-                                    prefixIcon: Container(
-                                      width: 40,
-                                      height: 40,
-                                      child: Center(
-                                        child: Text(
-                                          '$coinSymbol',
-                                          style: TextStyle(
+                                      child: TextField(
+                                        onChanged: (value) {
+                                          if (value.isEmpty) {
+                                            setState(() {
+                                              paidAmount = 0;
+                                              if (selectedValueA ==
+                                                  'Efectivo') {
+                                                change = moneyRecievedForRegisterMoney <
+                                                        paidAmount!
+                                                    ? 0
+                                                    : double.parse(
+                                                        (moneyRecievedForRegisterMoney -
+                                                                paidAmount!)
+                                                            .toStringAsFixed(
+                                                                2));
+                                              }
+                                            });
+                                            print(
+                                                'paidAmount setstate: $paidAmount');
+                                          } else {
+                                            setState(() {
+                                              paidAmount = double.parse(value);
+                                              if (selectedValueA ==
+                                                  'Efectivo') {
+                                                change = moneyRecievedForRegisterMoney <
+                                                        paidAmount!
+                                                    ? 0
+                                                    : double.parse(
+                                                        (moneyRecievedForRegisterMoney -
+                                                                paidAmount!)
+                                                            .toStringAsFixed(
+                                                                2));
+                                              }
+                                            });
+                                            print(
+                                                'paidAmount setstate: $paidAmount');
+                                          }
+                                        },
+                                        controller: fieldText,
+                                        readOnly:
+                                            selectedValueA == 'Efectivo' ||
+                                                    selectedValueA == null
+                                                ? true
+                                                : false,
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontFamily: 'Poppins-regular',
+                                          color: myTheme.colorScheme.primary,
+                                        ),
+                                        inputFormatters: <TextInputFormatter>[
+                                          FilteringTextInputFormatter.allow(
+                                            RegExp(r'[0-9]+[,.]{0,1}[0-9]*'),
+                                          ),
+                                          TextInputFormatter.withFunction(
+                                            (oldValue, newValue) =>
+                                                newValue.copyWith(
+                                              text: newValue.text
+                                                  .replaceAll(',', '.'),
+                                            ),
+                                          ),
+                                        ],
+                                        keyboardType: TextInputType.phone,
+                                        maxLines: 1,
+                                        maxLength: 50,
+                                        textCapitalization:
+                                            TextCapitalization.characters,
+                                        decoration: InputDecoration(
+                                          prefixIcon: Container(
+                                            width: 40,
+                                            height: 40,
+                                            child: Center(
+                                              child: Text(
+                                                '$coinSymbol',
+                                                style: TextStyle(
+                                                  fontFamily: 'Poppins-regular',
+                                                  fontSize: 14,
+                                                  color: myTheme
+                                                      .colorScheme.primary,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          contentPadding: EdgeInsets.fromLTRB(
+                                            14,
+                                            0,
+                                            0,
+                                            0,
+                                          ),
+                                          hintText:
+                                              '${paidAmount?.toStringAsFixed(2)}',
+                                          hintStyle: TextStyle(
+                                            height: 1.85,
                                             fontFamily: 'Poppins-regular',
                                             fontSize: 14,
                                             color: myTheme.colorScheme.primary,
-                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            borderSide: BorderSide(
+                                              color: selectedValueA != null
+                                                  ? selectedValueA!
+                                                          .contains('Tarjeta')
+                                                      ? (paidAmount ?? 0) >
+                                                              balanceConverted
+                                                          ? Colors.red
+                                                          : Colors.transparent
+                                                      : Colors.transparent
+                                                  : Colors.transparent,
+                                            ),
+                                          ),
+                                          counterText: '',
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            borderSide: BorderSide(
+                                              color: Colors.transparent,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                    contentPadding: EdgeInsets.fromLTRB(
-                                      14,
-                                      0,
-                                      0,
-                                      0,
-                                    ),
-                                    hintText:
-                                        '${paidAmount?.toStringAsFixed(2)}',
-                                    hintStyle: TextStyle(
-                                      height: 1.85,
-                                      fontFamily: 'Poppins-regular',
-                                      fontSize: 14,
-                                      color: myTheme.colorScheme.primary,
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: BorderSide(
-                                        color: Colors.transparent,
-                                      ),
-                                    ),
-                                    counterText: '',
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: BorderSide(
-                                        color: Colors.transparent,
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                      )),
+                                  selectedValueA != null
+                                      ? selectedValueA!.contains('Tarjeta')
+                                          ? (paidAmount ?? 0) > balanceConverted
+                                              ? Text(
+                                                  'El pago es mayor al saldo de la factura.',
+                                                  style: TextStyle(
+                                                      color: Colors.red,
+                                                      fontSize: 10),
+                                                )
+                                              : Container()
+                                          : Container()
+                                      : Container()
+                                ],
                               ),
                     selectedValueA != 'Efectivo'
                         ? Container()
