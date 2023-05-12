@@ -305,8 +305,613 @@ class _ProductsBodyState extends State<ProductsBody> {
               child: Column(
                 children: [
                   // TEST
-                  Text('Phos test: $phosTest'),
-                  testPhos(),
+                  // Text('Phos test: $phosTest'),
+                  // testPhos(context),
+                  // ElevatedButton.icon(
+                  //   onPressed: () {
+                  //     List<String> selectedValues = [];
+                  //     String? selectedCategorie;
+                  //     String? selectedSubCategorie;
+                  //     String? selectedLine;
+                  //     String? selectedQuality;
+                  //     String? selectedSize;
+
+                  //     List<String> categories = [
+                  //       'Baño',
+                  //       'Accesorios',
+                  //     ];
+                  //     List<String> subCategories = [
+                  //       'Bolso',
+                  //       'Toalla',
+                  //     ];
+                  //     List<String> lines = [
+                  //       'ELITE',
+                  //       'KIDS',
+                  //     ];
+                  //     List<String> qualities = [
+                  //       '1ra',
+                  //       '2da',
+                  //     ];
+                  //     List<String> sizes = [
+                  //       'Queen',
+                  //       'Estandar',
+                  //       'Pequeño',
+                  //     ];
+
+                  //     showDialog(
+                  //       barrierDismissible: false,
+                  //       context: context,
+                  //       builder: (context) => StatefulBuilder(
+                  //         builder: (BuildContext context, setState) {
+                  //           return Center(
+                  //             child: Column(
+                  //               mainAxisSize: MainAxisSize.min,
+                  //               children: [
+                  //                 AlertDialog(
+                  //                   shape: RoundedRectangleBorder(
+                  //                     borderRadius: BorderRadius.circular(20),
+                  //                   ),
+                  //                   title: Text('Filtro de productos'),
+                  //                   content: Column(
+                  //                     mainAxisAlignment:
+                  //                         MainAxisAlignment.center,
+                  //                     crossAxisAlignment:
+                  //                         CrossAxisAlignment.start,
+                  //                     children: [
+                  //                       // Selecciona de las sub-categorias
+                  //                       // de la DB
+                  //                       Container(
+                  //                         margin:
+                  //                             EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  //                         child: Text('Categoria'),
+                  //                       ),
+                  //                       DropdownButtonHideUnderline(
+                  //                         child: DropdownButton2(
+                  //                           items: categories
+                  //                               .map((categorie) =>
+                  //                                   DropdownMenuItem<String>(
+                  //                                     value: categorie,
+                  //                                     child: Text(
+                  //                                       categorie,
+                  //                                       style: const TextStyle(
+                  //                                         fontSize: 14,
+                  //                                       ),
+                  //                                     ),
+                  //                                   ))
+                  //                               .toList(),
+                  //                           value: selectedCategorie,
+                  //                           onChanged: (value) {
+                  //                             setState(() {
+                  //                               selectedCategorie =
+                  //                                   value as String;
+                  //                             });
+                  //                             if (value != null) {
+                  //                               selectedValues
+                  //                                   .add(selectedCategorie!);
+                  //                             }
+                  //                           },
+                  //                           buttonStyleData: ButtonStyleData(
+                  //                             padding: const EdgeInsets.only(
+                  //                                 left: 14, right: 14),
+                  //                             height: 40,
+                  //                             width: MediaQuery.of(context)
+                  //                                 .size
+                  //                                 .width,
+                  //                             decoration: BoxDecoration(
+                  //                               borderRadius:
+                  //                                   BorderRadius.circular(14),
+                  //                               border: Border.all(
+                  //                                 color: myTheme
+                  //                                     .colorScheme.primary
+                  //                                     .withOpacity(0.5),
+                  //                               ),
+                  //                               color: myTheme
+                  //                                   .colorScheme.background,
+                  //                             ),
+                  //                             // elevation: 0,
+                  //                           ),
+                  //                           menuItemStyleData:
+                  //                               const MenuItemStyleData(
+                  //                             height: 40,
+                  //                           ),
+                  //                           dropdownStyleData:
+                  //                               DropdownStyleData(
+                  //                             decoration: BoxDecoration(
+                  //                               borderRadius:
+                  //                                   BorderRadius.circular(14),
+                  //                               border: Border.all(
+                  //                                 color: myTheme
+                  //                                     .colorScheme.primary
+                  //                                     .withOpacity(0.5),
+                  //                               ),
+                  //                               // color: myTheme
+                  //                               //     .colorScheme.primary
+                  //                               //     .withOpacity(0.5),
+                  //                             ),
+                  //                             elevation: 1,
+                  //                             offset: const Offset(0, 0),
+                  //                             scrollbarTheme:
+                  //                                 ScrollbarThemeData(
+                  //                               radius:
+                  //                                   const Radius.circular(40),
+                  //                               thickness:
+                  //                                   MaterialStateProperty.all(
+                  //                                       6),
+                  //                               thumbVisibility:
+                  //                                   MaterialStateProperty.all(
+                  //                                       true),
+                  //                             ),
+                  //                           ),
+                  //                           iconStyleData: IconStyleData(
+                  //                             icon: Icon(
+                  //                               Icons
+                  //                                   .arrow_forward_ios_outlined,
+                  //                             ),
+                  //                             iconSize: 14,
+                  //                             iconEnabledColor:
+                  //                                 myTheme.colorScheme.primary,
+                  //                             iconDisabledColor: Colors.grey,
+                  //                           ),
+                  //                         ),
+                  //                       ),
+                  //                       // Selecciona de las categorias
+                  //                       // de la DB
+                  //                       Container(
+                  //                         margin:
+                  //                             EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  //                         child: Text('Tipo'),
+                  //                       ),
+                  //                       DropdownButtonHideUnderline(
+                  //                         child: DropdownButton2(
+                  //                           items: subCategories
+                  //                               .map((subCategorie) =>
+                  //                                   DropdownMenuItem<String>(
+                  //                                     value: subCategorie,
+                  //                                     child: Text(
+                  //                                       subCategorie,
+                  //                                       style: const TextStyle(
+                  //                                         fontSize: 14,
+                  //                                       ),
+                  //                                     ),
+                  //                                   ))
+                  //                               .toList(),
+                  //                           value: selectedSubCategorie,
+                  //                           onChanged: selectedCategorie == null
+                  //                               ? null
+                  //                               : (value) {
+                  //                                   setState(() {
+                  //                                     selectedSubCategorie =
+                  //                                         value as String;
+                  //                                   });
+                  //                                 },
+                  //                           buttonStyleData: ButtonStyleData(
+                  //                             padding: const EdgeInsets.only(
+                  //                                 left: 14, right: 14),
+                  //                             height: 40,
+                  //                             width: MediaQuery.of(context)
+                  //                                 .size
+                  //                                 .width,
+                  //                             decoration: BoxDecoration(
+                  //                               borderRadius:
+                  //                                   BorderRadius.circular(14),
+                  //                               border: Border.all(
+                  //                                 color: myTheme
+                  //                                     .colorScheme.primary
+                  //                                     .withOpacity(0.5),
+                  //                               ),
+                  //                               color: myTheme
+                  //                                   .colorScheme.background,
+                  //                             ),
+                  //                             // elevation: 0,
+                  //                           ),
+                  //                           menuItemStyleData:
+                  //                               const MenuItemStyleData(
+                  //                             height: 40,
+                  //                           ),
+                  //                           dropdownStyleData:
+                  //                               DropdownStyleData(
+                  //                             decoration: BoxDecoration(
+                  //                               borderRadius:
+                  //                                   BorderRadius.circular(14),
+                  //                               border: Border.all(
+                  //                                 color: myTheme
+                  //                                     .colorScheme.primary
+                  //                                     .withOpacity(0.5),
+                  //                               ),
+                  //                               // color: myTheme
+                  //                               //     .colorScheme.primary
+                  //                               //     .withOpacity(0.5),
+                  //                             ),
+                  //                             elevation: 1,
+                  //                             offset: const Offset(0, 0),
+                  //                             scrollbarTheme:
+                  //                                 ScrollbarThemeData(
+                  //                               radius:
+                  //                                   const Radius.circular(40),
+                  //                               thickness:
+                  //                                   MaterialStateProperty.all(
+                  //                                       6),
+                  //                               thumbVisibility:
+                  //                                   MaterialStateProperty.all(
+                  //                                       true),
+                  //                             ),
+                  //                           ),
+                  //                           iconStyleData: IconStyleData(
+                  //                             icon: Icon(
+                  //                               Icons
+                  //                                   .arrow_forward_ios_outlined,
+                  //                             ),
+                  //                             iconSize: 14,
+                  //                             iconEnabledColor:
+                  //                                 myTheme.colorScheme.primary,
+                  //                             iconDisabledColor: Colors.grey,
+                  //                           ),
+                  //                         ),
+                  //                       ),
+                  //                       // Selecciona de las lineas de la DB
+                  //                       Container(
+                  //                         margin:
+                  //                             EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  //                         child: Text('Linea'),
+                  //                       ),
+                  //                       DropdownButtonHideUnderline(
+                  //                         child: DropdownButton2(
+                  //                           items: lines
+                  //                               .map((line) =>
+                  //                                   DropdownMenuItem<String>(
+                  //                                     value: line,
+                  //                                     child: Text(
+                  //                                       line,
+                  //                                       style: const TextStyle(
+                  //                                         fontSize: 14,
+                  //                                       ),
+                  //                                     ),
+                  //                                   ))
+                  //                               .toList(),
+                  //                           value: selectedLine,
+                  //                           onChanged:
+                  //                               selectedSubCategorie == null
+                  //                                   ? null
+                  //                                   : (value) {
+                  //                                       setState(() {
+                  //                                         selectedLine =
+                  //                                             value as String;
+                  //                                       });
+                  //                                     },
+                  //                           buttonStyleData: ButtonStyleData(
+                  //                             padding: const EdgeInsets.only(
+                  //                                 left: 14, right: 14),
+                  //                             height: 40,
+                  //                             width: MediaQuery.of(context)
+                  //                                 .size
+                  //                                 .width,
+                  //                             decoration: BoxDecoration(
+                  //                               borderRadius:
+                  //                                   BorderRadius.circular(14),
+                  //                               border: Border.all(
+                  //                                 color: myTheme
+                  //                                     .colorScheme.primary
+                  //                                     .withOpacity(0.5),
+                  //                               ),
+                  //                               color: myTheme
+                  //                                   .colorScheme.background,
+                  //                             ),
+                  //                             // elevation: 0,
+                  //                           ),
+                  //                           menuItemStyleData:
+                  //                               const MenuItemStyleData(
+                  //                             height: 40,
+                  //                           ),
+                  //                           dropdownStyleData:
+                  //                               DropdownStyleData(
+                  //                             decoration: BoxDecoration(
+                  //                               borderRadius:
+                  //                                   BorderRadius.circular(14),
+                  //                               border: Border.all(
+                  //                                 color: myTheme
+                  //                                     .colorScheme.primary
+                  //                                     .withOpacity(0.5),
+                  //                               ),
+                  //                               // color: myTheme
+                  //                               //     .colorScheme.primary
+                  //                               //     .withOpacity(0.5),
+                  //                             ),
+                  //                             elevation: 1,
+                  //                             offset: const Offset(0, 0),
+                  //                             scrollbarTheme:
+                  //                                 ScrollbarThemeData(
+                  //                               radius:
+                  //                                   const Radius.circular(40),
+                  //                               thickness:
+                  //                                   MaterialStateProperty.all(
+                  //                                       6),
+                  //                               thumbVisibility:
+                  //                                   MaterialStateProperty.all(
+                  //                                       true),
+                  //                             ),
+                  //                           ),
+                  //                           iconStyleData: IconStyleData(
+                  //                             icon: Icon(
+                  //                               Icons
+                  //                                   .arrow_forward_ios_outlined,
+                  //                             ),
+                  //                             iconSize: 14,
+                  //                             iconEnabledColor:
+                  //                                 myTheme.colorScheme.primary,
+                  //                             iconDisabledColor: Colors.grey,
+                  //                           ),
+                  //                         ),
+                  //                       ),
+                  //                       // Selecciona de las calidades de la DB
+                  //                       Container(
+                  //                         margin:
+                  //                             EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  //                         child: Text('Calidad'),
+                  //                       ),
+                  //                       DropdownButtonHideUnderline(
+                  //                         child: DropdownButton2(
+                  //                           items: qualities
+                  //                               .map((quality) =>
+                  //                                   DropdownMenuItem<String>(
+                  //                                     value: quality,
+                  //                                     child: Text(
+                  //                                       quality,
+                  //                                       style: const TextStyle(
+                  //                                         fontSize: 14,
+                  //                                       ),
+                  //                                     ),
+                  //                                   ))
+                  //                               .toList(),
+                  //                           value: selectedQuality,
+                  //                           onChanged: selectedLine == null
+                  //                               ? null
+                  //                               : (value) {
+                  //                                   setState(() {
+                  //                                     selectedQuality =
+                  //                                         value as String;
+                  //                                   });
+                  //                                 },
+                  //                           buttonStyleData: ButtonStyleData(
+                  //                             padding: const EdgeInsets.only(
+                  //                                 left: 14, right: 14),
+                  //                             height: 40,
+                  //                             width: MediaQuery.of(context)
+                  //                                 .size
+                  //                                 .width,
+                  //                             decoration: BoxDecoration(
+                  //                               borderRadius:
+                  //                                   BorderRadius.circular(14),
+                  //                               border: Border.all(
+                  //                                 color: myTheme
+                  //                                     .colorScheme.primary
+                  //                                     .withOpacity(0.5),
+                  //                               ),
+                  //                               color: myTheme
+                  //                                   .colorScheme.background,
+                  //                             ),
+                  //                             // elevation: 0,
+                  //                           ),
+                  //                           menuItemStyleData:
+                  //                               const MenuItemStyleData(
+                  //                             height: 40,
+                  //                           ),
+                  //                           dropdownStyleData:
+                  //                               DropdownStyleData(
+                  //                             decoration: BoxDecoration(
+                  //                               borderRadius:
+                  //                                   BorderRadius.circular(14),
+                  //                               border: Border.all(
+                  //                                 color: myTheme
+                  //                                     .colorScheme.primary
+                  //                                     .withOpacity(0.5),
+                  //                               ),
+                  //                               // color: myTheme
+                  //                               //     .colorScheme.primary
+                  //                               //     .withOpacity(0.5),
+                  //                             ),
+                  //                             elevation: 1,
+                  //                             offset: const Offset(0, 0),
+                  //                             scrollbarTheme:
+                  //                                 ScrollbarThemeData(
+                  //                               radius:
+                  //                                   const Radius.circular(40),
+                  //                               thickness:
+                  //                                   MaterialStateProperty.all(
+                  //                                       6),
+                  //                               thumbVisibility:
+                  //                                   MaterialStateProperty.all(
+                  //                                       true),
+                  //                             ),
+                  //                           ),
+                  //                           iconStyleData: IconStyleData(
+                  //                             icon: Icon(
+                  //                               Icons
+                  //                                   .arrow_forward_ios_outlined,
+                  //                             ),
+                  //                             iconSize: 14,
+                  //                             iconEnabledColor:
+                  //                                 myTheme.colorScheme.primary,
+                  //                             iconDisabledColor: Colors.grey,
+                  //                           ),
+                  //                         ),
+                  //                       ),
+                  //                       // Selecciona de los tamaños de la DB
+                  //                       Container(
+                  //                         margin:
+                  //                             EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  //                         child: Text('Tamaños'),
+                  //                       ),
+                  //                       DropdownButtonHideUnderline(
+                  //                         child: DropdownButton2(
+                  //                           items: sizes
+                  //                               .map((size) =>
+                  //                                   DropdownMenuItem<String>(
+                  //                                     value: size,
+                  //                                     child: Text(
+                  //                                       size,
+                  //                                       style: const TextStyle(
+                  //                                         fontSize: 14,
+                  //                                       ),
+                  //                                     ),
+                  //                                   ))
+                  //                               .toList(),
+                  //                           value: selectedSize,
+                  //                           onChanged: selectedQuality == null
+                  //                               ? null
+                  //                               : (value) {
+                  //                                   setState(() {
+                  //                                     selectedSize =
+                  //                                         value as String;
+                  //                                   });
+                  //                                 },
+                  //                           buttonStyleData: ButtonStyleData(
+                  //                             padding: const EdgeInsets.only(
+                  //                                 left: 14, right: 14),
+                  //                             height: 40,
+                  //                             width: MediaQuery.of(context)
+                  //                                 .size
+                  //                                 .width,
+                  //                             decoration: BoxDecoration(
+                  //                               borderRadius:
+                  //                                   BorderRadius.circular(14),
+                  //                               border: Border.all(
+                  //                                 color: myTheme
+                  //                                     .colorScheme.primary
+                  //                                     .withOpacity(0.5),
+                  //                               ),
+                  //                               color: myTheme
+                  //                                   .colorScheme.background,
+                  //                             ),
+                  //                             // elevation: 0,
+                  //                           ),
+                  //                           menuItemStyleData:
+                  //                               const MenuItemStyleData(
+                  //                             height: 40,
+                  //                           ),
+                  //                           dropdownStyleData:
+                  //                               DropdownStyleData(
+                  //                             decoration: BoxDecoration(
+                  //                               borderRadius:
+                  //                                   BorderRadius.circular(14),
+                  //                               border: Border.all(
+                  //                                 color: myTheme
+                  //                                     .colorScheme.primary
+                  //                                     .withOpacity(0.5),
+                  //                               ),
+                  //                               // color: myTheme
+                  //                               //     .colorScheme.primary
+                  //                               //     .withOpacity(0.5),
+                  //                             ),
+                  //                             elevation: 1,
+                  //                             offset: const Offset(0, 0),
+                  //                             scrollbarTheme:
+                  //                                 ScrollbarThemeData(
+                  //                               radius:
+                  //                                   const Radius.circular(40),
+                  //                               thickness:
+                  //                                   MaterialStateProperty.all(
+                  //                                       6),
+                  //                               thumbVisibility:
+                  //                                   MaterialStateProperty.all(
+                  //                                       true),
+                  //                             ),
+                  //                           ),
+                  //                           iconStyleData: IconStyleData(
+                  //                             icon: Icon(
+                  //                               Icons
+                  //                                   .arrow_forward_ios_outlined,
+                  //                             ),
+                  //                             iconSize: 14,
+                  //                             iconEnabledColor:
+                  //                                 myTheme.colorScheme.primary,
+                  //                             iconDisabledColor: Colors.grey,
+                  //                           ),
+                  //                         ),
+                  //                       ),
+                  //                     ],
+                  //                   ),
+                  //                   actions: [
+                  //                     Row(
+                  //                       mainAxisAlignment:
+                  //                           MainAxisAlignment.spaceAround,
+                  //                       children: [
+                  //                         ElevatedButton.icon(
+                  //                           onPressed: () {
+                  //                             Navigator.pop(context);
+                  //                           },
+                  //                           style: ButtonStyle(
+                  //                             backgroundColor:
+                  //                                 MaterialStateProperty.all(
+                  //                               myTheme.colorScheme.primary,
+                  //                             ),
+                  //                             shape: MaterialStateProperty.all<
+                  //                                 RoundedRectangleBorder>(
+                  //                               RoundedRectangleBorder(
+                  //                                 borderRadius:
+                  //                                     BorderRadius.circular(
+                  //                                         18.0),
+                  //                               ),
+                  //                             ),
+                  //                           ),
+                  //                           icon: Icon(
+                  //                             MaterialCommunityIcons.backspace,
+                  //                             size: 16,
+                  //                           ),
+                  //                           label: Text(
+                  //                             'Cancelar',
+                  //                             style: TextStyle(
+                  //                               color: Colors.white,
+                  //                               fontFamily: 'Poppins-regular',
+                  //                               fontSize: 14,
+                  //                               fontWeight: FontWeight.bold,
+                  //                             ),
+                  //                           ),
+                  //                         ),
+                  //                         ElevatedButton.icon(
+                  //                           onPressed: () {},
+                  //                           style: ButtonStyle(
+                  //                             backgroundColor:
+                  //                                 MaterialStateProperty.all(
+                  //                               myTheme.colorScheme
+                  //                                   .onPrimaryContainer,
+                  //                             ),
+                  //                             shape: MaterialStateProperty.all<
+                  //                                 RoundedRectangleBorder>(
+                  //                               RoundedRectangleBorder(
+                  //                                 borderRadius:
+                  //                                     BorderRadius.circular(
+                  //                                         18.0),
+                  //                               ),
+                  //                             ),
+                  //                           ),
+                  //                           icon: Icon(
+                  //                             MaterialIcons.filter_list,
+                  //                             size: 20,
+                  //                           ),
+                  //                           label: Text(
+                  //                             'Filtrar',
+                  //                             style: TextStyle(
+                  //                               color: Colors.white,
+                  //                               fontFamily: 'Poppins-regular',
+                  //                               fontSize: 14,
+                  //                               fontWeight: FontWeight.bold,
+                  //                             ),
+                  //                           ),
+                  //                         ),
+                  //                       ],
+                  //                     )
+                  //                   ],
+                  //                 ),
+                  //               ],
+                  //             ),
+                  //           );
+                  //         },
+                  //       ),
+                  //     );
+                  //   },
+                  //   icon: Icon(Icons.text_snippet),
+                  //   label: Text('Test for Filter'),
+                  // ),
                   // TEST
                   Container(
                     margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
@@ -353,7 +958,9 @@ class _ProductsBodyState extends State<ProductsBody> {
                       textInputAction: TextInputAction.go,
                       onChanged: ((value) {
                         if (value.isEmpty) {
-                          filteredProducts.clear();
+                          setState(() {
+                            filteredProducts.clear();
+                          });
                         }
                       }),
                       onSubmitted: ((value) async {
@@ -1369,18 +1976,6 @@ class _ProductsBodyState extends State<ProductsBody> {
               ),
             ),
           );
-  }
-
-  ElevatedButton testPhos() {
-    return ElevatedButton.icon(
-      icon: Icon(Icons.text_snippet),
-      onPressed: () {
-        setState(() {
-          phosTest = 'Kaede';
-        });
-      },
-      label: Text('Cambiar texto de prueba Phos a Kaede'),
-    );
   }
 }
 
