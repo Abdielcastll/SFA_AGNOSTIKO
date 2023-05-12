@@ -117,9 +117,9 @@ class SfaAgnostiko extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var prissa = FirebaseFirestore.instance
-        .collection('marcas')
-        .doc('fekpFNxAR5U9PZko1XWq');
+    // var prissa = FirebaseFirestore.instance
+    //     .collection('marcas')
+    //     .doc('fekpFNxAR5U9PZko1XWq');
 
     return StreamProvider<UserModel?>.value(
       value: AuthService().user,
@@ -146,12 +146,12 @@ class SfaAgnostiko extends StatelessWidget {
                       return StreamProvider<List<Products>?>.value(
                         value: productsLimit == 0
                             ? productsCollection
-                                .where('marca', isEqualTo: prissa)
+                                // .where('marca', isEqualTo: prissa)
                                 .orderBy('codigo')
                                 .snapshots()
                                 .map(productsListFromSnapshot)
                             : productsCollection
-                                .where('marca', isEqualTo: prissa)
+                                // .where('marca', isEqualTo: prissa)
                                 .orderBy('codigo')
                                 .limit(productsLimit)
                                 .snapshots()
@@ -159,7 +159,7 @@ class SfaAgnostiko extends StatelessWidget {
                         initialData: const [],
                         catchError: (context, error) {
                           print(error);
-                          print('PRODIVER PRODUCT ERROR');
+                          print('PROVIDER PRODUCT ERROR');
                           return;
                         },
                         child: MaterialApp(

@@ -106,6 +106,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
   String? selectedDiscount = '0';
   String commentary = '';
   bool isFiscalSelected = true;
+  bool loading = false;
   var numberOrder;
   int discountByInput = 0;
   DateTime today = DateTime.now();
@@ -755,182 +756,246 @@ class _CheckoutBodyState extends State<CheckoutBody> {
               child: ElevatedButton(
                 onPressed: () async {
                   // Boton de procesar pago
+
+                  // print('first loading print: $loading');
+
+                  // setState(() {
+                  //   loading = true;
+                  // });
+
+                  // var result = await FirebaseFirestore.instance
+                  //     .collection('productos')
+                  //     .get();
+
+                  // print('Second loading print: $loading');
+
+                  // print(result.toString().length);
+                  // setState(() {
+                  //   loading = false;
+                  // });
+
+                  // print('Third loading print: $loading');
+
                   showDialog(
+                      barrierDismissible: false,
                       context: context,
                       builder: (BuildContext context) {
-                        return AlertDialog(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(16.0),
+                        return StatefulBuilder(
+                          builder: (context, setState) => AlertDialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(16.0),
+                              ),
                             ),
-                          ),
-                          title: Center(
-                            child: Text(
-                              'Confirmación',
-                            ),
-                          ),
-                          content: SingleChildScrollView(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Center(
-                                  child: Text(
-                                    '¿Pasar a procesar pago?',
-                                    textAlign: TextAlign.center,
-                                  ),
+                            title: Center(
+                              child: Text(
+                                'Confirmación',
+                                style: TextStyle(
+                                  fontFamily: 'Poppins-regular',
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                          actions: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                ElevatedButton.icon(
-                                  onPressed: () {
-                                    // Cancelar
-                                    Navigator.pop(context);
-                                  },
-                                  style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                      myTheme.colorScheme.primary,
-                                    ),
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(18.0),
+                            content: SingleChildScrollView(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Center(
+                                    child: Text(
+                                      '¿Pasar a procesar pago?',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins-regular',
                                       ),
                                     ),
                                   ),
-                                  icon: Icon(
-                                    MaterialCommunityIcons.backspace,
-                                    size: 16,
-                                  ),
-                                  label: Text(
-                                    'Cancelar',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'Poppins-regular',
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                ElevatedButton.icon(
-                                  onPressed: () async {
-                                    print('Iniciar proceso de pago directo');
-
-                                    final firebaseID = FirebaseFirestore
-                                        .instance
-                                        .collection('clientes')
-                                        .doc(widget.client!.clientDocumentId)
-                                        .collection('pedidos')
-                                        .doc()
-                                        .id;
-
-                                    print(firebaseID);
-
-                                    final invoiceNumber =
-                                        await completePaymentProcess(
-                                      widget.client,
-                                      userUid,
-                                      commentary,
-                                      subTotalWithMasterDiscount,
-                                      widget.cart,
-                                      selectedValue2,
-                                      selectedValue,
-                                      today,
-                                      getIVA,
-                                      numberOrder,
-                                      widget.subTotal,
-                                      totalPriceOfTheOrder,
-                                      discountByInput,
-                                      firebaseID,
-                                    );
-
-                                    Client currentClient = Client(
-                                      active: widget.client!.active,
-                                      specialContributor:
-                                          widget.client!.specialContributor,
-                                      madeBy: widget.client!.madeBy,
-                                      masterDiscount:
-                                          widget.client!.masterDiscount,
-                                      fiscalAdress: widget.client!.fiscalAdress,
-                                      dispatchAdress:
-                                          widget.client!.dispatchAdress,
-                                      email: widget.client!.email,
-                                      prices: widget.client!.prices,
-                                      modified: widget.client!.modified,
-                                      name: widget.client!.name,
-                                      id: widget.client!.id,
-                                      prospect: widget.client!.prospect,
-                                      phone1: widget.client!.phone1,
-                                      phone2: widget.client!.phone2,
-                                      idType: widget.client!.idType,
-                                      zone: widget.client!.zone,
-                                      clientDocumentId:
-                                          widget.client!.clientDocumentId,
-                                    );
-
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        settings:
-                                            RouteSettings(name: 'PAGO-DIRECTO'),
-                                        builder: (BuildContext context) =>
-                                            AddPaymentPage(
-                                          invoiceTotal: totalPriceOfTheOrder,
-                                          remaining: totalPriceOfTheOrder,
-                                          subTotal: widget.subTotal,
-                                          discountPercentage: discountByInput,
-                                          // discountPercentage:
-                                          //     widget.client?.masterDiscount,
-                                          discount: subTotalWithDiscountApplied,
-                                          // discount: (widget.subTotal / 100) *
-                                          //     widget.client?.masterDiscount,
-                                          tax: getIVA,
-                                          percentageTax: 16,
-                                          client: currentClient,
-                                          invoiceDocumentID: firebaseID,
-                                          invoiceNumber: invoiceNumber,
-                                          payments: [],
-                                          // updatePayed: updatePayed,
+                                ],
+                              ),
+                            ),
+                            actions: [
+                              Row(
+                                mainAxisAlignment: loading
+                                    ? MainAxisAlignment.center
+                                    : MainAxisAlignment.spaceAround,
+                                children: [
+                                  loading
+                                      ? Container()
+                                      : ElevatedButton.icon(
+                                          onPressed: () {
+                                            // Cancelar
+                                            Navigator.pop(context);
+                                          },
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                              myTheme.colorScheme.primary,
+                                            ),
+                                            shape: MaterialStateProperty.all<
+                                                RoundedRectangleBorder>(
+                                              RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(18.0),
+                                              ),
+                                            ),
+                                          ),
+                                          icon: Icon(
+                                            MaterialCommunityIcons.backspace,
+                                            size: 16,
+                                          ),
+                                          label: Text(
+                                            'Cancelar',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: 'Poppins-regular',
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    );
-                                  },
-                                  style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                      myTheme.colorScheme.onPrimaryContainer,
-                                    ),
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(18.0),
-                                      ),
-                                    ),
-                                  ),
-                                  icon: Icon(
-                                    MaterialCommunityIcons
-                                        .contactless_payment_circle,
-                                    size: 20,
-                                  ),
-                                  label: Text(
-                                    'Continuar',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'Poppins-regular',
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            )
-                          ],
+                                  loading
+                                      ? Container(
+                                          margin:
+                                              EdgeInsets.fromLTRB(0, 0, 0, 10),
+                                          child: CircularProgressIndicator())
+                                      : ElevatedButton.icon(
+                                          onPressed: () async {
+                                            print(
+                                                'Iniciar proceso de pago directo');
+
+                                            setState(() {
+                                              loading = true;
+                                            });
+                                            // var result = await FirebaseFirestore
+                                            //     .instance
+                                            //     .collection('productos')
+                                            //     .get();
+
+                                            // print('loading print: $loading');
+
+                                            // print(result.toString().length);
+                                            final firebaseID = FirebaseFirestore
+                                                .instance
+                                                .collection('clientes')
+                                                .doc(widget
+                                                    .client!.clientDocumentId)
+                                                .collection('pedidos')
+                                                .doc()
+                                                .id;
+
+                                            print(firebaseID);
+
+                                            final invoiceNumber =
+                                                await completePaymentProcess(
+                                              widget.client,
+                                              userUid,
+                                              commentary,
+                                              subTotalWithMasterDiscount,
+                                              widget.cart,
+                                              selectedValue2,
+                                              selectedValue,
+                                              today,
+                                              getIVA,
+                                              numberOrder,
+                                              widget.subTotal,
+                                              totalPriceOfTheOrder,
+                                              discountByInput,
+                                              firebaseID,
+                                            );
+
+                                            Client currentClient = Client(
+                                              active: widget.client!.active,
+                                              specialContributor: widget
+                                                  .client!.specialContributor,
+                                              madeBy: widget.client!.madeBy,
+                                              masterDiscount:
+                                                  widget.client!.masterDiscount,
+                                              fiscalAdress:
+                                                  widget.client!.fiscalAdress,
+                                              dispatchAdress:
+                                                  widget.client!.dispatchAdress,
+                                              email: widget.client!.email,
+                                              prices: widget.client!.prices,
+                                              modified: widget.client!.modified,
+                                              name: widget.client!.name,
+                                              id: widget.client!.id,
+                                              prospect: widget.client!.prospect,
+                                              phone1: widget.client!.phone1,
+                                              phone2: widget.client!.phone2,
+                                              idType: widget.client!.idType,
+                                              zone: widget.client!.zone,
+                                              clientDocumentId: widget
+                                                  .client!.clientDocumentId,
+                                            );
+
+                                            Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                settings: RouteSettings(
+                                                    name: 'PAGO-DIRECTO'),
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        AddPaymentPage(
+                                                  invoiceTotal:
+                                                      totalPriceOfTheOrder,
+                                                  remaining:
+                                                      totalPriceOfTheOrder,
+                                                  subTotal: widget.subTotal,
+                                                  discountPercentage:
+                                                      discountByInput,
+                                                  // discountPercentage:
+                                                  //     widget.client?.masterDiscount,
+                                                  discount:
+                                                      subTotalWithDiscountApplied,
+                                                  // discount: (widget.subTotal / 100) *
+                                                  //     widget.client?.masterDiscount,
+                                                  tax: getIVA,
+                                                  percentageTax: 16,
+                                                  client: currentClient,
+                                                  invoiceDocumentID: firebaseID,
+                                                  invoiceNumber: invoiceNumber,
+                                                  payments: [],
+                                                  // updatePayed: updatePayed,
+                                                ),
+                                              ),
+                                            );
+
+                                            // setState(() {
+                                            //   loading = false;
+                                            // });
+                                          },
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                              myTheme.colorScheme
+                                                  .onPrimaryContainer,
+                                            ),
+                                            shape: MaterialStateProperty.all<
+                                                RoundedRectangleBorder>(
+                                              RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(18.0),
+                                              ),
+                                            ),
+                                          ),
+                                          icon: Icon(
+                                            MaterialCommunityIcons
+                                                .contactless_payment_circle,
+                                            size: 20,
+                                          ),
+                                          label: Text(
+                                            'Continuar',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: 'Poppins-regular',
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                ],
+                              )
+                            ],
+                          ),
                         );
                       });
                 },
