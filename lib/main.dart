@@ -159,7 +159,7 @@ class SfaAgnostiko extends StatelessWidget {
                         initialData: const [],
                         catchError: (context, error) {
                           print(error);
-                          print('PRODIVER PRODUCT ERROR');
+                          print('PROVIDER PRODUCT ERROR');
                           return;
                         },
                         child: MaterialApp(
