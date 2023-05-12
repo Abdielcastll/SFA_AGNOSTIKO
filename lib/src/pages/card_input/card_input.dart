@@ -96,6 +96,7 @@ class _CardInputViewState extends State<CardInputView> {
   @override
   void dispose() {
     closeCardReader();
+    stopTimer();
     super.dispose();
   }
 
