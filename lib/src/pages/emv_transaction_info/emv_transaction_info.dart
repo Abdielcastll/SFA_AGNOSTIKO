@@ -196,6 +196,20 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                 ),
                 textAlign: TextAlign.center,
               ),
+              transactionArgs!.timeout || transactionArgs!.stan == null
+                  ? Text(
+                      "Timeout",
+                      style: TextStyle(
+                        color: this.transactionResult ==
+                                EmvTransactionResult.Approved
+                            ? Colors.green
+                            : Colors.red,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                      textAlign: TextAlign.center,
+                    )
+                  : const SizedBox(),
               Text(
                 transactionArgs!.isFallback ? 'Error de Chip' : '',
                 style: TextStyle(
@@ -271,65 +285,6 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                 subtitle: Text(_amountOtherString),
                 onTap: () {},
               ),
-              /* if (_kernelTypeStr != null)
-                ListTile(
-                  enableFeedback: true,
-                  title: const Text('Kernel Type'),
-                  subtitle: Text(_kernelTypeStr ?? ''),
-                  onTap: () {},
-                ),
-              ListTile(
-                enableFeedback: true,
-                title: const Text('PAN (5A)'),
-                subtitle:
-                    Text(infoTags?.cardNo?.toHexStr().toUpperCase() ?? '-'),
-                onTap: () {},
-              ),
-              ListTile(
-                enableFeedback: true,
-                title: const Text('AID (9F06)'),
-                subtitle: Text(infoTags?.aid?.toHexStr().toUpperCase() ?? '-'),
-                onTap: () {},
-              ),
-              ListTile(
-                enableFeedback: true,
-                title: const Text('AIP (82)'),
-                subtitle: Text(infoTags?.aip?.toHexStr().toUpperCase() ?? '-'),
-                onTap: _onTapAip,
-              ),
-              const Divider(),
-              ...firstGenerateTiles,
-              ...secondGenerateTiles,
-              ListTile(
-                enableFeedback: true,
-                title: Text(AppLocalizations.of(context)!.appliedCVM),
-                subtitle: Text(_getCvmTypeStr(infoTags?.cvmResults)),
-                onTap: () {},
-              ),
-              ListTile(
-                enableFeedback: true,
-                title: const Text('Terminal Capabilities (9F33)'),
-                subtitle: Text(
-                  infoTags?.terminalCapabilities?.toHexStr().toUpperCase() ??
-                      '-',
-                ),
-                onTap: _onTapTerminalCapabilities,
-              ),
-              ListTile(
-                enableFeedback: true,
-                title: const Text('CVM List (8E)'),
-                subtitle: Text(
-                  infoTags?.cvmList?.toHexStr().toUpperCase() ?? '-',
-                ),
-                onTap: () {},
-              ),
-              ListTile(
-                enableFeedback: true,
-                title: const Text('ATC (9F36)'),
-                subtitle: Text(infoTags?.atc?.toHexStr().toUpperCase() ?? '-'),
-                onTap: () {},
-              ), */
-
               if (!transactionArgs!.isFallback)
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -642,7 +597,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     listOfTextLine.add(PrinterText(
         transactionResult == EmvTransactionResult.Approved
             ? 'PAGO APROBADO'
-            : 'PAGO RECHAZADO',
+            : transactionArgs!.timeout || transactionArgs!.stan == null
+                ? 'TIEMPO DE ESPERA AGOTADO'
+                : 'PAGO RECHAZADO',
         format: TextFormat(fontSize: 16, fontFamily: regularFont)));
     listOfTextLine.add(PrinterSplitText("Total:".toUpperCase(), _amountString,
         format: TextFormat(fontSize: 16, fontFamily: regularFont)));
@@ -689,8 +646,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
 
     listOfTextLine.add(PrinterText.emptyLine(16));
 
-    listOfTextLine.add(PrinterText('FIRMA:______________________________',
-        format: TextFormat(fontSize: 16, fontFamily: regularFont)));
+    if (!transactionArgs!.timeout && transactionArgs!.stan != null)
+      listOfTextLine.add(PrinterText('FIRMA:______________________________',
+          format: TextFormat(fontSize: 16, fontFamily: regularFont)));
 
     listOfTextLine.add(PrinterText.emptyLine(16));
 

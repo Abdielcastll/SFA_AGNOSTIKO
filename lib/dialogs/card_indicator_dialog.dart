@@ -1,3 +1,4 @@
+import 'package:agnostiko/cards/src/card_reader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -9,10 +10,12 @@ void Function(bool) showCardIndicatorDialog(
   BuildContext context,
   bool waiting,
 ) {
-  final pleaseWaitMessage = AppLocalizations.of(context)!.pleaseWait;
+  const pleaseWaitMessage = "No retire la tarjeta";
   const removeCardMessage = "Alejar la tarjeta";
 
   StateSetter? setStateDialog;
+
+  Future? timer;
 
   showDialog(
     context: context,
@@ -21,6 +24,13 @@ void Function(bool) showCardIndicatorDialog(
       return Dialog(
         child: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
+          timer = Future.delayed(
+            const Duration(seconds: 30),
+            () async {
+              await closeCardReader();
+            },
+          );
+
           setStateDialog = setState;
           return Padding(
             padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
@@ -29,7 +39,9 @@ void Function(bool) showCardIndicatorDialog(
               children: [
                 Icon(Icons.circle, color: waiting ? Colors.green : Colors.red),
                 SizedBox(width: 20),
-                Text(waiting ? pleaseWaitMessage : removeCardMessage),
+                Text(
+                    "${waiting ? pleaseWaitMessage : removeCardMessage}\nContactless...",
+                    textAlign: TextAlign.center),
               ],
             ),
           );
@@ -41,6 +53,7 @@ void Function(bool) showCardIndicatorDialog(
   return (bool flag) {
     setStateDialog!(() {
       waiting = flag;
+      timer = null;
     });
   };
 }
