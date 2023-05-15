@@ -366,7 +366,6 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
 
     if (noRetail) {
       Navigator.pop(context);
-      Navigator.pop(context);
       return;
     }
     final paymentBody = (ModalRoute.of(context)?.settings.arguments! as List)[2]
