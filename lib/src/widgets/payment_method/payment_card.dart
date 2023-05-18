@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:agnostiko/agnostiko.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/card_input/card_input.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -30,6 +31,7 @@ Future<double?> _acceptAmount(
   var remaining = double.parse(
       (paymentBody?.remaining ?? invoiceData.totalOfTheOrder)
           .toStringAsFixed(2));
+
   if (amount > remaining) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: const Text(
@@ -114,50 +116,73 @@ paymentCard(
               alignment: Alignment.bottomCenter,
               margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: amount == 0
+                    ? MainAxisAlignment.center
+                    : MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  TextButton(
+                  ElevatedButton.icon(
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: Text(
-                      AppLocalizations.of(context)!.goBack,
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                        myTheme.colorScheme.primary,
+                      ),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                      ),
+                    ),
+                    icon: const Icon(
+                      MaterialIcons.arrow_back_ios,
+                      size: 14,
+                    ),
+                    label: const Text(
+                      'Cancelar',
                       style: TextStyle(
+                        color: Colors.white,
                         fontFamily: 'Poppins-regular',
-                        color: myTheme.colorScheme.primary,
-                        fontSize: 14,
+                        fontSize: 12,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                  Container(
-                    width: 100,
-                    height: 40,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        color: myTheme.colorScheme.primary),
-                    child: TextButton(
-                      onPressed: () {
-                        _acceptAmount(context, amount, invoiceData,
-                            updatePayed: updatePayed,
-                            paymentBody: paymentBody,
-                            noRetail: noRetail);
-                      },
-                      style: TextButton.styleFrom(
-                        foregroundColor: myTheme.colorScheme.primary,
-                      ),
-                      child: Text(
-                        AppLocalizations.of(context)!.orderContinue,
-                        style: const TextStyle(
-                          fontFamily: 'Poppins-regular',
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
+                  amount == 0
+                      ? Container()
+                      : ElevatedButton.icon(
+                          icon: const Icon(
+                            Icons.credit_card,
+                            size: 14,
+                          ),
+                          onPressed: () {
+                            _acceptAmount(context, amount, invoiceData,
+                                updatePayed: updatePayed,
+                                paymentBody: paymentBody,
+                                noRetail: noRetail);
+                          },
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(
+                              myTheme.colorScheme.primary,
+                            ),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                              ),
+                            ),
+                          ),
+                          label: Text(
+                            AppLocalizations.of(context)!.orderContinue,
+                            style: const TextStyle(
+                              fontFamily: 'Poppins-regular',
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),

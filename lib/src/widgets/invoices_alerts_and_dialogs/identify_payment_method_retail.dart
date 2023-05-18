@@ -570,6 +570,7 @@ identifyPaymentMethodRetail({
                                 } else {
                                   print('Registrando pago en cheque');
                                   print('Cantidad permitida');
+
                                   Fluttertoast.showToast(
                                     msg: 'Registrando Cheque',
                                     backgroundColor:
