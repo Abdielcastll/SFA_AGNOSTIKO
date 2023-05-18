@@ -505,9 +505,8 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
 
     final maxWidth = await getPaperWidth();
 
-    // final img = await bytesToUiImage(rgbaLogo, logo.width, logo.height);
-    final imgLogo =
-        PrinterImage(rgbaLogo, logo.width, logo.height, offsetX: maxWidth / 4);
+    final imgLogo = PrinterImage(rgbaLogo, logo.width, logo.height,
+        offsetX: (maxWidth / 2) - (logo.width / 2));
 
     // final logo = await assetsLogo.toPrinterImage(offsetX: maxWidth / 4);
 
