@@ -783,7 +783,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                         .snapshots()
                                                         .forEach((element) {
                                                       print(
-                                                          'Lenght quality: ${element.toString().length}');
+                                                          'Length quality: ${element.toString().length}');
                                                       for (var element
                                                           in element.docs) {
                                                         var quality = element
@@ -1187,6 +1187,13 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                     : () async {
                                                         print(
                                                             'Keys seleccionadas');
+                                                        DocumentReference<
+                                                                Map<String,
+                                                                    dynamic>>
+                                                            firestoreCategorie =
+                                                            subCategoriesCollection
+                                                                .doc(
+                                                                    combinationKeyForSubCategories);
 
                                                         print(
                                                             'combinationKeyForSubCategories: $combinationKeyForSubCategories');
@@ -1210,13 +1217,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                           print(
                                                               'selectedSize: $selectedSize');
                                                         }
-                                                        DocumentReference<
-                                                                Map<String,
-                                                                    dynamic>>
-                                                            firestoreCategorie =
-                                                            subCategoriesCollection
-                                                                .doc(
-                                                                    combinationKeyForSubCategories);
+
                                                         DocumentReference<
                                                                 Map<String,
                                                                     dynamic>>

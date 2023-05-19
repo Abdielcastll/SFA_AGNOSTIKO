@@ -72,22 +72,22 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 0, 8),
-              child: IconButton(
-                constraints: const BoxConstraints(),
-                splashRadius: 20.0,
-                icon: const Icon(
-                  MdiIcons.bellOutline,
-                  size: 25,
-                  color: Color.fromARGB(255, 196, 196, 196),
-                ),
-                // Redireccionar a la pantalla de notificaciones
-                onPressed: () {
-                  Navigator.pushNamed(context, 'notifications');
-                },
-              ),
-            ),
+            // Container(
+            //   margin: EdgeInsets.fromLTRB(0, 0, 0, 8),
+            //   child: IconButton(
+            //     constraints: const BoxConstraints(),
+            //     splashRadius: 20.0,
+            //     icon: const Icon(
+            //       MdiIcons.bellOutline,
+            //       size: 25,
+            //       color: Color.fromARGB(255, 196, 196, 196),
+            //     ),
+            //     // Redireccionar a la pantalla de notificaciones
+            //     onPressed: () {
+            //       Navigator.pushNamed(context, 'notifications');
+            //     },
+            //   ),
+            // ),
             orderActive.orderActive == false
                 ? Container(
                     margin: EdgeInsets.fromLTRB(0, 0, 16, 8),
