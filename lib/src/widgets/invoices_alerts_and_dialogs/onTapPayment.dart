@@ -18,7 +18,7 @@ import 'package:pwa_sales2go_flutter/src/pages/card_input/card_input.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/utils/parameters.dart';
 
-Future<List?> onTapPayment(BuildContext context, payment, String pleaseWait,
+/* Future<List?> onTapPayment(BuildContext context, payment, String pleaseWait,
     Client client, String invoiceId, int paymentIndex) async {
   if (payment['anulado'] == true ||
       payment['conciliado'] == true ||
@@ -34,6 +34,10 @@ Future<List?> onTapPayment(BuildContext context, payment, String pleaseWait,
       fecha.hour < 22) {
     permitirCancelacion = true;
   }
+
+  bool mostrarCancelacionDevolucion =
+      payment['metodo'].toString().toLowerCase().contains('tarjeta') &&
+          payment['stan'] != null;
 
   if (payment['metodo'].toString().toLowerCase().contains('tarjeta') &&
       payment['stan'] != null) {
@@ -87,7 +91,7 @@ Future<List?> onTapPayment(BuildContext context, payment, String pleaseWait,
     );
   }
   return null;
-}
+} */
 
 Future<List?> cancel(BuildContext context, payment, String pleaseWait,
     Client client, String invoiceId, int paymentIndex) async {
@@ -166,7 +170,7 @@ Future refund(BuildContext context, payment, String pleaseWait, Client client,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          title: Center(child: Text('Confirmar')),
+          title: const Center(child: Text('Confirmar')),
           content: SingleChildScrollView(
               child: Column(
             children: [
@@ -183,7 +187,8 @@ Future refund(BuildContext context, payment, String pleaseWait, Client client,
                     errorText: errorText,
                     helperText: 'No ingrese montos mayores al pago.'),
                 controller: amountController,
-                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(
                       RegExp(r'[0-9]*(\.[0-9]{0,2})?$'))
@@ -193,20 +198,20 @@ Future refund(BuildContext context, payment, String pleaseWait, Client client,
           )),
           actions: <Widget>[
             ElevatedButton(
-              child: Text("Aceptar"),
               onPressed: onAccept,
+              child: const Text("Aceptar"),
             ),
             ElevatedButton(
-              child: Text(
-                "Cancelar",
-                style: TextStyle(color: Colors.black),
-              ),
               onPressed: onCancel,
               style: ButtonStyle(
                 backgroundColor:
                     MaterialStateProperty.all(Colors.grey.shade400),
                 foregroundColor:
                     MaterialStateProperty.all(Colors.grey.shade400),
+              ),
+              child: const Text(
+                "Cancelar",
+                style: TextStyle(color: Colors.black),
               ),
             )
           ],

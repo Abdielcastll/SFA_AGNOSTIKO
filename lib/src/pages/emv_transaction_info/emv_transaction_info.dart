@@ -9,6 +9,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/dialogs/circular_progress_dialog.dart';
+import 'package:pwa_sales2go_flutter/dialogs/confirm_dialog.dart';
 import 'package:pwa_sales2go_flutter/dialogs/info_dialog.dart';
 import 'package:pwa_sales2go_flutter/pharos/pharos.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
@@ -40,6 +41,7 @@ class EmvTransactionInfoView extends StatefulWidget {
 
 class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   bool flagPrint = true;
+  bool ticketPrinted = false;
   TransactionArgs? transactionArgs;
   InfoTags? infoTags;
   Map<int, Uint8List?>? firstGenerateTags;
@@ -57,6 +59,19 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     print(tag5F34?.toHexStr());
     print(tag5A?.toHexStr());
     print(tag57?.toHexStr().split('d')[0]);
+  }
+
+  showModalNoTicketPrinted() {
+    showConfirmDialog(context,
+        title: '¿Estas seguro?',
+        message:
+            'No has imprimido el comprobante. ¿Seguro que deseas continuar?',
+        textAccept: 'Si',
+        textCancel: 'No', onAccept: () {
+      onAccept();
+    }, onCancel: () {
+      Navigator.pop(context);
+    });
   }
 
   @override
@@ -290,8 +305,11 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                   padding: const EdgeInsets.symmetric(
                       vertical: 4.0, horizontal: 16.0),
                   child: OutlinedButton(
-                      onPressed: () {
-                        printTicket();
+                      onPressed: () async {
+                        await printTicket();
+                        setState(() {
+                          ticketPrinted = true;
+                        });
                       },
                       style: TextButton.styleFrom(
                           foregroundColor: myTheme.colorScheme.primary,
@@ -306,36 +324,17 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                         ),
                       )),
                 ),
-              /* if (transactionArgs!.isFallback && transactionArgs!.stan != null)
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 4.0, horizontal: 16.0),
-                  child: OutlinedButton(
-                      onPressed: () {
-                        onVoidExecute(
-                            context,
-                            transactionArgs!.stan ?? 0,
-                            AppLocalizations.of(context)!.pleaseWait,
-                            'Reverso');
-                      },
-                      style: TextButton.styleFrom(
-                          foregroundColor: myTheme.colorScheme.primary,
-                          backgroundColor: Colors.blue.shade800),
-                      child: Text(
-                        'Realizar reverso'.toUpperCase(),
-                        style: const TextStyle(
-                          fontFamily: 'Poppins-regular',
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )),
-                ), */
               Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
                 child: OutlinedButton(
-                    onPressed: onAccept,
+                    onPressed: () {
+                      if (!ticketPrinted && !transactionArgs!.isFallback) {
+                        showModalNoTicketPrinted();
+                        return;
+                      }
+                      onAccept();
+                    },
                     style: TextButton.styleFrom(
                         foregroundColor: myTheme.colorScheme.primary,
                         backgroundColor: Colors.blue.shade800),
@@ -488,7 +487,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     return null;
   }
 
-  void printTicket() async {
+  Future<void> printTicket() async {
     final emv = EmvModule.instance;
 
     List<PrinterObject> listOfTextLine = [];

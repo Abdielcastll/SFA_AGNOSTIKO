@@ -8,6 +8,8 @@ Future<T?> showConfirmDialog<T>(
   required String message,
   required void Function() onAccept,
   required void Function() onCancel,
+  String textAccept = 'Aceptar',
+  String textCancel = 'Cancelar',
 }) {
   return showDialog<T>(
     context: context,
@@ -22,31 +24,40 @@ Future<T?> showConfirmDialog<T>(
           onEscape: onCancel,
         ),
         child: AlertDialog(
-          contentPadding: EdgeInsets.only(left: 25, right: 25),
+          contentPadding: const EdgeInsets.only(left: 25, right: 25),
           title: Center(child: Text(title)),
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(20.0)),
           ),
-          content: Text(
-            message,
-            textAlign: TextAlign.center,
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                message,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 13),
+              ),
+            ],
           ),
           actions: <Widget>[
             ElevatedButton(
-              child: Text("Aceptar"),
               onPressed: onAccept,
+              child: Text(textAccept),
             ),
             ElevatedButton(
-              child: Text(
-                "Cancelar",
-                style: TextStyle(color: Colors.black),
-              ),
               onPressed: onCancel,
               style: ButtonStyle(
                 backgroundColor:
                     MaterialStateProperty.all(Colors.grey.shade400),
                 foregroundColor:
                     MaterialStateProperty.all(Colors.grey.shade400),
+              ),
+              child: Text(
+                textCancel,
+                style: TextStyle(color: Colors.black),
               ),
             )
           ],

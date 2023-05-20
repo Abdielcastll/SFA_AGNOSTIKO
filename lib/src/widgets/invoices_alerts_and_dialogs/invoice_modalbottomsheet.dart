@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -1406,6 +1407,8 @@ class SeePaymentsALertDialog extends StatelessWidget {
                             child: ListView.builder(
                               itemCount: invoicePayments.length,
                               itemBuilder: (context, index) {
+                                final isLast =
+                                    index == (invoicePayments.length - 1);
                                 final payment = invoicePayments[index];
                                 final date = payment['fecha'];
                                 final unformattedDate =
@@ -1420,76 +1423,159 @@ class SeePaymentsALertDialog extends StatelessWidget {
                                   coinExchangeRatio: payment['tasaDeCambio'],
                                 );
 
-                                return ListTile(
-                                  onTap: () async {
-                                    final newPayments = await onTapPayment(
-                                        context,
-                                        payment,
-                                        AppLocalizations.of(context)!
-                                            .pleaseWait,
-                                        client,
-                                        invoiceDocumentID,
-                                        index);
+                                final fecha =
+                                    (payment['fecha'] as Timestamp).toDate();
+                                final hoy = DateTime.now();
+                                var permitirCancelacion = false;
 
-                                    if (newPayments == null) {
-                                      return;
-                                    }
-                                    setState(
-                                      () => invoicePayments = newPayments,
-                                    );
-                                  },
-                                  leading: Icon(
-                                    Icons.money_off_csred,
-                                    color: payment['refund'] == true
-                                        ? Colors.blue.shade800
-                                        : payment['anulado'] == false
-                                            ? payment['conciliado'] == false
-                                                ? Colors.amber.shade600
-                                                : Colors.green.shade600
-                                            : myTheme.colorScheme.error,
-                                  ),
-                                  title: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        '$coinSymbol ${paymentAmount.toStringAsFixed(2)}',
+                                if (fecha.year == hoy.year &&
+                                    fecha.month == hoy.month &&
+                                    fecha.day == hoy.day &&
+                                    fecha.hour < 22) {
+                                  permitirCancelacion = true;
+                                }
+
+                                final mostrarCancelacionDevolucion =
+                                    payment['metodo']
+                                            .toString()
+                                            .toLowerCase()
+                                            .contains('tarjeta') &&
+                                        payment['stan'] != null;
+
+                                final yaAnuladoConciliadoRefund =
+                                    payment['anulado'] == true ||
+                                        payment['conciliado'] == true ||
+                                        payment['refund'] == true;
+
+                                return Column(
+                                  children: [
+                                    ListTile(
+                                      onTap: () async {},
+                                      leading: Icon(
+                                        Icons.money_off_csred,
+                                        color: payment['refund'] == true
+                                            ? Colors.blue.shade800
+                                            : payment['anulado'] == false
+                                                ? payment['conciliado'] == false
+                                                    ? Colors.amber.shade600
+                                                    : Colors.green.shade600
+                                                : myTheme.colorScheme.error,
+                                      ),
+                                      title: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '$coinSymbol ${paymentAmount.toStringAsFixed(2)}',
+                                            style: TextStyle(
+                                              fontFamily: 'Poppins-regular',
+                                              color: payment['refund'] == true
+                                                  ? Colors.blue.shade800
+                                                  : payment['anulado'] == false
+                                                      ? payment['conciliado'] ==
+                                                              false
+                                                          ? Colors
+                                                              .amber.shade600
+                                                          : Colors
+                                                              .green.shade600
+                                                      : myTheme
+                                                          .colorScheme.error,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Container(
+                                            child: Text(
+                                              paymentDate,
+                                              style: TextStyle(
+                                                fontFamily: 'Poppins-regular',
+                                                color: myTheme
+                                                    .colorScheme.secondary,
+                                                fontSize: 10,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      subtitle: Text(
+                                        '${payment['metodo']}',
                                         style: TextStyle(
                                           fontFamily: 'Poppins-regular',
-                                          color: payment['refund'] == true
-                                              ? Colors.blue.shade800
-                                              : payment['anulado'] == false
-                                                  ? payment['conciliado'] ==
-                                                          false
-                                                      ? Colors.amber.shade600
-                                                      : Colors.green.shade600
-                                                  : myTheme.colorScheme.error,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
+                                          color: myTheme.colorScheme.secondary,
+                                          fontSize: 12,
                                         ),
                                       ),
-                                      Container(
-                                        child: Text(
-                                          paymentDate,
-                                          style: TextStyle(
-                                            fontFamily: 'Poppins-regular',
-                                            color:
-                                                myTheme.colorScheme.secondary,
-                                            fontSize: 10,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  subtitle: Text(
-                                    '${payment['metodo']}',
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins-regular',
-                                      color: myTheme.colorScheme.secondary,
-                                      fontSize: 12,
                                     ),
-                                  ),
+                                    if (mostrarCancelacionDevolucion &&
+                                        !yaAnuladoConciliadoRefund)
+                                      Column(
+                                        children: [
+                                          // if (permitirCancelacion)
+                                          ElevatedButton.icon(
+                                            onPressed: () async {
+                                              final newPayments = await cancel(
+                                                  context,
+                                                  payment,
+                                                  AppLocalizations.of(context)!
+                                                      .pleaseWait,
+                                                  client,
+                                                  invoiceDocumentID,
+                                                  index);
+                                              if (newPayments == null) {
+                                                return;
+                                              }
+                                              setState(
+                                                () => invoicePayments =
+                                                    newPayments,
+                                              );
+                                            },
+                                            style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateColor
+                                                        .resolveWith(
+                                              (states) => Colors.red,
+                                            )),
+                                            icon: Icon(
+                                              Icons.block_rounded,
+                                              size: 16,
+                                            ),
+                                            label: Text('Cancelación',
+                                                style: TextStyle(fontSize: 12)),
+                                          ),
+                                          ElevatedButton.icon(
+                                            onPressed: () async {
+                                              refund(
+                                                  context,
+                                                  payment,
+                                                  AppLocalizations.of(context)!
+                                                      .pleaseWait,
+                                                  client,
+                                                  invoiceDocumentID,
+                                                  index);
+                                            },
+                                            style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateColor
+                                                        .resolveWith(
+                                              (states) => Colors.green,
+                                            )),
+                                            icon: Icon(
+                                              Icons.currency_exchange_rounded,
+                                              size: 16,
+                                            ),
+                                            label: Text('Devolución',
+                                                style: TextStyle(fontSize: 12)),
+                                          )
+                                        ],
+                                      ),
+                                    if (!isLast)
+                                      Divider(
+                                        endIndent: 8,
+                                        indent: 8,
+                                      )
+                                  ],
                                 );
                               },
                             ),

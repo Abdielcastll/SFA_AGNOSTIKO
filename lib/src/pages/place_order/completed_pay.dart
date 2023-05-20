@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/dialogs/confirm_dialog.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
@@ -113,6 +114,28 @@ class _CompletedPayBody extends State<CompletedPayBody> {
   late List<double> coinsExchangeRates = widget.coinsExchangeRates;
   late double totalPayed = widget.addPaymentBody.payments.fold<double>(
       0.0, (previousValue, element) => previousValue + element.amount);
+
+  bool ticketPrinted = false;
+
+  onGoBack() {
+    final orderActive = Provider.of<OrderProvider>(context, listen: false);
+    objectBox.delelteAllShoppingCart();
+    orderActive.setOrder(false, Clients());
+    Navigator.popUntil(context, (route) => route.isFirst);
+  }
+
+  showModalNoTicketPrinted() {
+    showConfirmDialog(context,
+        title: '¿Estas seguro?',
+        message: 'No has imprimido la factura. ¿Seguro que deseas regresar?',
+        textAccept: 'Si',
+        textCancel: 'No', onAccept: () {
+      onGoBack();
+    }, onCancel: () {
+      Navigator.pop(context);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final coinName = Provider.of<Coin?>(context)?.name ?? '';
@@ -302,11 +325,12 @@ class _CompletedPayBody extends State<CompletedPayBody> {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  final orderActive =
-                      Provider.of<OrderProvider>(context, listen: false);
-                  objectBox.delelteAllShoppingCart();
-                  orderActive.setOrder(false, Clients());
-                  Navigator.popUntil(context, (route) => route.isFirst);
+                  if (!ticketPrinted) {
+                    showModalNoTicketPrinted();
+                    return;
+                  }
+
+                  onGoBack();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: myTheme.colorScheme.primary,
@@ -332,8 +356,11 @@ class _CompletedPayBody extends State<CompletedPayBody> {
                 ),
               ),
               ElevatedButton(
-                onPressed: () {
-                  invoicePrintLayout(widget.addPaymentBody, currentCoin);
+                onPressed: () async {
+                  await invoicePrintLayout(widget.addPaymentBody, currentCoin);
+                  setState(() {
+                    ticketPrinted = true;
+                  });
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: myTheme.colorScheme.primary,
