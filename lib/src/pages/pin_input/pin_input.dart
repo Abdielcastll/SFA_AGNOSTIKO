@@ -34,6 +34,7 @@ class _PinInputViewState extends State<PinInputView> {
   void resetTimer() {
     stopTimer();
     setState(() => timerDuration = const Duration(seconds: 30));
+    startTimer();
   }
 
   // Step 6
@@ -44,9 +45,10 @@ class _PinInputViewState extends State<PinInputView> {
       setState(() {
         countdownTimer!.cancel();
       });
-      await closeCardReader();
-      showInfoDialog(context, 'Tiempo de espera agotado.',
-          onClose: () => Navigator.pop(context));
+      await cancelPinEntry();
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Tiempo de espera agotado en PIN"),
+      ));
     } else {
       setState(() {
         timerDuration = Duration(seconds: seconds);
@@ -106,7 +108,7 @@ class _PinInputViewState extends State<PinInputView> {
             ),
             obscureText: true,
             readOnly: true,
-            style: TextStyle(fontSize: 40),
+            style: const TextStyle(fontSize: 40),
             textAlign: TextAlign.center,
           ),
           Expanded(child: Container()),
@@ -141,11 +143,15 @@ class _PinInputViewState extends State<PinInputView> {
       _pinError = "PIN Erroneo";
     }
 
+    startTimer();
+    print('startTimer');
+
     final pinEntryStream = startOfflinePinEntry(PinEntryParameters(
-      timeout: 60,
+      timeout: 120,
       pinRSAData: event.pinRSAData,
       allowedLength: [4, 8, 23, 13, 6],
     ));
+
     MPOSController.instance.showMessage("PIN:");
     try {
       await for (final event in pinEntryStream) {
@@ -154,14 +160,15 @@ class _PinInputViewState extends State<PinInputView> {
         if (event is PinFinishedEvent) {
           return emvCompletePin(event.pinResultSw);
         } else if (event is PinCancelledEvent) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("PIN Cancelado"),
           ));
         } else if (event is PinTimeoutEvent) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("Tiempo de espera agotado en PIN"),
           ));
         } else if (event is PinInputChangedEvent) {
+          resetTimer();
           String bullets = "";
           for (int i = 0; i < event.inputLength; i++) {
             bullets += "*";
