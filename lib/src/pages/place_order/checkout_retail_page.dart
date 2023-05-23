@@ -106,7 +106,6 @@ class _CheckoutBodyState extends State<CheckoutBody> {
   String? selectedDiscount = '0';
   String commentary = '';
   bool isFiscalSelected = true;
-  bool loading = false;
   var numberOrder;
   int discountByInput = 0;
   DateTime today = DateTime.now();
@@ -780,6 +779,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       barrierDismissible: false,
                       context: context,
                       builder: (BuildContext context) {
+                        bool loading = false;
+
                         return StatefulBuilder(
                           builder: (context, setState) => AlertDialog(
                             shape: RoundedRectangleBorder(

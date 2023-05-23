@@ -54,7 +54,7 @@ class _CardInputViewState extends State<CardInputView> {
 
   @override
   void initState() {
-    startTimer();
+    // startTimer();
     super.initState();
   }
 
@@ -312,7 +312,8 @@ class _CardInputViewState extends State<CardInputView> {
         (await EmvModule.instance.getTagValue(0x57))?.toHexStr().split('d')[0];
     // en caso de error, nos movemos a la pantalla de cierre
     final arguments = (ModalRoute.of(context)?.settings.arguments! as List);
-    Navigator.pushReplacementNamed(
+    Navigator.pushNamed(
+      // Navigator.pushReplacementNamed(
       context,
       EmvTransactionInfoView.route,
       arguments: [
@@ -481,7 +482,9 @@ class _CardInputViewState extends State<CardInputView> {
         (await EmvModule.instance.getTagValue(0x57))?.toHexStr().split('d')[0];
 
     final arguments = (ModalRoute.of(context)?.settings.arguments! as List);
-    Navigator.pushReplacementNamed(context, EmvTransactionInfoView.route,
+
+    Navigator.pushNamed(context, EmvTransactionInfoView.route,
+        // Navigator.pushReplacementNamed(context, EmvTransactionInfoView.route,
         arguments: [
           transactionArgs,
           if (arguments.length >= 2) arguments[1] else null,

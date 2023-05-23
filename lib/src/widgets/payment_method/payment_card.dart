@@ -67,7 +67,8 @@ Future<double?> _acceptAmount(
       Navigator.pop(context); // y cerramos el popup antes de seguir
     }
 
-    Navigator.pushReplacementNamed(
+    Navigator.pushNamed(
+      // Navigator.pushReplacementNamed(
       context,
       CardInputView.route,
       arguments: [transactionArgs, updatePayed, paymentBody, noRetail],

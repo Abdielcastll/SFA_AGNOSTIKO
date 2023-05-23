@@ -73,7 +73,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Salir de este proceso hara que deba continuarlo desde el menu de facturas como registro manual)",
+                    "Salir de este proceso hara que deba continuarlo desde el menu de facturas como registro manual",
                     style: TextStyle(
                       color: myTheme.colorScheme.primary,
                       fontFamily: 'Poppins-regular',
@@ -104,9 +104,37 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                     setState(() {
                       _canPop = true;
                     });
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
+                    Navigator.popUntil(
+                        context, (route) => route.settings.name == "ORDER");
+
+                    ScaffoldMessenger.of(context)
+                      ..removeCurrentSnackBar()
+                      ..showSnackBar(
+                        SnackBar(
+                          backgroundColor:
+                              myTheme.colorScheme.onPrimaryContainer,
+                          duration: const Duration(seconds: 1),
+                          content: Column(
+                            children: const [
+                              Text(
+                                "Facturación Pausada",
+                                style: TextStyle(
+                                  fontFamily: 'Poppins-regular',
+                                ),
+                              ),
+                              Text(
+                                "Consulte lista de facturas",
+                                style: TextStyle(
+                                  fontFamily: 'Poppins-regular',
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    // Navigator.of(context).pop();
+                    // Navigator.of(context).pop();
+                    // Navigator.of(context).pop();
                   },
                   child: Text("Yes"),
                 ),
