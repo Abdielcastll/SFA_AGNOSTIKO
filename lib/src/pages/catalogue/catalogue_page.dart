@@ -78,6 +78,7 @@ class _CataloguePageState extends State<CataloguePage> {
           value: DatabaseServiceStreams().promotions,
           initialData: const [],
           catchError: (context, error) {
+            print('ERROR ON GETTING PROMOTIONS');
             return;
           },
         ),

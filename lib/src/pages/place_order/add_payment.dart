@@ -136,7 +136,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                     // Navigator.of(context).pop();
                     // Navigator.of(context).pop();
                   },
-                  child: Text("Yes"),
+                  child: Text("Si"),
                 ),
               ],
             ),

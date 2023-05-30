@@ -63,9 +63,6 @@ class OrderCard extends StatefulWidget {
 class _OrderCardState extends State<OrderCard> {
   @override
   Widget build(BuildContext context) {
-    // final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
-    // List<String> currentCoinSplit = currentCoin!.split(' ');
-    // String currentCoinSelectedCode = currentCoinSplit.last;
     return MultiProvider(
       providers: [
         StreamProvider<Client?>.value(
@@ -80,19 +77,6 @@ class _OrderCardState extends State<OrderCard> {
           initialData: null,
           value: DatabaseServiceStreams().zoneSummary,
         ),
-        // StreamProvider<Coin?>.value(
-        //   initialData: Coin(),
-        //   catchError: (context, error) {
-        //     print(
-        //         'ERROR ON STREAM PROVIDER OF COINEXCHANGE RATES IN ADD CLIENT');
-        //     print(error);
-        //     return;
-        //   },
-        //   value: coinCollection
-        //       .doc(currentCoinSelectedCode)
-        //       .snapshots()
-        //       .map(coinFromSnapshot),
-        // ),
       ],
       child: OrderCardBody(widget: widget),
     );
@@ -147,11 +131,14 @@ class _OrderCardBodyState extends State<OrderCardBody> {
     // print('User Role ${userRole?.name}');
     // print("Retail: ${userRole?.isRetail}");
 
-    final total = priceMultipliedByItsExchangeRatio(
+    final totalConverted = priceMultipliedByItsExchangeRatio2(
         productPrice: widget.widget.total,
         coinDecimals: coinDecimals,
         coinExchangeRatio: double.parse(
             (widget.widget.coinsExchangeRates?['MXN'] ?? 1).toString()));
+
+    var totalFormatted = formatDecimalPriceByRegion(price: totalConverted);
+
     identifyStatusColor() {
       if (widget.widget.status == AppLocalizations.of(context)!.onProcess &&
           widget.widget.isInvoicesFailed == false) {
@@ -279,7 +266,7 @@ class _OrderCardBodyState extends State<OrderCardBody> {
                           ),
                         ),
                         Text(
-                          '$coinSymbol ${total.toStringAsFixed(2)}',
+                          '$coinSymbol $totalFormatted',
                           style: TextStyle(
                             color: identifyStatusColor(),
                             fontSize: 13,

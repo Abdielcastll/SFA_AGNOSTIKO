@@ -519,59 +519,59 @@ class ProductDetailsBody extends StatelessWidget {
                             ],
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              alignment: Alignment.centerLeft,
-                              margin: const EdgeInsets.fromLTRB(10, 5, 10, 0),
-                              child: Text(
-                                AppLocalizations.of(context)!.colors,
-                                style: TextStyle(
-                                  color: myTheme.colorScheme.onPrimaryContainer,
-                                  fontFamily: 'Poppins-regular',
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    margin: const EdgeInsets.only(right: 5.0),
-                                    height: 30,
-                                    width: 30,
-                                    decoration: BoxDecoration(
-                                      color: Colors.amber,
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: const EdgeInsets.only(right: 5.0),
-                                    height: 30,
-                                    width: 30,
-                                    decoration: BoxDecoration(
-                                      color: myTheme
-                                          .colorScheme.onPrimaryContainer,
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                  ),
-                                  Container(
-                                    // margin: const EdgeInsets.only(right: 5.0),
-                                    height: 30,
-                                    width: 30,
-                                    decoration: BoxDecoration(
-                                      color: Colors.green.shade900,
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //   children: [
+                        //     Container(
+                        //       alignment: Alignment.centerLeft,
+                        //       margin: const EdgeInsets.fromLTRB(10, 5, 10, 0),
+                        //       child: Text(
+                        //         AppLocalizations.of(context)!.colors,
+                        //         style: TextStyle(
+                        //           color: myTheme.colorScheme.onPrimaryContainer,
+                        //           fontFamily: 'Poppins-regular',
+                        //           fontSize: 16,
+                        //           fontWeight: FontWeight.bold,
+                        //         ),
+                        //       ),
+                        //     ),
+                        //     // Container(
+                        //     //   margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                        //     //   child: Row(
+                        //     //     children: [
+                        //     //       Container(
+                        //     //         margin: const EdgeInsets.only(right: 5.0),
+                        //     //         height: 30,
+                        //     //         width: 30,
+                        //     //         decoration: BoxDecoration(
+                        //     //           color: Colors.amber,
+                        //     //           borderRadius: BorderRadius.circular(20),
+                        //     //         ),
+                        //     //       ),
+                        //     //       Container(
+                        //     //         margin: const EdgeInsets.only(right: 5.0),
+                        //     //         height: 30,
+                        //     //         width: 30,
+                        //     //         decoration: BoxDecoration(
+                        //     //           color: myTheme
+                        //     //               .colorScheme.onPrimaryContainer,
+                        //     //           borderRadius: BorderRadius.circular(20),
+                        //     //         ),
+                        //     //       ),
+                        //     //       Container(
+                        //     //         // margin: const EdgeInsets.only(right: 5.0),
+                        //     //         height: 30,
+                        //     //         width: 30,
+                        //     //         decoration: BoxDecoration(
+                        //     //           color: Colors.green.shade900,
+                        //     //           borderRadius: BorderRadius.circular(20),
+                        //     //         ),
+                        //     //       ),
+                        //     //     ],
+                        //     //   ),
+                        //     // ),
+                        //   ],
+                        // ),
                       ],
                     ),
                   ),

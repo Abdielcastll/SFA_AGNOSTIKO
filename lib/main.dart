@@ -117,10 +117,6 @@ class SfaAgnostiko extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // var prissa = FirebaseFirestore.instance
-    //     .collection('marcas')
-    //     .doc('fekpFNxAR5U9PZko1XWq');
-
     return StreamProvider<UserModel?>.value(
       value: AuthService().user,
       initialData: null,

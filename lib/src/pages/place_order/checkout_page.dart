@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/services.dart';
@@ -107,6 +108,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
 
   @override
   Widget build(BuildContext context) {
+    print('OPENING CHECKOUT PAGE');
     final userUid = Provider.of<UserModel>(context).uid;
     int? clientMasterDiscount = widget.client?.masterDiscount;
     String? fiscalAddress = widget.client?.fiscalAdress;
@@ -119,64 +121,137 @@ class _CheckoutBodyState extends State<CheckoutBody> {
     final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 0;
     final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
     final coinCode = Provider.of<Coin?>(context)?.code ?? '';
-    print('TEStiNG COIN NAME');
-    print(coinName);
 
-    double subTotalConverted = priceMultipliedByItsExchangeRatio(
+    // SUB TOTAL
+
+    var subTotalConverted = priceMultipliedByItsExchangeRatio2(
         coinDecimals: coinDecimals,
         coinExchangeRatio: coinExchangeRatio,
         productPrice: widget.subTotal);
     print('subTotal: ${widget.subTotal}');
     print('subTotalConverted: $subTotalConverted');
 
-    double subTotalWithMasterDiscount = double.parse(
-        (widget.subTotal * (widget.client?.masterDiscount / 100))
-            .toStringAsFixed(4));
-    double subTotalWithMasterDiscountConverted =
-        priceMultipliedByItsExchangeRatio(
+    var subTotalFormatted =
+        formatDecimalPriceByRegion(price: subTotalConverted);
+    print('subTotalFormatted: $subTotalFormatted');
+
+    // DESCUENTO MAESTRO
+
+    var subTotalWithMasterDiscountRaw =
+        ((Decimal.parse(widget.subTotal.toString()) *
+                    Decimal.parse(
+                        widget.client?.masterDiscount.toString() ?? '0')) /
+                Decimal.parse('100'))
+            .toDecimal();
+    print('subTotalWithMasterDiscountRaw: $subTotalWithMasterDiscountRaw');
+
+    var subTotalWithMasterDiscountRounded = Decimal.parse(
+        ((Decimal.parse(subTotalWithMasterDiscountRaw.toString()) *
+                        Decimal.parse('100'))
+                    .round() /
+                Decimal.parse('100'))
+            .toDecimal()
+            .toString());
+    print(
+        'subTotalWithMasterDiscountRounded: $subTotalWithMasterDiscountRounded');
+
+    var subTotalWithMasterDiscountConverted =
+        priceMultipliedByItsExchangeRatio2(
             coinDecimals: coinDecimals,
             coinExchangeRatio: coinExchangeRatio,
-            productPrice: subTotalWithMasterDiscount);
-    print('subTotalWithMasterDiscount: $subTotalWithMasterDiscount');
+            productPrice: subTotalWithMasterDiscountRounded);
     print(
         'subTotalWithMasterDiscountConverted: $subTotalWithMasterDiscountConverted');
 
-    double subTotalWithDiscountApplied = double.parse(
-        (widget.subTotal * (discountByInput / 100)).toStringAsFixed(4));
-    double subTotalWithDiscountAppliedConverted =
-        priceMultipliedByItsExchangeRatio(
-            coinDecimals: coinDecimals,
-            coinExchangeRatio: coinExchangeRatio,
-            productPrice: subTotalWithDiscountApplied);
-    print('subTotalWithDiscountApplied: $subTotalWithDiscountApplied');
+    var subTotalWithMasterDiscountFormatted =
+        formatDecimalPriceByRegion(price: subTotalWithMasterDiscountConverted);
     print(
-        'subTotalWithDiscountAppliedConverted: $subTotalWithDiscountAppliedConverted');
+        'subTotalWithMasterDiscountFormatted: $subTotalWithMasterDiscountFormatted');
 
-    double getIVA = double.parse(
-      ((widget.subTotal -
-                  subTotalWithMasterDiscount -
-                  subTotalWithDiscountApplied) *
-              (16 / 100))
-          .toStringAsFixed(4),
-    );
-    double getIVAConverted = priceMultipliedByItsExchangeRatio(
+    // DESCUENTO APLICADO
+
+    var discountAppliedRaw = (((Decimal.parse(subTotalConverted.toString()) -
+                    Decimal.parse(
+                        subTotalWithMasterDiscountRounded.toString())) *
+                Decimal.parse(discountByInput.toString())) /
+            Decimal.parse('100'))
+        .toDecimal();
+    print('discountAppliedRaw: $discountAppliedRaw');
+
+    var discountAppliedRounded = Decimal.parse(
+        ((Decimal.parse(discountAppliedRaw.toString()) * Decimal.parse('100'))
+                    .round() /
+                Decimal.parse('100'))
+            .toDecimal()
+            .toString());
+    print('discountAppliedRounded: $discountAppliedRounded');
+
+    var discountAppliedConverted = priceMultipliedByItsExchangeRatio2(
         coinDecimals: coinDecimals,
         coinExchangeRatio: coinExchangeRatio,
-        productPrice: getIVA);
-    print('getIVA: $getIVA');
-    print('getIVAConverted: $getIVAConverted');
+        productPrice: discountAppliedRounded);
+    print('discountAppliedConverted: $discountAppliedConverted');
 
-    double totalPriceOfTheOrder = double.parse((widget.subTotal -
-            subTotalWithMasterDiscount -
-            subTotalWithDiscountApplied +
-            getIVA)
-        .toStringAsFixed(4));
-    double totalPriceOfTheOrderConverted = priceMultipliedByItsExchangeRatio(
+    var discountAppliedFormatted =
+        formatDecimalPriceByRegion(price: discountAppliedConverted);
+    print('discountAppliedFormatted: $discountAppliedFormatted');
+
+    // ACUMULADO
+
+    var accumulated = Decimal.parse(widget.subTotal.toString()) -
+        Decimal.parse(subTotalWithMasterDiscountRounded.toString()) -
+        Decimal.parse(discountAppliedRounded.toString());
+
+    print('accumulated: ${accumulated}');
+
+    // TAXES
+
+    var taxRaw =
+        ((Decimal.parse(accumulated.toString()) * Decimal.parse('16')) /
+                Decimal.parse('100'))
+            .toDecimal();
+
+    print('taxRaw: $taxRaw');
+
+    var taxRounded = Decimal.parse(
+        ((Decimal.parse(taxRaw.toString()) * Decimal.parse('100')).round() /
+                Decimal.parse('100'))
+            .toDecimal()
+            .toString());
+
+    print('taxRounded: $taxRounded');
+    print('resultado');
+    print(Decimal.parse(accumulated.toString()) +
+        Decimal.parse(taxRounded.toString()));
+
+    var taxConverted = priceMultipliedByItsExchangeRatio2(
+        coinDecimals: coinDecimals,
+        coinExchangeRatio: coinExchangeRatio,
+        productPrice: taxRounded);
+
+    print('taxConverted: $taxConverted');
+
+    var taxFormatted = formatDecimalPriceByRegion(price: taxConverted);
+    print('taxFormatted: $taxFormatted');
+
+    // TOTAL DEL PEDIDO
+
+    var totalPriceOfTheOrder = Decimal.parse(accumulated.toString()) +
+        Decimal.parse(taxRounded.toString());
+
+    print('totalPriceOfTheOrderRaw: $totalPriceOfTheOrder');
+
+    var totalPriceOfTheOrderConverted = priceMultipliedByItsExchangeRatio2(
         coinDecimals: coinDecimals,
         coinExchangeRatio: coinExchangeRatio,
         productPrice: totalPriceOfTheOrder);
-    print('totalPriceOfTheOrder: $totalPriceOfTheOrder');
+
     print('totalPriceOfTheOrderConverted: $totalPriceOfTheOrderConverted');
+
+    var totalPriceOfTheOrderFormatted =
+        formatDecimalPriceByRegion(price: totalPriceOfTheOrderConverted);
+
+    print('totalPriceOfTheOrderFormatted: $totalPriceOfTheOrderFormatted');
 
     completeOrder() {
       Navigator.pushReplacement(
@@ -230,7 +305,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerRight,
                       child: Text(
-                        '$coinSymbol ${subTotalConverted.toStringAsFixed(2)}',
+                        '$coinSymbol $subTotalFormatted',
+                        // '0',
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
@@ -261,7 +337,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerRight,
                       child: Text(
-                        '- $coinSymbol ${subTotalWithMasterDiscountConverted.toStringAsFixed(2)}',
+                        // '0',
+                        '- $coinSymbol $subTotalWithMasterDiscountFormatted',
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
@@ -604,8 +681,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerRight,
                       child: Text(
-                        // '- ${priceFormat(totalDiscountApplied())}',
-                        '- $coinSymbol ${subTotalWithDiscountAppliedConverted.toStringAsFixed(2)}',
+                        // '0',
+                        '- $coinSymbol $discountAppliedFormatted',
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
@@ -636,7 +713,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerRight,
                       child: Text(
-                        '+ $coinSymbol ${getIVAConverted.toStringAsFixed(2)}',
+                        // '0',
+                        '+ $coinSymbol $taxFormatted',
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-regular',
@@ -666,7 +744,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       margin: const EdgeInsets.only(bottom: 5),
                       alignment: Alignment.centerRight,
                       child: Text(
-                        '$coinSymbol ${totalPriceOfTheOrderConverted.toStringAsFixed(2)}',
+                        // '0',
+                        '$coinSymbol $totalPriceOfTheOrderFormatted',
                         style: TextStyle(
                           color: myTheme.colorScheme.onPrimaryContainer,
                           fontFamily: 'Poppins-regular',
@@ -952,7 +1031,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                   context: context,
                                   initialDate: today,
                                   firstDate: DateTime.now(),
-                                  lastDate: DateTime(2023),
+                                  lastDate: DateTime(2050),
                                 );
                                 if (newDate == null) return;
                                 setState(() {
@@ -1228,25 +1307,41 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                 ),
                                 ElevatedButton.icon(
                                   onPressed: () async {
-                                    print('GUARDAR PEDIDO');
+                                    print('GUARDAR PEDIDO INICIADO');
                                     final orderActive =
                                         Provider.of<OrderProvider>(context,
                                             listen: false);
+                                    final double subTotalToDouble =
+                                        widget.subTotal;
+                                    final double masterDiscount =
+                                        subTotalWithMasterDiscountRounded
+                                            .toDouble();
+                                    final double appliedDiscount =
+                                        discountAppliedRounded.toDouble();
+                                    final double taxes = taxRounded.toDouble();
+                                    final double total =
+                                        totalPriceOfTheOrder.toDouble();
+
+                                    print('subTotalToDouble:$subTotalToDouble');
+                                    print('masterDiscount:$masterDiscount');
+                                    print('appliedDiscount:$appliedDiscount');
+                                    print('taxes:$taxes');
+                                    print('total:$total');
 
                                     if (selectedValue2 != null) {
                                       var result = await createOrder(
                                         widget.client,
                                         userUid,
                                         commentary,
-                                        subTotalWithMasterDiscount,
+                                        masterDiscount,
                                         widget.cart,
                                         selectedValue2,
                                         selectedValue,
                                         today,
-                                        getIVA,
+                                        taxes,
                                         numberOrder,
-                                        widget.subTotal,
-                                        totalPriceOfTheOrder,
+                                        subTotalToDouble,
+                                        total,
                                         discountByInput,
                                         false,
                                       );

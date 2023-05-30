@@ -138,31 +138,9 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
             // Navigator.popUntil(context, ModalRoute.withName('ORDER'));
           }
         }
-
-        // productsInCart?.forEach((element) {
-        //   if (element.code == code) {
-        //     print('Kaede 1');
-        //   } else {
-        //     print('Kaede 2');
-        //   }
-        // });
-
-        // final result = ShoppingCartProduct(
-        //   availableStock: stock,
-        //   productQuantity: productQuantity,
-        //   code: code,
-        //   listOfPricesId: pricesList,
-        //   name: name,
-        //   productId: code,
-        //   unitPrice: productPrice.toString(),
-        //   totalAmount: productTotalAmount.toString(),
-        //   urlPicture: catalogue.toString(),
-        // );
-        // print(result);
-        // scannedProducts.add(result);
-        // objectBox.insertManyShoppingCartProducts(scannedProducts);
       });
     } catch (e) {
+      print('ERROR ON addProductFromBarcodeResult');
       print(e);
     }
 
@@ -181,6 +159,7 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
 
   @override
   Widget build(BuildContext context) {
+    print('Opening bar code scanner');
     String? scanResult;
     return Scaffold(
       appBar: AppBar(
