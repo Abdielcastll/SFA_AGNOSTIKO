@@ -736,11 +736,17 @@ Future<dynamic> showDialogForRegisterPayment(
                                                 change = moneyRecievedForRegisterMoney <
                                                         paidAmount!
                                                     ? 0
-                                                    : double.parse(
-                                                        (moneyRecievedForRegisterMoney -
-                                                                paidAmount!)
-                                                            .toStringAsFixed(
-                                                                2));
+                                                    : double.parse((((Decimal.parse(moneyRecievedForRegisterMoney
+                                                                            .toString()) -
+                                                                        Decimal.parse(paidAmount!
+                                                                            .toString())) *
+                                                                    Decimal.parse(
+                                                                        '100'))
+                                                                .round() /
+                                                            Decimal.parse(
+                                                                '100'))
+                                                        .toDecimal()
+                                                        .toString());
                                               }
                                             });
                                             print(
@@ -828,16 +834,16 @@ Future<dynamic> showDialogForRegisterPayment(
                                             borderRadius:
                                                 BorderRadius.circular(5),
                                             borderSide: BorderSide(
-                                                // color: selectedValueA != null
-                                                //     ? selectedValueA!
-                                                //             .contains('Tarjeta')
-                                                //         ? (paidAmount ?? 0) >
-                                                //                 balanceConverted
-                                                //             ? Colors.red
-                                                //             : Colors.transparent
-                                                //         : Colors.transparent
-                                                //     : Colors.transparent,
-                                                ),
+                                              color: selectedValueA != null
+                                                  ? selectedValueA!
+                                                          .contains('Tarjeta')
+                                                      ? (paidAmount ?? 0) >
+                                                              balanceConverted
+                                                          ? Colors.red
+                                                          : Colors.transparent
+                                                      : Colors.transparent
+                                                  : Colors.transparent,
+                                            ),
                                           ),
                                           counterText: '',
                                           border: OutlineInputBorder(
@@ -849,18 +855,19 @@ Future<dynamic> showDialogForRegisterPayment(
                                           ),
                                         ),
                                       )),
-                                  // selectedValueA != null
-                                  //     ? selectedValueA!.contains('Tarjeta')
-                                  //         ? (paidAmount ?? 0) > balanceConverted
-                                  //             ? Text(
-                                  //                 'El pago es mayor al saldo de la factura.',
-                                  //                 style: TextStyle(
-                                  //                     color: Colors.red,
-                                  //                     fontSize: 10),
-                                  //               )
-                                  //             : Container()
-                                  //         : Container()
-                                  //     : Container()
+                                  selectedValueA != null
+                                      ? selectedValueA!.contains('Tarjeta')
+                                          ? (paidAmount ?? 0) >
+                                                  balanceConverted.toDouble()
+                                              ? Text(
+                                                  'El pago es mayor al saldo de la factura.',
+                                                  style: TextStyle(
+                                                      color: Colors.red,
+                                                      fontSize: 10),
+                                                )
+                                              : Container()
+                                          : Container()
+                                      : Container()
                                 ],
                               ),
                     selectedValueA != 'Efectivo'
@@ -1139,8 +1146,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                           ),
                                         ),
                                         Text(
-                                          'Taxes',
-                                          // '$coinSymbol ${taxConverted.toStringAsFixed(2)}',
+                                          // 'Taxes',
+                                          '$coinSymbol $taxformatted',
                                           style: TextStyle(
                                             fontFamily: 'Poppins-regular',
                                             color: myTheme.colorScheme.primary,
@@ -1170,8 +1177,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                           ),
                                         ),
                                         Text(
-                                          'total',
-                                          // '$coinSymbol ${totalConverted.toStringAsFixed(2)}',
+                                          // 'total',
+                                          '$coinSymbol $totalformatted',
                                           style: TextStyle(
                                             fontFamily: 'Poppins-regular',
                                             color: myTheme
@@ -1201,8 +1208,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                           ),
                                         ),
                                         Text(
-                                          'balance',
-                                          // '$coinSymbol ${balanceConverted.toStringAsFixed(2)}',
+                                          // 'balance',
+                                          '$coinSymbol $balanceformatted',
                                           style: TextStyle(
                                             fontFamily: 'Poppins-regular',
                                             color: myTheme
@@ -1237,8 +1244,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                                 ),
                                               ),
                                               Text(
-                                                'Cambio',
-                                                // '$coinSymbol ${change.toStringAsFixed(2)}',
+                                                // 'Cambio',
+                                                '$coinSymbol ${formatDecimalPriceByRegion(price: Decimal.parse(change.toString()))}',
                                                 style: TextStyle(
                                                   fontFamily: 'Poppins-regular',
                                                   color: Colors.green.shade600,
@@ -1250,48 +1257,48 @@ Future<dynamic> showDialogForRegisterPayment(
                                           ),
                                         ),
                                   Divider(),
-                                  // Container(
-                                  //   margin: EdgeInsets.fromLTRB(
-                                  //     0,
-                                  //     5,
-                                  //     0,
-                                  //     0,
-                                  //   ),
-                                  //   child: identifyPaymentMethod(
-                                  //     coinName: coinName,
-                                  //     coinDecimals: coinDecimals,
-                                  //     coinExchangeRatio: coinExchangeRatio,
-                                  //     coinSymbol: coinSymbol,
-                                  //     coinCode: coinCode,
-                                  //     moneyRecievedForRegisterMoney:
-                                  //         moneyRecievedForRegisterMoney,
-                                  //     paymentsValidPayQuantity:
-                                  //         paymentsValidPayQuantity,
-                                  //     selectedValueA: selectedValueA!,
-                                  //     client: client,
-                                  //     invoiceDocumentID: invoiceDocumentID,
-                                  //     paidAmount: paidAmount ?? 0,
-                                  //     totalOfTheOrder: invoiceTotal,
-                                  //     date: today,
-                                  //     context: context,
-                                  //     remaining: remaining!,
-                                  //     remainingConverted: remainingConverted,
-                                  //     selectedCoin: selectedCoin,
-                                  //     noRetail: true,
-                                  //     paymentBody: AddPaymentBodyAtt(
-                                  //         client: client,
-                                  //         currency: selectedCoin,
-                                  //         discount: 0,
-                                  //         discountPercentage: 0,
-                                  //         invoiceDocumentID: invoiceDocumentID,
-                                  //         invoiceNumber: invoiceNumber,
-                                  //         percentageTax: percentageTax,
-                                  //         remaining: remaining,
-                                  //         subTotal: subTotal,
-                                  //         currencyExchange: coinExchangeRatio!,
-                                  //         tax: tax),
-                                  //   ),
-                                  // )
+                                  Container(
+                                    margin: EdgeInsets.fromLTRB(
+                                      0,
+                                      5,
+                                      0,
+                                      0,
+                                    ),
+                                    child: identifyPaymentMethod(
+                                      coinName: coinName,
+                                      coinDecimals: coinDecimals,
+                                      coinExchangeRatio: coinExchangeRatio,
+                                      coinSymbol: coinSymbol,
+                                      coinCode: coinCode,
+                                      moneyRecievedForRegisterMoney:
+                                          moneyRecievedForRegisterMoney,
+                                      paymentsValidPayQuantity:
+                                          paymentsValidPayQuantity,
+                                      selectedValueA: selectedValueA!,
+                                      client: client,
+                                      invoiceDocumentID: invoiceDocumentID,
+                                      paidAmount: paidAmount ?? 0,
+                                      totalOfTheOrder: invoiceTotal,
+                                      date: today,
+                                      context: context,
+                                      remaining: remaining!,
+                                      remainingConverted: remainingConverted,
+                                      selectedCoin: selectedCoin,
+                                      noRetail: true,
+                                      paymentBody: AddPaymentBodyAtt(
+                                          client: client,
+                                          currency: selectedCoin,
+                                          discount: 0,
+                                          discountPercentage: 0,
+                                          invoiceDocumentID: invoiceDocumentID,
+                                          invoiceNumber: invoiceNumber,
+                                          percentageTax: percentageTax,
+                                          remaining: remaining,
+                                          subTotal: subTotal,
+                                          currencyExchange: coinExchangeRatio!,
+                                          tax: tax),
+                                    ),
+                                  )
                                 ],
                               )
                             : Container()
