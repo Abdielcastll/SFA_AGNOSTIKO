@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:agnostiko/agnostiko.dart';
+import 'package:pwa_sales2go_flutter/dialogs/info_dialog.dart';
 
 import '../../../dialogs/cancel_transaction_dialog.dart';
 import '../../models/transaction_args.dart';
@@ -14,6 +17,45 @@ class PinInputView extends StatefulWidget {
 class _PinInputViewState extends State<PinInputView> {
   final _pinTextController = TextEditingController();
 
+  Timer? countdownTimer;
+  Duration timerDuration = const Duration(seconds: 30);
+
+  void startTimer() {
+    countdownTimer =
+        Timer.periodic(const Duration(seconds: 1), (_) => setCountDown());
+  }
+
+  // Step 4
+  void stopTimer() {
+    setState(() => countdownTimer!.cancel());
+  }
+
+  // Step 5
+  void resetTimer() {
+    stopTimer();
+    setState(() => timerDuration = const Duration(seconds: 30));
+    startTimer();
+  }
+
+  // Step 6
+  void setCountDown() async {
+    const reduceSecondsBy = 1;
+    final seconds = timerDuration.inSeconds - reduceSecondsBy;
+    if (seconds < 0) {
+      setState(() {
+        countdownTimer!.cancel();
+      });
+      await cancelPinEntry();
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Tiempo de espera agotado en PIN"),
+      ));
+    } else {
+      setState(() {
+        timerDuration = Duration(seconds: seconds);
+      });
+    }
+  }
+
   String? _pinError;
 
   TransactionArgs? transactionArgs;
@@ -22,6 +64,7 @@ class _PinInputViewState extends State<PinInputView> {
   @override
   void initState() {
     super.initState();
+    // startTimer();
     WidgetsBinding.instance.addPostFrameCallback((_) => _emvEventLoop());
   }
 
@@ -29,6 +72,7 @@ class _PinInputViewState extends State<PinInputView> {
   void dispose() {
     transactionArgs = null;
     remainingPinTries = null;
+    stopTimer();
     super.dispose();
   }
 
@@ -64,7 +108,7 @@ class _PinInputViewState extends State<PinInputView> {
             ),
             obscureText: true,
             readOnly: true,
-            style: TextStyle(fontSize: 40),
+            style: const TextStyle(fontSize: 40),
             textAlign: TextAlign.center,
           ),
           Expanded(child: Container()),
@@ -96,14 +140,18 @@ class _PinInputViewState extends State<PinInputView> {
       setState(() {
         this.remainingPinTries = event.remainingTries;
       });
-      _pinError = "wrongPIN";
+      _pinError = "PIN Erroneo";
     }
 
+    startTimer();
+    print('startTimer');
+
     final pinEntryStream = startOfflinePinEntry(PinEntryParameters(
-      timeout: 60,
+      timeout: 120,
       pinRSAData: event.pinRSAData,
       allowedLength: [4, 8, 23, 13, 6],
     ));
+
     MPOSController.instance.showMessage("PIN:");
     try {
       await for (final event in pinEntryStream) {
@@ -112,14 +160,15 @@ class _PinInputViewState extends State<PinInputView> {
         if (event is PinFinishedEvent) {
           return emvCompletePin(event.pinResultSw);
         } else if (event is PinCancelledEvent) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("pinCancelled"),
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("PIN Cancelado"),
           ));
         } else if (event is PinTimeoutEvent) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("pinTimeout"),
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Tiempo de espera agotado en PIN"),
           ));
         } else if (event is PinInputChangedEvent) {
+          resetTimer();
           String bullets = "";
           for (int i = 0; i < event.inputLength; i++) {
             bullets += "*";

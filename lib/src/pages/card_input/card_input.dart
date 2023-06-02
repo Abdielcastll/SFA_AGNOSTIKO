@@ -38,9 +38,6 @@ class CardInputView extends StatefulWidget {
 class _CardInputViewState extends State<CardInputView> {
   TransactionArgs? transactionArgs;
 
-  Timer? countdownTimer;
-  Duration timerDuration = const Duration(seconds: 30);
-
   bool _isFallback = false;
 
   /// Flag para evitar el reingreso a la pantalla de PIN
@@ -54,49 +51,12 @@ class _CardInputViewState extends State<CardInputView> {
 
   @override
   void initState() {
-    // startTimer();
     super.initState();
-  }
-
-  void startTimer() {
-    countdownTimer =
-        Timer.periodic(const Duration(seconds: 1), (_) => setCountDown());
-  }
-
-  // Step 4
-  void stopTimer() {
-    setState(() => countdownTimer!.cancel());
-  }
-
-  // Step 5
-  void resetTimer() {
-    stopTimer();
-    setState(() => timerDuration = const Duration(seconds: 30));
-  }
-
-  // Step 6
-  void setCountDown() async {
-    const reduceSecondsBy = 1;
-    final seconds = timerDuration.inSeconds - reduceSecondsBy;
-    if (seconds < 0) {
-      setState(() {
-        countdownTimer!.cancel();
-      });
-      await closeCardReader();
-      showInfoDialog(context, 'Tiempo de espera agotado.',
-          onClose: () =>
-              _processEMVException('Timeout', 'Tiempo de espera agotado.'));
-    } else {
-      setState(() {
-        timerDuration = Duration(seconds: seconds);
-      });
-    }
   }
 
   @override
   void dispose() {
     closeCardReader();
-    stopTimer();
     super.dispose();
   }
 
@@ -193,7 +153,7 @@ class _CardInputViewState extends State<CardInputView> {
       Navigator.popUntil(context, (route) => route.isFirst == true);
     }
 
-    final cardReaderStream = openCardReader(cardTypes: cardTypes);
+    final cardReaderStream = openCardReader(cardTypes: cardTypes, timeout: 30);
 
     setState(() {
       _expectedCardTypes = cardTypes;
@@ -226,14 +186,22 @@ class _CardInputViewState extends State<CardInputView> {
       _startCardDetection(_supportedCardTypes
           .where((type) => type != CardType.Magnetic)
           .toList());
+    } on TimeoutException {
+      await closeCardReader();
+      transactionArgs?.timeout = true;
+      print('TimeoutException');
+      showInfoDialog(context, 'Tiempo de espera agotado.', onClose: () {
+        Navigator.pop(context);
+        _processEMVException('Timeout', 'Tiempo de espera agotado.');
+      });
     } catch (e, stackTrace) {
+      await closeCardReader();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("Error al detectar la tarjeta"),
       ));
       print("Error: $e");
       print(stackTrace);
-      Navigator.popUntil(context, (route) => route.isFirst == true);
-      Navigator.pop(context);
+      _startCardDetection(cardTypes);
     }
     print("****************CARD READER CLOSED*****************");
   }
@@ -301,13 +269,13 @@ class _CardInputViewState extends State<CardInputView> {
 
   void _processEMVException(dynamic e, String message) async {
     await cancelEmvTransaction();
+    print('Error EMV $e');
     if (!mounted) return; // si la pantalla no está activa cancelamos
     print("Error: $e");
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(message),
     ));
     MPOSController.instance.showHomeScreen();
-    Navigator.pop(context);
     transactionArgs?.pan ??=
         (await EmvModule.instance.getTagValue(0x57))?.toHexStr().split('d')[0];
     // en caso de error, nos movemos a la pantalla de cierre

@@ -9,6 +9,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/dialogs/circular_progress_dialog.dart';
+import 'package:pwa_sales2go_flutter/dialogs/confirm_dialog.dart';
 import 'package:pwa_sales2go_flutter/dialogs/info_dialog.dart';
 import 'package:pwa_sales2go_flutter/pharos/pharos.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
@@ -40,6 +41,7 @@ class EmvTransactionInfoView extends StatefulWidget {
 
 class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   bool flagPrint = true;
+  bool ticketPrinted = false;
   TransactionArgs? transactionArgs;
   InfoTags? infoTags;
   Map<int, Uint8List?>? firstGenerateTags;
@@ -57,6 +59,19 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     print(tag5F34?.toHexStr());
     print(tag5A?.toHexStr());
     print(tag57?.toHexStr().split('d')[0]);
+  }
+
+  showModalNoTicketPrinted() {
+    showConfirmDialog(context,
+        title: '¿Estas seguro?',
+        message:
+            'No has imprimido el comprobante. ¿Seguro que deseas continuar?',
+        textAccept: 'Si',
+        textCancel: 'No', onAccept: () {
+      onAccept();
+    }, onCancel: () {
+      Navigator.pop(context);
+    });
   }
 
   @override
@@ -196,6 +211,20 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                 ),
                 textAlign: TextAlign.center,
               ),
+              transactionArgs!.timeout || transactionArgs!.stan == null
+                  ? Text(
+                      "Timeout",
+                      style: TextStyle(
+                        color: this.transactionResult ==
+                                EmvTransactionResult.Approved
+                            ? Colors.green
+                            : Colors.red,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                      textAlign: TextAlign.center,
+                    )
+                  : const SizedBox(),
               Text(
                 transactionArgs!.isFallback ? 'Error de Chip' : '',
                 style: TextStyle(
@@ -271,72 +300,16 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                 subtitle: Text(_amountOtherString),
                 onTap: () {},
               ),
-              /* if (_kernelTypeStr != null)
-                ListTile(
-                  enableFeedback: true,
-                  title: const Text('Kernel Type'),
-                  subtitle: Text(_kernelTypeStr ?? ''),
-                  onTap: () {},
-                ),
-              ListTile(
-                enableFeedback: true,
-                title: const Text('PAN (5A)'),
-                subtitle:
-                    Text(infoTags?.cardNo?.toHexStr().toUpperCase() ?? '-'),
-                onTap: () {},
-              ),
-              ListTile(
-                enableFeedback: true,
-                title: const Text('AID (9F06)'),
-                subtitle: Text(infoTags?.aid?.toHexStr().toUpperCase() ?? '-'),
-                onTap: () {},
-              ),
-              ListTile(
-                enableFeedback: true,
-                title: const Text('AIP (82)'),
-                subtitle: Text(infoTags?.aip?.toHexStr().toUpperCase() ?? '-'),
-                onTap: _onTapAip,
-              ),
-              const Divider(),
-              ...firstGenerateTiles,
-              ...secondGenerateTiles,
-              ListTile(
-                enableFeedback: true,
-                title: Text(AppLocalizations.of(context)!.appliedCVM),
-                subtitle: Text(_getCvmTypeStr(infoTags?.cvmResults)),
-                onTap: () {},
-              ),
-              ListTile(
-                enableFeedback: true,
-                title: const Text('Terminal Capabilities (9F33)'),
-                subtitle: Text(
-                  infoTags?.terminalCapabilities?.toHexStr().toUpperCase() ??
-                      '-',
-                ),
-                onTap: _onTapTerminalCapabilities,
-              ),
-              ListTile(
-                enableFeedback: true,
-                title: const Text('CVM List (8E)'),
-                subtitle: Text(
-                  infoTags?.cvmList?.toHexStr().toUpperCase() ?? '-',
-                ),
-                onTap: () {},
-              ),
-              ListTile(
-                enableFeedback: true,
-                title: const Text('ATC (9F36)'),
-                subtitle: Text(infoTags?.atc?.toHexStr().toUpperCase() ?? '-'),
-                onTap: () {},
-              ), */
-
               if (!transactionArgs!.isFallback)
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       vertical: 4.0, horizontal: 16.0),
                   child: OutlinedButton(
-                      onPressed: () {
-                        printTicket();
+                      onPressed: () async {
+                        await printTicket();
+                        setState(() {
+                          ticketPrinted = true;
+                        });
                       },
                       style: TextButton.styleFrom(
                           foregroundColor: myTheme.colorScheme.primary,
@@ -351,36 +324,17 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                         ),
                       )),
                 ),
-              /* if (transactionArgs!.isFallback && transactionArgs!.stan != null)
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 4.0, horizontal: 16.0),
-                  child: OutlinedButton(
-                      onPressed: () {
-                        onVoidExecute(
-                            context,
-                            transactionArgs!.stan ?? 0,
-                            AppLocalizations.of(context)!.pleaseWait,
-                            'Reverso');
-                      },
-                      style: TextButton.styleFrom(
-                          foregroundColor: myTheme.colorScheme.primary,
-                          backgroundColor: Colors.blue.shade800),
-                      child: Text(
-                        'Realizar reverso'.toUpperCase(),
-                        style: const TextStyle(
-                          fontFamily: 'Poppins-regular',
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )),
-                ), */
               Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
                 child: OutlinedButton(
-                    onPressed: onAccept,
+                    onPressed: () {
+                      if (!ticketPrinted && !transactionArgs!.isFallback) {
+                        showModalNoTicketPrinted();
+                        return;
+                      }
+                      onAccept();
+                    },
                     style: TextButton.styleFrom(
                         foregroundColor: myTheme.colorScheme.primary,
                         backgroundColor: Colors.blue.shade800),
@@ -410,7 +364,6 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     final noRetail = (ModalRoute.of(context)?.settings.arguments! as List)[3];
 
     if (noRetail) {
-      Navigator.pop(context);
       Navigator.pop(context);
       return;
     }
@@ -534,7 +487,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     return null;
   }
 
-  void printTicket() async {
+  Future<void> printTicket() async {
     final emv = EmvModule.instance;
 
     List<PrinterObject> listOfTextLine = [];
@@ -551,9 +504,8 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
 
     final maxWidth = await getPaperWidth();
 
-    // final img = await bytesToUiImage(rgbaLogo, logo.width, logo.height);
-    final imgLogo =
-        PrinterImage(rgbaLogo, logo.width, logo.height, offsetX: maxWidth / 4);
+    final imgLogo = PrinterImage(rgbaLogo, logo.width, logo.height,
+        offsetX: (maxWidth / 2) - (logo.width / 2));
 
     // final logo = await assetsLogo.toPrinterImage(offsetX: maxWidth / 4);
 
@@ -642,7 +594,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     listOfTextLine.add(PrinterText(
         transactionResult == EmvTransactionResult.Approved
             ? 'PAGO APROBADO'
-            : 'PAGO RECHAZADO',
+            : transactionArgs!.timeout || transactionArgs!.stan == null
+                ? 'TIEMPO DE ESPERA AGOTADO'
+                : 'PAGO RECHAZADO',
         format: TextFormat(fontSize: 16, fontFamily: regularFont)));
     listOfTextLine.add(PrinterSplitText("Total:".toUpperCase(), _amountString,
         format: TextFormat(fontSize: 16, fontFamily: regularFont)));
@@ -689,8 +643,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
 
     listOfTextLine.add(PrinterText.emptyLine(16));
 
-    listOfTextLine.add(PrinterText('FIRMA:______________________________',
-        format: TextFormat(fontSize: 16, fontFamily: regularFont)));
+    if (!transactionArgs!.timeout && transactionArgs!.stan != null)
+      listOfTextLine.add(PrinterText('FIRMA:______________________________',
+          format: TextFormat(fontSize: 16, fontFamily: regularFont)));
 
     listOfTextLine.add(PrinterText.emptyLine(16));
 

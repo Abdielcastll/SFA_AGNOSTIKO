@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -11,7 +12,9 @@ void showCircularProgressDialog(BuildContext context, String message,
   if (Platform.isLinux) {
     enableAnimation = false;
   }
-
+  Timer? timer = Timer(Duration(seconds: 40), () {
+    Navigator.of(context).pop();
+  });
   showDialog(
     context: context,
     barrierDismissible: false,
@@ -25,7 +28,7 @@ void showCircularProgressDialog(BuildContext context, String message,
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (enableAnimation) CircularProgressIndicator(),
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 Flexible(child: Text(message)),
               ],
             ),
@@ -33,5 +36,9 @@ void showCircularProgressDialog(BuildContext context, String message,
         ),
       );
     },
-  );
+  ).then((value) {
+    timer?.cancel();
+    timer = null;
+  });
+  ;
 }

@@ -29,6 +29,7 @@ class TransactionArgs {
   int? stan;
   String? referenceNumber;
   String? currencyCode;
+  bool timeout = false;
 
   Stream<dynamic>? emvStream;
 
