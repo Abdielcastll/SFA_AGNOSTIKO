@@ -1598,38 +1598,41 @@ class SeePaymentsALertDialog extends StatelessWidget {
                                         !yaAnuladoConciliadoRefund)
                                       Column(
                                         children: [
-                                          // if (permitirCancelacion)
-                                          ElevatedButton.icon(
-                                            onPressed: () async {
-                                              final newPayments = await cancel(
-                                                  context,
-                                                  payment,
-                                                  AppLocalizations.of(context)!
-                                                      .pleaseWait,
-                                                  client,
-                                                  invoiceDocumentID,
-                                                  index);
-                                              if (newPayments == null) {
-                                                return;
-                                              }
-                                              setState(
-                                                () => invoicePayments =
-                                                    newPayments,
-                                              );
-                                            },
-                                            style: ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStateColor
-                                                        .resolveWith(
-                                              (states) => Colors.red,
-                                            )),
-                                            icon: Icon(
-                                              Icons.block_rounded,
-                                              size: 16,
+                                          if (permitirCancelacion)
+                                            ElevatedButton.icon(
+                                              onPressed: () async {
+                                                final newPayments =
+                                                    await cancel(
+                                                        context,
+                                                        payment,
+                                                        AppLocalizations.of(
+                                                                context)!
+                                                            .pleaseWait,
+                                                        client,
+                                                        invoiceDocumentID,
+                                                        index);
+                                                if (newPayments == null) {
+                                                  return;
+                                                }
+                                                setState(
+                                                  () => invoicePayments =
+                                                      newPayments,
+                                                );
+                                              },
+                                              style: ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStateColor
+                                                          .resolveWith(
+                                                (states) => Colors.red,
+                                              )),
+                                              icon: Icon(
+                                                Icons.block_rounded,
+                                                size: 16,
+                                              ),
+                                              label: Text('Cancelación',
+                                                  style:
+                                                      TextStyle(fontSize: 12)),
                                             ),
-                                            label: Text('Cancelación',
-                                                style: TextStyle(fontSize: 12)),
-                                          ),
                                           ElevatedButton.icon(
                                             onPressed: () async {
                                               refund(

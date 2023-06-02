@@ -265,7 +265,9 @@ class SplashScreenViewState extends State<SplashScreenView> {
     // cargamos la llave fija del entorno de prueba
     // esta llave está encriptada con un KEK de valor '33333333333333333333333333333333'
     // la llave en claro es 'A66AB26590D3186E8A4C5A40D6F4F15D'
-    await loadTestKEK();
+    /* ---------------
+    Carga de llaves en terminales de forma manual
+    await loadTestKEK();  ----- */
     await cryptoLoadIPEK(1, "FFFF7790169673800001".toHexBytes(),
         "b8b2fc9b033410594aed0b45f571bb04".toHexBytes(),
         kekIndex: 1);

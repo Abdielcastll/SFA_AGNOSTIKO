@@ -11,6 +11,9 @@ class DatabaseServiceStreams {
   var prissa = FirebaseFirestore.instance
       .collection('marcas')
       .doc('fekpFNxAR5U9PZko1XWq');
+  var aceites = FirebaseFirestore.instance
+      .collection('marcas')
+      .doc('bYsgyluivxaZQWLeMJqA');
   // Streams de productos
 
   // Stream de Productos completos
@@ -19,6 +22,7 @@ class DatabaseServiceStreams {
     return productsCollection
         // .orderBy('nombre')
         // .limit(200)
+        /* .where('marca', isEqualTo: aceites) */
         .snapshots()
         .map(productsListFromSnapshot);
   }
@@ -28,7 +32,7 @@ class DatabaseServiceStreams {
   Stream<List<ProductsWithPromotions>> get productsWithPromotions {
     return productsCollection
         .where('promocion', isNull: false)
-        // .where('marca', isEqualTo: prissa)
+        /* .where('marca', isEqualTo: aceites) */
         .snapshots()
         .map(productsWithPromotionListFromSnapshot);
   }
@@ -37,6 +41,7 @@ class DatabaseServiceStreams {
 
   Stream<List<Promotions>> get promotions {
     return promotionsCollection
+        .where('activo', isEqualTo: true)
         .where('fecha_vencimiento',
             isGreaterThanOrEqualTo: Timestamp.fromDate(DateTime.now()))
         .orderBy('fecha_vencimiento', descending: true)

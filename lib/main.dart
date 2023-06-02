@@ -142,12 +142,12 @@ class SfaAgnostiko extends StatelessWidget {
                       return StreamProvider<List<Products>?>.value(
                         value: productsLimit == 0
                             ? productsCollection
-                                // .where('marca', isEqualTo: prissa)
+                                // .where('marca', isEqualTo: aceites)
                                 .orderBy('codigo')
                                 .snapshots()
                                 .map(productsListFromSnapshot)
                             : productsCollection
-                                // .where('marca', isEqualTo: prissa)
+                                // .where('marca', isEqualTo: aceites)
                                 .orderBy('codigo')
                                 .limit(productsLimit)
                                 .snapshots()
@@ -174,7 +174,7 @@ class SfaAgnostiko extends StatelessWidget {
                               //'wrapper' for mobile to avoid checking terminal
                               // token, SplashScreenView.route to activate
                               // in terminals
-                              // 'wrapper',
+                              //'wrapper',
                               SplashScreenView.route,
                           routes: {
                             SplashScreenView.route: (BuildContext context) =>
