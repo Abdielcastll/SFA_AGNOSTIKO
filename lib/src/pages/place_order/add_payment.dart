@@ -114,7 +114,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                         SnackBar(
                           backgroundColor:
                               myTheme.colorScheme.onPrimaryContainer,
-                          duration: const Duration(seconds: 1),
+                          duration: const Duration(seconds: 3),
                           content: Column(
                             children: const [
                               Text(

@@ -1451,7 +1451,7 @@ checkIfInvoiceIsCompleted(
     print('remaining: $remaining');
     print('amount: $paidAmount ');
     print('total: ${total.toStringAsFixed(2)}');
-    if (total <= 0.0044) {
+    if (total <= 0.00) {
       print('Factura pagada completamente');
       Fluttertoast.showToast(
         msg: 'Factura pagada completamente',
