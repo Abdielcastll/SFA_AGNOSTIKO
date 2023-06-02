@@ -22,7 +22,7 @@ class DatabaseServiceStreams {
     return productsCollection
         // .orderBy('nombre')
         // .limit(200)
-        .where('marca', isEqualTo: aceites)
+        /* .where('marca', isEqualTo: aceites) */
         .snapshots()
         .map(productsListFromSnapshot);
   }
@@ -32,7 +32,7 @@ class DatabaseServiceStreams {
   Stream<List<ProductsWithPromotions>> get productsWithPromotions {
     return productsCollection
         .where('promocion', isNull: false)
-        .where('marca', isEqualTo: aceites)
+        /* .where('marca', isEqualTo: aceites) */
         .snapshots()
         .map(productsWithPromotionListFromSnapshot);
   }
