@@ -68,6 +68,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
             'No has imprimido el comprobante. ¿Seguro que deseas continuar?',
         textAccept: 'Si',
         textCancel: 'No', onAccept: () {
+      Navigator.pop(context);
       onAccept();
     }, onCancel: () {
       Navigator.pop(context);
@@ -364,6 +365,8 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     final noRetail = (ModalRoute.of(context)?.settings.arguments! as List)[3];
 
     if (noRetail) {
+      Navigator.pop(context);
+      Navigator.pop(context);
       Navigator.pop(context);
       return;
     }

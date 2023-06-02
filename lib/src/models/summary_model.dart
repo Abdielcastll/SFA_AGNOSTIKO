@@ -17,7 +17,14 @@ class CategorieSummary {
 }
 
 CategorieSummary categorieSummaryFromSnapshot(snapshot) {
-  return CategorieSummary(snapshot.get('nombres'));
+  print('CATEGORIAS');
+  var res = (snapshot.get('nombres') as Map<String, dynamic>);
+
+  res.removeWhere((key, value) =>
+      !value.toLowerCase().contains('aceite') &&
+      !value.toLowerCase().contains('manteca'));
+  print(res);
+  return CategorieSummary(res);
 }
 
 // Get del provider de resumen de disenos

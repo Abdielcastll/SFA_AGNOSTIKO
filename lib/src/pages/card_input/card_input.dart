@@ -453,6 +453,7 @@ class _CardInputViewState extends State<CardInputView> {
 
     final arguments = (ModalRoute.of(context)?.settings.arguments! as List);
     Navigator.pushReplacementNamed(context, EmvTransactionInfoView.route,
+        // Navigator.pushReplacementNamed(context, EmvTransactionInfoView.route,
         arguments: [
           transactionArgs,
           if (arguments.length >= 2) arguments[1] else null,
