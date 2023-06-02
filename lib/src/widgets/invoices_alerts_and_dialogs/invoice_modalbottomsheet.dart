@@ -457,6 +457,11 @@ Future<dynamic> showDialogForRegisterPayment(
       print('remainingConverted: $remainingConverted');
       print('remainingformatted: $remainingformatted');
 
+      var payedUp = (Decimal.parse(totalConverted.toString()) -
+          Decimal.parse(remainingConverted.toString()));
+
+      var payedUpformatted = formatDecimalPriceByRegion(price: payedUp);
+
       final List<String> items = [
         'Tarjeta de Debito',
         'Tarjeta de Credito',
@@ -1218,6 +1223,38 @@ Future<dynamic> showDialogForRegisterPayment(
                                                 .colorScheme.onPrimaryContainer,
                                             fontSize: 10,
                                             fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.fromLTRB(
+                                      15,
+                                      0,
+                                      15,
+                                      0,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Monto pagado: ',
+                                          style: TextStyle(
+                                            fontFamily: 'Poppins-regular',
+                                            color: myTheme.colorScheme.primary,
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                        Text(
+                                          // 'total',
+                                          '$coinSymbol $payedUpformatted',
+                                          style: TextStyle(
+                                            fontFamily: 'Poppins-regular',
+                                            color: myTheme
+                                                .colorScheme.onPrimaryContainer,
+                                            fontSize: 10,
                                           ),
                                         ),
                                       ],
