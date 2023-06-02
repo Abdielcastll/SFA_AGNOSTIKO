@@ -946,19 +946,21 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                               ),
                                             ),
                                             onPressed: () {
-                                              // Navigator.push(
-                                              //     context,
-                                              //     MaterialPageRoute(
-                                              //       builder: (BuildContext context) =>
-                                              //           NewBardcodeScanner(
-                                              //         clientPriceList:
-                                              //             clientPriceList,
-                                              //         products: products,
-                                              //       ),
-                                              //     ));
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (BuildContext
+                                                            context) =>
+                                                        NewBardcodeScanner(
+                                                      clientPriceList:
+                                                          clientPriceList,
+                                                      products: products,
+                                                    ),
+                                                  ));
 
-                                              // addProductFromBarcodeResult(
-                                              //     scanResult.toString(), products);
+                                              addProductFromBarcodeResult(
+                                                  scanResult.toString(),
+                                                  products);
                                             },
                                             child: const Icon(
                                               FontAwesome.barcode,

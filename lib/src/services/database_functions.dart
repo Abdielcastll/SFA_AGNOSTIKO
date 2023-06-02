@@ -1444,11 +1444,13 @@ Future<List> cancelPayment(
 checkIfInvoiceIsCompleted(
     {double? remaining, double? paidAmount, client, invoiceDocumentID}) {
   try {
-    double total = remaining! - paidAmount!;
+    double total = double.parse((Decimal.parse(remaining!.toString()) -
+            Decimal.parse(paidAmount!.toString()))
+        .toString());
     print('Verificando si lo que faltaba - lo pagado es igual a 0');
     print('remaining: $remaining');
     print('amount: $paidAmount ');
-    print('total: ${total.toStringAsFixed(2)}');
+    print('total: $total');
     if (total <= 0) {
       print('Factura pagada completamente');
       Fluttertoast.showToast(

@@ -82,8 +82,9 @@ void modalBottomSheetForInvoices(
   print('sumOfValidPayments: $sumOfValidPayments');
   print('sumOfApprovedPayments: $sumOfApprovedPayments');
 
-  double remaining =
-      double.parse((invoiceTotal - sumOfValidPayments).toStringAsFixed(4));
+  var remaining = double.parse((Decimal.parse(invoiceTotal.toString()) -
+          Decimal.parse(sumOfValidPayments.toString()))
+      .toString());
 
   showModalBottomSheet(
     elevation: 0,
@@ -128,13 +129,12 @@ void modalBottomSheetForInvoices(
             final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
             final coinCode = Provider.of<Coin?>(context)?.code ?? '';
             final fieldText = TextEditingController();
-            double paidAmount = priceMultipliedByItsExchangeRatio(
-                productPrice: remaining,
-                coinDecimals: coinDecimals,
-                coinExchangeRatio: coinExchangeRatio);
+            var paidAmount = double.parse(priceMultipliedByItsExchangeRatio2(
+                    productPrice: remaining,
+                    coinDecimals: coinDecimals,
+                    coinExchangeRatio: coinExchangeRatio)
+                .toString());
             print('remaining: $remaining');
-            print(
-                'Remaining converted: ${priceMultipliedByItsExchangeRatio(productPrice: remaining, coinDecimals: coinDecimals, coinExchangeRatio: coinExchangeRatio)}');
             print('PaidAmount inicial: $paidAmount');
 
             double moneyRecievedForRegisterMoney = 0;
@@ -464,8 +464,6 @@ Future<dynamic> showDialogForRegisterPayment(
         'Deposito',
         'Transferencia',
         'Transf-internacional',
-        // 'Criptomoneda',
-        // 'Nota de credito',
       ];
       List<String> itemsCoin = [
         'USD',
@@ -745,7 +743,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                                                 .round() /
                                                             Decimal.parse(
                                                                 '100'))
-                                                        .toDecimal()
+                                                        // .toDecimal()
+                                                        .toDouble()
                                                         .toString());
                                               }
                                             });
@@ -759,11 +758,18 @@ Future<dynamic> showDialogForRegisterPayment(
                                                 change = moneyRecievedForRegisterMoney <
                                                         paidAmount!
                                                     ? 0
-                                                    : double.parse(
-                                                        (moneyRecievedForRegisterMoney -
-                                                                paidAmount!)
-                                                            .toStringAsFixed(
-                                                                2));
+                                                    : double.parse((((Decimal.parse(moneyRecievedForRegisterMoney
+                                                                            .toString()) -
+                                                                        Decimal.parse(paidAmount!
+                                                                            .toString())) *
+                                                                    Decimal.parse(
+                                                                        '100'))
+                                                                .round() /
+                                                            Decimal.parse(
+                                                                '100'))
+                                                        // .toDecimal()
+                                                        .toDouble()
+                                                        .toString());
                                               }
                                             });
                                             print(
@@ -838,7 +844,9 @@ Future<dynamic> showDialogForRegisterPayment(
                                                   ? selectedValueA!
                                                           .contains('Tarjeta')
                                                       ? (paidAmount ?? 0) >
-                                                              balanceConverted
+                                                              double.parse(
+                                                                  balanceConverted
+                                                                      .toString())
                                                           ? Colors.red
                                                           : Colors.transparent
                                                       : Colors.transparent
@@ -924,10 +932,22 @@ Future<dynamic> showDialogForRegisterPayment(
                                       change = moneyRecievedForRegisterMoney <
                                               paidAmount!
                                           ? 0.00001
-                                          : double.parse(
-                                              (moneyRecievedForRegisterMoney -
-                                                      paidAmount!)
-                                                  .toStringAsFixed(2));
+                                          : double.parse((((Decimal.parse(
+                                                                  moneyRecievedForRegisterMoney
+                                                                      .toString()) -
+                                                              Decimal.parse(
+                                                                  paidAmount!
+                                                                      .toString())) *
+                                                          Decimal.parse('100'))
+                                                      .round() /
+                                                  Decimal.parse('100'))
+                                              // .toDecimal()
+                                              .toDouble()
+                                              .toString());
+                                      // : double.parse(
+                                      //     (moneyRecievedForRegisterMoney -
+                                      //             paidAmount!)
+                                      //         .toStringAsFixed(2));
                                     }
                                   });
                                   print(
@@ -940,10 +960,22 @@ Future<dynamic> showDialogForRegisterPayment(
                                       change = moneyRecievedForRegisterMoney <
                                               paidAmount!
                                           ? 0.00001
-                                          : double.parse(
-                                              (moneyRecievedForRegisterMoney -
-                                                      paidAmount!)
-                                                  .toStringAsFixed(2));
+                                          : double.parse((((Decimal.parse(
+                                                                  moneyRecievedForRegisterMoney
+                                                                      .toString()) -
+                                                              Decimal.parse(
+                                                                  paidAmount!
+                                                                      .toString())) *
+                                                          Decimal.parse('100'))
+                                                      .round() /
+                                                  Decimal.parse('100'))
+                                              // .toDecimal()
+                                              .toDouble()
+                                              .toString());
+                                      // : double.parse(
+                                      //     (moneyRecievedForRegisterMoney -
+                                      //             paidAmount!)
+                                      //         .toStringAsFixed(2));
                                     }
                                   });
                                   print(
@@ -1264,6 +1296,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                       0,
                                       0,
                                     ),
+
+                                    ///
                                     child: identifyPaymentMethod(
                                       coinName: coinName,
                                       coinDecimals: coinDecimals,
@@ -1282,21 +1316,24 @@ Future<dynamic> showDialogForRegisterPayment(
                                       date: today,
                                       context: context,
                                       remaining: remaining!,
-                                      remainingConverted: remainingConverted,
+                                      remainingConverted: double.parse(
+                                          remainingConverted.toString()),
                                       selectedCoin: selectedCoin,
                                       noRetail: true,
                                       paymentBody: AddPaymentBodyAtt(
-                                          client: client,
-                                          currency: selectedCoin,
-                                          discount: 0,
-                                          discountPercentage: 0,
-                                          invoiceDocumentID: invoiceDocumentID,
-                                          invoiceNumber: invoiceNumber,
-                                          percentageTax: percentageTax,
-                                          remaining: remaining,
-                                          subTotal: subTotal,
-                                          currencyExchange: coinExchangeRatio!,
-                                          tax: tax),
+                                        client: client,
+                                        currency: selectedCoin,
+                                        discount: 0,
+                                        discountPercentage: 0,
+                                        invoiceDocumentID: invoiceDocumentID,
+                                        invoiceNumber: invoiceNumber,
+                                        percentageTax: percentageTax,
+                                        remaining: remaining,
+                                        subTotal:
+                                            double.parse(subTotal.toString()),
+                                        currencyExchange: coinExchangeRatio!,
+                                        tax: tax,
+                                      ),
                                     ),
                                   )
                                 ],

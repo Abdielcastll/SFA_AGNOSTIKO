@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:decimal/decimal.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -2507,7 +2508,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                             ),
                                             TextFieldForCard(
                                               message:
-                                                  '$coinSymbol ${priceProduct.toStringAsFixed(2)}',
+                                                  '$coinSymbol ${formatDecimalPriceByRegion(price: Decimal.parse(priceProduct.toString()))}',
                                             ),
                                             TextFieldForCard(
                                               message: productBrand,

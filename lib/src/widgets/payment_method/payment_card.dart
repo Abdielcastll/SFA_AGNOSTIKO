@@ -101,8 +101,16 @@ paymentCard(
     currentCoin,
     coinExchangeRatio,
   );
-  final invoiceData = InvoiceData(client, invoiceDocumentID, currentCoin,
-      amount, totalOfTheOrder, currentCoin, date, remaining, coinExchangeRatio);
+  final invoiceData = InvoiceData(
+      client,
+      invoiceDocumentID,
+      currentCoin,
+      amount,
+      ((totalOfTheOrder * 100).round() / 100),
+      currentCoin,
+      date,
+      remaining,
+      coinExchangeRatio);
   print(invoiceData.currentCoin);
   print('GET COIN FROM PAYMENTCARD');
 

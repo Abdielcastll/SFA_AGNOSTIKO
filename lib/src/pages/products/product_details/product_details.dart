@@ -2,6 +2,7 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -162,13 +163,17 @@ class ProductDetailsBody extends StatelessWidget {
     // final priceProduct = (double.parse(price ?? '0.0') *
     //         double.parse(coinExchangeRatio.toString()))
     //     .toStringAsFixed(coinDecimals);
-    final double priceProduct = priceMultipliedByItsExchangeRatio(
-        productPrice: price,
-        coinDecimals: coinDecimals,
-        coinExchangeRatio: coinExchangeRatio);
+    final double priceProduct = double.parse(
+        (priceMultipliedByItsExchangeRatio2(
+                productPrice: price,
+                coinDecimals: coinDecimals,
+                coinExchangeRatio: coinExchangeRatio))
+            .toString());
     print('price: $price');
     print('priceProduct: $priceProduct');
-    print('priceProductFixedDecimals: ${priceProduct.toStringAsFixed(2)}');
+
+    var formattedPrice = formatDecimalPriceByRegion(
+        price: Decimal.parse(priceProduct.toString()));
 
     return coinName.toString().isEmpty
         ? Center(
@@ -509,7 +514,7 @@ class ProductDetailsBody extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                '$coinSymbol ${priceProduct.toStringAsFixed(2)}',
+                                '$coinSymbol $formattedPrice',
                                 style: TextStyle(
                                   color: myTheme.colorScheme.primary,
                                   fontFamily: 'Poppins-regular',

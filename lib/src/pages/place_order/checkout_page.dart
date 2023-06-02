@@ -142,7 +142,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                     Decimal.parse(
                         widget.client?.masterDiscount.toString() ?? '0')) /
                 Decimal.parse('100'))
-            .toDecimal();
+            // .toDecimal();
+            .toDouble();
     print('subTotalWithMasterDiscountRaw: $subTotalWithMasterDiscountRaw');
 
     var subTotalWithMasterDiscountRounded = Decimal.parse(
@@ -150,7 +151,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         Decimal.parse('100'))
                     .round() /
                 Decimal.parse('100'))
-            .toDecimal()
+            // .toDecimal()
+            .toDouble()
             .toString());
     print(
         'subTotalWithMasterDiscountRounded: $subTotalWithMasterDiscountRounded');
@@ -175,14 +177,16 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         subTotalWithMasterDiscountRounded.toString())) *
                 Decimal.parse(discountByInput.toString())) /
             Decimal.parse('100'))
-        .toDecimal();
+        // .toDecimal();
+        .toDouble();
     print('discountAppliedRaw: $discountAppliedRaw');
 
     var discountAppliedRounded = Decimal.parse(
         ((Decimal.parse(discountAppliedRaw.toString()) * Decimal.parse('100'))
                     .round() /
                 Decimal.parse('100'))
-            .toDecimal()
+            // .toDecimal()
+            .toDouble()
             .toString());
     print('discountAppliedRounded: $discountAppliedRounded');
 
@@ -209,14 +213,16 @@ class _CheckoutBodyState extends State<CheckoutBody> {
     var taxRaw =
         ((Decimal.parse(accumulated.toString()) * Decimal.parse('16')) /
                 Decimal.parse('100'))
-            .toDecimal();
+            // .toDecimal();
+            .toDouble();
 
     print('taxRaw: $taxRaw');
 
     var taxRounded = Decimal.parse(
         ((Decimal.parse(taxRaw.toString()) * Decimal.parse('100')).round() /
                 Decimal.parse('100'))
-            .toDecimal()
+            // .toDecimal()
+            .toDouble()
             .toString());
 
     print('taxRounded: $taxRounded');

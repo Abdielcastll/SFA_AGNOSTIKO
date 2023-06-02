@@ -102,8 +102,8 @@ double priceDividedbyItsExchangeRatio({double? amount, double? exchange}) {
   double convertedAmount = correctAmount / exchange!;
   // String convertedAmountFixedDecimals =
   //     convertedAmount.toStringAsFixed(coinDecimals);
-  // double output = double.parse(convertedAmountFixedDecimals);
-  return convertedAmount;
+  double output = double.parse(convertedAmount.toStringAsFixed(4));
+  return output;
 }
 
 // TESTING 2
