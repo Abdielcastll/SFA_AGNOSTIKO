@@ -1,3 +1,6 @@
+import 'package:decimal/decimal.dart';
+import 'package:decimal/intl.dart';
+import 'package:intl/intl.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 
 double exchangeAmount({String? coin, double? amount, double? exchange}) {
@@ -99,6 +102,26 @@ double priceDividedbyItsExchangeRatio({double? amount, double? exchange}) {
   double convertedAmount = correctAmount / exchange!;
   // String convertedAmountFixedDecimals =
   //     convertedAmount.toStringAsFixed(coinDecimals);
-  // double output = double.parse(convertedAmountFixedDecimals);
-  return convertedAmount;
+  double output = double.parse(convertedAmount.toStringAsFixed(4));
+  return output;
+}
+
+// TESTING 2
+
+priceMultipliedByItsExchangeRatio2(
+    {productPrice, coinExchangeRatio, coinDecimals}) {
+  var convertedAmount = Decimal.parse(productPrice.toString()) *
+      Decimal.parse(coinExchangeRatio.toString());
+  var convertedAmountFixedDecimals =
+      convertedAmount.toStringAsFixed(coinDecimals);
+  var output = Decimal.parse(convertedAmountFixedDecimals);
+  // return convertedAmountFixedDecimals;
+  return output;
+}
+
+formatDecimalPriceByRegion({price}) {
+  var formatter =
+      NumberFormat.decimalPatternDigits(locale: 'es-mx', decimalDigits: 2);
+  var formatted = formatter.format(DecimalIntl(price));
+  return formatted;
 }

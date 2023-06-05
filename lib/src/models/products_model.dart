@@ -97,6 +97,7 @@ class ProductsByDate {
 }
 
 List<Products> productsListFromSnapshot(QuerySnapshot snapshot) {
+  print('FETCHING PRODUCTS');
   return snapshot.docs.map((doc) {
     return Products(
       quality: doc.data().toString().contains('calidad')

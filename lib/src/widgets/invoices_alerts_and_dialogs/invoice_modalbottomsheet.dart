@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:decimal/decimal.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -82,8 +83,9 @@ void modalBottomSheetForInvoices(
   print('sumOfValidPayments: $sumOfValidPayments');
   print('sumOfApprovedPayments: $sumOfApprovedPayments');
 
-  double remaining =
-      double.parse((invoiceTotal - sumOfValidPayments).toStringAsFixed(4));
+  var remaining = double.parse((Decimal.parse(invoiceTotal.toString()) -
+          Decimal.parse(sumOfValidPayments.toString()))
+      .toString());
 
   showModalBottomSheet(
     elevation: 0,
@@ -128,13 +130,12 @@ void modalBottomSheetForInvoices(
             final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
             final coinCode = Provider.of<Coin?>(context)?.code ?? '';
             final fieldText = TextEditingController();
-            double paidAmount = priceMultipliedByItsExchangeRatio(
-                productPrice: remaining,
-                coinDecimals: coinDecimals,
-                coinExchangeRatio: coinExchangeRatio);
+            var paidAmount = double.parse(priceMultipliedByItsExchangeRatio2(
+                    productPrice: remaining,
+                    coinDecimals: coinDecimals,
+                    coinExchangeRatio: coinExchangeRatio)
+                .toString());
             print('remaining: $remaining');
-            print(
-                'Remaining converted: ${priceMultipliedByItsExchangeRatio(productPrice: remaining, coinDecimals: coinDecimals, coinExchangeRatio: coinExchangeRatio)}');
             print('PaidAmount inicial: $paidAmount');
 
             double moneyRecievedForRegisterMoney = 0;
@@ -398,42 +399,69 @@ Future<dynamic> showDialogForRegisterPayment(
   return showDialog(
     context: context,
     builder: (BuildContext context) {
-      double subTotalConverted = priceMultipliedByItsExchangeRatio(
+      var subTotalConverted = priceMultipliedByItsExchangeRatio2(
           coinDecimals: coinDecimals,
           coinExchangeRatio: coinExchangeRatio,
           productPrice: subTotal);
+      var subTotalformatted =
+          formatDecimalPriceByRegion(price: subTotalConverted);
       print('subtotal: $subTotal');
       print('subTotalConverted: $subTotalConverted');
-      double discountMasterConverted = priceMultipliedByItsExchangeRatio(
+      print('subTotalformatted: $subTotalformatted');
+
+      var discountMasterConverted = priceMultipliedByItsExchangeRatio2(
           coinDecimals: coinDecimals,
           coinExchangeRatio: coinExchangeRatio,
           productPrice: discount);
+      var discountMasterformatted =
+          formatDecimalPriceByRegion(price: discountMasterConverted);
       print('discountMaster: $discount');
       print('discountMasterConverted: $discountMasterConverted');
-      double taxConverted = priceMultipliedByItsExchangeRatio(
+      print('discountMasterformatted: $discountMasterformatted');
+
+      var taxConverted = priceMultipliedByItsExchangeRatio2(
           coinDecimals: coinDecimals,
           coinExchangeRatio: coinExchangeRatio,
           productPrice: tax);
+      var taxformatted = formatDecimalPriceByRegion(price: taxConverted);
       print('tax: $tax');
       print('taxConverted: $taxConverted');
-      double totalConverted = priceMultipliedByItsExchangeRatio(
+      print('taxformatted: $taxformatted');
+
+      var totalConverted = priceMultipliedByItsExchangeRatio2(
           coinDecimals: coinDecimals,
           coinExchangeRatio: coinExchangeRatio,
           productPrice: invoiceTotal);
+      var totalformatted = formatDecimalPriceByRegion(price: totalConverted);
       print('total: $invoiceTotal');
       print('totalConverted: $totalConverted');
-      double balanceConverted = priceMultipliedByItsExchangeRatio(
+      print('totalformatted: $totalformatted');
+
+      var balanceConverted = priceMultipliedByItsExchangeRatio2(
           coinDecimals: coinDecimals,
           coinExchangeRatio: coinExchangeRatio,
           productPrice: remaining);
+      var balanceformatted =
+          formatDecimalPriceByRegion(price: balanceConverted);
       print('balance: $remaining');
       print('balanceConverted: $balanceConverted');
-      double remainingConverted = priceMultipliedByItsExchangeRatio(
+      print('balanceformatted: $balanceformatted');
+
+      var remainingConverted = priceMultipliedByItsExchangeRatio2(
         productPrice: remaining,
         coinDecimals: coinDecimals,
         coinExchangeRatio: coinExchangeRatio,
       );
+      var remainingformatted =
+          formatDecimalPriceByRegion(price: remainingConverted);
       print('remainingConverted: $remainingConverted');
+      print('remainingformatted: $remainingformatted');
+
+      var payedUp = (Decimal.parse(totalConverted.toString()) -
+          Decimal.parse(remainingConverted.toString()));
+
+      var payedUpformatted = formatDecimalPriceByRegion(price: payedUp);
+
       final List<String> items = [
         'Tarjeta de Debito',
         'Tarjeta de Credito',
@@ -442,8 +470,6 @@ Future<dynamic> showDialogForRegisterPayment(
         'Deposito',
         'Transferencia',
         'Transf-internacional',
-        // 'Criptomoneda',
-        // 'Nota de credito',
       ];
       List<String> itemsCoin = [
         'USD',
@@ -714,11 +740,18 @@ Future<dynamic> showDialogForRegisterPayment(
                                                 change = moneyRecievedForRegisterMoney <
                                                         paidAmount!
                                                     ? 0
-                                                    : double.parse(
-                                                        (moneyRecievedForRegisterMoney -
-                                                                paidAmount!)
-                                                            .toStringAsFixed(
-                                                                2));
+                                                    : double.parse((((Decimal.parse(moneyRecievedForRegisterMoney
+                                                                            .toString()) -
+                                                                        Decimal.parse(paidAmount!
+                                                                            .toString())) *
+                                                                    Decimal.parse(
+                                                                        '100'))
+                                                                .round() /
+                                                            Decimal.parse(
+                                                                '100'))
+                                                        // .toDecimal()
+                                                        .toDouble()
+                                                        .toString());
                                               }
                                             });
                                             print(
@@ -731,11 +764,18 @@ Future<dynamic> showDialogForRegisterPayment(
                                                 change = moneyRecievedForRegisterMoney <
                                                         paidAmount!
                                                     ? 0
-                                                    : double.parse(
-                                                        (moneyRecievedForRegisterMoney -
-                                                                paidAmount!)
-                                                            .toStringAsFixed(
-                                                                2));
+                                                    : double.parse((((Decimal.parse(moneyRecievedForRegisterMoney
+                                                                            .toString()) -
+                                                                        Decimal.parse(paidAmount!
+                                                                            .toString())) *
+                                                                    Decimal.parse(
+                                                                        '100'))
+                                                                .round() /
+                                                            Decimal.parse(
+                                                                '100'))
+                                                        // .toDecimal()
+                                                        .toDouble()
+                                                        .toString());
                                               }
                                             });
                                             print(
@@ -794,7 +834,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                             0,
                                           ),
                                           hintText:
-                                              '${paidAmount?.toStringAsFixed(2)}',
+                                              // 'PAIDAMOUNT',
+                                              '${(formatDecimalPriceByRegion(price: Decimal.parse(paidAmount.toString())))}',
                                           hintStyle: TextStyle(
                                             height: 1.85,
                                             fontFamily: 'Poppins-regular',
@@ -809,7 +850,9 @@ Future<dynamic> showDialogForRegisterPayment(
                                                   ? selectedValueA!
                                                           .contains('Tarjeta')
                                                       ? (paidAmount ?? 0) >
-                                                              balanceConverted
+                                                              double.parse(
+                                                                  balanceConverted
+                                                                      .toString())
                                                           ? Colors.red
                                                           : Colors.transparent
                                                       : Colors.transparent
@@ -828,7 +871,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                       )),
                                   selectedValueA != null
                                       ? selectedValueA!.contains('Tarjeta')
-                                          ? (paidAmount ?? 0) > balanceConverted
+                                          ? (paidAmount ?? 0) >
+                                                  balanceConverted.toDouble()
                                               ? Text(
                                                   'El pago es mayor al saldo de la factura.',
                                                   style: TextStyle(
@@ -894,10 +938,22 @@ Future<dynamic> showDialogForRegisterPayment(
                                       change = moneyRecievedForRegisterMoney <
                                               paidAmount!
                                           ? 0.00001
-                                          : double.parse(
-                                              (moneyRecievedForRegisterMoney -
-                                                      paidAmount!)
-                                                  .toStringAsFixed(2));
+                                          : double.parse((((Decimal.parse(
+                                                                  moneyRecievedForRegisterMoney
+                                                                      .toString()) -
+                                                              Decimal.parse(
+                                                                  paidAmount!
+                                                                      .toString())) *
+                                                          Decimal.parse('100'))
+                                                      .round() /
+                                                  Decimal.parse('100'))
+                                              // .toDecimal()
+                                              .toDouble()
+                                              .toString());
+                                      // : double.parse(
+                                      //     (moneyRecievedForRegisterMoney -
+                                      //             paidAmount!)
+                                      //         .toStringAsFixed(2));
                                     }
                                   });
                                   print(
@@ -910,10 +966,22 @@ Future<dynamic> showDialogForRegisterPayment(
                                       change = moneyRecievedForRegisterMoney <
                                               paidAmount!
                                           ? 0.00001
-                                          : double.parse(
-                                              (moneyRecievedForRegisterMoney -
-                                                      paidAmount!)
-                                                  .toStringAsFixed(2));
+                                          : double.parse((((Decimal.parse(
+                                                                  moneyRecievedForRegisterMoney
+                                                                      .toString()) -
+                                                              Decimal.parse(
+                                                                  paidAmount!
+                                                                      .toString())) *
+                                                          Decimal.parse('100'))
+                                                      .round() /
+                                                  Decimal.parse('100'))
+                                              // .toDecimal()
+                                              .toDouble()
+                                              .toString());
+                                      // : double.parse(
+                                      //     (moneyRecievedForRegisterMoney -
+                                      //             paidAmount!)
+                                      //         .toStringAsFixed(2));
                                     }
                                   });
                                   print(
@@ -1054,7 +1122,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                           ),
                                         ),
                                         Text(
-                                          '$coinSymbol ${subTotalConverted.toStringAsFixed(2)}',
+                                          // 'Subtotal',
+                                          '$coinSymbol $subTotalformatted',
                                           style: TextStyle(
                                             fontFamily: 'Poppins-regular',
                                             color: myTheme.colorScheme.primary,
@@ -1084,7 +1153,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                           ),
                                         ),
                                         Text(
-                                          ' - $coinSymbol ${discountMasterConverted.toStringAsFixed(2)}',
+                                          // 'Descuento maestro',
+                                          ' - $coinSymbol $discountMasterformatted',
                                           style: TextStyle(
                                             fontFamily: 'Poppins-regular',
                                             color: myTheme.colorScheme.primary,
@@ -1114,7 +1184,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                           ),
                                         ),
                                         Text(
-                                          '$coinSymbol ${taxConverted.toStringAsFixed(2)}',
+                                          // 'Taxes',
+                                          '$coinSymbol $taxformatted',
                                           style: TextStyle(
                                             fontFamily: 'Poppins-regular',
                                             color: myTheme.colorScheme.primary,
@@ -1144,13 +1215,46 @@ Future<dynamic> showDialogForRegisterPayment(
                                           ),
                                         ),
                                         Text(
-                                          '$coinSymbol ${totalConverted.toStringAsFixed(2)}',
+                                          // 'total',
+                                          '$coinSymbol $totalformatted',
                                           style: TextStyle(
                                             fontFamily: 'Poppins-regular',
                                             color: myTheme
                                                 .colorScheme.onPrimaryContainer,
                                             fontSize: 10,
                                             fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.fromLTRB(
+                                      15,
+                                      0,
+                                      15,
+                                      0,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Monto pagado: ',
+                                          style: TextStyle(
+                                            fontFamily: 'Poppins-regular',
+                                            color: myTheme.colorScheme.primary,
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                        Text(
+                                          // 'total',
+                                          '$coinSymbol $payedUpformatted',
+                                          style: TextStyle(
+                                            fontFamily: 'Poppins-regular',
+                                            color: myTheme
+                                                .colorScheme.onPrimaryContainer,
+                                            fontSize: 10,
                                           ),
                                         ),
                                       ],
@@ -1174,7 +1278,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                           ),
                                         ),
                                         Text(
-                                          '$coinSymbol ${balanceConverted.toStringAsFixed(2)}',
+                                          // 'balance',
+                                          '$coinSymbol $balanceformatted',
                                           style: TextStyle(
                                             fontFamily: 'Poppins-regular',
                                             color: myTheme
@@ -1209,7 +1314,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                                 ),
                                               ),
                                               Text(
-                                                '$coinSymbol ${change.toStringAsFixed(2)}',
+                                                // 'Cambio',
+                                                '$coinSymbol ${formatDecimalPriceByRegion(price: Decimal.parse(change.toString()))}',
                                                 style: TextStyle(
                                                   fontFamily: 'Poppins-regular',
                                                   color: Colors.green.shade600,
@@ -1228,6 +1334,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                       0,
                                       0,
                                     ),
+
+                                    ///
                                     child: identifyPaymentMethod(
                                       coinName: coinName,
                                       coinDecimals: coinDecimals,
@@ -1246,21 +1354,24 @@ Future<dynamic> showDialogForRegisterPayment(
                                       date: today,
                                       context: context,
                                       remaining: remaining!,
-                                      remainingConverted: remainingConverted,
+                                      remainingConverted: double.parse(
+                                          remainingConverted.toString()),
                                       selectedCoin: selectedCoin,
                                       noRetail: true,
                                       paymentBody: AddPaymentBodyAtt(
-                                          client: client,
-                                          currency: selectedCoin,
-                                          discount: 0,
-                                          discountPercentage: 0,
-                                          invoiceDocumentID: invoiceDocumentID,
-                                          invoiceNumber: invoiceNumber,
-                                          percentageTax: percentageTax,
-                                          remaining: remaining,
-                                          subTotal: subTotal,
-                                          currencyExchange: coinExchangeRatio!,
-                                          tax: tax),
+                                        client: client,
+                                        currency: selectedCoin,
+                                        discount: 0,
+                                        discountPercentage: 0,
+                                        invoiceDocumentID: invoiceDocumentID,
+                                        invoiceNumber: invoiceNumber,
+                                        percentageTax: percentageTax,
+                                        remaining: remaining,
+                                        subTotal:
+                                            double.parse(subTotal.toString()),
+                                        currencyExchange: coinExchangeRatio!,
+                                        tax: tax,
+                                      ),
                                     ),
                                   )
                                 ],
@@ -1316,29 +1427,38 @@ class SeePaymentsALertDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: StatefulBuilder(builder: ((context, setState) {
-        double remainingConverted = priceMultipliedByItsExchangeRatio(
+        var remainingConverted = priceMultipliedByItsExchangeRatio2(
           productPrice: remaining,
           coinDecimals: coinDecimals,
           coinExchangeRatio: coinExchangeRatio,
         );
+        var remainingFormatted =
+            formatDecimalPriceByRegion(price: remainingConverted);
         print('remainingConverted: $remainingConverted');
+        print('remainingFormatted: $remainingFormatted');
 
-        double sumOfApprovedPaymentsConverted =
-            priceMultipliedByItsExchangeRatio(
+        var sumOfApprovedPaymentsConverted = priceMultipliedByItsExchangeRatio2(
           productPrice: sumOfApprovedPayments,
           coinDecimals: coinDecimals,
           coinExchangeRatio: coinExchangeRatio,
         );
+        var sumOfApprovedPaymentsFormatted =
+            formatDecimalPriceByRegion(price: sumOfApprovedPaymentsConverted);
         print(
             'sumOfApprovedPaymentsConverted: $sumOfApprovedPaymentsConverted');
+        print(
+            'sumOfApprovedPaymentsFormatted: $sumOfApprovedPaymentsFormatted');
 
-        double sumOfPendingPaymenstConverted =
-            priceMultipliedByItsExchangeRatio(
+        var sumOfPendingPaymenstConverted = priceMultipliedByItsExchangeRatio2(
           productPrice: sumOfPendingPayments,
           coinDecimals: coinDecimals,
           coinExchangeRatio: coinExchangeRatio,
         );
+        var sumOfPendingPaymensFormatted =
+            formatDecimalPriceByRegion(price: sumOfPendingPaymenstConverted);
+
         print('sumOfPendingPaymenstConverted: $sumOfPendingPaymenstConverted');
+        print('sumOfPendingPaymensFormatted: $sumOfPendingPaymensFormatted');
 
         return AlertDialog(
           shape: RoundedRectangleBorder(
@@ -1416,12 +1536,15 @@ class SeePaymentsALertDialog extends StatelessWidget {
                                 final paymentDate =
                                     dateFormatter.format(unformattedDate);
 
-                                final double paymentAmount =
-                                    priceMultipliedByItsExchangeRatio(
+                                var paymentAmount =
+                                    priceMultipliedByItsExchangeRatio2(
                                   productPrice: payment['monto'],
                                   coinDecimals: coinDecimals,
                                   coinExchangeRatio: payment['tasaDeCambio'],
                                 );
+                                var paymentAmountFormatted =
+                                    formatDecimalPriceByRegion(
+                                        price: paymentAmount);
 
                                 final fecha =
                                     (payment['fecha'] as Timestamp).toDate();
@@ -1599,9 +1722,11 @@ class SeePaymentsALertDialog extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      completed
-                          ? '$coinSymbol 0.00'
-                          : '$coinSymbol ${remainingConverted.abs().toStringAsFixed(2)}',
+                      // 'Phos',
+                      '$coinSymbol $remainingFormatted',
+                      // completed
+                      //     ? '$coinSymbol $remainingConverted'
+                      //     : '$coinSymbol ${remainingConverted.abs().toStringAsFixed(2)}',
                       style: TextStyle(
                         fontFamily: 'Poppins-regular',
                         color: Colors.black,
@@ -1611,12 +1736,12 @@ class SeePaymentsALertDialog extends StatelessWidget {
                     ),
                   ],
                 ),
-                remainingConverted <= 0
+                remainingConverted.toDouble() <= 0
                     ? SizedBox(
                         height: 5,
                       )
                     : Container(),
-                remainingConverted <= 0
+                remainingConverted.toDouble() <= 0
                     ? Text(
                         'Esta factura no tiene deuda',
                         style: TextStyle(
@@ -1627,7 +1752,7 @@ class SeePaymentsALertDialog extends StatelessWidget {
                         ),
                       )
                     : Container(),
-                remainingConverted <= 0
+                remainingConverted.toDouble() <= 0
                     ? SizedBox(
                         height: 5,
                       )
@@ -1645,7 +1770,9 @@ class SeePaymentsALertDialog extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '$coinSymbol ${sumOfApprovedPaymentsConverted.toStringAsFixed(2)}',
+                      // 'Phos',
+
+                      '$coinSymbol $sumOfApprovedPaymentsFormatted',
                       style: TextStyle(
                         fontFamily: 'Poppins-regular',
                         color: Colors.green.shade600,
@@ -1668,8 +1795,9 @@ class SeePaymentsALertDialog extends StatelessWidget {
                       ),
                     ),
                     Text(
+                      // 'Phos',
                       // '${AppLocalizations.of(context)!.balanceLeft}: ${priceFormat(sumOfPendingPayments)}',
-                      '$coinSymbol ${sumOfPendingPaymenstConverted.toStringAsFixed(2)}',
+                      '$coinSymbol $sumOfPendingPaymensFormatted',
                       style: TextStyle(
                         fontFamily: 'Poppins-regular',
                         color: Colors.amber.shade600,
@@ -1704,43 +1832,3 @@ class SeePaymentsALertDialog extends StatelessWidget {
     );
   }
 }
-
-// class DecimalTextInputFormatter extends TextInputFormatter {
-//   DecimalTextInputFormatter({required this.decimalRange})
-//       : assert(decimalRange == null || decimalRange > 0);
-
-//   final int decimalRange;
-
-//   @override
-//   TextEditingValue formatEditUpdate(
-//     TextEditingValue oldValue, // unused.
-//     TextEditingValue newValue,
-//   ) {
-//     TextSelection newSelection = newValue.selection;
-//     String truncated = newValue.text;
-
-//     if (decimalRange != null) {
-//       String value = newValue.text;
-
-//       if (value.contains(".") &&
-//           value.substring(value.indexOf(".") + 1).length > decimalRange) {
-//         truncated = oldValue.text;
-//         newSelection = oldValue.selection;
-//       } else if (value == ".") {
-//         truncated = "0.";
-
-//         newSelection = newValue.selection.copyWith(
-//           baseOffset: math.min(truncated.length, truncated.length + 1),
-//           extentOffset: math.min(truncated.length, truncated.length + 1),
-//         );
-//       }
-
-//       return TextEditingValue(
-//         text: truncated,
-//         selection: newSelection,
-//         composing: TextRange.empty,
-//       );
-//     }
-//     return newValue;
-//   }
-// }

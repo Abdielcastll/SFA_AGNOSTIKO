@@ -2,6 +2,7 @@
 
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pwa_sales2go_flutter/src/services/auth.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -103,6 +104,12 @@ class _LoginPageState extends State<LoginPage> {
                           email != null && !EmailValidator.validate(email)
                               ? 'Email inválido'
                               : null,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.allow(
+                          // RegExp(r'[0-9]+[.]{0,1}[0-9]*'),
+                          RegExp(r"^[a-zA-Z0-9@.]*"),
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(height: 5),

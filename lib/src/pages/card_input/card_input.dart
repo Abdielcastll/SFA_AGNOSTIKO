@@ -280,10 +280,8 @@ class _CardInputViewState extends State<CardInputView> {
         (await EmvModule.instance.getTagValue(0x57))?.toHexStr().split('d')[0];
     // en caso de error, nos movemos a la pantalla de cierre
     final arguments = (ModalRoute.of(context)?.settings.arguments! as List);
-    print("argument noRetail ${arguments[2]}");
-    print("argument noRetail ${arguments[3]}");
-    Navigator.pop(context);
-    Navigator.pushReplacementNamed(
+    Navigator.pushNamed(
+      // Navigator.pushReplacementNamed(
       context,
       EmvTransactionInfoView.route,
       arguments: [

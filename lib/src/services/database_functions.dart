@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:decimal/decimal.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -145,67 +146,27 @@ Future createOrder(
       'codigo': element.code?.toString() ?? 'NaN',
       'id': element.code?.toString() ?? 'NaN',
       'idListaDePrecios': client?.prices ?? 'NaN',
-      'monto': double.parse(element.totalAmount ?? '0') *
-          int.parse(element.productQuantity.toString()),
+      'monto': double.parse((Decimal.parse(element.totalAmount.toString()) *
+              Decimal.parse(element.productQuantity.toString()))
+          .toString()),
       'nombre': element.name?.toString() ?? 'NaN',
       'precioUnitario': double.parse(element.unitPrice ?? '0.0'),
       'urlFoto': '',
     });
     final productQuantity = <String, dynamic>{
-      // '${element.code}':
-      //     (element.availableStock! - (element.productQuantity)!.toInt()),
       '${element.code}': element.productQuantity,
     };
     productsStock.addEntries(productQuantity.entries);
-    // print('Cantidad de producto: ${element.code}: ${element.productQuantity}');
   });
   print('productsStock: $productsStock');
   print('Cantidades: $quantitiesList');
-  // print(
-  //     'Cliente: ${FirebaseFirestore.instance.collection('clientes').doc(client!.clientDocumentId)}');
-  // print('IDs: $productsIds');
-  // print('Productos: $products');
 
   // REDUCE STOCK ON DATABASE
 
   if (reduceStock == false) {
     final DocumentReference stockPath =
         FirebaseFirestore.instance.collection('stock').doc('productos');
-    // final Map<String, dynamic> originalStock = {
-    //   '026229570704': 398,
-    //   '1AC1K0003': 100,
-    //   '1AC1K003': 100,
-    //   'P1S0001': 46,
-    //   'P1S0002': 65,
-    //   'P1S0003': 102,
-    //   'P1S0004': 48,
-    //   'P1S0005': 51,
-    //   'P1S0006': 23,
-    //   'P1S0007': 12,
-    //   'P1S0008': 41,
-    //   'P1S0009': 20,
-    //   'P1S0010': 12,
-    //   'P1S9911': 154,
-    //   'P1S0012': 37,
-    //   'P1S0013': 321,
-    //   'P1S0014': 560,
-    //   'P1S0015': 500,
-    //   'P1S0016': 480,
-    //   'P1S0017': 410,
-    //   'P1S0018': 359,
-    //   'P1S0019': 387,
-    //   'P1S0020': 326,
-    //   'P1S0021': 403,
-    //   'P1S0022': 369,
-    //   'P1S0023': 247,
-    //   'P1S0024': 501,
-    //   'P1S0025': 58,
-    //   'P1S0026': 26,
-    //   'P1S0027': 87,
-    //   'P1S0028': 49,
-    //   'P1S0029': 5,
-    //   'P1S0030': 3,
-    // };
+
     Map<String, dynamic> currentStock = {};
 
     await stockPath.get().then(
@@ -285,6 +246,8 @@ Future createOrder(
       'vendedor':
           FirebaseFirestore.instance.collection('usuarios').doc(userUid),
     },
+  ).whenComplete(
+    () => print('//////////////// PEDIDO CREADO ////////////////'),
   );
 }
 
@@ -298,7 +261,10 @@ Future deleteOrder(
       .doc(clientId)
       .collection('pedidos')
       .doc(docId)
-      .delete();
+      .delete()
+      .whenComplete(
+        () => print('//////////////// PEDIDO BORRADO ////////////////'),
+      );
 }
 
 // Funciones de Facturas
@@ -343,6 +309,7 @@ Future createInvoice(
     'usuario': FirebaseFirestore.instance.collection('usuarios').doc(userID),
   };
   final seller = FirebaseFirestore.instance.collection('usuarios').doc(userID);
+
   // GET EXCHANGE RATES
 
   List<Coin> coins = [];
@@ -419,7 +386,9 @@ Future createInvoice(
           .update({'numero': correlativeNumber + 1});
     }).whenComplete(() =>
             Fluttertoast.showToast(msg: 'Factura ${correlativeNumber + 1}'));
-  });
+  }).whenComplete(
+    () => print('//////////////// FACTURA CREADA ////////////////'),
+  );
 }
 
 //Registrar pagos de Tarjeta de Credito/Debito
@@ -1475,12 +1444,14 @@ Future<List> cancelPayment(
 checkIfInvoiceIsCompleted(
     {double? remaining, double? paidAmount, client, invoiceDocumentID}) {
   try {
-    double total = remaining! - paidAmount!;
+    double total = double.parse((Decimal.parse(remaining!.toString()) -
+            Decimal.parse(paidAmount!.toString()))
+        .toString());
     print('Verificando si lo que faltaba - lo pagado es igual a 0');
     print('remaining: $remaining');
     print('amount: $paidAmount ');
     print('total: ${total.toStringAsFixed(2)}');
-    if (total <= 0.0044) {
+    if (total <= 0.00) {
       print('Factura pagada completamente');
       Fluttertoast.showToast(
         msg: 'Factura pagada completamente',

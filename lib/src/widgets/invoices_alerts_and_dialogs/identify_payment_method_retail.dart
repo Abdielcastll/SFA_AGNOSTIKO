@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:decimal/decimal.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -2821,7 +2822,7 @@ Future<dynamic> showDialogForConfirmedPaymentRetail(
                               Container(
                                 margin: EdgeInsets.only(top: 10),
                                 child: Text(
-                                  'Monto pagado: $coinSymbol ${paidAmount.toStringAsFixed(2)}',
+                                  'Monto pagado: $coinSymbol ${formatDecimalPriceByRegion(price: Decimal.parse(paidAmount.toString()))}',
                                   style: TextStyle(
                                     fontFamily: 'Poppins-regular',
                                     fontSize: 12,
@@ -2888,8 +2889,14 @@ Future<dynamic> showDialogForConfirmedPaymentRetail(
                                         name: 'PAGO-DIRECTO'),
                                     builder: (BuildContext context) =>
                                         AddPaymentPage(
-                                          remaining: paymentBody.remaining -
-                                              amountExchanged,
+                                          remaining: double.parse(
+                                              (Decimal.parse(paymentBody
+                                                          .remaining
+                                                          .toString()) -
+                                                      Decimal.parse(
+                                                          amountExchanged
+                                                              .toString()))
+                                                  .toString()),
                                           subTotal: paymentBody.subTotal,
                                           discountPercentage:
                                               paymentBody.discountPercentage,
@@ -2902,9 +2909,15 @@ Future<dynamic> showDialogForConfirmedPaymentRetail(
                                               paymentBody.invoiceDocumentID,
                                           invoiceNumber:
                                               paymentBody.invoiceNumber,
-                                          amountPayed:
-                                              (paymentBody.amountPaied ?? 0) +
-                                                  amountExchanged,
+                                          amountPayed: double.parse(
+                                              (Decimal.parse((paymentBody
+                                                                  .amountPaied ??
+                                                              0)
+                                                          .toString()) +
+                                                      Decimal.parse(
+                                                          amountExchanged
+                                                              .toString()))
+                                                  .toString()),
                                           payments: paymentBody.payments,
                                           invoiceTotal: totalOfTheOrder,
                                           // updatePayed: updatePayed,

@@ -117,13 +117,6 @@ class SfaAgnostiko extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // var prissa = FirebaseFirestore.instance
-    //     .collection('marcas')
-    //     .doc('fekpFNxAR5U9PZko1XWq');
-    var aceites = FirebaseFirestore.instance
-        .collection('marcas')
-        .doc('bYsgyluivxaZQWLeMJqA');
-
     return StreamProvider<UserModel?>.value(
       value: AuthService().user,
       initialData: null,
@@ -149,12 +142,12 @@ class SfaAgnostiko extends StatelessWidget {
                       return StreamProvider<List<Products>?>.value(
                         value: productsLimit == 0
                             ? productsCollection
-                                /* .where('marca', isEqualTo: aceites) */
+                                // .where('marca', isEqualTo: aceites)
                                 .orderBy('codigo')
                                 .snapshots()
                                 .map(productsListFromSnapshot)
                             : productsCollection
-                                /* .where('marca', isEqualTo: aceites) */
+                                // .where('marca', isEqualTo: aceites)
                                 .orderBy('codigo')
                                 .limit(productsLimit)
                                 .snapshots()
@@ -181,7 +174,7 @@ class SfaAgnostiko extends StatelessWidget {
                               //'wrapper' for mobile to avoid checking terminal
                               // token, SplashScreenView.route to activate
                               // in terminals
-                              //'wrapper',
+                              // 'wrapper',
                               SplashScreenView.route,
                           routes: {
                             SplashScreenView.route: (BuildContext context) =>

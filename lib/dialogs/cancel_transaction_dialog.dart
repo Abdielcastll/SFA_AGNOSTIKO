@@ -19,7 +19,8 @@ Future<bool> Function() cancelTransactionDialogFn(BuildContext context) {
         await closeCardReader();
         await cancelEmvTransaction();
 
-        Navigator.popUntil(context, (route) => route.isFirst == true);
+        // Navigator.popUntil(context, (route) => route.isFirst == true);
+        Navigator.pop(context, true);
       },
       onCancel: () {
         Navigator.pop(context, false);

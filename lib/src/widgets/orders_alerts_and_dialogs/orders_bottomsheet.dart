@@ -851,6 +851,32 @@ class SeeProductsAlertDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var subTotalConverted = priceMultipliedByItsExchangeRatio2(
+        productPrice: subTotal,
+        coinDecimals: coinDecimals,
+        coinExchangeRatio: coinExchangeRateFromDB);
+    var subTotalFormatted =
+        formatDecimalPriceByRegion(price: subTotalConverted);
+
+    var discountConverted = priceMultipliedByItsExchangeRatio2(
+        productPrice: discountMaster,
+        coinDecimals: coinDecimals,
+        coinExchangeRatio: coinExchangeRateFromDB);
+    var discountFormatted =
+        formatDecimalPriceByRegion(price: discountConverted);
+
+    var taxConverted = priceMultipliedByItsExchangeRatio2(
+        productPrice: tax,
+        coinDecimals: coinDecimals,
+        coinExchangeRatio: coinExchangeRateFromDB);
+    var taxFormatted = formatDecimalPriceByRegion(price: taxConverted);
+
+    var totalConverted = priceMultipliedByItsExchangeRatio2(
+        productPrice: total,
+        coinDecimals: coinDecimals,
+        coinExchangeRatio: coinExchangeRateFromDB);
+    var totalFormatted = formatDecimalPriceByRegion(price: totalConverted);
+
     return AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
@@ -878,6 +904,14 @@ class SeeProductsAlertDialog extends StatelessWidget {
                   itemCount: products.length,
                   itemBuilder: (context, index) {
                     final product = products[index];
+
+                    var priceConverted = priceMultipliedByItsExchangeRatio2(
+                        productPrice: product['monto'],
+                        coinDecimals: coinDecimals,
+                        coinExchangeRatio: coinExchangeRateFromDB);
+                    var priceFormatted =
+                        formatDecimalPriceByRegion(price: priceConverted);
+
                     return ListTile(
                       leading: Icon(
                         Icons.photo,
@@ -918,7 +952,7 @@ class SeeProductsAlertDialog extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  '$coinSymbol ${priceMultipliedByItsExchangeRatio(productPrice: product['monto'], coinDecimals: coinDecimals, coinExchangeRatio: coinExchangeRateFromDB).toStringAsFixed(2)}',
+                                  '$coinSymbol $priceFormatted',
                                   style: TextStyle(
                                     fontFamily: 'Poppins-regular',
                                     color: myTheme.colorScheme.primary,
@@ -949,7 +983,7 @@ class SeeProductsAlertDialog extends StatelessWidget {
                 ),
               ),
               Text(
-                '$coinSymbol ${priceMultipliedByItsExchangeRatio(productPrice: subTotal, coinDecimals: coinDecimals, coinExchangeRatio: coinExchangeRateFromDB).toStringAsFixed(2)}',
+                '$coinSymbol $subTotalFormatted',
                 style: TextStyle(
                   fontFamily: 'Poppins-regular',
                   color: Colors.black,
@@ -972,7 +1006,7 @@ class SeeProductsAlertDialog extends StatelessWidget {
                 ),
               ),
               Text(
-                '$coinSymbol ${priceMultipliedByItsExchangeRatio(productPrice: discountMaster, coinDecimals: coinDecimals, coinExchangeRatio: coinExchangeRateFromDB).toStringAsFixed(2)}',
+                '$coinSymbol $discountFormatted',
                 style: TextStyle(
                   fontFamily: 'Poppins-regular',
                   color: Colors.black,
@@ -995,7 +1029,7 @@ class SeeProductsAlertDialog extends StatelessWidget {
                 ),
               ),
               Text(
-                '$coinSymbol ${priceMultipliedByItsExchangeRatio(productPrice: tax, coinDecimals: coinDecimals, coinExchangeRatio: coinExchangeRateFromDB).toStringAsFixed(2)}',
+                '$coinSymbol $taxFormatted',
                 style: TextStyle(
                   fontFamily: 'Poppins-regular',
                   color: Colors.black,
@@ -1018,7 +1052,7 @@ class SeeProductsAlertDialog extends StatelessWidget {
                 ),
               ),
               Text(
-                '$coinSymbol ${priceMultipliedByItsExchangeRatio(productPrice: total, coinDecimals: coinDecimals, coinExchangeRatio: coinExchangeRateFromDB).toStringAsFixed(2)}',
+                '$coinSymbol $totalFormatted',
                 style: TextStyle(
                   fontFamily: 'Poppins-regular',
                   color: Colors.green,

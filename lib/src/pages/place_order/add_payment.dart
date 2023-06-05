@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
-
+import 'dart:math' as math;
+import 'package:decimal/decimal.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -73,7 +74,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Salir de este proceso hara que deba continuarlo desde el menu de facturas como registro manual)",
+                    "Salir de este proceso hara que deba continuarlo desde el menu de facturas como registro manual",
                     style: TextStyle(
                       color: myTheme.colorScheme.primary,
                       fontFamily: 'Poppins-regular',
@@ -104,11 +105,39 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                     setState(() {
                       _canPop = true;
                     });
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
+                    Navigator.popUntil(
+                        context, (route) => route.settings.name == "ORDER");
+
+                    ScaffoldMessenger.of(context)
+                      ..removeCurrentSnackBar()
+                      ..showSnackBar(
+                        SnackBar(
+                          backgroundColor:
+                              myTheme.colorScheme.onPrimaryContainer,
+                          duration: const Duration(seconds: 3),
+                          content: Column(
+                            children: const [
+                              Text(
+                                "Facturación Pausada",
+                                style: TextStyle(
+                                  fontFamily: 'Poppins-regular',
+                                ),
+                              ),
+                              Text(
+                                "Consulte lista de facturas",
+                                style: TextStyle(
+                                  fontFamily: 'Poppins-regular',
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    // Navigator.of(context).pop();
+                    // Navigator.of(context).pop();
+                    // Navigator.of(context).pop();
                   },
-                  child: Text("Yes"),
+                  child: Text("Si"),
                 ),
               ],
             ),
@@ -221,47 +250,61 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
 
   @override
   Widget build(BuildContext context) {
+    print('OPENING ADD PAYMENT PAGE');
     final coinName = Provider.of<Coin?>(context)?.name ?? '';
     final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 0;
     final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 0;
     final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
     final coinCode = Provider.of<Coin?>(context)?.code ?? '';
-    double subTotalConverted = priceMultipliedByItsExchangeRatio(
+    print('getTotalAmount: $getTotalAmount');
+    print('invoiceDocumentID: ${widget.invoiceDocumentID}');
+
+    // double subTotalConverted = priceMultipliedByItsExchangeRatio(
+    //     coinDecimals: coinDecimals,
+    //     coinExchangeRatio: coinExchangeRatio,
+    //     productPrice: widget.subTotal);
+    // print('subtotal: ${widget.subTotal}');
+    var subTotalConverted = priceMultipliedByItsExchangeRatio2(
         coinDecimals: coinDecimals,
         coinExchangeRatio: coinExchangeRatio,
         productPrice: widget.subTotal);
-    print('subtotal: ${widget.subTotal}');
+    print('subTotal: ${widget.subTotal}');
     print('subTotalConverted: $subTotalConverted');
-    double discountMasterConverted = priceMultipliedByItsExchangeRatio(
+
+    var subTotalFormatted =
+        formatDecimalPriceByRegion(price: subTotalConverted);
+    print('subTotalFormatted: $subTotalFormatted');
+
+    var discountMasterConverted = priceMultipliedByItsExchangeRatio2(
         coinDecimals: coinDecimals,
         coinExchangeRatio: coinExchangeRatio,
         productPrice: widget.discount);
     print('discountMaster: ${widget.discount}');
     print('discountMasterConverted: $discountMasterConverted');
-    double taxConverted = priceMultipliedByItsExchangeRatio(
+    var taxConverted = priceMultipliedByItsExchangeRatio2(
         coinDecimals: coinDecimals,
         coinExchangeRatio: coinExchangeRatio,
         productPrice: widget.tax);
     print('tax: ${widget.tax}');
     print('taxConverted: $taxConverted');
-    double totalConverted = priceMultipliedByItsExchangeRatio(
+    var totalConverted = priceMultipliedByItsExchangeRatio2(
         coinDecimals: coinDecimals,
         coinExchangeRatio: coinExchangeRatio,
         productPrice: widget.invoiceTotal);
     print('total: ${widget.invoiceTotal}');
     print('totalConverted: $totalConverted');
-    double balanceConverted = priceMultipliedByItsExchangeRatio(
+    var balanceConverted = priceMultipliedByItsExchangeRatio2(
         coinDecimals: coinDecimals,
         coinExchangeRatio: coinExchangeRatio,
         productPrice: widget.remaining);
     print('balance: ${widget.remaining}');
     print('balanceConverted: $balanceConverted');
-    double remainingConverted = priceMultipliedByItsExchangeRatio(
+    var remainingConverted = priceMultipliedByItsExchangeRatio2(
       productPrice: widget.remaining,
       coinDecimals: coinDecimals,
       coinExchangeRatio: coinExchangeRatio,
     );
-    double paidAmount = priceMultipliedByItsExchangeRatio(
+    var paidAmount = priceMultipliedByItsExchangeRatio2(
         productPrice: widget.remaining,
         coinDecimals: coinDecimals,
         coinExchangeRatio: coinExchangeRatio);
@@ -301,23 +344,24 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
 
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
+      // child: Container());
       child: paymentForm(
           context,
           items,
           formattedDate,
-          paidAmount,
+          double.parse(paidAmount.toString()),
           coinSymbol,
-          subTotalConverted,
-          discountMasterConverted,
-          taxConverted,
-          totalConverted,
+          double.parse(subTotalConverted.toString()),
+          double.parse(discountMasterConverted.toString()),
+          double.parse(taxConverted.toString()),
+          double.parse(totalConverted.toString()),
           paymentsTotalAmount!,
-          balanceConverted,
+          double.parse(balanceConverted.toString()),
           coinName,
           coinDecimals,
           coinExchangeRatio,
           coinCode,
-          remainingConverted),
+          double.parse(remainingConverted.toString())),
     );
   }
 
@@ -661,7 +705,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                       child: Text(
                                         // priceFormatForPaidAmount(
                                         //     remaining, selectedCoin),
-                                        '$coinSymbol ${balanceConverted.toStringAsFixed(2)}',
+                                        '$coinSymbol ${formatDecimalPriceByRegion(price: Decimal.parse(balanceConverted.toString()))}',
                                         // priceFormat(priceFormatForPaidAmount(
                                         //     remaining, selectedCoin)),
                                         style: TextStyle(
@@ -678,7 +722,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                       alignment: Alignment.centerRight,
                                       child: Text(
                                         // priceFormat(paymentsTotalAmount),
-                                        '$coinSymbol ${paymentsTotalAmount.toStringAsFixed(2)}',
+                                        '$coinSymbol ${formatDecimalPriceByRegion(price: Decimal.parse(paymentsTotalAmount.toString()))}',
                                         style: TextStyle(
                                           color: myTheme
                                               .colorScheme.onPrimaryContainer,
@@ -700,7 +744,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            '${AppLocalizations.of(context)!.amount}*',
+                            '${AppLocalizations.of(context)!.amount}',
                             style: TextStyle(
                               fontFamily: 'Poppins-regular',
                               color: myTheme.colorScheme.primary,
@@ -733,29 +777,52 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                               setState(() {
                                 paidAmount = 0;
                                 if (selectedValueA == 'Efectivo') {
-                                  change =
-                                      moneyRecievedForRegisterMoney < paidAmount
-                                          ? 0
-                                          : double.parse(
-                                              (moneyRecievedForRegisterMoney -
-                                                      paidAmount)
-                                                  .toStringAsFixed(2),
-                                            );
+                                  change = moneyRecievedForRegisterMoney <
+                                          paidAmount
+                                      ? 0
+                                      : double.parse((((Decimal.parse(
+                                                              moneyRecievedForRegisterMoney
+                                                                  .toString()) -
+                                                          Decimal.parse(
+                                                              paidAmount!
+                                                                  .toString())) *
+                                                      Decimal.parse('100'))
+                                                  .round() /
+                                              Decimal.parse('100'))
+                                          // .toDecimal()
+                                          .toDouble()
+                                          .toString());
+                                  // : double.parse(
+                                  //     (moneyRecievedForRegisterMoney -
+                                  //             paidAmount)
+                                  //         .toStringAsFixed(2),
+                                  //   );
                                 }
                               });
-                              print(
-                                  'paidAmount setstate: ${paidAmount.toStringAsFixed(2)}');
+                              print('paidAmount setstate: $paidAmount');
                             } else {
                               setState(() {
                                 paidAmount = double.parse(value);
                                 if (selectedValueA == 'Efectivo') {
-                                  change =
-                                      moneyRecievedForRegisterMoney < paidAmount
-                                          ? 0
-                                          : double.parse(
-                                              (moneyRecievedForRegisterMoney -
-                                                      paidAmount)
-                                                  .toStringAsFixed(2));
+                                  change = moneyRecievedForRegisterMoney <
+                                          paidAmount
+                                      ? 0
+                                      : double.parse((((Decimal.parse(
+                                                              moneyRecievedForRegisterMoney
+                                                                  .toString()) -
+                                                          Decimal.parse(
+                                                              paidAmount!
+                                                                  .toString())) *
+                                                      Decimal.parse('100'))
+                                                  .round() /
+                                              Decimal.parse('100'))
+                                          // .toDecimal()
+                                          .toDouble()
+                                          .toString());
+                                  // : double.parse(
+                                  //     (moneyRecievedForRegisterMoney -
+                                  //             paidAmount)
+                                  //         .toStringAsFixed(2));
                                 }
                               });
                               print('paidAmount setstate: $paidAmount');
@@ -823,6 +890,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                             color: myTheme.colorScheme.primary,
                           ),
                           inputFormatters: <TextInputFormatter>[
+                            DecimalTextInputFormatter(decimalRange: 2),
                             FilteringTextInputFormatter.allow(
                               RegExp(r'[0-9]+[,.]{0,1}[0-9]*'),
                             ),
@@ -858,14 +926,8 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                               0,
                               0,
                             ),
-                            // priceFormatForPaidAmount(remaining, selectedCoin),
                             hintText:
-                                '${paidAmount.toStringAsFixed(2)}', // priceFormatForPaidAmount(
-                            //         double.parse(remaining == 0
-                            //             ? '0.00'
-                            //             : remaining.toStringAsFixed(4)),
-                            //         selectedCoin)
-                            //     .toString(),
+                                '${formatDecimalPriceByRegion(price: Decimal.parse(paidAmount.toString()))}',
                             hintStyle: TextStyle(
                               fontFamily: 'Poppins-regular',
                               fontSize: 14,
@@ -933,13 +995,25 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                               setState(() {
                                 moneyRecievedForRegisterMoney = 0;
                                 if (selectedValueA == 'Efectivo') {
-                                  change =
-                                      moneyRecievedForRegisterMoney < paidAmount
-                                          ? 0.00001
-                                          : double.parse(
-                                              (moneyRecievedForRegisterMoney -
-                                                      paidAmount)
-                                                  .toStringAsFixed(2));
+                                  change = moneyRecievedForRegisterMoney <
+                                          paidAmount
+                                      ? 0.00001
+                                      : double.parse((((Decimal.parse(
+                                                              moneyRecievedForRegisterMoney
+                                                                  .toString()) -
+                                                          Decimal.parse(
+                                                              paidAmount!
+                                                                  .toString())) *
+                                                      Decimal.parse('100'))
+                                                  .round() /
+                                              Decimal.parse('100'))
+                                          // .toDecimal()
+                                          .toDouble()
+                                          .toString());
+                                  // : double.parse(
+                                  //     (moneyRecievedForRegisterMoney -
+                                  //             paidAmount)
+                                  //         .toStringAsFixed(2));
                                 }
                               });
                               print(
@@ -949,13 +1023,25 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                 moneyRecievedForRegisterMoney =
                                     double.parse(value);
                                 if (selectedValueA == 'Efectivo') {
-                                  change =
-                                      moneyRecievedForRegisterMoney < paidAmount
-                                          ? 0.00001
-                                          : double.parse(
-                                              (moneyRecievedForRegisterMoney -
-                                                      paidAmount!)
-                                                  .toStringAsFixed(2));
+                                  change = moneyRecievedForRegisterMoney <
+                                          paidAmount
+                                      ? 0.00001
+                                      : double.parse((((Decimal.parse(
+                                                              moneyRecievedForRegisterMoney
+                                                                  .toString()) -
+                                                          Decimal.parse(
+                                                              paidAmount!
+                                                                  .toString())) *
+                                                      Decimal.parse('100'))
+                                                  .round() /
+                                              Decimal.parse('100'))
+                                          // .toDecimal()
+                                          .toDouble()
+                                          .toString());
+                                  // : double.parse(
+                                  //     (moneyRecievedForRegisterMoney -
+                                  //             paidAmount!)
+                                  //         .toStringAsFixed(2));
                                 }
                               });
                               print(
@@ -1177,10 +1263,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                       ),
                                     ),
                                     Text(
-                                      // priceFormatForPaidAmount(
-                                      //         widget.subTotal, selectedCoin)
-                                      //     .toString(),
-                                      '$coinSymbol ${subTotalConverted.toStringAsFixed(2)}',
+                                      '$coinSymbol ${formatDecimalPriceByRegion(price: Decimal.parse(subTotalConverted.toString()))}',
                                       style: TextStyle(
                                         fontFamily: 'Poppins-regular',
                                         color: myTheme.colorScheme.primary,
@@ -1213,7 +1296,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                       // double.parse(priceFormatForPaidAmount(
                                       //         widget.discount, selectedCoin))
                                       //     .toStringAsFixed(2),
-                                      ' - $coinSymbol ${discountMasterConverted.toStringAsFixed(2)}',
+                                      ' - $coinSymbol ${formatDecimalPriceByRegion(price: Decimal.parse(discountMasterConverted.toString()))}',
                                       style: TextStyle(
                                         fontFamily: 'Poppins-regular',
                                         color: myTheme.colorScheme.primary,
@@ -1243,10 +1326,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                       ),
                                     ),
                                     Text(
-                                      // priceFormatForPaidAmount(
-                                      //         widget.tax, selectedCoin)
-                                      //     .toString(),
-                                      '$coinSymbol ${taxConverted.toStringAsFixed(2)}',
+                                      '+ $coinSymbol ${formatDecimalPriceByRegion(price: Decimal.parse(taxConverted.toString()))}',
                                       style: TextStyle(
                                         fontFamily: 'Poppins-regular',
                                         color: myTheme.colorScheme.primary,
@@ -1268,9 +1348,6 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      // Aqui va widget.InvoiceTotal pero hay
-                                      // que consultar si primero se va a
-                                      // pagar completo o por partes aca
                                       'Total:',
                                       style: TextStyle(
                                         fontFamily: 'Poppins-regular',
@@ -1279,22 +1356,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                       ),
                                     ),
                                     Text(
-                                      // Aqui va widget.InvoiceTotal pero hay
-                                      // que consultar si primero se va a
-                                      // pagar completo o por partes aca
-                                      // priceFormatForPaidAmount(
-                                      //         double.parse((widget.subTotal)
-                                      //                 .toStringAsFixed(2)) -
-                                      //             double.parse((widget.discount)
-                                      //                 .toStringAsFixed(2)) +
-                                      //             double.parse((widget.tax)
-                                      //                 .toStringAsFixed(2)),
-                                      //         selectedCoin)
-                                      //     .toString(),
-                                      '$coinSymbol ${totalConverted.toStringAsFixed(2)}',
-                                      // priceFormatForPaidAmount(total, coin)
-                                      // priceFormatForPaidAmount(
-                                      //     remaining, selectedCoin),
+                                      '$coinSymbol ${formatDecimalPriceByRegion(price: Decimal.parse(totalConverted.toString()))}',
                                       style: TextStyle(
                                         fontFamily: 'Poppins-regular',
                                         color: myTheme.colorScheme.primary,
@@ -1326,7 +1388,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                         ),
                                       ),
                                       Text(
-                                        '$coinSymbol ${paymentsTotalAmount.toStringAsFixed(2)}',
+                                        '$coinSymbol ${formatDecimalPriceByRegion(price: Decimal.parse(paymentsTotalAmount.toString()))}',
                                         style: TextStyle(
                                           fontFamily: 'Poppins-regular',
                                           color: myTheme
@@ -1363,7 +1425,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                       // 'Saldo: ${priceFormatForPaidAmount(remaining.toStringAsFixed(4), selectedCoin)}',
                                       // priceFormatForPaidAmount(
                                       //     remaining, selectedCoin),
-                                      '$coinSymbol ${balanceConverted.abs().toStringAsFixed(2)}',
+                                      '$coinSymbol ${formatDecimalPriceByRegion(price: Decimal.parse(balanceConverted.toString()))}',
                                       style: TextStyle(
                                         fontFamily: 'Poppins-regular',
                                         color: myTheme
@@ -1401,7 +1463,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                                   ),
                                                 ),
                                           Text(
-                                            '\$ ${change.toStringAsFixed(2)}',
+                                            '\$ ${formatDecimalPriceByRegion(price: Decimal.parse(change.toString()))}',
                                             style: TextStyle(
                                               fontFamily: 'Poppins-regular',
                                               color: Colors.green,
@@ -1428,13 +1490,10 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                   selectedValueA: selectedValueA!,
                                   client: widget.client,
                                   invoiceDocumentID: widget.invoiceDocumentID,
-
                                   paidAmount: paidAmount,
                                   totalOfTheOrder: getTotalAmount,
                                   date: today,
                                   context: context,
-                                  // remaining: double.parse(
-                                  //     widget.remaining.toStringAsFixed(4)),
                                   remaining: widget.remaining,
                                   remainingConverted: remainingConverted,
                                   selectedCoin: selectedCoin!,
@@ -1504,4 +1563,44 @@ class PayMethod {
   double amount;
 
   PayMethod(this.name, this.amount);
+}
+
+class DecimalTextInputFormatter extends TextInputFormatter {
+  DecimalTextInputFormatter({required this.decimalRange})
+      : assert(decimalRange == null || decimalRange > 0);
+
+  final int decimalRange;
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue, // unused.
+    TextEditingValue newValue,
+  ) {
+    TextSelection newSelection = newValue.selection;
+    String truncated = newValue.text;
+
+    if (decimalRange != null) {
+      String value = newValue.text;
+
+      if (value.contains(".") &&
+          value.substring(value.indexOf(".") + 1).length > decimalRange) {
+        truncated = oldValue.text;
+        newSelection = oldValue.selection;
+      } else if (value == ".") {
+        truncated = "0.";
+
+        newSelection = newValue.selection.copyWith(
+          baseOffset: math.min(truncated.length, truncated.length + 1),
+          extentOffset: math.min(truncated.length, truncated.length + 1),
+        );
+      }
+
+      return TextEditingValue(
+        text: truncated,
+        selection: newSelection,
+        composing: TextRange.empty,
+      );
+    }
+    return newValue;
+  }
 }

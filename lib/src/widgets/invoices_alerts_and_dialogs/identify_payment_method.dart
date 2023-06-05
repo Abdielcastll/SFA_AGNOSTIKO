@@ -672,7 +672,6 @@ identifyPaymentMethod({
     //             transactionId = value;
     //             print(transactionId);
     //           },
-
     //           decoration: InputDecoration(
     //             contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
     //             hintText: '00000000',
@@ -1499,7 +1498,6 @@ identifyPaymentMethod({
                   );
                 },
                 child: Row(
-                  // ignore: prefer_const_literals_to_create_immutables
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
@@ -1643,8 +1641,9 @@ identifyPaymentMethod({
                                     invoiceDocumentID: invoiceDocumentID,
                                     currency: selectedCoin,
                                     amount: priceDividedbyItsExchangeRatio(
-                                        amount: paidAmount,
-                                        exchange: coinExchangeRatio),
+                                      amount: paidAmount,
+                                      exchange: coinExchangeRatio,
+                                    ),
                                     totalOfTheOrder: totalOfTheOrder,
                                     imageFile: imageFile,
                                     date: date,
