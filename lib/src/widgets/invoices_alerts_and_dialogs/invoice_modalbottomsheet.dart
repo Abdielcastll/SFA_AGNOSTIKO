@@ -794,6 +794,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                           color: myTheme.colorScheme.primary,
                                         ),
                                         inputFormatters: <TextInputFormatter>[
+                                          DecimalTextInputFormatter(
+                                              decimalRange: 2),
                                           FilteringTextInputFormatter.allow(
                                             RegExp(r'[0-9]+[,.]{0,1}[0-9]*'),
                                           ),
@@ -999,6 +1001,7 @@ Future<dynamic> showDialogForRegisterPayment(
                                         : myTheme.colorScheme.primary,
                               ),
                               inputFormatters: <TextInputFormatter>[
+                                DecimalTextInputFormatter(decimalRange: 2),
                                 FilteringTextInputFormatter.allow(
                                   RegExp(r'[0-9]+[,.]{0,1}[0-9]*'),
                                 ),
@@ -1328,14 +1331,7 @@ Future<dynamic> showDialogForRegisterPayment(
                                         ),
                                   Divider(),
                                   Container(
-                                    margin: EdgeInsets.fromLTRB(
-                                      0,
-                                      5,
-                                      0,
-                                      0,
-                                    ),
-
-                                    ///
+                                    margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                                     child: identifyPaymentMethod(
                                       coinName: coinName,
                                       coinDecimals: coinDecimals,

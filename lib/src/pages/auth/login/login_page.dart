@@ -107,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
                       inputFormatters: <TextInputFormatter>[
                         FilteringTextInputFormatter.allow(
                           // RegExp(r'[0-9]+[.]{0,1}[0-9]*'),
-                          RegExp(r"^[a-zA-Z0-9@.]*"),
+                          RegExp(r"^[a-zA-Z0-9@.!#$%&'*+-/=?^_`{|}~\u00f1]*"),
                         ),
                       ],
                     ),
@@ -145,6 +145,12 @@ class _LoginPageState extends State<LoginPage> {
                           color: myTheme.colorScheme.secondary,
                         ),
                       ),
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.allow(
+                          // RegExp(r'[0-9]+[.]{0,1}[0-9]*'),
+                          RegExp(r"^[a-zA-Z0-9@.!#$%&'*+-/=?^_`{|}~\u00f1]*"),
+                        ),
+                      ],
                       validator: (password) =>
                           password != null && password.length < 6
                               ? 'Contraseña inválida'
