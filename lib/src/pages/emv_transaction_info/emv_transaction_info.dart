@@ -7,22 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:agnostiko/agnostiko.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-import 'package:pwa_sales2go_flutter/dialogs/circular_progress_dialog.dart';
 import 'package:pwa_sales2go_flutter/dialogs/confirm_dialog.dart';
-import 'package:pwa_sales2go_flutter/dialogs/info_dialog.dart';
-import 'package:pwa_sales2go_flutter/pharos/pharos.dart';
-import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
-import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
-import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
-import 'package:pwa_sales2go_flutter/src/pages/diary/diary_tabs.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/completed_pay.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
-import 'package:pwa_sales2go_flutter/src/services/utils/comm.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 
-/* import '../../config/app_config.dart'; */
 import '../../../dialogs/param_bitmap_dialog.dart';
 import '../../models/transaction_args.dart';
 import '../../services/utils/emv.dart';
@@ -35,12 +25,13 @@ import '../place_order/add_payment.dart';
 class EmvTransactionInfoView extends StatefulWidget {
   static String route = "/emvTransactionInfo";
 
+  const EmvTransactionInfoView({super.key});
+
   @override
   _EmvTransactionInfoViewState createState() => _EmvTransactionInfoViewState();
 }
 
 class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
-  bool flagPrint = true;
   bool ticketPrinted = false;
   TransactionArgs? transactionArgs;
   InfoTags? infoTags;
@@ -167,21 +158,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
 
       transactionOnlineStr =
           transactionInfo?.onlineRequested == true ? onlineStr : offlineStr;
-
-      if (flagPrint) {
-        // printTicket();
-        flagPrint = false;
-      }
     }
-
-    final firstGenerateTiles = _generateCommandTiles(
-      '1st GENERATE AC',
-      firstGenerateTags,
-    );
-    final secondGenerateTiles = _generateCommandTiles(
-      '2nd GENERATE AC',
-      secondGenerateTags,
-    );
 
     return WillPopScope(
       onWillPop: () async {
@@ -308,9 +285,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                   child: OutlinedButton(
                       onPressed: () async {
                         await printTicket();
-                        setState(() {
-                          ticketPrinted = true;
-                        });
+                        ticketPrinted = true;
                       },
                       style: TextButton.styleFrom(
                           foregroundColor: myTheme.colorScheme.primary,
@@ -367,7 +342,6 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     if (noRetail) {
       Navigator.pop(context);
       Navigator.pop(context);
-      Navigator.pop(context);
       return;
     }
     final paymentBody = (ModalRoute.of(context)?.settings.arguments! as List)[2]
@@ -395,22 +369,11 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
 
     paymentBody.payments.add(PayMethod('Tarjeta', _amountDouble));
 
-    final totalPayed =
-        paymentBody.payments.fold<double>(0.0, (previousValue, element) {
-      print(element.amount);
-      return previousValue + element.amount;
-    });
-
-    // final totalInvoice =
-    //     paymentBody.subTotal + paymentBody.tax - paymentBody.discount;
-    final totalInvoice = transactionArgs!.invoice!.totalOfTheOrder;
     final remainingConverted = priceMultipliedByItsExchangeRatio(
         coinDecimals: 2,
         coinExchangeRatio: transactionArgs!.invoice!.coinExchangeRatio,
         productPrice: transactionArgs!.invoice!.remaining);
-    // paidAmount < remainingConverted
-    // if (transactionResult == EmvTransactionResult.Approved &&
-    //     totalPayed >= totalInvoice) {
+
     if (transactionResult == EmvTransactionResult.Approved &&
         transactionArgs!.invoice!.amount >= remainingConverted) {
       final date = transactionArgs!.invoice!.date;

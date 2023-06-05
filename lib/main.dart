@@ -149,12 +149,12 @@ class SfaAgnostiko extends StatelessWidget {
                       return StreamProvider<List<Products>?>.value(
                         value: productsLimit == 0
                             ? productsCollection
-                                .where('marca', isEqualTo: aceites)
+                                /* .where('marca', isEqualTo: aceites) */
                                 .orderBy('codigo')
                                 .snapshots()
                                 .map(productsListFromSnapshot)
                             : productsCollection
-                                .where('marca', isEqualTo: aceites)
+                                /* .where('marca', isEqualTo: aceites) */
                                 .orderBy('codigo')
                                 .limit(productsLimit)
                                 .snapshots()
