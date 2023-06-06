@@ -15,6 +15,7 @@ import 'package:pwa_sales2go_flutter/pharos/pharos.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/transaction_args.dart';
 import 'package:pwa_sales2go_flutter/src/pages/card_input/card_input.dart';
+import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/utils/parameters.dart';
 
@@ -190,6 +191,7 @@ Future refund(BuildContext context, payment, String pleaseWait, Client client,
                 keyboardType:
                     const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
+                  DecimalTextInputFormatter(decimalRange: 2),
                   FilteringTextInputFormatter.allow(
                       RegExp(r'[0-9]*(\.[0-9]{0,2})?$'))
                 ],

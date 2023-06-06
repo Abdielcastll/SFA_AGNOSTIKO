@@ -187,6 +187,8 @@ identifyPaymentMethod({
                       accountHolder = '';
                     },
                   );
+                  print('accountNumber: $accountNumber');
+                  print('accountHolder: $accountHolder');
                 },
                 iconStyleData: IconStyleData(
                   icon: const Icon(
@@ -266,7 +268,7 @@ identifyPaymentMethod({
                 // setState(() {
                 accountNumber = value;
                 // });
-                print(accountNumber);
+                print('accountNumber: $accountNumber');
               },
               // textAlign: TextAlign.center,
               decoration: InputDecoration(
