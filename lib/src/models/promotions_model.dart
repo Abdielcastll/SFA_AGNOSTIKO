@@ -26,9 +26,9 @@ List<Promotions> promotionListfromSnapshot(QuerySnapshot snapshot) {
     return Promotions(
       active:
           doc.data().toString().contains('activo') ? doc.get('activo') : false,
-      description: /* doc.data().toString().contains('descripcion')
-          ? doc.get('descripcion') */
-          '',
+      description: doc.data().toString().contains('descripcion')
+          ? doc.get('descripcion')
+          : '',
       expireDate: doc.data().toString().contains('fecha_vencimiento')
           ? doc.get('fecha_vencimiento')
           : Timestamp.fromDate(DateTime.now()),

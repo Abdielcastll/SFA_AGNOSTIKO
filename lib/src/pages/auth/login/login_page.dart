@@ -1,5 +1,6 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +9,7 @@ import 'package:pwa_sales2go_flutter/src/services/auth.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_login.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/loading/loading_widget.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -17,8 +19,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final AuthService _auth = AuthService();
-  final formKey = GlobalKey<FormState>();
+  // final AuthService _auth = AuthService();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool loading = false;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -30,182 +32,422 @@ class _LoginPageState extends State<LoginPage> {
             message: 'Verificando Credenciales',
           )
         : Scaffold(
-            appBar: AppBarLogin(
-              title: 'Login',
-              backgroundColor: myTheme.colorScheme.primary,
-            ),
-            body: _loginBody(context),
-            backgroundColor: Colors.white,
-          );
-  }
-
-  Widget _loginBody(context) {
-    return SingleChildScrollView(
-      child: Center(
-        child: Column(
-          children: [
-            const SizedBox(height: 125.0),
-            Container(
-              alignment: Alignment.center,
-              width: 250.0,
-              child: Image.asset('assets/images/logo_agnostiko_eslogan.png'),
-            ),
-            const SizedBox(height: 50.0),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 35.0),
-              alignment: Alignment.centerLeft,
-              child: const Text(
-                'Iniciar sesión',
-                style: TextStyle(
-                  fontSize: 14.0,
-                  color: Colors.grey,
-                  fontFamily: 'Poppins-regular',
+            body: SingleChildScrollView(
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: myTheme.colorScheme.primary,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    SizedBox(
+                      height: 80,
+                    ),
+                    Header(),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Color(0xFFFFFBFF),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(32),
+                          topRight: Radius.circular(32),
+                        ),
+                      ),
+                      child: InputWrapper(
+                        emailController: emailController,
+                        passwordController: passwordController,
+                        formKey: formKey,
+                        loading: loading,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-            const SizedBox(height: 5.0),
-            Form(
-              key: formKey,
+          );
+  }
+}
+
+class InputWrapper extends StatefulWidget {
+  const InputWrapper({
+    super.key,
+    required this.emailController,
+    required this.passwordController,
+    required this.formKey,
+    required this.loading,
+  });
+  final TextEditingController? emailController;
+  final TextEditingController? passwordController;
+  final GlobalKey<FormState> formKey;
+  final bool loading;
+
+  @override
+  State<InputWrapper> createState() => _InputWrapperState();
+}
+
+class _InputWrapperState extends State<InputWrapper> {
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.all(30),
+        child: Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: Color(0xFFFFFBFF),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: InputField(
+                emailController: widget.emailController,
+                passwordController: widget.passwordController,
+                formKey: widget.formKey,
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+              alignment: Alignment.centerRight,
+              child: Text(
+                "Recuperar contraseña",
+                style: TextStyle(
+                  color: Color(0xFF7D5070),
+                  fontFamily: 'Poppins-regular',
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 40,
+            ),
+            Button(
+              emailController: widget.emailController,
+              formKey: widget.formKey,
+              loading: widget.loading,
+              passwordController: widget.passwordController,
+            ),
+            SizedBox(
+              height: 40,
+            ),
+            Image.asset(
+              'assets/images/powered.png',
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class Header extends StatefulWidget {
+  const Header({super.key});
+
+  @override
+  State<Header> createState() => _HeaderState();
+}
+
+class _HeaderState extends State<Header> {
+  int activeIndex = 0;
+  final assetsImages = [
+    "assets/images/logo_agnostiko_blanco_eslogan.png",
+    "assets/tests/LOGO.png",
+    "assets/tests/LOGO.png",
+    "assets/tests/LOGO.png",
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
               child: Column(
                 children: [
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 35),
-                    child: TextFormField(
-                      maxLines: 1,
-                      maxLength: 100,
-                      keyboardType: TextInputType.emailAddress,
-                      controller: emailController,
-                      cursorColor: myTheme.colorScheme.secondary,
-                      textInputAction: TextInputAction.next,
-                      style: TextStyle(fontFamily: 'Poppins-regular'),
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.only(
-                            left: 20.0, top: 10.0, right: 10.0),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                          borderSide: const BorderSide(
-                            color: Color(0xFF4f42ed),
-                          ),
-                        ),
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Color.fromARGB(255, 191, 191, 191)),
-                          borderRadius: BorderRadius.all(Radius.circular(50)),
-                        ),
-                        focusColor: Theme.of(context).primaryColor,
-                        labelText: 'Email',
-                        suffixIcon: Icon(
-                          Icons.email,
-                          size: 20,
-                          color: myTheme.colorScheme.secondary,
-                        ),
-                      ),
-                      validator: (email) =>
-                          email != null && !EmailValidator.validate(email)
-                              ? 'Email inválido'
-                              : null,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.allow(
-                          // RegExp(r'[0-9]+[.]{0,1}[0-9]*'),
-                          RegExp(r"^[a-zA-Z0-9@.!#$%&'*+-/=?^_`{|}~\u00f1]*"),
-                        ),
-                      ],
+                  CarouselSlider.builder(
+                    itemCount: assetsImages.length,
+                    options: CarouselOptions(
+                      height: 100,
+                      autoPlay: false,
+                      // autoPlayInterval: Duration(seconds: 5),
+                      viewportFraction: 1,
+                      enlargeCenterPage: true,
+                      enlargeStrategy: CenterPageEnlargeStrategy.height,
+                      onPageChanged: (index, reason) {
+                        setState(() => activeIndex = index);
+                      },
                     ),
+                    itemBuilder: (context, index, realIndex) {
+                      final assetsImage = assetsImages[index];
+                      return Container(
+                        color: Colors.transparent,
+                        child: Image.asset(
+                          assetsImage,
+                          fit: BoxFit.contain,
+                        ),
+                      );
+                    },
                   ),
-                  const SizedBox(height: 5),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 35),
-                    child: TextFormField(
-                      obscureText: true,
-                      maxLines: 1,
-                      maxLength: 100,
-                      controller: passwordController,
-                      cursorColor: myTheme.colorScheme.secondary,
-                      style: TextStyle(fontFamily: 'Poppins-regular'),
-                      textInputAction: TextInputAction.next,
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.only(
-                            left: 20.0, top: 10.0, right: 10.0),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                          borderSide: const BorderSide(
-                            color: Color(0xFF4f42ed),
-                          ),
-                        ),
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Color.fromARGB(255, 231, 209, 209)),
-                          borderRadius: BorderRadius.all(Radius.circular(50)),
-                        ),
-                        focusColor: Theme.of(context).primaryColor,
-                        labelText: 'Contraseña',
-                        suffixIcon: Icon(
-                          Icons.lock,
-                          size: 20,
-                          color: myTheme.colorScheme.secondary,
-                        ),
-                      ),
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.allow(
-                          // RegExp(r'[0-9]+[.]{0,1}[0-9]*'),
-                          RegExp(r"^[a-zA-Z0-9@.!#$%&'*+-/=?^_`{|}~\u00f1]*"),
-                        ),
-                      ],
-                      validator: (password) =>
-                          password != null && password.length < 6
-                              ? 'Contraseña inválida'
-                              : null,
+                  SizedBox(
+                    height: 80,
+                  ),
+                  AnimatedSmoothIndicator(
+                    activeIndex: activeIndex,
+                    count: assetsImages.length,
+                    effect: ExpandingDotsEffect(
+                      dotHeight: 10,
+                      dotWidth: 10,
+                      dotColor: Colors.white,
+                      activeDotColor: Colors.white,
                     ),
-                  ),
+                  )
                 ],
               ),
             ),
-            const SizedBox(height: 40.0),
-            SizedBox(
-              width: 300.0,
-              child: ElevatedButton(
-                onPressed: () async {
-                  if (formKey.currentState!.validate()) {
-                    setState(() {
-                      loading = true;
-                    });
-                    final user = await _auth.signInWithEmailAndPassword(
-                      emailController.text.toString(),
-                      passwordController.text.toString(),
-                    );
-                    if (user == null) {
-                      setState(() {
-                        loading = false;
-                      });
-                    }
-                  }
-                },
-                style: ButtonStyle(
-                  alignment: Alignment.center,
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                    myTheme.colorScheme.primary,
-                  ),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      side: BorderSide(color: myTheme.colorScheme.primary),
-                    ),
-                  ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class Button extends StatefulWidget {
+  Button({
+    super.key,
+    required this.formKey,
+    required this.loading,
+    required this.emailController,
+    required this.passwordController,
+  });
+
+  final formKey;
+  bool loading;
+  final emailController;
+  final passwordController;
+
+  @override
+  State<Button> createState() => _ButtonState();
+}
+
+class _ButtonState extends State<Button> {
+  final AuthService _auth = AuthService();
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.loading
+        ? Center(
+            child: Column(
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(height: 20),
+              Text(
+                'Verificando credenciales...',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontFamily: 'Poppins-regular',
+                  color: myTheme.colorScheme.onPrimaryContainer,
                 ),
-                child: const Text(
-                  'Iniciar Sesión',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15.0,
-                    fontFamily: 'Poppins-regular',
+              ),
+            ],
+          ))
+        : Container(
+            width: 328,
+            height: 45,
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: ElevatedButton(
+              onPressed: () async {
+                if (widget.formKey.currentState!.validate()) {
+                  setState(() {
+                    widget.loading = true;
+                  });
+                  final user = await _auth.signInWithEmailAndPassword(
+                    widget.emailController.text.toString(),
+                    widget.passwordController.text.toString(),
+                  );
+                  if (user == null) {
+                    setState(() {
+                      widget.loading = false;
+                    });
+                  }
+                }
+              },
+              style: ButtonStyle(
+                alignment: Alignment.center,
+                backgroundColor: MaterialStateProperty.all<Color>(
+                  myTheme.colorScheme.primary,
+                ),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    side: BorderSide(color: myTheme.colorScheme.primary),
                   ),
                 ),
               ),
+              child: Text('Ingresar'),
             ),
-            const SizedBox(height: 80.0),
-          ],
-        ),
+          );
+  }
+}
+
+class InputField extends StatefulWidget {
+  const InputField({
+    super.key,
+    required this.emailController,
+    required this.passwordController,
+    required this.formKey,
+  });
+  final TextEditingController? emailController;
+  final TextEditingController? passwordController;
+  final GlobalKey<FormState> formKey;
+
+  @override
+  State<InputField> createState() => _InputFieldState();
+}
+
+class _InputFieldState extends State<InputField> {
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: widget.formKey,
+      child: Column(
+        children: [
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+            child: Text(
+              "¡Hola de nuevo!",
+              style: TextStyle(
+                fontFamily: 'Poppins-regular',
+                fontSize: 28,
+                fontWeight: FontWeight.w400,
+                color: myTheme.colorScheme.onPrimaryContainer,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 30,
+          ),
+          Container(
+            height: 56,
+            width: 328,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: TextFormField(
+              controller: widget.emailController,
+              onChanged: (value) {
+                print("emailController: ${widget.emailController?.text}");
+              },
+              maxLines: 1,
+              keyboardType: TextInputType.emailAddress,
+              cursorColor: myTheme.colorScheme.primary,
+              textInputAction: TextInputAction.next,
+              style: TextStyle(
+                fontFamily: 'Poppins-regular',
+                color: myTheme.colorScheme.primary,
+              ),
+              validator: (email) =>
+                  email != null && !EmailValidator.validate(email)
+                      ? 'Email inválido'
+                      : null,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.allow(
+                  // RegExp(r'[0-9]+[.]{0,1}[0-9]*'),
+                  RegExp(r"^[a-zA-Z0-9@.!#$%&'*+-/=?^_`{|}~\u00f1]*"),
+                ),
+              ],
+              decoration: InputDecoration(
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(
+                    color: Colors.transparent,
+                  ),
+                ),
+                enabledBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.transparent),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                ),
+                focusColor: Theme.of(context).primaryColor,
+                hintText: "Correo",
+                hintStyle: TextStyle(
+                  color: Color(0xFF5A5D77),
+                  fontFamily: 'Poppins-regular',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  letterSpacing: 0.25,
+                ),
+                filled: true,
+                fillColor: Colors.white,
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 16,
+          ),
+          Container(
+            height: 56,
+            width: 328,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: TextFormField(
+              controller: widget.passwordController,
+              onChanged: (value) {
+                print("passwordController: ${widget.passwordController?.text}");
+              },
+              maxLines: 1,
+              keyboardType: TextInputType.emailAddress,
+              cursorColor: myTheme.colorScheme.primary,
+              textInputAction: TextInputAction.next,
+              obscureText: true,
+              style: TextStyle(
+                fontFamily: 'Poppins-regular',
+                color: myTheme.colorScheme.primary,
+              ),
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.allow(
+                  // RegExp(r'[0-9]+[.]{0,1}[0-9]*'),
+                  RegExp(r"^[a-zA-Z0-9@.!#$%&'*+-/=?^_`{|}~\u00f1]*"),
+                ),
+              ],
+              validator: (password) => password != null && password.length < 6
+                  ? 'Contraseña inválida'
+                  : null,
+              decoration: InputDecoration(
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(
+                    color: Colors.transparent,
+                  ),
+                ),
+                enabledBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.transparent),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                ),
+                focusColor: Theme.of(context).primaryColor,
+                hintText: "Contraseña",
+                hintStyle: TextStyle(
+                  color: Color(0xFF5A5D77),
+                  fontFamily: 'Poppins-regular',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  letterSpacing: 0.25,
+                ),
+                filled: true,
+                fillColor: Colors.white,
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

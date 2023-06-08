@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
@@ -30,21 +31,23 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
     final prices = Provider.of<Prices?>(context)?.prices ?? {};
     final pricesName = Provider.of<Prices?>(context)?.name ?? {};
     final products = Provider.of<List<Products>?>(context) ?? [];
-    final productsList = products;
     final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
 
     return Container(
-      margin: const EdgeInsets.fromLTRB(16, 12.0, 16, 0),
+      margin: const EdgeInsets.fromLTRB(0, 12.0, 0, 0),
       child: Column(
         children: [
           Row(
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 0.0),
-                child: Icon(
-                  CupertinoIcons.sparkles,
-                  color: myTheme.colorScheme.onPrimaryContainer,
-                  size: 25.0,
+                padding: const EdgeInsets.only(left: 15),
+                child: Container(
+                  padding: EdgeInsets.only(bottom: 2),
+                  child: Icon(
+                    MaterialIcons.auto_awesome,
+                    color: myTheme.colorScheme.onPrimaryContainer,
+                    size: 19,
+                  ),
                 ),
               ),
               const SizedBox(width: 5.0),
@@ -52,11 +55,11 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                 child: Text(
                   AppLocalizations.of(context)!.newProducts,
                   style: TextStyle(
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w500,
                     color: myTheme.colorScheme.onPrimaryContainer,
-                    fontSize: 16.0,
-                    fontFamily: 'Poppins-regular',
                     letterSpacing: 0.15,
+                    fontSize: 16,
+                    fontFamily: 'Poppins-medium',
                   ),
                 ),
               ),
@@ -118,8 +121,11 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                             );
                           },
                           child: Container(
-                            margin:
-                                const EdgeInsets.fromLTRB(0.0, 12.0, 16.0, 8),
+                            // margin:
+                            //     const EdgeInsets.fromLTRB(0.0, 12.0, 16.0, 8),
+                            margin: productsByDateList.last == product
+                                ? const EdgeInsets.fromLTRB(16, 12, 16, 8)
+                                : const EdgeInsets.fromLTRB(16, 12, 0, 8),
                             width: 140,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(0),
@@ -155,15 +161,15 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                       const EdgeInsets.fromLTRB(5, 0, 0, 15),
                                   child: Text(
                                     '${product.name}',
-                                    textAlign: TextAlign.start,
+                                    textAlign: TextAlign.left,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       color: myTheme
                                           .colorScheme.onPrimaryContainer,
                                       fontFamily: 'Poppins-regular',
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12,
+                                      letterSpacing: 0.25,
                                     ),
                                   ),
                                 ),

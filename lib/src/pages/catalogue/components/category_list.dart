@@ -39,43 +39,30 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
     List categoriesSummary = sortedListData.values.toList();
     List categorieKeys = sortedListData.keys.toList();
     final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
-    // print(categorieKeys);
-    // print(categoriesSummary);
-    // print(productsList);
-    // print(products.length);
-    // print('CANTIDAD PRODUCTOS DB');
-    // print(sortedListData);
-    // categorieKeys.sort((a, b) {
-    //   return a.toLowerCase().compareTo(b.toLowerCase());
-    // });
-    // categoriesSummary.sort((a, b) {
-    //   return a.toLowerCase().compareTo(b.toLowerCase());
-    // });
-    // categories.sort((a, b) {
-    //   return a.toLowerCase().compareTo(b.toLowerCase());
-    // });
-    // print(categories);
-    // print(categoriesSummary);
 
     return Container(
-      margin: EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 0),
+      margin: EdgeInsets.fromLTRB(0, 12.0, 0, 0),
       child: Column(
         children: [
           Row(
             children: [
-              Icon(
-                Icons.category_outlined,
-                color: myTheme.colorScheme.onPrimaryContainer,
-                size: 20.0,
+              Padding(
+                padding: EdgeInsets.only(left: 16),
+                child: Icon(
+                  Icons.category_outlined,
+                  color: myTheme.colorScheme.onPrimaryContainer,
+                  size: 20.0,
+                ),
               ),
               SizedBox(width: 8.0),
               Text(
-                AppLocalizations.of(context)!.catalogue,
+                // AppLocalizations.of(context)!.catalogue,
+                "Categorías",
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w500,
                   color: myTheme.colorScheme.onPrimaryContainer,
                   fontSize: 16.0,
-                  fontFamily: 'Poppins-regular',
+                  fontFamily: 'Poppins-medium',
                   letterSpacing: 0.15,
                 ),
               ),
@@ -146,7 +133,9 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                     });
                   },
                   child: Container(
-                    margin: EdgeInsets.fromLTRB(0.0, 0.0, 16.0, 0),
+                    margin: categoriesSummary.last == categorie
+                        ? const EdgeInsets.fromLTRB(16, 0, 16, 0)
+                        : const EdgeInsets.fromLTRB(16, 0, 0, 0),
                     height: 240,
                     width: 120,
                     decoration: BoxDecoration(
@@ -303,12 +292,12 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                               borderRadius: BorderRadius.circular(8)),
                           child: Text(
                             '$categorie',
-                            textAlign: TextAlign.center,
+                            textAlign: TextAlign.left,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontFamily: 'Poppins-regular',
-                              fontSize: 13,
+                              fontSize: 14,
                               color: Colors.white,
                             ),
                           ),

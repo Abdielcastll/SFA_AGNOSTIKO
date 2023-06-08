@@ -36,24 +36,28 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
     final productsList = products;
 
     return Container(
-      margin: const EdgeInsets.fromLTRB(16, 12.0, 16.0, 15.0),
+      margin: const EdgeInsets.fromLTRB(0, 12.0, 0, 15.0),
       child: Column(
         children: [
           Row(
             children: [
-              Icon(
-                AntDesign.dotchart,
-                color: myTheme.colorScheme.onPrimaryContainer,
-                size: 20.0,
+              Padding(
+                padding: const EdgeInsets.only(left: 16.0),
+                child: Icon(
+                  MaterialCommunityIcons.chart_timeline_variant_shimmer,
+                  color: myTheme.colorScheme.onPrimaryContainer,
+                  size: 19,
+                ),
               ),
               const SizedBox(width: 8.0),
               Text(
                 AppLocalizations.of(context)!.mostSelled,
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w500,
                   color: myTheme.colorScheme.onPrimaryContainer,
-                  fontSize: 16.0,
-                  fontFamily: 'Poppins-regular',
+                  letterSpacing: 0.15,
+                  fontSize: 16,
+                  fontFamily: 'Poppins-medium',
                 ),
               ),
             ],
@@ -111,8 +115,9 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                             );
                           },
                           child: Container(
-                            margin:
-                                const EdgeInsets.fromLTRB(0.0, 8.0, 16.0, 0),
+                            margin: productsBySales.last == product
+                                ? const EdgeInsets.fromLTRB(16, 12, 16, 0)
+                                : const EdgeInsets.fromLTRB(16, 12, 0, 0),
                             width: 140,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(16),
@@ -156,8 +161,8 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                       color: myTheme
                                           .colorScheme.onPrimaryContainer,
                                       fontFamily: 'Poppins-regular',
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12,
+                                      letterSpacing: 0.25,
                                     ),
                                   ),
                                 ),

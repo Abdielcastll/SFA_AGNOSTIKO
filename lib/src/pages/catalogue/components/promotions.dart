@@ -1,4 +1,7 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -17,6 +20,7 @@ import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class PromotionsWidget extends StatefulWidget {
   const PromotionsWidget({
@@ -53,34 +57,42 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
 
     final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
 
+    int activeIndex = 0;
+
     return Container(
-      height: 240,
-      padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 10.0),
+      // padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 10.0),
+      margin: EdgeInsets.only(top: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: myTheme.colorScheme.background,
       ),
       child: Column(
         children: [
-          Row(
-            children: [
-              Icon(
-                MaterialIcons.grade,
-                color: myTheme.colorScheme.primary,
-                size: 25.0,
-              ),
-              const SizedBox(width: 5.0),
-              Text(
-                AppLocalizations.of(context)!.promotions,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: myTheme.colorScheme.onPrimaryContainer,
-                  letterSpacing: 0.15,
-                  fontSize: 16,
-                  fontFamily: 'Poppins-regular',
+          Container(
+            margin: EdgeInsets.fromLTRB(15, 8, 0, 0),
+            child: Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(bottom: 2),
+                  child: Icon(
+                    Entypo.star_outlined,
+                    color: myTheme.colorScheme.onPrimaryContainer,
+                    size: 19,
+                  ),
                 ),
-              ),
-            ],
+                const SizedBox(width: 5.0),
+                Text(
+                  AppLocalizations.of(context)!.promotions,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: myTheme.colorScheme.onPrimaryContainer,
+                    letterSpacing: 0.15,
+                    fontSize: 16,
+                    fontFamily: 'Poppins-medium',
+                  ),
+                ),
+              ],
+            ),
           ),
           activePromotions.isEmpty
               ? Container(
@@ -128,195 +140,200 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
                 )
               : Container(
                   margin: const EdgeInsets.fromLTRB(0, 12, 0, 0),
-                  height: 175,
+                  // height: 180,
                   width: double.infinity,
-                  child: RawScrollbar(
-                    thumbColor: myTheme.colorScheme.primary.withOpacity(0.3),
-                    thickness: 4,
-                    radius: const Radius.circular(16),
-                    child: ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: activePromotions.length,
-                      itemBuilder: (BuildContext context, index) {
-                        final promotion = activePromotions[index];
+                  child: CarouselSlider.builder(
+                    itemCount: activePromotions.length,
+                    options: CarouselOptions(
+                      viewportFraction: 0.9,
+                      height: 180,
+                      enableInfiniteScroll: false,
+                      onPageChanged: (index, reason) {
+                        setState(() => activeIndex = index);
+                        print(activeIndex);
+                      },
+                    ),
+                    itemBuilder: (context, index, realIndex) {
+                      final promotion = activePromotions[index];
 
-                        return FutureBuilder<String?>(
-                          future: FirebaseStorage.instance
-                              .ref()
-                              .child('imagenes')
-                              .child('promociones')
-                              .child(promotion.firebaseDocumentID)
-                              .child('1')
-                              .getDownloadURL()
-                              .catchError((e) {
-                            print(e);
-                          }),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              final String url = snapshot.data?.toString() ??
-                                  'https://imgur.com/Tx5FGxS';
+                      return FutureBuilder<String?>(
+                        future: FirebaseStorage.instance
+                            .ref()
+                            .child('imagenes')
+                            .child('promociones')
+                            .child(promotion.firebaseDocumentID)
+                            .child('1')
+                            .getDownloadURL()
+                            .catchError((e) {
+                          print('ERROR ON GETTING PROMOTION IMAGE');
+                          print(e);
+                          return e;
+                        }),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            final String url = snapshot.data?.toString() ??
+                                'https://imgur.com/Tx5FGxS';
 
-                              return GestureDetector(
-                                onTap: () {
-                                  final counterLimitProvider =
-                                      Provider.of<CounterLimitFirestore>(
-                                          context,
-                                          listen: false);
-                                  if (counterLimitProvider.getProductsLimit >
-                                      100) {
-                                    counterLimitProvider.setProductsLimit(
-                                        10, 10);
-                                  }
-                                  print(products
-                                      .where((product) =>
-                                          product.promotion ==
-                                          promotion.firebaseDocumentID)
-                                      .toList());
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ProductsPage(
-                                        listOfProducts: productsWithPromotions
-                                            .where((product) =>
-                                                product.promotion ==
-                                                promotion.firebaseDocumentID)
-                                            .toList(),
-                                        listOfPrices: listOfPrices,
-                                        userZoneDocument: userZoneDocument,
-                                        showFullList: false,
-                                        pricesName: pricesName,
-                                      ),
+                            return GestureDetector(
+                              onTap: () {
+                                final counterLimitProvider =
+                                    Provider.of<CounterLimitFirestore>(context,
+                                        listen: false);
+                                if (counterLimitProvider.getProductsLimit >
+                                    100) {
+                                  counterLimitProvider.setProductsLimit(10, 10);
+                                }
+                                print(products
+                                    .where((product) =>
+                                        product.promotion ==
+                                        promotion.firebaseDocumentID)
+                                    .toList());
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ProductsPage(
+                                      listOfProducts: productsWithPromotions
+                                          .where((product) =>
+                                              product.promotion ==
+                                              promotion.firebaseDocumentID)
+                                          .toList(),
+                                      listOfPrices: listOfPrices,
+                                      userZoneDocument: userZoneDocument,
+                                      showFullList: false,
+                                      pricesName: pricesName,
                                     ),
-                                  );
-                                },
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      margin: const EdgeInsets.fromLTRB(
-                                          0, 0, 16, 0),
-                                      height: 140,
-                                      width: 300,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(8),
-                                        child: CachedNetworkImage(
-                                          fit: BoxFit.cover,
-                                          imageUrl: url,
-                                          placeholder: (context, url) =>
-                                              const SizedBox(
-                                                  width: 300,
-                                                  child: Center(
-                                                      child:
-                                                          CircularProgressIndicator())),
-                                          errorWidget: (context, url, error) =>
-                                              Image.asset(
-                                            'assets/images/promotions.jpg',
-                                            fit: BoxFit.cover,
+                                  ),
+                                );
+                              },
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    // margin: activePromotions.last == promotion
+                                    //     ? const EdgeInsets.fromLTRB(0, 0, 16, 0)
+                                    //     : const EdgeInsets.fromLTRB(
+                                    //         0, 0, 16, 0),
+                                    margin:
+                                        const EdgeInsets.fromLTRB(0, 0, 16, 0),
+                                    height: 140,
+                                    width: 300,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: CachedNetworkImage(
+                                        fit: BoxFit.cover,
+                                        imageUrl: url,
+                                        placeholder: (context, url) =>
+                                            const SizedBox(
+                                          width: 300,
+                                          child: Center(
+                                            child: CircularProgressIndicator(),
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 12),
-                                    Container(
-                                      margin: const EdgeInsets.only(left: 12),
-                                      width: 280,
-                                      height: 20,
-                                      child: Text(
-                                        promotion.description,
-                                        maxLines: 1,
-                                        textAlign: TextAlign.start,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontFamily: 'Poppins-regular',
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: myTheme
-                                              .colorScheme.onPrimaryContainer,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            } else if (snapshot.hasError) {
-                              return GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ProductsPage(
-                                        listOfProducts: productsWithPromotions
-                                            .where(
-                                              (product) =>
-                                                  product.promotion ==
-                                                  promotion.firebaseDocumentID,
-                                            )
-                                            .toList(),
-                                        listOfPrices: listOfPrices,
-                                        userZoneDocument: userZoneDocument,
-                                        showFullList: false,
-                                        pricesName: pricesName,
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      margin: const EdgeInsets.fromLTRB(
-                                          0, 0, 16, 0),
-                                      height: 140,
-                                      width: 300,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(8),
-                                        child: Image.asset(
+                                        errorWidget: (context, url, error) =>
+                                            Image.asset(
                                           'assets/images/promotions.jpg',
                                           fit: BoxFit.cover,
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(height: 12),
-                                    Container(
-                                      margin: const EdgeInsets.only(left: 12),
-                                      width: 280,
-                                      height: 20,
-                                      child: Text(
-                                        promotion.description,
-                                        maxLines: 1,
-                                        textAlign: TextAlign.start,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontFamily: 'Poppins-regular',
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: myTheme
-                                              .colorScheme.onPrimaryContainer,
-                                        ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Container(
+                                    width: 280,
+                                    child: Text(
+                                      promotion.description,
+                                      maxLines: 1,
+                                      textAlign: TextAlign.start,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins-regular',
+                                        color: myTheme
+                                            .colorScheme.onPrimaryContainer,
+                                        fontSize: 16,
+                                        letterSpacing: 0.5,
                                       ),
                                     ),
-                                  ],
-                                ),
-                              );
-                            } else {
-                              return const SizedBox(
-                                width: 300,
-                                child: Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              );
-                            }
-                          },
-                        );
-                      },
-                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else if (snapshot.hasError) {
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ProductsPage(
+                                      listOfProducts: productsWithPromotions
+                                          .where(
+                                            (product) =>
+                                                product.promotion ==
+                                                promotion.firebaseDocumentID,
+                                          )
+                                          .toList(),
+                                      listOfPrices: listOfPrices,
+                                      userZoneDocument: userZoneDocument,
+                                      showFullList: false,
+                                      pricesName: pricesName,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    margin:
+                                        const EdgeInsets.fromLTRB(0, 0, 16, 0),
+                                    height: 140,
+                                    width: 300,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Image.asset(
+                                        'assets/images/promotions.jpg',
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 12),
+                                  Container(
+                                    margin: const EdgeInsets.only(left: 12),
+                                    width: 280,
+                                    height: 20,
+                                    child: Text(
+                                      promotion.description,
+                                      maxLines: 1,
+                                      textAlign: TextAlign.start,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins-regular',
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: myTheme
+                                            .colorScheme.onPrimaryContainer,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else {
+                            return const SizedBox(
+                              width: 300,
+                              child: Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            );
+                          }
+                        },
+                      );
+                    },
                   ),
                 ),
         ],

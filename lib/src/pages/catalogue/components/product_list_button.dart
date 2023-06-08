@@ -27,67 +27,77 @@ class _ListOfProductsButtonState extends State<ListOfProductsButton> {
     final products = Provider.of<List<Products>?>(context) ?? [];
 
     // print('products from button: ${products.length}');
-    return Container(
-      margin: const EdgeInsets.fromLTRB(16, 10, 16, 0),
-      width: MediaQuery.of(context).size.width,
-      height: 45,
-      child: ElevatedButton.icon(
-        onPressed: () {
-          final counterLimitProvider =
-              Provider.of<CounterLimitFirestore>(context, listen: false);
-          if (products.length > 100) {
-            counterLimitProvider.setProductsLimit(10, 10);
-          } else {
-            counterLimitProvider.setProductsLimit(
-                counterLimitProvider.getProductsLimit,
-                counterLimitProvider.getScrollProductLimit);
-          }
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (BuildContext context) => ProductsPage(
-                listOfPrices: prices,
-                userZoneDocument: userZoneDocument,
-                listOfProducts: const [],
-                showFullList: true,
-                pricesName: pricesName,
-              ),
-            ),
-          );
-        },
-        style: ButtonStyle(
-          elevation: MaterialStateProperty.all<double>(0),
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-          overlayColor: MaterialStateProperty.all<Color>(
-              myTheme.colorScheme.primary.withOpacity(0.5)),
+    return Center(
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+        width: 380,
+        height: 56,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100),
         ),
-        icon: Container(
-          margin: const EdgeInsets.only(bottom: 3),
-          child: Icon(
-            MaterialCommunityIcons.tag_outline,
-            color: myTheme.colorScheme.onPrimaryContainer,
-            size: 20,
-          ),
-        ),
-        label: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              margin: const EdgeInsets.only(left: 16),
-              child: Text(
-                AppLocalizations.of(context)!.listOfProducts,
-                style: TextStyle(
-                  color: myTheme.colorScheme.onPrimaryContainer,
-                  fontFamily: 'Poppins-regular',
-                  fontWeight: FontWeight.bold,
+        child: ElevatedButton.icon(
+          onPressed: () {
+            final counterLimitProvider =
+                Provider.of<CounterLimitFirestore>(context, listen: false);
+            if (products.length > 100) {
+              counterLimitProvider.setProductsLimit(10, 10);
+            } else {
+              counterLimitProvider.setProductsLimit(
+                  counterLimitProvider.getProductsLimit,
+                  counterLimitProvider.getScrollProductLimit);
+            }
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (BuildContext context) => ProductsPage(
+                  listOfPrices: prices,
+                  userZoneDocument: userZoneDocument,
+                  listOfProducts: const [],
+                  showFullList: true,
+                  pricesName: pricesName,
                 ),
               ),
+            );
+          },
+          style: ButtonStyle(
+            elevation: MaterialStateProperty.all<double>(0),
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+            overlayColor: MaterialStateProperty.all<Color>(
+              myTheme.colorScheme.primary.withOpacity(0.5),
             ),
-            Icon(
-              MaterialIcons.keyboard_arrow_right,
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(100),
+              ),
+            ),
+          ),
+          icon: Container(
+            margin: const EdgeInsets.only(bottom: 3, left: 8),
+            child: Icon(
+              MaterialCommunityIcons.tag_outline,
               color: myTheme.colorScheme.onPrimaryContainer,
-              size: 16,
+              size: 20,
             ),
-          ],
+          ),
+          label: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(left: 18),
+                child: Text(
+                  AppLocalizations.of(context)!.listOfProducts,
+                  style: TextStyle(
+                    color: myTheme.colorScheme.onPrimaryContainer,
+                    fontFamily: 'Poppins-medium',
+                  ),
+                ),
+              ),
+              Icon(
+                MaterialIcons.keyboard_arrow_right,
+                color: myTheme.colorScheme.onPrimaryContainer,
+                size: 16,
+              ),
+            ],
+          ),
         ),
       ),
     );
