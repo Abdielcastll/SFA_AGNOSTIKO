@@ -244,14 +244,7 @@ identifyPaymentMethod({
           ),
           Container(
             margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-            height: 50,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: myTheme.colorScheme.primary.withOpacity(0.3),
-                // color: Colors.transparent,
-              ),
-            ),
+            height: 70,
             child: TextField(
               style: TextStyle(
                 fontSize: 14,
@@ -279,13 +272,20 @@ identifyPaymentMethod({
                   fontSize: 14,
                   color: myTheme.colorScheme.primary.withOpacity(0.2),
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(
+                    color: Color(0xFF4f42ed),
                   ),
                 ),
-                counterText: '',
+                filled: true, //<-- SEE HERE
+                fillColor: Colors.white,
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: myTheme.colorScheme.primary.withOpacity(0.3),
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(
@@ -309,15 +309,7 @@ identifyPaymentMethod({
           ),
           Container(
             margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-            height: 50,
-            // width: 200,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: myTheme.colorScheme.primary.withOpacity(0.3),
-                // color: Colors.transparent,
-              ),
-            ),
+            height: 70,
             child: TextField(
               style: TextStyle(
                 fontSize: 14,
@@ -327,6 +319,11 @@ identifyPaymentMethod({
               keyboardType: TextInputType.name,
               maxLines: 1,
               maxLength: 50,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                  RegExp(r"^[a-zA-ZñÑ@.]*"),
+                ),
+              ],
               textCapitalization: TextCapitalization.characters,
               onChanged: (value) {
                 // setState(() {
@@ -342,13 +339,20 @@ identifyPaymentMethod({
                   fontSize: 14,
                   color: myTheme.colorScheme.primary.withOpacity(0.2),
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(
+                    color: Color(0xFF4f42ed),
                   ),
                 ),
-                counterText: '',
+                filled: true, //<-- SEE HERE
+                fillColor: Colors.white,
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: myTheme.colorScheme.primary.withOpacity(0.3),
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(
@@ -1027,15 +1031,9 @@ identifyPaymentMethod({
           ),
           Container(
             margin: EdgeInsets.fromLTRB(10, 0, 0, 10),
-            height: 50,
+            height: 70,
             // width: 200,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: myTheme.colorScheme.primary.withOpacity(0.3),
-                // color: Colors.transparent,
-              ),
-            ),
+
             child: TextField(
               style: TextStyle(
                 fontSize: 14,
@@ -1044,7 +1042,7 @@ identifyPaymentMethod({
               ),
               keyboardType: TextInputType.phone,
               maxLines: 1,
-              maxLength: 50,
+              maxLength: 12,
               textCapitalization: TextCapitalization.characters,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
@@ -1061,13 +1059,20 @@ identifyPaymentMethod({
                   fontSize: 14,
                   color: myTheme.colorScheme.primary.withOpacity(0.2),
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(
+                    color: Color(0xFF4f42ed),
                   ),
                 ),
-                counterText: '',
+                filled: true, //<-- SEE HERE
+                fillColor: Colors.white,
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: myTheme.colorScheme.primary.withOpacity(0.3),
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(
@@ -1087,13 +1092,7 @@ identifyPaymentMethod({
           ),
           Container(
             margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-            height: 50,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: myTheme.colorScheme.primary.withOpacity(0.3),
-              ),
-            ),
+            height: 70,
             child: TextField(
               style: TextStyle(
                 fontSize: 14,
@@ -1102,7 +1101,7 @@ identifyPaymentMethod({
               ),
               keyboardType: TextInputType.phone,
               maxLines: 1,
-              maxLength: 50,
+              maxLength: 25,
               textCapitalization: TextCapitalization.characters,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
@@ -1119,13 +1118,20 @@ identifyPaymentMethod({
                   fontSize: 14,
                   color: myTheme.colorScheme.primary.withOpacity(0.2),
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(
+                    color: Color(0xFF4f42ed),
                   ),
                 ),
-                counterText: '',
+                filled: true, //<-- SEE HERE
+                fillColor: Colors.white,
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: myTheme.colorScheme.primary.withOpacity(0.3),
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(
@@ -1907,15 +1913,9 @@ identifyPaymentMethod({
           ),
           Container(
             margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-            height: 50,
+            height: 70,
             // width: 200,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: myTheme.colorScheme.primary.withOpacity(0.3),
-                // color: Colors.transparent,
-              ),
-            ),
+
             child: TextField(
               style: TextStyle(
                 fontSize: 14,
@@ -1924,7 +1924,7 @@ identifyPaymentMethod({
               ),
               keyboardType: TextInputType.phone,
               maxLines: 1,
-              maxLength: 50,
+              maxLength: 12,
               textCapitalization: TextCapitalization.characters,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
@@ -1942,13 +1942,20 @@ identifyPaymentMethod({
                   fontSize: 14,
                   color: myTheme.colorScheme.primary.withOpacity(0.2),
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(
+                    color: Color(0xFF4f42ed),
                   ),
                 ),
-                counterText: '',
+                filled: true, //<-- SEE HERE
+                fillColor: Colors.white,
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: myTheme.colorScheme.primary.withOpacity(0.3),
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(
