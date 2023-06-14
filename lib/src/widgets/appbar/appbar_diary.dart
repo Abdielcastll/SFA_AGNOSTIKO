@@ -745,17 +745,19 @@ class DiaryTabBar extends StatelessWidget implements PreferredSizeWidget {
       splashBorderRadius: BorderRadius.circular(20),
       splashFactory: InkSplash.splashFactory,
       labelColor: Colors.white,
-      indicatorColor: myTheme.colorScheme.onPrimaryContainer,
+      indicatorColor: Colors.white,
       unselectedLabelColor: Colors.grey.shade400,
-      indicatorWeight: 4,
-      indicatorPadding: EdgeInsets.symmetric(horizontal: 20),
+
+      indicatorWeight: 2,
+      indicatorPadding: EdgeInsets.symmetric(horizontal: 30),
       indicatorSize: TabBarIndicatorSize.tab,
       // isScrollable: true,
       // ignore: prefer_const_literals_to_create_immutables
       tabs: [
         Tab(text: AppLocalizations.of(context)!.visits),
         Tab(text: AppLocalizations.of(context)!.orders),
-        Tab(text: AppLocalizations.of(context)!.invoices),
+        Tab(text: "Pagos"),
+        // Tab(text: AppLocalizations.of(context)!.invoices),
       ],
     );
   }

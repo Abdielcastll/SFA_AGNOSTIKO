@@ -8,6 +8,7 @@ import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/invoices_page.dart
 import 'package:pwa_sales2go_flutter/src/pages/diary/orders/orders_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/visits/visits_page.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
+import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_diary.dart';
 
 class DiaryTabs extends StatefulWidget {
@@ -26,7 +27,7 @@ class _DiaryTabsState extends State<DiaryTabs> {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        backgroundColor: Colors.grey.shade200,
+        backgroundColor: myTheme.colorScheme.background,
         appBar: AppBarDiary(userZoneDocument: userZoneDocument),
         body: DiaryBody(),
       ),

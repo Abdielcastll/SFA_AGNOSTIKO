@@ -16,25 +16,21 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 class OrdersOnProcess extends StatefulWidget {
   const OrdersOnProcess({
     Key? key,
+    required this.isDescending,
   }) : super(key: key);
+
+  final bool isDescending;
 
   @override
   State<OrdersOnProcess> createState() => _OrdersOnProcessState();
 }
 
 class _OrdersOnProcessState extends State<OrdersOnProcess> {
-  bool isDescending = false;
-  DateTime today = DateTime.now();
   var dateFormatter = DateFormat('dd-MM-yyyy');
 
   @override
   Widget build(BuildContext context) {
     final orders = Provider.of<List<Orders>?>(context) ?? [];
-    final currentDay =
-        Provider.of<CounterLimitFirestore>(context).currentDayOrder;
-    final currentDateTime = currentDay.toDate();
-    String formattedDate = dateFormatter.format(currentDateTime);
-    print('ordenes: ${orders.length}');
     final ordersOnProcess = orders
         .where((element) => element.isInvoiced == false)
         .toList()
@@ -45,154 +41,6 @@ class _OrdersOnProcessState extends State<OrdersOnProcess> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        MaterialCommunityIcons.order_alphabetical_ascending,
-                        color: myTheme.colorScheme.secondary,
-                        size: 25,
-                      ),
-                      const SizedBox(width: 5),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
-                        child: Text(
-                          isDescending
-                              ? AppLocalizations.of(context)!.ascendingFilter
-                              : AppLocalizations.of(context)!.descendingFilter,
-                          style: TextStyle(
-                            fontFamily: 'Poppins-regular',
-                            // color: Colors.grey.shade500,
-                            color: myTheme.colorScheme.secondary,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  onPressed: () {
-                    // Re ordenar el list view alfabeticamente
-                    setState(() => isDescending = !isDescending);
-                  },
-                ),
-                const SizedBox(width: 20),
-                Container(
-                  height: 40,
-                  padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                        color: myTheme.colorScheme.primary.withOpacity(0.3)),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
-                        child: Text(
-                          currentDay !=
-                                  Timestamp.fromDate(DateTime(
-                                    DateTime.now().year + 99,
-                                    DateTime.now().month + 99,
-                                    DateTime.now().day + 99,
-                                    0,
-                                    0,
-                                    0,
-                                    0,
-                                    0,
-                                  ))
-                              ? formattedDate
-                              : '00-00-0000',
-                          style: TextStyle(
-                            fontSize: 14,
-                            // fontWeight: FontWeight.bold,
-                            fontFamily: 'Poppins-regular',
-                            color: myTheme.colorScheme.primary,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 20,
-                        child: IconButton(
-                          onPressed: () async {
-                            final currentDayProvider =
-                                Provider.of<CounterLimitFirestore>(context,
-                                    listen: false);
-
-                            DateTime? newDate = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(2010),
-                              lastDate: DateTime(2030),
-                            );
-                            if (newDate == null) {
-                              return;
-                            }
-                            setState(() {
-                              today = newDate;
-                              formattedDate = dateFormatter.format(newDate);
-                              final newDay = Timestamp.fromDate(newDate);
-                              currentDayProvider.setNewDayOrder(newDay);
-                            });
-                          },
-                          splashRadius: 5,
-                          icon: Icon(
-                            MaterialCommunityIcons.calendar_edit,
-                            color: myTheme.colorScheme.primary.withOpacity(0.8),
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        // width: 20,
-                        margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                        child: IconButton(
-                          onPressed: () {
-                            final currentDayProvider =
-                                Provider.of<CounterLimitFirestore>(context,
-                                    listen: false);
-                            setState(() {
-                              currentDayProvider
-                                  .setNewDayOrder(Timestamp.fromDate(DateTime(
-                                DateTime.now().year + 99,
-                                DateTime.now().month + 99,
-                                DateTime.now().day + 99,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                              )));
-                            });
-                          },
-                          splashRadius: 5,
-                          icon: Icon(
-                            MaterialCommunityIcons.calendar_remove,
-                            color: myTheme.colorScheme.onPrimaryContainer,
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
           ordersOnProcess.isNotEmpty
               ? SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
@@ -204,7 +52,7 @@ class _OrdersOnProcessState extends State<OrdersOnProcess> {
                         physics: BouncingScrollPhysics(),
                         itemCount: ordersOnProcess.length,
                         itemBuilder: (BuildContext context, int index) {
-                          final sortedOrders = isDescending
+                          final sortedOrders = widget.isDescending
                               ? ordersOnProcess.reversed.toList()
                               : ordersOnProcess;
                           final order = sortedOrders[index];
@@ -225,7 +73,7 @@ class _OrdersOnProcessState extends State<OrdersOnProcess> {
                           final orderSubTotal = order.subTotal;
                           final orderDiscountMaster = order.masterDiscount;
                           final orderExchangeRates = order.exchangeRate;
-                          print(orderExchangeRates);
+                          final orderProductQuantities = order.productsQuantity;
                           return OrderCard(
                             clientReferenceId: orderClientRefID,
                             date: deliveryDate,
@@ -241,6 +89,7 @@ class _OrdersOnProcessState extends State<OrdersOnProcess> {
                             correlativeNumber: order.correlativeNumber,
                             showButton: true,
                             coinsExchangeRates: orderExchangeRates,
+                            orderProductQuantities: orderProductQuantities,
                           );
                         },
                       ),

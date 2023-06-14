@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -118,44 +120,46 @@ class _VIsitCardBodyState extends State<VIsitCardBody> {
             onTap: () {
               widget.widget.status == AppLocalizations.of(context)!.onProcess
                   ? modalBottomSheetForOnProcess(
-                      context,
-                      widget.widget.commentary,
-                      currentClientName,
-                      currentClientIdType,
-                      currentClientId,
-                      currentClientSpecial,
-                      currentClientPhone,
-                      currentClientEmail,
-                      currentClientAddress,
-                      currentClientDispatchAdress,
-                      zonesSummary[currentClientZones],
-                      currentClientPrices,
-                      currentDiscountMaster,
-                      widget.widget.clientReferenceId,
-                      userUID,
-                      widget.widget.visitDocumentId,
-                      currentClientId,
-                      currentClientIdType,
+                      context: context,
+                      commentary: widget.widget.commentary,
+                      currentClientName: currentClientName,
+                      idType: currentClientIdType,
+                      id: currentClientId,
+                      specialContributor: currentClientSpecial,
+                      currentClientPhone: currentClientPhone,
+                      currentClientEmail: currentClientEmail,
+                      currentClientAddress: currentClientAddress,
+                      currentClientDispatchAdress: currentClientDispatchAdress,
+                      currentClientZones: zonesSummary[currentClientZones],
+                      currentClientPrices: currentClientPrices,
+                      currentDiscountMaster: currentDiscountMaster,
+                      clientReferenceId: widget.widget.clientReferenceId,
+                      userUID: userUID,
+                      visitDocumentId: widget.widget.visitDocumentId,
+                      currentClientId: currentClientId,
+                      currentClientIdType: currentClientIdType,
+                      date: widget.widget.date,
                     )
                   : modalBottomSheetForCompleted(
-                      context,
-                      widget.widget.commentary,
-                      currentClientName,
-                      currentClientIdType,
-                      currentClientId,
-                      currentClientSpecial,
-                      currentClientPhone,
-                      currentClientEmail,
-                      currentClientAddress,
-                      currentClientDispatchAdress,
-                      zonesSummary[currentClientZones],
-                      currentClientPrices,
-                      currentDiscountMaster,
-                      widget.widget.clientReferenceId,
-                      userUID,
-                      widget.widget.visitDocumentId,
-                      currentClientId,
-                      currentClientIdType,
+                      context: context,
+                      commentary: widget.widget.commentary,
+                      currentClientName: currentClientName,
+                      idType: currentClientIdType,
+                      id: currentClientId,
+                      specialContributor: currentClientSpecial,
+                      currentClientPhone: currentClientPhone,
+                      currentClientEmail: currentClientEmail,
+                      currentClientAddress: currentClientAddress,
+                      currentClientDispatchAdress: currentClientDispatchAdress,
+                      currentClientZones: zonesSummary[currentClientZones],
+                      currentClientPrices: currentClientPrices,
+                      currentDiscountMaster: currentDiscountMaster,
+                      clientReferenceId: widget.widget.clientReferenceId,
+                      userUID: userUID,
+                      visitDocumentId: widget.widget.visitDocumentId,
+                      currentClientId: currentClientId,
+                      currentClientIdType: currentClientIdType,
+                      date: widget.widget.date,
                     );
             },
             child: Padding(
@@ -182,10 +186,10 @@ class _VIsitCardBodyState extends State<VIsitCardBody> {
                             child: Text(
                               '$currentClientName',
                               style: const TextStyle(
-                                fontSize: 13,
-                                fontFamily: 'Poppins-regular',
-                                color: Colors.black,
-                              ),
+                                  fontSize: 14,
+                                  fontFamily: 'Poppins-regular',
+                                  color: Colors.black,
+                                  letterSpacing: 0.5),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -197,9 +201,8 @@ class _VIsitCardBodyState extends State<VIsitCardBody> {
                             widget.widget.date,
                             style: TextStyle(
                               color: identifyColor(),
-                              fontSize: 13,
-                              fontFamily: 'Poppins-regular',
-                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                              fontFamily: 'Poppins-medium',
                             ),
                           ),
                         ),
@@ -214,10 +217,6 @@ class _VIsitCardBodyState extends State<VIsitCardBody> {
                         children: [
                           Container(
                             margin: EdgeInsets.fromLTRB(14, 0, 0, 0),
-
-                            // height: 13,
-                            // width: 150,
-                            // color: Colors.red,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -229,7 +228,6 @@ class _VIsitCardBodyState extends State<VIsitCardBody> {
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     fontSize: 10,
-                                    // color: Colors.grey.shade500,
                                     color: myTheme.colorScheme.secondary,
                                     fontFamily: 'Poppins-regular',
                                   ),
@@ -238,14 +236,11 @@ class _VIsitCardBodyState extends State<VIsitCardBody> {
                                   width: 10,
                                 ),
                                 Text(
-                                  // '${widget.widget.date}',
-                                  // '000-000-0000',
                                   'TLF:$currentClientPhone',
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     fontSize: 10,
-                                    // color: Colors.grey.shade500,
                                     color: myTheme.colorScheme.secondary,
                                   ),
                                 ),
@@ -282,7 +277,7 @@ class _VIsitCardBodyState extends State<VIsitCardBody> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                fontSize: 10,
+                                fontSize: 11,
                                 fontWeight: FontWeight.w400,
                                 color: identifyColor(),
                                 fontFamily: 'Poppins-regular',

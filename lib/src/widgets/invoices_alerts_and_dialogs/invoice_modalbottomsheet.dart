@@ -20,8 +20,8 @@ import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/ide
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/onTapPayment.dart';
 
-void modalBottomSheetForInvoices(
-  bool completed,
+void modalBottomSheetForInvoices({
+  required bool completed,
   context,
   specialContribuyer,
   masterDiscount,
@@ -36,18 +36,26 @@ void modalBottomSheetForInvoices(
   typeId,
   clientDocumentReferenceID,
   invoicePayments,
-  int invoiceNumber,
+  required int invoiceNumber,
   invoiceTotal,
   client,
   invoiceDocumentID,
   currentClientDispatchAdress,
   subTotal,
   percentageTax,
-  double tax,
+  required double tax,
   discountPercentage,
   discount,
-) {
-  var dateFormatter = DateFormat('dd-MM-yyyy');
+  invoiceDate,
+}) {
+  final coinName = Provider.of<Coin?>(context, listen: false)?.name ?? '';
+  final coinDecimals =
+      Provider.of<Coin?>(context, listen: false)?.decimals ?? 0;
+  final coinExchangeRatio =
+      Provider.of<Coin?>(context, listen: false)?.exchangeRatio ?? 0;
+  final coinSymbol = Provider.of<Coin?>(context, listen: false)?.symbol ?? '';
+  final coinCode = Provider.of<Coin?>(context, listen: false)?.code ?? '';
+  var dateFormatter = DateFormat('dd/MM/yyyy');
   DateTime today = DateTime.now();
   String formattedDate = dateFormatter.format(today);
   String? selectedValueA;
@@ -87,15 +95,40 @@ void modalBottomSheetForInvoices(
           Decimal.parse(sumOfValidPayments.toString()))
       .toString());
 
+  var subTotalConverted = priceMultipliedByItsExchangeRatio2(
+      coinDecimals: coinDecimals,
+      coinExchangeRatio: coinExchangeRatio,
+      productPrice: subTotal);
+  var subTotalformatted = formatDecimalPriceByRegion(price: subTotalConverted);
+
+  var discountMasterConverted = priceMultipliedByItsExchangeRatio2(
+      coinDecimals: coinDecimals,
+      coinExchangeRatio: coinExchangeRatio,
+      productPrice: discount ?? 0.0);
+  var discountMasterformatted =
+      formatDecimalPriceByRegion(price: discountMasterConverted);
+
+  var taxConverted = priceMultipliedByItsExchangeRatio2(
+      coinDecimals: coinDecimals,
+      coinExchangeRatio: coinExchangeRatio,
+      productPrice: tax);
+  var taxformatted = formatDecimalPriceByRegion(price: taxConverted);
+
+  var totalConverted = priceMultipliedByItsExchangeRatio2(
+      coinDecimals: coinDecimals,
+      coinExchangeRatio: coinExchangeRatio,
+      productPrice: invoiceTotal);
+  var totalformatted = formatDecimalPriceByRegion(price: totalConverted);
+
   showModalBottomSheet(
     elevation: 0,
     backgroundColor: Colors.white,
     barrierColor: myTheme.colorScheme.secondary.withOpacity(0.5),
-    // isScrollControlled: true,
+    isScrollControlled: true,
     context: context,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(
-        top: Radius.circular(20),
+        top: Radius.circular(10),
       ),
     ),
     builder: (context) {
@@ -147,156 +180,361 @@ void modalBottomSheetForInvoices(
                 padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                 child: SingleChildScrollView(
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        alignment: Alignment.centerLeft,
-                        margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                         child: Text(
-                          AppLocalizations.of(context)!.options,
+                          'Ticket #$invoiceNumber',
                           style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: myTheme.colorScheme.primary,
+                            fontSize: 24,
+                            color: Color(0xFF1B1B1F),
+                            fontFamily: 'Poppins-regular',
                           ),
                         ),
                       ),
-                      Column(
+                      SizedBox(height: 14),
+                      Container(
+                        child: Text(
+                          name,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: myTheme.colorScheme.onPrimaryContainer,
+                            fontFamily: 'Poppins-medium',
+                            letterSpacing: 0.15,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 12),
+                        child: Divider(),
+                      ),
+                      SizedBox(height: 12),
+                      Container(
+                        child: Row(
+                          children: [
+                            Text(
+                              'Fecha: ',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: myTheme.colorScheme.onPrimaryContainer,
+                                fontFamily: 'Poppins-medium',
+                                letterSpacing: 0.15,
+                              ),
+                            ),
+                            Text(
+                              '$invoiceDate',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: myTheme.colorScheme.primary,
+                                fontFamily: 'Poppins-medium',
+                                letterSpacing: 0.15,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 12),
+                        child: Divider(),
+                      ),
+                      SizedBox(height: 12),
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Subtotal',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: myTheme.colorScheme.onPrimaryContainer,
+                                fontFamily: 'Poppins-medium',
+                                letterSpacing: 0.15,
+                              ),
+                            ),
+                            Text(
+                              '$coinSymbol $subTotalformatted',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: myTheme.colorScheme.primary,
+                                fontFamily: 'Poppins-medium',
+                                letterSpacing: 0.15,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 12),
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Descuento maestro ($masterDiscount%)',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: myTheme.colorScheme.onPrimaryContainer,
+                                fontFamily: 'Poppins-medium',
+                                letterSpacing: 0.15,
+                              ),
+                            ),
+                            Text(
+                              '$coinSymbol $discountMasterformatted',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: myTheme.colorScheme.primary,
+                                fontFamily: 'Poppins-medium',
+                                letterSpacing: 0.15,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 12),
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'IVA (16%)',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: myTheme.colorScheme.onPrimaryContainer,
+                                fontFamily: 'Poppins-medium',
+                                letterSpacing: 0.15,
+                              ),
+                            ),
+                            Text(
+                              '$coinSymbol $taxformatted',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: myTheme.colorScheme.primary,
+                                fontFamily: 'Poppins-medium',
+                                letterSpacing: 0.15,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 12),
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Total',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: myTheme.colorScheme.onPrimaryContainer,
+                                fontFamily: 'Poppins-medium',
+                                letterSpacing: 0.15,
+                              ),
+                            ),
+                            Text(
+                              '$coinSymbol $totalformatted',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: myTheme.colorScheme.primary,
+                                fontFamily: 'Poppins-medium',
+                                letterSpacing: 0.15,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 35),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                child: ElevatedButton.icon(
-                                  onPressed: () {
-                                    // Ver resumen de Cliente
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            ClientDetails(
-                                          specialContribuyer:
-                                              specialContribuyer,
-                                          masterDiscount: masterDiscount,
-                                          fiscalAddress: fiscalAddress,
-                                          email: email,
-                                          listOfPrices: listOfPrices,
-                                          name: name,
-                                          tlf1: tlf1,
-                                          tlf2: tlf2,
-                                          zone: zone,
-                                          nameId: nameId,
-                                          typeId: typeId,
-                                          clientDocumentReferenceID:
-                                              clientDocumentReferenceID,
-                                          dispatchAddress:
-                                              currentClientDispatchAdress,
+                          Container(
+                            width: 150,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                  Colors.white,
+                                ),
+                                overlayColor: MaterialStateProperty.resolveWith(
+                                  (states) {
+                                    return states
+                                            .contains(MaterialState.pressed)
+                                        ? myTheme.colorScheme.primary
+                                        : null;
+                                  },
+                                ),
+                                splashFactory: NoSplash.splashFactory,
+                                elevation: MaterialStateProperty.all(0),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100),
+                                    side: BorderSide(
+                                      color: myTheme.colorScheme.primary,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              child: Text(
+                                AppLocalizations.of(context)!.seeClient,
+                                style: TextStyle(
+                                  fontFamily: 'Poppins-medium',
+                                  color: myTheme.colorScheme.primary,
+                                  fontSize: 12,
+                                ),
+                              ),
+                              onPressed: () {
+                                // Ver resumen de Cliente
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        ClientDetails(
+                                      specialContribuyer: specialContribuyer,
+                                      masterDiscount: masterDiscount,
+                                      fiscalAddress: fiscalAddress,
+                                      email: email,
+                                      listOfPrices: listOfPrices,
+                                      name: name,
+                                      tlf1: tlf1,
+                                      tlf2: tlf2,
+                                      zone: zone,
+                                      nameId: nameId,
+                                      typeId: typeId,
+                                      clientDocumentReferenceID:
+                                          clientDocumentReferenceID,
+                                      dispatchAddress:
+                                          currentClientDispatchAdress,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          Container(
+                            width: 150,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                  Colors.white,
+                                ),
+                                overlayColor: MaterialStateProperty.resolveWith(
+                                  (states) {
+                                    return states
+                                            .contains(MaterialState.pressed)
+                                        ? myTheme.colorScheme.primary
+                                        : null;
+                                  },
+                                ),
+                                splashFactory: NoSplash.splashFactory,
+                                elevation: MaterialStateProperty.all(0),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100),
+                                    side: BorderSide(
+                                      color: myTheme.colorScheme.primary,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              child: Text(
+                                AppLocalizations.of(context)!.seePayments,
+                                style: TextStyle(
+                                  fontFamily: 'Poppins-medium',
+                                  color: myTheme.colorScheme.primary,
+                                  fontSize: 12,
+                                ),
+                              ),
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      // return Container();
+                                      return SeePaymentsALertDialog(
+                                        dateFormatter: dateFormatter,
+                                        invoiceNumber:
+                                            int.parse(invoiceNumber.toString()),
+                                        client: client,
+                                        invoiceDocumentID: invoiceDocumentID,
+                                        invoicePayments: invoicePayments,
+                                        coinName: coinName,
+                                        coinDecimals: coinDecimals,
+                                        coinExchangeRatio: coinExchangeRatio,
+                                        coinSymbol: coinSymbol,
+                                        coinCode: coinCode,
+                                        remaining: remaining,
+                                        sumOfApprovedPayments:
+                                            sumOfApprovedPayments,
+                                        sumOfPendingPayments:
+                                            sumOfPendingPayments,
+                                        completed: completed!,
+                                      );
+                                    });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      completed!
+                          ? Container()
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.8,
+                                  child: ElevatedButton(
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                        myTheme.colorScheme.primary,
+                                      ),
+                                      overlayColor:
+                                          MaterialStateProperty.resolveWith(
+                                        (states) {
+                                          return states.contains(
+                                                  MaterialState.pressed)
+                                              ? Colors.white
+                                              : null;
+                                        },
+                                      ),
+                                      splashFactory: NoSplash.splashFactory,
+                                      elevation: MaterialStateProperty.all(0),
+                                      shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                          side: BorderSide(
+                                            color: myTheme.colorScheme.primary,
+                                          ),
                                         ),
                                       ),
-                                    );
-                                  },
-                                  style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                      myTheme.colorScheme.primary,
                                     ),
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(18.0),
+                                    child: Text(
+                                      AppLocalizations.of(context)!
+                                          .registerPayment,
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins-medium',
+                                        color: Colors.white,
+                                        fontSize: 12,
                                       ),
                                     ),
-                                  ),
-                                  icon: Icon(Icons.person),
-                                  label: Text(
-                                    AppLocalizations.of(context)!.seeClient,
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins-regular',
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              // SizedBox(width: 15),
-                              Container(
-                                child: ElevatedButton.icon(
-                                  onPressed: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          // return Container();
-                                          return SeePaymentsALertDialog(
-                                            dateFormatter: dateFormatter,
-                                            invoiceNumber: invoiceNumber,
-                                            client: client,
-                                            invoiceDocumentID:
-                                                invoiceDocumentID,
-                                            invoicePayments: invoicePayments,
-                                            coinName: coinName,
-                                            coinDecimals: coinDecimals,
-                                            coinExchangeRatio:
-                                                coinExchangeRatio,
-                                            coinSymbol: coinSymbol,
-                                            coinCode: coinCode,
-                                            remaining: remaining,
-                                            sumOfApprovedPayments:
-                                                sumOfApprovedPayments,
-                                            sumOfPendingPayments:
-                                                sumOfPendingPayments,
-                                            completed: completed,
-                                          );
-                                        });
-                                  },
-                                  style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                      myTheme.colorScheme.primary,
-                                    ),
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(18.0),
-                                      ),
-                                    ),
-                                  ),
-                                  icon: Icon(Icons.app_registration),
-                                  label: Text(
-                                    // Ver Pagos
-                                    AppLocalizations.of(context)!.seePayments,
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins-regular',
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          // Registrar pagos
-                          completed
-                              ? Container()
-                              : Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  child: ElevatedButton.icon(
                                     onPressed: () {
-                                      // ignore: use_build_context_synchronously
-                                      // /* Navigator.pushNamed(
-                                      //   context,
-                                      //   AmountInputView.route,
-                                      //   arguments: TransactionArgs(
-                                      //     platformInfo: platformInfo,
-                                      //     entryMode: EntryMode.Magstripe,
-                                      //     showNumericKeyboard:
-                                      //         !platformInfo.hasKeypad,
-                                      //     supportedCardTypes:
-                                      //         platformInfo.supportedCardTypes,
-                                      //     emvTransactionType:
-                                      //         EmvTransactionType.Goods,
-                                      //   ),
-                                      // ); */
+                                      //                     // ignore: use_build_context_synchronously
+                                      //                     // /* Navigator.pushNamed(
+                                      //                     //   context,
+                                      //                     //   AmountInputView.route,
+                                      //                     //   arguments: TransactionArgs(
+                                      //                     //     platformInfo: platformInfo,
+                                      //                     //     entryMode: EntryMode.Magstripe,
+                                      //                     //     showNumericKeyboard:
+                                      //                     //         !platformInfo.hasKeypad,
+                                      //                     //     supportedCardTypes:
+                                      //                     //         platformInfo.supportedCardTypes,
+                                      //                     //     emvTransactionType:
+                                      //                     //         EmvTransactionType.Goods,
+                                      //                     //   ),
+                                      //                     // ); */
                                       showDialogForRegisterPayment(
                                         context,
                                         selectedValueA,
@@ -310,7 +548,7 @@ void modalBottomSheetForInvoices(
                                         discountPercentage,
                                         discount,
                                         percentageTax,
-                                        tax,
+                                        double.parse(tax.toString()),
                                         invoiceTotal,
                                         change,
                                         paidAmount: paidAmount,
@@ -328,36 +566,224 @@ void modalBottomSheetForInvoices(
                                         invoiceNumber: invoiceNumber,
                                       );
                                     },
-                                    style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                        myTheme.colorScheme.onPrimaryContainer,
-                                      ),
-                                      shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(18.0),
-                                        ),
-                                      ),
-                                    ),
-                                    icon: Icon(Icons.add_card_outlined),
-                                    label: Text(
-                                      AppLocalizations.of(context)!
-                                          .registerPayment,
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins-regular',
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
                                   ),
                                 ),
-                        ],
-                      ),
+                              ],
+                            ),
                     ],
                   ),
+                  // child: Column(
+                  //   children: [
+                  //     Container(
+                  //       alignment: Alignment.centerLeft,
+                  //       margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                  //       child: Text(
+                  //         AppLocalizations.of(context)!.options,
+                  //         style: TextStyle(
+                  //           fontSize: 16,
+                  //           fontWeight: FontWeight.bold,
+                  //           color: myTheme.colorScheme.primary,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     Column(
+                  //       children: [
+                  //         Row(
+                  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //           children: [
+                  //             Container(
+                  //               child: ElevatedButton.icon(
+                  //                 onPressed: () {
+                  //                   // Ver resumen de Cliente
+                  //                   Navigator.push(
+                  //                     context,
+                  //                     MaterialPageRoute(
+                  //                       builder: (BuildContext context) =>
+                  //                           ClientDetails(
+                  //                         specialContribuyer:
+                  //                             specialContribuyer,
+                  //                         masterDiscount: masterDiscount,
+                  //                         fiscalAddress: fiscalAddress,
+                  //                         email: email,
+                  //                         listOfPrices: listOfPrices,
+                  //                         name: name,
+                  //                         tlf1: tlf1,
+                  //                         tlf2: tlf2,
+                  //                         zone: zone,
+                  //                         nameId: nameId,
+                  //                         typeId: typeId,
+                  //                         clientDocumentReferenceID:
+                  //                             clientDocumentReferenceID,
+                  //                         dispatchAddress:
+                  //                             currentClientDispatchAdress,
+                  //                       ),
+                  //                     ),
+                  //                   );
+                  //                 },
+                  //                 style: ButtonStyle(
+                  //                   backgroundColor: MaterialStateProperty.all(
+                  //                     myTheme.colorScheme.primary,
+                  //                   ),
+                  //                   shape: MaterialStateProperty.all<
+                  //                       RoundedRectangleBorder>(
+                  //                     RoundedRectangleBorder(
+                  //                       borderRadius:
+                  //                           BorderRadius.circular(18.0),
+                  //                     ),
+                  //                   ),
+                  //                 ),
+                  //                 icon: Icon(Icons.person),
+                  //                 label: Text(
+                  //                   AppLocalizations.of(context)!.seeClient,
+                  //                   style: TextStyle(
+                  //                     fontFamily: 'Poppins-regular',
+                  //                     color: Colors.white,
+                  //                     fontSize: 14,
+                  //                     fontWeight: FontWeight.bold,
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //             // SizedBox(width: 15),
+                  //             Container(
+                  //               child: ElevatedButton.icon(
+                  //                 onPressed: () {
+                  //                   showDialog(
+                  //                       context: context,
+                  //                       builder: (BuildContext context) {
+                  //                         // return Container();
+                  //                         return SeePaymentsALertDialog(
+                  //                           dateFormatter: dateFormatter,
+                  //                           invoiceNumber: invoiceNumber,
+                  //                           client: client,
+                  //                           invoiceDocumentID:
+                  //                               invoiceDocumentID,
+                  //                           invoicePayments: invoicePayments,
+                  //                           coinName: coinName,
+                  //                           coinDecimals: coinDecimals,
+                  //                           coinExchangeRatio:
+                  //                               coinExchangeRatio,
+                  //                           coinSymbol: coinSymbol,
+                  //                           coinCode: coinCode,
+                  //                           remaining: remaining,
+                  //                           sumOfApprovedPayments:
+                  //                               sumOfApprovedPayments,
+                  //                           sumOfPendingPayments:
+                  //                               sumOfPendingPayments,
+                  //                           completed: completed,
+                  //                         );
+                  //                       });
+                  //                 },
+                  //                 style: ButtonStyle(
+                  //                   backgroundColor: MaterialStateProperty.all(
+                  //                     myTheme.colorScheme.primary,
+                  //                   ),
+                  //                   shape: MaterialStateProperty.all<
+                  //                       RoundedRectangleBorder>(
+                  //                     RoundedRectangleBorder(
+                  //                       borderRadius:
+                  //                           BorderRadius.circular(18.0),
+                  //                     ),
+                  //                   ),
+                  //                 ),
+                  //                 icon: Icon(Icons.app_registration),
+                  //                 label: Text(
+                  //                   // Ver Pagos
+                  //                   AppLocalizations.of(context)!.seePayments,
+                  //                   style: TextStyle(
+                  //                     fontFamily: 'Poppins-regular',
+                  //                     color: Colors.white,
+                  //                     fontSize: 14,
+                  //                     fontWeight: FontWeight.bold,
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //         // Registrar pagos
+                  //         completed
+                  //             ? Container()
+                  //             : Container(
+                  //                 width: MediaQuery.of(context).size.width,
+                  //                 child: ElevatedButton.icon(
+                  //                   onPressed: () {
+                  //                     // ignore: use_build_context_synchronously
+                  //                     // /* Navigator.pushNamed(
+                  //                     //   context,
+                  //                     //   AmountInputView.route,
+                  //                     //   arguments: TransactionArgs(
+                  //                     //     platformInfo: platformInfo,
+                  //                     //     entryMode: EntryMode.Magstripe,
+                  //                     //     showNumericKeyboard:
+                  //                     //         !platformInfo.hasKeypad,
+                  //                     //     supportedCardTypes:
+                  //                     //         platformInfo.supportedCardTypes,
+                  //                     //     emvTransactionType:
+                  //                     //         EmvTransactionType.Goods,
+                  //                     //   ),
+                  //                     // ); */
+                  //                     showDialogForRegisterPayment(
+                  //                       context,
+                  //                       selectedValueA,
+                  //                       formattedDate,
+                  //                       today,
+                  //                       dateFormatter,
+                  //                       selectedCoin,
+                  //                       fieldText,
+                  //                       moneyRecievedForRegisterMoney,
+                  //                       subTotal,
+                  //                       discountPercentage,
+                  //                       discount,
+                  //                       percentageTax,
+                  //                       tax,
+                  //                       invoiceTotal,
+                  //                       change,
+                  //                       paidAmount: paidAmount,
+                  //                       coinDecimals: coinDecimals,
+                  //                       coinExchangeRatio: double.parse(
+                  //                           coinExchangeRatio.toString()),
+                  //                       coinSymbol: coinSymbol,
+                  //                       remaining: remaining,
+                  //                       coinName: coinName,
+                  //                       coinCode: coinCode,
+                  //                       paymentsValidPayQuantity:
+                  //                           paymentsValidPayQuantity,
+                  //                       client: client,
+                  //                       invoiceDocumentID: invoiceDocumentID,
+                  //                       invoiceNumber: invoiceNumber,
+                  //                     );
+                  //                   },
+                  //                   style: ButtonStyle(
+                  //                     backgroundColor:
+                  //                         MaterialStateProperty.all(
+                  //                       myTheme.colorScheme.onPrimaryContainer,
+                  //                     ),
+                  //                     shape: MaterialStateProperty.all<
+                  //                         RoundedRectangleBorder>(
+                  //                       RoundedRectangleBorder(
+                  //                         borderRadius:
+                  //                             BorderRadius.circular(18.0),
+                  //                       ),
+                  //                     ),
+                  //                   ),
+                  //                   icon: Icon(Icons.add_card_outlined),
+                  //                   label: Text(
+                  //                     AppLocalizations.of(context)!
+                  //                         .registerPayment,
+                  //                     style: TextStyle(
+                  //                       fontFamily: 'Poppins-regular',
+                  //                       color: Colors.white,
+                  //                       fontSize: 14,
+                  //                       fontWeight: FontWeight.bold,
+                  //                     ),
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //       ],
+                  //     ),
+                  //   ],
+                  // ),
                 ),
               ),
             );

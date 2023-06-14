@@ -39,6 +39,7 @@ class OrderCard extends StatefulWidget {
     this.coinsExchangeRates,
     this.correlativeNumber,
     required this.showButton,
+    this.orderProductQuantities,
   }) : super(key: key);
 
   final clientReferenceId;
@@ -55,6 +56,7 @@ class OrderCard extends StatefulWidget {
   final coinsExchangeRates;
   final correlativeNumber;
   final bool showButton;
+  final orderProductQuantities;
 
   @override
   State<OrderCard> createState() => _OrderCardState();
@@ -130,6 +132,13 @@ class _OrderCardBodyState extends State<OrderCardBody> {
     final userRole = Provider.of<UserRole?>(context, listen: true);
     // print('User Role ${userRole?.name}');
     // print("Retail: ${userRole?.isRetail}");
+    final totalProducts = widget.widget.orderProductQuantities.reduce(
+      (a, b) =>
+          int.parse(a.toString()) +
+          int.parse(
+            b.toString(),
+          ),
+    );
 
     final totalConverted = priceMultipliedByItsExchangeRatio2(
         productPrice: widget.widget.total,
@@ -270,14 +279,26 @@ class _OrderCardBodyState extends State<OrderCardBody> {
                           style: TextStyle(
                             color: identifyStatusColor(),
                             fontSize: 13,
-                            fontFamily: 'Poppins-regular',
-                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Poppins-Medium',
                           ),
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(height: 15),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    height: 15,
+                    child: Text(
+                      '$totalProducts items',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontFamily: 'Poppins-medium',
+                        color: Color(0xFF7D5070),
+                      ),
+                    ),
+                  ),
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
                     child: Row(
@@ -286,7 +307,7 @@ class _OrderCardBodyState extends State<OrderCardBody> {
                       children: [
                         Container(
                           // height: 13,
-                          width: 150,
+                          width: 100,
                           child: Text(
                             currentClientId == 0
                                 ? 'Sin Identificación'
@@ -310,8 +331,8 @@ class _OrderCardBodyState extends State<OrderCardBody> {
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontSize: 10,
-                              // color: Colors.grey.shade500,
-                              color: myTheme.colorScheme.secondary,
+                              fontFamily: 'Poppins-medium',
+                              color: identifyStatusColor(),
                             ),
                           ),
                         ),
@@ -325,6 +346,7 @@ class _OrderCardBodyState extends State<OrderCardBody> {
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontSize: 10,
+                              fontFamily: 'Poppins-medium',
                               color: identifyStatusColor(),
                             ),
                           ),

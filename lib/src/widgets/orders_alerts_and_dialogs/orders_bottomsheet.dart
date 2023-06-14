@@ -639,9 +639,10 @@ void modalBottomSheetForOrders(
                                                     label: Text(
                                                       isRetail
                                                           ? "Retomar pedido"
-                                                          : AppLocalizations.of(
-                                                                  context)!
-                                                              .createInvoiceConfirmation,
+                                                          : "Aprobar pedido",
+                                                      // AppLocalizations.of(
+                                                      //         context)!
+                                                      //     .createInvoiceConfirmation,
                                                       style: TextStyle(
                                                         fontFamily:
                                                             'Poppins-regular',

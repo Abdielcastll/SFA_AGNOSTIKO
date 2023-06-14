@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
@@ -19,12 +20,11 @@ import 'package:pwa_sales2go_flutter/src/widgets/loading/loading_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void showCreateClientDialog(context, uid) {
-  var dateFormatter = DateFormat('dd-MM-yyyy');
+  var dateFormatter = DateFormat('dd/MM/yyyy');
   DateTime today = DateTime.now();
   String formattedDate = dateFormatter.format(today);
   final nameOfCurrentUser =
       Provider.of<CurrentUserInfo>(context, listen: false).name;
-  print('nameOfCurrentUser: $nameOfCurrentUser');
 
   final List<ClientName> allClientsFromZone = [];
 
@@ -32,6 +32,7 @@ void showCreateClientDialog(context, uid) {
   String? selectedValueB;
   bool isLoading = false;
   bool isAllSelected = false;
+  bool light = false;
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -94,48 +95,49 @@ void showCreateClientDialog(context, uid) {
 
             return AlertDialog(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(28),
               ),
               title: Text(
                 AppLocalizations.of(context)!.newVisit,
                 style: TextStyle(
                   fontFamily: 'Poppins-regular',
                   color: myTheme.colorScheme.onPrimaryContainer,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 22,
                 ),
               ),
               content: SingleChildScrollView(
                 child: Container(
-                  // height: MediaQuery.of(context).size.height * 0.60,
-                  width: 300,
                   child: isLoading == true
-                      ? LoadingWidget(
-                          message: AppLocalizations.of(context)!.creatingVisit)
+                      ? Container(
+                          margin: EdgeInsets.only(top: 10),
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        )
+                      // LoadingWidget(
+                      //     message: AppLocalizations.of(context)!.creatingVisit)
                       : SingleChildScrollView(
                           child: Column(
                             children: [
                               Container(
                                 alignment: Alignment.centerLeft,
-                                margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                                 child: Text(
                                   AppLocalizations.of(context)!.date,
                                   style: TextStyle(
                                     fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: myTheme.colorScheme.primary,
-                                    fontFamily: 'Poppins-regular',
+                                    color: Color(0xFF4353C2),
+                                    fontFamily: 'Poppins-medium',
                                   ),
                                 ),
                               ),
+                              SizedBox(height: 8),
                               Container(
-                                margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
-                                padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                padding: EdgeInsets.all(10),
+                                height: 56,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
+                                  borderRadius: BorderRadius.circular(8),
                                   border: Border.all(
-                                    color: myTheme.colorScheme.primary
-                                        .withOpacity(0.3),
+                                    color: Color(0xFFDFE0FF),
                                   ),
                                 ),
                                 alignment: Alignment.centerLeft,
@@ -147,8 +149,7 @@ void showCreateClientDialog(context, uid) {
                                       formattedDate,
                                       style: TextStyle(
                                         fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: myTheme.colorScheme.primary,
+                                        color: Color(0xFF4353C2),
                                         fontFamily: 'Poppins-regular',
                                       ),
                                     ),
@@ -162,9 +163,41 @@ void showCreateClientDialog(context, uid) {
                                           DateTime? newDate =
                                               await showDatePicker(
                                             context: context,
-                                            initialDate: today,
-                                            firstDate: DateTime.now(),
+                                            initialDate: DateTime.now(),
+                                            firstDate: DateTime(2010),
                                             lastDate: DateTime(2030),
+                                            builder: (context, child) {
+                                              return Theme(
+                                                data:
+                                                    Theme.of(context).copyWith(
+                                                  dialogTheme: DialogTheme(
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              28), // this is the border radius of the picker
+                                                    ),
+                                                  ),
+                                                  colorScheme: ColorScheme.dark(
+                                                    primary: myTheme
+                                                        .colorScheme.primary,
+                                                    onPrimary: Colors.white,
+                                                    surface: Colors.white,
+                                                    onSurface:
+                                                        Color(0xFF1D1B20),
+                                                  ),
+                                                  textButtonTheme:
+                                                      TextButtonThemeData(
+                                                    style: TextButton.styleFrom(
+                                                      foregroundColor: myTheme
+                                                          .colorScheme
+                                                          .primary, // button text color
+                                                    ),
+                                                  ),
+                                                ),
+                                                child: child!,
+                                              );
+                                            },
                                           );
                                           if (newDate == null) return;
 
@@ -181,35 +214,34 @@ void showCreateClientDialog(context, uid) {
                                         splashRadius: 5,
                                         icon: Icon(
                                           MaterialCommunityIcons.calendar_edit,
-                                          color: myTheme.colorScheme.primary,
-                                          size: 20,
+                                          color: Color(0xFF4353C2),
+                                          size: 19,
                                         ),
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
+                              SizedBox(height: 12),
                               Container(
                                 alignment: Alignment.centerLeft,
-                                margin: EdgeInsets.fromLTRB(14, 5, 0, 0),
                                 child: Text(
                                   AppLocalizations.of(context)!.seller,
                                   style: TextStyle(
                                     fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: myTheme.colorScheme.primary,
-                                    fontFamily: 'Poppins-regular',
+                                    color: Color(0xFF4353C2),
+                                    fontFamily: 'Poppins-medium',
                                   ),
                                 ),
                               ),
+                              SizedBox(height: 8),
                               Container(
-                                margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
                                 padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                height: 56,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
+                                  borderRadius: BorderRadius.circular(8),
                                   border: Border.all(
-                                    color: myTheme.colorScheme.primary
-                                        .withOpacity(0.3),
+                                    color: Color(0xFFDFE0FF),
                                   ),
                                 ),
                                 alignment: Alignment.centerLeft,
@@ -221,29 +253,27 @@ void showCreateClientDialog(context, uid) {
                                       nameOfCurrentUser.toString(),
                                       style: TextStyle(
                                         fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: myTheme.colorScheme.primary,
+                                        color: Color(0xFF4353C2),
                                         fontFamily: 'Poppins-regular',
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
+                              SizedBox(height: 12),
                               Container(
                                 alignment: Alignment.centerLeft,
-                                margin: EdgeInsets.fromLTRB(14, 0, 0, 0),
                                 child: Text(
                                   AppLocalizations.of(context)!.salesArea,
                                   style: TextStyle(
                                     fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: myTheme.colorScheme.primary,
-                                    fontFamily: 'Poppins-regular',
+                                    color: Color(0xFF4353C2),
+                                    fontFamily: 'Poppins-medium',
                                   ),
                                 ),
                               ),
+                              SizedBox(height: 8),
                               Container(
-                                margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
                                 child: DropdownButtonHideUnderline(
                                   child: DropdownButton2(
                                     isExpanded: true,
@@ -256,10 +286,9 @@ void showCreateClientDialog(context, uid) {
                                                 'EJ: Caracas este',
                                             textAlign: TextAlign.left,
                                             style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold,
-                                              color: myTheme.colorScheme.primary
-                                                  .withOpacity(0.7),
+                                              fontSize: 14,
+                                              fontFamily: 'Poppins-regular',
+                                              color: Color(0xFF4353C2),
                                             ),
                                             overflow: TextOverflow.ellipsis,
                                           ),
@@ -273,10 +302,8 @@ void showCreateClientDialog(context, uid) {
                                                 item,
                                                 style: TextStyle(
                                                   fontSize: 14,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: myTheme
-                                                      .colorScheme.primary
-                                                      .withOpacity(0.7),
+                                                  fontFamily: 'Poppins-regular',
+                                                  color: Color(0xFF4353C2),
                                                 ),
                                                 overflow: TextOverflow.ellipsis,
                                               ),
@@ -290,7 +317,6 @@ void showCreateClientDialog(context, uid) {
                                           selectedValueB = null;
                                         },
                                       );
-                                      // Mover la funcion en la base de datos para cambiar la lista
                                     },
                                     iconStyleData: IconStyleData(
                                       icon: const Icon(
@@ -303,14 +329,12 @@ void showCreateClientDialog(context, uid) {
                                       iconDisabledColor: Colors.grey,
                                     ),
                                     buttonStyleData: ButtonStyleData(
-                                      height: 50,
-                                      // width: 200,
+                                      height: 56,
                                       padding: const EdgeInsets.only(right: 14),
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
+                                        borderRadius: BorderRadius.circular(8),
                                         border: Border.all(
-                                          color: myTheme.colorScheme.primary
-                                              .withOpacity(0.3),
+                                          color: Color(0xFFDFE0FF),
                                         ),
                                         color: Colors.white,
                                       ),
@@ -344,29 +368,25 @@ void showCreateClientDialog(context, uid) {
                                   ),
                                 ),
                               ),
+                              SizedBox(height: 12),
                               selectedValueA != null
                                   ? Column(
                                       children: [
                                         Container(
                                           alignment: Alignment.centerLeft,
-                                          margin:
-                                              EdgeInsets.fromLTRB(14, 5, 0, 0),
                                           child: Text(
                                             AppLocalizations.of(context)!
                                                 .clients,
                                             style: TextStyle(
                                               fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                              color:
-                                                  myTheme.colorScheme.primary,
-                                              fontFamily: "Poppins-regular",
+                                              color: Color(0xFF4353C2),
+                                              fontFamily: "Poppins-medium",
                                             ),
                                           ),
                                         ),
+                                        SizedBox(height: 8),
                                         isAllSelected == false
                                             ? Container(
-                                                margin: EdgeInsets.fromLTRB(
-                                                    10, 5, 10, 10),
                                                 child:
                                                     DropdownButtonHideUnderline(
                                                   child: DropdownButton2(
@@ -379,14 +399,10 @@ void showCreateClientDialog(context, uid) {
                                                             clientHint,
                                                             style: TextStyle(
                                                               fontSize: 12,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              color: myTheme
-                                                                  .colorScheme
-                                                                  .primary
-                                                                  .withOpacity(
-                                                                      0.7),
+                                                              fontFamily:
+                                                                  'Poppins-regular',
+                                                              color: Color(
+                                                                  0xFF4353C2),
                                                             ),
                                                             overflow:
                                                                 TextOverflow
@@ -405,12 +421,10 @@ void showCreateClientDialog(context, uid) {
                                                                 style:
                                                                     TextStyle(
                                                                   fontSize: 12,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  color: myTheme
-                                                                      .colorScheme
-                                                                      .primary,
+                                                                  fontFamily:
+                                                                      'Poppins-regular',
+                                                                  color: Color(
+                                                                      0xFF4353C2),
                                                                 ),
                                                                 overflow:
                                                                     TextOverflow
@@ -434,17 +448,18 @@ void showCreateClientDialog(context, uid) {
                                                       icon: const Icon(
                                                         Icons
                                                             .arrow_forward_ios_outlined,
+                                                        color:
+                                                            Color(0xFF4353C2),
                                                       ),
-                                                      iconSize: 11,
-                                                      iconEnabledColor: myTheme
-                                                          .colorScheme.primary
-                                                          .withOpacity(0.5),
+                                                      iconSize: 10,
+                                                      iconEnabledColor:
+                                                          Color(0xFF4353C2),
                                                       iconDisabledColor:
                                                           Colors.grey,
                                                     ),
                                                     buttonStyleData:
                                                         ButtonStyleData(
-                                                      height: 50,
+                                                      height: 56,
                                                       // width: 200,
                                                       padding:
                                                           const EdgeInsets.only(
@@ -453,12 +468,10 @@ void showCreateClientDialog(context, uid) {
                                                       decoration: BoxDecoration(
                                                         borderRadius:
                                                             BorderRadius
-                                                                .circular(20),
+                                                                .circular(8),
                                                         border: Border.all(
-                                                          color: myTheme
-                                                              .colorScheme
-                                                              .primary
-                                                              .withOpacity(0.3),
+                                                          color:
+                                                              Color(0xFFDFE0FF),
                                                         ),
                                                         color: Colors.white,
                                                       ),
@@ -521,47 +534,57 @@ void showCreateClientDialog(context, uid) {
                                                   ),
                                                 ),
                                               ),
+                                        SizedBox(height: 12),
                                         clientsFiltered.isNotEmpty
                                             ? Center(
-                                                child: Row(
-                                                  children: [
-                                                    Container(
-                                                      child: Checkbox(
-                                                        checkColor:
-                                                            Colors.white,
-                                                        shape: CircleBorder(),
-                                                        fillColor:
-                                                            MaterialStateProperty
-                                                                .all(myTheme
-                                                                    .colorScheme
-                                                                    .primary),
-                                                        activeColor: myTheme
-                                                            .colorScheme
-                                                            .primary,
-                                                        value: isAllSelected,
-                                                        onChanged: (value) {
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 8.0),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Container(
+                                                        child: Text(
+                                                          'Seleccionar todos',
+                                                          style: TextStyle(
+                                                            fontFamily:
+                                                                'Poppins-regular',
+                                                            color: myTheme
+                                                                .colorScheme
+                                                                .primary,
+                                                            fontSize: 14,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(width: 8),
+                                                      FlutterSwitch(
+                                                        onToggle: (val) {
                                                           setState(() {
+                                                            light = val;
                                                             selectedValueB =
                                                                 null;
                                                             isAllSelected =
                                                                 !isAllSelected;
                                                           });
                                                         },
+                                                        width: 39,
+                                                        height: 24,
+                                                        toggleSize: 12,
+                                                        value: light,
+                                                        borderRadius: 26,
+                                                        padding: 6,
+                                                        activeColor: Colors
+                                                            .green.shade300,
+                                                        inactiveColor:
+                                                            Color(0xFFDFE0FF),
+                                                        inactiveToggleColor:
+                                                            Color(0xFF5A5D77),
                                                       ),
-                                                    ),
-                                                    Container(
-                                                        child: Text(
-                                                      'Seleccionar todos',
-                                                      style: TextStyle(
-                                                        fontFamily:
-                                                            'Poppins-regular',
-                                                        color: myTheme
-                                                            .colorScheme
-                                                            .primary,
-                                                        fontSize: 14,
-                                                      ),
-                                                    )),
-                                                  ],
+                                                    ],
+                                                  ),
                                                 ),
                                               )
                                             : Container(),
@@ -574,133 +597,139 @@ void showCreateClientDialog(context, uid) {
                 ),
               ),
               actions: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text(
-                        AppLocalizations.of(context)!.goBack,
-                        style: TextStyle(
-                          fontFamily: 'Poppins-regular',
-                          color: myTheme.colorScheme.primary,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
+                isLoading == true
+                    ? Container()
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              AppLocalizations.of(context)!.goBack,
+                              style: TextStyle(
+                                fontFamily: 'Poppins-regular',
+                                color: myTheme.colorScheme.primary,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          selectedValueB != null
+                              ? Container(
+                                  child: ElevatedButton.icon(
+                                    onPressed: () async {
+                                      // Crear en DB una visita//
+                                      if (selectedValueA != null &&
+                                          selectedValueB != null) {
+                                        setState(() {
+                                          isLoading = true;
+                                        });
+                                        var result = await createVisitData(
+                                          uid,
+                                          clientDocID,
+                                          today,
+                                        );
+                                        if (result == null) {
+                                          setState(() {
+                                            isLoading = false;
+                                            Navigator.pop(context);
+                                          });
+                                          Fluttertoast.showToast(
+                                            msg: AppLocalizations.of(context)!
+                                                .visitCreated,
+                                          );
+                                        } else if (result != null) {
+                                          Fluttertoast.showToast(
+                                            msg: AppLocalizations.of(context)!
+                                                .createVisitError,
+                                          );
+                                          Navigator.pop(context);
+                                        }
+                                      }
+                                    },
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                        myTheme.colorScheme.onPrimaryContainer,
+                                      ),
+                                      shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                      ),
+                                    ),
+                                    icon: Icon(MaterialCommunityIcons
+                                        .truck_fast_outline),
+                                    label: Text(
+                                      AppLocalizations.of(context)!.createVisit,
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins-regular',
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        // fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : Container(),
+                          isAllSelected == true
+                              ? Container(
+                                  child: ElevatedButton.icon(
+                                    onPressed: () async {
+                                      // Crear en DB visitas//
+                                      if (clientsFiltered.isNotEmpty) {
+                                        print(clientsFiltered);
+                                        setState(() {
+                                          isLoading = true;
+                                        });
+
+                                        for (var client in clientsFiltered) {
+                                          await createVisitData(uid,
+                                              client.clientDocumentId, today);
+                                        }
+
+                                        setState(() {
+                                          isLoading = false;
+                                          Navigator.pop(context);
+                                        });
+                                        Fluttertoast.showToast(
+                                          msg: 'Visitas creadas',
+                                        );
+                                      }
+                                    },
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                        myTheme.colorScheme.onPrimaryContainer,
+                                      ),
+                                      shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                      ),
+                                    ),
+                                    icon: Icon(MaterialCommunityIcons
+                                        .truck_fast_outline),
+                                    label: Text(
+                                      AppLocalizations.of(context)!.createVisit,
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins-regular',
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        // fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : Container(),
+                        ],
                       ),
-                    ),
-                    selectedValueB != null
-                        ? Container(
-                            child: ElevatedButton.icon(
-                              onPressed: () async {
-                                // Crear en DB una visita//
-                                if (selectedValueA != null &&
-                                    selectedValueB != null) {
-                                  setState(() {
-                                    isLoading = true;
-                                  });
-                                  var result = await createVisitData(
-                                    uid,
-                                    clientDocID,
-                                    today,
-                                  );
-                                  if (result == null) {
-                                    setState(() {
-                                      isLoading = false;
-                                      Navigator.pop(context);
-                                    });
-                                    Fluttertoast.showToast(
-                                      msg: AppLocalizations.of(context)!
-                                          .visitCreated,
-                                    );
-                                  } else if (result != null) {
-                                    Fluttertoast.showToast(
-                                      msg: AppLocalizations.of(context)!
-                                          .createVisitError,
-                                    );
-                                    Navigator.pop(context);
-                                  }
-                                }
-                              },
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                  myTheme.colorScheme.onPrimaryContainer,
-                                ),
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                ),
-                              ),
-                              icon: Icon(
-                                  MaterialCommunityIcons.truck_fast_outline),
-                              label: Text(
-                                AppLocalizations.of(context)!.createVisit,
-                                style: TextStyle(
-                                  fontFamily: 'Poppins-regular',
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  // fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          )
-                        : Container(),
-                    isAllSelected == true
-                        ? Container(
-                            child: ElevatedButton.icon(
-                              onPressed: () async {
-                                // Crear en DB visitas//
-                                if (clientsFiltered.isNotEmpty) {
-                                  print(clientsFiltered);
-                                  setState(() {
-                                    isLoading = true;
-                                  });
-
-                                  for (var client in clientsFiltered) {
-                                    await createVisitData(
-                                        uid, client.clientDocumentId, today);
-                                  }
-
-                                  setState(() {
-                                    isLoading = false;
-                                    Navigator.pop(context);
-                                  });
-                                  Fluttertoast.showToast(
-                                    msg: 'Visitas creadas',
-                                  );
-                                }
-                              },
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                  myTheme.colorScheme.onPrimaryContainer,
-                                ),
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                ),
-                              ),
-                              icon: Icon(
-                                  MaterialCommunityIcons.truck_fast_outline),
-                              label: Text(
-                                AppLocalizations.of(context)!.createVisit,
-                                style: TextStyle(
-                                  fontFamily: 'Poppins-regular',
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  // fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          )
-                        : Container(),
-                  ],
-                ),
               ],
             );
           });
