@@ -432,7 +432,7 @@ identifyPaymentMethodRetail({
               },
               inputFormatters: [
                 FilteringTextInputFormatter.allow(
-                  RegExp(r"^[a-zA-ZñÑ@.]*"),
+                  RegExp(r"^[a-zA-ZñÑ@.\s]*"),
                 ),
               ],
               decoration: InputDecoration(
@@ -1743,8 +1743,6 @@ identifyPaymentMethodRetail({
                     ElevatedButton.icon(
                       onPressed: () {
                         goBackToCatalogue(context);
-
-                        // Navigator.pop(context);
                         setState(() => imageFile = null);
                       },
                       style: ButtonStyle(
