@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/add_new_client/add_new_client_page.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
@@ -110,8 +111,12 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                     setState(() {
                       _canPop = true;
                     });
-                    Navigator.popUntil(
-                        context, (route) => route.settings.name == "ORDER");
+                    Navigator.popUntil(context, (route) => route.isFirst);
+                    objectBox.delelteAllShoppingCart();
+                    orderActive.setOrder(false, Clients());
+                    final j = Provider.of<CounterLimitFirestore>(context,
+                        listen: false);
+                    j.setNewScreen(1);
 
                     ScaffoldMessenger.of(context)
                       ..removeCurrentSnackBar()
