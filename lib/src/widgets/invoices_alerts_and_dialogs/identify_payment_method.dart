@@ -319,7 +319,7 @@ identifyPaymentMethod({
               maxLength: 50,
               inputFormatters: [
                 FilteringTextInputFormatter.allow(
-                  RegExp(r"^[a-zA-ZñÑ@.]*"),
+                  RegExp(r"^[a-zA-ZñÑ@.\s]*"),
                 ),
               ],
               textCapitalization: TextCapitalization.characters,
