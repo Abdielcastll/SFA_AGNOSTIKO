@@ -15,6 +15,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
+import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/completed_pay.dart';
@@ -345,16 +346,8 @@ identifyPaymentMethodRetail({
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-            height: 50,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: myTheme.colorScheme.primary.withOpacity(0.3),
-                // color: Colors.transparent,
-              ),
-            ),
+            margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+            height: 70,
             child: TextField(
               style: TextStyle(
                 fontSize: 14,
@@ -363,7 +356,7 @@ identifyPaymentMethodRetail({
               ),
               keyboardType: TextInputType.phone,
               maxLines: 1,
-              maxLength: 20,
+              maxLength: 25,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
               ],
@@ -382,13 +375,20 @@ identifyPaymentMethodRetail({
                   fontSize: 14,
                   color: myTheme.colorScheme.primary.withOpacity(0.2),
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(
+                    color: Color(0xFF4f42ed),
                   ),
                 ),
-                counterText: '',
+                filled: true, //<-- SEE HERE
+                fillColor: Colors.white,
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: myTheme.colorScheme.primary.withOpacity(0.3),
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(
@@ -411,17 +411,10 @@ identifyPaymentMethodRetail({
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-            height: 50,
+            margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+            height: 70,
             // width: 200,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: myTheme.colorScheme.primary.withOpacity(0.3),
-                // color: Colors.transparent,
-              ),
-            ),
+
             child: TextField(
               style: TextStyle(
                 fontSize: 14,
@@ -432,14 +425,17 @@ identifyPaymentMethodRetail({
               maxLines: 1,
               maxLength: 50,
               textCapitalization: TextCapitalization.characters,
-
               onChanged: (value) {
                 // setState(() {
                 accountHolder = value;
                 // });
                 print(accountHolder);
               },
-
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                  RegExp(r"^[a-zA-ZñÑ@.\s]*"),
+                ),
+              ],
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
                 hintText: 'John Doe / Jane Doe',
@@ -448,13 +444,20 @@ identifyPaymentMethodRetail({
                   fontSize: 14,
                   color: myTheme.colorScheme.primary.withOpacity(0.2),
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(
+                    color: Color(0xFF4f42ed),
                   ),
                 ),
-                counterText: '',
+                filled: true, //<-- SEE HERE
+                fillColor: Colors.white,
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: myTheme.colorScheme.primary.withOpacity(0.3),
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(
@@ -611,8 +614,7 @@ identifyPaymentMethodRetail({
                 children: [
                   ElevatedButton.icon(
                     onPressed: () {
-                      // Navigator.pop(context);
-                      goBackToCatalogue(context);
+                      Navigator.pop(context);
                       setState(() => imageFile = null);
                     },
                     style: ButtonStyle(
@@ -1476,17 +1478,10 @@ identifyPaymentMethodRetail({
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(10, 0, 0, 10),
-            height: 50,
+            margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+            height: 70,
             // width: 200,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: myTheme.colorScheme.primary.withOpacity(0.3),
-                // color: Colors.transparent,
-              ),
-            ),
+
             child: TextField(
               style: TextStyle(
                 fontSize: 14,
@@ -1495,7 +1490,7 @@ identifyPaymentMethodRetail({
               ),
               keyboardType: TextInputType.phone,
               maxLines: 1,
-              maxLength: 50,
+              maxLength: 12,
               textCapitalization: TextCapitalization.characters,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
@@ -1507,21 +1502,28 @@ identifyPaymentMethodRetail({
 
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(
+                    color: Color(0xFF4f42ed),
+                  ),
+                ),
+                filled: true, //<-- SEE HERE
+                fillColor: Colors.white,
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: myTheme.colorScheme.primary.withOpacity(0.3),
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
                 hintText: '0112345678',
                 hintStyle: TextStyle(
                   fontFamily: 'Poppins-regular',
                   fontSize: 14,
                   color: myTheme.colorScheme.primary.withOpacity(0.2),
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
-                  ),
-                ),
-                counterText: '',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
+                  borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide(
                     color: Colors.transparent,
                   ),
@@ -1539,17 +1541,10 @@ identifyPaymentMethodRetail({
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-            height: 50,
+            margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+            height: 70,
             // width: 200,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: myTheme.colorScheme.primary.withOpacity(0.3),
-                // color: Colors.transparent,
-              ),
-            ),
+
             child: TextField(
               style: TextStyle(
                 fontSize: 14,
@@ -1558,7 +1553,7 @@ identifyPaymentMethodRetail({
               ),
               keyboardType: TextInputType.phone,
               maxLines: 1,
-              maxLength: 50,
+              maxLength: 12,
               textCapitalization: TextCapitalization.characters,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
@@ -1578,13 +1573,20 @@ identifyPaymentMethodRetail({
                   fontSize: 14,
                   color: myTheme.colorScheme.primary.withOpacity(0.2),
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(
+                    color: Color(0xFF4f42ed),
                   ),
                 ),
-                counterText: '',
+                filled: true, //<-- SEE HERE
+                fillColor: Colors.white,
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: myTheme.colorScheme.primary.withOpacity(0.3),
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(
@@ -1740,9 +1742,7 @@ identifyPaymentMethodRetail({
                   children: [
                     ElevatedButton.icon(
                       onPressed: () {
-                        goBackToCatalogue(context);
-
-                        // Navigator.pop(context);
+                        Navigator.pop(context);
                         setState(() => imageFile = null);
                       },
                       style: ButtonStyle(
@@ -2059,8 +2059,7 @@ identifyPaymentMethodRetail({
                   children: [
                     ElevatedButton.icon(
                       onPressed: () {
-                        goBackToCatalogue(context);
-                        // Navigator.pop(context);
+                        Navigator.pop(context);
                         setState(() => imageFile = null);
                       },
                       style: ButtonStyle(
@@ -2220,7 +2219,6 @@ identifyPaymentMethodRetail({
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton2(
                       isExpanded: true,
-                      // ignore: prefer_const_literals_to_create_immutables
                       hint: Row(
                         children: [
                           Expanded(
@@ -2309,7 +2307,6 @@ identifyPaymentMethodRetail({
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton2(
                       isExpanded: true,
-                      // ignore: prefer_const_literals_to_create_immutables
                       hint: Row(
                         children: [
                           Expanded(
@@ -2402,17 +2399,16 @@ identifyPaymentMethodRetail({
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-            height: 50,
+            margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+            height: 70,
             // width: 200,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: myTheme.colorScheme.primary.withOpacity(0.3),
-                // color: Colors.transparent,
-              ),
-            ),
+            // decoration: BoxDecoration(
+            //   borderRadius: BorderRadius.circular(10),
+            //   border: Border.all(
+            //     color: myTheme.colorScheme.primary.withOpacity(0.3),
+            //     // color: Colors.transparent,
+            //   ),
+            // ),
             child: TextField(
               style: TextStyle(
                 fontSize: 14,
@@ -2421,7 +2417,7 @@ identifyPaymentMethodRetail({
               ),
               keyboardType: TextInputType.phone,
               maxLines: 1,
-              maxLength: 50,
+              maxLength: 12,
               textCapitalization: TextCapitalization.characters,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
@@ -2433,19 +2429,28 @@ identifyPaymentMethodRetail({
 
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(
+                    color: Color(0xFF4f42ed),
+                  ),
+                ),
+                filled: true, //<-- SEE HERE
+                fillColor: Colors.white,
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: myTheme.colorScheme.primary.withOpacity(0.3),
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
                 hintText: '00000000',
                 hintStyle: TextStyle(
                   fontFamily: 'Poppins-regular',
                   fontSize: 14,
                   color: myTheme.colorScheme.primary.withOpacity(0.2),
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
-                  ),
-                ),
-                counterText: '',
+
+                // counterText: '',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(
@@ -2600,8 +2605,7 @@ identifyPaymentMethodRetail({
                   children: [
                     ElevatedButton.icon(
                       onPressed: () {
-                        goBackToCatalogue(context);
-                        // Navigator.pop(context);
+                        Navigator.pop(context);
                         setState(() => imageFile = null);
                       },
                       style: ButtonStyle(
