@@ -1534,9 +1534,9 @@ Future<dynamic> showDialogForRegisterPayment(
                                         : Container(),
                                 Container(
                                   margin: const EdgeInsets.fromLTRB(
-                                    15,
+                                    0,
                                     10,
-                                    15,
+                                    0,
                                     0,
                                   ),
                                   child: Row(
@@ -1565,9 +1565,9 @@ Future<dynamic> showDialogForRegisterPayment(
                                 ),
                                 Container(
                                   margin: const EdgeInsets.fromLTRB(
-                                    15,
                                     0,
-                                    15,
+                                    0,
+                                    0,
                                     0,
                                   ),
                                   child: Row(
@@ -1596,9 +1596,9 @@ Future<dynamic> showDialogForRegisterPayment(
                                 ),
                                 Container(
                                   margin: const EdgeInsets.fromLTRB(
-                                    15,
                                     0,
-                                    15,
+                                    0,
+                                    0,
                                     0,
                                   ),
                                   child: Row(
@@ -1627,9 +1627,9 @@ Future<dynamic> showDialogForRegisterPayment(
                                 ),
                                 Container(
                                   margin: const EdgeInsets.fromLTRB(
-                                    15,
                                     0,
-                                    15,
+                                    0,
+                                    0,
                                     0,
                                   ),
                                   child: Row(
@@ -1660,9 +1660,9 @@ Future<dynamic> showDialogForRegisterPayment(
                                 ),
                                 Container(
                                   margin: const EdgeInsets.fromLTRB(
-                                    15,
                                     0,
-                                    15,
+                                    0,
+                                    0,
                                     0,
                                   ),
                                   child: Row(
@@ -1692,7 +1692,7 @@ Future<dynamic> showDialogForRegisterPayment(
                                 ),
                                 SizedBox(height: 5),
                                 Container(
-                                  margin: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                                  margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -1725,8 +1725,7 @@ Future<dynamic> showDialogForRegisterPayment(
                                     ? Container()
                                     : Container(
                                         alignment: Alignment.bottomCenter,
-                                        margin:
-                                            EdgeInsets.fromLTRB(15, 0, 15, 5),
+                                        margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,

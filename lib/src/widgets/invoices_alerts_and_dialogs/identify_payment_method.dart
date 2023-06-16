@@ -135,6 +135,8 @@ identifyPaymentMethod({
   if (selectedValueA == 'Cheque') {
     return StatefulBuilder(
       builder: (context, setState) => Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             '${AppLocalizations.of(context)!.bank}*',
@@ -144,8 +146,8 @@ identifyPaymentMethod({
               fontSize: 14,
             ),
           ),
+          SizedBox(height: 12),
           Container(
-            margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
             child: DropdownButtonHideUnderline(
               child: DropdownButton2(
                 isExpanded: true,
@@ -156,8 +158,8 @@ identifyPaymentMethod({
                         selectedBank ?? 'Seleccione una opción',
                         style: TextStyle(
                           fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: myTheme.colorScheme.primary.withOpacity(0.7),
+                          color: myTheme.colorScheme.primary,
+                          fontFamily: "Poppins-regular",
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -171,8 +173,8 @@ identifyPaymentMethod({
                             item,
                             style: TextStyle(
                               fontSize: 14,
-                              fontWeight: FontWeight.bold,
                               color: myTheme.colorScheme.primary,
+                              fontFamily: "Poppins-regular",
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -203,7 +205,7 @@ identifyPaymentMethod({
                   height: 50,
                   padding: const EdgeInsets.only(left: 14, right: 14),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
+                    borderRadius: BorderRadius.circular(8),
                     border: Border.all(
                       color: myTheme.colorScheme.primary.withOpacity(0.3),
                     ),
@@ -217,15 +219,14 @@ identifyPaymentMethod({
                 ),
                 dropdownStyleData: DropdownStyleData(
                   maxHeight: 200,
-                  width: 200,
                   padding: null,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(8),
                     color: Colors.white,
                   ),
                   elevation: 8,
                   scrollbarTheme: ScrollbarThemeData(
-                    radius: const Radius.circular(10),
+                    radius: const Radius.circular(8),
                     thickness: MaterialStateProperty.all<double>(6),
                     thumbVisibility: MaterialStateProperty.all<bool>(true),
                   ),
@@ -234,6 +235,7 @@ identifyPaymentMethod({
               ),
             ),
           ),
+          SizedBox(height: 12),
           Text(
             '${AppLocalizations.of(context)!.accountNumber}*',
             style: TextStyle(
@@ -242,8 +244,8 @@ identifyPaymentMethod({
               fontSize: 14,
             ),
           ),
+          SizedBox(height: 8),
           Container(
-            margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
             height: 70,
             child: TextField(
               style: TextStyle(
@@ -273,7 +275,7 @@ identifyPaymentMethod({
                   color: myTheme.colorScheme.primary.withOpacity(0.2),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(8),
                   borderSide: const BorderSide(
                     color: Color(0xFF4f42ed),
                   ),
@@ -284,10 +286,10 @@ identifyPaymentMethod({
                   borderSide: BorderSide(
                     color: myTheme.colorScheme.primary.withOpacity(0.3),
                   ),
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
                 ),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
+                  borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide(
                     color: Colors.transparent,
                   ),
@@ -297,7 +299,6 @@ identifyPaymentMethod({
             ),
           ),
           Container(
-            margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
             child: Text(
               '${AppLocalizations.of(context)!.accountHolder}*',
               style: TextStyle(
@@ -307,8 +308,8 @@ identifyPaymentMethod({
               ),
             ),
           ),
+          SizedBox(height: 8),
           Container(
-            margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
             height: 70,
             child: TextField(
               style: TextStyle(
@@ -340,7 +341,7 @@ identifyPaymentMethod({
                   color: myTheme.colorScheme.primary.withOpacity(0.2),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(8),
                   borderSide: const BorderSide(
                     color: Color(0xFF4f42ed),
                   ),
@@ -351,10 +352,10 @@ identifyPaymentMethod({
                   borderSide: BorderSide(
                     color: myTheme.colorScheme.primary.withOpacity(0.3),
                   ),
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
                 ),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
+                  borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide(
                     color: Colors.transparent,
                   ),
@@ -363,272 +364,295 @@ identifyPaymentMethod({
             ),
           ),
           Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: 10,
-              ),
               Text(
-                AppLocalizations.of(context)!.selectFile,
+                // AppLocalizations.of(context)!.selectFile,
+                'Subir comprobante',
                 style: TextStyle(
-                  fontFamily: 'Poppins-regular',
-                  color: Colors.grey.shade400,
+                  fontFamily: 'Poppins-medium',
+                  color: myTheme.colorScheme.primary,
+                  fontWeight: FontWeight.bold,
                   fontSize: 14,
                 ),
               ),
-              SizedBox(
-                height: 10,
-              ),
-              InkWell(
-                onTap: () async {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ListTile(
-                            leading: Icon(
-                              Icons.camera_alt,
-                              color: myTheme.colorScheme.onPrimaryContainer,
-                            ),
-                            title: Text(
-                              'Camara',
-                              style: TextStyle(
-                                color: myTheme.colorScheme.primary,
-                                fontFamily: 'Poppins-regular',
+              SizedBox(height: 8),
+              Container(
+                width: 149,
+                height: 24,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ListTile(
+                              leading: Icon(
+                                Icons.camera_alt,
+                                color: myTheme.colorScheme.onPrimaryContainer,
                               ),
-                            ),
-                            onTap: () async {
-                              Navigator.of(context).pop();
-                              var pickedFile = await getFromCamera(context);
-                              if (pickedFile != null) {
-                                print('Imagen seleccionada');
-                                var croppedImage =
-                                    await cropImage(pickedFile.path, imageFile);
-                                if (croppedImage != null) {
-                                  print('Imagen recortada');
-                                  setState(() {
-                                    imageFile = File(croppedImage.path);
-                                  });
-                                } else {
-                                  print('Error croppeando');
-                                }
-                              } else {
-                                print('error seleccionando');
-                                return;
-                              }
-                            },
-                          ),
-                          Divider(),
-                          ListTile(
-                            leading: Icon(
-                              Icons.photo_camera_back_rounded,
-                              color: myTheme.colorScheme.onPrimaryContainer,
-                            ),
-                            title: Text(
-                              'Galeria',
-                              style: TextStyle(
-                                color: myTheme.colorScheme.primary,
-                                fontFamily: 'Poppins-regular',
+                              title: Text(
+                                'Camara',
+                                style: TextStyle(
+                                  color: myTheme.colorScheme.primary,
+                                  fontFamily: 'Poppins-regular',
+                                ),
                               ),
-                            ),
-                            onTap: () async {
-                              Navigator.of(context).pop();
-                              var pickedFile = await getFromGallery(context);
-                              if (pickedFile != null) {
-                                print('Imagen seleccionada');
-                                var croppedImage =
-                                    await cropImage(pickedFile.path, imageFile);
-                                if (croppedImage != null) {
-                                  print('Imagen recortada');
-                                  setState(() {
-                                    imageFile = File(croppedImage.path);
-                                  });
+                              onTap: () async {
+                                Navigator.of(context).pop();
+                                var pickedFile = await getFromCamera(context);
+                                if (pickedFile != null) {
+                                  print('Imagen seleccionada');
+                                  var croppedImage = await cropImage(
+                                      pickedFile.path, imageFile);
+                                  if (croppedImage != null) {
+                                    print('Imagen recortada');
+                                    setState(() {
+                                      imageFile = File(croppedImage.path);
+                                    });
+                                  } else {
+                                    print('Error croppeando');
+                                  }
                                 } else {
-                                  print('Error croppeando');
+                                  print('error seleccionando');
+                                  return;
                                 }
-                              } else {
-                                print('error seleccionando');
-                                return;
-                              }
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(4.0),
-                      child: Icon(
-                        Icons.camera,
-                        color: myTheme.colorScheme.secondary,
-                      ),
-                    ),
-                    Text(
-                      'Subir Imagen',
-                      style: TextStyle(
-                        color: myTheme.colorScheme.primary,
-                        fontFamily: 'Poppins-regular',
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              imageFile == null
-                  ? Container()
-                  : Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: myTheme.colorScheme.primary,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(9),
-                        child: Image.file(
-                          imageFile!,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      setState(() => imageFile = null);
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
-                        myTheme.colorScheme.primary,
-                      ),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                        ),
-                      ),
-                    ),
-                    icon: Icon(
-                      MaterialIcons.arrow_back_ios,
-                      size: 14,
-                    ),
-                    label: Text(
-                      'Cancelar',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Poppins-regular',
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
+                              },
+                            ),
+                            Divider(),
+                            ListTile(
+                              leading: Icon(
+                                Icons.photo_camera_back_rounded,
+                                color: myTheme.colorScheme.onPrimaryContainer,
+                              ),
+                              title: Text(
+                                'Galeria',
+                                style: TextStyle(
+                                  color: myTheme.colorScheme.primary,
+                                  fontFamily: 'Poppins-regular',
+                                ),
+                              ),
+                              onTap: () async {
+                                Navigator.of(context).pop();
+                                var pickedFile = await getFromGallery(context);
+                                if (pickedFile != null) {
+                                  print('Imagen seleccionada');
+                                  var croppedImage = await cropImage(
+                                      pickedFile.path, imageFile);
+                                  if (croppedImage != null) {
+                                    print('Imagen recortada');
+                                    setState(() {
+                                      imageFile = File(croppedImage.path);
+                                    });
+                                  } else {
+                                    print('Error croppeando');
+                                  }
+                                } else {
+                                  print('error seleccionando');
+                                  return;
+                                }
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: myTheme.colorScheme.primary,
+                    backgroundColor: Color(0xFFDFE0FF),
+                    elevation: 0,
+                  ),
+                  child: Text(
+                    'Seleccionar archivo',
+                    style: TextStyle(
+                      color: myTheme.colorScheme.onPrimaryContainer,
+                      fontFamily: 'Poppins-medium',
+                      fontSize: 11,
                     ),
                   ),
-                  paidAmount == 0
-                      ? Container()
-                      : Container(
-                          child: ElevatedButton.icon(
-                            onPressed: () async {
-                              if (selectedBank == null) {
-                                Fluttertoast.showToast(
-                                    msg: 'Complete los datos porfavor');
-                              } else {
-                                if (accountNumber == '' &&
-                                    accountHolder == '') {
+                ),
+              ),
+              SizedBox(height: 12),
+              imageFile == null
+                  ? Container()
+                  : GestureDetector(
+                      onTap: () {
+                        Fluttertoast.showToast(
+                          msg:
+                              'Presione 2 veces para eliminar imagen seleccionada',
+                          backgroundColor: myTheme.colorScheme.primary,
+                          textColor: Colors.white,
+                        );
+                      },
+                      onDoubleTap: () {
+                        setState(() {
+                          imageFile = null;
+                        });
+                        Fluttertoast.showToast(
+                          msg: 'Imagen eliminada',
+                          backgroundColor: Colors.green.shade600,
+                          textColor: Colors.white,
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: myTheme.colorScheme.primary,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.file(
+                            imageFile!,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                    ),
+              SizedBox(height: 20),
+              Container(
+                alignment: Alignment.bottomCenter,
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Container(
+                      width: 104,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          setState(() => imageFile = null);
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                            // myTheme.colorScheme.primary,
+                            Colors.white,
+                          ),
+                          elevation: MaterialStateProperty.all(0),
+                          splashFactory: NoSplash.splashFactory,
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(100),
+                              side: BorderSide(
+                                color: myTheme.colorScheme.primary,
+                              ),
+                            ),
+                          ),
+                        ),
+                        child: Text(
+                          'Cancelar',
+                          style: TextStyle(
+                            color: myTheme.colorScheme.primary,
+                            fontFamily: 'Poppins-medium',
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ),
+                    paidAmount == 0
+                        ? Container()
+                        : Container(
+                            width: 104,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                if (selectedBank == null) {
                                   Fluttertoast.showToast(
-                                      msg: 'Ingrese datos de cuenta validos');
+                                      msg: 'Complete los datos porfavor');
                                 } else {
-                                  print('Registrando pago en cheque');
-                                  print('Cantidad permitida');
-                                  Fluttertoast.showToast(
-                                    msg: 'Registrando Cheque',
-                                    backgroundColor:
-                                        myTheme.colorScheme.primary,
-                                    textColor: Colors.white,
-                                  );
-                                  try {
-                                    await registerBankCheckPayment(
-                                      coinExchangeRatio: coinExchangeRatio,
-                                      originalAmount: paidAmount,
-                                      client: client,
-                                      invoiceDocumentID: invoiceDocumentID,
-                                      currency: selectedCoin,
-                                      amount: priceDividedbyItsExchangeRatio(
-                                          amount: paidAmount,
-                                          exchange: coinExchangeRatio),
-                                      totalOfTheOrder: totalOfTheOrder,
-                                      currentCoin: currentCoin,
-                                      bank: selectedBank,
-                                      accountNumber: accountNumber,
-                                      accountHolder: accountHolder,
-                                      imageFile: imageFile,
-                                      date: date,
-                                      remaining: remaining,
-                                    ).whenComplete(() async {
-                                      await uploadReceiptImage(
-                                          imageFile,
-                                          invoiceDocumentID,
-                                          paymentsValidPayQuantity! + 1);
-                                    }).whenComplete(() {
-                                      checkIfInvoiceIsCompleted(
-                                        paidAmount: paidAmount,
-                                        remaining: remainingConverted,
+                                  if (accountNumber == '' &&
+                                      accountHolder == '') {
+                                    Fluttertoast.showToast(
+                                        msg: 'Ingrese datos de cuenta validos');
+                                  } else {
+                                    print('Registrando pago en cheque');
+                                    print('Cantidad permitida');
+                                    Fluttertoast.showToast(
+                                      msg: 'Registrando Cheque',
+                                      backgroundColor:
+                                          myTheme.colorScheme.primary,
+                                      textColor: Colors.white,
+                                    );
+                                    try {
+                                      await registerBankCheckPayment(
+                                        coinExchangeRatio: coinExchangeRatio,
+                                        originalAmount: paidAmount,
                                         client: client,
                                         invoiceDocumentID: invoiceDocumentID,
-                                      );
-                                    }).whenComplete(
-                                      () {
-                                        Navigator.pop(context);
-                                        Navigator.pop(context);
+                                        currency: selectedCoin,
+                                        amount: priceDividedbyItsExchangeRatio(
+                                            amount: paidAmount,
+                                            exchange: coinExchangeRatio),
+                                        totalOfTheOrder: totalOfTheOrder,
+                                        currentCoin: currentCoin,
+                                        bank: selectedBank,
+                                        accountNumber: accountNumber,
+                                        accountHolder: accountHolder,
+                                        imageFile: imageFile,
+                                        date: date,
+                                        remaining: remaining,
+                                      ).whenComplete(() async {
+                                        await uploadReceiptImage(
+                                            imageFile,
+                                            invoiceDocumentID,
+                                            paymentsValidPayQuantity! + 1);
+                                      }).whenComplete(() {
+                                        checkIfInvoiceIsCompleted(
+                                          paidAmount: paidAmount,
+                                          remaining: remainingConverted,
+                                          client: client,
+                                          invoiceDocumentID: invoiceDocumentID,
+                                        );
+                                      }).whenComplete(
+                                        () {
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
 
-                                        showDialogForConfirmedPayment(
-                                            context,
-                                            coinSymbol,
-                                            paidAmount,
-                                            client,
-                                            date,
-                                            selectedValueA);
-                                      },
-                                    );
-                                  } catch (e) {
-                                    print(e);
-                                    Fluttertoast.showToast(msg: e.toString());
+                                          showDialogForConfirmedPayment(
+                                              context,
+                                              coinSymbol,
+                                              paidAmount,
+                                              client,
+                                              date,
+                                              selectedValueA);
+                                        },
+                                      );
+                                    } catch (e) {
+                                      print(e);
+                                      Fluttertoast.showToast(msg: e.toString());
+                                    }
                                   }
                                 }
-                              }
-                            },
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                myTheme.colorScheme.onPrimaryContainer,
+                              },
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                  myTheme.colorScheme.onPrimaryContainer,
+                                ),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                  ),
+                                ),
                               ),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18.0),
+                              child: Text(
+                                'Continuar',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Poppins-medium',
+                                  fontSize: 12,
                                 ),
                               ),
                             ),
-                            icon: Icon(
-                              MaterialCommunityIcons.bank,
-                              size: 14,
-                            ),
-                            label: Text(
-                              'Continuar',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Poppins-regular',
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
                           ),
-                        ),
-                ],
+                  ],
+                ),
               ),
               SizedBox(
                 height: 10,
@@ -926,6 +950,8 @@ identifyPaymentMethod({
   } else if (selectedValueA == 'Deposito') {
     return StatefulBuilder(
       builder: (context, setState) => Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             '${AppLocalizations.of(context)!.bank}*',
@@ -935,8 +961,8 @@ identifyPaymentMethod({
               fontSize: 14,
             ),
           ),
+          SizedBox(height: 12),
           Container(
-            margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
             child: DropdownButtonHideUnderline(
               child: DropdownButton2(
                 isExpanded: true,
@@ -947,8 +973,8 @@ identifyPaymentMethod({
                         selectedBank ?? 'Seleccione una opción',
                         style: TextStyle(
                           fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: myTheme.colorScheme.primary.withOpacity(0.7),
+                          color: myTheme.colorScheme.primary,
+                          fontFamily: "Poppins-regular",
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -962,8 +988,8 @@ identifyPaymentMethod({
                             item,
                             style: TextStyle(
                               fontSize: 14,
-                              fontWeight: FontWeight.bold,
                               color: myTheme.colorScheme.primary,
+                              fontFamily: "Poppins-regular",
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -1004,15 +1030,14 @@ identifyPaymentMethod({
                 ),
                 dropdownStyleData: DropdownStyleData(
                   maxHeight: 200,
-                  width: 200,
                   padding: null,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(8),
                     color: Colors.white,
                   ),
                   elevation: 8,
                   scrollbarTheme: ScrollbarThemeData(
-                    radius: const Radius.circular(10),
+                    radius: const Radius.circular(8),
                     thickness: MaterialStateProperty.all<double>(6),
                     thumbVisibility: MaterialStateProperty.all<bool>(true),
                   ),
@@ -1021,6 +1046,7 @@ identifyPaymentMethod({
               ),
             ),
           ),
+          SizedBox(height: 12),
           Text(
             '${AppLocalizations.of(context)!.voucherNumber}*',
             style: TextStyle(
@@ -1029,8 +1055,8 @@ identifyPaymentMethod({
               fontSize: 14,
             ),
           ),
+          SizedBox(height: 8),
           Container(
-            margin: EdgeInsets.fromLTRB(10, 0, 0, 10),
             height: 70,
             // width: 200,
 
@@ -1060,7 +1086,7 @@ identifyPaymentMethod({
                   color: myTheme.colorScheme.primary.withOpacity(0.2),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(8),
                   borderSide: const BorderSide(
                     color: Color(0xFF4f42ed),
                   ),
@@ -1071,10 +1097,10 @@ identifyPaymentMethod({
                   borderSide: BorderSide(
                     color: myTheme.colorScheme.primary.withOpacity(0.3),
                   ),
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
                 ),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
+                  borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide(
                     color: Colors.transparent,
                   ),
@@ -1090,8 +1116,8 @@ identifyPaymentMethod({
               fontSize: 14,
             ),
           ),
+          SizedBox(height: 8),
           Container(
-            margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
             height: 70,
             child: TextField(
               style: TextStyle(
@@ -1142,392 +1168,119 @@ identifyPaymentMethod({
             ),
           ),
           Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 10),
               Text(
-                AppLocalizations.of(context)!.selectFile,
+                // AppLocalizations.of(context)!.selectFile,
+                'Subir comprobante',
                 style: TextStyle(
-                  fontFamily: 'Poppins-regular',
-                  color: Colors.grey.shade400,
+                  fontFamily: 'Poppins-medium',
+                  color: myTheme.colorScheme.primary,
+                  fontWeight: FontWeight.bold,
                   fontSize: 14,
                 ),
               ),
-              InkWell(
-                onTap: () async {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ListTile(
-                            leading: Icon(
-                              Icons.camera_alt,
-                              color: myTheme.colorScheme.onPrimaryContainer,
-                            ),
-                            title: Text(
-                              'Camara',
-                              style: TextStyle(
-                                color: myTheme.colorScheme.primary,
-                                fontFamily: 'Poppins-regular',
-                              ),
-                            ),
-                            onTap: () async {
-                              Navigator.of(context).pop();
-                              var pickedFile = await getFromCamera(context);
-                              if (pickedFile != null) {
-                                print('Imagen seleccionada');
-                                var croppedImage =
-                                    await cropImage(pickedFile.path, imageFile);
-                                if (croppedImage != null) {
-                                  print('Imagen recortada');
-                                  setState(() {
-                                    imageFile = File(croppedImage.path);
-                                  });
-                                } else {
-                                  print('Error croppeando');
-                                }
-                              } else {
-                                print('error seleccionando');
-                                return;
-                              }
-                            },
-                          ),
-                          Divider(),
-                          ListTile(
-                            leading: Icon(
-                              Icons.photo_camera_back_rounded,
-                              color: myTheme.colorScheme.onPrimaryContainer,
-                            ),
-                            title: Text(
-                              'Galeria',
-                              style: TextStyle(
-                                color: myTheme.colorScheme.primary,
-                                fontFamily: 'Poppins-regular',
-                              ),
-                            ),
-                            onTap: () async {
-                              Navigator.of(context).pop();
-                              var pickedFile = await getFromGallery(context);
-                              if (pickedFile != null) {
-                                print('Imagen seleccionada');
-                                var croppedImage =
-                                    await cropImage(pickedFile.path, imageFile);
-                                if (croppedImage != null) {
-                                  print('Imagen recortada');
-                                  setState(() {
-                                    imageFile = File(croppedImage.path);
-                                  });
-                                } else {
-                                  print('Error croppeando');
-                                }
-                              } else {
-                                print('error seleccionando');
-                                return;
-                              }
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(4.0),
-                      child: Icon(
-                        Icons.camera,
-                        color: myTheme.colorScheme.secondary,
-                      ),
-                    ),
-                    Text(
-                      // AppLocalizations.of(context)!.gallery,
-                      'Subir Imagen',
-                      style: TextStyle(
-                        color: myTheme.colorScheme.primary,
-                        fontFamily: 'Poppins-regular',
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              imageFile == null
-                  ? Container()
-                  : Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: myTheme.colorScheme.primary,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(9),
-                        child: Image.file(
-                          imageFile!,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),
+              SizedBox(height: 8),
               Container(
-                alignment: Alignment.bottomCenter,
-                margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    SizedBox(height: 10),
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        setState(() => imageFile = null);
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                          myTheme.colorScheme.primary,
-                        ),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ),
-                        ),
-                      ),
-                      icon: Icon(
-                        MaterialIcons.arrow_back_ios,
-                        size: 14,
-                      ),
-                      label: Text(
-                        'Cancelar',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Poppins-regular',
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    paidAmount == 0
-                        ? Container()
-                        : ElevatedButton.icon(
-                            onPressed: () async {
-                              // Crear en DB una visita
-
-                              if (selectedBank == null) {
-                                Fluttertoast.showToast(
-                                    msg: 'Seleccione un banco por favor');
-                              } else {
-                                if (accountNumber == '' &&
-                                    voucherNumber == '') {
-                                  Fluttertoast.showToast(
-                                      msg: 'Ingrese datos de cuenta validos');
-                                } else {
-                                  print('Cantidad permitida');
-                                  Fluttertoast.showToast(
-                                    msg: 'Registrando Pago con deposito',
-                                    backgroundColor:
-                                        myTheme.colorScheme.primary,
-                                    textColor: Colors.white,
-                                  );
-                                  try {
-                                    await registerDepositPayment(
-                                      coinExchangeRatio: coinExchangeRatio,
-                                      originalAmount: paidAmount,
-                                      client: client,
-                                      invoiceDocumentID: invoiceDocumentID,
-                                      currency: selectedCoin,
-                                      amount: priceDividedbyItsExchangeRatio(
-                                          amount: paidAmount,
-                                          exchange: coinExchangeRatio),
-                                      totalOfTheOrder: totalOfTheOrder,
-                                      currentCoin: currentCoin,
-                                      bank: selectedBank,
-                                      accountNumber: accountNumber,
-                                      voucherNumber: voucherNumber,
-                                      imageFile: imageFile,
-                                      date: date,
-                                      remaining: remaining,
-                                    ).whenComplete(() async {
-                                      await uploadReceiptImage(
-                                          imageFile,
-                                          invoiceDocumentID,
-                                          paymentsValidPayQuantity! + 1);
-                                    }).whenComplete(() {
-                                      checkIfInvoiceIsCompleted(
-                                        paidAmount: paidAmount,
-                                        remaining: remainingConverted,
-                                        client: client,
-                                        invoiceDocumentID: invoiceDocumentID,
-                                      );
-                                    }).whenComplete(() {
-                                      Navigator.pop(context);
-                                      Navigator.pop(context);
-                                      showDialogForConfirmedPayment(
-                                          context,
-                                          coinSymbol,
-                                          paidAmount,
-                                          client,
-                                          date,
-                                          selectedValueA);
-                                    });
-                                  } catch (e) {
-                                    print(e);
-                                  }
-                                }
-                              }
-                            },
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                myTheme.colorScheme.onPrimaryContainer,
+                width: 149,
+                height: 24,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ListTile(
+                              leading: Icon(
+                                Icons.camera_alt,
+                                color: myTheme.colorScheme.onPrimaryContainer,
                               ),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18.0),
+                              title: Text(
+                                'Camara',
+                                style: TextStyle(
+                                  color: myTheme.colorScheme.primary,
+                                  fontFamily: 'Poppins-regular',
                                 ),
                               ),
-                            ),
-                            icon: Icon(
-                              MaterialCommunityIcons.bank,
-                              size: 14,
-                            ),
-                            label: Text(
-                              'Continuar',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Poppins-regular',
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                  ],
-                ),
-              ),
-            ],
-          )
-        ],
-      ),
-    );
-  } else if (selectedValueA == 'Efectivo') {
-    return StatefulBuilder(
-      builder: (BuildContext context, setState) => Column(
-        children: [
-          Column(
-            children: [
-              Text(
-                AppLocalizations.of(context)!.selectFile,
-                style: TextStyle(
-                  fontFamily: 'Poppins-regular',
-                  color: Colors.grey.shade400,
-                  fontSize: 14,
-                ),
-              ),
-              InkWell(
-                onTap: () async {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ListTile(
-                            leading: Icon(
-                              Icons.camera_alt,
-                              color: myTheme.colorScheme.onPrimaryContainer,
-                            ),
-                            title: Text(
-                              'Camara',
-                              style: TextStyle(
-                                color: myTheme.colorScheme.primary,
-                                fontFamily: 'Poppins-regular',
-                              ),
-                            ),
-                            onTap: () async {
-                              Navigator.of(context).pop();
-                              var pickedFile = await getFromCamera(context);
-                              if (pickedFile != null) {
-                                print('Imagen seleccionada');
-                                var croppedImage =
-                                    await cropImage(pickedFile.path, imageFile);
-                                if (croppedImage != null) {
-                                  print('Imagen recortada');
-                                  setState(() {
-                                    imageFile = File(croppedImage.path);
-                                  });
+                              onTap: () async {
+                                Navigator.of(context).pop();
+                                var pickedFile = await getFromCamera(context);
+                                if (pickedFile != null) {
+                                  print('Imagen seleccionada');
+                                  var croppedImage = await cropImage(
+                                      pickedFile.path, imageFile);
+                                  if (croppedImage != null) {
+                                    print('Imagen recortada');
+                                    setState(() {
+                                      imageFile = File(croppedImage.path);
+                                    });
+                                  } else {
+                                    print('Error croppeando');
+                                  }
                                 } else {
-                                  print('Error croppeando');
+                                  print('error seleccionando');
+                                  return;
                                 }
-                              } else {
-                                print('error seleccionando');
-                                return;
-                              }
-                            },
-                          ),
-                          Divider(),
-                          ListTile(
-                            leading: Icon(
-                              Icons.photo_camera_back_rounded,
-                              color: myTheme.colorScheme.onPrimaryContainer,
+                              },
                             ),
-                            title: Text(
-                              'Galeria',
-                              style: TextStyle(
-                                color: myTheme.colorScheme.primary,
-                                fontFamily: 'Poppins-regular',
+                            Divider(),
+                            ListTile(
+                              leading: Icon(
+                                Icons.photo_camera_back_rounded,
+                                color: myTheme.colorScheme.onPrimaryContainer,
                               ),
-                            ),
-                            onTap: () async {
-                              Navigator.of(context).pop();
-                              var pickedFile = await getFromGallery(context);
-                              if (pickedFile != null) {
-                                print('Imagen seleccionada');
-                                var croppedImage =
-                                    await cropImage(pickedFile.path, imageFile);
-                                if (croppedImage != null) {
-                                  print('Imagen recortada');
-                                  setState(() {
-                                    imageFile = File(croppedImage.path);
-                                  });
+                              title: Text(
+                                'Galeria',
+                                style: TextStyle(
+                                  color: myTheme.colorScheme.primary,
+                                  fontFamily: 'Poppins-regular',
+                                ),
+                              ),
+                              onTap: () async {
+                                Navigator.of(context).pop();
+                                var pickedFile = await getFromGallery(context);
+                                if (pickedFile != null) {
+                                  print('Imagen seleccionada');
+                                  var croppedImage = await cropImage(
+                                      pickedFile.path, imageFile);
+                                  if (croppedImage != null) {
+                                    print('Imagen recortada');
+                                    setState(() {
+                                      imageFile = File(croppedImage.path);
+                                    });
+                                  } else {
+                                    print('Error croppeando');
+                                  }
                                 } else {
-                                  print('Error croppeando');
+                                  print('error seleccionando');
+                                  return;
                                 }
-                              } else {
-                                print('error seleccionando');
-                                return;
-                              }
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(4.0),
-                      child: Icon(
-                        Icons.camera,
-                        color: myTheme.colorScheme.primary,
-                        size: 15,
-                      ),
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: myTheme.colorScheme.primary,
+                    backgroundColor: Color(0xFFDFE0FF),
+                    elevation: 0,
+                  ),
+                  child: Text(
+                    'Seleccionar archivo',
+                    style: TextStyle(
+                      color: myTheme.colorScheme.onPrimaryContainer,
+                      fontFamily: 'Poppins-medium',
+                      fontSize: 11,
                     ),
-                    Text(
-                      // AppLocalizations.of(context)!.gallery,
-                      'Subir Imagen',
-                      style: TextStyle(
-                        color: myTheme.colorScheme.primary,
-                        fontFamily: 'Poppins-regular',
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
+              SizedBox(height: 12),
               imageFile == null
                   ? Container()
                   : GestureDetector(
@@ -1554,10 +1307,10 @@ identifyPaymentMethod({
                           border: Border.all(
                             color: myTheme.colorScheme.primary,
                           ),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(8),
                         ),
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(9),
+                          borderRadius: BorderRadius.circular(8),
                           child: Image.file(
                             imageFile!,
                             fit: BoxFit.contain,
@@ -1565,146 +1318,140 @@ identifyPaymentMethod({
                         ),
                       ),
                     ),
+              SizedBox(height: 20),
               Container(
                 alignment: Alignment.bottomCenter,
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    SizedBox(height: 10),
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        setState(() => imageFile = null);
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                          myTheme.colorScheme.primary,
-                        ),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
+                    Container(
+                      width: 104,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          setState(() => imageFile = null);
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                            // myTheme.colorScheme.primary,
+                            Colors.white,
+                          ),
+                          elevation: MaterialStateProperty.all(0),
+                          splashFactory: NoSplash.splashFactory,
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(100),
+                              side: BorderSide(
+                                color: myTheme.colorScheme.primary,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                      icon: Icon(
-                        MaterialIcons.arrow_back_ios,
-                        size: 14,
-                      ),
-                      label: Text(
-                        'Cancelar',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Poppins-regular',
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
+                        child: Text(
+                          'Cancelar',
+                          style: TextStyle(
+                            color: myTheme.colorScheme.primary,
+                            fontFamily: 'Poppins-medium',
+                            fontSize: 12,
+                          ),
                         ),
                       ),
                     ),
                     paidAmount == 0
                         ? Container()
-                        : moneyRecievedForRegisterMoney < paidAmount
-                            ? Container()
-                            : ElevatedButton.icon(
-                                onPressed: () async {
-                                  if (paidAmount is String) {
-                                    paidAmount =
-                                        double.parse(paidAmount.toString());
-                                  }
+                        : Container(
+                            width: 104,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                // Crear en DB una visita
 
-                                  print('Cantidad permitida');
-                                  print('REGISTRANDO PAGO EN EFECTIVO');
-                                  print('FACTURA: $invoiceDocumentID');
+                                if (selectedBank == null) {
                                   Fluttertoast.showToast(
-                                    msg: 'Registrando pago en efectivo',
-                                    backgroundColor:
-                                        myTheme.colorScheme.primary,
-                                    textColor: Colors.white,
-                                  );
-                                  print('+++++++++++++++++++++++++++++++++');
-                                  print('DATOS A ENVIAR');
-                                  print(
-                                      'coinExchangeRatio: $coinExchangeRatio');
-                                  print('originalAmount: $paidAmount');
-                                  print('client: $client');
-                                  print(
-                                      'invoiceDocumentID: $invoiceDocumentID');
-                                  print('currency: $selectedCoin');
-                                  print(
-                                      'amount: ${exchangeAmount(amount: paidAmount, coin: selectedCoin, exchange: coinExchangeRatio)},');
-                                  print('totalOfTheOrder: $totalOfTheOrder');
-                                  print('imageFile: $imageFile');
-                                  print('date: $date');
-                                  print('remaining: $remaining');
-                                  print('imageFile: $imageFile');
-                                  print(
-                                      'paymentsValidPayQuantity: $paymentsValidPayQuantity');
-
-                                  await registerMoneyPayment(
-                                    coinExchangeRatio: coinExchangeRatio,
-                                    originalAmount: paidAmount,
-                                    client: client,
-                                    invoiceDocumentID: invoiceDocumentID,
-                                    currency: selectedCoin,
-                                    amount: priceDividedbyItsExchangeRatio(
-                                      amount: paidAmount,
-                                      exchange: coinExchangeRatio,
-                                    ),
-                                    totalOfTheOrder: totalOfTheOrder,
-                                    imageFile: imageFile,
-                                    date: date,
-                                  ).whenComplete(() async {
-                                    await uploadReceiptImage(
-                                        imageFile,
-                                        invoiceDocumentID,
-                                        paymentsValidPayQuantity! + 1);
-                                  }).whenComplete(() {
-                                    checkIfInvoiceIsCompleted(
-                                      paidAmount: paidAmount,
-                                      remaining: remainingConverted,
-                                      client: client,
-                                      invoiceDocumentID: invoiceDocumentID,
+                                      msg: 'Seleccione un banco por favor');
+                                } else {
+                                  if (accountNumber == '' &&
+                                      voucherNumber == '') {
+                                    Fluttertoast.showToast(
+                                        msg: 'Ingrese datos de cuenta validos');
+                                  } else {
+                                    print('Cantidad permitida');
+                                    Fluttertoast.showToast(
+                                      msg: 'Registrando Pago con deposito',
+                                      backgroundColor:
+                                          myTheme.colorScheme.primary,
+                                      textColor: Colors.white,
                                     );
-                                  }).whenComplete(() {
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                    showDialogForConfirmedPayment(
-                                      context,
-                                      coinSymbol,
-                                      paidAmount,
-                                      client,
-                                      date,
-                                      selectedValueA,
-                                    );
-                                  });
-                                },
-                                style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                    myTheme.colorScheme.primary,
-                                  ),
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0),
-                                    ),
-                                  ),
+                                    try {
+                                      await registerDepositPayment(
+                                        coinExchangeRatio: coinExchangeRatio,
+                                        originalAmount: paidAmount,
+                                        client: client,
+                                        invoiceDocumentID: invoiceDocumentID,
+                                        currency: selectedCoin,
+                                        amount: priceDividedbyItsExchangeRatio(
+                                            amount: paidAmount,
+                                            exchange: coinExchangeRatio),
+                                        totalOfTheOrder: totalOfTheOrder,
+                                        currentCoin: currentCoin,
+                                        bank: selectedBank,
+                                        accountNumber: accountNumber,
+                                        voucherNumber: voucherNumber,
+                                        imageFile: imageFile,
+                                        date: date,
+                                        remaining: remaining,
+                                      ).whenComplete(() async {
+                                        await uploadReceiptImage(
+                                            imageFile,
+                                            invoiceDocumentID,
+                                            paymentsValidPayQuantity! + 1);
+                                      }).whenComplete(() {
+                                        checkIfInvoiceIsCompleted(
+                                          paidAmount: paidAmount,
+                                          remaining: remainingConverted,
+                                          client: client,
+                                          invoiceDocumentID: invoiceDocumentID,
+                                        );
+                                      }).whenComplete(() {
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                        showDialogForConfirmedPayment(
+                                            context,
+                                            coinSymbol,
+                                            paidAmount,
+                                            client,
+                                            date,
+                                            selectedValueA);
+                                      });
+                                    } catch (e) {
+                                      print(e);
+                                    }
+                                  }
+                                }
+                              },
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                  myTheme.colorScheme.onPrimaryContainer,
                                 ),
-                                icon: Icon(
-                                  Icons.handshake_rounded,
-                                  size: 14,
-                                ),
-                                label: Text(
-                                  'Continuar',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'Poppins-regular',
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
                                   ),
                                 ),
                               ),
+                              child: Text(
+                                'Continuar',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Poppins-medium',
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          ),
                   ],
                 ),
               ),
@@ -1713,10 +1460,405 @@ identifyPaymentMethod({
         ],
       ),
     );
+  } else if (selectedValueA == 'Efectivo') {
+    return StatefulBuilder(
+      builder: (BuildContext context, setState) => Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            // AppLocalizations.of(context)!.selectFile,
+            'Subir comprobante',
+            style: TextStyle(
+              fontFamily: 'Poppins-medium',
+              color: myTheme.colorScheme.primary,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            ),
+          ),
+          SizedBox(height: 8),
+          Container(
+            width: 149,
+            height: 24,
+            child: ElevatedButton(
+              onPressed: () async {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ListTile(
+                          leading: Icon(
+                            Icons.camera_alt,
+                            color: myTheme.colorScheme.onPrimaryContainer,
+                          ),
+                          title: Text(
+                            'Camara',
+                            style: TextStyle(
+                              color: myTheme.colorScheme.primary,
+                              fontFamily: 'Poppins-regular',
+                            ),
+                          ),
+                          onTap: () async {
+                            Navigator.of(context).pop();
+                            var pickedFile = await getFromCamera(context);
+                            if (pickedFile != null) {
+                              print('Imagen seleccionada');
+                              var croppedImage =
+                                  await cropImage(pickedFile.path, imageFile);
+                              if (croppedImage != null) {
+                                print('Imagen recortada');
+                                setState(() {
+                                  imageFile = File(croppedImage.path);
+                                });
+                              } else {
+                                print('Error croppeando');
+                              }
+                            } else {
+                              print('error seleccionando');
+                              return;
+                            }
+                          },
+                        ),
+                        Divider(),
+                        ListTile(
+                          leading: Icon(
+                            Icons.photo_camera_back_rounded,
+                            color: myTheme.colorScheme.onPrimaryContainer,
+                          ),
+                          title: Text(
+                            'Galeria',
+                            style: TextStyle(
+                              color: myTheme.colorScheme.primary,
+                              fontFamily: 'Poppins-regular',
+                            ),
+                          ),
+                          onTap: () async {
+                            Navigator.of(context).pop();
+                            var pickedFile = await getFromGallery(context);
+                            if (pickedFile != null) {
+                              print('Imagen seleccionada');
+                              var croppedImage =
+                                  await cropImage(pickedFile.path, imageFile);
+                              if (croppedImage != null) {
+                                print('Imagen recortada');
+                                setState(() {
+                                  imageFile = File(croppedImage.path);
+                                });
+                              } else {
+                                print('Error croppeando');
+                              }
+                            } else {
+                              print('error seleccionando');
+                              return;
+                            }
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                foregroundColor: myTheme.colorScheme.primary,
+                backgroundColor: Color(0xFFDFE0FF),
+                elevation: 0,
+              ),
+              child: Text(
+                'Seleccionar archivo',
+                style: TextStyle(
+                  color: myTheme.colorScheme.onPrimaryContainer,
+                  fontFamily: 'Poppins-medium',
+                  fontSize: 11,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 12),
+          // InkWell(
+          //   onTap: () async {
+          //     showModalBottomSheet(
+          //       context: context,
+          //       builder: (context) {
+          //         return Column(
+          //           mainAxisSize: MainAxisSize.min,
+          //           children: [
+          //             ListTile(
+          //               leading: Icon(
+          //                 Icons.camera_alt,
+          //                 color: myTheme.colorScheme.onPrimaryContainer,
+          //               ),
+          //               title: Text(
+          //                 'Camara',
+          //                 style: TextStyle(
+          //                   color: myTheme.colorScheme.primary,
+          //                   fontFamily: 'Poppins-regular',
+          //                 ),
+          //               ),
+          //               onTap: () async {
+          //                 Navigator.of(context).pop();
+          //                 var pickedFile = await getFromCamera(context);
+          //                 if (pickedFile != null) {
+          //                   print('Imagen seleccionada');
+          //                   var croppedImage =
+          //                       await cropImage(pickedFile.path, imageFile);
+          //                   if (croppedImage != null) {
+          //                     print('Imagen recortada');
+          //                     setState(() {
+          //                       imageFile = File(croppedImage.path);
+          //                     });
+          //                   } else {
+          //                     print('Error croppeando');
+          //                   }
+          //                 } else {
+          //                   print('error seleccionando');
+          //                   return;
+          //                 }
+          //               },
+          //             ),
+          //             Divider(),
+          //             ListTile(
+          //               leading: Icon(
+          //                 Icons.photo_camera_back_rounded,
+          //                 color: myTheme.colorScheme.onPrimaryContainer,
+          //               ),
+          //               title: Text(
+          //                 'Galeria',
+          //                 style: TextStyle(
+          //                   color: myTheme.colorScheme.primary,
+          //                   fontFamily: 'Poppins-regular',
+          //                 ),
+          //               ),
+          //               onTap: () async {
+          //                 Navigator.of(context).pop();
+          //                 var pickedFile = await getFromGallery(context);
+          //                 if (pickedFile != null) {
+          //                   print('Imagen seleccionada');
+          //                   var croppedImage =
+          //                       await cropImage(pickedFile.path, imageFile);
+          //                   if (croppedImage != null) {
+          //                     print('Imagen recortada');
+          //                     setState(() {
+          //                       imageFile = File(croppedImage.path);
+          //                     });
+          //                   } else {
+          //                     print('Error croppeando');
+          //                   }
+          //                 } else {
+          //                   print('error seleccionando');
+          //                   return;
+          //                 }
+          //               },
+          //             ),
+          //           ],
+          //         );
+          //       },
+          //     );
+          //   },
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.center,
+          //     children: [
+          //       Padding(
+          //         padding: EdgeInsets.all(4.0),
+          //         child: Icon(
+          //           Icons.camera,
+          //           color: myTheme.colorScheme.primary,
+          //           size: 15,
+          //         ),
+          //       ),
+          //       Text(
+          //         // AppLocalizations.of(context)!.gallery,
+          //         'Subir Imagen',
+          //         style: TextStyle(
+          //           color: myTheme.colorScheme.primary,
+          //           fontFamily: 'Poppins-regular',
+          //           fontSize: 14,
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
+          imageFile == null
+              ? Container()
+              : GestureDetector(
+                  onTap: () {
+                    Fluttertoast.showToast(
+                      msg: 'Presione 2 veces para eliminar imagen seleccionada',
+                      backgroundColor: myTheme.colorScheme.primary,
+                      textColor: Colors.white,
+                    );
+                  },
+                  onDoubleTap: () {
+                    setState(() {
+                      imageFile = null;
+                    });
+                    Fluttertoast.showToast(
+                      msg: 'Imagen eliminada',
+                      backgroundColor: Colors.green.shade600,
+                      textColor: Colors.white,
+                    );
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: myTheme.colorScheme.primary,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.file(
+                        imageFile!,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                ),
+          Container(
+            alignment: Alignment.bottomCenter,
+            margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    setState(() => imageFile = null);
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                      // myTheme.colorScheme.primary,
+                      Colors.white,
+                    ),
+                    elevation: MaterialStateProperty.all(0),
+                    splashFactory: NoSplash.splashFactory,
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100),
+                        side: BorderSide(
+                          color: myTheme.colorScheme.primary,
+                        ),
+                      ),
+                    ),
+                  ),
+                  child: Text(
+                    'Cancelar',
+                    style: TextStyle(
+                      color: myTheme.colorScheme.primary,
+                      fontFamily: 'Poppins-medium',
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+                paidAmount == 0
+                    ? Container()
+                    : moneyRecievedForRegisterMoney < paidAmount
+                        ? Container()
+                        : ElevatedButton(
+                            onPressed: () async {
+                              if (paidAmount is String) {
+                                paidAmount =
+                                    double.parse(paidAmount.toString());
+                              }
+
+                              print('Cantidad permitida');
+                              print('REGISTRANDO PAGO EN EFECTIVO');
+                              print('FACTURA: $invoiceDocumentID');
+                              Fluttertoast.showToast(
+                                msg: 'Registrando pago en efectivo',
+                                backgroundColor: myTheme.colorScheme.primary,
+                                textColor: Colors.white,
+                              );
+                              print('+++++++++++++++++++++++++++++++++');
+                              print('DATOS A ENVIAR');
+                              print('coinExchangeRatio: $coinExchangeRatio');
+                              print('originalAmount: $paidAmount');
+                              print('client: $client');
+                              print('invoiceDocumentID: $invoiceDocumentID');
+                              print('currency: $selectedCoin');
+                              print(
+                                  'amount: ${exchangeAmount(amount: paidAmount, coin: selectedCoin, exchange: coinExchangeRatio)},');
+                              print('totalOfTheOrder: $totalOfTheOrder');
+                              print('imageFile: $imageFile');
+                              print('date: $date');
+                              print('remaining: $remaining');
+                              print('imageFile: $imageFile');
+                              print(
+                                  'paymentsValidPayQuantity: $paymentsValidPayQuantity');
+
+                              await registerMoneyPayment(
+                                coinExchangeRatio: coinExchangeRatio,
+                                originalAmount: paidAmount,
+                                client: client,
+                                invoiceDocumentID: invoiceDocumentID,
+                                currency: selectedCoin,
+                                amount: priceDividedbyItsExchangeRatio(
+                                  amount: paidAmount,
+                                  exchange: coinExchangeRatio,
+                                ),
+                                totalOfTheOrder: totalOfTheOrder,
+                                imageFile: imageFile,
+                                date: date,
+                              ).whenComplete(() async {
+                                await uploadReceiptImage(
+                                    imageFile,
+                                    invoiceDocumentID,
+                                    paymentsValidPayQuantity! + 1);
+                              }).whenComplete(() {
+                                checkIfInvoiceIsCompleted(
+                                  paidAmount: paidAmount,
+                                  remaining: remainingConverted,
+                                  client: client,
+                                  invoiceDocumentID: invoiceDocumentID,
+                                );
+                              }).whenComplete(() {
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                showDialogForConfirmedPayment(
+                                  context,
+                                  coinSymbol,
+                                  paidAmount,
+                                  client,
+                                  date,
+                                  selectedValueA,
+                                );
+                              });
+                            },
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                myTheme.colorScheme.onPrimaryContainer,
+                              ),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                ),
+                              ),
+                            ),
+                            child: Text(
+                              'Continuar',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Poppins-medium',
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
   } else if (selectedValueA == 'Transferencia' ||
       selectedValueA == 'Transf-internacional') {
     return StatefulBuilder(
       builder: (context, setState) => Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             '${AppLocalizations.of(context)!.bank}*',
@@ -1726,9 +1868,9 @@ identifyPaymentMethod({
               fontSize: 14,
             ),
           ),
+          SizedBox(height: 12),
           selectedValueA == 'Transferencia'
               ? Container(
-                  margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton2(
                       isExpanded: true,
@@ -1738,10 +1880,9 @@ identifyPaymentMethod({
                             child: Text(
                               selectedBank ?? 'Seleccione una opción',
                               style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: myTheme.colorScheme.primary
-                                    .withOpacity(0.7),
+                                fontSize: 14,
+                                color: myTheme.colorScheme.primary,
+                                fontFamily: "Poppins-regular",
                               ),
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -1755,8 +1896,8 @@ identifyPaymentMethod({
                                   item,
                                   style: TextStyle(
                                     fontSize: 14,
-                                    fontWeight: FontWeight.bold,
                                     color: myTheme.colorScheme.primary,
+                                    fontFamily: "Poppins-regular",
                                   ),
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -1816,7 +1957,6 @@ identifyPaymentMethod({
                   ),
                 )
               : Container(
-                  margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton2(
                       isExpanded: true,
@@ -1826,10 +1966,9 @@ identifyPaymentMethod({
                             child: Text(
                               selectedBank ?? 'Seleccione una opción',
                               style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: myTheme.colorScheme.primary
-                                    .withOpacity(0.7),
+                                fontSize: 14,
+                                color: myTheme.colorScheme.primary,
+                                fontFamily: "Poppins-regular",
                               ),
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -1843,8 +1982,8 @@ identifyPaymentMethod({
                                   item,
                                   style: TextStyle(
                                     fontSize: 14,
-                                    fontWeight: FontWeight.bold,
                                     color: myTheme.colorScheme.primary,
+                                    fontFamily: "Poppins-regular",
                                   ),
                                   overflow: TextOverflow.ellipsis,
                                 ),
