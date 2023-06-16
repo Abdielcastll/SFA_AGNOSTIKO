@@ -251,7 +251,7 @@ identifyPaymentMethod({
               ),
               keyboardType: TextInputType.phone,
               maxLines: 1,
-              maxLength: 20,
+              maxLength: 25,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
               ],
@@ -316,7 +316,7 @@ identifyPaymentMethod({
               ),
               keyboardType: TextInputType.name,
               maxLines: 1,
-              maxLength: 50,
+              maxLength: 40,
               inputFormatters: [
                 FilteringTextInputFormatter.allow(
                   RegExp(r"^[a-zA-ZñÑ@.\s]*"),
@@ -1040,7 +1040,7 @@ identifyPaymentMethod({
               ),
               keyboardType: TextInputType.phone,
               maxLines: 1,
-              maxLength: 12,
+              maxLength: 25,
               textCapitalization: TextCapitalization.characters,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
@@ -1922,7 +1922,7 @@ identifyPaymentMethod({
               ),
               keyboardType: TextInputType.phone,
               maxLines: 1,
-              maxLength: 12,
+              maxLength: 25,
               textCapitalization: TextCapitalization.characters,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,

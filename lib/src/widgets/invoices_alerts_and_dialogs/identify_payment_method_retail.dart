@@ -422,7 +422,7 @@ identifyPaymentMethodRetail({
               ),
               keyboardType: TextInputType.name,
               maxLines: 1,
-              maxLength: 50,
+              maxLength: 40,
               textCapitalization: TextCapitalization.characters,
               onChanged: (value) {
                 // setState(() {
@@ -1489,7 +1489,7 @@ identifyPaymentMethodRetail({
               ),
               keyboardType: TextInputType.phone,
               maxLines: 1,
-              maxLength: 12,
+              maxLength: 25,
               textCapitalization: TextCapitalization.characters,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
@@ -1552,7 +1552,7 @@ identifyPaymentMethodRetail({
               ),
               keyboardType: TextInputType.phone,
               maxLines: 1,
-              maxLength: 12,
+              maxLength: 25,
               textCapitalization: TextCapitalization.characters,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
@@ -2416,7 +2416,7 @@ identifyPaymentMethodRetail({
               ),
               keyboardType: TextInputType.phone,
               maxLines: 1,
-              maxLength: 12,
+              maxLength: 25,
               textCapitalization: TextCapitalization.characters,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
