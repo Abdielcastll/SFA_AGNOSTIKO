@@ -18,7 +18,7 @@ class InvoiceInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        margin: const EdgeInsets.only(top: 10),
+        margin: const EdgeInsets.fromLTRB(8, 10, 8, 0),
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -33,7 +33,7 @@ class InvoiceInfo extends StatelessWidget {
                 AppLocalizations.of(context)!.clientInvoiceInfo,
                 style: TextStyle(
                   color: myTheme.colorScheme.primary,
-                  fontFamily: 'Poppins-regular',
+                  fontFamily: 'Poppins-medium',
                   fontWeight: FontWeight.bold,
                   fontSize: 11,
                 ),
@@ -45,8 +45,9 @@ class InvoiceInfo extends StatelessWidget {
               child: Text(
                 tlf2,
                 style: const TextStyle(
-                  fontFamily: 'Poppins-regular',
+                  fontFamily: 'Poppins-medium',
                   fontSize: 11,
+                  color: Color(0xFF5A5D77),
                 ),
               ),
             ),
@@ -56,8 +57,9 @@ class InvoiceInfo extends StatelessWidget {
               child: Text(
                 'RIF: $typeId-$nameId ',
                 style: const TextStyle(
-                  fontFamily: 'Poppins-regular',
+                  fontFamily: 'Poppins-medium',
                   fontSize: 11,
+                  color: Color(0xFF5A5D77),
                 ),
               ),
             ),

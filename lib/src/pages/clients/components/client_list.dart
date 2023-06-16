@@ -352,7 +352,7 @@ class _ClientListState extends State<ClientList> {
                   margin: const EdgeInsets.fromLTRB(0, 16, 0, 10),
                   // color: Colors.grey,
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height * 0.57,
+                  height: MediaQuery.of(context).size.height * 0.68,
                   child: ListView.builder(
                     controller: widget.controller,
                     physics: const BouncingScrollPhysics(),
@@ -382,13 +382,18 @@ class _ClientListState extends State<ClientList> {
                           client?.dispatchAdress ?? 'NaN';
 
                       return Container(
-                        margin: const EdgeInsets.only(top: 10.0),
+                        margin: const EdgeInsets.only(top: 10),
                         width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
+                        // decoration: BoxDecoration(
+                        //   color: Colors.white,
+                        //   borderRadius: BorderRadius.circular(16),
+                        // ),
                         child: ListTile(
+                          tileColor: Colors.white,
+                          splashColor: myTheme.colorScheme.primary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(12)),
+                          ),
                           onTap: () {
                             // Redireccion a detalles de cliente
                             Navigator.push(
@@ -414,7 +419,7 @@ class _ClientListState extends State<ClientList> {
                             );
                           },
                           title: Container(
-                            margin: const EdgeInsets.only(top: 10),
+                            margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                             width: 240,
                             child: Text(
                               clientName,
@@ -426,37 +431,50 @@ class _ClientListState extends State<ClientList> {
                               ),
                             ),
                           ),
-                          subtitle: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          subtitle: Column(
                             children: [
-                              SizedBox(
-                                width: 150,
-                                child: Text(
-                                  clientFiscalAddress.toString().toLowerCase(),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    fontFamily: 'Poppins-regular',
-                                    fontSize: 10,
-                                  ),
-                                ),
-                              ),
+                              SizedBox(height: 10),
                               Container(
-                                alignment: Alignment.bottomRight,
-                                margin: const EdgeInsets.fromLTRB(5, 10, 0, 0),
-                                width: 150,
-                                child: Text(
-                                  clientEmail,
-                                  maxLines: 2,
-                                  textAlign: TextAlign.end,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins-regular',
-                                    fontSize: 9,
-                                    color: Colors.purple.shade500,
-                                  ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Container(
+                                      alignment: Alignment.bottomLeft,
+                                      width: 170,
+                                      child: Text(
+                                        clientFiscalAddress
+                                            .toString()
+                                            .toLowerCase(),
+                                        maxLines: 2,
+                                        textAlign: TextAlign.start,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          fontFamily: 'Poppins-regular',
+                                          fontSize: 11,
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      alignment: Alignment.bottomRight,
+                                      width: 150,
+                                      child: Text(
+                                        clientPhone1,
+                                        maxLines: 2,
+                                        textAlign: TextAlign.end,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins-regular',
+                                          fontSize: 11,
+                                          color: Colors.purple.shade500,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
+                              SizedBox(height: 10),
                             ],
                           ),
                         ),
@@ -529,64 +547,63 @@ class _ClientListState extends State<ClientList> {
                               ),
                             );
                           },
-                          title: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                margin: const EdgeInsets.only(top: 5),
-                                width: 200,
-                                child: Text(
-                                  clientName,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    fontFamily: 'Poppins-regular',
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
+                          title: Container(
+                            margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                            width: 240,
+                            child: Text(
+                              clientName,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontFamily: 'Poppins-regular',
+                                fontSize: 14,
+                                wordSpacing: 0.5,
                               ),
-                              Icon(
-                                MaterialIcons.keyboard_arrow_right,
-                                color: myTheme.colorScheme.secondary,
-                                size: 18,
-                              ),
-                            ],
+                            ),
                           ),
-                          subtitle: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                          subtitle: Column(
                             children: [
-                              SizedBox(
-                                width: 200,
-                                child: Text(
-                                  clientFiscalAddress.toString().toLowerCase(),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    fontFamily: 'Poppins-regular',
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ),
+                              SizedBox(height: 10),
                               Container(
-                                alignment: Alignment.bottomRight,
-                                child: Container(
-                                  margin:
-                                      const EdgeInsets.fromLTRB(5, 10, 0, 0),
-                                  width: 120,
-                                  height: 30,
-                                  child: Text(
-                                    clientEmail,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins-regular',
-                                      fontSize: 9,
-                                      color: Colors.purple.shade500,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Container(
+                                      alignment: Alignment.bottomLeft,
+                                      width: 170,
+                                      child: Text(
+                                        clientFiscalAddress
+                                            .toString()
+                                            .toLowerCase(),
+                                        maxLines: 2,
+                                        textAlign: TextAlign.start,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          fontFamily: 'Poppins-regular',
+                                          fontSize: 11,
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    Container(
+                                      alignment: Alignment.bottomRight,
+                                      width: 150,
+                                      child: Text(
+                                        clientPhone1,
+                                        maxLines: 2,
+                                        textAlign: TextAlign.end,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins-regular',
+                                          fontSize: 11,
+                                          color: Colors.purple.shade500,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
+                              SizedBox(height: 10),
                             ],
                           ),
                         ),

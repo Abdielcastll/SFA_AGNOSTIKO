@@ -54,7 +54,7 @@ class _ClientDetailsState extends State<ClientDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade200,
+      backgroundColor: myTheme.colorScheme.background,
       appBar: AppBar(
         toolbarHeight: 40,
         elevation: 0,
@@ -116,9 +116,23 @@ class ClientDetailsBody extends StatelessWidget {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClientPicture(
               name: name, documentReferenceId: clientDocumentReferenceID),
+          SizedBox(height: 16),
+          Container(
+            margin: EdgeInsets.fromLTRB(16, 0, 0, 0),
+            child: Text(
+              name,
+              style: const TextStyle(
+                fontSize: 22,
+                color: Colors.black,
+                fontFamily: 'Poppins-regular',
+              ),
+            ),
+          ),
           ButtonOptions(
             specialContribuyer: specialContribuyer,
             masterDiscount: masterDiscount,

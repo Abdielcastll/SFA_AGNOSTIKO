@@ -278,18 +278,17 @@ class ProductDetailsBody extends StatelessWidget {
                   ),
                   Container(
                     margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: Text(
-                        '$name',
-                        textAlign: TextAlign.left,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontFamily: 'Poppins-regular',
-                          fontSize: 24,
-                          color: myTheme.colorScheme.primary,
-                        ),
+                    alignment: Alignment.center,
+                    width: 380,
+                    child: Text(
+                      '$name',
+                      textAlign: TextAlign.left,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontFamily: 'Poppins-regular',
+                        fontSize: 26,
+                        color: Color(0xFF1B1B1F),
                       ),
                     ),
                   ),
@@ -306,63 +305,74 @@ class ProductDetailsBody extends StatelessWidget {
                             showListButton == false
                                 ? Container()
                                 : Container(
-                                    // alignment: Alignment.centerLeft,
-                                    child: Container(
-                                      // margin: const EdgeInsets.only(left: 30.0),
-                                      // width: 160,
-                                      height: 38,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(20)),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(20),
-                                        child: ElevatedButton.icon(
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder:
-                                                    (BuildContext context) =>
-                                                        ProductsPage(
-                                                  listOfProducts: list,
-                                                  listOfPrices: prices,
-                                                  userZoneDocument:
-                                                      userZoneDocument,
-                                                  showFullList: false,
-                                                ),
+                                    // margin: const EdgeInsets.only(left: 30.0),
+                                    // width: 160,
+                                    width: orderActive.orderActive == false
+                                        ? 300
+                                        : 200,
+                                    height: 46,
+
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(100),
+                                      child: ElevatedButton.icon(
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  ProductsPage(
+                                                listOfProducts: list,
+                                                listOfPrices: prices,
+                                                userZoneDocument:
+                                                    userZoneDocument,
+                                                showFullList: false,
                                               ),
-                                            );
-                                          },
-                                          icon: Icon(
-                                            MaterialCommunityIcons.view_list,
-                                            color: myTheme
-                                                .colorScheme.onPrimaryContainer,
-                                          ),
-                                          style: ButtonStyle(
-                                            shadowColor: MaterialStateProperty
-                                                .all<Color>(Colors.transparent),
-                                            backgroundColor:
-                                                MaterialStateProperty.all<
-                                                    Color>(
-                                              const Color.fromARGB(
-                                                      255, 159, 165, 252)
-                                                  .withOpacity(0.3),
                                             ),
-                                            overlayColor: MaterialStateProperty
-                                                .all<Color>(myTheme
-                                                    .colorScheme.primary
-                                                    .withOpacity(0.3)),
+                                          );
+                                        },
+                                        icon: Icon(
+                                          MaterialCommunityIcons
+                                              .view_list_outline,
+                                          color: myTheme
+                                              .colorScheme.onPrimaryContainer,
+                                        ),
+                                        style: ButtonStyle(
+                                          shadowColor:
+                                              MaterialStateProperty.all<Color>(
+                                                  Colors.transparent),
+                                          backgroundColor:
+                                              MaterialStateProperty.all<Color>(
+                                            // const Color.fromARGB(
+                                            //         255, 159, 165, 252)
+                                            //     .withOpacity(0.3),
+                                            Colors.white,
                                           ),
-                                          label: Text(
-                                            AppLocalizations.of(context)!
-                                                .seeInList,
-                                            style: TextStyle(
-                                                color: myTheme.colorScheme
-                                                    .onPrimaryContainer,
-                                                fontFamily: 'Poppins-regular',
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.bold),
-                                          ),
+                                          overlayColor:
+                                              MaterialStateProperty.all<Color>(
+                                                  myTheme.colorScheme.primary
+                                                      .withOpacity(0.3)),
+                                        ),
+                                        label: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              AppLocalizations.of(context)!
+                                                  .seeInList,
+                                              style: TextStyle(
+                                                  color: myTheme.colorScheme
+                                                      .onPrimaryContainer,
+                                                  fontFamily: 'Poppins-regular',
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Icon(
+                                              MaterialIcons.arrow_forward_ios,
+                                              color: myTheme.colorScheme
+                                                  .onPrimaryContainer,
+                                              size: 10,
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ),
@@ -374,12 +384,13 @@ class ProductDetailsBody extends StatelessWidget {
                                     // alignment: Alignment.center,
                                     child: Container(
                                       // margin: const EdgeInsets.only(left: 30.0),
-                                      height: 38,
+                                      height: 46,
                                       decoration: BoxDecoration(
                                           borderRadius:
-                                              BorderRadius.circular(20)),
+                                              BorderRadius.circular(100)),
                                       child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(20),
+                                        borderRadius:
+                                            BorderRadius.circular(100),
                                         child: ElevatedButton.icon(
                                           onPressed: () {
                                             if (stock! > 0) {
@@ -420,11 +431,11 @@ class ProductDetailsBody extends StatelessWidget {
                                                 .all<Color>(Colors.transparent),
                                             backgroundColor:
                                                 MaterialStateProperty.all<
-                                                    Color>(
-                                              const Color.fromARGB(
-                                                      255, 159, 165, 252)
-                                                  .withOpacity(0.3),
-                                            ),
+                                                        Color>(
+                                                    // const Color.fromARGB(
+                                                    //         255, 159, 165, 252)
+                                                    //     .withOpacity(0.3),
+                                                    Colors.white),
                                             overlayColor: MaterialStateProperty
                                                 .all<Color>(myTheme
                                                     .colorScheme.primary
@@ -447,24 +458,23 @@ class ProductDetailsBody extends StatelessWidget {
                           ],
                         ),
                         Container(
-                          margin: const EdgeInsets.fromLTRB(10, 15, 10, 0),
                           alignment: Alignment.centerLeft,
+                          margin: const EdgeInsets.fromLTRB(10, 15, 10, 0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Linea: ',
+                                '${AppLocalizations.of(context)!.price}: ',
                                 style: TextStyle(
-                                  color: myTheme.colorScheme.onPrimaryContainer,
+                                  color: Color(0xFF5A5D77),
                                   fontFamily: 'Poppins-regular',
                                   fontSize: 16,
-                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                               Text(
-                                '$line •',
+                                '$coinSymbol $formattedPrice',
                                 style: TextStyle(
-                                  color: myTheme.colorScheme.primary,
+                                  color: Color(0xFF5A5D77),
                                   fontFamily: 'Poppins-regular',
                                   fontSize: 16,
                                 ),
@@ -481,16 +491,15 @@ class ProductDetailsBody extends StatelessWidget {
                               Text(
                                 '${AppLocalizations.of(context)!.stock}: ',
                                 style: TextStyle(
-                                  color: myTheme.colorScheme.onPrimaryContainer,
+                                  color: Color(0xFF5A5D77),
                                   fontFamily: 'Poppins-regular',
                                   fontSize: 16,
-                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                               Text(
                                 '$stock en Inventario',
                                 style: TextStyle(
-                                  color: myTheme.colorScheme.primary,
+                                  color: Color(0xFF5A5D77),
                                   fontFamily: 'Poppins-regular',
                                   fontSize: 16,
                                 ),
@@ -499,24 +508,23 @@ class ProductDetailsBody extends StatelessWidget {
                           ),
                         ),
                         Container(
-                          alignment: Alignment.centerLeft,
                           margin: const EdgeInsets.fromLTRB(10, 5, 10, 0),
+                          alignment: Alignment.centerLeft,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                '${AppLocalizations.of(context)!.price}: ',
+                                'Linea: ',
                                 style: TextStyle(
-                                  color: myTheme.colorScheme.onPrimaryContainer,
+                                  color: Color(0xFF5A5D77),
                                   fontFamily: 'Poppins-regular',
                                   fontSize: 16,
-                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                               Text(
-                                '$coinSymbol $formattedPrice',
+                                '$line •',
                                 style: TextStyle(
-                                  color: myTheme.colorScheme.primary,
+                                  color: Color(0xFF5A5D77),
                                   fontFamily: 'Poppins-regular',
                                   fontSize: 16,
                                 ),
@@ -524,6 +532,7 @@ class ProductDetailsBody extends StatelessWidget {
                             ],
                           ),
                         ),
+
                         // Row(
                         //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         //   children: [

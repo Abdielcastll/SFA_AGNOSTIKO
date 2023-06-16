@@ -15,6 +15,7 @@ class AddressInfo extends StatelessWidget {
     return SingleChildScrollView(
       child: Container(
         width: MediaQuery.of(context).size.width,
+        margin: const EdgeInsets.fromLTRB(8, 0, 8, 0),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
@@ -28,7 +29,7 @@ class AddressInfo extends StatelessWidget {
                 AppLocalizations.of(context)!.clientFiscalAddress,
                 style: TextStyle(
                   color: myTheme.colorScheme.primary,
-                  fontFamily: 'Poppins-regular',
+                  fontFamily: 'Poppins-medium',
                   fontWeight: FontWeight.bold,
                   fontSize: 11,
                 ),
@@ -40,8 +41,9 @@ class AddressInfo extends StatelessWidget {
               child: Text(
                 fiscalAddress.toLowerCase(),
                 style: const TextStyle(
-                  fontFamily: 'Poppins-regular',
+                  fontFamily: 'Poppins-medium',
                   fontSize: 11,
+                  color: Color(0xFF5A5D77),
                 ),
               ),
             ),

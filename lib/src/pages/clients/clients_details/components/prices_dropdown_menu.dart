@@ -37,12 +37,13 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
     String? selectedDiscount = widget.masterDiscount.toString();
     return SingleChildScrollView(
       child: Container(
-        margin: const EdgeInsets.only(top: 10, bottom: 20),
+        margin: const EdgeInsets.fromLTRB(8, 10, 8, 20),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,7 +54,7 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
                     AppLocalizations.of(context)!.listOfPrices,
                     style: TextStyle(
                       color: myTheme.colorScheme.primary,
-                      fontFamily: 'Poppins-regular',
+                      fontFamily: 'Poppins-medium',
                       fontWeight: FontWeight.bold,
                       fontSize: 11,
                     ),
@@ -61,9 +62,9 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
                 ),
                 Container(
                     alignment: Alignment.center,
-                    margin: const EdgeInsets.fromLTRB(10, 5, 10, 10),
+                    margin: const EdgeInsets.fromLTRB(10, 5, 0, 10),
                     height: 50,
-                    width: 150,
+                    width: 130,
                     decoration: BoxDecoration(
                         color: Colors.transparent,
                         borderRadius: BorderRadius.circular(16),
@@ -75,9 +76,8 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontFamily: 'Poppins-regular',
+                        fontFamily: 'Poppins-medium',
                         fontSize: 14,
-                        fontWeight: FontWeight.bold,
                         color: myTheme.colorScheme.primary.withOpacity(0.7),
                       ),
                     )),
@@ -165,12 +165,12 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                  margin: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                  margin: const EdgeInsets.fromLTRB(0, 10, 10, 0),
                   child: Text(
                     AppLocalizations.of(context)!.masterDiscount,
                     style: TextStyle(
                       color: myTheme.colorScheme.primary,
-                      fontFamily: 'Poppins-regular',
+                      fontFamily: 'Poppins-medium',
                       fontWeight: FontWeight.bold,
                       fontSize: 11,
                     ),
@@ -178,9 +178,9 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
                 ),
                 Container(
                     alignment: Alignment.center,
-                    margin: const EdgeInsets.fromLTRB(10, 5, 10, 10),
+                    margin: const EdgeInsets.fromLTRB(0, 5, 10, 10),
                     height: 50,
-                    width: 100,
+                    width: 130,
                     decoration: BoxDecoration(
                         color: Colors.transparent,
                         borderRadius: BorderRadius.circular(16),
@@ -192,9 +192,8 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontFamily: 'Poppins-regular',
+                        fontFamily: 'Poppins-medium',
                         fontSize: 14,
-                        fontWeight: FontWeight.bold,
                         color: myTheme.colorScheme.primary.withOpacity(0.7),
                       ),
                     )),

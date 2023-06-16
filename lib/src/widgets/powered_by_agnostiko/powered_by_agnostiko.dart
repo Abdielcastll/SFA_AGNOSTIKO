@@ -15,7 +15,7 @@ class PoweredByAgnostiko extends StatelessWidget {
         const SizedBox(height: 10),
         Container(
           alignment: Alignment.center,
-          child: Image.asset('assets/images/agnostiko.png'),
+          child: Image.asset('assets/images/powered.png'),
         ),
       ],
     );

@@ -52,21 +52,21 @@ class ButtonOptions extends StatelessWidget {
     // print('userRole IN CLIENT DETAILS: $userRole');
 
     return Container(
-      margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+      margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Container(
-            width: 170,
-            height: 35,
+            width: 160,
+            height: 40,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(100),
               border: Border.all(
                 color: myTheme.colorScheme.primary,
               ),
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(100),
               child: ElevatedButton.icon(
                 onPressed: () {
                   Navigator.push(
@@ -89,27 +89,29 @@ class ButtonOptions extends StatelessWidget {
                   AppLocalizations.of(context)!.clientRecord,
                   style: TextStyle(
                     color: myTheme.colorScheme.primary,
-                    fontFamily: 'Poppins-regular',
+                    fontFamily: 'Poppins-medium',
                     fontSize: 14,
-                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color?>(
-                    Colors.white,
-                  ),
+                  shadowColor:
+                      MaterialStateProperty.all<Color>(Colors.transparent),
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                      // const Color.fromARGB(
+                      //         255, 159, 165, 252)
+                      //     .withOpacity(0.3),
+                      Colors.white),
                   overlayColor: MaterialStateProperty.all<Color>(
-                    myTheme.colorScheme.primary.withOpacity(0.5),
-                  ),
+                      myTheme.colorScheme.primary.withOpacity(0.3)),
                 ),
               ),
             ),
           ),
           SizedBox(
-            width: 170,
-            height: 35,
+            width: 160,
+            height: 40,
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(100),
               child: ElevatedButton.icon(
                 onPressed: () {
                   final orderActive =
@@ -162,7 +164,7 @@ class ButtonOptions extends StatelessWidget {
                       ? MaterialCommunityIcons.cart_plus
                       : Icons.shopping_cart_checkout,
                   color: myTheme.colorScheme.background,
-                  size: 22,
+                  size: 17,
                 ),
                 label: Text(
                   orderActive.orderActive == false
@@ -172,9 +174,8 @@ class ButtonOptions extends StatelessWidget {
                           : 'Orden en progreso',
                   style: TextStyle(
                     color: myTheme.colorScheme.background,
-                    fontFamily: 'Poppins-regular',
+                    fontFamily: 'Poppins-medium',
                     fontSize: orderActive.orderActive == false ? 14 : 11,
-                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 style: ButtonStyle(

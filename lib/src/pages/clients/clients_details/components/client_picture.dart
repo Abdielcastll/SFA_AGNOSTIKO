@@ -38,7 +38,7 @@ class ClientPicture extends StatelessWidget {
             if (snapshot.hasData) {
               final url = snapshot.data!.toString();
               return SizedBox(
-                height: 275,
+                height: 200,
                 width: MediaQuery.of(context).size.width,
                 child: CachedNetworkImage(
                   fit: BoxFit.cover,
@@ -55,7 +55,7 @@ class ClientPicture extends StatelessWidget {
               );
             } else if (snapshot.hasError) {
               return SizedBox(
-                height: 275,
+                height: 200,
                 width: MediaQuery.of(context).size.width,
                 child: Image.asset(
                   'assets/images/clientphoto.jpg',
@@ -73,39 +73,39 @@ class ClientPicture extends StatelessWidget {
             }
           },
         ),
-        Container(
-          margin: EdgeInsets.fromLTRB(10, 0, 0, 10),
-          child: Stack(
-            children: [
-              SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: Stack(
-                    children: <Widget>[
-                      // Stroked text as border.
-                      Text(
-                        name,
-                        style: TextStyle(
-                          fontSize: 24,
-                          foreground: Paint()
-                            ..style = PaintingStyle.stroke
-                            ..strokeWidth = 3
-                            ..color =
-                                myTheme.colorScheme.primary.withOpacity(0.5),
-                        ),
-                      ),
-                      // Solid text as fill.
-                      Text(
-                        name,
-                        style: const TextStyle(
-                          fontSize: 24,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  )),
-            ],
-          ),
-        ),
+        // Container(
+        //   margin: EdgeInsets.fromLTRB(10, 0, 0, 10),
+        //   child: Stack(
+        //     children: [
+        //       SizedBox(
+        //           width: MediaQuery.of(context).size.width,
+        //           child: Stack(
+        //             children: <Widget>[
+        //               // Stroked text as border.
+        //               Text(
+        //                 name,
+        //                 style: TextStyle(
+        //                   fontSize: 24,
+        //                   foreground: Paint()
+        //                     ..style = PaintingStyle.stroke
+        //                     ..strokeWidth = 3
+        //                     ..color =
+        //                         myTheme.colorScheme.primary.withOpacity(0.5),
+        //                 ),
+        //               ),
+        //               // Solid text as fill.
+        //               Text(
+        //                 name,
+        //                 style: const TextStyle(
+        //                   fontSize: 24,
+        //                   color: Colors.white,
+        //                 ),
+        //               ),
+        //             ],
+        //           )),
+        //     ],
+        //   ),
+        // ),
       ],
     );
   }
