@@ -15,6 +15,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
+import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/completed_pay.dart';
@@ -422,7 +423,7 @@ identifyPaymentMethodRetail({
               ),
               keyboardType: TextInputType.name,
               maxLines: 1,
-              maxLength: 50,
+              maxLength: 40,
               textCapitalization: TextCapitalization.characters,
               onChanged: (value) {
                 // setState(() {
@@ -1490,7 +1491,7 @@ identifyPaymentMethodRetail({
               ),
               keyboardType: TextInputType.phone,
               maxLines: 1,
-              maxLength: 12,
+              maxLength: 25,
               textCapitalization: TextCapitalization.characters,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
@@ -1553,7 +1554,7 @@ identifyPaymentMethodRetail({
               ),
               keyboardType: TextInputType.phone,
               maxLines: 1,
-              maxLength: 12,
+              maxLength: 25,
               textCapitalization: TextCapitalization.characters,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
@@ -2418,7 +2419,7 @@ identifyPaymentMethodRetail({
               ),
               keyboardType: TextInputType.phone,
               maxLines: 1,
-              maxLength: 12,
+              maxLength: 25,
               textCapitalization: TextCapitalization.characters,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
