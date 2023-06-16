@@ -15,6 +15,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
+import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/completed_pay.dart';
@@ -613,7 +614,7 @@ identifyPaymentMethodRetail({
                 children: [
                   ElevatedButton.icon(
                     onPressed: () {
-                      goBackToCatalogue(context);
+                      Navigator.pop(context);
                       setState(() => imageFile = null);
                     },
                     style: ButtonStyle(
@@ -1741,7 +1742,7 @@ identifyPaymentMethodRetail({
                   children: [
                     ElevatedButton.icon(
                       onPressed: () {
-                        goBackToCatalogue(context);
+                        Navigator.pop(context);
                         setState(() => imageFile = null);
                       },
                       style: ButtonStyle(
@@ -2058,7 +2059,7 @@ identifyPaymentMethodRetail({
                   children: [
                     ElevatedButton.icon(
                       onPressed: () {
-                        goBackToCatalogue(context);
+                        Navigator.pop(context);
                         setState(() => imageFile = null);
                       },
                       style: ButtonStyle(
@@ -2604,7 +2605,7 @@ identifyPaymentMethodRetail({
                   children: [
                     ElevatedButton.icon(
                       onPressed: () {
-                        goBackToCatalogue(context);
+                        Navigator.pop(context);
                         setState(() => imageFile = null);
                       },
                       style: ButtonStyle(

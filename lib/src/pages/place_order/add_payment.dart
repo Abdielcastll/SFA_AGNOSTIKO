@@ -111,6 +111,8 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                     setState(() {
                       _canPop = true;
                     });
+                    // Navigator.popUntil(
+                    //     context, (route) => route.settings.name == "ORDER");
                     Navigator.popUntil(context, (route) => route.isFirst);
                     objectBox.delelteAllShoppingCart();
                     orderActive.setOrder(false, Clients());

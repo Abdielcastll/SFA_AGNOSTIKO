@@ -97,12 +97,12 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                 builder: (BuildContext context) =>
                                     ProductDetails(
                                   code: product.code,
-                                  price: (prices[product.code] ?? 0),
+                                  price: (prices[product.code] ?? 0.00),
                                   line: linesSummary[product.line],
                                   imageUrl: url!,
                                   isProductNew: true,
                                   name: product.name,
-                                  stock: stockValues[product.code] ?? 000,
+                                  stock: stockValues[product.code] ?? 0,
                                   list: productsByDate
                                       .where((element) =>
                                           element.name == product.name)
@@ -228,7 +228,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                 builder: (BuildContext context) =>
                                     ProductDetails(
                                   code: product.code,
-                                  price: (prices[product.code] ?? 0),
+                                  price: (prices[product.code] ?? 0.00),
                                   line: linesSummary[product.line],
                                   imageUrl: 'https://i.imgur.com/BPbj6Gy.jpg',
                                   isProductNew: true,
@@ -284,48 +284,48 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                     ),
                                   ),
                                 ),
-                                Container(
-                                  margin:
-                                      const EdgeInsets.fromLTRB(5.0, 0.0, 0, 0),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        margin:
-                                            const EdgeInsets.only(right: 3.0),
-                                        height: 10,
-                                        width: 10,
-                                        decoration: BoxDecoration(
-                                          color: Colors.amber,
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                      ),
-                                      Container(
-                                        margin:
-                                            const EdgeInsets.only(right: 3.0),
-                                        height: 10,
-                                        width: 10,
-                                        decoration: BoxDecoration(
-                                          color: myTheme
-                                              .colorScheme.onPrimaryContainer,
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                      ),
-                                      Container(
-                                        margin:
-                                            const EdgeInsets.only(right: 3.0),
-                                        height: 10,
-                                        width: 10,
-                                        decoration: BoxDecoration(
-                                          color: Colors.green.shade900,
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                // Container(
+                                //   margin:
+                                //       const EdgeInsets.fromLTRB(5.0, 0.0, 0, 0),
+                                //   child: Row(
+                                //     children: [
+                                //       Container(
+                                //         margin:
+                                //             const EdgeInsets.only(right: 3.0),
+                                //         height: 10,
+                                //         width: 10,
+                                //         decoration: BoxDecoration(
+                                //           color: Colors.amber,
+                                //           borderRadius:
+                                //               BorderRadius.circular(20),
+                                //         ),
+                                //       ),
+                                //       Container(
+                                //         margin:
+                                //             const EdgeInsets.only(right: 3.0),
+                                //         height: 10,
+                                //         width: 10,
+                                //         decoration: BoxDecoration(
+                                //           color: myTheme
+                                //               .colorScheme.onPrimaryContainer,
+                                //           borderRadius:
+                                //               BorderRadius.circular(20),
+                                //         ),
+                                //       ),
+                                //       Container(
+                                //         margin:
+                                //             const EdgeInsets.only(right: 3.0),
+                                //         height: 10,
+                                //         width: 10,
+                                //         decoration: BoxDecoration(
+                                //           color: Colors.green.shade900,
+                                //           borderRadius:
+                                //               BorderRadius.circular(20),
+                                //         ),
+                                //       ),
+                                //     ],
+                                //   ),
+                                // ),
                               ],
                             ),
                           ),
