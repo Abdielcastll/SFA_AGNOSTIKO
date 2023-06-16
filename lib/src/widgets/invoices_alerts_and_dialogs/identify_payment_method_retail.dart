@@ -422,7 +422,7 @@ identifyPaymentMethodRetail({
               ),
               keyboardType: TextInputType.name,
               maxLines: 1,
-              maxLength: 30,
+              maxLength: 50,
               textCapitalization: TextCapitalization.characters,
               onChanged: (value) {
                 // setState(() {
