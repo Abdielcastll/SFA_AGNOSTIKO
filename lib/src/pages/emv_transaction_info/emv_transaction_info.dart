@@ -13,10 +13,8 @@ import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 
-import '../../../dialogs/param_bitmap_dialog.dart';
 import '../../models/transaction_args.dart';
 import '../../services/utils/emv.dart';
-import '../../services/utils/keypad.dart';
 import '../../services/utils/parameters.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -75,6 +73,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     String failedStr = AppLocalizations.of(context)!.failed.toUpperCase();
     String offlineStr = AppLocalizations.of(context)!.offline.toUpperCase();
     String onlineStr = AppLocalizations.of(context)!.online.toUpperCase();
+    String errorResultStr = '';
 
     String transactionResultStr = failedStr;
     String transactionOnlineStr = offlineStr;
@@ -121,12 +120,30 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
             });
             break;
           case EmvTransactionResult.Denied:
-            print('Pago denegado');
+            errorResultStr = 'Denegado';
             transactionResultStr = declinedStr;
+            break;
+          case EmvTransactionResult.CmdError:
+            print('Tarjeta Retirada');
+            transactionResultStr = declinedStr;
+            errorResultStr = 'Tarjeta Retirada';
+            break;
+          case EmvTransactionResult.Fallback:
+            print('Falback conexion');
+            transactionResultStr = declinedStr;
+            errorResultStr = 'Error de lectura de chip';
+            break;
+          case EmvTransactionResult.Fail:
+            print('Fail conexion');
+            transactionResultStr = declinedStr;
+            errorResultStr = 'Fallo en la transacción';
             break;
           default:
             print('Pago Fallido');
             break;
+        }
+        if (transactionArgs!.timeout) {
+          errorResultStr = 'Timeout';
         }
       } else {
         switch (transactionResult) {
@@ -150,60 +167,59 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
             print('Devolucion denegada');
             transactionResultStr = declinedStr;
             break;
+          case EmvTransactionResult.CmdError:
+            print('Tarjeta Retirada');
+            transactionResultStr = declinedStr;
+            errorResultStr = 'Tarjeta Retirada';
+            break;
+          case EmvTransactionResult.Fallback:
+            print('Falback conexion');
+            transactionResultStr = declinedStr;
+            errorResultStr = 'Error de conexión';
+            break;
           default:
             print('Devolucion Fallida');
             break;
         }
+        if (transactionArgs!.timeout) {
+          errorResultStr = 'Timeout';
+        }
       }
-
       transactionOnlineStr =
           transactionInfo?.onlineRequested == true ? onlineStr : offlineStr;
     }
 
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.pop(context);
-        return true;
-      },
-      child: RawKeyboardListener(
-        autofocus: true,
-        focusNode: FocusNode(),
-        onKey: rawKeypadHandler(context, onEscape: () {
-          Navigator.pop(context);
-        }),
-        child: Scaffold(
-          appBar: AppBar(
-              title: Text(AppLocalizations.of(context)!.emvTransactionInfo),
-              automaticallyImplyLeading: false),
-          body: ListView(
-            children: [
-              const Text(''),
-              Text(
-                "${AppLocalizations.of(context)!.transaction} $transactionResultStr - $transactionOnlineStr",
-                style: TextStyle(
-                  color: this.transactionResult == EmvTransactionResult.Approved
-                      ? Colors.green
-                      : Colors.red,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-                textAlign: TextAlign.center,
+    return Scaffold(
+      appBar: AppBar(
+          title: Text(AppLocalizations.of(context)!.emvTransactionInfo),
+          automaticallyImplyLeading: false),
+      body: ListView(
+        children: [
+          const Text(''),
+          Text(
+            "${AppLocalizations.of(context)!.transaction} $transactionResultStr - $transactionOnlineStr",
+            style: TextStyle(
+              color: this.transactionResult == EmvTransactionResult.Approved
+                  ? Colors.green
+                  : Colors.red,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          if (errorResultStr != '')
+            Text(
+              errorResultStr,
+              style: TextStyle(
+                color: this.transactionResult == EmvTransactionResult.Approved
+                    ? Colors.green
+                    : Colors.red,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
               ),
-              transactionArgs!.timeout || transactionArgs!.stan == null
-                  ? Text(
-                      "Timeout",
-                      style: TextStyle(
-                        color: this.transactionResult ==
-                                EmvTransactionResult.Approved
-                            ? Colors.green
-                            : Colors.red,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                      textAlign: TextAlign.center,
-                    )
-                  : const SizedBox(),
-              Text(
+              textAlign: TextAlign.center,
+            ),
+          /* Text(
                 transactionArgs!.isFallback ? 'Error de Chip' : '',
                 style: TextStyle(
                   color: Colors.red,
@@ -211,122 +227,118 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                   fontSize: 14,
                 ),
                 textAlign: TextAlign.center,
-              ),
-              const Divider(),
-              if (!transactionArgs!.isFallback)
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      height: 50,
-                      width: 120,
-                      child: SvgPicture.asset(
-                        infoTags?.cardNo?.toHexStr().substring(0, 1) == '5' ||
-                                transactionArgs?.transactionInfo?.kernelType ==
-                                    ContactlessKernelType.PayPass
-                            ? 'assets/images/mastercard.svg'
-                            : 'assets/images/visa.svg',
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                    Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            if (transactionArgs
-                                    ?.transactionInfo?.isContactless ==
-                                true)
-                              Container(
-                                margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                height: 50,
-                                width: 120,
-                                child: Image.asset(
-                                  'assets/images/contactless.jpeg',
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
-                            Text(
-                              '''**** ${(infoTags?.cardNo?.toHexStr() ?? transactionArgs?.pan)?.substring(12) ?? '-'}''',
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        )),
-                  ],
+              ), */
+          const Divider(),
+          if (!transactionArgs!.isFallback && infoTags?.cardNo != null)
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  height: 50,
+                  width: 120,
+                  child: SvgPicture.asset(
+                    infoTags?.cardNo?.toHexStr().substring(0, 1) == '5' ||
+                            transactionArgs?.transactionInfo?.kernelType ==
+                                ContactlessKernelType.PayPass
+                        ? 'assets/images/mastercard.svg'
+                        : 'assets/images/visa.svg',
+                    fit: BoxFit.contain,
+                  ),
                 ),
-              if (!transactionArgs!.isFallback) const Divider(),
-              ListTile(
-                enableFeedback: true,
-                title: Text(
-                    '${AppLocalizations.of(context)!.transactionType} (9C)'),
-                subtitle: Text(
-                  infoTags?.transactionType?.toHexStr().toUpperCase() ?? '-',
-                ),
-                onTap: () {},
-              ),
-              ListTile(
-                enableFeedback: true,
-                title: Text('${AppLocalizations.of(context)!.amount} (9F02)'),
-                subtitle: Text(_amountString),
-                onTap: () {},
-              ),
-              ListTile(
-                enableFeedback: true,
-                title: Text(
-                    '${AppLocalizations.of(context)!.cashbackAmount} (9F03)'),
-                subtitle: Text(_amountOtherString),
-                onTap: () {},
-              ),
-              if (!transactionArgs!.isFallback)
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 4.0, horizontal: 16.0),
-                  child: OutlinedButton(
-                      onPressed: () async {
-                        await printTicket();
-                        ticketPrinted = true;
-                      },
-                      style: TextButton.styleFrom(
-                          foregroundColor: myTheme.colorScheme.primary,
-                          backgroundColor: Colors.blue.shade800),
-                      child: Text(
-                        'imprimir comprobante'.toUpperCase(),
-                        style: const TextStyle(
-                          fontFamily: 'Poppins-regular',
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        if (transactionArgs?.transactionInfo?.isContactless ==
+                            true)
+                          Container(
+                            margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            height: 50,
+                            width: 120,
+                            child: Image.asset(
+                              'assets/images/contactless.jpeg',
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        Text(
+                          '''**** ${(infoTags?.cardNo?.toHexStr() ?? transactionArgs?.pan)?.substring(12) ?? '-'}''',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
-                      )),
-                ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
-                child: OutlinedButton(
-                    onPressed: () {
-                      if (!ticketPrinted && !transactionArgs!.isFallback) {
-                        showModalNoTicketPrinted();
-                        return;
-                      }
-                      onAccept();
-                    },
-                    style: TextButton.styleFrom(
-                        foregroundColor: myTheme.colorScheme.primary,
-                        backgroundColor: Colors.blue.shade800),
-                    child: Text(
-                      'aceptar'.toUpperCase(),
-                      style: const TextStyle(
-                        fontFamily: 'Poppins-regular',
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      ],
                     )),
-              )
-            ],
+              ],
+            ),
+          if (!transactionArgs!.isFallback) const Divider(),
+          ListTile(
+            enableFeedback: true,
+            title:
+                Text('${AppLocalizations.of(context)!.transactionType} (9C)'),
+            subtitle: Text(
+              infoTags?.transactionType?.toHexStr().toUpperCase() ?? '-',
+            ),
+            onTap: () {},
           ),
-        ),
+          ListTile(
+            enableFeedback: true,
+            title: Text('${AppLocalizations.of(context)!.amount} (9F02)'),
+            subtitle: Text(_amountString),
+            onTap: () {},
+          ),
+          ListTile(
+            enableFeedback: true,
+            title:
+                Text('${AppLocalizations.of(context)!.cashbackAmount} (9F03)'),
+            subtitle: Text(_amountOtherString),
+            onTap: () {},
+          ),
+          if (!transactionArgs!.isFallback)
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+              child: OutlinedButton(
+                  onPressed: () async {
+                    await printTicket();
+                    ticketPrinted = true;
+                  },
+                  style: TextButton.styleFrom(
+                      foregroundColor: myTheme.colorScheme.primary,
+                      backgroundColor: Colors.blue.shade800),
+                  child: Text(
+                    'imprimir comprobante'.toUpperCase(),
+                    style: const TextStyle(
+                      fontFamily: 'Poppins-regular',
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )),
+            ),
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+            child: OutlinedButton(
+                onPressed: () {
+                  if (!ticketPrinted && !transactionArgs!.isFallback) {
+                    showModalNoTicketPrinted();
+                    return;
+                  }
+                  onAccept();
+                },
+                style: TextButton.styleFrom(
+                    foregroundColor: myTheme.colorScheme.primary,
+                    backgroundColor: Colors.blue.shade800),
+                child: Text(
+                  'aceptar'.toUpperCase(),
+                  style: const TextStyle(
+                    fontFamily: 'Poppins-regular',
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )),
+          )
+        ],
       ),
     );
   }
@@ -417,9 +429,6 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
           ),
         ),
       );
-      /* (ModalRoute.of(context)?.settings.arguments!
-                            as List)[1](payed); */
-      // Navigator.pop(context, payed);
     }
   }
 
@@ -526,19 +535,17 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       listOfTextLine.add(PrinterText('Tarjeta: ${cardResult.toUpperCase()}',
           format:
               TextFormat(fontSize: 16, bold: true, fontFamily: regularFont)));
+      final cardBrand = infoTags?.cardNo?.toHexStr().substring(0, 1) == '5'
+          ? 'Mastercard'
+          : 'Visa';
+      listOfTextLine.add(PrinterText.emptyLine(32));
+      listOfTextLine.add(
+        PrinterText(cardBrand.toUpperCase(),
+            format: TextFormat(fontSize: 16, fontFamily: regularFont),
+            alignment: TextAlignment.Center),
+      );
+      listOfTextLine.add(PrinterText.emptyLine(16));
     }
-
-    final cardBrand = infoTags?.cardNo?.toHexStr().substring(0, 1) == '5'
-        ? 'Mastercard'
-        : 'Visa';
-    listOfTextLine.add(PrinterText.emptyLine(32));
-    listOfTextLine.add(
-      PrinterText(cardBrand.toUpperCase(),
-          format: TextFormat(fontSize: 16, fontFamily: regularFont),
-          alignment: TextAlignment.Center),
-    );
-
-    listOfTextLine.add(PrinterText.emptyLine(16));
 
     if (transactionArgs!.emvTransactionType == EmvTransactionType.Refund) {
       listOfTextLine.add(
@@ -557,12 +564,15 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       );
     }
 
-    listOfTextLine.add(PrinterText(
-        transactionResult == EmvTransactionResult.Approved
-            ? 'PAGO APROBADO'
+    final ticketMessage = transactionResult == EmvTransactionResult.Approved
+        ? 'PAGO APROBADO'
+        : transactionResult == EmvTransactionResult.CmdError
+            ? 'TARJETA RETIRADA'
             : transactionArgs!.timeout || transactionArgs!.stan == null
                 ? 'TIEMPO DE ESPERA AGOTADO'
-                : 'PAGO RECHAZADO',
+                : 'PAGO FALLIDO';
+
+    listOfTextLine.add(PrinterText(ticketMessage,
         format: TextFormat(fontSize: 16, fontFamily: regularFont)));
     listOfTextLine.add(PrinterSplitText("Total:".toUpperCase(), _amountString,
         format: TextFormat(fontSize: 16, fontFamily: regularFont)));
@@ -609,7 +619,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
 
     listOfTextLine.add(PrinterText.emptyLine(16));
 
-    if (!transactionArgs!.timeout && transactionArgs!.stan != null)
+    if (!transactionArgs!.timeout &&
+        transactionArgs!.stan != null &&
+        transactionResult == EmvTransactionResult.Approved)
       listOfTextLine.add(PrinterText('FIRMA:______________________________',
           format: TextFormat(fontSize: 16, fontFamily: regularFont)));
 
@@ -726,109 +738,6 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       return currencyFormat.format(amountInt / 100);
     }
     return '-';
-  }
-
-  String? get _kernelTypeStr {
-    final kernelType = transactionArgs?.transactionInfo?.kernelType;
-    switch (kernelType) {
-      case ContactlessKernelType.PayPass:
-        return "MasterCard PayPass";
-      case ContactlessKernelType.PayWave:
-        return "VISA PayWave";
-      default:
-        return null;
-    }
-  }
-
-  List<Widget> _generateCommandTiles(
-    String title,
-    Map<int, Uint8List?>? tags,
-  ) {
-    return tags != null
-        ? [
-            Text(
-              title,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            ListTile(
-              enableFeedback: true,
-              title: const Text('CID (9F27)'),
-              subtitle: Text(_getCidStr(tags[0x9f27])),
-              onTap: () {},
-            ),
-            ListTile(
-              enableFeedback: true,
-              title: const Text('TSI (9B)'),
-              subtitle: Text(
-                tags[0x9b]?.toHexStr().toUpperCase() ?? '-',
-              ),
-              onTap: () {
-                _showTsiBitmap(tags[0x9b]);
-              },
-            ),
-            ListTile(
-              enableFeedback: true,
-              title: const Text('TVR (95)'),
-              subtitle: Text(
-                tags[0x95]?.toHexStr().toUpperCase() ?? '-',
-              ),
-              onTap: () {
-                _showTvrBitmap(tags[0x95]);
-              },
-            ),
-            const Divider(),
-          ]
-        : List<Widget>.empty();
-  }
-
-  void _onTapAip() {
-    final aip = infoTags?.aip;
-    if (aip == null) return;
-
-    final aipBitmap = getAipBitmap();
-    aipBitmap.loadFromBytes(aip);
-    showParamBitmapDialog(context, bitmap: aipBitmap, readOnly: true);
-  }
-
-  void _onTapTerminalCapabilities() {
-    final capabilities = infoTags?.terminalCapabilities;
-    if (capabilities == null) return;
-
-    final capabilitiesBitmap = getTerminalCapabilitiesBitmap();
-    capabilitiesBitmap.loadFromBytes(capabilities);
-    showParamBitmapDialog(context, bitmap: capabilitiesBitmap, readOnly: true);
-  }
-
-  String _getCidStr(Uint8List? cid) {
-    if (cid == null) return '-';
-
-    final cidStr = cid.toHexStr();
-    if (cidStr == "80") {
-      return '80 - ARQC';
-    } else if (cidStr == "40") {
-      return '40 - TC';
-    } else if (cidStr == "00") {
-      return '00 - AAC';
-    }
-
-    return cidStr;
-  }
-
-  void _showTvrBitmap(Uint8List? tvr) {
-    if (tvr == null) return;
-
-    final tvrBitmap = getTvrBitmap();
-    tvrBitmap.loadFromBytes(tvr);
-    showParamBitmapDialog(context, bitmap: tvrBitmap, readOnly: true);
-  }
-
-  void _showTsiBitmap(Uint8List? tsi) {
-    if (tsi == null) return;
-
-    final tsiBitmap = getTsiBitmap();
-    tsiBitmap.loadFromBytes(tsi);
-    showParamBitmapDialog(context, bitmap: tsiBitmap, readOnly: true);
   }
 
   String _getCvmTypeStr(Uint8List? cvmResults) {

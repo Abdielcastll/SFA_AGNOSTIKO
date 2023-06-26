@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "873436355955",
+    "firebase_url": "https://pwa-sales2go.firebaseio.com",
+    "project_id": "pwa-sales2go",
+    "storage_bucket": "pwa-sales2go.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:873436355955:android:4e545580e4d1c220ff7906",
+        "android_client_info": {
+          "package_name": "com.example.pwa_sales2go_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "873436355955-87s1ch2ae4jcbdbd0cuq1cfb836kkhku.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRzqyy0CAAK63aRdu0SyNlawZBdWZyMZ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "873436355955-87s1ch2ae4jcbdbd0cuq1cfb836kkhku.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "873436355955-c6tdvqa9c4ifibbegk1f71l6univ53vi.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.pwaSales2goFlutter"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:873436355955:android:c7c36445706079beff7906",
+        "android_client_info": {
+          "package_name": "com.example.sfa_agnostiko_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "873436355955-87s1ch2ae4jcbdbd0cuq1cfb836kkhku.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRzqyy0CAAK63aRdu0SyNlawZBdWZyMZ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "873436355955-87s1ch2ae4jcbdbd0cuq1cfb836kkhku.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "873436355955-c6tdvqa9c4ifibbegk1f71l6univ53vi.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.pwaSales2goFlutter"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

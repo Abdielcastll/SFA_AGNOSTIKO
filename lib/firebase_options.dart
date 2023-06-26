@@ -17,15 +17,24 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -43,45 +52,12 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAMDDHkRHcjIOn77OA6dLy-3frhPXfjKQ4',
-    appId: '1:873436355955:web:739cfd50f3b4fbb4ff7906',
-    messagingSenderId: '873436355955',
-    projectId: 'pwa-sales2go',
-    authDomain: 'pwa-sales2go.firebaseapp.com',
-    databaseURL: 'https://pwa-sales2go.firebaseio.com',
-    storageBucket: 'pwa-sales2go.appspot.com',
-    measurementId: 'G-TLQLVFN176',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDRzqyy0CAAK63aRdu0SyNlawZBdWZyMZ8',
-    appId: '1:873436355955:android:4e545580e4d1c220ff7906',
+    appId: '1:873436355955:android:c7c36445706079beff7906',
     messagingSenderId: '873436355955',
     projectId: 'pwa-sales2go',
     databaseURL: 'https://pwa-sales2go.firebaseio.com',
     storageBucket: 'pwa-sales2go.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBWF5JUDJf9ruOAS5yknb3yGQpqCqo2QHY',
-    appId: '1:873436355955:ios:fc925adc83e9363cff7906',
-    messagingSenderId: '873436355955',
-    projectId: 'pwa-sales2go',
-    databaseURL: 'https://pwa-sales2go.firebaseio.com',
-    storageBucket: 'pwa-sales2go.appspot.com',
-    iosClientId: '873436355955-c6tdvqa9c4ifibbegk1f71l6univ53vi.apps.googleusercontent.com',
-    iosBundleId: 'com.example.pwaSales2goFlutter',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBWF5JUDJf9ruOAS5yknb3yGQpqCqo2QHY',
-    appId: '1:873436355955:ios:fc925adc83e9363cff7906',
-    messagingSenderId: '873436355955',
-    projectId: 'pwa-sales2go',
-    databaseURL: 'https://pwa-sales2go.firebaseio.com',
-    storageBucket: 'pwa-sales2go.appspot.com',
-    iosClientId: '873436355955-c6tdvqa9c4ifibbegk1f71l6univ53vi.apps.googleusercontent.com',
-    iosBundleId: 'com.example.pwaSales2goFlutter',
   );
 }
