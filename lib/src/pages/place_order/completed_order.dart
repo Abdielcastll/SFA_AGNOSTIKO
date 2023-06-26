@@ -1,11 +1,16 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
+import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
+import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
+import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
@@ -36,7 +41,7 @@ class CompletedOrderPage extends StatelessWidget {
     List<String> currentCoinSplit = currentCoin!.split(' ');
     String currentCoinSelectedCode = currentCoinSplit.last;
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: myTheme.colorScheme.background,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(20),
         child: AppBar(
@@ -124,14 +129,14 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
             widget.completedMessage,
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: myTheme.colorScheme.secondary,
+              color: myTheme.colorScheme.primary,
               fontFamily: 'Poppins-regular',
               fontSize: 25,
             ),
           ),
         ),
         Container(
-          margin: const EdgeInsets.fromLTRB(20, 10, 10, 20),
+          margin: const EdgeInsets.fromLTRB(16, 10, 16, 20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -141,7 +146,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                    margin: const EdgeInsets.fromLTRB(0, 17, 0, 10),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,19 +154,20 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                         Text(
                           'CLIENTE',
                           style: TextStyle(
-                            color: Colors.purple.shade600,
-                            fontFamily: 'Poppins-regular',
-                            fontSize: 16,
+                            color: Color(0xFF7D5070),
+                            fontFamily: 'Poppins-medium',
+                            fontSize: 14,
                           ),
                         ),
+                        SizedBox(height: 8),
                         SizedBox(
                           // height: 60,
                           width: 140,
                           child: Text(
                             widget.client,
                             style: TextStyle(
-                              color: Colors.grey.shade500,
-                              fontFamily: 'Poppins-regular',
+                              color: Color(0xFF5A5D77),
+                              fontFamily: 'Poppins-medium',
                               fontSize: 12,
                             ),
                           ),
@@ -178,16 +184,17 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                         Text(
                           'FECHA DE PEDIDO',
                           style: TextStyle(
-                            color: Colors.purple.shade600,
-                            fontFamily: 'Poppins-regular',
-                            fontSize: 16,
+                            color: Color(0xFF7D5070),
+                            fontFamily: 'Poppins-medium',
+                            fontSize: 14,
                           ),
                         ),
+                        SizedBox(height: 8),
                         Text(
                           widget.date,
                           style: TextStyle(
-                            color: Colors.grey.shade500,
-                            fontFamily: 'Poppins-regular',
+                            color: Color(0xFF5A5D77),
+                            fontFamily: 'Poppins-medium',
                             fontSize: 12,
                           ),
                         ),
@@ -203,16 +210,17 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                         Text(
                           'PEDIDO',
                           style: TextStyle(
-                            color: Colors.purple.shade600,
-                            fontFamily: 'Poppins-regular',
-                            fontSize: 16,
+                            color: Color(0xFF7D5070),
+                            fontFamily: 'Poppins-medium',
+                            fontSize: 14,
                           ),
                         ),
+                        SizedBox(height: 8),
                         Text(
                           '# ${widget.orderNumber}',
                           style: TextStyle(
-                            color: Colors.grey.shade500,
-                            fontFamily: 'Poppins-regular',
+                            color: Color(0xFF5A5D77),
+                            fontFamily: 'Poppins-medium',
                             fontSize: 12,
                           ),
                         ),
@@ -237,16 +245,17 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                           Text(
                             'MÉTODO DE PAGO',
                             style: TextStyle(
-                              color: Colors.purple.shade600,
-                              fontFamily: 'Poppins-regular',
-                              fontSize: 16,
+                              color: Color(0xFF7D5070),
+                              fontFamily: 'Poppins-medium',
+                              fontSize: 14,
                             ),
                           ),
+                          SizedBox(height: 8),
                           Text(
                             '${widget.method}',
                             style: TextStyle(
-                              color: Colors.grey.shade500,
-                              fontFamily: 'Poppins-regular',
+                              color: Color(0xFF5A5D77),
+                              fontFamily: 'Poppins-medium',
                               fontSize: 12,
                             ),
                           ),
@@ -262,16 +271,17 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                           Text(
                             'MONTO A PAGAR',
                             style: TextStyle(
-                              color: Colors.purple.shade600,
-                              fontFamily: 'Poppins-regular',
-                              fontSize: 16,
+                              color: Color(0xFF7D5070),
+                              fontFamily: 'Poppins-medium',
+                              fontSize: 14,
                             ),
                           ),
+                          SizedBox(height: 8),
                           Text(
                             '$coinSymbol ${total.toStringAsFixed(2)}',
                             style: TextStyle(
-                              color: Colors.grey.shade500,
-                              fontFamily: 'Poppins-regular',
+                              color: Color(0xFF5A5D77),
+                              fontFamily: 'Poppins-medium',
                               fontSize: 12,
                             ),
                           ),
@@ -287,19 +297,20 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                           Text(
                             'DIRECCION',
                             style: TextStyle(
-                              color: Colors.purple.shade600,
-                              fontFamily: 'Poppins-regular',
-                              fontSize: 16,
+                              color: Color(0xFF7D5070),
+                              fontFamily: 'Poppins-medium',
+                              fontSize: 14,
                             ),
                           ),
+                          SizedBox(height: 8),
                           SizedBox(
                             // height: 60,
                             width: 150,
                             child: Text(
-                              '${widget.address}',
+                              '${widget.address ?? ''}',
                               style: TextStyle(
-                                color: Colors.grey.shade500,
-                                fontFamily: 'Poppins-regular',
+                                color: Color(0xFF5A5D77),
+                                fontFamily: 'Poppins-medium',
                                 fontSize: 12,
                               ),
                             ),
@@ -313,13 +324,42 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
             ],
           ),
         ),
-        const SizedBox(height: 20),
+        Container(
+          height: 250,
+          child: Image.asset(
+            'assets/images/receipt.png',
+            fit: BoxFit.cover,
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: CircleAvatar(
+                backgroundColor: myTheme.colorScheme.primary.withOpacity(0.1),
+                child: IconButton(
+                  onPressed: () {
+                    // Compartir
+                  },
+                  splashRadius: 15,
+                  splashColor: myTheme.colorScheme.primary,
+                  icon: Icon(
+                    Icons.share,
+                    color: myTheme.colorScheme.primary,
+                    size: 24,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
         Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(16),
           ),
           width: 340,
-          height: 40,
+          height: 50,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(16),
             child: ElevatedButton(
@@ -331,20 +371,13 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                 backgroundColor: myTheme.colorScheme.primary,
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    'Regresar al Inicio',
+                  Text(
+                    'REGRESAR AL INICIO',
                     style: TextStyle(
-                      fontFamily: 'Poppins-regular',
+                      fontFamily: 'Poppins-medium',
                       fontSize: 14,
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
-                    child: const Icon(
-                      SimpleLineIcons.check,
-                      size: 14,
                     ),
                   ),
                 ],
@@ -352,9 +385,44 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
             ),
           ),
         ),
-        Image.asset(
-          'assets/images/receipt.png',
-          fit: BoxFit.cover,
+        SizedBox(height: 12),
+        Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: myTheme.colorScheme.primary, width: 2)),
+          width: 340,
+          height: 50,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: ElevatedButton(
+              onPressed: () {
+                final orderActive =
+                    Provider.of<OrderProvider>(context, listen: false);
+                objectBox.delelteAllShoppingCart();
+                Navigator.popUntil(context, (route) => route.isFirst);
+                orderActive.setOrder(false, Clients());
+                final j =
+                    Provider.of<CounterLimitFirestore>(context, listen: false);
+                j.setNewScreen(1);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'VER AGENDA',
+                    style: TextStyle(
+                      fontFamily: 'Poppins-medium',
+                      fontSize: 14,
+                      color: myTheme.colorScheme.primary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       ],
     );

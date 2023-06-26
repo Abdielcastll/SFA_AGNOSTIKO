@@ -103,8 +103,7 @@ class _OrderCardBodyState extends State<OrderCardBody> {
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     List<String> currentCoinSplit = currentCoin!.split(' ');
     String currentCoinSelectedCode = currentCoinSplit.last;
-    print(currentCoinSelectedCode);
-    print('TEST COIN');
+
     final currentClient = Provider.of<Client?>(context) ?? [];
     final currentClientName = Provider.of<Client?>(context)?.name ?? '';
     final currentClientAddress =

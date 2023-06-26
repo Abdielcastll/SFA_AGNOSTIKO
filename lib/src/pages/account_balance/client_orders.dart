@@ -1,6 +1,12 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'dart:ui' as ui;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_switch/flutter_switch.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/order_model.dart';
@@ -31,12 +37,19 @@ class _ClientOrdersState extends State<ClientOrders> {
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     List<String> currentCoinSplit = currentCoin!.split(' ');
     String currentCoinSelectedCode = currentCoinSplit.last;
+    final currentDay =
+        Provider.of<CounterLimitFirestore>(context).currentDayOrder;
+    final currentDayDateTime = currentDay.toDate();
+    DateTime tomorrow = DateTime(currentDayDateTime.year,
+        currentDayDateTime.month, currentDayDateTime.day + 1);
 
     final scrollLimit =
         Provider.of<CounterLimitFirestore>(context).getScrollOrderBalance;
     final document = clientsCollection
         .doc(widget.clientDocument)
         .collection('pedidos')
+        .where('fecha', isGreaterThanOrEqualTo: currentDay)
+        .where('fecha', isLessThan: tomorrow)
         .orderBy('fecha')
         .limit(scrollLimit)
         .snapshots();
@@ -46,14 +59,16 @@ class _ClientOrdersState extends State<ClientOrders> {
           value: document.map(ordersFromSnapshot),
           initialData: const [],
           catchError: (context, error) {
+            print('ERROR ON GETTING CLIENT ORDERS IN CLIENT DETAILS');
             print(error);
+            return;
           },
         ),
         StreamProvider<Coin?>.value(
           initialData: Coin(),
           catchError: (context, error) {
             print(
-                'ERROR ON STREAM PROVIDER OF COINEXCHANGE RATES IN ADD CLIENT');
+                'ERROR ON STREAM PROVIDER OF COINEXCHANGE RATES  IN CLIENT DETAILS');
             print(error);
             return;
           },
@@ -93,6 +108,10 @@ class ClientOrdersBody extends StatefulWidget {
 class _ClientOrdersBodyState extends State<ClientOrdersBody> {
   bool seeCompleted = false;
   final _controller = ScrollController();
+  bool isDescending = false;
+  bool light = false;
+  DateTime today = DateTime.now();
+  var dateFormatter = DateFormat('dd-MM-yyyy');
 
   @override
   void initState() {
@@ -135,12 +154,13 @@ class _ClientOrdersBodyState extends State<ClientOrdersBody> {
 
   @override
   Widget build(BuildContext context) {
+    final currentDay =
+        Provider.of<CounterLimitFirestore>(context).currentDayOrder;
+    final currentDateTime = currentDay.toDate();
+    String formattedDate = dateFormatter.format(currentDateTime);
+
     return SingleChildScrollView(
-      child:
-          // Center(
-          //   child: CircularProgressIndicator(),
-          // ),
-          Column(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -148,52 +168,187 @@ class _ClientOrdersBodyState extends State<ClientOrdersBody> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Container(
-                width: 120,
-                margin: const EdgeInsets.fromLTRB(16, 10, 0, 10),
-                child: Text(
-                  seeCompleted == true
-                      ? AppLocalizations.of(context)!.completed
-                      : AppLocalizations.of(context)!.onProcess,
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    color: seeCompleted == true
-                        ? Colors.green.shade600
-                        : Colors.amber.shade600,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Poppins-regular',
+                width: 160,
+                height: 40,
+                margin: EdgeInsets.only(top: 16),
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    setState(() => isDescending = !isDescending);
+                    print('descending: $isDescending');
+                  },
+                  icon: Icon(
+                    isDescending
+                        ? MaterialCommunityIcons.sort_calendar_descending
+                        : MaterialCommunityIcons.sort_calendar_ascending,
+                    color: myTheme.colorScheme.onPrimaryContainer,
+                  ),
+                  label: Container(
+                    width: 88,
+                    child: Text(
+                      isDescending
+                          ? 'Más recientes'
+                          // AppLocalizations.of(context)!.ascendingFilter
+                          : 'Más antiguos',
+                      // AppLocalizations.of(context)!.descendingFilter,
+                      style: TextStyle(
+                        fontFamily: 'Poppins-medium',
+                        color: myTheme.colorScheme.onPrimaryContainer,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(Color(0xFFDFE0FF)),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                    ),
+                    elevation: MaterialStateProperty.all(0),
                   ),
                 ),
               ),
               Container(
-                margin: const EdgeInsets.fromLTRB(30, 0, 0, 0),
-                child: const Text(
-                  'Ver completados',
-                  style: TextStyle(
-                    fontSize: 15,
-                    // fontWeight: FontWeight.bold,
-                    fontFamily: 'Poppins-regular',
+                width: 160,
+                height: 40,
+                margin: EdgeInsets.only(top: 16),
+                child: Directionality(
+                  textDirection: ui.TextDirection.rtl,
+                  child: ElevatedButton.icon(
+                    onPressed: () async {
+                      final currentDayProvider =
+                          Provider.of<CounterLimitFirestore>(context,
+                              listen: false);
+
+                      DateTime? newDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2010),
+                        lastDate: DateTime(2030),
+                        builder: (context, child) {
+                          return Theme(
+                            data: Theme.of(context).copyWith(
+                              dialogTheme: DialogTheme(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      28), // this is the border radius of the picker
+                                ),
+                              ),
+                              colorScheme: ColorScheme.dark(
+                                primary: myTheme.colorScheme.primary,
+                                onPrimary: Colors.white,
+                                surface: Colors.white,
+                                onSurface: Color(0xFF1D1B20),
+                              ),
+                              textButtonTheme: TextButtonThemeData(
+                                style: TextButton.styleFrom(
+                                  foregroundColor: myTheme
+                                      .colorScheme.primary, // button text color
+                                ),
+                              ),
+                            ),
+                            child: child!,
+                          );
+                        },
+                      );
+                      if (newDate == null) {
+                        return;
+                      }
+                      setState(() {
+                        today = newDate;
+                        formattedDate = dateFormatter.format(newDate);
+                        final newDay = Timestamp.fromDate(newDate);
+                        currentDayProvider.setNewDayOrder(newDay);
+                      });
+                    },
+                    icon: Icon(
+                      MaterialIcons.event,
+                      color: myTheme.colorScheme.onPrimaryContainer,
+                    ),
+                    label: Container(
+                      width: 100,
+                      child: Text(
+                        currentDay !=
+                                Timestamp.fromDate(
+                                  DateTime(
+                                    DateTime.now().year + 99,
+                                    DateTime.now().month + 99,
+                                    DateTime.now().day + 99,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                  ),
+                                )
+                            ? formattedDate
+                            : 'Elige una fecha',
+                        style: TextStyle(
+                          fontFamily: 'Poppins-medium',
+                          color: myTheme.colorScheme.onPrimaryContainer,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all(Color(0xFFDFE0FF)),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                      ),
+                      elevation: MaterialStateProperty.all(0),
+                    ),
                   ),
                 ),
               ),
-              Checkbox(
-                activeColor: myTheme.colorScheme.primary,
-                value: seeCompleted,
-                onChanged: (value) {
-                  setState(() {
-                    seeCompleted = !seeCompleted;
-                  });
-                },
-              ),
             ],
           ),
-          seeCompleted == false
-              ? ClientsOrdersOnProcess(
-                  controller: _controller,
-                )
-              : ClientOrdersCompleted(
-                  controller: _controller,
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 16, 16, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  'Ver completados',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'Poppins-medium',
+                    color: Color(0xFF5A5D77),
+                  ),
                 ),
+                SizedBox(width: 8),
+                FlutterSwitch(
+                  onToggle: (val) {
+                    setState(() {
+                      light = val;
+                      seeCompleted = !seeCompleted;
+                    });
+                  },
+                  width: 39,
+                  height: 24,
+                  toggleSize: 12,
+                  value: light,
+                  borderRadius: 26,
+                  padding: 6,
+                  activeColor: Colors.green.shade300,
+                  inactiveColor: Color(0xFFDFE0FF),
+                  inactiveToggleColor: Color(0xFF5A5D77),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Divider(),
+          ),
+          seeCompleted == false
+              ? ClientsOrdersOnProcess(controller: _controller)
+              : ClientOrdersCompleted(controller: _controller),
         ],
       ),
     );

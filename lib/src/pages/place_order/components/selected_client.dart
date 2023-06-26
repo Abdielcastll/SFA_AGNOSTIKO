@@ -23,8 +23,8 @@ class SelectedClient extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userRole = Provider.of<UserRole?>(context, listen: true);
-    print('User Role ${userRole?.name}');
-    print("Retail: ${userRole?.isRetail}");
+    // print('User Role ${userRole?.name}');
+    // print("Retail: ${userRole?.isRetail}");
 
     return Column(
       children: [
@@ -45,7 +45,7 @@ class SelectedClient extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    margin: EdgeInsets.fromLTRB(14, 0, 0, 2),
+                    margin: EdgeInsets.fromLTRB(14, 5, 0, 2),
                     height: 16,
                     width: 180,
                     child: Text(
@@ -53,7 +53,7 @@ class SelectedClient extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontFamily: 'Poppins-regular',
+                        fontFamily: 'Poppins-mediumm',
                         fontSize: 9,
                         fontWeight: FontWeight.w500,
                         color: Colors.grey.shade500,
@@ -62,28 +62,28 @@ class SelectedClient extends StatelessWidget {
                   ),
                   Container(
                     width: 250,
-                    margin: EdgeInsets.fromLTRB(14, 8, 0, 0),
+                    margin: EdgeInsets.fromLTRB(14, 8, 0, 10),
                     child: Text(
                       client?.name,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontFamily: 'Poppins-regular',
-                        fontSize: 16,
+                        fontFamily: 'Poppins-mediumm',
+                        fontSize: 14,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.fromLTRB(14, 0, 0, 10),
+                    margin: EdgeInsets.fromLTRB(14, 0, 0, 0),
                     height: 30,
                     width: 180,
                     child: Text(
-                      client?.fiscalAdress ?? 'NaN',
+                      client?.fiscalAdress ?? "",
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontFamily: 'Poppins-regular',
+                        fontFamily: 'Poppins-mediumm',
                         fontSize: 11,
                         fontWeight: FontWeight.w500,
                         color: Colors.grey.shade500,
@@ -150,6 +150,7 @@ class SelectedClient extends StatelessWidget {
                           icon: Icon(
                             Feather.edit,
                             color: myTheme.colorScheme.primary,
+                            size: 24,
                           ),
                         ),
                       ),
@@ -159,14 +160,12 @@ class SelectedClient extends StatelessWidget {
           ),
         ),
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 20),
+          margin: EdgeInsets.symmetric(horizontal: 16),
           child: Center(
             child: SizedBox(
               width: MediaQuery.of(context).size.width,
               child: Divider(
-                thickness: 2,
                 height: 10,
-                color: myTheme.colorScheme.secondary.withOpacity(0.2),
               ),
             ),
           ),

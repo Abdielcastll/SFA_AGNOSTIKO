@@ -38,7 +38,7 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBarNavigation(
           message: AppLocalizations.of(context)!.profile,
           userZoneDocument: userZoneDocument),
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: myTheme.colorScheme.background,
       body: const ProfileBody(),
     );
   }

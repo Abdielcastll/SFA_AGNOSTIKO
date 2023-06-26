@@ -68,3 +68,5 @@ final idTypeCollection = FirebaseFirestore.instance.collection('tipos_id');
 
 //Coleccion del usuarios
 final usersCollection = FirebaseFirestore.instance.collection('usuarios');
+
+final banksCollection = FirebaseFirestore.instance.collection('bancos');

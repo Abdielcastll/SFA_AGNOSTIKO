@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +48,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
     String currentCoinSelectedCode = currentCoinSplit.last;
     return Scaffold(
       appBar: const AppBarCheckout(),
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: myTheme.colorScheme.background,
       body: MultiProvider(
         providers: [
           StreamProvider<Coin?>.value(
@@ -100,7 +100,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
   var numberOrder;
   int discountByInput = 0;
   DateTime today = DateTime.now();
-  DateFormat dateFormatter = DateFormat('dd-MM-yyyy');
+  DateFormat dateFormatter = DateFormat('dd/MM/yyyy');
 
   final List<String> items = ['Fiscal', 'Despacho'];
 
@@ -777,19 +777,18 @@ class _CheckoutBodyState extends State<CheckoutBody> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  margin: const EdgeInsets.fromLTRB(16, 16, 0, 0),
                   child: Text(
                     AppLocalizations.of(context)!.orderDeliveryAddress,
                     style: TextStyle(
-                      color: myTheme.colorScheme.primary,
-                      fontFamily: 'Poppins-regular',
+                      color: Color(0xFF4353C2),
+                      fontFamily: 'Poppins-medium',
                       fontSize: 14,
-                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
                 Container(
-                  margin: const EdgeInsets.fromLTRB(10, 5, 10, 10),
+                  margin: const EdgeInsets.fromLTRB(16, 12, 16, 0),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton2(
                       isExpanded: true,
@@ -799,9 +798,9 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                             child: Text(
                               '$selectedValue',
                               style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: myTheme.colorScheme.primary,
+                                fontSize: 14,
+                                color: Color(0xFF4353C2),
+                                fontFamily: 'Poppins-medium',
                               ),
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -816,8 +815,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                 item,
                                 style: TextStyle(
                                   fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: myTheme.colorScheme.primary,
+                                  color: Color(0xFF4353C2),
+                                  fontFamily: 'Poppins-medium',
                                 ),
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -839,21 +838,21 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       },
                       iconStyleData: IconStyleData(
                         icon: const Icon(
-                          Icons.arrow_forward_ios_outlined,
+                          Icons.arrow_drop_down,
+                          color: Color(0xFFDFE0FF),
                         ),
-                        iconSize: 11,
-                        iconEnabledColor:
-                            myTheme.colorScheme.primary.withOpacity(0.5),
+                        iconSize: 24,
+                        iconEnabledColor: Color(0xFFDFE0FF),
                         iconDisabledColor: Colors.grey,
                       ),
                       buttonStyleData: ButtonStyleData(
-                        height: 50,
-                        width: MediaQuery.of(context).size.width,
+                        height: 56,
+                        width: 180,
                         padding: const EdgeInsets.only(left: 14, right: 14),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
+                          borderRadius: BorderRadius.circular(8),
                           border: Border.all(
-                            color: myTheme.colorScheme.primary.withOpacity(0.3),
+                            color: Color(0xFFDFE0FF),
                           ),
                           color: Colors.white,
                         ),
@@ -865,15 +864,15 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       ),
                       dropdownStyleData: DropdownStyleData(
                         maxHeight: 200,
-                        width: MediaQuery.of(context).size.width * 0.9,
+                        width: 180,
                         padding: null,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(8),
                           color: Colors.white,
                         ),
-                        elevation: 8,
+                        elevation: 1,
                         scrollbarTheme: ScrollbarThemeData(
-                          radius: const Radius.circular(10),
+                          radius: const Radius.circular(8),
                           thickness: MaterialStateProperty.all<double>(6),
                           thumbVisibility:
                               MaterialStateProperty.all<bool>(true),
@@ -884,22 +883,24 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                   ),
                 ),
                 Container(
-                  margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                  margin: const EdgeInsets.fromLTRB(16, 16, 16, 10),
                   padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(8),
                     border: Border.all(
-                      color: myTheme.colorScheme.primary.withOpacity(0.3),
+                      color: Color(0xFFDFE0FF),
                     ),
                   ),
+                  height: 110,
                   width: MediaQuery.of(context).size.width,
                   child: Text(
                     isFiscalSelected
                         ? widget.client?.fiscalAdress
                         : widget.client?.dispatchAdress,
-                    style: const TextStyle(
-                      fontFamily: 'Poppins-regular',
+                    style: TextStyle(
                       fontSize: 14,
+                      color: Color(0xFF4353C2),
+                      fontFamily: 'Poppins-medium',
                     ),
                   ),
                 ),
@@ -917,7 +918,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
             child: Column(
               children: [
                 Container(
-                  margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  margin: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -927,8 +928,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                           AppLocalizations.of(context)!.orderNumber,
                           style: TextStyle(
                             fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: myTheme.colorScheme.primary,
+                            color: Color(0xFF4353C2),
+                            fontFamily: 'Poppins-medium',
                           ),
                         ),
                       ),
@@ -938,8 +939,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                           'Fecha de Entrega',
                           style: TextStyle(
                             fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: myTheme.colorScheme.primary,
+                            color: Color(0xFF4353C2),
+                            fontFamily: 'Poppins-medium',
                           ),
                         ),
                       ),
@@ -947,15 +948,16 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                   ),
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      width: 120,
-                      margin: const EdgeInsets.fromLTRB(15, 5, 0, 10),
+                      width: 150,
+                      margin: const EdgeInsets.fromLTRB(16, 5, 0, 10),
                       child: TextField(
                         style: TextStyle(
                           fontSize: 14,
-                          color: myTheme.colorScheme.primary,
+                          color: Color(0xFF4353C2),
+                          fontFamily: 'Poppins-medium',
                         ),
                         keyboardType: TextInputType.phone,
                         maxLines: 1,
@@ -968,27 +970,24 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                           counterText: "",
                           hintStyle: TextStyle(
                             fontSize: 14,
-                            color: myTheme.colorScheme.primary.withOpacity(0.4),
+                            color: Color(0xFFDFE0FF),
                           ),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(8),
                             borderSide: BorderSide(
-                              color:
-                                  myTheme.colorScheme.primary.withOpacity(0.4),
+                              color: Color(0xFFDFE0FF),
                             ),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(8),
                             borderSide: BorderSide(
-                              color:
-                                  myTheme.colorScheme.primary.withOpacity(0.4),
+                              color: Color(0xFFDFE0FF),
                             ),
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(8),
                             borderSide: BorderSide(
-                              color:
-                                  myTheme.colorScheme.primary.withOpacity(0.4),
+                              color: Color(0xFFDFE0FF),
                             ),
                           ),
                         ),
@@ -999,25 +998,20 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         },
                       ),
                     ),
-                    Icon(
-                      Icons.numbers_rounded,
-                      color: myTheme.colorScheme.primary,
-                      size: 20,
-                    ),
-                    const SizedBox(width: 50),
                     Container(
-                      height: 47,
+                      width: 150,
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 3),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(8),
                         border: Border.all(
-                          color: myTheme.colorScheme.primary.withOpacity(0.3),
+                          color: Color(0xFFDFE0FF),
                         ),
                       ),
-                      alignment: Alignment.centerLeft,
+                      alignment: Alignment.center,
                       child: Row(
                         children: [
                           Container(
-                            padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                            padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
                             child: Text(
                               formattedDate,
                               style: TextStyle(
@@ -1028,29 +1022,26 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                               ),
                             ),
                           ),
-                          SizedBox(
-                            width: 30,
-                            child: IconButton(
-                              onPressed: () async {
-                                // Seleccionar fecha
-                                DateTime? newDate = await showDatePicker(
-                                  context: context,
-                                  initialDate: today,
-                                  firstDate: DateTime.now(),
-                                  lastDate: DateTime(2050),
-                                );
-                                if (newDate == null) return;
-                                setState(() {
-                                  today = newDate;
-                                  (today);
-                                });
-                              },
-                              splashRadius: 5,
-                              icon: Icon(
-                                Icons.calendar_month,
-                                color: myTheme.colorScheme.primary,
-                                size: 20,
-                              ),
+                          IconButton(
+                            onPressed: () async {
+                              // Seleccionar fecha
+                              DateTime? newDate = await showDatePicker(
+                                context: context,
+                                initialDate: today,
+                                firstDate: DateTime.now(),
+                                lastDate: DateTime(2050),
+                              );
+                              if (newDate == null) return;
+                              setState(() {
+                                today = newDate;
+                                (today);
+                              });
+                            },
+                            splashRadius: 5,
+                            icon: Icon(
+                              Icons.calendar_month,
+                              color: myTheme.colorScheme.primary,
+                              size: 16,
                             ),
                           ),
                         ],
@@ -1062,7 +1053,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
             ),
           ),
           Container(
-            margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+            margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
             padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
@@ -1074,18 +1065,18 @@ class _CheckoutBodyState extends State<CheckoutBody> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                  margin: const EdgeInsets.fromLTRB(16, 0, 160, 0),
                   child: Text(
                     'Tipo de negociacion',
                     style: TextStyle(
                       fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: myTheme.colorScheme.primary,
+                      color: Color(0xFF4353C2),
+                      fontFamily: 'Poppins-medium',
                     ),
                   ),
                 ),
                 Container(
-                  margin: const EdgeInsets.fromLTRB(10, 5, 10, 10),
+                  margin: const EdgeInsets.fromLTRB(16, 12, 10, 10),
                   width: 300,
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton2(
@@ -1097,8 +1088,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                               '$selectedValue2',
                               style: TextStyle(
                                 fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: myTheme.colorScheme.primary,
+                                color: Color(0xFF4353C2),
+                                fontFamily: 'Poppins-medium',
                               ),
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -1112,8 +1103,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                   item,
                                   style: TextStyle(
                                     fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: myTheme.colorScheme.primary,
+                                    color: Color(0xFF4353C2),
+                                    fontFamily: 'Poppins-medium',
                                   ),
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -1127,12 +1118,9 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         });
                       },
                       iconStyleData: IconStyleData(
-                        icon: const Icon(
-                          Icons.arrow_forward_ios_outlined,
-                        ),
-                        iconSize: 11,
-                        iconEnabledColor:
-                            myTheme.colorScheme.primary.withOpacity(0.5),
+                        icon: const Icon(Icons.arrow_drop_down_outlined),
+                        iconSize: 24,
+                        iconEnabledColor: Color(0xFFDFE0FF),
                         iconDisabledColor: Colors.grey,
                       ),
                       buttonStyleData: ButtonStyleData(
@@ -1140,9 +1128,9 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         width: 150,
                         padding: const EdgeInsets.only(left: 14, right: 14),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
+                          borderRadius: BorderRadius.circular(8),
                           border: Border.all(
-                            color: myTheme.colorScheme.primary.withOpacity(0.3),
+                            color: Color(0xFFDFE0FF),
                           ),
                           color: Colors.white,
                         ),
@@ -1154,15 +1142,15 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       ),
                       dropdownStyleData: DropdownStyleData(
                         maxHeight: 200,
-                        width: 200,
+                        width: 300,
                         padding: null,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(8),
                           color: Colors.white,
                         ),
-                        elevation: 8,
+                        elevation: 1,
                         scrollbarTheme: ScrollbarThemeData(
-                          radius: const Radius.circular(10),
+                          radius: const Radius.circular(8),
                           thickness: MaterialStateProperty.all<double>(6),
                           thumbVisibility:
                               MaterialStateProperty.all<bool>(true),
@@ -1193,8 +1181,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                     'Comentario',
                     style: TextStyle(
                       fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: myTheme.colorScheme.primary,
+                      color: Color(0xFF4353C2),
+                      fontFamily: 'Poppins-medium',
                     ),
                   ),
                 ),
@@ -1203,23 +1191,35 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                   child: TextField(
                     style: TextStyle(
                       fontSize: 14,
-                      color: myTheme.colorScheme.primary,
+                      color: Color(0xFFDFE0FF),
                     ),
                     keyboardType: TextInputType.text,
                     maxLines: 1,
                     maxLength: 200,
                     textCapitalization: TextCapitalization.characters,
                     decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.fromLTRB(14, 0, 0, 0),
+                      contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                       hintText: 'Comentario sobre la entrega',
                       hintStyle: TextStyle(
                         fontSize: 14,
-                        color: myTheme.colorScheme.primary.withOpacity(0.4),
+                        color: Color(0xFFDFE0FF),
                       ),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(
-                          color: myTheme.colorScheme.primary.withOpacity(0.5),
+                          color: Color(0xFFDFE0FF),
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          color: Color(0xFFDFE0FF),
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          color: Color(0xFFDFE0FF),
                         ),
                       ),
                     ),
@@ -1397,21 +1397,19 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    SizedBox(),
                     Text(
-                      'GUARDAR PEDIDO',
+                      'Completar Pedido',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: 'Poppins-regular',
                         fontSize: 14,
                       ),
                     ),
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
-                      child: Icon(
-                        MaterialIcons.save_alt,
-                        // SimpleLineIcons.arrow_right,
-                        size: 14,
-                        color: Colors.grey.shade300,
-                      ),
+                    Icon(
+                      Icons.keyboard_arrow_right_outlined,
+                      size: 24,
+                      color: Color(0xFFDFE0FF),
                     ),
                   ],
                 ),

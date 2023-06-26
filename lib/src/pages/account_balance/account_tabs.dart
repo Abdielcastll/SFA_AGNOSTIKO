@@ -26,21 +26,12 @@ class AccountTabs extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.grey.shade200,
         appBar: AppBar(
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(20),
-            ),
-          ),
-
-          title: const Padding(
-            padding: EdgeInsets.only(left: 5),
-            child: Text(
-              'Estado de cuenta',
-              style: TextStyle(
-                fontSize: 21,
-                fontWeight: FontWeight.w300,
-                fontFamily: 'Poppins-regular',
-              ),
+          title: Text(
+            '$clientName',
+            // 'Estado de cuenta',
+            style: const TextStyle(
+              fontSize: 14,
+              fontFamily: 'Poppins-medium',
             ),
           ),
           // centerTitle: true,
@@ -49,16 +40,14 @@ class AccountTabs extends StatelessWidget {
 
           bottom: const AccountTabBar(),
         ),
-        body: Container(
-          child: TabBarView(
-            children: [
-              ClientOrders(clientDocument: clientDocumentReferenceID),
-              AccountBalancePage(
-                clientDocument: clientDocument,
-                clientName: clientName,
-              ),
-            ],
-          ),
+        body: TabBarView(
+          children: [
+            ClientOrders(clientDocument: clientDocumentReferenceID),
+            AccountBalancePage(
+              clientDocument: clientDocument,
+              clientName: clientName,
+            ),
+          ],
         ),
       ),
     );
@@ -71,25 +60,25 @@ class AccountTabBar extends StatelessWidget implements PreferredSizeWidget {
   }) : super(key: key);
 
   @override
-  Size get preferredSize => const Size.fromHeight(40);
+  Size get preferredSize => const Size.fromHeight(56);
 
   @override
   Widget build(BuildContext context) {
     return TabBar(
       splashBorderRadius: BorderRadius.circular(20),
       splashFactory: InkSplash.splashFactory,
-
       labelColor: Colors.white,
-      indicatorColor: myTheme.colorScheme.secondary,
+      indicatorColor: Colors.white,
       unselectedLabelColor: Colors.grey.shade400,
+
       indicatorWeight: 2,
-      indicatorPadding: const EdgeInsets.symmetric(horizontal: 20),
+      indicatorPadding: const EdgeInsets.symmetric(horizontal: 30),
       indicatorSize: TabBarIndicatorSize.tab,
       // isScrollable: true,
       // ignore: prefer_const_literals_to_create_immutables
       tabs: [
         const Tab(text: 'Pedidos'),
-        const Tab(text: 'Balance'),
+        const Tab(text: 'Tickets'),
       ],
     );
   }

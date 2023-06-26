@@ -822,6 +822,10 @@ Future<dynamic> showDialogForRegisterPayment(
   invoiceDocumentID,
   invoiceNumber,
 }) {
+  List<String> nationalBanks = [];
+  List<String> internationalBanks = [];
+  List<String> banks = [];
+
   return showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -967,12 +971,48 @@ Future<dynamic> showDialogForRegisterPayment(
                               ))
                           .toList(),
                       value: selectedValueA,
-                      onChanged: (value) {
+                      onChanged: (value) async {
                         setState(
                           () {
                             selectedValueA = value as String;
                           },
                         );
+                        if (value.toString().toLowerCase() == "transferencia" ||
+                            value.toString().toLowerCase() == "deposito" ||
+                            value.toString().toLowerCase() == "cheque") {
+                          print('fetching banks');
+                          await banksCollection
+                              .where('internacional', isEqualTo: false)
+                              .snapshots()
+                              .forEach((snapshot) {
+                            for (var doc in snapshot.docs) {
+                              print('Nacionales');
+                              doc.data().toString().contains('nombre')
+                                  ? setState(() {
+                                      nationalBanks.add(doc.get('nombre'));
+                                    })
+                                  : null;
+                            }
+                          }).whenComplete(() => print('done'));
+                        } else if (value.toString().toLowerCase() ==
+                            "transf-internacional") {
+                          print('fetching banks');
+                          await banksCollection
+                              .where('internacional', isEqualTo: true)
+                              .snapshots()
+                              .forEach((snapshot) {
+                            print('Internacionales');
+
+                            for (var doc in snapshot.docs) {
+                              doc.data().toString().contains('nombre')
+                                  ? setState(() {
+                                      internationalBanks.add(doc.get('nombre'));
+                                    })
+                                  : null;
+                            }
+                          }).whenComplete(() => print('done'));
+                        }
+                        setState(() {});
                         print('selectedValueA: $selectedValueA');
                       },
                       iconStyleData: IconStyleData(
@@ -1759,6 +1799,9 @@ Future<dynamic> showDialogForRegisterPayment(
                                 Container(
                                   margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                                   child: identifyPaymentMethod(
+                                    banks: banks,
+                                    itemsBank: nationalBanks,
+                                    itemsBankInter: internationalBanks,
                                     coinName: coinName,
                                     coinDecimals: coinDecimals,
                                     coinExchangeRatio: coinExchangeRatio,

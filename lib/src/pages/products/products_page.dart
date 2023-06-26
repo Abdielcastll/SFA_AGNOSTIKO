@@ -427,7 +427,9 @@ class _ProductsBodyState extends State<ProductsBody> {
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.fromLTRB(4, 16, 0, 0),
+                        margin: widget.showFullList == true
+                            ? EdgeInsets.fromLTRB(4, 16, 0, 0)
+                            : EdgeInsets.fromLTRB(4, 16, 0, 8),
                         height: 40,
                         width: 68,
                         decoration: BoxDecoration(

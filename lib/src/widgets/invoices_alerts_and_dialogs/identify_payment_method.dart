@@ -84,6 +84,9 @@ identifyPaymentMethod({
   AddPaymentBodyAtt? paymentBody,
   noRetail = false,
   int? paymentsValidPayQuantity,
+  required List<String> itemsBank,
+  required List<String> itemsBankInter,
+  required List<String> banks,
 }) {
   File? imageFile;
   String accountHolder = '';
@@ -92,27 +95,27 @@ identifyPaymentMethod({
   String voucherNumber = '';
   String referenceId = '';
   String? selectedBank;
-  List<String> itemsBank = [
-    'BANCO CENTRAL',
-    'BANCO BICENTENARIO',
-    'BANCO DE VENEZUELA',
-    'BANESCO',
-    'BOD',
-    'BNC',
-  ];
-  List<String> itemsBankInter = [
-    'BANK OF AMERICA',
-    'CITIBANK',
-    'HSBC',
-    'WELLSFARGO',
-  ];
+  // List<String> itemsBank = [
+  //   'BANCO CENTRAL',
+  //   'BANCO BICENTENARIO',
+  //   'BANCO DE VENEZUELA',
+  //   'BANESCO',
+  //   'BOD',
+  //   'BNC',
+  // ];
+  // List<String> itemsBankInter = [
+  //   'BANK OF AMERICA',
+  //   'CITIBANK',
+  //   'HSBC',
+  //   'WELLSFARGO',
+  // ];
 
   final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
 
-  print('Metodo: $selectedValueA');
-  print('currentCoin: $currentCoin');
-  print('paidAmount: $paidAmount');
-  print('remainingFixed: $remaining');
+  // print('Metodo: $selectedValueA');
+  // print('currentCoin: $currentCoin');
+  // print('paidAmount: $paidAmount');
+  // print('remainingFixed: $remaining');
 
   if (selectedValueA == 'Tarjeta de Debito' ||
       selectedValueA == 'Tarjeta de Credito') {
@@ -373,7 +376,6 @@ identifyPaymentMethod({
                 style: TextStyle(
                   fontFamily: 'Poppins-medium',
                   color: myTheme.colorScheme.primary,
-                  fontWeight: FontWeight.bold,
                   fontSize: 14,
                 ),
               ),
@@ -1177,7 +1179,6 @@ identifyPaymentMethod({
                 style: TextStyle(
                   fontFamily: 'Poppins-medium',
                   color: myTheme.colorScheme.primary,
-                  fontWeight: FontWeight.bold,
                   fontSize: 14,
                 ),
               ),
@@ -1472,7 +1473,6 @@ identifyPaymentMethod({
             style: TextStyle(
               fontFamily: 'Poppins-medium',
               color: myTheme.colorScheme.primary,
-              fontWeight: FontWeight.bold,
               fontSize: 14,
             ),
           ),
@@ -2042,6 +2042,7 @@ identifyPaymentMethod({
                     ),
                   ),
                 ),
+          SizedBox(height: 12),
           Text(
             '${AppLocalizations.of(context)!.referenceNumber}*',
             style: TextStyle(
@@ -2051,7 +2052,7 @@ identifyPaymentMethod({
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
             height: 70,
             // width: 200,
 
@@ -2106,134 +2107,155 @@ identifyPaymentMethod({
             ),
           ),
           Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '${AppLocalizations.of(context)!.selectFile}',
+                'Subir comprobante',
                 style: TextStyle(
-                  fontFamily: 'Poppins-regular',
-                  color: Colors.grey.shade400,
+                  fontFamily: 'Poppins-medium',
+                  color: myTheme.colorScheme.primary,
                   fontSize: 14,
                 ),
               ),
-              InkWell(
-                onTap: () async {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ListTile(
-                            leading: Icon(
-                              Icons.camera_alt,
-                              color: myTheme.colorScheme.onPrimaryContainer,
-                            ),
-                            title: Text(
-                              'Camara',
-                              style: TextStyle(
-                                color: myTheme.colorScheme.primary,
-                                fontFamily: 'Poppins-regular',
+              SizedBox(height: 8),
+              Container(
+                width: 149,
+                height: 24,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ListTile(
+                              leading: Icon(
+                                Icons.camera_alt,
+                                color: myTheme.colorScheme.onPrimaryContainer,
                               ),
-                            ),
-                            onTap: () async {
-                              Navigator.of(context).pop();
-                              var pickedFile = await getFromCamera(context);
-                              if (pickedFile != null) {
-                                print('Imagen seleccionada');
-                                var croppedImage =
-                                    await cropImage(pickedFile.path, imageFile);
-                                if (croppedImage != null) {
-                                  print('Imagen recortada');
-                                  setState(() {
-                                    imageFile = File(croppedImage.path);
-                                  });
-                                } else {
-                                  print('Error croppeando');
-                                }
-                              } else {
-                                print('error seleccionando');
-                                return;
-                              }
-                            },
-                          ),
-                          Divider(),
-                          ListTile(
-                            leading: Icon(
-                              Icons.photo_camera_back_rounded,
-                              color: myTheme.colorScheme.onPrimaryContainer,
-                            ),
-                            title: Text(
-                              'Galeria',
-                              style: TextStyle(
-                                color: myTheme.colorScheme.primary,
-                                fontFamily: 'Poppins-regular',
+                              title: Text(
+                                'Camara',
+                                style: TextStyle(
+                                  color: myTheme.colorScheme.primary,
+                                  fontFamily: 'Poppins-regular',
+                                ),
                               ),
-                            ),
-                            onTap: () async {
-                              Navigator.of(context).pop();
-                              var pickedFile = await getFromGallery(context);
-                              if (pickedFile != null) {
-                                print('Imagen seleccionada');
-                                var croppedImage =
-                                    await cropImage(pickedFile.path, imageFile);
-                                if (croppedImage != null) {
-                                  print('Imagen recortada');
-                                  setState(() {
-                                    imageFile = File(croppedImage.path);
-                                  });
+                              onTap: () async {
+                                Navigator.of(context).pop();
+                                var pickedFile = await getFromCamera(context);
+                                if (pickedFile != null) {
+                                  print('Imagen seleccionada');
+                                  var croppedImage = await cropImage(
+                                      pickedFile.path, imageFile);
+                                  if (croppedImage != null) {
+                                    print('Imagen recortada');
+                                    setState(() {
+                                      imageFile = File(croppedImage.path);
+                                    });
+                                  } else {
+                                    print('Error croppeando');
+                                  }
                                 } else {
-                                  print('Error croppeando');
+                                  print('error seleccionando');
+                                  return;
                                 }
-                              } else {
-                                print('error seleccionando');
-                                return;
-                              }
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                child: Row(
-                  // ignore: prefer_const_literals_to_create_immutables
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(4.0),
-                      child: Icon(
-                        Icons.camera,
-                        color: myTheme.colorScheme.secondary,
-                      ),
+                              },
+                            ),
+                            Divider(),
+                            ListTile(
+                              leading: Icon(
+                                Icons.photo_camera_back_rounded,
+                                color: myTheme.colorScheme.onPrimaryContainer,
+                              ),
+                              title: Text(
+                                'Galeria',
+                                style: TextStyle(
+                                  color: myTheme.colorScheme.primary,
+                                  fontFamily: 'Poppins-regular',
+                                ),
+                              ),
+                              onTap: () async {
+                                Navigator.of(context).pop();
+                                var pickedFile = await getFromGallery(context);
+                                if (pickedFile != null) {
+                                  print('Imagen seleccionada');
+                                  var croppedImage = await cropImage(
+                                      pickedFile.path, imageFile);
+                                  if (croppedImage != null) {
+                                    print('Imagen recortada');
+                                    setState(() {
+                                      imageFile = File(croppedImage.path);
+                                    });
+                                  } else {
+                                    print('Error croppeando');
+                                  }
+                                } else {
+                                  print('error seleccionando');
+                                  return;
+                                }
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: myTheme.colorScheme.primary,
+                    backgroundColor: Color(0xFFDFE0FF),
+                    elevation: 0,
+                  ),
+                  child: Text(
+                    'Seleccionar archivo',
+                    style: TextStyle(
+                      color: myTheme.colorScheme.onPrimaryContainer,
+                      fontFamily: 'Poppins-medium',
+                      fontSize: 11,
                     ),
-                    Text(
-                      // AppLocalizations.of(context)!.gallery,
-                      'Subir Imagen',
-                      style: TextStyle(
-                        color: myTheme.colorScheme.primary,
-                        fontFamily: 'Poppins-regular',
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
+              SizedBox(height: 12),
               imageFile == null
                   ? Container()
-                  : Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: myTheme.colorScheme.primary,
+                  : GestureDetector(
+                      onTap: () {
+                        Fluttertoast.showToast(
+                          msg:
+                              'Presione 2 veces para eliminar imagen seleccionada',
+                          backgroundColor: myTheme.colorScheme.primary,
+                          textColor: Colors.white,
+                        );
+                      },
+                      onDoubleTap: () {
+                        setState(() {
+                          imageFile = null;
+                        });
+                        Fluttertoast.showToast(
+                          msg: 'Imagen eliminada',
+                          backgroundColor: Colors.green.shade600,
+                          textColor: Colors.white,
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: myTheme.colorScheme.primary,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(9),
-                        child: Image.file(
-                          imageFile!,
-                          fit: BoxFit.contain,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.file(
+                            imageFile!,
+                            fit: BoxFit.contain,
+                          ),
                         ),
                       ),
                     ),
+              SizedBox(height: 20),
               Container(
                 alignment: Alignment.bottomCenter,
                 margin: EdgeInsets.fromLTRB(0, 0, 0, 10),

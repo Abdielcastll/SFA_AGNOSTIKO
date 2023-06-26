@@ -38,47 +38,6 @@ class _ClientsOrdersOnProcessState extends State<ClientsOrdersOnProcess> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            margin: const EdgeInsets.fromLTRB(10.0, 0.0, 0, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                TextButton(
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        MaterialCommunityIcons.order_alphabetical_ascending,
-                        color: Colors.grey.shade500,
-                        size: 25,
-                      ),
-                      const SizedBox(width: 5),
-                      Text(
-                        isDescending
-                            ? AppLocalizations.of(context)!.ascendingFilter
-                            : AppLocalizations.of(context)!.descendingFilter,
-                        style: TextStyle(
-                            fontFamily: 'Poppins-regular',
-                            color: Colors.grey.shade500,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  onPressed: () {
-                    // Re ordenar el list view alfabeticamente
-                    setState(() => isDescending = !isDescending);
-                  },
-                ),
-              ],
-            ),
-          ),
           ordersOnProcess.isNotEmpty
               ? SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
@@ -111,20 +70,8 @@ class _ClientsOrdersOnProcessState extends State<ClientsOrdersOnProcess> {
                           final orderSubTotal = order.subTotal;
                           final orderDiscountMaster = order.masterDiscount;
                           final orderExchangeRates = order.exchangeRate;
+                          final orderProductQuantities = order.productsQuantity;
 
-                          // print('orderTotalAmount: $orderTotalAmount');
-                          // print('unformattedDate: $unformattedDate');
-                          // print('orderStatus: $orderStatus');
-                          // print('date: $date');
-                          // print('deliveryDate: $deliveryDate');
-                          // print('orderCommentary: $orderCommentary');
-                          // print('orderClientRefID: $orderClientRefID');
-                          // print('orderRefID: $orderRefID');
-                          // print('orderIsFailed: $orderIsFailed');
-                          // print('orderProducts: $orderProducts');
-                          // print('orderTax: $orderTax');
-                          // print('orderSubTotal: $orderSubTotal');
-                          // print('orderDiscountMaster: $orderDiscountMaster');
                           return OrderCard(
                             clientReferenceId: orderClientRefID,
                             date: deliveryDate,
@@ -140,6 +87,7 @@ class _ClientsOrdersOnProcessState extends State<ClientsOrdersOnProcess> {
                             correlativeNumber: order.correlativeNumber,
                             showButton: false,
                             coinsExchangeRates: orderExchangeRates,
+                            orderProductQuantities: orderProductQuantities,
                           );
                         },
                       ),

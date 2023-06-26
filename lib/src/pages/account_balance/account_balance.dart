@@ -1,7 +1,9 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +11,7 @@ import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/account_balance_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
+import 'package:pwa_sales2go_flutter/src/pages/account_balance/invoice_details/invoice_details.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
@@ -45,7 +48,7 @@ class _AccountBalancePageState extends State<AccountBalancePage> {
           initialData: Coin(),
           catchError: (context, error) {
             print(
-                'ERROR ON STREAM PROVIDER OF COINEXCHANGE RATES IN ADD CLIENT');
+                'ERROR ON STREAM PROVIDER OF COINEXCHANGE RATES IN ACCOUNT BALANCE - TICKETS');
             print(error);
             return;
           },
@@ -56,7 +59,7 @@ class _AccountBalancePageState extends State<AccountBalancePage> {
         ),
       ],
       child: Scaffold(
-        backgroundColor: Colors.grey.shade100,
+        backgroundColor: myTheme.colorScheme.background,
         body: AccountBalanceBody(
           clientDocument: widget.clientDocument,
           clientName: widget.clientName,
@@ -84,18 +87,112 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
   bool isCheckedNotes = false;
   bool isCheckedFactures = true;
   bool isCheckedOnProcess = false;
+  bool light = false;
+  List? invoicesAllPaymentAmounts = [];
+  List? invoicesPayedUp = [];
+  int? invoicesUpToPay = 0;
+  int? payedUpInvoicesLength = 0;
+
+  getInvoices() async {
+    await FirebaseFirestore.instance
+        .collection('clientes')
+        .doc(widget.clientDocument.toString())
+        .collection('facturas')
+        .snapshots()
+        .forEach((snapshot) {
+      snapshot.docs.forEach((doc) {
+        if (doc.data().toString().contains("pagada") == true) {
+          if (doc.get("pagada") == true) {
+            payedUpInvoicesLength = payedUpInvoicesLength! + 1;
+          } else {
+            invoicesUpToPay = invoicesUpToPay! + 1;
+          }
+        }
+        invoicesPayedUp?.add(
+          doc.data().toString().contains("montoTotal")
+              ? doc.get("montoTotal")
+              : 0.0,
+        );
+        var data =
+            doc.data().toString().contains("pagos") ? doc.get("pagos") : null;
+        data.forEach((element) {
+          if (element["montoOriginal"] >= 0) {
+            invoicesAllPaymentAmounts?.add(element["montoOriginal"]);
+          }
+        });
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getInvoices();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final coinName = Provider.of<Coin?>(context)?.name ?? '';
-    final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 0;
-    final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 0;
-    final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
-    final coinCode = Provider.of<Coin?>(context)?.code ?? '';
-    print('CLIENT ORDERS ON CLIENT DETAILS');
-    print(coinName);
+    // print('invoicesAllPaymentAmounts: $invoicesAllPaymentAmounts');
+    // print('invoicesPayedUp: $invoicesPayedUp');
+    // print('invoicesUpToPay: $invoicesUpToPay');
+    // print('payedUpInvoicesLength: $payedUpInvoicesLength');
     final scrollLimit =
         Provider.of<CounterLimitFirestore>(context).getScrollBalance;
+    final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 2;
+    final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 1;
+    final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
+
+    var foldedTotalPayments = invoicesAllPaymentAmounts?.fold(
+      0,
+      (a, b) => double.parse(
+        (Decimal.parse(a.toString()) + Decimal.parse(b.toString())).toString(),
+      ),
+    );
+    var foldedAllInvoiceTotals = invoicesPayedUp?.fold(
+      0,
+      (a, b) => double.parse(
+        (Decimal.parse(a.toString()) + Decimal.parse(b.toString())).toString(),
+      ),
+    );
+    double balance = double.parse(
+        (Decimal.parse(foldedAllInvoiceTotals.toString()) -
+                Decimal.parse(foldedTotalPayments.toString()))
+            .toString());
+    print('foldedTotalAmount: $foldedTotalPayments');
+    print('foldedAcumulated: $foldedAllInvoiceTotals');
+    print('balance: $balance');
+    // print('foldedAcumulated');
+    // print(foldedAcumulated);
+    // print('foldedTotalAmount: $foldedTotalAmount');
+    // print('balance: $balance');
+    // if (widget.isCheckedFactures == true && invoices.isNotEmpty) {
+    //   for (int i = 0; i < invoices.length; i++) {
+    //     totalAmount += (invoices[i].totalAmount).toDouble();
+    //   }
+    // } else if (widget.isCheckedFactures == false && creditNotes.isNotEmpty) {
+    //   for (int i = 0; i < creditNotes.length; i++) {
+    //     totalAmount +=
+    //         (creditNotes[i].paymentsData['montoOriginal']).toDouble() ?? 0;
+    //   }
+    // }
+
+    var totalAmountConverted = priceMultipliedByItsExchangeRatio2(
+      productPrice: foldedTotalPayments,
+      coinDecimals: coinDecimals,
+      coinExchangeRatio: coinExchangeRatio,
+    );
+
+    var totalAmountFormatted =
+        formatDecimalPriceByRegion(price: totalAmountConverted);
+
+    var balanceConverted = priceMultipliedByItsExchangeRatio2(
+      productPrice: balance,
+      coinDecimals: coinDecimals,
+      coinExchangeRatio: coinExchangeRatio,
+    );
+
+    var balanceFormatted = formatDecimalPriceByRegion(price: balanceConverted);
+
     return MultiProvider(
       providers: [
         isCheckedFactures == true
@@ -104,8 +201,8 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
                     .collection('clientes')
                     .doc(widget.clientDocument.toString())
                     .collection('facturas')
+                    .orderBy('nroCorrelativo', descending: true)
                     .limit(scrollLimit)
-                    .orderBy('nroCorrelativo', descending: false)
                     .snapshots()
                     .map(accountInvoicesFromSnapshot),
                 initialData: const [],
@@ -118,7 +215,7 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
                     .collection('clientes')
                     .doc(widget.clientDocument.toString())
                     .collection('notas_credito')
-                    .orderBy('nroCorrelativo', descending: false)
+                    .orderBy('nroCorrelativo', descending: true)
                     .snapshots()
                     .map(accountCreditNotesFromSnapshot),
                 initialData: const [],
@@ -131,73 +228,165 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            StatusBarResume(isCheckedFactures: isCheckedFactures),
             Container(
               margin: const EdgeInsets.fromLTRB(10, 20, 10, 5),
-              child: Row(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Checkbox(
-                    checkColor: Colors.white,
-                    activeColor: myTheme.colorScheme.primary,
-                    value: isCheckedOnProcess,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        isCheckedOnProcess = value!;
-                      });
-                    },
-                  ),
-                  Text(
-                    AppLocalizations.of(context)!.issues,
-                    style: const TextStyle(
-                      fontFamily: 'Poppins-regular',
-                      fontSize: 14,
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0, 12, 16, 0),
+                    alignment: Alignment.centerRight,
+                    width: MediaQuery.of(context).size.width,
+                    height: 65,
+                    decoration: BoxDecoration(
+                      // color: Colors.green.shade100,
+                      color: Color(0xFF33C926).withOpacity(0.1),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(8),
+                        topRight: Radius.circular(8),
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Total pagado',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontFamily: 'Poppins-medium',
+                            color: Color(0xFF33C926),
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                        Text(
+                          '$coinSymbol $totalAmountFormatted',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'Poppins-regular',
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  Checkbox(
-                    checkColor: Colors.white,
-                    activeColor: myTheme.colorScheme.primary,
-                    value: isCheckedNotes,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        isCheckedNotes = value!;
-                        if (isCheckedNotes = true) {
-                          isCheckedFactures = false;
-                          isCheckedOnProcess = false;
-                        }
-                      });
-                    },
-                  ),
-                  Text(
-                    AppLocalizations.of(context)!.notes,
-                    style: const TextStyle(
-                      fontFamily: 'Poppins-regular',
-                      fontSize: 14,
-                    ),
-                  ),
-                  Checkbox(
-                    checkColor: Colors.white,
-                    activeColor: myTheme.colorScheme.primary,
-                    value: isCheckedFactures,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        isCheckedFactures = value!;
-                        if (isCheckedFactures = true) {
-                          isCheckedNotes = false;
-                          isCheckedOnProcess = false;
-                        }
-                      });
-                    },
-                  ),
-                  Text(
-                    AppLocalizations.of(context)!.invoices,
-                    style: const TextStyle(
-                      fontFamily: 'Poppins-regular',
-                      fontSize: 14,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.29,
+                        padding: EdgeInsets.fromLTRB(0, 12, 0, 0),
+                        height: 65,
+                        decoration: BoxDecoration(
+                          // color: Colors.green.shade100,
+                          color: Color(0xFFC97426).withOpacity(0.1),
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(8),
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            Text(
+                              'Pagadas',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 11,
+                                fontFamily: 'Poppins-medium',
+                                color: Color(0xFFC97426),
+                              ),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              // '0',
+                              '$payedUpInvoicesLength',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontFamily: 'Poppins-regular',
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.654,
+                        padding: EdgeInsets.fromLTRB(0, 12, 16, 0),
+                        alignment: Alignment.centerRight,
+                        height: 65,
+                        decoration: BoxDecoration(
+                          // color: Colors.green.shade100,
+                          color: Color(0xFF2667C9).withOpacity(0.1),
+                          borderRadius: BorderRadius.only(
+                            bottomRight: Radius.circular(8),
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            Text(
+                              'Saldo restante',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 11,
+                                fontFamily: 'Poppins-medium',
+                                color: Color(0xFF2667C9),
+                              ),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              '$coinSymbol $balanceFormatted',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontFamily: 'Poppins-regular',
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
+            Container(
+              margin: const EdgeInsets.fromLTRB(10, 10, 10, 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    'Ver $invoicesUpToPay pendientes',
+                    style: TextStyle(
+                      fontFamily: 'Poppins-medium',
+                      fontSize: 12,
+                      color: myTheme.colorScheme.secondary,
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  FlutterSwitch(
+                    onToggle: (val) {
+                      setState(() {
+                        light = val;
+                        isCheckedOnProcess = !isCheckedOnProcess;
+                      });
+                    },
+                    width: 39,
+                    height: 24,
+                    toggleSize: 12,
+                    value: light,
+                    borderRadius: 26,
+                    padding: 6,
+                    activeColor: Colors.green.shade300,
+                    inactiveColor: Color(0xFFDFE0FF),
+                    inactiveToggleColor: Color(0xFF5A5D77),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 12),
             isCheckedFactures == true
                 ? ShowInvoices(
                     isCheckedOnProcess: isCheckedOnProcess,
@@ -209,191 +398,6 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
                   ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class StatusBarResume extends StatefulWidget {
-  const StatusBarResume({
-    Key? key,
-    this.isCheckedFactures,
-  }) : super(key: key);
-
-  final isCheckedFactures;
-
-  @override
-  State<StatusBarResume> createState() => _StatusBarResumeState();
-}
-
-class _StatusBarResumeState extends State<StatusBarResume> {
-  @override
-  Widget build(BuildContext context) {
-    final coinName = Provider.of<Coin?>(context)?.name ?? '';
-    final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 2;
-    final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 1;
-    final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
-    final coinCode = Provider.of<Coin?>(context)?.code ?? '';
-    final invoices = Provider.of<List<Invoices>?>(context) ?? [];
-    final creditNotes = Provider.of<List<CreditNotes>?>(context) ?? [];
-    final listOnProcess = widget.isCheckedFactures == true
-        ? invoices.where((element) => element.isPaid == false).toList()
-        : creditNotes
-            .where((element) =>
-                element.paymentsData['conciliado'] == false &&
-                element.paymentsData['anulado'] == false)
-            .toList();
-    final listOfCompleted = widget.isCheckedFactures == true
-        ? invoices.where((element) => element.isPaid == true).toList()
-        : creditNotes
-            .where((element) =>
-                element.paymentsData['conciliado'] == true &&
-                element.paymentsData['anulado'] == false)
-            .toList();
-    double totalAmount = 0.0;
-    if (widget.isCheckedFactures == true && invoices.isNotEmpty) {
-      for (int i = 0; i < invoices.length; i++) {
-        totalAmount += (invoices[i].totalAmount).toDouble();
-      }
-    } else if (widget.isCheckedFactures == false && creditNotes.isNotEmpty) {
-      for (int i = 0; i < creditNotes.length; i++) {
-        totalAmount +=
-            (creditNotes[i].paymentsData['montoOriginal']).toDouble() ?? 0;
-      }
-    }
-    final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
-
-    return Container(
-      margin: const EdgeInsets.fromLTRB(10, 20, 10, 5),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            children: [
-              Text(
-                AppLocalizations.of(context)!.issues,
-                style: const TextStyle(
-                  fontFamily: 'Poppins-regular',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                ),
-              ),
-              Container(
-                height: 40,
-                width: 70,
-                decoration: BoxDecoration(
-                  color: Colors.amber.shade300,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  listOnProcess.length.toString(),
-                  style: const TextStyle(
-                    fontFamily: 'Poppins-regular',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Column(
-            children: [
-              Text(
-                AppLocalizations.of(context)!.paidUp,
-                style: const TextStyle(
-                  fontFamily: 'Poppins-regular',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                ),
-              ),
-              Container(
-                height: 40,
-                width: 70,
-                decoration: BoxDecoration(
-                  color: Colors.green.shade300,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  listOfCompleted.length.toString(),
-                  style: const TextStyle(
-                    fontFamily: 'Poppins-regular',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Column(
-            children: [
-              Text(
-                AppLocalizations.of(context)!.accountTotalAmount,
-                style: const TextStyle(
-                  fontFamily: 'Poppins-regular',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                height: 40,
-                // width: 70,
-                decoration: BoxDecoration(
-                  color: Colors.blue.shade300,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  '$coinSymbol ${priceMultipliedByItsExchangeRatio(
-                    productPrice: totalAmount,
-                    coinDecimals: coinDecimals,
-                    coinExchangeRatio: coinExchangeRatio,
-                  ).toStringAsFixed(2)}',
-                  style: const TextStyle(
-                    fontFamily: 'Poppins-regular',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Column(
-            children: [
-              Text(
-                AppLocalizations.of(context)!.accountTotalBalance,
-                style: const TextStyle(
-                  fontFamily: 'Poppins-regular',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                ),
-              ),
-              Container(
-                height: 40,
-                width: 70,
-                decoration: BoxDecoration(
-                  color: Colors.red.shade300,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  '$coinSymbol ${priceMultipliedByItsExchangeRatio(
-                    productPrice: 0,
-                    coinDecimals: coinDecimals,
-                    coinExchangeRatio: coinExchangeRatio,
-                  ).toStringAsFixed(2)}',
-                  style: const TextStyle(
-                    fontFamily: 'Poppins-regular',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
       ),
     );
   }
@@ -433,7 +437,6 @@ class _ShowInvoicesState extends State<ShowInvoices> {
   @override
   void initState() {
     super.initState();
-    // products = widget.listOfProducts;
     _controller.addListener(() {
       final productsLimitProvider =
           Provider.of<CounterLimitFirestore>(context, listen: false);
@@ -471,16 +474,14 @@ class _ShowInvoicesState extends State<ShowInvoices> {
 
   @override
   Widget build(BuildContext context) {
-    final coinName = Provider.of<Coin?>(context)?.name ?? '';
     final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 2;
     final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 1;
     final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
-    final coinCode = Provider.of<Coin?>(context)?.code ?? '';
     final invoices = Provider.of<List<Invoices>?>(context) ?? [];
     final invoicesList = invoices;
     var invoicesOnProcessList =
         invoices.where((element) => element.isPaid == false).toList();
-    var dateFormatter = DateFormat('yyyy-MM-dd');
+    var dateFormatter = DateFormat('yyyy/MM/dd');
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
 
     return Container(
@@ -515,82 +516,108 @@ class _ShowInvoicesState extends State<ShowInvoices> {
           // final noteBalance = 00;
           final noteBalance = remaining;
 
-          return ListTile(
-            leading: leadingIcon(note.isPaid),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Factura #$noteNumber',
-                  style: const TextStyle(
-                    fontFamily: 'Poppins-regular',
-                    fontSize: 14,
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            child: ListTile(
+              onTap: () {
+                print('Ticket #$noteNumber');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => InvoiceDetails(
+                      number: note.correlativeNumber.toString(),
+                      totalOfTheOrder: note.totalAmount,
+                      coinDecimals: coinDecimals,
+                      coinExchangeRatio:
+                          double.parse(coinExchangeRatio.toString()),
+                      coinSymbol: coinSymbol,
+                      clientID: note.clientIdReference.toString(),
+                      isPaid: note.isPaid,
+                      orderID: note.orderIdReference.toString(),
+                    ),
                   ),
-                ),
-                Text(
-                  noteDate,
-                  style: const TextStyle(
-                    fontFamily: 'Poppins-regular',
-                    fontSize: 12,
-                    color: Colors.grey,
+                );
+              },
+              tileColor: Colors.white,
+              leading: leadingIcon(note.isPaid),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Ticket #$noteNumber',
+                    style: const TextStyle(
+                      fontFamily: 'Poppins-regular',
+                      fontSize: 14,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            subtitle: Column(
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      "Monto original: ",
-                      style: TextStyle(
-                        fontFamily: 'Poppins-regular',
-                        fontSize: 12,
-                        color: Colors.grey,
-                      ),
+                  Text(
+                    noteDate,
+                    style: const TextStyle(
+                      fontFamily: 'Poppins-regular',
+                      fontSize: 12,
+                      color: Colors.grey,
                     ),
-                    Text(
-                      '$coinSymbol ${priceMultipliedByItsExchangeRatio(
-                        productPrice: noteOriginalAmount,
-                        coinDecimals: coinDecimals,
-                        coinExchangeRatio: coinExchangeRatio,
-                      ).toStringAsFixed(2)}',
-                      style: TextStyle(
-                        fontFamily: 'Poppins-regular',
-                        fontSize: 12,
-                        color: myTheme.colorScheme.onPrimaryContainer,
+                  ),
+                ],
+              ),
+              subtitle: Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        "Monto original: ",
+                        style: TextStyle(
+                          fontFamily: 'Poppins-regular',
+                          fontSize: 12,
+                          color: Colors.grey,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 3),
-                Row(
-                  children: [
-                    Text(
-                      'Saldo: ',
-                      style: const TextStyle(
-                        fontFamily: 'Poppins-regular',
-                        fontSize: 12,
-                        color: Colors.grey,
+                      Text(
+                        // '$coinSymbol ${priceMultipliedByItsExchangeRatio(
+                        //   productPrice: noteOriginalAmount,
+                        //   coinDecimals: coinDecimals,
+                        //   coinExchangeRatio: coinExchangeRatio,
+                        // ).toStringAsFixed(2)}',
+                        '000000',
+                        style: TextStyle(
+                          fontFamily: 'Poppins-regular',
+                          fontSize: 12,
+                          color: myTheme.colorScheme.onPrimaryContainer,
+                        ),
                       ),
-                    ),
-                    Text(
-                      noteBalance < 0.001
-                          ? '0.00'
-                          : '$coinSymbol ${priceMultipliedByItsExchangeRatio(
-                              productPrice: noteBalance,
-                              coinDecimals: coinDecimals,
-                              coinExchangeRatio: coinExchangeRatio,
-                            ).toStringAsFixed(2)}',
-                      style: TextStyle(
-                        fontFamily: 'Poppins-regular',
-                        fontSize: 12,
-                        color: Colors.amber.shade600,
+                    ],
+                  ),
+                  SizedBox(height: 3),
+                  Row(
+                    children: [
+                      Text(
+                        'Saldo: ',
+                        style: const TextStyle(
+                          fontFamily: 'Poppins-regular',
+                          fontSize: 12,
+                          color: Colors.grey,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                      Text(
+                        '000000',
+
+                        // noteBalance < 0.001
+                        //     ? '0.00'
+                        //     : '$coinSymbol ${priceMultipliedByItsExchangeRatio(
+                        //         productPrice: noteBalance,
+                        //         coinDecimals: coinDecimals,
+                        //         coinExchangeRatio: coinExchangeRatio,
+                        //       ).toStringAsFixed(2)}',
+                        style: TextStyle(
+                          fontFamily: 'Poppins-regular',
+                          fontSize: 12,
+                          color: Colors.amber.shade600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           );
         },
@@ -635,11 +662,9 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
 
   @override
   Widget build(BuildContext context) {
-    final coinName = Provider.of<Coin?>(context)?.name ?? '';
     final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 2;
     final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 1;
     final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
-    final coinCode = Provider.of<Coin?>(context)?.code ?? '';
     final creditNotes = Provider.of<List<CreditNotes>?>(context) ?? [];
     final creditNotesList = creditNotes;
     var creditOnProcessList = creditNotes
@@ -647,8 +672,7 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
             element.paymentsData['conciliado'] == false &&
             element.paymentsData['anulado'] == false)
         .toList();
-    var dateFormatter = DateFormat('yyyy-MM-dd');
-    final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
+    var dateFormatter = DateFormat('yyyy/MM/dd');
 
     return Container(
       width: MediaQuery.of(context).size.width,
