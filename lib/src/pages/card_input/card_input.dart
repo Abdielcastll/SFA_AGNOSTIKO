@@ -78,10 +78,10 @@ class _CardInputViewState extends State<CardInputView> {
     TextStyle style;
     if (transactionArgs?.emvTransactionType == EmvTransactionType.Refund) {
       appBarText = "Reembolso";
-      style = TextStyle(color: Colors.red, fontSize: 32);
+      style = const TextStyle(color: Colors.red, fontSize: 32);
     } else {
       appBarText = "Venta";
-      style = TextStyle(color: Colors.green, fontSize: 32);
+      style = const TextStyle(color: Colors.green, fontSize: 32);
     }
 
     return WillPopScope(
@@ -103,7 +103,7 @@ class _CardInputViewState extends State<CardInputView> {
               _currencyFormat.format(amount),
               style: style,
             ),
-            Text(""),
+            const Text(""),
             _expectedCardsWidget,
             Expanded(child: Container()),
           ]),
@@ -178,8 +178,8 @@ class _CardInputViewState extends State<CardInputView> {
         }
       }
     } on ChipCardException {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("chipCardUseChip"),
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Tarjeta con chip, usar chip"),
       ));
       await closeCardReader();
       // reiniciamos la detección sin banda
@@ -196,7 +196,7 @@ class _CardInputViewState extends State<CardInputView> {
       });
     } catch (e, stackTrace) {
       await closeCardReader();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Error al detectar la tarjeta"),
       ));
       print("Error: $e");
@@ -280,8 +280,7 @@ class _CardInputViewState extends State<CardInputView> {
         (await EmvModule.instance.getTagValue(0x57))?.toHexStr().split('d')[0];
     // en caso de error, nos movemos a la pantalla de cierre
     final arguments = (ModalRoute.of(context)?.settings.arguments! as List);
-    Navigator.pushNamed(
-      // Navigator.pushReplacementNamed(
+    Navigator.pushReplacementNamed(
       context,
       EmvTransactionInfoView.route,
       arguments: [
@@ -361,12 +360,16 @@ class _CardInputViewState extends State<CardInputView> {
       try {
         final response = await processSalePharos(pharosMsg);
         responseCode = response.resultCode;
+        print('responseCode');
+        print(responseCode);
         transactionArgs.referenceNumber = response.referenceNumber;
         await emvCompleteOnline(EmvOnlineResponse(
           authorisationResponseCode: responseCode,
         ));
       } catch (e) {
         final stan = transactionArgs.stan;
+        print('errorSale');
+        print(e.toString());
         if (stan != null) {
           final response = await runVoidPharos(stan);
           String? responseCode = response.resultCode;
@@ -428,12 +431,9 @@ class _CardInputViewState extends State<CardInputView> {
       setState(() {
         this._isFallback = true;
       });
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Error de chip"),
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Error de lectura de chip"),
       ));
-      _startCardDetection(
-        _supportedCardTypes.where((type) => type != CardType.IC).toList(),
-      );
     }
     if (event.transactionInfo.onlineRequested &&
         !event.transactionInfo.isContactless) {
@@ -451,7 +451,6 @@ class _CardInputViewState extends State<CardInputView> {
 
     final arguments = (ModalRoute.of(context)?.settings.arguments! as List);
     Navigator.pushReplacementNamed(context, EmvTransactionInfoView.route,
-        // Navigator.pushReplacementNamed(context, EmvTransactionInfoView.route,
         arguments: [
           transactionArgs,
           if (arguments.length >= 2) arguments[1] else null,
@@ -535,7 +534,7 @@ class CardExpectedWidget extends StatelessWidget {
         width: imageWidth,
         height: imageWidth,
       ),
-      Text(message, style: TextStyle(color: Colors.grey, fontSize: 16)),
+      Text(message, style: const TextStyle(color: Colors.grey, fontSize: 16)),
     ]);
   }
 }
