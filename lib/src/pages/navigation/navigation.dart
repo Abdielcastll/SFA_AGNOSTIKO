@@ -32,7 +32,6 @@ class _NavigationPagesState extends State<NavigationPages> {
   @override
   Widget build(BuildContext context) {
     int index = Provider.of<CounterLimitFirestore>(context).currentScreen;
-    // getDataFromBQ(queryProductosMasVendidos);
     return Scaffold(
       body: IndexedStack(
         index: index,

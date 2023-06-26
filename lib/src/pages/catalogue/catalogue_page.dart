@@ -20,6 +20,7 @@ import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/new_products
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/product_list_button.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
+import 'package:pwa_sales2go_flutter/src/services/cloud_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -150,10 +151,6 @@ class _CatalogueBodyState extends State<CatalogueBody> {
   Widget build(BuildContext context) {
     final productsByDateProvider =
         Provider.of<List<ProductsByDate>?>(context) ?? [];
-    // final productsLimit =
-    //     Provider.of<CounterLimitFirestore>(context).getProductsLimit;
-    // final productsScrollLimit =
-    //     Provider.of<CounterLimitFirestore>(context).getScrollProductLimit;
 
     return productsByDateProvider.isEmpty
         ? const Center(
