@@ -121,6 +121,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
     final orderActive = Provider.of<OrderProvider>(context, listen: false);
     objectBox.delelteAllShoppingCart();
     orderActive.setOrder(false, Clients());
+    print('Going back');
     Navigator.popUntil(context, (route) => route.isFirst);
   }
 

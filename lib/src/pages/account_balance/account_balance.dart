@@ -141,7 +141,7 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
     final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 2;
     final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 1;
     final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
-
+    final userUID = Provider.of<UserModel?>(context);
     // var foldedTotalPayments = invoicesAllPaymentAmounts?.fold(
     //   0,
     //   (a, b) => double.parse(
@@ -195,35 +195,21 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
 
     return MultiProvider(
       providers: [
-        isCheckedFactures == true
-            ? StreamProvider<List<Invoices>?>.value(
-                value: FirebaseFirestore.instance
-                    .collection('clientes')
-                    .doc(widget.clientDocument.toString())
-                    .collection('facturas')
-                    .orderBy('nroCorrelativo', descending: true)
-                    .limit(scrollLimit)
-                    .snapshots()
-                    .map(accountInvoicesFromSnapshot),
-                initialData: const [],
-                catchError: (context, error) {
-                  return;
-                },
-              )
-            : StreamProvider<List<CreditNotes>?>.value(
-                value: FirebaseFirestore.instance
-                    .collection('clientes')
-                    .doc(widget.clientDocument.toString())
-                    .collection('notas_credito')
-                    .orderBy('nroCorrelativo', descending: true)
-                    .snapshots()
-                    .map(accountCreditNotesFromSnapshot),
-                initialData: const [],
-                catchError: (context, error) {
-                  // print(error);
-                  return;
-                },
-              )
+        StreamProvider<List<Invoices>?>.value(
+          value: FirebaseFirestore.instance
+              .collection('clientes')
+              .doc(widget.clientDocument.toString())
+              .collection('facturas')
+              .where('vendedor', isEqualTo: usersCollection.doc(userUID?.uid))
+              .orderBy('nroCorrelativo', descending: true)
+              .limit(scrollLimit)
+              .snapshots()
+              .map(accountInvoicesFromSnapshot),
+          initialData: const [],
+          catchError: (context, error) {
+            return;
+          },
+        )
       ],
       child: SingleChildScrollView(
         child: Column(
@@ -358,7 +344,7 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    'Ver $invoicesUpToPay pendientes',
+                    'Ver pendientes',
                     style: TextStyle(
                       fontFamily: 'Poppins-medium',
                       fontSize: 12,
@@ -486,141 +472,147 @@ class _ShowInvoicesState extends State<ShowInvoices> {
 
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.51,
+      // height: MediaQuery.of(context).size.height * 0.51,
       margin: const EdgeInsets.fromLTRB(10, 0, 10, 5),
-      child: ListView.builder(
-        controller: _controller,
-        physics: const BouncingScrollPhysics(),
-        itemCount: widget.isCheckedOnProcess == true
-            ? invoicesOnProcessList.length
-            : invoicesList.length,
-        itemBuilder: (context, index) {
-          final note = widget.isCheckedOnProcess == true
-              ? invoicesOnProcessList[index]
-              : invoicesList[index];
-          final noteNumber = note.correlativeNumber ?? 'NaN';
-          final unFormattedDate =
-              note.orderDate ?? Timestamp.fromDate(DateTime.now());
-          final date = DateTime.parse(unFormattedDate.toDate().toString());
-          final noteDate = dateFormatter.format(date);
-          final noteOriginalAmount = note.totalAmount ?? 0;
+      child: Column(
+        children: [
+          ListView.builder(
+            shrinkWrap: true,
+            controller: _controller,
+            physics: const BouncingScrollPhysics(),
+            itemCount: widget.isCheckedOnProcess == true
+                ? invoicesOnProcessList.length
+                : invoicesList.length,
+            itemBuilder: (context, index) {
+              final note = widget.isCheckedOnProcess == true
+                  ? invoicesOnProcessList[index]
+                  : invoicesList[index];
+              final noteNumber = note.correlativeNumber ?? 'NaN';
+              final unFormattedDate =
+                  note.orderDate ?? Timestamp.fromDate(DateTime.now());
+              final date = DateTime.parse(unFormattedDate.toDate().toString());
+              final noteDate = dateFormatter.format(date);
+              final noteOriginalAmount = note.totalAmount ?? 0;
 
-          final paymentsValidPay = note.payments
-              .where((element) => element['anulado'] == false)
-              .toList();
-          var sumOfValidPayments = paymentsValidPay.fold(0, (i, element) {
-            return i + element['monto'];
-          });
-          double remaining = double.parse(
-              (noteOriginalAmount - sumOfValidPayments).toStringAsFixed(4));
-          // final noteBalance = 00;
-          final noteBalance = remaining;
+              final paymentsValidPay = note.payments
+                  .where((element) => element['anulado'] == false)
+                  .toList();
+              var sumOfValidPayments = paymentsValidPay.fold(0, (i, element) {
+                return i + element['monto'];
+              });
+              double remaining = double.parse(
+                  (noteOriginalAmount - sumOfValidPayments).toStringAsFixed(4));
+              // final noteBalance = 00;
+              final noteBalance = remaining;
 
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
-            child: ListTile(
-              onTap: () {
-                print('Ticket #$noteNumber');
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => InvoiceDetails(
-                      number: note.correlativeNumber.toString(),
-                      totalOfTheOrder: note.totalAmount,
-                      coinDecimals: coinDecimals,
-                      coinExchangeRatio:
-                          double.parse(coinExchangeRatio.toString()),
-                      coinSymbol: coinSymbol,
-                      clientID: note.clientIdReference.toString(),
-                      isPaid: note.isPaid,
-                      orderID: note.orderIdReference.toString(),
-                    ),
-                  ),
-                );
-              },
-              tileColor: Colors.white,
-              leading: leadingIcon(note.isPaid),
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Ticket #$noteNumber',
-                    style: const TextStyle(
-                      fontFamily: 'Poppins-regular',
-                      fontSize: 14,
-                    ),
-                  ),
-                  Text(
-                    noteDate,
-                    style: const TextStyle(
-                      fontFamily: 'Poppins-regular',
-                      fontSize: 12,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ],
-              ),
-              subtitle: Column(
-                children: [
-                  Row(
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: ListTile(
+                  onTap: () {
+                    print('Ticket #$noteNumber');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => InvoiceDetails(
+                          number: note.correlativeNumber.toString(),
+                          totalOfTheOrder: note.totalAmount,
+                          coinDecimals: coinDecimals,
+                          coinExchangeRatio:
+                              double.parse(coinExchangeRatio.toString()),
+                          coinSymbol: coinSymbol,
+                          clientID: note.clientIdReference.toString(),
+                          isPaid: note.isPaid,
+                          orderID: note.orderIdReference.toString(),
+                        ),
+                      ),
+                    );
+                  },
+                  tileColor: Colors.white,
+                  leading: leadingIcon(note.isPaid),
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Monto original: ",
-                        style: TextStyle(
+                        'Ticket #$noteNumber',
+                        style: const TextStyle(
                           fontFamily: 'Poppins-regular',
-                          fontSize: 12,
-                          color: Colors.grey,
+                          fontSize: 14,
                         ),
                       ),
                       Text(
-                        // '$coinSymbol ${priceMultipliedByItsExchangeRatio(
-                        //   productPrice: noteOriginalAmount,
-                        //   coinDecimals: coinDecimals,
-                        //   coinExchangeRatio: coinExchangeRatio,
-                        // ).toStringAsFixed(2)}',
-                        '000000',
-                        style: TextStyle(
-                          fontFamily: 'Poppins-regular',
-                          fontSize: 12,
-                          color: myTheme.colorScheme.onPrimaryContainer,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 3),
-                  Row(
-                    children: [
-                      Text(
-                        'Saldo: ',
+                        noteDate,
                         style: const TextStyle(
                           fontFamily: 'Poppins-regular',
                           fontSize: 12,
                           color: Colors.grey,
                         ),
                       ),
-                      Text(
-                        '000000',
+                    ],
+                  ),
+                  subtitle: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            "Monto original: ",
+                            style: TextStyle(
+                              fontFamily: 'Poppins-regular',
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          Text(
+                            // '$coinSymbol ${priceMultipliedByItsExchangeRatio(
+                            //   productPrice: noteOriginalAmount,
+                            //   coinDecimals: coinDecimals,
+                            //   coinExchangeRatio: coinExchangeRatio,
+                            // ).toStringAsFixed(2)}',
+                            '000000',
+                            style: TextStyle(
+                              fontFamily: 'Poppins-regular',
+                              fontSize: 12,
+                              color: myTheme.colorScheme.onPrimaryContainer,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 3),
+                      Row(
+                        children: [
+                          Text(
+                            'Saldo: ',
+                            style: const TextStyle(
+                              fontFamily: 'Poppins-regular',
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          Text(
+                            '000000',
 
-                        // noteBalance < 0.001
-                        //     ? '0.00'
-                        //     : '$coinSymbol ${priceMultipliedByItsExchangeRatio(
-                        //         productPrice: noteBalance,
-                        //         coinDecimals: coinDecimals,
-                        //         coinExchangeRatio: coinExchangeRatio,
-                        //       ).toStringAsFixed(2)}',
-                        style: TextStyle(
-                          fontFamily: 'Poppins-regular',
-                          fontSize: 12,
-                          color: Colors.amber.shade600,
-                        ),
+                            // noteBalance < 0.001
+                            //     ? '0.00'
+                            //     : '$coinSymbol ${priceMultipliedByItsExchangeRatio(
+                            //         productPrice: noteBalance,
+                            //         coinDecimals: coinDecimals,
+                            //         coinExchangeRatio: coinExchangeRatio,
+                            //       ).toStringAsFixed(2)}',
+                            style: TextStyle(
+                              fontFamily: 'Poppins-regular',
+                              fontSize: 12,
+                              color: Colors.amber.shade600,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
-            ),
-          );
-        },
+                ),
+              );
+            },
+          ),
+          SizedBox(height: 60),
+        ],
       ),
     );
   }

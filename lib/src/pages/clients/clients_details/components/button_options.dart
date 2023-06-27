@@ -7,6 +7,7 @@ import 'package:pwa_sales2go_flutter/src/pages/account_balance/account_balance.d
 import 'package:pwa_sales2go_flutter/src/pages/account_balance/account_tabs.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
+import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -49,8 +50,6 @@ class ButtonOptions extends StatelessWidget {
         Provider.of<OrderProvider>(context).clientForTheOrder;
     // final userRole = Provider.of<CurrentUserInfo>(context).role;
 
-    // print('userRole IN CLIENT DETAILS: $userRole');
-
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
       child: Row(
@@ -69,6 +68,34 @@ class ButtonOptions extends StatelessWidget {
               borderRadius: BorderRadius.circular(100),
               child: ElevatedButton.icon(
                 onPressed: () {
+                  //  Navigator.push(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //           builder: (context) =>
+                  //               StreamProvider<CurrentUserInfo?>.value(
+                  //             value: usersCollection
+                  //                 .doc(user.uid)
+                  //                 .snapshots()
+                  //                 .map(AuthService().userDataFromsnapshot),
+                  //             initialData: CurrentUserInfo(
+                  //               name: '',
+                  //               dni: '',
+                  //               zone: '',
+                  //               zoneDocument: '',
+                  //               email: '',
+                  //               role: '',
+                  //               uid: '',
+                  //             ),
+                  //             catchError: (context, error) {
+                  //               print(
+                  //                   'ERROR GETTING CURRENT USER INFO IN APPBAR NAVIGATION');
+                  //               print(error);
+                  //               return;
+                  //             },
+                  //             child: const OrderPage(),
+                  //           ),
+                  //         ),
+                  //       );
                   Navigator.push(
                     context,
                     MaterialPageRoute(

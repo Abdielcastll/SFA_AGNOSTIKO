@@ -324,15 +324,19 @@ class InvoiceDetailsBody extends StatelessWidget {
                               ),
                             ),
                             child: ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(16),
-                                bottomLeft: Radius.circular(16),
-                              ),
-                              child: Image.network(
-                                'https://d36tnp772eyphs.cloudfront.net/blogs/1/2018/02/Taj-Mahal.jpg',
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(16),
+                                  bottomLeft: Radius.circular(16),
+                                ),
+                                child: Icon(
+                                  Icons.image,
+                                  color: Colors.grey,
+                                )
+                                // Image.network(
+                                //   'https://d36tnp772eyphs.cloudfront.net/blogs/1/2018/02/Taj-Mahal.jpg',
+                                //   fit: BoxFit.cover,
+                                // ),
+                                ),
                           ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(16, 13, 0, 13),

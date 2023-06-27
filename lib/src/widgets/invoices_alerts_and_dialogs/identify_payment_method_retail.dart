@@ -323,7 +323,7 @@ identifyPaymentMethodRetail({
                 ),
                 dropdownStyleData: DropdownStyleData(
                   maxHeight: 200,
-                  width: 200,
+                  // width: 200,
                   padding: null,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
@@ -436,7 +436,7 @@ identifyPaymentMethodRetail({
               },
               inputFormatters: [
                 FilteringTextInputFormatter.allow(
-                  RegExp(r"^[a-zA-ZñÑ@.\s]*"),
+                  RegExp(r"^[a-zA-ZñÑ@.\s@]*"),
                 ),
               ],
               decoration: InputDecoration(

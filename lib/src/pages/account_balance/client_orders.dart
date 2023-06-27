@@ -34,6 +34,10 @@ class _ClientOrdersState extends State<ClientOrders> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<CurrentUserInfo?>(context);
+    final userUID = Provider.of<UserModel?>(context);
+
+    // print('+++++++++++++++++++++++');
+    // print(userUID?.uid);
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     List<String> currentCoinSplit = currentCoin!.split(' ');
     String currentCoinSelectedCode = currentCoinSplit.last;
@@ -48,6 +52,7 @@ class _ClientOrdersState extends State<ClientOrders> {
     final document = clientsCollection
         .doc(widget.clientDocument)
         .collection('pedidos')
+        .where('vendedor', isEqualTo: usersCollection.doc(userUID?.uid))
         .where('fecha', isGreaterThanOrEqualTo: currentDay)
         .where('fecha', isLessThan: tomorrow)
         .orderBy('fecha')

@@ -53,6 +53,8 @@ class ClientDetails extends StatefulWidget {
 class _ClientDetailsState extends State<ClientDetails> {
   @override
   Widget build(BuildContext context) {
+    // print('userRole IN CLIENT DETAILS: $userRole');
+
     return Scaffold(
       backgroundColor: myTheme.colorScheme.background,
       appBar: AppBar(

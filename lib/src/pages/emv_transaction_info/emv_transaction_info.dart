@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
 import 'package:agnostiko/agnostiko.dart';
@@ -413,7 +414,10 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
         MaterialPageRoute(
           settings: const RouteSettings(name: 'PAGO-DIRECTO'),
           builder: (BuildContext context) => AddPaymentPage(
-            remaining: paymentBody.remaining - payed,
+            remaining: double.parse(
+                (Decimal.parse(paymentBody.remaining.toString()) -
+                        Decimal.parse(payed.toString()))
+                    .toString()),
             subTotal: paymentBody.subTotal,
             discountPercentage: paymentBody.discountPercentage,
             discount: paymentBody.discount,

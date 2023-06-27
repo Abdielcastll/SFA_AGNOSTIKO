@@ -232,7 +232,11 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
   late List<PayMethod> payments = widget.payments;
   final TextEditingController fieldTextAmountToPay = TextEditingController();
 
-  get getTotalAmount => widget.subTotal + widget.tax - widget.discount;
+  get getTotalAmount =>
+      double.parse((Decimal.parse(widget.subTotal.toString()) +
+              Decimal.parse(widget.tax.toString()) -
+              Decimal.parse(widget.discount.toString()))
+          .toString());
 
   bool amountChanged = false;
   double moneyRecievedForRegisterMoney = 0;

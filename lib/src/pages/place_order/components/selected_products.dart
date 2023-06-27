@@ -291,9 +291,8 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                   )
                                 : Container(
                                     color: Colors.grey.shade100,
-                                    // height:
-                                    //     MediaQuery.of(context).size.height *
-                                    //         0.50,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.50,
                                     width: MediaQuery.of(context).size.width,
                                     child: ListView.builder(
                                       shrinkWrap: true,

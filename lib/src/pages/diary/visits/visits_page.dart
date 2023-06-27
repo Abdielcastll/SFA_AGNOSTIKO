@@ -35,6 +35,8 @@ class _VisitsPageState extends State<VisitsPage> {
         currentDayDateTime.month, currentDayDateTime.day + 1);
 
     final user = Provider.of<UserModel?>(context);
+    // print('VISITAS');
+    // print(user?.uid);
     return StreamProvider<List<Visits>>.value(
       value: currentDay !=
               Timestamp.fromDate(DateTime(

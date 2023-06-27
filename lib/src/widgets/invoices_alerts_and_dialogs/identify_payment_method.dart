@@ -82,7 +82,7 @@ identifyPaymentMethod({
   context,
   Function? updatePayed,
   AddPaymentBodyAtt? paymentBody,
-  noRetail = false,
+  noRetail = true,
   int? paymentsValidPayQuantity,
   required List<String> itemsBank,
   required List<String> itemsBankInter,
@@ -325,7 +325,7 @@ identifyPaymentMethod({
               maxLength: 40,
               inputFormatters: [
                 FilteringTextInputFormatter.allow(
-                  RegExp(r"^[a-zA-ZñÑ@.\s]*"),
+                  RegExp(r"^[a-zA-ZñÑ@.\s@]*"),
                 ),
               ],
               textCapitalization: TextCapitalization.characters,
