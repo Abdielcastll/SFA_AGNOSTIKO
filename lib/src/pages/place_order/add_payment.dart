@@ -242,6 +242,9 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
   DateTime today = DateTime.now();
   String? selectedValueA;
   String? selectedCoin = 'MXN';
+  List<String> nationalBanks = [];
+  List<String> internationalBanks = [];
+  List<String> banks = [];
 
   updatePayed(double amount) {
     print('payed $amount');
@@ -453,12 +456,48 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                               ))
                           .toList(),
                       value: selectedValueA,
-                      onChanged: (value) {
+                      onChanged: (value) async {
                         setState(
                           () {
                             selectedValueA = value as String;
                           },
                         );
+                        if (value.toString().toLowerCase() == "transferencia" ||
+                            value.toString().toLowerCase() == "deposito" ||
+                            value.toString().toLowerCase() == "cheque") {
+                          print('fetching banks');
+                          await banksCollection
+                              .where('internacional', isEqualTo: false)
+                              .snapshots()
+                              .forEach((snapshot) {
+                            for (var doc in snapshot.docs) {
+                              print('Nacionales');
+                              doc.data().toString().contains('nombre')
+                                  ? setState(() {
+                                      nationalBanks.add(doc.get('nombre'));
+                                    })
+                                  : null;
+                            }
+                          }).whenComplete(() => print('done'));
+                        } else if (value.toString().toLowerCase() ==
+                            "transf-internacional") {
+                          print('fetching banks');
+                          await banksCollection
+                              .where('internacional', isEqualTo: true)
+                              .snapshots()
+                              .forEach((snapshot) {
+                            print('Internacionales');
+
+                            for (var doc in snapshot.docs) {
+                              doc.data().toString().contains('nombre')
+                                  ? setState(() {
+                                      internationalBanks.add(doc.get('nombre'));
+                                    })
+                                  : null;
+                            }
+                          }).whenComplete(() => print('done'));
+                        }
+                        setState(() {});
                         print(selectedValueA);
                       },
                       iconStyleData: IconStyleData(
@@ -1489,6 +1528,9 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                               Container(
                                 margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                                 child: identifyPaymentMethodRetail(
+                                  banks: banks,
+                                  itemsBank: nationalBanks,
+                                  itemsBankInter: internationalBanks,
                                   coinName: coinName,
                                   coinDecimals: coinDecimals,
                                   coinExchangeRatio: double.parse(

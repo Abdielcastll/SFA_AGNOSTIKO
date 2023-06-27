@@ -217,7 +217,7 @@ class _ProductsBodyState extends State<ProductsBody> {
     });
   }
 
-  final List<String> items = ['10', '50', 'Todos'];
+  final List<String> items = ['10', '50', '100'];
   String? selectedValue;
 
   //Test
@@ -404,7 +404,9 @@ class _ProductsBodyState extends State<ProductsBody> {
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.fromLTRB(4, 16, 0, 0),
+                        margin: widget.showFullList == true
+                            ? EdgeInsets.fromLTRB(4, 16, 0, 0)
+                            : EdgeInsets.fromLTRB(4, 16, 0, 8),
                         height: 40,
                         width: 68,
                         decoration: BoxDecoration(
@@ -2203,27 +2205,29 @@ class _ProductsBodyState extends State<ProductsBody> {
                     children: [
                       widget.showFullList == true
                           ? Container(
-                              margin:
-                                  EdgeInsets.only(top: 8, right: 8, bottom: 8),
+                              margin: EdgeInsets.only(top: 8, right: 8),
                               height: 40,
-                              width: 136,
+                              width: 68,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(100),
                                   color: Color(0xFFDFE0FF)),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton2(
-                                  hint: Text(
-                                    selectedValue == null
-                                        ? productsLimit == 0
-                                            ? 'Todos'
-                                            : '$productsScrollLimit'
-                                        : selectedValue.toString(),
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontFamily: 'Poppins-regular',
-                                      color: myTheme
-                                          .colorScheme.onPrimaryContainer,
-                                      fontWeight: FontWeight.bold,
+                                  hint: Container(
+                                    margin: EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      selectedValue == null
+                                          ? productsLimit == 0
+                                              ? 'Todos'
+                                              : '$productsScrollLimit'
+                                          : selectedValue.toString(),
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontFamily: 'Poppins-regular',
+                                        color: myTheme
+                                            .colorScheme.onPrimaryContainer,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                   items: items
@@ -2268,7 +2272,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                   },
                                   buttonStyleData: const ButtonStyleData(
                                     height: 40,
-                                    width: 100,
+                                    width: 68,
                                     elevation: 1,
                                   ),
                                   menuItemStyleData: const MenuItemStyleData(
@@ -2276,7 +2280,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                   ),
                                   alignment: Alignment.center,
                                   dropdownStyleData: DropdownStyleData(
-                                    width: 136,
+                                    width: 68,
                                     elevation: 0,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(14),
@@ -2287,9 +2291,50 @@ class _ProductsBodyState extends State<ProductsBody> {
                               ),
                             )
                           : Container(),
+                      widget.showFullList == false
+                          ? Container()
+                          : filteredProducts.isEmpty
+                              ? Container()
+                              : Container(
+                                  margin: EdgeInsets.only(top: 8, right: 8),
+                                  height: 40,
+                                  width: 68,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(100),
+                                      color: Color(0xFFDFE0FF)),
+                                  child: IconButton(
+                                    onPressed: () {
+                                      if (filteredProducts.isNotEmpty) {
+                                        ScaffoldMessenger.of(context)
+                                          ..removeCurrentSnackBar()
+                                          ..showSnackBar(
+                                            SnackBar(
+                                              backgroundColor:
+                                                  myTheme.colorScheme.primary,
+                                              duration:
+                                                  const Duration(seconds: 1),
+                                              content: const Text(
+                                                "Filtros eliminados",
+                                                style: TextStyle(
+                                                  fontFamily: 'Poppins-regular',
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                      }
+                                      setState(() {
+                                        filteredProducts.clear();
+                                      });
+                                    },
+                                    icon: Icon(Icons.filter_alt_off_rounded,
+                                        color: myTheme
+                                            .colorScheme.onPrimaryContainer),
+                                    splashRadius: 5,
+                                  ),
+                                ),
                     ],
                   ),
-
+                  SizedBox(height: 8),
                   filteredProducts.isEmpty
                       ? SizedBox(
                           width: MediaQuery.of(context).size.width,

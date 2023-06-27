@@ -260,250 +260,471 @@ class _SelectedProductsState extends State<SelectedProducts> {
                     return SingleChildScrollView(
                       child: Container(
                         padding: EdgeInsets.only(bottom: 10),
-                        child: Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              products!.isEmpty
-                                  ? Container(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.50,
-                                      width: MediaQuery.of(context).size.width,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: const [
-                                          Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                16, 8, 0, 0),
-                                            child: Text(
-                                              'No hay productos seleccionados',
-                                              style: TextStyle(
-                                                color: Color(0xFF5A5D77),
-                                                fontFamily: 'Poppins-medium',
-                                                fontSize: 14,
-                                              ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            products!.isEmpty
+                                ? Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.50,
+                                    width: MediaQuery.of(context).size.width,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: const [
+                                        Padding(
+                                          padding:
+                                              EdgeInsets.fromLTRB(16, 8, 0, 0),
+                                          child: Text(
+                                            'No hay productos seleccionados',
+                                            style: TextStyle(
+                                              color: Color(0xFF5A5D77),
+                                              fontFamily: 'Poppins-medium',
+                                              fontSize: 14,
                                             ),
-                                          )
-                                        ],
-                                      ),
-                                    )
-                                  : Container(
-                                      color: Colors.grey.shade100,
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.50,
-                                      width: MediaQuery.of(context).size.width,
-                                      child: ListView.builder(
-                                        physics: const BouncingScrollPhysics(),
-                                        itemCount: products.length,
-                                        itemBuilder: (context, index) {
-                                          final ShoppingCartProduct product =
-                                              products[index];
-                                          var productPrice = Decimal.parse(
-                                              product.unitPrice.toString());
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                : Container(
+                                    color: Colors.grey.shade100,
+                                    // height:
+                                    //     MediaQuery.of(context).size.height *
+                                    //         0.50,
+                                    width: MediaQuery.of(context).size.width,
+                                    child: ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: const BouncingScrollPhysics(),
+                                      itemCount: products.length,
+                                      itemBuilder: (context, index) {
+                                        final ShoppingCartProduct product =
+                                            products[index];
+                                        var productPrice = Decimal.parse(
+                                            product.unitPrice.toString());
 
-                                          var productPriceConverted =
-                                              // final double productPriceConverted =
-                                              priceMultipliedByItsExchangeRatio2(
-                                                  productPrice: productPrice,
-                                                  coinDecimals: coinDecimals,
-                                                  coinExchangeRatio:
-                                                      coinExchangeRatio);
+                                        var productPriceConverted =
+                                            // final double productPriceConverted =
+                                            priceMultipliedByItsExchangeRatio2(
+                                                productPrice: productPrice,
+                                                coinDecimals: coinDecimals,
+                                                coinExchangeRatio:
+                                                    coinExchangeRatio);
 
-                                          var productPriceConvertedFormatted =
-                                              formatDecimalPriceByRegion(
-                                                  price: productPriceConverted);
+                                        var productPriceConvertedFormatted =
+                                            formatDecimalPriceByRegion(
+                                                price: productPriceConverted);
 
-                                          var productTotalByQuantity =
-                                              Decimal.parse(product.unitPrice
-                                                      .toString()) *
-                                                  Decimal.parse(product
-                                                      .productQuantity
-                                                      .toString());
+                                        var productTotalByQuantity =
+                                            Decimal.parse(product.unitPrice
+                                                    .toString()) *
+                                                Decimal.parse(product
+                                                    .productQuantity
+                                                    .toString());
 
-                                          var productTotalByQuantityConverted =
-                                              priceMultipliedByItsExchangeRatio2(
-                                            productPrice:
-                                                productTotalByQuantity,
-                                            coinDecimals: coinDecimals,
-                                            coinExchangeRatio:
-                                                coinExchangeRatio,
-                                          );
+                                        var productTotalByQuantityConverted =
+                                            priceMultipliedByItsExchangeRatio2(
+                                          productPrice: productTotalByQuantity,
+                                          coinDecimals: coinDecimals,
+                                          coinExchangeRatio: coinExchangeRatio,
+                                        );
 
-                                          var productTotalByQuantityConvertedFormatted =
-                                              formatDecimalPriceByRegion(
-                                                  price:
-                                                      productTotalByQuantityConverted);
+                                        var productTotalByQuantityConvertedFormatted =
+                                            formatDecimalPriceByRegion(
+                                                price:
+                                                    productTotalByQuantityConverted);
 
-                                          return Container(
-                                            margin: const EdgeInsets.fromLTRB(
-                                                16, 10, 16, 0),
-                                            height: 95,
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            decoration: BoxDecoration(
-                                              color: myTheme
-                                                  .colorScheme.background,
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                FutureBuilder(
-                                                  future: FirebaseStorage
-                                                      .instance
-                                                      .ref()
-                                                      .child('imagenes')
-                                                      .child('catalogos')
-                                                      .child(product.urlPicture
-                                                          .toString())
-                                                      .child('1')
-                                                      .getDownloadURL()
-                                                      .catchError((e) {
-                                                    print(e);
-                                                    print(
-                                                        'ERROR OBTENIENDO IMG DE PRODUCTO EN ARRITO');
-                                                  }),
-                                                  builder: (context, snapshot) {
-                                                    if (snapshot.hasData) {
-                                                      final url = snapshot.data!
-                                                          .toString();
-                                                      return Container(
-                                                        height: 95,
-                                                        width: 80,
-                                                        decoration:
-                                                            const BoxDecoration(
-                                                          color: Colors
-                                                              .transparent,
-                                                          borderRadius:
-                                                              BorderRadius.only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    8),
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    8),
-                                                          ),
+                                        return Container(
+                                          margin: const EdgeInsets.fromLTRB(
+                                              16, 10, 16, 0),
+                                          height: 95,
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          decoration: BoxDecoration(
+                                            color:
+                                                myTheme.colorScheme.background,
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              FutureBuilder(
+                                                future: FirebaseStorage.instance
+                                                    .ref()
+                                                    .child('imagenes')
+                                                    .child('catalogos')
+                                                    .child(product.urlPicture
+                                                        .toString())
+                                                    .child('1')
+                                                    .getDownloadURL()
+                                                    .catchError((e) {
+                                                  print(e);
+                                                  print(
+                                                      'ERROR OBTENIENDO IMG DE PRODUCTO EN ARRITO');
+                                                }),
+                                                builder: (context, snapshot) {
+                                                  if (snapshot.hasData) {
+                                                    final url = snapshot.data!
+                                                        .toString();
+                                                    return Container(
+                                                      height: 95,
+                                                      width: 80,
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                        color:
+                                                            Colors.transparent,
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  8),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  8),
                                                         ),
-                                                        child: ClipRRect(
-                                                          borderRadius:
-                                                              const BorderRadius
-                                                                  .only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    8),
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    8),
-                                                          ),
-                                                          child:
-                                                              CachedNetworkImage(
-                                                            fit: BoxFit.cover,
-                                                            imageUrl: url,
-                                                            placeholder:
-                                                                (context,
-                                                                        url) =>
-                                                                    Container(
-                                                              alignment:
-                                                                  Alignment
-                                                                      .center,
-                                                              width: 80,
+                                                      ),
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            const BorderRadius
+                                                                .only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  8),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  8),
+                                                        ),
+                                                        child:
+                                                            CachedNetworkImage(
+                                                          fit: BoxFit.cover,
+                                                          imageUrl: url,
+                                                          placeholder:
+                                                              (context, url) =>
+                                                                  Container(
+                                                            alignment: Alignment
+                                                                .center,
+                                                            width: 80,
+                                                            child: const Center(
                                                               child:
-                                                                  const Center(
-                                                                child:
-                                                                    CircularProgressIndicator(),
-                                                              ),
-                                                            ),
-                                                            errorWidget:
-                                                                (context, url,
-                                                                        error) =>
-                                                                    Image.asset(
-                                                              'assets/images/noproduct.jpg',
-                                                              fit: BoxFit.cover,
+                                                                  CircularProgressIndicator(),
                                                             ),
                                                           ),
-                                                        ),
-                                                      );
-                                                    } else if (snapshot
-                                                        .hasError) {
-                                                      return Container(
-                                                        height: 95,
-                                                        width: 80,
-                                                        decoration:
-                                                            const BoxDecoration(
-                                                          color: Colors
-                                                              .transparent,
-                                                          borderRadius:
-                                                              BorderRadius.only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    8),
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    8),
-                                                          ),
-                                                        ),
-                                                        child: ClipRRect(
-                                                          borderRadius:
-                                                              const BorderRadius
-                                                                      .only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          8),
-                                                                  bottomLeft: Radius
-                                                                      .circular(
-                                                                          8)),
-                                                          child: Image.asset(
+                                                          errorWidget: (context,
+                                                                  url, error) =>
+                                                              Image.asset(
                                                             'assets/images/noproduct.jpg',
                                                             fit: BoxFit.cover,
                                                           ),
                                                         ),
-                                                      );
-                                                    } else {
-                                                      return const SizedBox(
-                                                        width: 80,
-                                                        child: Center(
-                                                          child:
-                                                              CircularProgressIndicator(),
+                                                      ),
+                                                    );
+                                                  } else if (snapshot
+                                                      .hasError) {
+                                                    return Container(
+                                                      height: 95,
+                                                      width: 80,
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                        color:
+                                                            Colors.transparent,
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  8),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  8),
                                                         ),
-                                                      );
-                                                    }
-                                                  },
-                                                ),
-                                                Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Row(
+                                                      ),
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            const BorderRadius
+                                                                    .only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        8),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        8)),
+                                                        child: Image.asset(
+                                                          'assets/images/noproduct.jpg',
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  } else {
+                                                    return const SizedBox(
+                                                      width: 80,
+                                                      child: Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      ),
+                                                    );
+                                                  }
+                                                },
+                                              ),
+                                              Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Container(
+                                                        margin: const EdgeInsets
+                                                                .fromLTRB(
+                                                            10, 10, 0, 0),
+                                                        color:
+                                                            Colors.transparent,
+                                                        height: 50,
+                                                        width: 180,
+                                                        child: Text(
+                                                          '${product.name}',
+                                                          style:
+                                                              const TextStyle(
+                                                            letterSpacing: 0.4,
+                                                            fontSize: 10,
+                                                            fontFamily:
+                                                                'Poppins-regular',
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        margin: const EdgeInsets
+                                                                .fromLTRB(
+                                                            15, 0, 0, 0),
+                                                        height: 30,
+                                                        width: 30,
+                                                        child: Material(
+                                                          child: IconButton(
+                                                            onPressed: () {
+                                                              objectBox
+                                                                  .deleteShoppingCartProduct(
+                                                                      product
+                                                                          .id);
+                                                            },
+                                                            icon: Icon(
+                                                              Icons
+                                                                  .delete_outline_rounded,
+                                                              size: 20,
+                                                              color: myTheme
+                                                                  .colorScheme
+                                                                  .error,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SingleChildScrollView(
+                                                    scrollDirection:
+                                                        Axis.horizontal,
+                                                    child: Row(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
                                                               .spaceBetween,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
                                                       children: [
+                                                        Material(
+                                                          child: Container(
+                                                            alignment: Alignment
+                                                                .topLeft,
+                                                            height: 30,
+                                                            child: Row(
+                                                              children: [
+                                                                product.productQuantity! >
+                                                                        1
+                                                                    ? Container(
+                                                                        width:
+                                                                            30,
+                                                                        margin:
+                                                                            EdgeInsets.fromLTRB(
+                                                                          0,
+                                                                          0,
+                                                                          0,
+                                                                          0,
+                                                                        ),
+                                                                        // color: Colors
+                                                                        //     .red,
+                                                                        child:
+                                                                            IconButton(
+                                                                          iconSize:
+                                                                              15,
+                                                                          splashRadius:
+                                                                              15,
+                                                                          icon:
+                                                                              Icon(
+                                                                            Icons.remove,
+                                                                            color:
+                                                                                myTheme.colorScheme.onPrimaryContainer,
+                                                                          ),
+                                                                          onPressed:
+                                                                              () {
+                                                                            setState(() {
+                                                                              final List<ShoppingCartProduct> updatedList = [];
+                                                                              final updatedProduct = ShoppingCartProduct(
+                                                                                id: product.id,
+                                                                                productQuantity: product.productQuantity! - 1,
+                                                                                code: product.code.toString(),
+                                                                                productId: product.code.toString(),
+                                                                                listOfPricesId: product.listOfPricesId.toString(),
+                                                                                totalAmount: productPrice.toString(),
+                                                                                name: product.name,
+                                                                                unitPrice: productPrice.toString(),
+                                                                                availableStock: product.availableStock,
+                                                                                urlPicture: product.urlPicture,
+                                                                              );
+                                                                              updatedList.add(updatedProduct);
+                                                                              objectBox.insertManyShoppingCartProducts(updatedList);
+                                                                            });
+                                                                          },
+                                                                        ),
+                                                                      )
+                                                                    : Container(
+                                                                        margin:
+                                                                            EdgeInsets.fromLTRB(
+                                                                          0,
+                                                                          0,
+                                                                          0,
+                                                                          0,
+                                                                        ),
+                                                                        width:
+                                                                            30,
+                                                                        child: IconButton(
+                                                                            iconSize: 15,
+                                                                            splashRadius: 15,
+                                                                            icon: const Icon(
+                                                                              Icons.remove,
+                                                                              color: Colors.grey,
+                                                                            ),
+                                                                            onPressed: () {
+                                                                              return;
+                                                                            }),
+                                                                      ),
+                                                                Container(
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                  margin: const EdgeInsets
+                                                                      .fromLTRB(
+                                                                    0,
+                                                                    0,
+                                                                    0,
+                                                                    0,
+                                                                  ),
+                                                                  width: 30,
+                                                                  child: Text(
+                                                                    '${product.productQuantity}',
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      fontSize:
+                                                                          12,
+                                                                      fontFamily:
+                                                                          'Poppins-regular',
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                product.productQuantity! <
+                                                                        product
+                                                                            .availableStock!
+                                                                    ? Container(
+                                                                        margin:
+                                                                            EdgeInsets.fromLTRB(
+                                                                          0,
+                                                                          0,
+                                                                          0,
+                                                                          0,
+                                                                        ),
+                                                                        width:
+                                                                            30,
+                                                                        // color: Colors
+                                                                        //     .red,
+                                                                        child:
+                                                                            IconButton(
+                                                                          iconSize:
+                                                                              15,
+                                                                          splashRadius:
+                                                                              15,
+                                                                          icon:
+                                                                              Icon(
+                                                                            Icons.add,
+                                                                            color:
+                                                                                myTheme.colorScheme.primary,
+                                                                          ),
+                                                                          onPressed:
+                                                                              () {
+                                                                            setState(() {
+                                                                              final List<ShoppingCartProduct> updatedList = [];
+                                                                              final updatedProduct = ShoppingCartProduct(
+                                                                                id: product.id,
+                                                                                productQuantity: product.productQuantity! + 1,
+                                                                                code: product.code.toString(),
+                                                                                productId: product.code.toString(),
+                                                                                listOfPricesId: product.listOfPricesId.toString(),
+                                                                                totalAmount: productPrice.toString(),
+                                                                                name: product.name,
+                                                                                unitPrice: productPrice.toString(),
+                                                                                availableStock: product.availableStock,
+                                                                                urlPicture: product.urlPicture,
+                                                                              );
+                                                                              updatedList.add(updatedProduct);
+                                                                              objectBox.insertManyShoppingCartProducts(updatedList);
+                                                                            });
+                                                                          },
+                                                                        ),
+                                                                      )
+                                                                    : Container(
+                                                                        margin:
+                                                                            EdgeInsets.fromLTRB(
+                                                                          0,
+                                                                          0,
+                                                                          0,
+                                                                          0,
+                                                                        ),
+                                                                        width:
+                                                                            30,
+                                                                        child:
+                                                                            IconButton(
+                                                                          iconSize:
+                                                                              15,
+                                                                          splashRadius:
+                                                                              15,
+                                                                          icon:
+                                                                              const Icon(
+                                                                            Icons.add,
+                                                                            color:
+                                                                                Colors.grey,
+                                                                          ),
+                                                                          onPressed:
+                                                                              () {
+                                                                            return;
+                                                                          },
+                                                                        ),
+                                                                      ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
                                                         Container(
                                                           margin:
                                                               const EdgeInsets
                                                                       .fromLTRB(
-                                                                  10, 10, 0, 0),
-                                                          color: Colors
-                                                              .transparent,
-                                                          height: 50,
-                                                          width: 180,
+                                                                  0, 0, 0, 0),
                                                           child: Text(
-                                                            '${product.name}',
+                                                            'U/P:$coinSymbol $productPriceConvertedFormatted',
                                                             style:
                                                                 const TextStyle(
                                                               letterSpacing:
@@ -515,528 +736,289 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                           ),
                                                         ),
                                                         Container(
+                                                          width: 60,
+                                                          alignment: Alignment
+                                                              .centerRight,
                                                           margin:
                                                               const EdgeInsets
                                                                       .fromLTRB(
-                                                                  15, 0, 0, 0),
-                                                          height: 30,
-                                                          width: 30,
-                                                          child: Material(
-                                                            child: IconButton(
-                                                              onPressed: () {
-                                                                objectBox
-                                                                    .deleteShoppingCartProduct(
-                                                                        product
-                                                                            .id);
-                                                              },
-                                                              icon: Icon(
-                                                                Icons
-                                                                    .delete_outline_rounded,
-                                                                size: 20,
-                                                                color: myTheme
-                                                                    .colorScheme
-                                                                    .error,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    SingleChildScrollView(
-                                                      scrollDirection:
-                                                          Axis.horizontal,
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          Material(
-                                                            child: Container(
-                                                              alignment:
-                                                                  Alignment
-                                                                      .topLeft,
-                                                              height: 30,
-                                                              child: Row(
-                                                                children: [
-                                                                  product.productQuantity! >
-                                                                          1
-                                                                      ? Container(
-                                                                          width:
-                                                                              30,
-                                                                          margin:
-                                                                              EdgeInsets.fromLTRB(
-                                                                            0,
-                                                                            0,
-                                                                            0,
-                                                                            0,
-                                                                          ),
-                                                                          // color: Colors
-                                                                          //     .red,
-                                                                          child:
-                                                                              IconButton(
-                                                                            iconSize:
-                                                                                15,
-                                                                            splashRadius:
-                                                                                15,
-                                                                            icon:
-                                                                                Icon(
-                                                                              Icons.remove,
-                                                                              color: myTheme.colorScheme.onPrimaryContainer,
-                                                                            ),
-                                                                            onPressed:
-                                                                                () {
-                                                                              setState(() {
-                                                                                final List<ShoppingCartProduct> updatedList = [];
-                                                                                final updatedProduct = ShoppingCartProduct(
-                                                                                  id: product.id,
-                                                                                  productQuantity: product.productQuantity! - 1,
-                                                                                  code: product.code.toString(),
-                                                                                  productId: product.code.toString(),
-                                                                                  listOfPricesId: product.listOfPricesId.toString(),
-                                                                                  totalAmount: productPrice.toString(),
-                                                                                  name: product.name,
-                                                                                  unitPrice: productPrice.toString(),
-                                                                                  availableStock: product.availableStock,
-                                                                                  urlPicture: product.urlPicture,
-                                                                                );
-                                                                                updatedList.add(updatedProduct);
-                                                                                objectBox.insertManyShoppingCartProducts(updatedList);
-                                                                              });
-                                                                            },
-                                                                          ),
-                                                                        )
-                                                                      : Container(
-                                                                          margin:
-                                                                              EdgeInsets.fromLTRB(
-                                                                            0,
-                                                                            0,
-                                                                            0,
-                                                                            0,
-                                                                          ),
-                                                                          width:
-                                                                              30,
-                                                                          child: IconButton(
-                                                                              iconSize: 15,
-                                                                              splashRadius: 15,
-                                                                              icon: const Icon(
-                                                                                Icons.remove,
-                                                                                color: Colors.grey,
-                                                                              ),
-                                                                              onPressed: () {
-                                                                                return;
-                                                                              }),
-                                                                        ),
-                                                                  Container(
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .center,
-                                                                    margin: const EdgeInsets
-                                                                        .fromLTRB(
-                                                                      0,
-                                                                      0,
-                                                                      0,
-                                                                      0,
-                                                                    ),
-                                                                    width: 30,
-                                                                    child: Text(
-                                                                      '${product.productQuantity}',
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        fontSize:
-                                                                            12,
-                                                                        fontFamily:
-                                                                            'Poppins-regular',
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  product.productQuantity! <
-                                                                          product
-                                                                              .availableStock!
-                                                                      ? Container(
-                                                                          margin:
-                                                                              EdgeInsets.fromLTRB(
-                                                                            0,
-                                                                            0,
-                                                                            0,
-                                                                            0,
-                                                                          ),
-                                                                          width:
-                                                                              30,
-                                                                          // color: Colors
-                                                                          //     .red,
-                                                                          child:
-                                                                              IconButton(
-                                                                            iconSize:
-                                                                                15,
-                                                                            splashRadius:
-                                                                                15,
-                                                                            icon:
-                                                                                Icon(
-                                                                              Icons.add,
-                                                                              color: myTheme.colorScheme.primary,
-                                                                            ),
-                                                                            onPressed:
-                                                                                () {
-                                                                              setState(() {
-                                                                                final List<ShoppingCartProduct> updatedList = [];
-                                                                                final updatedProduct = ShoppingCartProduct(
-                                                                                  id: product.id,
-                                                                                  productQuantity: product.productQuantity! + 1,
-                                                                                  code: product.code.toString(),
-                                                                                  productId: product.code.toString(),
-                                                                                  listOfPricesId: product.listOfPricesId.toString(),
-                                                                                  totalAmount: productPrice.toString(),
-                                                                                  name: product.name,
-                                                                                  unitPrice: productPrice.toString(),
-                                                                                  availableStock: product.availableStock,
-                                                                                  urlPicture: product.urlPicture,
-                                                                                );
-                                                                                updatedList.add(updatedProduct);
-                                                                                objectBox.insertManyShoppingCartProducts(updatedList);
-                                                                              });
-                                                                            },
-                                                                          ),
-                                                                        )
-                                                                      : Container(
-                                                                          margin:
-                                                                              EdgeInsets.fromLTRB(
-                                                                            0,
-                                                                            0,
-                                                                            0,
-                                                                            0,
-                                                                          ),
-                                                                          width:
-                                                                              30,
-                                                                          child:
-                                                                              IconButton(
-                                                                            iconSize:
-                                                                                15,
-                                                                            splashRadius:
-                                                                                15,
-                                                                            icon:
-                                                                                const Icon(
-                                                                              Icons.add,
-                                                                              color: Colors.grey,
-                                                                            ),
-                                                                            onPressed:
-                                                                                () {
-                                                                              return;
-                                                                            },
-                                                                          ),
-                                                                        ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Container(
-                                                            margin:
-                                                                const EdgeInsets
-                                                                        .fromLTRB(
-                                                                    0, 0, 0, 0),
-                                                            child: Text(
-                                                              'U/P:$coinSymbol $productPriceConvertedFormatted',
-                                                              style:
-                                                                  const TextStyle(
+                                                                  10, 0, 0, 0),
+                                                          child: Text(
+                                                            '$coinSymbol $productTotalByQuantityConvertedFormatted',
+                                                            textAlign:
+                                                                TextAlign.end,
+                                                            style: const TextStyle(
                                                                 letterSpacing:
                                                                     0.4,
                                                                 fontSize: 10,
                                                                 fontFamily:
                                                                     'Poppins-regular',
-                                                              ),
-                                                            ),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
                                                           ),
-                                                          Container(
-                                                            width: 60,
-                                                            alignment: Alignment
-                                                                .centerRight,
-                                                            margin:
-                                                                const EdgeInsets
-                                                                        .fromLTRB(
-                                                                    10,
-                                                                    0,
-                                                                    0,
-                                                                    0),
-                                                            child: Text(
-                                                              '$coinSymbol $productTotalByQuantityConvertedFormatted',
-                                                              textAlign:
-                                                                  TextAlign.end,
-                                                              style: const TextStyle(
-                                                                  letterSpacing:
-                                                                      0.4,
-                                                                  fontSize: 10,
-                                                                  fontFamily:
-                                                                      'Poppins-regular',
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
+                                                        ),
+                                                      ],
                                                     ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                              Container(
-                                alignment: Alignment.bottomCenter,
-                                width: MediaQuery.of(context).size.width,
-                                decoration: const BoxDecoration(),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    const SizedBox(height: 10),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(16),
-                                          ),
-                                          width: 160,
-                                          height: 56,
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(16),
-                                            child: ElevatedButton.icon(
-                                              style: ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStateProperty.all(
-                                                        myTheme.colorScheme
-                                                            .primary),
-                                                foregroundColor:
-                                                    MaterialStateProperty.all(
-                                                        Colors.white),
-                                                shape:
-                                                    MaterialStateProperty.all(
-                                                  RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            16),
                                                   ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                            Container(
+                              alignment: Alignment.bottomCenter,
+                              width: MediaQuery.of(context).size.width,
+                              decoration: const BoxDecoration(),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  const SizedBox(height: 10),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(16),
+                                        ),
+                                        width: 160,
+                                        height: 56,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(16),
+                                          child: ElevatedButton.icon(
+                                            style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      myTheme
+                                                          .colorScheme.primary),
+                                              foregroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.white),
+                                              shape: MaterialStateProperty.all(
+                                                RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(16),
                                                 ),
                                               ),
-                                              onPressed: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (BuildContext
-                                                              context) =>
-                                                          NewBardcodeScanner(
-                                                        clientPriceList:
-                                                            clientPriceList,
-                                                        products: products,
-                                                      ),
-                                                    ));
+                                            ),
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (BuildContext
+                                                            context) =>
+                                                        NewBardcodeScanner(
+                                                      clientPriceList:
+                                                          clientPriceList,
+                                                      products: products,
+                                                    ),
+                                                  ));
 
-                                                addProductFromBarcodeResult(
-                                                    scanResult.toString(),
-                                                    products);
-                                              },
-                                              label: Text(
-                                                'Escanear código',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontFamily: 'Poppins-medium',
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                              icon: const Icon(
-                                                MaterialCommunityIcons
-                                                    .barcode_scan,
+                                              addProductFromBarcodeResult(
+                                                  scanResult.toString(),
+                                                  products);
+                                            },
+                                            label: Text(
+                                              'Escanear código',
+                                              style: TextStyle(
                                                 color: Colors.white,
-                                                size: 20,
+                                                fontFamily: 'Poppins-medium',
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                            icon: const Icon(
+                                              MaterialCommunityIcons
+                                                  .barcode_scan,
+                                              color: Colors.white,
+                                              size: 20,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        width: 182,
+                                        height: 56,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(16),
+                                          child: ElevatedButton.icon(
+                                            onPressed: () {
+                                              final test = Provider.of<
+                                                      CounterLimitFirestore>(
+                                                  context,
+                                                  listen: false);
+                                              Navigator.popUntil(
+                                                context,
+                                                (route) => route.isFirst,
+                                              );
+                                              test.setNewScreen(0);
+                                            },
+                                            icon: const Icon(
+                                              MaterialCommunityIcons.tag_plus,
+                                              size: 17,
+                                            ),
+                                            label: Text(
+                                              AppLocalizations.of(context)!
+                                                  .addProducts,
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontFamily: 'Poppins-medium',
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                            style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                myTheme.colorScheme.primary,
                                               ),
                                             ),
                                           ),
                                         ),
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
+                                      ),
+                                    ],
+                                  ),
+                                  Container(
+                                    alignment: Alignment.bottomCenter,
+                                    margin: const EdgeInsets.fromLTRB(
+                                        16, 16, 16, 0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          // AppLocalizations.of(context)!
+                                          //     .orderSubTotal,
+                                          'Subtotal',
+                                          style: const TextStyle(
+                                            fontFamily: 'Poppins-regular',
+                                            fontSize: 14,
+                                            color: Color(0xff000C99),
                                           ),
-                                          width: 182,
-                                          height: 56,
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(16),
-                                            child: ElevatedButton.icon(
-                                              onPressed: () {
-                                                final test = Provider.of<
-                                                        CounterLimitFirestore>(
-                                                    context,
-                                                    listen: false);
-                                                Navigator.popUntil(
-                                                  context,
-                                                  (route) => route.isFirst,
-                                                );
-                                                test.setNewScreen(0);
-                                              },
-                                              icon: const Icon(
-                                                MaterialCommunityIcons.tag_plus,
-                                                size: 17,
-                                              ),
-                                              label: Text(
-                                                AppLocalizations.of(context)!
-                                                    .addProducts,
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontFamily: 'Poppins-medium',
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                              style: ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStateProperty.all(
-                                                  myTheme.colorScheme.primary,
-                                                ),
-                                              ),
-                                            ),
+                                        ),
+                                        Text(
+                                          '$coinSymbol $subTotalFormatted',
+                                          style: const TextStyle(
+                                            fontFamily: 'Poppins-regular',
+                                            fontSize: 14,
+                                            color: Color(0xff000C99),
                                           ),
                                         ),
                                       ],
                                     ),
-                                    Container(
-                                      alignment: Alignment.bottomCenter,
-                                      margin: const EdgeInsets.fromLTRB(
-                                          16, 16, 16, 0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            // AppLocalizations.of(context)!
-                                            //     .orderSubTotal,
-                                            'Subtotal',
-                                            style: const TextStyle(
-                                              fontFamily: 'Poppins-regular',
-                                              fontSize: 14,
-                                              color: Color(0xff000C99),
-                                            ),
-                                          ),
-                                          Text(
-                                            '$coinSymbol $subTotalFormatted',
-                                            style: const TextStyle(
-                                              fontFamily: 'Poppins-regular',
-                                              fontSize: 14,
-                                              color: Color(0xff000C99),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.fromLTRB(
+                                        10, 10, 10, 0),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16),
                                     ),
-                                    Container(
-                                      margin: const EdgeInsets.fromLTRB(
-                                          10, 10, 10, 0),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(16),
-                                      ),
-                                      width: MediaQuery.of(context).size.width,
-                                      height: 52,
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(16),
-                                        child: ElevatedButton(
-                                          onPressed: products.isEmpty
-                                              ? null
-                                              : () {
-                                                  userRole?.isRetail == false
-                                                      ? Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                CheckoutPage(
-                                                              client:
-                                                                  widget.client,
-                                                              cart: products,
-                                                              subTotal:
-                                                                  double.parse(
-                                                                subTotal
-                                                                    .toString(),
-                                                              ),
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 52,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(16),
+                                      child: ElevatedButton(
+                                        onPressed: products.isEmpty
+                                            ? null
+                                            : () {
+                                                userRole?.isRetail == false
+                                                    ? Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              CheckoutPage(
+                                                            client:
+                                                                widget.client,
+                                                            cart: products,
+                                                            subTotal:
+                                                                double.parse(
+                                                              subTotal
+                                                                  .toString(),
                                                             ),
                                                           ),
-                                                        )
-                                                      : Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                CheckoutRetailPage(
-                                                              client:
-                                                                  widget.client,
-                                                              cart: products,
-                                                              subTotal:
-                                                                  double.parse(
-                                                                subTotal
-                                                                    .toString(),
-                                                              ),
+                                                        ),
+                                                      )
+                                                    : Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              CheckoutRetailPage(
+                                                            client:
+                                                                widget.client,
+                                                            cart: products,
+                                                            subTotal:
+                                                                double.parse(
+                                                              subTotal
+                                                                  .toString(),
                                                             ),
                                                           ),
-                                                        );
-                                                },
-                                          style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty
-                                                    .resolveWith<Color>(
-                                              (Set<MaterialState> states) {
-                                                if (states.contains(
-                                                    MaterialState.pressed)) {
-                                                  return myTheme
-                                                      .colorScheme.primary
-                                                      .withOpacity(0.8);
-                                                } else if (states.contains(
-                                                    MaterialState.disabled)) {
-                                                  return Colors.grey.shade500;
-                                                } else {
-                                                  return myTheme
-                                                      .colorScheme.primary;
-                                                }
+                                                        ),
+                                                      );
                                               },
+                                        style: ButtonStyle(
+                                          backgroundColor: MaterialStateProperty
+                                              .resolveWith<Color>(
+                                            (Set<MaterialState> states) {
+                                              if (states.contains(
+                                                  MaterialState.pressed)) {
+                                                return myTheme
+                                                    .colorScheme.primary
+                                                    .withOpacity(0.8);
+                                              } else if (states.contains(
+                                                  MaterialState.disabled)) {
+                                                return Colors.grey.shade500;
+                                              } else {
+                                                return myTheme
+                                                    .colorScheme.primary;
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            SizedBox(),
+                                            Text(
+                                              'Continuar',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontFamily: 'Poppins-medium',
+                                                fontSize: 14,
+                                                color: products.isEmpty
+                                                    ? Colors.grey.shade700
+                                                    : Colors.white,
+                                              ),
                                             ),
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              SizedBox(),
-                                              Text(
-                                                'Continuar',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontFamily: 'Poppins-medium',
-                                                  fontSize: 14,
-                                                  color: products.isEmpty
-                                                      ? Colors.grey.shade700
-                                                      : Colors.white,
-                                                ),
+                                            Container(
+                                              margin: const EdgeInsets.fromLTRB(
+                                                  0, 0, 0, 2),
+                                              child: Icon(
+                                                SimpleLineIcons.arrow_right,
+                                                size: 14,
+                                                color: products.isEmpty
+                                                    ? Colors.grey.shade700
+                                                    : Colors.grey.shade300,
                                               ),
-                                              Container(
-                                                margin:
-                                                    const EdgeInsets.fromLTRB(
-                                                        0, 0, 0, 2),
-                                                child: Icon(
-                                                  SimpleLineIcons.arrow_right,
-                                                  size: 14,
-                                                  color: products.isEmpty
-                                                      ? Colors.grey.shade700
-                                                      : Colors.grey.shade300,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     );

@@ -55,12 +55,13 @@ class _ClientListState extends State<ClientList> {
       onTap: () {
         myfocus.unfocus();
       },
-      child: Expanded(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            color: myTheme.colorScheme.surface,
+            child: Row(
               children: [
                 Container(
                   margin: const EdgeInsets.fromLTRB(8, 16, 0, 0),
@@ -355,277 +356,273 @@ class _ClientListState extends State<ClientList> {
                       ),
               ],
             ),
-            filteredClients.isEmpty
-                ? Container(
-                    margin: const EdgeInsets.fromLTRB(0, 16, 0, 10),
-                    // color: Colors.grey,
-                    width: MediaQuery.of(context).size.width,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      controller: widget.controller,
-                      physics: const ScrollPhysics(),
-                      itemCount: widget.mutatedList!.length,
-                      itemBuilder: (BuildContext context, index) {
-                        final sortedClients = isDescending
-                            ? widget.mutatedList?.reversed.toList()
-                            : widget.mutatedList;
-                        final client = sortedClients?[index];
-                        final clientSpecialContributor =
-                            client?.specialContributor ?? 'NaN';
-                        final clientMasterDiscount =
-                            client?.masterDiscount ?? 'NaN';
-                        final clientFiscalAddress =
-                            client?.fiscalAdress ?? 'NaN';
-                        final clientEmail = client?.email ?? 'NaN';
-                        final clientPrices = client?.prices ?? 'NaN';
-                        final clientName = client?.name ?? 'NaN';
-                        final clientPhone1 = client?.phone1 ?? 'NaN';
-                        final clientPhone2 = client?.phone2 ?? 'NaN';
-                        final clientIdType =
-                            idTypeSummary[client?.idType] ?? 'NaN';
-                        final clientId = client?.id ?? 'NaN';
-                        final clientZone = zonesSummary[client?.zone] ?? 'NaN';
-                        final clientDocumentReferenceID =
-                            client?.clientDocumentId ?? 'NaN';
-                        final clientDispatchAddress =
-                            client?.dispatchAdress ?? 'NaN';
+          ),
+          // SizedBox(height: 10),
+          filteredClients.isEmpty
+              ? Container(
+                  margin: const EdgeInsets.fromLTRB(0, 16, 0, 10),
+                  // color: Colors.grey,
+                  // height: MediaQuery.of(context).size.height * 0.68,
 
-                        return Container(
-                          margin: const EdgeInsets.only(top: 10),
-                          width: MediaQuery.of(context).size.width,
-                          // decoration: BoxDecoration(
-                          //   color: Colors.white,
-                          //   borderRadius: BorderRadius.circular(16),
-                          // ),
-                          child: ListTile(
-                            tileColor: Colors.white,
-                            splashColor: myTheme.colorScheme.primary,
-                            shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(12)),
-                            ),
-                            onTap: () {
-                              // Redireccion a detalles de cliente
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ClientDetails(
-                                    specialContribuyer:
-                                        clientSpecialContributor,
-                                    masterDiscount: clientMasterDiscount,
-                                    fiscalAddress: clientFiscalAddress,
-                                    email: clientEmail,
-                                    listOfPrices: clientPrices,
-                                    name: clientName,
-                                    tlf1: clientPhone1,
-                                    tlf2: clientPhone2,
-                                    typeId: clientIdType,
-                                    nameId: clientId,
-                                    zone: clientZone,
-                                    clientDocumentReferenceID:
-                                        clientDocumentReferenceID,
-                                    dispatchAddress: clientDispatchAddress,
-                                  ),
-                                ),
-                              );
-                            },
-                            title: Container(
-                              margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                              width: 240,
-                              child: Text(
-                                clientName,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontFamily: 'Poppins-regular',
-                                  fontSize: 14,
-                                  wordSpacing: 0.5,
+                  width: MediaQuery.of(context).size.width,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    controller: widget.controller,
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: widget.mutatedList!.length,
+                    itemBuilder: (BuildContext context, index) {
+                      final sortedClients = isDescending
+                          ? widget.mutatedList?.reversed.toList()
+                          : widget.mutatedList;
+                      final client = sortedClients?[index];
+                      final clientSpecialContributor =
+                          client?.specialContributor ?? 'NaN';
+                      final clientMasterDiscount =
+                          client?.masterDiscount ?? 'NaN';
+                      final clientFiscalAddress = client?.fiscalAdress ?? 'NaN';
+                      final clientEmail = client?.email ?? 'NaN';
+                      final clientPrices = client?.prices ?? 'NaN';
+                      final clientName = client?.name ?? 'NaN';
+                      final clientPhone1 = client?.phone1 ?? 'NaN';
+                      final clientPhone2 = client?.phone2 ?? 'NaN';
+                      final clientIdType =
+                          idTypeSummary[client?.idType] ?? 'NaN';
+                      final clientId = client?.id ?? 'NaN';
+                      final clientZone = zonesSummary[client?.zone] ?? 'NaN';
+                      final clientDocumentReferenceID =
+                          client?.clientDocumentId ?? 'NaN';
+                      final clientDispatchAddress =
+                          client?.dispatchAdress ?? 'NaN';
+
+                      return Container(
+                        margin: const EdgeInsets.only(top: 10),
+                        width: MediaQuery.of(context).size.width,
+                        child: ListTile(
+                          tileColor: Colors.white,
+                          splashColor: myTheme.colorScheme.primary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(12)),
+                          ),
+                          onTap: () {
+                            // Redireccion a detalles de cliente
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ClientDetails(
+                                  specialContribuyer: clientSpecialContributor,
+                                  masterDiscount: clientMasterDiscount,
+                                  fiscalAddress: clientFiscalAddress,
+                                  email: clientEmail,
+                                  listOfPrices: clientPrices,
+                                  name: clientName,
+                                  tlf1: clientPhone1,
+                                  tlf2: clientPhone2,
+                                  typeId: clientIdType,
+                                  nameId: clientId,
+                                  zone: clientZone,
+                                  clientDocumentReferenceID:
+                                      clientDocumentReferenceID,
+                                  dispatchAddress: clientDispatchAddress,
                                 ),
                               ),
-                            ),
-                            subtitle: Column(
-                              children: [
-                                SizedBox(height: 10),
-                                Container(
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Container(
-                                        alignment: Alignment.bottomLeft,
-                                        width: 170,
-                                        child: Text(
-                                          clientFiscalAddress
-                                              .toString()
-                                              .toLowerCase(),
-                                          maxLines: 2,
-                                          textAlign: TextAlign.start,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                            fontFamily: 'Poppins-regular',
-                                            fontSize: 11,
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        alignment: Alignment.bottomRight,
-                                        width: 150,
-                                        child: Text(
-                                          clientPhone1,
-                                          maxLines: 2,
-                                          textAlign: TextAlign.end,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            fontFamily: 'Poppins-regular',
-                                            fontSize: 11,
-                                            color: Colors.purple.shade500,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  )
-                : Container(
-                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                    // color: Colors.grey,
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height * 0.68,
-                    child: ListView.builder(
-                      controller: widget.controller,
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: filteredClients.length,
-                      itemBuilder: (BuildContext context, index) {
-                        final sortedClients = isDescending
-                            ? filteredClients.reversed.toList()
-                            : filteredClients;
-                        final client = sortedClients[index];
-                        final clientSpecialContributor =
-                            client.specialContributor ?? 'NaN';
-                        final clientMasterDiscount =
-                            client.masterDiscount ?? 'NaN';
-                        final clientFiscalAddress =
-                            client.fiscalAdress ?? 'NaN';
-                        final clientEmail = client.email ?? 'NaN';
-                        final clientPrices = client.prices ?? 'NaN';
-                        final clientName = client.name ?? 'NaN';
-                        final clientPhone1 = client.phone1 ?? 'NaN';
-                        final clientPhone2 = client.phone2 ?? 'NaN';
-                        final clientIdType =
-                            idTypeSummary[client.idType] ?? 'NaN';
-                        final clientId = client.id ?? 'NaN';
-                        final clientZone = zonesSummary[client.zone] ?? 'NaN';
-                        final clientDocumentReferenceID =
-                            client.clientDocumentId ?? 'NaN';
-                        final clientDispatchAddress =
-                            client.dispatchAdress ?? 'NaN';
-
-                        return Container(
-                          margin: const EdgeInsets.only(top: 10.0),
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: ListTile(
-                            onTap: () {
-                              // Redireccion a detalles de cliente
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ClientDetails(
-                                    specialContribuyer:
-                                        clientSpecialContributor,
-                                    masterDiscount: clientMasterDiscount,
-                                    fiscalAddress: clientFiscalAddress,
-                                    email: clientEmail,
-                                    listOfPrices: clientPrices,
-                                    name: clientName,
-                                    tlf1: clientPhone1,
-                                    tlf2: clientPhone2,
-                                    typeId: clientIdType,
-                                    nameId: clientId,
-                                    zone: clientZone,
-                                    clientDocumentReferenceID:
-                                        clientDocumentReferenceID,
-                                    dispatchAddress: clientDispatchAddress,
-                                  ),
-                                ),
-                              );
-                            },
-                            title: Container(
-                              margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                              width: 240,
-                              child: Text(
-                                clientName,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontFamily: 'Poppins-regular',
-                                  fontSize: 14,
-                                  wordSpacing: 0.5,
-                                ),
+                            );
+                          },
+                          title: Container(
+                            margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                            width: 240,
+                            child: Text(
+                              clientName,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontFamily: 'Poppins-regular',
+                                fontSize: 14,
+                                wordSpacing: 0.5,
                               ),
                             ),
-                            subtitle: Column(
-                              children: [
-                                SizedBox(height: 10),
-                                Container(
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Container(
-                                        alignment: Alignment.bottomLeft,
-                                        width: 170,
-                                        child: Text(
-                                          clientFiscalAddress
-                                              .toString()
-                                              .toLowerCase(),
-                                          maxLines: 2,
-                                          textAlign: TextAlign.start,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                            fontFamily: 'Poppins-regular',
-                                            fontSize: 11,
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        alignment: Alignment.bottomRight,
-                                        width: 150,
-                                        child: Text(
-                                          clientPhone1,
-                                          maxLines: 2,
-                                          textAlign: TextAlign.end,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            fontFamily: 'Poppins-regular',
-                                            fontSize: 11,
-                                            color: Colors.purple.shade500,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                              ],
-                            ),
                           ),
-                        );
-                      },
-                    ),
+                          subtitle: Column(
+                            children: [
+                              SizedBox(height: 10),
+                              Container(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Container(
+                                      alignment: Alignment.bottomLeft,
+                                      width: 170,
+                                      child: Text(
+                                        clientFiscalAddress
+                                            .toString()
+                                            .toLowerCase(),
+                                        maxLines: 2,
+                                        textAlign: TextAlign.start,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          fontFamily: 'Poppins-regular',
+                                          fontSize: 11,
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      alignment: Alignment.bottomRight,
+                                      width: 150,
+                                      child: Text(
+                                        clientPhone1,
+                                        maxLines: 2,
+                                        textAlign: TextAlign.end,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins-regular',
+                                          fontSize: 11,
+                                          color: Colors.purple.shade500,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
                   ),
-          ],
-        ),
+                )
+              : Container(
+                  margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                  // color: Colors.grey,
+                  width: MediaQuery.of(context).size.width,
+                  // height: MediaQuery.of(context).size.height * 0.68,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    controller: widget.controller,
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: filteredClients.length,
+                    itemBuilder: (BuildContext context, index) {
+                      final sortedClients = isDescending
+                          ? filteredClients.reversed.toList()
+                          : filteredClients;
+                      final client = sortedClients[index];
+                      final clientSpecialContributor =
+                          client.specialContributor ?? 'NaN';
+                      final clientMasterDiscount =
+                          client.masterDiscount ?? 'NaN';
+                      final clientFiscalAddress = client.fiscalAdress ?? 'NaN';
+                      final clientEmail = client.email ?? 'NaN';
+                      final clientPrices = client.prices ?? 'NaN';
+                      final clientName = client.name ?? 'NaN';
+                      final clientPhone1 = client.phone1 ?? 'NaN';
+                      final clientPhone2 = client.phone2 ?? 'NaN';
+                      final clientIdType =
+                          idTypeSummary[client.idType] ?? 'NaN';
+                      final clientId = client.id ?? 'NaN';
+                      final clientZone = zonesSummary[client.zone] ?? 'NaN';
+                      final clientDocumentReferenceID =
+                          client.clientDocumentId ?? 'NaN';
+                      final clientDispatchAddress =
+                          client.dispatchAdress ?? 'NaN';
+
+                      return Container(
+                        margin: const EdgeInsets.only(top: 10.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: ListTile(
+                          onTap: () {
+                            // Redireccion a detalles de cliente
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ClientDetails(
+                                  specialContribuyer: clientSpecialContributor,
+                                  masterDiscount: clientMasterDiscount,
+                                  fiscalAddress: clientFiscalAddress,
+                                  email: clientEmail,
+                                  listOfPrices: clientPrices,
+                                  name: clientName,
+                                  tlf1: clientPhone1,
+                                  tlf2: clientPhone2,
+                                  typeId: clientIdType,
+                                  nameId: clientId,
+                                  zone: clientZone,
+                                  clientDocumentReferenceID:
+                                      clientDocumentReferenceID,
+                                  dispatchAddress: clientDispatchAddress,
+                                ),
+                              ),
+                            );
+                          },
+                          title: Container(
+                            margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                            width: 240,
+                            child: Text(
+                              clientName,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontFamily: 'Poppins-regular',
+                                fontSize: 14,
+                                wordSpacing: 0.5,
+                              ),
+                            ),
+                          ),
+                          subtitle: Column(
+                            children: [
+                              SizedBox(height: 10),
+                              Container(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Container(
+                                      alignment: Alignment.bottomLeft,
+                                      width: 170,
+                                      child: Text(
+                                        clientFiscalAddress
+                                            .toString()
+                                            .toLowerCase(),
+                                        maxLines: 2,
+                                        textAlign: TextAlign.start,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          fontFamily: 'Poppins-regular',
+                                          fontSize: 11,
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      alignment: Alignment.bottomRight,
+                                      width: 150,
+                                      child: Text(
+                                        clientPhone1,
+                                        maxLines: 2,
+                                        textAlign: TextAlign.end,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins-regular',
+                                          fontSize: 11,
+                                          color: Colors.purple.shade500,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+          SizedBox(height: 60),
+        ],
       ),
     );
   }

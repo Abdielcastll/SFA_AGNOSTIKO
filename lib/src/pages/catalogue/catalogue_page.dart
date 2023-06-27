@@ -1,8 +1,9 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
@@ -28,6 +29,7 @@ import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/promotions.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/loading/loading_widget.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/toast/toast.dart';
 
 class CataloguePage extends StatefulWidget {
   const CataloguePage({Key? key}) : super(key: key);
@@ -147,6 +149,15 @@ class CatalogueBody extends StatefulWidget {
 }
 
 class _CatalogueBodyState extends State<CatalogueBody> {
+  late FToast fToast;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   fToast = FToast();
+  //   fToast.init(context);
+  // }
+
   @override
   Widget build(BuildContext context) {
     final productsByDateProvider =
@@ -159,7 +170,21 @@ class _CatalogueBodyState extends State<CatalogueBody> {
         : SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Column(
-              children: const [
+              children: [
+                // ElevatedButton(
+                //   onPressed: () {
+                //     customToast(
+                //         fToast: fToast,
+                //         msg: 'Se ha ',
+                //         backgroundColor: Color(0xFF95E7B8),
+                //         icon: Icon(
+                //           Icons.check,
+                //           color: Color(0xFF10783C),
+                //         ),
+                //         textColor: Color(0xFF10783C));
+                //   },
+                //   child: Text('get data'),
+                // ),
                 PromotionsWidget(),
                 NewProductsWidget(),
                 ListOfProductsButton(),

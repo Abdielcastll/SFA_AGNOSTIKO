@@ -93,41 +93,41 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
   int? invoicesUpToPay = 0;
   int? payedUpInvoicesLength = 0;
 
-  getInvoices() async {
-    await FirebaseFirestore.instance
-        .collection('clientes')
-        .doc(widget.clientDocument.toString())
-        .collection('facturas')
-        .snapshots()
-        .forEach((snapshot) {
-      snapshot.docs.forEach((doc) {
-        if (doc.data().toString().contains("pagada") == true) {
-          if (doc.get("pagada") == true) {
-            payedUpInvoicesLength = payedUpInvoicesLength! + 1;
-          } else {
-            invoicesUpToPay = invoicesUpToPay! + 1;
-          }
-        }
-        invoicesPayedUp?.add(
-          doc.data().toString().contains("montoTotal")
-              ? doc.get("montoTotal")
-              : 0.0,
-        );
-        var data =
-            doc.data().toString().contains("pagos") ? doc.get("pagos") : null;
-        data.forEach((element) {
-          if (element["montoOriginal"] >= 0) {
-            invoicesAllPaymentAmounts?.add(element["montoOriginal"]);
-          }
-        });
-      });
-    });
-  }
+  // getInvoices() async {
+  //   await FirebaseFirestore.instance
+  //       .collection('clientes')
+  //       .doc(widget.clientDocument.toString())
+  //       .collection('facturas')
+  //       .snapshots()
+  //       .forEach((snapshot) {
+  //     snapshot.docs.forEach((doc) {
+  //       if (doc.data().toString().contains("pagada") == true) {
+  //         if (doc.get("pagada") == true) {
+  //           payedUpInvoicesLength = payedUpInvoicesLength! + 1;
+  //         } else {
+  //           invoicesUpToPay = invoicesUpToPay! + 1;
+  //         }
+  //       }
+  //       invoicesPayedUp?.add(
+  //         doc.data().toString().contains("montoTotal")
+  //             ? doc.get("montoTotal")
+  //             : 0.0,
+  //       );
+  //       var data =
+  //           doc.data().toString().contains("pagos") ? doc.get("pagos") : null;
+  //       data.forEach((element) {
+  //         if (element["montoOriginal"] >= 0) {
+  //           invoicesAllPaymentAmounts?.add(element["montoOriginal"]);
+  //         }
+  //       });
+  //     });
+  //   });
+  // }
 
   @override
   void initState() {
     super.initState();
-    getInvoices();
+    // getInvoices();
   }
 
   @override
@@ -142,42 +142,42 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
     final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 1;
     final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
 
-    var foldedTotalPayments = invoicesAllPaymentAmounts?.fold(
-      0,
-      (a, b) => double.parse(
-        (Decimal.parse(a.toString()) + Decimal.parse(b.toString())).toString(),
-      ),
-    );
-    var foldedAllInvoiceTotals = invoicesPayedUp?.fold(
-      0,
-      (a, b) => double.parse(
-        (Decimal.parse(a.toString()) + Decimal.parse(b.toString())).toString(),
-      ),
-    );
-    double balance = double.parse(
-        (Decimal.parse(foldedAllInvoiceTotals.toString()) -
-                Decimal.parse(foldedTotalPayments.toString()))
-            .toString());
-    print('foldedTotalAmount: $foldedTotalPayments');
-    print('foldedAcumulated: $foldedAllInvoiceTotals');
-    print('balance: $balance');
-    // print('foldedAcumulated');
-    // print(foldedAcumulated);
-    // print('foldedTotalAmount: $foldedTotalAmount');
+    // var foldedTotalPayments = invoicesAllPaymentAmounts?.fold(
+    //   0,
+    //   (a, b) => double.parse(
+    //     (Decimal.parse(a.toString()) + Decimal.parse(b.toString())).toString(),
+    //   ),
+    // );
+    // var foldedAllInvoiceTotals = invoicesPayedUp?.fold(
+    //   0,
+    //   (a, b) => double.parse(
+    //     (Decimal.parse(a.toString()) + Decimal.parse(b.toString())).toString(),
+    //   ),
+    // );
+    // double balance = double.parse(
+    //     (Decimal.parse(foldedAllInvoiceTotals.toString()) -
+    //             Decimal.parse(foldedTotalPayments.toString()))
+    //         .toString());
+    // print('foldedTotalAmount: $foldedTotalPayments');
+    // print('foldedAcumulated: $foldedAllInvoiceTotals');
     // print('balance: $balance');
-    // if (widget.isCheckedFactures == true && invoices.isNotEmpty) {
-    //   for (int i = 0; i < invoices.length; i++) {
-    //     totalAmount += (invoices[i].totalAmount).toDouble();
-    //   }
-    // } else if (widget.isCheckedFactures == false && creditNotes.isNotEmpty) {
-    //   for (int i = 0; i < creditNotes.length; i++) {
-    //     totalAmount +=
-    //         (creditNotes[i].paymentsData['montoOriginal']).toDouble() ?? 0;
-    //   }
-    // }
+    // // print('foldedAcumulated');
+    // // print(foldedAcumulated);
+    // // print('foldedTotalAmount: $foldedTotalAmount');
+    // // print('balance: $balance');
+    // // if (widget.isCheckedFactures == true && invoices.isNotEmpty) {
+    // //   for (int i = 0; i < invoices.length; i++) {
+    // //     totalAmount += (invoices[i].totalAmount).toDouble();
+    // //   }
+    // // } else if (widget.isCheckedFactures == false && creditNotes.isNotEmpty) {
+    // //   for (int i = 0; i < creditNotes.length; i++) {
+    // //     totalAmount +=
+    // //         (creditNotes[i].paymentsData['montoOriginal']).toDouble() ?? 0;
+    // //   }
+    // // }
 
     var totalAmountConverted = priceMultipliedByItsExchangeRatio2(
-      productPrice: foldedTotalPayments,
+      productPrice: 0,
       coinDecimals: coinDecimals,
       coinExchangeRatio: coinExchangeRatio,
     );
@@ -186,7 +186,7 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
         formatDecimalPriceByRegion(price: totalAmountConverted);
 
     var balanceConverted = priceMultipliedByItsExchangeRatio2(
-      productPrice: balance,
+      productPrice: 0,
       coinDecimals: coinDecimals,
       coinExchangeRatio: coinExchangeRatio,
     );

@@ -171,6 +171,9 @@ identifyPaymentMethodRetail({
   required Function updatePayed,
   required AddPaymentBodyAtt paymentBody,
   noRetail = false,
+  required List<String> itemsBank,
+  required List<String> itemsBankInter,
+  required List<String> banks,
 }) {
   print('amountToPay IDENTIFY $paidAmount');
   print('selectedCoin IDENTIFY $selectedCoin');

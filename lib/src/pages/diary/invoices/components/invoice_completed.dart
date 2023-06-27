@@ -43,10 +43,11 @@ class _InvoicesCompletedState extends State<InvoicesCompleted> {
         invoicesList.isNotEmpty
             ? SingleChildScrollView(
                 child: Container(
-                  height: MediaQuery.of(context).size.height * 0.52,
+                  // height: MediaQuery.of(context).size.height * 0.52,
                   child: Scrollbar(
                     child: ListView.builder(
-                      physics: ClampingScrollPhysics(),
+                      shrinkWrap: true,
+                      physics: const BouncingScrollPhysics(),
                       itemCount: invoicesList.length,
                       itemBuilder: (BuildContext context, int index) {
                         final sortedInvoices = isDescending

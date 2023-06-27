@@ -42,10 +42,12 @@ class _ClientsOrdersOnProcessState extends State<ClientsOrdersOnProcess> {
               ? SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   child: Container(
-                    height: MediaQuery.of(context).size.height * 0.61,
+                    // height: MediaQuery.of(context).size.height * 0.61,
                     margin: const EdgeInsets.fromLTRB(0, 0, 0, 5),
                     child: Scrollbar(
                       child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: const BouncingScrollPhysics(),
                         controller: widget.controller,
                         itemCount: ordersOnProcess.length,
                         itemBuilder: (BuildContext context, int index) {
