@@ -46,7 +46,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:873436355955:android:c7c36445706079beff7906",
         "android_client_info": {
-          "package_name": "com.example.sfa_agnostiko_flutter"
+          "package_name": "com.agnostiko.fied_sales"
         }
       },
       "oauth_client": [

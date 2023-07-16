@@ -1,4 +1,4 @@
-package com.example.sfa_agnostiko_flutter
+package com.agnostiko.fied_sales
 
 import io.flutter.embedding.android.FlutterActivity
 
