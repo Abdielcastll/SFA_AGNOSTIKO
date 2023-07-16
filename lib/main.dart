@@ -31,6 +31,7 @@ import 'package:pwa_sales2go_flutter/src/provider/locale_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/auth.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
+import 'package:pwa_sales2go_flutter/src/utils/multitenant-config.dart';
 import 'firebase_options.dart';
 import 'package:pwa_sales2go_flutter/src/pages/auth/login/login_page.dart';
 import 'package:flutter/material.dart';
@@ -51,8 +52,6 @@ Future<Position?> determinePosition() async {
   bool serviceEnabled;
 
   LocationPermission permission;
-
-  // Geolocator.openLocationSettings();
 
   serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
@@ -84,19 +83,6 @@ Future<Position?> determinePosition() async {
   await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
       forceAndroidLocationManager: true);
-
-  /* final pos = await Geolocator.getCurrentPosition(
-
-      desiredAccuracy: LocationAccuracy.high,
-
-      forceAndroidLocationManager: true,
-
-      timeLimit: const Duration(seconds: 60));
-
-  print(pos); */
-
-  // return await Geolocator.getLastKnownPosition(
-  //     forceAndroidLocationManager: true);
 }
 
 Future<void> main() async {
@@ -104,6 +90,8 @@ Future<void> main() async {
   objectBox = await ObjectBox.init();
 
   await dotenv.load();
+
+  await multitenantConfig.initialize();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
