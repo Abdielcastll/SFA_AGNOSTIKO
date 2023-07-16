@@ -93,8 +93,6 @@ Future<void> main() async {
 
   await multitenantConfig.initialize();
 
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
   sharedPreferences = await SharedPreferences.getInstance();
   determinePosition();
   runApp(const SfaAgnostiko());

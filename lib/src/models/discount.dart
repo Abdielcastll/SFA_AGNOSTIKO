@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 
 class Discount {
   late DiscountTypes _type;
@@ -113,8 +113,7 @@ List discountByBanks = [
 ];
 
 Future<List<Discount>> getDiscounts() async {
-  final discounts =
-      await FirebaseFirestore.instance.collection('descuentos').get();
+  final discounts = await descuentosRef.get();
 
   print("DESCUENTOS");
   List<Discount> res = [];

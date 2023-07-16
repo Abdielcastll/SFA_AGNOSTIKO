@@ -2,67 +2,76 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:decimal/decimal.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
-import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
-import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
-import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/models/transaction_args.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
+import 'package:pwa_sales2go_flutter/src/utils/multitenant-config.dart';
 
 import '../models/user_rol_model.dart';
 
 // Funciones de Visitas
+final firebase =
+    FirebaseFirestore.instanceFor(app: multitenantConfig.tenantApp!);
+
+final storage = FirebaseStorage.instanceFor(app: multitenantConfig.tenantApp!);
+
+final CollectionReference bancosRef = bancosRef;
+final CollectionReference catalogoProductosRef =
+    firebase.collection('catalogo_productos');
+final CollectionReference catalogosRef = firebase.collection('catalogos');
+final CollectionReference categoriasRef = firebase.collection('categorias');
+final CollectionReference clientesRef = firebase.collection('clientes');
+final CollectionReference configRef = firebase.collection('config');
+final CollectionReference descuentosRef = firebase.collection('descuentos');
+final CollectionReference disenosRef = firebase.collection('disenos');
+final CollectionReference dispositivosRef = firebase.collection('dispositivos');
+final CollectionReference equiposRef = firebase.collection('equipos');
+final CollectionReference lineasRef = firebase.collection('lineas');
+final CollectionReference listaDePreciosRef =
+    firebase.collection('lista_de_precios');
+final CollectionReference marcasRef = firebase.collection('marcas');
+final CollectionReference monedasRef = firebase.collection('monedas');
+final CollectionReference productosRef = firebase.collection('productos');
+final CollectionReference promocionesRef = firebase.collection('promociones');
+final CollectionReference rolesRef = firebase.collection('roles');
+final CollectionReference stockRef = firebase.collection('stock');
+final CollectionReference subcategoriasRef =
+    firebase.collection('subcategorias');
+final CollectionReference tamanosRef = firebase.collection('tamanos');
+final CollectionReference tiposIdRef = firebase.collection('tipos_id');
+final CollectionReference usuariosRef = firebase.collection('usuarios');
+final CollectionReference zonasRef = firebase.collection('zonas');
 
 Future createVisitData(
   String userUid,
   String clientDocumentId,
   DateTime date,
 ) async {
-  print('////// CREAR VISITA EN PROCESO /////');
   final lastModified = <String, dynamic>{
     'timestamp': Timestamp.now(),
-    'usuario': FirebaseFirestore.instance.collection('usuarios').doc(userUid)
+    'usuario': usuariosRef.doc(userUid)
   };
 
-  print(false);
-  print(FirebaseFirestore.instance.collection('cliente').doc(clientDocumentId));
-  print(false);
-  print(FirebaseFirestore.instance.collection('usuarios').doc(userUid));
-  print(Timestamp.fromDate(date));
-  print(false);
-  print(false);
-  print(false);
-  print(Timestamp.fromDate(DateTime.now()));
-  print(Map<String, dynamic>.from(lastModified));
-  print(FirebaseFirestore.instance.collection('usuarios').doc(userUid));
-
-  return await FirebaseFirestore.instance
-      .collection('usuarios')
-      .doc(userUid)
-      .collection('visitas')
-      .doc()
-      .set({
+  return await usuariosRef.doc(userUid).collection('visitas').doc().set({
     'cancelada': false,
-    'cliente':
-        FirebaseFirestore.instance.collection('cliente').doc(clientDocumentId),
+    'cliente': clientesRef.doc(clientDocumentId),
     'completada': false,
-    'creadoPor': FirebaseFirestore.instance.collection('usuarios').doc(userUid),
+    'creadoPor': usuariosRef.doc(userUid),
     'fecha': Timestamp.fromDate(date),
     'noCobranza': false,
     'noPedido': false,
     'noVisita': false,
     'timestrampRegistro': Timestamp.fromDate(DateTime.now()),
     'ultima modificacion': Map<String, dynamic>.from(lastModified),
-    'vendedor': FirebaseFirestore.instance.collection('usuarios').doc(userUid),
+    'vendedor': usuariosRef.doc(userUid),
   });
 }
 
@@ -87,12 +96,7 @@ Future updateVisitData(
     isCancelled = false;
   }
   commentary ??= 'No hay comentario';
-  return await FirebaseFirestore.instance
-      .collection('usuarios')
-      .doc(uid)
-      .collection('visitas')
-      .doc(docId)
-      .update({
+  return await usuariosRef.doc(uid).collection('visitas').doc(docId).update({
     'comentario': commentary,
     'cancelada': isCancelled,
     'completada': isCompleted,
@@ -104,12 +108,7 @@ Future deleteVisit(
   String uid,
 ) async {
   print('Borrar Visita');
-  return await FirebaseFirestore.instance
-      .collection('usuarios')
-      .doc(uid)
-      .collection('visitas')
-      .doc(docId)
-      .delete();
+  return await usuariosRef.doc(uid).collection('visitas').doc(docId).delete();
 }
 
 // Funciones de Pedidos
@@ -164,8 +163,7 @@ Future createOrder(
   // REDUCE STOCK ON DATABASE
 
   if (reduceStock == false) {
-    final DocumentReference stockPath =
-        FirebaseFirestore.instance.collection('stock').doc('productos');
+    final DocumentReference stockPath = stockRef.doc('productos');
 
     Map<String, dynamic> currentStock = {};
 
@@ -209,19 +207,14 @@ Future createOrder(
   final exchangeRates = getExchangesRatesTest(coins);
   print('exchangeRates: $exchangeRates');
 
-  DocumentReference<Map<String, dynamic>> path = FirebaseFirestore.instance
-      .collection('clientes')
-      .doc(client!.clientDocumentId)
-      .collection('pedidos')
-      .doc();
+  DocumentReference<Map<String, dynamic>> path =
+      clientesRef.doc(client!.clientDocumentId).collection('pedidos').doc();
   print('path de la factura: ${path.id}');
 
   return await path.set(
     {
       'cantidadesProductos': quantitiesList,
-      'cliente': FirebaseFirestore.instance
-          .collection('clientes')
-          .doc(client.clientDocumentId),
+      'cliente': clientesRef.doc(client.clientDocumentId),
       'comentario': commentary,
       'descuentoMaestro': masterDiscount,
       'tipoDeNegociacion': negotiation,
@@ -243,8 +236,7 @@ Future createOrder(
       'timestampRegistro': Timestamp.fromDate(DateTime.now()),
       'totalAPagar': totalOfTheOrder,
       'ultimaModificacion': Timestamp.fromDate(DateTime.now()),
-      'vendedor':
-          FirebaseFirestore.instance.collection('usuarios').doc(userUid),
+      'vendedor': usuariosRef.doc(userUid),
     },
   ).whenComplete(
     () => print('//////////////// PEDIDO CREADO ////////////////'),
@@ -256,8 +248,7 @@ Future deleteOrder(
   String clientId,
 ) async {
   print('Borrar pedido');
-  return await FirebaseFirestore.instance
-      .collection('clientes')
+  return await clientesRef
       .doc(clientId)
       .collection('pedidos')
       .doc(docId)
@@ -281,22 +272,16 @@ Future createInvoice(
 ) async {
   print('/// CREAR FACTURA ///');
 
-  final clientID = FirebaseFirestore.instance
-      .collection('clientes')
-      .doc(client.clientDocumentId);
+  final clientID = clientesRef.doc(client.clientDocumentId);
   final date = orderDate;
 
-  var correlativeNumber = await FirebaseFirestore.instance
-      .collection('config')
-      .doc('contador_pedidos')
-      .get()
-      .then((value) {
+  var correlativeNumber =
+      await configRef.doc('contador_pedidos').get().then((value) {
     return value['numero'];
   });
   const isPaid = false;
   final payments = [];
-  final order = FirebaseFirestore.instance
-      .collection('clientes')
+  final order = clientesRef
       .doc(client.clientDocumentId)
       .collection('pedidos')
       .doc(orderDocumentID);
@@ -306,9 +291,9 @@ Future createInvoice(
   final register = Timestamp.fromDate(DateTime.now());
   final lastModification = <String, dynamic>{
     'timestamp': register,
-    'usuario': FirebaseFirestore.instance.collection('usuarios').doc(userID),
+    'usuario': usuariosRef.doc(userID),
   };
-  final seller = FirebaseFirestore.instance.collection('usuarios').doc(userID);
+  final seller = usuariosRef.doc(userID);
 
   // GET EXCHANGE RATES
 
@@ -347,8 +332,7 @@ Future createInvoice(
   print(correlativeNumber);
   print(correlativeNumber + 1);
 
-  await FirebaseFirestore.instance
-      .collection('clientes')
+  await clientesRef
       .doc(client.clientDocumentId)
       .collection('pedidos')
       .doc(orderDocumentID)
@@ -356,8 +340,7 @@ Future createInvoice(
     'facturado': true,
     'nroCorrelativo': correlativeNumber + 1
   }).whenComplete(() async {
-    return await FirebaseFirestore.instance
-        .collection('clientes')
+    return await clientesRef
         .doc(client.clientDocumentId)
         .collection('facturas')
         .doc()
@@ -380,8 +363,7 @@ Future createInvoice(
       'vendedor': seller,
       'tasasDeCambio': exchangeRates,
     }).whenComplete(() async {
-      return await FirebaseFirestore.instance
-          .collection('config')
+      return await configRef
           .doc('contador_pedidos')
           .update({'numero': correlativeNumber + 1});
     }).whenComplete(() =>
@@ -434,8 +416,7 @@ Future registerDebitCreditCardPayment(
     newPay.addAll({'refund': true});
   }
   try {
-    return await FirebaseFirestore.instance
-        .collection('clientes')
+    return await clientesRef
         .doc(client.clientDocumentId)
         .collection('facturas')
         .doc(invoiceDocumentID)
@@ -468,14 +449,10 @@ Future registerBankCheckPayment({
   double? remaining,
 }) async {
   String? banksDocumentsID;
-  await FirebaseFirestore.instance
-      .collection('bancos')
-      .where('nombre', isEqualTo: bank)
-      .get()
-      .then((document) {
-    document.docs.forEach((element) {
+  await bancosRef.where('nombre', isEqualTo: bank).get().then((document) {
+    for (var element in document.docs) {
       banksDocumentsID = element.reference.id;
-    });
+    }
   });
 
   const cancelled = false;
@@ -484,16 +461,14 @@ Future registerBankCheckPayment({
   final timestampDate = Timestamp.fromDate(date!);
   const method = 'Cheque';
   final paidAmount = amount;
-  final selectedBank =
-      FirebaseFirestore.instance.collection('bancos').doc(banksDocumentsID);
+  final selectedBank = bancosRef.doc(banksDocumentsID);
   final account = accountNumber;
   final holder = accountHolder;
   const nroCN = 0;
   final selectedExchangedRate = coinExchangeRatio;
 
   try {
-    return await FirebaseFirestore.instance
-        .collection('clientes')
+    return await clientesRef
         .doc(client!.clientDocumentId)
         .collection('facturas')
         .doc(invoiceDocumentID)
@@ -508,9 +483,7 @@ Future registerBankCheckPayment({
             'metodo': method,
             'monto': paidAmount,
             'montoOriginal': originalAmount,
-            'banco': FirebaseFirestore.instance
-                .collection('bancos')
-                .doc(banksDocumentsID),
+            'banco': bancosRef.doc(banksDocumentsID),
             'nroCuenta': int.parse(accountNumber!),
             'titular': accountHolder,
             // 'nroNotaCredito': 0,
@@ -539,17 +512,6 @@ Future registerCriptoPayment(
 ) async {
   print('/// Registrar pago en BTC en factura: $invoiceDocumentID ///');
 
-  print('Datos Recibidos: ////////////////');
-  print('client: $client');
-  print('invoiceDocumentID: $invoiceDocumentID');
-  print('currency: $currency');
-  print('amount: $amount');
-  print('totalOfTheOrder: $totalOfTheOrder');
-  print('transactionId: $transactionId');
-  print('imageFile: $imageFile');
-  print('date: $date');
-  print('remaining: $remaining');
-
   final Map<String, double> exchangeRate = {
     'BTC': 0.00011,
     'EUR': 0.89,
@@ -570,78 +532,6 @@ Future registerCriptoPayment(
   } else if (currency.toString().contains('MXN')) {
     selectedCoinExchangeRate = exchangeRate['MXN'];
   }
-
-  const nulled = false;
-  final codeCurrency = currency.toString();
-  const concillied = false;
-  final paymentDate = Timestamp.fromDate(date);
-  const method = 'Criptomoneda';
-  final paymentAmount = double.parse(amount);
-  final originalAmount = double.parse(amount);
-  final transactionID = transactionId;
-  final exancheRates = selectedCoinExchangeRate;
-
-  print('Datos a Registrar: ////////////////');
-
-  print('nulled: $nulled');
-  print('codeCurrency: $codeCurrency');
-  print('concillied: $concillied');
-  print('paymentDate: $paymentDate');
-  print('method: $method');
-  print('paymentAmount: $paymentAmount');
-  print('originalAmount: $originalAmount');
-  print('transactionID: $transactionID');
-  print('exancheRates: $exancheRates');
-
-  // try {
-  //   print('Pago registrado correctamente');
-  //   return await FirebaseFirestore.instance
-  //       .collection('clientes')
-  //       .doc(client.clientDocumentId)
-  //       .collection('facturas')
-  //       .doc(invoiceDocumentID)
-  //       .update({
-  //     'pagos': FieldValue.arrayUnion(
-  //       [
-  //         <String, dynamic>{
-  //           'anulado': nulled,
-  //           'codigoMoneda': codeCurrency,
-  //           'conciliado': concillied,
-  //           'fecha': paymentDate,
-  //           'metodo': method,
-  //           'monto': paymentAmount,
-  //           'montoOriginal': originalAmount,
-  //           'idTransaccion': transactionID,
-  //           'tasaDeCambio': selectedCoinExchangeRate,
-  //         },
-  //       ],
-  //     ),
-  //   }).whenComplete(() {
-  //     print(
-  //         'remaining de proceso: ${priceToCurrencySelected(remaining!, currency!)}');
-  //     print('Amount de proceso: ${priceToCurrencySelected(amount!, currency)}');
-  //     print(
-  //         'restante total: ${priceToCurrencySelected(remaining!, currency!) - priceToCurrencySelected(amount!, currency)}');
-  //     var total = priceToCurrencySelected(remaining!, currency!) -
-  //         priceToCurrencySelected(amount!, currency);
-  //     try {
-  //       if (total <= 0) {
-  //         FirebaseFirestore.instance
-  //             .collection('clientes')
-  //             .doc(client.clientDocumentId)
-  //             .collection('facturas')
-  //             .doc(invoiceDocumentID)
-  //             .update({
-  //           'pagada': true,
-  //         });
-  //       }
-  //     } catch (e) {
-  //       print(e);
-  //     }
-  //   });
-  // } catch (e) {
-  //   print(e);
-  // }
 }
 
 //Registro de deposito
@@ -678,11 +568,7 @@ Future registerDepositPayment({
   print('  remaining: $remaining');
 
   String? banksDocumentsID;
-  await FirebaseFirestore.instance
-      .collection('bancos')
-      .where('nombre', isEqualTo: bank)
-      .get()
-      .then((document) {
+  await bancosRef.where('nombre', isEqualTo: bank).get().then((document) {
     for (var element in document.docs) {
       banksDocumentsID = element.reference.id;
     }
@@ -699,16 +585,14 @@ Future registerDepositPayment({
   final timestampDate = Timestamp.fromDate(date!);
   const method = 'Deposito';
   final paidAmount = double.parse(amount.toString());
-  final selectedBank =
-      FirebaseFirestore.instance.collection('bancos').doc(banksDocumentsID);
+  final selectedBank = bancosRef.doc(banksDocumentsID);
   final account = int.parse(accountNumber!);
   final voucher = voucherNumber;
   final selectedExchangedRate = coinExchangeRatio;
 
   try {
     print('Pago registrado correctamente');
-    return await FirebaseFirestore.instance
-        .collection('clientes')
+    return await clientesRef
         .doc(client.clientDocumentId)
         .collection('facturas')
         .doc(invoiceDocumentID)
@@ -752,8 +636,7 @@ Future registerMoneyPayment({
 }) async {
   print('Registrando dinero');
   try {
-    return await FirebaseFirestore.instance
-        .collection('clientes')
+    return await clientesRef
         .doc(client!.clientDocumentId)
         .collection('facturas')
         .doc(invoiceDocumentID)
@@ -812,11 +695,7 @@ Future registerTransferPayment({
   print('  remaining: $remaining');
 
   String? banksDocumentsID;
-  await FirebaseFirestore.instance
-      .collection('bancos')
-      .where('nombre', isEqualTo: bank)
-      .get()
-      .then((document) {
+  await bancosRef.where('nombre', isEqualTo: bank).get().then((document) {
     document.docs.forEach((element) {
       banksDocumentsID = element.reference.id;
     });
@@ -829,8 +708,7 @@ Future registerTransferPayment({
   final timestampDate = Timestamp.fromDate(date!);
   const method = 'Transferencia';
   final paidAmount = double.parse(amount.toString());
-  final selectedBank =
-      FirebaseFirestore.instance.collection('bancos').doc(banksDocumentsID);
+  final selectedBank = bancosRef.doc(banksDocumentsID);
   final referenceID = int.parse(referenceId!);
   final selectedExchangedRate = coinExchangeRatio;
 
@@ -845,8 +723,7 @@ Future registerTransferPayment({
   print('selectedExchangedRate: $selectedExchangedRate');
 
   try {
-    return await FirebaseFirestore.instance
-        .collection('clientes')
+    return await clientesRef
         .doc(client!.clientDocumentId)
         .collection('facturas')
         .doc(invoiceDocumentID)
@@ -906,11 +783,7 @@ Future registerTransferInterPayment({
   print('  remaining: $remaining');
 
   String? banksDocumentsID;
-  await FirebaseFirestore.instance
-      .collection('bancos')
-      .where('nombre', isEqualTo: bank)
-      .get()
-      .then((document) {
+  await bancosRef.where('nombre', isEqualTo: bank).get().then((document) {
     document.docs.forEach((element) {
       banksDocumentsID = element.reference.id;
     });
@@ -923,8 +796,7 @@ Future registerTransferInterPayment({
   final timestampDate = Timestamp.fromDate(date!);
   const method = 'Transferencia Internacional';
   final paidAmount = double.parse(amount.toString());
-  final selectedBank =
-      FirebaseFirestore.instance.collection('bancos').doc(banksDocumentsID);
+  final selectedBank = bancosRef.doc(banksDocumentsID);
   final referenceID = int.parse(referenceId!);
   final selectedExchangedRate = coinExchangeRatio;
 
@@ -939,8 +811,7 @@ Future registerTransferInterPayment({
   print('selectedExchangedRate: $selectedExchangedRate');
 
   try {
-    return await FirebaseFirestore.instance
-        .collection('clientes')
+    return await clientesRef
         .doc(client!.clientDocumentId)
         .collection('facturas')
         .doc(invoiceDocumentID)
@@ -992,9 +863,6 @@ Future<int> completePaymentProcess(
   final List<Map<dynamic, dynamic>> products = [];
   final Map<String, dynamic> productsStock = {};
 
-  // print('Cantidad de producto: ${element.code}: ${element.productQuantity}');
-  // GET EXCHANGE RATES
-
   List<Coin> coins = [];
   await coinCollection.get().then((element) {
     return element.docs.forEach((doc) {
@@ -1028,58 +896,18 @@ Future<int> completePaymentProcess(
       'urlFoto': '',
     });
     final productQuantity = <String, dynamic>{
-      // '${element.code}':
-      //     (element.availableStock! - (element.productQuantity)!.toInt()),
       '${element.code}': element.productQuantity,
     };
     productsStock.addEntries(productQuantity.entries);
-    // print('Cantidad de producto: ${element.code}: ${element.productQuantity}');
   });
   print('Cantidades: $quantitiesList');
-  print(
-      'Cliente: ${FirebaseFirestore.instance.collection('clientes').doc(client!.clientDocumentId)}');
+  print('Cliente: ${clientesRef.doc(client!.clientDocumentId)}');
   print('IDs: $productsIds');
   print('Productos: $products');
 
   // REDUCE STOCK ON DATABASE
 
-  final DocumentReference stockPath =
-      FirebaseFirestore.instance.collection('stock').doc('productos');
-  // final Map<String, dynamic> originalStock = {
-  //   '026229570704': 398,
-  //   '1AC1K0003': 100,
-  //   '1AC1K003': 100,
-  //   'P1S0001': 46,
-  //   'P1S0002': 65,
-  //   'P1S0003': 102,
-  //   'P1S0004': 48,
-  //   'P1S0005': 51,
-  //   'P1S0006': 23,
-  //   'P1S0007': 12,
-  //   'P1S0008': 41,
-  //   'P1S0009': 20,
-  //   'P1S0010': 12,
-  //   'P1S9911': 154,
-  //   'P1S0012': 37,
-  //   'P1S0013': 321,
-  //   'P1S0014': 560,
-  //   'P1S0015': 500,
-  //   'P1S0016': 480,
-  //   'P1S0017': 410,
-  //   'P1S0018': 359,
-  //   'P1S0019': 387,
-  //   'P1S0020': 326,
-  //   'P1S0021': 403,
-  //   'P1S0022': 369,
-  //   'P1S0023': 247,
-  //   'P1S0024': 501,
-  //   'P1S0025': 58,
-  //   'P1S0026': 26,
-  //   'P1S0027': 87,
-  //   'P1S0028': 49,
-  //   'P1S0029': 5,
-  //   'P1S0030': 3,
-  // };
+  final DocumentReference stockPath = stockRef.doc('productos');
   Map<String, dynamic> currentStock = {};
 
   await stockPath.get().then(
@@ -1103,17 +931,14 @@ Future<int> completePaymentProcess(
     }
   });
 
-  await FirebaseFirestore.instance
-      .collection('clientes')
+  await clientesRef
       .doc(client.clientDocumentId)
       .collection('pedidos')
       .doc(randomID)
       .set(
     {
       'cantidadesProductos': quantitiesList,
-      'cliente': FirebaseFirestore.instance
-          .collection('clientes')
-          .doc(client.clientDocumentId),
+      'cliente': clientesRef.doc(client.clientDocumentId),
       'comentario': commentary,
       'descuentoMaestro': masterDiscount,
       'tipoDeNegociacion': negotiation,
@@ -1136,30 +961,23 @@ Future<int> completePaymentProcess(
       'timestampRegistro': Timestamp.fromDate(DateTime.now()),
       'totalAPagar': double.parse(totalAsString),
       'ultimaModificacion': Timestamp.fromDate(DateTime.now()),
-      'vendedor':
-          FirebaseFirestore.instance.collection('usuarios').doc(userUid),
+      'vendedor': usuariosRef.doc(userUid),
     },
   );
   print('/// CREAR FACTURA ///');
 
-  final clientID = FirebaseFirestore.instance
-      .collection('clientes')
-      .doc(client.clientDocumentId);
+  final clientID = clientesRef.doc(client.clientDocumentId);
   final discount = masterDiscount;
   final date = Timestamp.fromDate(DateTime.now());
   final tax = taxTotal;
 
-  var correlativeNumber = await FirebaseFirestore.instance
-      .collection('config')
-      .doc('contador_pedidos')
-      .get()
-      .then((value) {
+  var correlativeNumber =
+      await configRef.doc('contador_pedidos').get().then((value) {
     return value['numero'];
   });
   const isPaid = false;
   final payments = [];
-  final order = FirebaseFirestore.instance
-      .collection('clientes')
+  final order = clientesRef
       .doc(client.clientDocumentId)
       .collection('pedidos')
       .doc(randomID);
@@ -1169,9 +987,9 @@ Future<int> completePaymentProcess(
   final register = Timestamp.fromDate(DateTime.now());
   final lastModification = <String, dynamic>{
     'timestamp': register,
-    'usuario': FirebaseFirestore.instance.collection('usuarios').doc(userUid),
+    'usuario': usuariosRef.doc(userUid),
   };
-  final seller = FirebaseFirestore.instance.collection('usuarios').doc(userUid);
+  final seller = usuariosRef.doc(userUid);
 
   print(clientID);
   print(discount);
@@ -1190,14 +1008,12 @@ Future<int> completePaymentProcess(
   print(correlativeNumber);
   print(correlativeNumber + 1);
 
-  await FirebaseFirestore.instance
-      .collection('clientes')
+  await clientesRef
       .doc(client.clientDocumentId)
       .collection('pedidos')
       .doc(randomID)
       .update({'facturado': true, 'nroCorrelativo': correlativeNumber + 1});
-  await FirebaseFirestore.instance
-      .collection('clientes')
+  await clientesRef
       .doc(client.clientDocumentId)
       .collection('facturas')
       .doc(randomID)
@@ -1220,8 +1036,7 @@ Future<int> completePaymentProcess(
     'vendedor': seller,
     'tasasDeCambio': exchangeRates,
   }).whenComplete(() async {
-    return await FirebaseFirestore.instance
-        .collection('config')
+    return await configRef
         .doc('contador_pedidos')
         .update({'numero': correlativeNumber + 1});
   }).whenComplete(() =>
@@ -1235,8 +1050,7 @@ Future<int> completePaymentProcess(
 
 // Obtener Rol
 Future<UserRole?> getUserRol(String rolId) async {
-  final rol =
-      await FirebaseFirestore.instance.collection('roles').doc(rolId).get();
+  final rol = await rolesRef.doc(rolId).get();
 
   if (!rol.exists) return null;
 
@@ -1265,7 +1079,7 @@ Future registerClient({
 }) async {
   // CAMBIOS A LA DIRECCION EN LA DB
   final clientDocument = clientsCollection.doc();
-  final storagePath = FirebaseStorage.instance
+  final storagePath = storage
       .ref()
       .child('imagenes')
       .child('clientes')
@@ -1274,7 +1088,7 @@ Future registerClient({
   print(clientDocument);
   final lastModified = <String, dynamic>{
     'timestamp': Timestamp.now(),
-    'usuario': FirebaseFirestore.instance.collection('usuarios').doc(uid)
+    'usuario': usuariosRef.doc(uid)
   };
   checkLocalization(la, lo) {
     double? laDouble = double.tryParse(la);
@@ -1308,58 +1122,16 @@ Future registerClient({
   print(output.toString());
   print('TEST OUTPUT PHOS IN CLIENT CREATION');
 
-  // print('  isSpecialContributor: $isSpecialContributor');
-  // print(' newClientName:${newClientName.trim().toUpperCase()}');
-  // print('  newClientId: $newClientId');
-  // print('  newclientPhone: $newclientPhone');
-  // print('  newClientEmail: $newClientEmail');
-  // print('  newClientAddress1: $newClientAddress1');
-  // print('  newClientAddress2: $newClientAddress2');
-  // print('  newClientMasterDiscount: $newClientMasterDiscount');
-  // print('  selectedIdType: $selectedIdType');
-  // print('  newClientSalesZone: $newClientSalesZone');
-  // print('longitude: $latitude');
-  // print('latitude: $longitude');
-  // print('Document: $selectedIdType$newClientId');
-  // print('userZoneDocument: $userZoneDocument');
-  print('  activo: true,');
-  print(' contribuyenteEspecial: $isSpecialContributor,');
-  print(
-      ' creadoPor: ${FirebaseFirestore.instance.collection('usuarios').doc(uid)}');
-  print(' descuentoMaestro: $newClientMasterDiscount,');
-  print(' direccionDespacho: $newClientAddress2,');
-  print(' direccionFiscal: $newClientAddress1,');
-  print(' email:$newClientEmail,');
-  print(' fechaRegistro: ${Timestamp.now()},');
-  print(
-      ' listaDePrecios: ${FirebaseFirestore.instance.collection('listas_de_precios.doc(selectedPricesList')}');
-
-  print(' modificado: ${Timestamp.now()}');
-  print(' nombre: $newClientName,');
-  print(' nombreIndice: $output,');
-  print(' numeroId: $newClientId,');
-  //  print(' prospecto: $false,');
-  print(' telefono: $newclientPhone,');
-  print(' telefono2: $newclientPhone,');
-  print(
-      ' tipoId:${FirebaseFirestore.instance.collection('tipos_id').doc(selectedIdType)}');
-  //  print('    ');
-  print(' ultimaModificacion: ${Map<String, dynamic>.from(lastModified)},');
-  print(' zona: $userZoneDocument,');
-  print('localizacion: $localization,');
-
   await clientDocument.set({
     'activo': true,
     'contribuyenteEspecial': isSpecialContributor,
-    'creadoPor': FirebaseFirestore.instance.collection('usuarios').doc(uid),
+    'creadoPor': usuariosRef.doc(uid),
     'descuentoMaestro': newClientMasterDiscount,
     'direccionDespacho': newClientAddress2,
     'direccionFiscal': newClientAddress1,
     'email': newClientEmail,
     'fechaRegistro': Timestamp.now(),
-    'listaDePrecios': FirebaseFirestore.instance
-        .collection('listas_de_precios')
-        .doc(selectedPricesList),
+    'listaDePrecios': listaDePreciosRef.doc(selectedPricesList),
     'modificado': Timestamp.now(),
     'nombre': newClientName,
     'nombreIndice': output,
@@ -1367,8 +1139,7 @@ Future registerClient({
     'prospecto': false,
     'telefono': newclientPhone,
     'telefono2': newclientPhone,
-    'tipoId':
-        FirebaseFirestore.instance.collection('tipos_id').doc(selectedIdType),
+    'tipoId': tiposIdRef.doc(selectedIdType),
     'ultimaModificacion': Map<String, dynamic>.from(lastModified),
     'zona': userZoneDocument,
     if (localization != null) 'localizacion': localization,
@@ -1391,7 +1162,7 @@ Future registerClient({
 
 Future uploadReceiptImage(image, invoiceDocumentId, paymentIndex) async {
   try {
-    final storagePath = FirebaseStorage.instance
+    final storagePath = storage
         .ref()
         .child('imagenes')
         .child('facturas')
@@ -1415,8 +1186,7 @@ Future uploadReceiptImage(image, invoiceDocumentId, paymentIndex) async {
 
 Future<List> cancelPayment(
     Client client, String invoiceId, int paymentIndex) async {
-  final invoiceSnapshot = await FirebaseFirestore.instance
-      .collection('clientes')
+  final invoiceSnapshot = await clientesRef
       .doc(client.clientDocumentId)
       .collection('facturas')
       .doc(invoiceId)
@@ -1431,8 +1201,7 @@ Future<List> cancelPayment(
 
   payments[paymentIndex] = payment;
 
-  await FirebaseFirestore.instance
-      .collection('clientes')
+  await clientesRef
       .doc(client.clientDocumentId)
       .collection('facturas')
       .doc(invoiceId)
@@ -1458,8 +1227,7 @@ checkIfInvoiceIsCompleted(
         backgroundColor: myTheme.colorScheme.onPrimaryContainer,
         textColor: Colors.white,
       );
-      FirebaseFirestore.instance
-          .collection('clientes')
+      clientesRef
           .doc(client.clientDocumentId)
           .collection('facturas')
           .doc(invoiceDocumentID)

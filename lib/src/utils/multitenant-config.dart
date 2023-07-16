@@ -2,11 +2,15 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:agnostiko/agnostiko.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:tms_agent_communication/tms_agent_communication.dart';
 import 'package:collection/collection.dart';
 
 class _MultitenantConfig {
   Map<String, dynamic>? fieldSalesConfig;
+  FirebaseApp? baseApp;
+  FirebaseApp? tenantApp;
 
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
@@ -53,11 +57,53 @@ class _MultitenantConfig {
 
       print(fieldSalesConfig);
 
+      final tenantInfo = await getTenantFirebaseDatabase();
+
+      tenantApp =
+          await Firebase.initializeApp(name: 'tenant-app', options: tenantInfo);
+
       return true;
     } catch (e) {
       throw Exception(
           'No se pudo inicializar la configuracion Multitenant: $e');
     }
+  }
+
+  Future<FirebaseOptions> getTenantFirebaseDatabase() async {
+    baseApp = await Firebase.initializeApp(
+        name: 'base-app',
+        options: const FirebaseOptions(
+            apiKey: "AIzaSyCoOXpe8Y3eI7yo85ExuFKHJ9q8OvuDG_g",
+            authDomain: "multitenant-example-1.firebaseapp.com",
+            projectId: "multitenant-example-1",
+            storageBucket: "multitenant-example-1.appspot.com",
+            messagingSenderId: "473200255429",
+            appId: "1:473200255429:web:08f7d3d72d91394d68abac"));
+
+    final tenantDoc = fieldSalesConfig!['cliente_id'];
+
+    final tenantInfo = await FirebaseFirestore.instanceFor(app: baseApp!)
+        .collection('clientes')
+        .doc(tenantDoc)
+        .get();
+
+    print(tenantInfo.exists);
+
+    if (!tenantInfo.exists) {
+      throw Exception('Tenant no registrado en Firebase');
+    }
+
+    final mapAppConfig = tenantInfo.get('webAppConfig') as Map<String, dynamic>;
+
+    print(mapAppConfig);
+
+    return FirebaseOptions(
+        apiKey: mapAppConfig['apiKey']!,
+        authDomain: mapAppConfig['authDomain']!,
+        projectId: mapAppConfig['projectId']!,
+        storageBucket: mapAppConfig['storageBucket']!,
+        messagingSenderId: mapAppConfig['messagingSenderId']!,
+        appId: mapAppConfig['appId']!);
   }
 
   Future<Map<String, dynamic>> getAppConfig() async {

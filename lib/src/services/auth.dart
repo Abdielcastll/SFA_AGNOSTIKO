@@ -6,10 +6,13 @@ import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:pwa_sales2go_flutter/src/utils/multitenant-config.dart';
 
 class AuthService {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore firebaseInstance = FirebaseFirestore.instance;
+  final FirebaseAuth _auth =
+      FirebaseAuth.instanceFor(app: multitenantConfig.tenantApp!);
+  final FirebaseFirestore firebaseInstance =
+      FirebaseFirestore.instanceFor(app: multitenantConfig.tenantApp!);
 
   // Create object based on firebase user
 
