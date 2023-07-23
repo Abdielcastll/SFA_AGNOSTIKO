@@ -23,6 +23,7 @@ import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/checkout_retail_page.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/checkout_page.dart';
@@ -93,18 +94,13 @@ class _SelectedProductsState extends State<SelectedProducts> {
     print('ScanResult: $scanResult');
     List<ShoppingCartProduct> scannedProducts = [];
     try {
-      final stockProducts = await FirebaseFirestore.instance
-          .collection('stock')
-          .doc('productos')
-          .get()
-          .then(
+      final stockProducts = await stockRef.doc('productos').get().then(
         (value) {
           return value['valores'];
         },
       );
       // print(stockProducts);
-      final priceProducts = await FirebaseFirestore.instance
-          .collection('listas_de_precios')
+      final priceProducts = await listaDePreciosRef
           .doc(clientPriceList.toString())
           .get()
           .then((value) {
@@ -112,11 +108,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
       });
       print(priceProducts);
 
-      await FirebaseFirestore.instance
-          .collection('productos')
-          .doc(productScanResult)
-          .get()
-          .then((doc) {
+      await productosRef.doc(productScanResult).get().then((doc) {
         const stock = 999;
         const productQuantity = 1;
         final code = doc.data().toString().contains('codigo')
@@ -354,7 +346,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               FutureBuilder(
-                                                future: FirebaseStorage.instance
+                                                future: storage
                                                     .ref()
                                                     .child('imagenes')
                                                     .child('catalogos')

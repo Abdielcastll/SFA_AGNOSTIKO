@@ -17,6 +17,7 @@ import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/invoice
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/invoices_on_process.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -59,7 +60,7 @@ class _InvoicesPageState extends State<InvoicesPage> {
                     0,
                     0,
                   ))
-              ? FirebaseFirestore.instance
+              ? firebase
                   .collectionGroup('facturas')
                   .where('vendedor', isEqualTo: userDoc)
                   .where('fecha', isGreaterThanOrEqualTo: currentDay)
@@ -67,7 +68,7 @@ class _InvoicesPageState extends State<InvoicesPage> {
                   .orderBy('fecha', descending: true)
                   .snapshots()
                   .map(accountInvoicesFromSnapshot)
-              : FirebaseFirestore.instance
+              : firebase
                   .collectionGroup('facturas')
                   .where('vendedor', isEqualTo: userDoc)
                   .orderBy('fecha', descending: true)
@@ -92,18 +93,6 @@ class _InvoicesPageState extends State<InvoicesPage> {
               .snapshots()
               .map(coinFromSnapshot),
         ),
-
-        //     // : StreamProvider<List<CreditNotes>?>.value(
-        //     //     value: FirebaseFirestore.instance
-        //     //         .collectionGroup('notas_credito')
-        //     //         .orderBy('fecha', descending: true)
-        //     //         .snapshots()
-        //     //         .map(accountCreditNotesFromSnapshot),
-        //     //     initialData: const [],
-        //     //     catchError: (context, error) {
-        //     //       return;
-        //     //     },
-        //     //   )
       ],
       child: SafeArea(
         child: Scaffold(

@@ -17,6 +17,7 @@ import 'package:pwa_sales2go_flutter/src/pages/products/product_details/product_
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -2439,7 +2440,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                       MaterialPageRoute(
                                         builder: (BuildContext context) =>
                                             FutureBuilder(
-                                          future: FirebaseStorage.instance
+                                          future: storage
                                               .ref()
                                               .child('imagenes')
                                               .child('catalogos')
@@ -2883,7 +2884,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                       MaterialPageRoute(
                                         builder: (BuildContext context) =>
                                             FutureBuilder(
-                                          future: FirebaseStorage.instance
+                                          future: storage
                                               .ref()
                                               .child('imagenes')
                                               .child('catalogos')

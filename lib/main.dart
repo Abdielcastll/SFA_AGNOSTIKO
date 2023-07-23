@@ -22,7 +22,6 @@ import 'package:pwa_sales2go_flutter/src/pages/pan_input/pan_input.dart';
 import 'package:pwa_sales2go_flutter/src/pages/pin_input/pin_input.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/place_oder_page.dart';
-import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/profile/profile_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/splash_screen/splash_screen.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
@@ -31,67 +30,25 @@ import 'package:pwa_sales2go_flutter/src/provider/locale_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/auth.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
-import 'package:pwa_sales2go_flutter/src/utils/multitenant-config.dart';
-import 'firebase_options.dart';
+import 'package:pwa_sales2go_flutter/src/utils/determinePosition.dart';
 import 'package:pwa_sales2go_flutter/src/pages/auth/login/login_page.dart';
 import 'package:flutter/material.dart';
+import 'package:pwa_sales2go_flutter/src/utils/multitenant-config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:geolocator/geolocator.dart';
 
 // 1/17/23 BUGFIXES
 
 late ObjectBox objectBox;
-
-Future<Position?> determinePosition() async {
-  print('++++++++++++++++++++++++++++++');
-  print('LAUNCHING GEOLOCATOR');
-  bool serviceEnabled;
-
-  LocationPermission permission;
-
-  serviceEnabled = await Geolocator.isLocationServiceEnabled();
-
-  if (!serviceEnabled) {
-    return Future.error('Location services are disabled.');
-  }
-
-  permission = await Geolocator.checkPermission();
-
-  if (permission == LocationPermission.deniedForever) {
-    return Future.error(
-        'Location permissions are permanently denied, we cannot request permissions.');
-  }
-
-  if (permission == LocationPermission.denied) {
-    permission = await Geolocator.requestPermission();
-
-    if (permission != LocationPermission.whileInUse &&
-        permission != LocationPermission.always) {
-      return Future.error(
-          'Location permissions are denied (actual value: $permission).');
-    }
-  }
-
-  if (kDebugMode) {
-    print('Location permission: $permission');
-  }
-
-  await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-      forceAndroidLocationManager: true);
-}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   objectBox = await ObjectBox.init();
 
   await dotenv.load();
-
-  await multitenantConfig.initialize();
 
   sharedPreferences = await SharedPreferences.getInstance();
   determinePosition();
@@ -103,110 +60,133 @@ class SfaAgnostiko extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<UserModel?>.value(
-      value: AuthService().user,
-      initialData: null,
-      child: ChangeNotifierProvider(
-        create: (context) => LocaleProvider(),
-        builder: (context, child) {
-          final localeProvider = Provider.of<LocaleProvider>(context);
-          return ChangeNotifierProvider(
-            create: (context) => CurrencyProvider(),
+    return FutureBuilder<bool>(
+      future: multitenantConfig.initialize(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            supportedLocales: L10n.all,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            title: 'Field Sales',
+            theme: myTheme,
+            home: const SplashScreenView(redirect: false),
+          );
+        }
+
+        return StreamProvider<UserModel?>.value(
+          value: AuthService().user,
+          initialData: null,
+          child: ChangeNotifierProvider(
+            create: (context) => LocaleProvider(),
             builder: (context, child) {
+              final localeProvider = Provider.of<LocaleProvider>(context);
               return ChangeNotifierProvider(
-                create: (context) => OrderProvider(),
+                create: (context) => CurrencyProvider(),
                 builder: (context, child) {
                   return ChangeNotifierProvider(
-                    create: (context) => CounterLimitFirestore(),
+                    create: (context) => OrderProvider(),
                     builder: (context, child) {
-                      final productsLimit =
-                          Provider.of<CounterLimitFirestore>(context)
-                              .getProductsLimit;
-                      // final productsScrollLimit =
-                      //     Provider.of<CounterLimitFirestore>(context)
-                      //         .getScrollProductLimit;
-                      return StreamProvider<List<Products>?>.value(
-                        value: productsLimit == 0
-                            ? productsCollection
-                                // .where('marca', isEqualTo: aceites)
-                                .orderBy('codigo')
-                                .snapshots()
-                                .map(productsListFromSnapshot)
-                            : productsCollection
-                                // .where('marca', isEqualTo: aceites)
-                                .orderBy('codigo')
-                                .limit(productsLimit)
-                                .snapshots()
-                                .map(productsListFromSnapshot),
-                        initialData: const [],
-                        catchError: (context, error) {
-                          print(error);
-                          print('PROVIDER PRODUCT ERROR');
-                          return;
+                      return ChangeNotifierProvider(
+                        create: (context) => CounterLimitFirestore(),
+                        builder: (context, child) {
+                          final productsLimit =
+                              Provider.of<CounterLimitFirestore>(context)
+                                  .getProductsLimit;
+                          // final productsScrollLimit =
+                          //     Provider.of<CounterLimitFirestore>(context)
+                          //         .getScrollProductLimit;
+                          return StreamProvider<List<Products>?>.value(
+                            value: productsLimit == 0
+                                ? productsCollection
+                                    // .where('marca', isEqualTo: aceites)
+                                    .orderBy('codigo')
+                                    .snapshots()
+                                    .map(productsListFromSnapshot)
+                                : productsCollection
+                                    // .where('marca', isEqualTo: aceites)
+                                    .orderBy('codigo')
+                                    .limit(productsLimit)
+                                    .snapshots()
+                                    .map(productsListFromSnapshot),
+                            initialData: const [],
+                            catchError: (context, error) {
+                              print(error);
+                              print('PROVIDER PRODUCT ERROR');
+                              return;
+                            },
+                            child: MaterialApp(
+                              debugShowCheckedModeBanner: false,
+                              locale: localeProvider.locale,
+                              supportedLocales: L10n.all,
+                              localizationsDelegates: const [
+                                AppLocalizations.delegate,
+                                GlobalMaterialLocalizations.delegate,
+                                GlobalWidgetsLocalizations.delegate,
+                                GlobalCupertinoLocalizations.delegate,
+                              ],
+                              title: 'Field Sales',
+                              theme: myTheme,
+                              initialRoute:
+                                  //'wrapper' for mobile to avoid checking terminal
+                                  // token, SplashScreenView.route to activate
+                                  // in terminals
+                                  // 'wrapper',
+                                  SplashScreenView.route,
+                              routes: {
+                                SplashScreenView.route:
+                                    (BuildContext context) =>
+                                        const SplashScreenView(),
+                                PinInputView.route: (context) => PinInputView(),
+                                PanInputView.route: (context) => PanInputView(),
+                                ExpDateInputView.route: (context) =>
+                                    ExpDateInputView(),
+                                EmvTransactionInfoView.route: (context) =>
+                                    const EmvTransactionInfoView(),
+                                CvvInputView.route: (context) => CvvInputView(),
+                                CardInputView.route: (context) =>
+                                    CardInputView(),
+                                AmountInputView.route: (context) =>
+                                    AmountInputView(),
+                                'wrapper': (BuildContext context) => Wrapper(),
+                                'login': (BuildContext context) =>
+                                    const LoginPage(),
+                                'navigation': (BuildContext context) =>
+                                    const NavigationPages(),
+                                'notifications': (BuildContext context) =>
+                                    const NotificationsPage(),
+                                'place_order': (BuildContext context) =>
+                                    const PlaceOrderPage(),
+                                'catalogue': (BuildContext context) =>
+                                    const CataloguePage(),
+                                // 'products': (BuildContext context) =>
+                                //     const ProductsPage(pricesName: 'GENER-03'),
+                                'clients': (BuildContext context) =>
+                                    const ClientsPage(),
+                                'profile': (BuildContext context) =>
+                                    const ProfilePage(),
+                                DiaryTabs.route: (BuildContext context) =>
+                                    const DiaryTabs(),
+                                'order': (BuildContext context) =>
+                                    const OrderPage(),
+                              },
+                            ),
+                          );
                         },
-                        child: MaterialApp(
-                          debugShowCheckedModeBanner: false,
-                          locale: localeProvider.locale,
-                          supportedLocales: L10n.all,
-                          localizationsDelegates: const [
-                            AppLocalizations.delegate,
-                            GlobalMaterialLocalizations.delegate,
-                            GlobalWidgetsLocalizations.delegate,
-                            GlobalCupertinoLocalizations.delegate,
-                          ],
-                          title: 'Field Sales',
-                          theme: myTheme,
-                          initialRoute:
-                              //'wrapper' for mobile to avoid checking terminal
-                              // token, SplashScreenView.route to activate
-                              // in terminals
-                              // 'wrapper',
-                              SplashScreenView.route,
-                          routes: {
-                            SplashScreenView.route: (BuildContext context) =>
-                                SplashScreenView(),
-                            PinInputView.route: (context) => PinInputView(),
-                            PanInputView.route: (context) => PanInputView(),
-                            ExpDateInputView.route: (context) =>
-                                ExpDateInputView(),
-                            EmvTransactionInfoView.route: (context) =>
-                                EmvTransactionInfoView(),
-                            CvvInputView.route: (context) => CvvInputView(),
-                            CardInputView.route: (context) => CardInputView(),
-                            AmountInputView.route: (context) =>
-                                AmountInputView(),
-                            'wrapper': (BuildContext context) => Wrapper(),
-                            'login': (BuildContext context) =>
-                                const LoginPage(),
-                            'navigation': (BuildContext context) =>
-                                const NavigationPages(),
-                            'notifications': (BuildContext context) =>
-                                const NotificationsPage(),
-                            'place_order': (BuildContext context) =>
-                                const PlaceOrderPage(),
-                            'catalogue': (BuildContext context) =>
-                                const CataloguePage(),
-                            // 'products': (BuildContext context) =>
-                            //     const ProductsPage(pricesName: 'GENER-03'),
-                            'clients': (BuildContext context) =>
-                                const ClientsPage(),
-                            'profile': (BuildContext context) =>
-                                const ProfilePage(),
-                            DiaryTabs.route: (BuildContext context) =>
-                                const DiaryTabs(),
-                            'order': (BuildContext context) =>
-                                const OrderPage(),
-                          },
-                        ),
                       );
                     },
                   );
                 },
               );
             },
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

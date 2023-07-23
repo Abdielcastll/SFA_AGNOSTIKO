@@ -36,7 +36,7 @@ final CollectionReference dispositivosRef = firebase.collection('dispositivos');
 final CollectionReference equiposRef = firebase.collection('equipos');
 final CollectionReference lineasRef = firebase.collection('lineas');
 final CollectionReference listaDePreciosRef =
-    firebase.collection('lista_de_precios');
+    firebase.collection('listas_de_precios');
 final CollectionReference marcasRef = firebase.collection('marcas');
 final CollectionReference monedasRef = firebase.collection('monedas');
 final CollectionReference productosRef = firebase.collection('productos');

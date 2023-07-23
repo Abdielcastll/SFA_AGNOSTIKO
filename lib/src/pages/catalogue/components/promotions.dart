@@ -18,6 +18,7 @@ import 'package:pwa_sales2go_flutter/src/pages/products/product_details/product_
 import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -157,7 +158,7 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
                       final promotion = activePromotions[index];
 
                       return FutureBuilder<String?>(
-                        future: FirebaseStorage.instance
+                        future: storage
                             .ref()
                             .child('imagenes')
                             .child('promociones')

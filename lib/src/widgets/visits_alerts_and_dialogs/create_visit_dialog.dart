@@ -47,10 +47,7 @@ void showCreateClientDialog(context, uid) {
             },
           ),
           StreamProvider<List<ClientName>?>.value(
-            value: FirebaseFirestore.instance
-                .collection('clientes')
-                .snapshots()
-                .map(clientNameFromDocumentID),
+            value: clientesRef.snapshots().map(clientNameFromDocumentID),
             initialData: const [],
           ),
         ],

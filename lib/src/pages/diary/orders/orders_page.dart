@@ -18,6 +18,7 @@ import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/orders_co
 import 'package:pwa_sales2go_flutter/src/pages/diary/orders/components/orders_on_process.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -76,7 +77,7 @@ class _OrdersPageState extends State<OrdersPage> {
                       0,
                     ),
                   )
-              ? FirebaseFirestore.instance
+              ? firebase
                   .collectionGroup('pedidos')
                   .where('vendedor', isEqualTo: userDoc)
                   .where('fecha', isGreaterThanOrEqualTo: currentDay)
@@ -84,7 +85,7 @@ class _OrdersPageState extends State<OrdersPage> {
                   .orderBy('fecha')
                   .snapshots()
                   .map(ordersFromSnapshot)
-              : FirebaseFirestore.instance
+              : firebase
                   .collectionGroup('pedidos')
                   .where('vendedor', isEqualTo: userDoc)
                   .orderBy('fecha')

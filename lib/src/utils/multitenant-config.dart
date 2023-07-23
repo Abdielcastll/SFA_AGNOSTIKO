@@ -12,6 +12,28 @@ class _MultitenantConfig {
   FirebaseApp? baseApp;
   FirebaseApp? tenantApp;
 
+  final _tmsAgentCommunication =
+      TmsAgentCommunication(appId: 'com.agnostiko.field_sales');
+
+  _MultitenantConfig() {
+    _tmsAgentCommunication.streamConfigChanges.stream.listen((configs) async {
+      if (configs == null) {
+        return;
+      }
+
+      final fsConfig = configs.firstWhereOrNull(
+          (element) => element['templateName'] == 'Field Sales');
+
+      if (fsConfig == null) {
+        return;
+      }
+
+      await saveConfigFile(fsConfig);
+
+      fieldSalesConfig = await readLocalFile();
+    });
+  }
+
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
 
@@ -43,9 +65,6 @@ class _MultitenantConfig {
     }
   }
 
-  final _tmsAgentCommunication =
-      TmsAgentCommunication(appId: 'com.agnostiko.field_sales');
-
   Future<bool> initialize() async {
     try {
       if (!await validateLocalFile()) {
@@ -54,8 +73,6 @@ class _MultitenantConfig {
       }
 
       fieldSalesConfig = await readLocalFile();
-
-      print(fieldSalesConfig);
 
       final tenantInfo = await getTenantFirebaseDatabase();
 
@@ -110,7 +127,7 @@ class _MultitenantConfig {
     final configs = await _tmsAgentCommunication.getConfig;
 
     if (configs == null) {
-      throw Exception('Error al recivir la configuracion del dispositivo');
+      throw Exception('Error al recibir la configuracion del dispositivo');
     }
 
     final fsConfig = configs.firstWhereOrNull(

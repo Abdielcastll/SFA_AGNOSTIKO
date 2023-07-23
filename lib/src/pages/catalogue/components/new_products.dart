@@ -10,6 +10,7 @@ import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/product_details/product_details.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../models/prices_model.dart';
@@ -32,6 +33,8 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
     final pricesName = Provider.of<Prices?>(context)?.name ?? {};
     final products = Provider.of<List<Products>?>(context) ?? [];
     final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
+
+    print('pricesAAA ${prices}');
 
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 12.0, 0, 0),
@@ -76,7 +79,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                 final product = productsByDateList[index];
                 if ((stockValues[product.code] ?? 000) > 0) {
                   return FutureBuilder<String?>(
-                    future: FirebaseStorage.instance
+                    future: storage
                         .ref()
                         .child('imagenes')
                         .child('catalogos')

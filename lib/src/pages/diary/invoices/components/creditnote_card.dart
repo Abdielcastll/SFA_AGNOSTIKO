@@ -14,6 +14,7 @@ import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/invoices_alerts_and_dialogs/invoice_modalbottomsheet.dart';
@@ -52,8 +53,7 @@ class _CreditNoteCardState extends State<CreditNoteCard> {
     return MultiProvider(providers: [
       StreamProvider<Client?>.value(
         initialData: null,
-        value: FirebaseFirestore.instance
-            .collection('clientes')
+        value: clientesRef
             .doc(widget.creditNoteClient)
             .snapshots()
             .map(clientFromDocumentID),

@@ -13,6 +13,7 @@ import 'package:pwa_sales2go_flutter/src/models/visit_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/visits/components/visits_completed.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/visits/components/visits_on_process.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/visits_alerts_and_dialogs/create_visit_dialog.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -49,8 +50,7 @@ class _VisitsPageState extends State<VisitsPage> {
                 0,
                 0,
               ))
-          ? FirebaseFirestore.instance
-              .collection('usuarios')
+          ? usuariosRef
               .doc(user?.uid)
               .collection('visitas')
               .orderBy('fecha', descending: true)
@@ -59,8 +59,7 @@ class _VisitsPageState extends State<VisitsPage> {
               .where('fecha', isLessThan: tomorrow)
               .snapshots()
               .map(visitsFromSnasphot)
-          : FirebaseFirestore.instance
-              .collection('usuarios')
+          : usuariosRef
               .doc(user?.uid)
               .collection('visitas')
               .orderBy('fecha', descending: true)

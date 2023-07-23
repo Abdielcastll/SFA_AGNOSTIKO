@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 
 class NewBardcodeScanner extends StatefulWidget {
   const NewBardcodeScanner(
@@ -28,18 +29,13 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
     print('ScanResult: $scanResult');
     List<ShoppingCartProduct> scannedProducts = [];
     try {
-      final stockProducts = await FirebaseFirestore.instance
-          .collection('stock')
-          .doc('productos')
-          .get()
-          .then(
+      final stockProducts = await stockRef.doc('productos').get().then(
         (value) {
           return value['valores'];
         },
       );
       // print(stockProducts);
-      final priceProducts = await FirebaseFirestore.instance
-          .collection('listas_de_precios')
+      final priceProducts = await listaDePreciosRef
           .doc(widget.clientPriceList.toString())
           .get()
           .then((value) {
@@ -47,11 +43,7 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
       });
       print(priceProducts);
 
-      await FirebaseFirestore.instance
-          .collection('productos')
-          .doc(productScanResult)
-          .get()
-          .then((doc) {
+      await productosRef.doc(productScanResult).get().then((doc) {
         const stock = 999;
         const productQuantity = 1;
         final code = doc.data().toString().contains('codigo')

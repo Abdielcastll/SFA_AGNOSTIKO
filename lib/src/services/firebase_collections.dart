@@ -1,72 +1,68 @@
 // Colecciones de informacion dentro de la DB
 
 // Colecciones de productos
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 
-final productsCollection = FirebaseFirestore.instance.collection('productos');
+final productsCollection = firebase.collection('productos');
 
 // Coleccion de Zonas
-final zonesCollection = FirebaseFirestore.instance.collection('zonas');
+final zonesCollection = firebase.collection('zonas');
 
 // Coleccion de tamanos
-final sizesCollection = FirebaseFirestore.instance.collection('tamanos');
+final sizesCollection = firebase.collection('tamanos');
 
 // Coleccion de sub categorias
-final subCategoriesCollection =
-    FirebaseFirestore.instance.collection('subcategorias');
+final subCategoriesCollection = firebase.collection('subcategorias');
 
 // Coleccion de stock
-final stockCollection = FirebaseFirestore.instance.collection('stock');
+final stockCollection = firebase.collection('stock');
 
 // Collecion de roles
-final rolesCollection = FirebaseFirestore.instance.collection('roles');
+final rolesCollection = firebase.collection('roles');
 
 // Collecion de promociones
-final promotionsCollection =
-    FirebaseFirestore.instance.collection('promociones');
+final promotionsCollection = firebase.collection('promociones');
 
 // Collecion de monedas
-final coinCollection = FirebaseFirestore.instance.collection('monedas');
+final coinCollection = firebase.collection('monedas');
 
 // Collecion de precios
-final pricesCollection =
-    FirebaseFirestore.instance.collection('listas_de_precios');
+final pricesCollection = firebase.collection('listas_de_precios');
 
 // Collecion de lineas
-final linesCollection = FirebaseFirestore.instance.collection('lineas');
+final linesCollection = firebase.collection('lineas');
 
 // Collecion de equipos
-final teamsCollection = FirebaseFirestore.instance.collection('equipos');
+final teamsCollection = firebase.collection('equipos');
 
 // Collecion de dispositivos
-final devicesCollection = FirebaseFirestore.instance.collection('dispositivos');
+final devicesCollection = firebase.collection('dispositivos');
 
 // Collecion de disenos
-final designsCollection = FirebaseFirestore.instance.collection('disenos');
+final designsCollection = firebase.collection('disenos');
 
 // Collecion de config
-final configCollection = FirebaseFirestore.instance.collection('config');
+final configCollection = firebase.collection('config');
 
 // Collecion de clientes
-final clientsCollection = FirebaseFirestore.instance.collection('clientes');
+final clientsCollection = firebase.collection('clientes');
 
 // Collecion de categorias
-final categoriesCollection =
-    FirebaseFirestore.instance.collection('categorias');
+final categoriesCollection = firebase.collection('categorias');
 
 // Collecion de catalogo
-final catalogueCollection = FirebaseFirestore.instance.collection('catalogos');
+final catalogueCollection = firebase.collection('catalogos');
 
 // Collecion de catalogo_productos
-final brandsCollection = FirebaseFirestore.instance.collection('marcas');
+final brandsCollection = firebase.collection('marcas');
 
 //Coleccion de Calidades
-final qualityCollection = FirebaseFirestore.instance.collection('calidades');
+final qualityCollection = firebase.collection('calidades');
 
 //Coleccion de tipos de Id
-final idTypeCollection = FirebaseFirestore.instance.collection('tipos_id');
+final idTypeCollection = firebase.collection('tipos_id');
 
 //Coleccion del usuarios
-final usersCollection = FirebaseFirestore.instance.collection('usuarios');
+final usersCollection = firebase.collection('usuarios');
 
-final banksCollection = FirebaseFirestore.instance.collection('bancos');
+final banksCollection = firebase.collection('bancos');

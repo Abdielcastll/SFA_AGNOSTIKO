@@ -3,6 +3,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class ClientPicture extends StatelessWidget {
@@ -23,7 +24,7 @@ class ClientPicture extends StatelessWidget {
       alignment: AlignmentDirectional.bottomStart,
       children: [
         FutureBuilder<String>(
-          future: FirebaseStorage.instance
+          future: storage
               .ref()
               .child('imagenes')
               .child('clientes')

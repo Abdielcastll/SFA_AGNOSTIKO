@@ -5,15 +5,12 @@ import 'package:pwa_sales2go_flutter/src/models/promotions_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 
 class DatabaseServiceStreams {
-  var prissa = FirebaseFirestore.instance
-      .collection('marcas')
-      .doc('fekpFNxAR5U9PZko1XWq');
-  var aceites = FirebaseFirestore.instance
-      .collection('marcas')
-      .doc('bYsgyluivxaZQWLeMJqA');
+  var prissa = marcasRef.doc('fekpFNxAR5U9PZko1XWq');
+  var aceites = marcasRef.doc('bYsgyluivxaZQWLeMJqA');
   // Streams de productos
 
   // Stream de Productos completos

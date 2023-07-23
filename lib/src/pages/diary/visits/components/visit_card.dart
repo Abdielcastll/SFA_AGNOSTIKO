@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/visits_alerts_and_dialogs/completed_bottomsheet.dart';
@@ -42,8 +43,7 @@ class _VisitCardState extends State<VisitCard> {
       providers: [
         StreamProvider<Client?>.value(
           initialData: null,
-          value: FirebaseFirestore.instance
-              .collection('clientes')
+          value: clientesRef
               .doc(widget.clientReferenceId)
               .snapshots()
               .map(clientFromDocumentID),

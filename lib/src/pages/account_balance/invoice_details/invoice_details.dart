@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/account_balance_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/order_model.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
@@ -41,8 +42,7 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
   Widget build(BuildContext context) {
     return MultiProvider(providers: [
       StreamProvider<Client?>.value(
-        value: FirebaseFirestore.instance
-            .collection('clientes')
+        value: clientesRef
             .doc(widget.clientID.toString())
             .snapshots()
             .map(clientFromDocumentID),
@@ -54,8 +54,7 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
         },
       ),
       StreamProvider<ClientOrder?>.value(
-        value: FirebaseFirestore.instance
-            .collection('clientes')
+        value: clientesRef
             .doc(widget.clientID.toString())
             .collection('pedidos')
             .doc(widget.orderID)

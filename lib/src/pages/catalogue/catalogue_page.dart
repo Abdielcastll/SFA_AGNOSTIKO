@@ -22,6 +22,7 @@ import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/product_list
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/cloud_functions.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -49,6 +50,7 @@ class _CataloguePageState extends State<CataloguePage> {
     final userRole = Provider.of<CurrentUserInfo>(context).role;
 
     print('zoneDocument: $userZoneDocument');
+    print('currentClientForTheOrder: ${currentClientForTheOrder?.prices}');
     print('userRole: $userRole');
     getDiscounts();
     return MultiProvider(
@@ -116,13 +118,13 @@ class _CataloguePageState extends State<CataloguePage> {
           },
         ),
         StreamProvider<Prices?>.value(
-          value: FirebaseFirestore.instance
-              .collection('listas_de_precios')
+          value: listaDePreciosRef
               .doc(currentClientForTheOrder?.prices.toString())
               .snapshots()
               .map(pricesfromSnapshot),
           initialData: null,
           catchError: (context, error) {
+            print('StreamProvider<Prices?> $error');
             return;
           },
         ),

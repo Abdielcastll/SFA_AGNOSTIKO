@@ -51,17 +51,17 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     print(tag57?.toHexStr().split('d')[0]);
   }
 
-  showModalNoTicketPrinted() {
-    showConfirmDialog(context,
+  Future<bool> showModalNoTicketPrinted() async {
+    return await showConfirmDialog(context,
         title: '¿Estas seguro?',
         message:
             'No has imprimido el comprobante. ¿Seguro que deseas continuar?',
         textAccept: 'Si',
         textCancel: 'No', onAccept: () {
-      Navigator.pop(context);
+      Navigator.pop(context, true);
       onAccept();
     }, onCancel: () {
-      Navigator.pop(context);
+      Navigator.pop(context, false);
     });
   }
 
@@ -190,27 +190,17 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
           transactionInfo?.onlineRequested == true ? onlineStr : offlineStr;
     }
 
-    return Scaffold(
-      appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.emvTransactionInfo),
-          automaticallyImplyLeading: false),
-      body: ListView(
-        children: [
-          const Text(''),
-          Text(
-            "${AppLocalizations.of(context)!.transaction} $transactionResultStr - $transactionOnlineStr",
-            style: TextStyle(
-              color: this.transactionResult == EmvTransactionResult.Approved
-                  ? Colors.green
-                  : Colors.red,
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          if (errorResultStr != '')
+    return WillPopScope(
+      onWillPop: showModalNoTicketPrinted,
+      child: Scaffold(
+        appBar: AppBar(
+            title: Text(AppLocalizations.of(context)!.emvTransactionInfo),
+            automaticallyImplyLeading: false),
+        body: ListView(
+          children: [
+            const Text(''),
             Text(
-              errorResultStr,
+              "${AppLocalizations.of(context)!.transaction} $transactionResultStr - $transactionOnlineStr",
               style: TextStyle(
                 color: this.transactionResult == EmvTransactionResult.Approved
                     ? Colors.green
@@ -220,93 +210,120 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
               ),
               textAlign: TextAlign.center,
             ),
-          /* Text(
-                transactionArgs!.isFallback ? 'Error de Chip' : '',
+            if (errorResultStr != '')
+              Text(
+                errorResultStr,
                 style: TextStyle(
-                  color: Colors.red,
+                  color: this.transactionResult == EmvTransactionResult.Approved
+                      ? Colors.green
+                      : Colors.red,
                   fontWeight: FontWeight.bold,
-                  fontSize: 14,
+                  fontSize: 18,
                 ),
                 textAlign: TextAlign.center,
-              ), */
-          const Divider(),
-          if (!transactionArgs!.isFallback && infoTags?.cardNo != null)
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  height: 50,
-                  width: 120,
-                  child: SvgPicture.asset(
-                    infoTags?.cardNo?.toHexStr().substring(0, 1) == '5' ||
-                            transactionArgs?.transactionInfo?.kernelType ==
-                                ContactlessKernelType.PayPass
-                        ? 'assets/images/mastercard.svg'
-                        : 'assets/images/visa.svg',
-                    fit: BoxFit.contain,
+              ),
+            const Divider(),
+            if (!transactionArgs!.isFallback && infoTags?.cardNo != null)
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    height: 50,
+                    width: 120,
+                    child: SvgPicture.asset(
+                      infoTags?.cardNo?.toHexStr().substring(0, 1) == '5' ||
+                              transactionArgs?.transactionInfo?.kernelType ==
+                                  ContactlessKernelType.PayPass
+                          ? 'assets/images/mastercard.svg'
+                          : 'assets/images/visa.svg',
+                      fit: BoxFit.contain,
+                    ),
                   ),
-                ),
-                Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        if (transactionArgs?.transactionInfo?.isContactless ==
-                            true)
-                          Container(
-                            margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            height: 50,
-                            width: 120,
-                            child: Image.asset(
-                              'assets/images/contactless.jpeg',
-                              fit: BoxFit.contain,
+                  Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          if (transactionArgs?.transactionInfo?.isContactless ==
+                              true)
+                            Container(
+                              margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                              height: 50,
+                              width: 120,
+                              child: Image.asset(
+                                'assets/images/contactless.jpeg',
+                                fit: BoxFit.contain,
+                              ),
                             ),
+                          Text(
+                            '''**** ${(infoTags?.cardNo?.toHexStr() ?? transactionArgs?.pan)?.substring(12) ?? '-'}''',
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
-                        Text(
-                          '''**** ${(infoTags?.cardNo?.toHexStr() ?? transactionArgs?.pan)?.substring(12) ?? '-'}''',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
+                        ],
+                      )),
+                ],
+              ),
+            if (!transactionArgs!.isFallback) const Divider(),
+            ListTile(
+              enableFeedback: true,
+              title:
+                  Text('${AppLocalizations.of(context)!.transactionType} (9C)'),
+              subtitle: Text(
+                infoTags?.transactionType?.toHexStr().toUpperCase() ?? '-',
+              ),
+              onTap: () {},
+            ),
+            ListTile(
+              enableFeedback: true,
+              title: Text('${AppLocalizations.of(context)!.amount} (9F02)'),
+              subtitle: Text(_amountString),
+              onTap: () {},
+            ),
+            ListTile(
+              enableFeedback: true,
+              title: Text(
+                  '${AppLocalizations.of(context)!.cashbackAmount} (9F03)'),
+              subtitle: Text(_amountOtherString),
+              onTap: () {},
+            ),
+            if (!transactionArgs!.isFallback)
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+                child: OutlinedButton(
+                    onPressed: () async {
+                      await printTicket();
+                      ticketPrinted = true;
+                    },
+                    style: TextButton.styleFrom(
+                        foregroundColor: myTheme.colorScheme.primary,
+                        backgroundColor: Colors.blue.shade800),
+                    child: Text(
+                      'imprimir comprobante'.toUpperCase(),
+                      style: const TextStyle(
+                        fontFamily: 'Poppins-regular',
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
                     )),
-              ],
-            ),
-          if (!transactionArgs!.isFallback) const Divider(),
-          ListTile(
-            enableFeedback: true,
-            title:
-                Text('${AppLocalizations.of(context)!.transactionType} (9C)'),
-            subtitle: Text(
-              infoTags?.transactionType?.toHexStr().toUpperCase() ?? '-',
-            ),
-            onTap: () {},
-          ),
-          ListTile(
-            enableFeedback: true,
-            title: Text('${AppLocalizations.of(context)!.amount} (9F02)'),
-            subtitle: Text(_amountString),
-            onTap: () {},
-          ),
-          ListTile(
-            enableFeedback: true,
-            title:
-                Text('${AppLocalizations.of(context)!.cashbackAmount} (9F03)'),
-            subtitle: Text(_amountOtherString),
-            onTap: () {},
-          ),
-          if (!transactionArgs!.isFallback)
+              ),
             Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
               child: OutlinedButton(
-                  onPressed: () async {
-                    await printTicket();
-                    ticketPrinted = true;
+                  onPressed: () {
+                    if (!ticketPrinted && !transactionArgs!.isFallback) {
+                      showModalNoTicketPrinted();
+                      return;
+                    }
+                    onAccept();
                   },
                   style: TextButton.styleFrom(
                       foregroundColor: myTheme.colorScheme.primary,
                       backgroundColor: Colors.blue.shade800),
                   child: Text(
-                    'imprimir comprobante'.toUpperCase(),
+                    'aceptar'.toUpperCase(),
                     style: const TextStyle(
                       fontFamily: 'Poppins-regular',
                       color: Colors.white,
@@ -314,32 +331,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                       fontWeight: FontWeight.bold,
                     ),
                   )),
-            ),
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
-            child: OutlinedButton(
-                onPressed: () {
-                  if (!ticketPrinted && !transactionArgs!.isFallback) {
-                    showModalNoTicketPrinted();
-                    return;
-                  }
-                  onAccept();
-                },
-                style: TextButton.styleFrom(
-                    foregroundColor: myTheme.colorScheme.primary,
-                    backgroundColor: Colors.blue.shade800),
-                child: Text(
-                  'aceptar'.toUpperCase(),
-                  style: const TextStyle(
-                    fontFamily: 'Poppins-regular',
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                )),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -359,13 +353,6 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     }
     final paymentBody = (ModalRoute.of(context)?.settings.arguments! as List)[2]
         as AddPaymentBodyAtt;
-
-    // final payed = transactionResult == EmvTransactionResult.Approved
-    //     ? exchangeAmount(
-    //         coin: paymentBody.currency,
-    //         amount: _amountDouble,
-    //         exchange: transactionArgs!.invoice!.coinExchangeRatio)
-    //     : 0.0;
     final payed = transactionResult == EmvTransactionResult.Approved
         ? exchangeAmount(
             coin: paymentBody.currency,
@@ -582,20 +569,6 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
         format: TextFormat(fontSize: 16, fontFamily: regularFont)));
 
     final contactlessBool = transactionArgs?.transactionInfo?.isContactless;
-    /* switch (contactlessBool) {
-      case false:
-        listOfTextLine.add(
-          PrinterText("I@1".toUpperCase(),
-              format: TextFormat(fontSize: 16, fontFamily: regularFont)),
-        );
-        break;
-      case true:
-        listOfTextLine.add(
-          PrinterText("C@1".toUpperCase(),
-              format: TextFormat(fontSize: 16, fontFamily: regularFont)),
-        );
-        break;
-    } */
 
     listOfTextLine.add(PrinterText.emptyLine(16));
     listOfTextLine.add(PrinterText(
@@ -687,26 +660,6 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     listOfTextLine.add(PrinterText('powered by pharos payments'.toUpperCase(),
         format: TextFormat(fontSize: 14, fontFamily: regularFont),
         alignment: TextAlignment.Center));
-
-    /* listOfTextLine.add(PrinterText.emptyLine(24));
-
-    listOfTextLine.add(PrinterText(
-        "PAGADERE NEGOCIABLE UNICAMENTE CON INSTITUCIONES DE CRÉDITO",
-        format: TextFormat(fontSize: 12, fontFamily: regularFont),
-        alignment: TextAlignment.Center));
-
-    listOfTextLine.add(PrinterText.emptyLine(12));
-
-    listOfTextLine.add(PrinterText(
-        "POR ESTE PAGARE ME OBLIGO INCONDICIONALMENTE A PAGAR A LA ORDEN DE " +
-            "BANCO ACREDITANTE EL IMPORTE DE ESTE TÍTULO.",
-        format: TextFormat(fontSize: 12, fontFamily: regularFont),
-        alignment: TextAlignment.Center));
-    listOfTextLine.add(PrinterText(
-        "ESTE PAGARE PROCEDE DEL CONTRATO DE APERTURA DE CREDITO QUE EL BANCO" +
-            "ACREDITANTE Y EL TARJETAHABIENTE TIENEN CELEBRADO",
-        format: TextFormat(fontSize: 12, fontFamily: regularFont),
-        alignment: TextAlignment.Center)); */
 
     listOfTextLine.add(PrinterText.emptyLine(16));
 

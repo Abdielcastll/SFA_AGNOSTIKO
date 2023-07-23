@@ -18,6 +18,7 @@ import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:pwa_sales2go_flutter/src/utils/determinePosition.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/loading/loading_widget.dart';
 
 class AddClientPage extends StatefulWidget {
@@ -57,8 +58,7 @@ class _AddClientPageState extends State<AddClientPage> {
             print('ERROR ON STREAM PROVIDER OF PRICES IN ADD CLIENT');
             print(error);
           },
-          value: FirebaseFirestore.instance
-              .collection('listas_de_precios')
+          value: listaDePreciosRef
               .doc('resumen')
               .snapshots()
               .map(pricesSummaryFromSnapshot),
@@ -124,58 +124,6 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
   //     forceAndroidLocationManager: true,
   //   );
   // }
-
-  Future<Position?> determinePosition() async {
-    bool serviceEnabled;
-
-    LocationPermission permission;
-
-    // Geolocator.openLocationSettings();
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-
-      if (permission != LocationPermission.whileInUse &&
-          permission != LocationPermission.always) {
-        return Future.error(
-            'Location permissions are denied (actual value: $permission).');
-      }
-    }
-
-    if (kDebugMode) {
-      print('Location permission: $permission');
-    }
-
-    // await Geolocator.getCurrentPosition(
-    //     desiredAccuracy: LocationAccuracy.high,
-    //     forceAndroidLocationManager: true);
-
-    /* final pos = await Geolocator.getCurrentPosition(
-
-      desiredAccuracy: LocationAccuracy.high,
-
-      forceAndroidLocationManager: true,
-
-      timeLimit: const Duration(seconds: 60));
-
-  print(pos); */
-
-    return await Geolocator.getLastKnownPosition(
-        forceAndroidLocationManager: true);
-  }
 
   File? imageFile;
 

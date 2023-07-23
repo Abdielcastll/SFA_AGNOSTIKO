@@ -143,9 +143,6 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                           ),
                         ),
                       );
-                    // Navigator.of(context).pop();
-                    // Navigator.of(context).pop();
-                    // Navigator.of(context).pop();
                   },
                   child: Text("Si"),
                 ),
@@ -551,88 +548,6 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                     ),
                   ),
                 ),
-                // Container(
-                //   margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
-                //   child: DropdownButtonHideUnderline(
-                //     child: DropdownButton2(
-                //       isExpanded: true,
-                //       // ignore: prefer_const_literals_to_create_immutables
-                //       hint: Row(
-                //         children: [
-                //           Expanded(
-                //             child: Text(
-                //               selectedCoin ?? 'Seleccione moneda',
-                //               style: TextStyle(
-                //                 fontSize: 12,
-                //                 fontWeight: FontWeight.bold,
-                //                 color: myTheme.colorScheme.primary
-                //                     .withOpacity(0.3),
-                //               ),
-                //               overflow: TextOverflow.ellipsis,
-                //             ),
-                //           ),
-                //         ],
-                //       ),
-                //       items: itemsCoin
-                //           .map((item) => DropdownMenuItem<String>(
-                //                 value: item,
-                //                 child: Text(
-                //                   item,
-                //                   style: TextStyle(
-                //                     fontSize: 14,
-                //                     fontWeight: FontWeight.bold,
-                //                     color: myTheme.colorScheme.primary,
-                //                   ),
-                //                   overflow: TextOverflow.ellipsis,
-                //                 ),
-                //               ))
-                //           .toList(),
-                //       value: selectedCoin,
-                //       onChanged: (value) {
-                //         // Pendiente
-                //         // fieldText.clear();
-                //         setState(
-                //           () {
-                //             selectedCoin = value as String;
-                //           },
-                //         );
-                //       },
-                //       icon: const Icon(
-                //         Icons.arrow_forward_ios_outlined,
-                //       ),
-                //       iconSize: 11,
-                //       iconEnabledColor:
-                //           myTheme.colorScheme.primary.withOpacity(0.5),
-                //       iconDisabledColor: Colors.grey,
-                //       buttonHeight: 50,
-                //       // buttonWidth: 200,
-                //       buttonPadding:
-                //           const EdgeInsets.only(left: 14, right: 14),
-                //       buttonDecoration: BoxDecoration(
-                //         borderRadius: BorderRadius.circular(5),
-                //         border: Border.all(
-                //           color: myTheme.colorScheme.primary.withOpacity(0.3),
-                //         ),
-                //         color: Colors.white,
-                //       ),
-                //       buttonElevation: 0,
-                //       itemHeight: 40,
-                //       itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                //       dropdownMaxHeight: 200,
-                //       dropdownWidth: 200,
-                //       dropdownPadding: null,
-                //       dropdownDecoration: BoxDecoration(
-                //         borderRadius: BorderRadius.circular(10),
-                //         color: Colors.white,
-                //       ),
-                //       dropdownElevation: 8,
-                //       scrollbarRadius: const Radius.circular(10),
-                //       scrollbarThickness: 6,
-                //       scrollbarAlwaysShow: true,
-                //       offset: const Offset(60, 0),
-                //     ),
-                //   ),
-                // ),
                 Text(
                   AppLocalizations.of(context)!.date,
                   style: TextStyle(
@@ -880,60 +795,6 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                               });
                               print('paidAmount setstate: $paidAmount');
                             }
-
-                            // if (value.isEmpty) {
-                            //   // setState(() {
-                            //   //   amountToPay = 0;
-                            //   //   print(amountToPay);
-                            //   //   //CAMBIO
-                            //   //   if (selectedValueA == 'Efectivo') {
-                            //   //     change = moneyRecievedForRegisterMoney <
-                            //   //             (amountChanged
-                            //   //                 ? roundAmount(amountToPay)
-                            //   //                 : priceToCurrencySelected(
-                            //   //                     roundAmount(amountToPay),
-                            //   //                     selectedCoin!))
-                            //   //         ? 0
-                            //   //         : double.parse(
-                            //   //             (moneyRecievedForRegisterMoney -
-                            //   //                     (amountChanged
-                            //   //                         ? roundAmount(amountToPay)
-                            //   //                         : priceToCurrencySelected(
-                            //   //                             roundAmount(
-                            //   //                                 amountToPay),
-                            //   //                             selectedCoin!)))
-                            //   //                 .toStringAsFixed(2));
-                            //   //   }
-                            //   // });
-                            // } else {
-                            //   // setState(() {
-                            //   //   amountToPay = double.parse(value);
-                            //   //   print('amountToPay');
-                            //   //   print(amountToPay);
-                            //   //   // CAMBIO
-                            //   //   if (selectedValueA == 'Efectivo') {
-                            //   //     change = moneyRecievedForRegisterMoney <
-                            //   //             (amountChanged
-                            //   //                 ? roundAmount(amountToPay)
-                            //   //                 : priceToCurrencySelected(
-                            //   //                     roundAmount(amountToPay),
-                            //   //                     selectedCoin!))
-                            //   //         ? 0
-                            //   //         : double.parse(
-                            //   //             (moneyRecievedForRegisterMoney -
-                            //   //                     (amountChanged
-                            //   //                         ? roundAmount(amountToPay)
-                            //   //                         : priceToCurrencySelected(
-                            //   //                             roundAmount(
-                            //   //                                 amountToPay),
-                            //   //                             selectedCoin!)))
-                            //   //                 .toStringAsFixed(2));
-                            //   //   }
-                            //   // });
-                            // }
-                            // // setState(() {
-                            // //   amountChanged = true;
-                            // // });
                           },
                           readOnly: selectedValueA == 'Efectivo' ? true : false,
                           controller: fieldTextAmountToPay,
@@ -1100,56 +961,6 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                               print(
                                   'moneyRecievedForRegisterMoney: $moneyRecievedForRegisterMoney');
                             }
-                            // if (value.isEmpty) {
-                            //   setState(() {
-                            //     moneyRecievedForRegisterMoney = 0;
-                            //     if (selectedValueA == 'Efectivo') {
-                            //       change = moneyRecievedForRegisterMoney <
-                            //               (amountChanged
-                            //                   ? roundAmount(amountToPay)
-                            //                   : priceToCurrencySelected(
-                            //                       roundAmount(amountToPay),
-                            //                       selectedCoin!))
-                            //           ? 0
-                            //           : double.parse(
-                            //               (moneyRecievedForRegisterMoney -
-                            //                       (amountChanged
-                            //                           ? roundAmount(amountToPay)
-                            //                           : priceToCurrencySelected(
-                            //                               roundAmount(
-                            //                                   amountToPay),
-                            //                               selectedCoin!)))
-                            //                   .toStringAsFixed(2));
-                            //     }
-                            //   });
-                            // } else {
-                            //   setState(() {
-                            //     moneyRecievedForRegisterMoney =
-                            //         double.parse(value);
-                            //     if (selectedValueA == 'Efectivo') {
-                            //       change = moneyRecievedForRegisterMoney <
-                            //               (amountChanged
-                            //                   ? roundAmount(amountToPay)
-                            //                   : priceToCurrencySelected(
-                            //                       roundAmount(amountToPay),
-                            //                       selectedCoin!))
-                            //           ? 0
-                            //           : double.parse(
-                            //               (moneyRecievedForRegisterMoney -
-                            //                       (amountChanged
-                            //                           ? roundAmount(amountToPay)
-                            //                           : priceToCurrencySelected(
-                            //                               roundAmount(
-                            //                                   amountToPay),
-                            //                               selectedCoin!)))
-                            //                   .toStringAsFixed(2));
-                            //     }
-                            //   });
-                            // }
-                            // if (selectedValueA == 'Efectivo') {
-                            //   print(
-                            //       "moneyRecievedForRegisterMoney: $moneyRecievedForRegisterMoney");
-                            // }
                           },
                           // controller:
                           //     fieldText,
@@ -1266,36 +1077,6 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                               ),
                                             )
                                       : Container(),
-                              // moneyRecievedForRegisterMoney < 0.000001
-                              //     ? Container()
-                              //     : moneyRecievedForRegisterMoney <
-                              //             (amountChanged
-                              //                 ? roundAmount(amountToPay)
-                              //                 : priceToCurrencySelected(
-                              //                     roundAmount(amountToPay),
-                              //                     selectedCoin!))
-                              //         ? selectedValueA != 'Efectivo'
-                              //             ? Container()
-                              //             : Container(
-                              //                 margin: EdgeInsets.fromLTRB(
-                              //                   50,
-                              //                   10,
-                              //                   50,
-                              //                   0,
-                              //                 ),
-                              //                 child: Text(
-                              //                   'EL MONTO RECIBIDO NO PUEDE SER MENOR QUE EL MONTO TOTAL',
-                              //                   textAlign: TextAlign.center,
-                              //                   style: TextStyle(
-                              //                     fontFamily: 'Poppins-regular',
-                              //                     color:
-                              //                         myTheme.colorScheme.error,
-                              //                     fontSize: 10,
-                              //                     fontWeight: FontWeight.bold,
-                              //                   ),
-                              //                 ),
-                              //               )
-                              //         : Container(),
                               Container(
                                 margin: const EdgeInsets.fromLTRB(
                                   50,
@@ -1528,7 +1309,6 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                       ),
                                     ),
                               Divider(),
-
                               Container(
                                 margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                                 child: identifyPaymentMethodRetail(

@@ -1,22 +1,23 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:agnostiko/agnostiko.dart';
 import 'package:flutter/services.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:pwa_sales2go_flutter/dialogs/circular_progress_dialog.dart';
 import 'package:pwa_sales2go_flutter/pharos/pharos.dart';
 import 'package:pwa_sales2go_flutter/src/services/utils/comm.dart';
+import 'package:pwa_sales2go_flutter/src/utils/multitenant-config.dart';
 
 import '../../services/utils/keypad.dart';
 import '../../services/utils/token.dart';
-import '../auth/wrapper/wrapper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SplashScreenView extends StatefulWidget {
   static String route = "/";
+  final bool redirect;
+
+  const SplashScreenView({super.key, this.redirect = true});
 
   @override
   SplashScreenViewState createState() => SplashScreenViewState();
@@ -204,7 +205,7 @@ class SplashScreenViewState extends State<SplashScreenView> {
       _initPos(),
       Future.delayed(const Duration(seconds: 2), () => true),
     ]);
-    if (future[0] && future[1]) {
+    if (future[0] && future[1] && widget.redirect) {
       Navigator.pushReplacementNamed(context, 'wrapper');
     }
   }
@@ -257,8 +258,8 @@ class SplashScreenViewState extends State<SplashScreenView> {
     final pharosResponse = await processKeyInitPharos(pharosMsgKeyInit);
     print('pharos responde');
 
-    final encryptedK0 = pharosResponse.encryptedNewKey;
-    final ksn = pharosResponse.newKeyKsn;
+    // final encryptedK0 = pharosResponse.encryptedNewKey;
+    // final ksn = pharosResponse.newKeyKsn;
     // TODO - habilitar en entorno de producción
     // await capx.loadEncryptedIPEK(ksn.toHexBytes(), encryptedK0.toHexBytes());
 

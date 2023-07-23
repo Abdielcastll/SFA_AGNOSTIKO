@@ -16,6 +16,7 @@ import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/product_details/product_details.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/services/cloud_functions.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -83,17 +84,17 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
               // print(line);
 
               var msp = ProductsByDate(
-                quality: FirebaseFirestore.instance.doc(quality).id,
-                catalogue: FirebaseFirestore.instance.doc(catalogue).id,
-                categorie: FirebaseFirestore.instance.doc(categorie).id,
+                quality: firebase.doc(quality).id,
+                catalogue: firebase.doc(catalogue).id,
+                categorie: firebase.doc(categorie).id,
                 code: code,
-                design: FirebaseFirestore.instance.doc(design).id,
-                line: FirebaseFirestore.instance.doc(line).id,
-                brand: FirebaseFirestore.instance.doc(brand).id,
+                design: firebase.doc(design).id,
+                line: firebase.doc(line).id,
+                brand: firebase.doc(brand).id,
                 lastModifiedDate: Timestamp.now(),
                 name: name,
-                subCategorie: FirebaseFirestore.instance.doc(subcategorie).id,
-                size: FirebaseFirestore.instance.doc(size).id,
+                subCategorie: firebase.doc(subcategorie).id,
+                size: firebase.doc(size).id,
                 selected: false,
               );
 
@@ -138,7 +139,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                       final product = productsBySalesList?[index];
                       if ((stockValues[product?.code] ?? 000) > 0) {
                         return FutureBuilder<String>(
-                          future: FirebaseStorage.instance
+                          future: storage
                               .ref()
                               .child('imagenes')
                               .child('catalogos')
@@ -419,7 +420,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                       } else {
                         // return Container();
                         return FutureBuilder<String>(
-                          future: FirebaseStorage.instance
+                          future: storage
                               .ref()
                               .child('imagenes')
                               .child('catalogos')
