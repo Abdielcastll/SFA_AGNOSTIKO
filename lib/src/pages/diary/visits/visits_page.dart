@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/visit_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/visits/components/visits_completed.dart';
+import 'package:pwa_sales2go_flutter/src/pages/diary/visits/components/visits_map.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/visits/components/visits_on_process.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
@@ -31,8 +32,8 @@ class _VisitsPageState extends State<VisitsPage> {
     final currentDay = currentDayProvider.currentDayVisits;
 
     final currentDayDateTime = currentDayProvider.currentDayVisits.toDate();
-    DateTime tomorrow = DateTime(currentDayDateTime.year,
-        currentDayDateTime.month, currentDayDateTime.day + 1);
+    DateTime tomorrow = currentDayDateTime;
+    tomorrow = tomorrow.add(Duration(days: 1));
 
     final user = Provider.of<UserModel?>(context);
     // print('VISITAS');
@@ -76,19 +77,66 @@ class _VisitsPageState extends State<VisitsPage> {
           floatingActionButton: Wrap(
             direction: Axis.vertical,
             children: [
-              Container(
-                // margin: const EdgeInsets.all(10.0),
-                child: FloatingActionButton(
-                  elevation: 10,
-                  backgroundColor: myTheme.colorScheme.primary,
-                  onPressed: () {
-                    // ShowDialog de a;adir visita
-                    showCreateClientDialog(context, user?.uid);
-                  },
-                  child: const Icon(
-                    MaterialCommunityIcons.calendar_plus,
-                    color: Colors.white,
-                  ),
+              FloatingActionButton(
+                elevation: 10,
+                heroTag: null,
+                backgroundColor: myTheme.colorScheme.primary,
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            StreamProvider<List<Visits>>.value(
+                              value: currentDay !=
+                                      Timestamp.fromDate(DateTime(
+                                        DateTime.now().year + 99,
+                                        DateTime.now().month + 99,
+                                        DateTime.now().day + 99,
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                      ))
+                                  ? usuariosRef
+                                      .doc(user?.uid)
+                                      .collection('visitas')
+                                      .orderBy('fecha', descending: true)
+                                      .where('fecha',
+                                          isGreaterThanOrEqualTo:
+                                              currentDayProvider
+                                                  .currentDayVisits)
+                                      .where('fecha', isLessThan: tomorrow)
+                                      .snapshots()
+                                      .map(visitsFromSnasphot)
+                                  : usuariosRef
+                                      .doc(user?.uid)
+                                      .collection('visitas')
+                                      .orderBy('fecha', descending: true)
+                                      .snapshots()
+                                      .map(visitsFromSnasphot),
+                              initialData: [],
+                              lazy: true,
+                              child: VisitsMap(),
+                            )),
+                  );
+                },
+                child: const Icon(
+                  MaterialCommunityIcons.map,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(height: 20),
+              FloatingActionButton(
+                heroTag: null,
+                elevation: 10,
+                backgroundColor: myTheme.colorScheme.primary,
+                onPressed: () {
+                  // ShowDialog de a;adir visita
+                  showCreateClientDialog(context, user?.uid);
+                },
+                child: const Icon(
+                  MaterialCommunityIcons.calendar_plus,
+                  color: Colors.white,
                 ),
               ),
             ],
@@ -269,100 +317,6 @@ class _VisitsBodyState extends State<VisitsBody> {
                   ),
                 ),
               ),
-              // Container(
-              //   height: 40,
-              //   padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-              //   decoration: BoxDecoration(
-              //     borderRadius: BorderRadius.circular(16),
-              //     border: Border.all(
-              //         color: myTheme.colorScheme.primary.withOpacity(0.3)),
-              //   ),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     crossAxisAlignment: CrossAxisAlignment.center,
-              //     children: [
-              //       Text(
-              //         currentDay !=
-              //                 Timestamp.fromDate(DateTime(
-              //                   DateTime.now().year + 99,
-              //                   DateTime.now().month + 99,
-              //                   DateTime.now().day + 99,
-              //                   0,
-              //                   0,
-              //                   0,
-              //                   0,
-              //                   0,
-              //                 ))
-              //             ? formattedDate
-              //             : '00-00-0000',
-              //         style: TextStyle(
-              //           fontSize: 14,
-              //           // fontWeight: FontWeight.bold,
-              //           fontFamily: 'Poppins-regular',
-              //           color: myTheme.colorScheme.primary,
-              //         ),
-              //       ),
-              //       Container(
-              //         width: 20,
-              //         child: IconButton(
-              //           onPressed: () async {
-              //             final currentDayProvider =
-              //                 Provider.of<CounterLimitFirestore>(context,
-              //                     listen: false);
-              //             DateTime? newDate = await showDatePicker(
-              //               context: context,
-              //               initialDate: DateTime.now(),
-              //               firstDate: DateTime(2010),
-              //               lastDate: DateTime(2030),
-              //             );
-              //             if (newDate == null) {
-              //               return;
-              //             }
-              //             // setState(() {
-              //             //   today = newDate;
-              //             //   formattedDate = dateFormatter.format(newDate);
-              //             //   final newDay = Timestamp.fromDate(newDate);
-              //             //   currentDayProvider.setNewDayVisits(newDay);
-              //             // });
-              //           },
-              //           splashRadius: 5,
-              //           icon: Icon(
-              //             MaterialCommunityIcons.calendar_edit,
-              //             color: myTheme.colorScheme.primary.withOpacity(0.8),
-              //             size: 20,
-              //           ),
-              //         ),
-              //       ),
-              //       Container(
-              //         margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-              //         child: IconButton(
-              //           onPressed: () {
-              //             final currentDayProvider =
-              //                 Provider.of<CounterLimitFirestore>(context,
-              //                     listen: false);
-              //             setState(() {
-              //               currentDayProvider
-              //                   .setNewDayVisits(Timestamp.fromDate(DateTime(
-              //                 DateTime.now().year + 99,
-              //                 DateTime.now().month + 99,
-              //                 DateTime.now().day + 99,
-              //                 0,
-              //                 0,
-              //                 0,
-              //                 0,
-              //                 0,
-              //               )));
-              //             });
-              //           },
-              //           icon: Icon(
-              //             MaterialCommunityIcons.calendar_remove,
-              //             color: myTheme.colorScheme.onPrimaryContainer,
-              //           ),
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
             ],
           ),
           Padding(

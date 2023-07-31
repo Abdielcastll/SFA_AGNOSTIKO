@@ -44,7 +44,7 @@ class _CreditNoteCardState extends State<CreditNoteCard> {
         value: clientesRef
             .doc(widget.creditNoteClient)
             .snapshots()
-            .map(clientFromDocumentID),
+            .map(Client.fromSnapshot),
         catchError: (context, error) {
           print(error);
           return;

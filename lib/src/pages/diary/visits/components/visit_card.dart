@@ -45,7 +45,7 @@ class _VisitCardState extends State<VisitCard> {
           value: clientesRef
               .doc(widget.clientReferenceId)
               .snapshots()
-              .map(clientFromDocumentID),
+              .map(Client.fromSnapshot),
           catchError: (context, error) {
             // print(error);
             return;

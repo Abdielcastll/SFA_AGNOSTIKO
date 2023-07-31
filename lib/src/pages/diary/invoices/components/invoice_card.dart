@@ -64,7 +64,7 @@ class _InvoiceCardState extends State<InvoiceCard> {
         value: clientesRef
             .doc(widget.invoiceClient)
             .snapshots()
-            .map(clientFromDocumentID),
+            .map(Client.fromSnapshot),
         catchError: (context, error) {
           return;
         },

@@ -65,7 +65,7 @@ class _OrderCardState extends State<OrderCard> {
           value: clientesRef
               .doc(widget.clientReferenceId)
               .snapshots()
-              .map(clientFromDocumentID),
+              .map(Client.fromSnapshot),
         ),
         StreamProvider<ZoneSummary?>.value(
           initialData: null,

@@ -42,7 +42,7 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
         value: clientesRef
             .doc(widget.clientID.toString())
             .snapshots()
-            .map(clientFromDocumentID),
+            .map(Client.fromSnapshot),
         initialData: Client(),
         catchError: (context, error) {
           print('ERROR ON FETCHING CLIENT IN TICKET DETAILS');
