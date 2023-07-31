@@ -2,20 +2,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
-import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
-import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
-import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
-import 'package:pwa_sales2go_flutter/src/services/auth.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -120,12 +115,10 @@ void modalBottomSheetForOrders(
         ],
         child: StatefulBuilder(
           builder: (context, setState) {
-            final coinName = Provider.of<Coin?>(context)?.name ?? '';
             final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 0;
             final coinExchangeRatio =
                 Provider.of<Coin?>(context)?.exchangeRatio ?? 0;
             final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
-            final coinCode = Provider.of<Coin?>(context)?.code ?? '';
 
             doublePop() {
               Navigator.of(context).popUntil((route) => route.isFirst);
@@ -779,7 +772,7 @@ class DeleteOrderAlertDialog extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () async {
                 // Eliminar Visita en proceso de DB
-                var result = deleteOrder(
+                await deleteOrder(
                   orderDocumentId,
                   clientReferenceId,
                 );

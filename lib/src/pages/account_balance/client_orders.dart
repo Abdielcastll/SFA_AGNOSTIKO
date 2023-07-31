@@ -14,12 +14,10 @@ import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/account_balance/client_orders_completed.dart';
 import 'package:pwa_sales2go_flutter/src/pages/account_balance/client_orders_onprocess,.dart';
-import 'package:pwa_sales2go_flutter/src/pages/diary/orders/orders_page.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ClientOrders extends StatefulWidget {
   const ClientOrders({super.key, required this.clientDocument});
@@ -128,8 +126,6 @@ class _ClientOrdersBodyState extends State<ClientOrdersBody> {
       if (_controller.position.atEdge) {
         bool isTop = _controller.position.pixels == 0;
         if (isTop) {
-          int newValor =
-              int.parse(productsLimitProvider.getScrollOrderBalance.toString());
           print('Top balance page');
           productsLimitProvider.setOrderBalanceLimit(30, 30);
         } else {

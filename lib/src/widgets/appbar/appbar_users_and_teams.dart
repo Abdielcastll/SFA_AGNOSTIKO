@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/pages/users_and_teams/users_and_teams.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class AppBarUsersAndTeams extends StatelessWidget

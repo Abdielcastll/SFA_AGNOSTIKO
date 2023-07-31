@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class UserInfo extends StatefulWidget {

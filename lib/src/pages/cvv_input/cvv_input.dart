@@ -1,20 +1,14 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
-import '../../../../../pharos/pharos.dart';
-import '../../services/utils/comm.dart';
 import '../../../dialogs/cancel_transaction_dialog.dart';
-import '../../../dialogs/circular_progress_dialog.dart';
-import '../../../dialogs/info_dialog.dart';
 import '../../models/transaction_args.dart';
 import '../../widgets/sdk/on_screen_keypad.dart';
 import '../../services/utils/keypad.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CvvInputView extends StatefulWidget {
   static String route = "/cvvInput";
+
+  const CvvInputView({super.key});
 
   @override
   _CvvInputViewState createState() => _CvvInputViewState();

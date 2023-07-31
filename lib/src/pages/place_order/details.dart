@@ -3,8 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:provider/provider.dart';
-import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class SettingsForm extends StatefulWidget {
@@ -30,9 +28,6 @@ class _SettingsFormState extends State<SettingsForm> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserModel?>(context);
-    String? currentUnits;
-
     //TODO: utilizar un streambuilder para sacar del carrito;
     return SingleChildScrollView(
       child: Form(
@@ -95,9 +90,6 @@ class _SettingsFormState extends State<SettingsForm> {
                     ),
                     validator: (val) =>
                         val!.isEmpty ? 'Entra una cantidad valida' : null,
-                    onChanged: (val) => setState(() {
-                      currentUnits = val;
-                    }),
                   ),
                 ),
               ],

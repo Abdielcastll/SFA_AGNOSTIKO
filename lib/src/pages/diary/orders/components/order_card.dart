@@ -1,23 +1,15 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
-import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
-import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
-import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
-import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/orders_alerts_and_dialogs/orders_bottomsheet.dart';
@@ -100,10 +92,6 @@ class OrderCardBody extends StatefulWidget {
 class _OrderCardBodyState extends State<OrderCardBody> {
   @override
   Widget build(BuildContext context) {
-    final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
-    List<String> currentCoinSplit = currentCoin!.split(' ');
-    String currentCoinSelectedCode = currentCoinSplit.last;
-
     final currentClient = Provider.of<Client?>(context) ?? [];
     final currentClientName = Provider.of<Client?>(context)?.name ?? '';
     final currentClientAddress =
@@ -122,11 +110,8 @@ class _OrderCardBodyState extends State<OrderCardBody> {
         Provider.of<Client?>(context)?.masterDiscount ?? {};
     final zonesSummary = Provider.of<ZoneSummary?>(context)?.summary ?? '';
     final userUID = Provider.of<UserModel>(context).uid;
-    final coinName = Provider.of<Coin?>(context)?.name ?? '';
     final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 0;
-    final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 0;
     final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '\$';
-    final coinCode = Provider.of<Coin?>(context)?.code ?? '';
     // Get if user is a retail seller
     final userRole = Provider.of<UserRole?>(context, listen: true);
     // print('User Role ${userRole?.name}');

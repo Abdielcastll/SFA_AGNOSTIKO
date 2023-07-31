@@ -1,11 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:convert';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:agnostiko/agnostiko.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -222,8 +219,6 @@ Future refund(BuildContext context, payment, String pleaseWait, Client client,
 }
 
 Future printCancelTicket(int stan, String referenceNumber, double monto) async {
-  final emv = EmvModule.instance;
-
   List<PrinterObject> listOfTextLine = [];
   final terminalParameters = await loadTerminalParameters();
 

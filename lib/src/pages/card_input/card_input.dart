@@ -22,7 +22,6 @@ import '../../../dialogs/circular_progress_dialog.dart';
 import '../../../dialogs/card_indicator_dialog.dart';
 import '../../models/transaction_args.dart';
 import '../../pages/emv_transaction_info/emv_transaction_info.dart';
-import '../../pages/cvv_input/cvv_input.dart';
 import '../../pages/pin_input/pin_input.dart';
 import '../../services/utils/keypad.dart';
 import '../../services/utils/comm.dart';

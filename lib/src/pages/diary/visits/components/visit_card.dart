@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
@@ -155,7 +154,7 @@ class _VIsitCardBodyState extends State<VIsitCardBody> {
                       currentClientPrices: currentClientPrices,
                       currentDiscountMaster: currentDiscountMaster,
                       clientReferenceId: widget.widget.clientReferenceId,
-                      userUID: userUID,
+                      userUID: userUID!,
                       visitDocumentId: widget.widget.visitDocumentId,
                       currentClientId: currentClientId,
                       currentClientIdType: currentClientIdType,

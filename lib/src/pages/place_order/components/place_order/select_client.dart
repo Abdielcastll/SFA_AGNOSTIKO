@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
-import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SelectClient extends StatefulWidget {
@@ -15,8 +13,7 @@ class SelectClient extends StatefulWidget {
     this.clientsList,
   }) : super(key: key);
 
-  List<Clients>? clientsList;
-  late List<Clients>? mutatedList = clientsList;
+  final List<Clients>? clientsList;
 
   @override
   State<SelectClient> createState() => _SelectClientState();
@@ -25,6 +22,13 @@ class SelectClient extends StatefulWidget {
 class _SelectClientState extends State<SelectClient> {
   final clientController = TextEditingController();
   List<Clients> starterClient = [Clients(name: 'NaN', fiscalAdress: 'NaN')];
+  List<Clients>? mutatedList = [];
+
+  @override
+  initState() {
+    mutatedList = widget.clientsList;
+    super.initState();
+  }
 
   // Esta funcion se llama cada vez que el text field cambia
   void _searchClient(String query) {
@@ -40,14 +44,12 @@ class _SelectClientState extends State<SelectClient> {
           .toList();
     }
     // Refrescar la UI
-    setState(() => widget.mutatedList = suggestions);
+    setState(() => mutatedList = suggestions);
   }
 
   @override
   Widget build(BuildContext context) {
     final orderActive = Provider.of<OrderProvider>(context);
-    final currentClientForTheOrder =
-        Provider.of<OrderProvider>(context).clientForTheOrder;
     return Column(
       children: [
         Container(
@@ -102,11 +104,10 @@ class _SelectClientState extends State<SelectClient> {
             color: Colors.transparent,
             child: ListView.builder(
               physics: const BouncingScrollPhysics(),
-              itemCount: widget.mutatedList?.length ?? starterClient.length,
+              itemCount: mutatedList?.length ?? starterClient.length,
               // itemCount: 1,
               itemBuilder: (context, index) {
-                final client =
-                    widget.mutatedList?[index] ?? starterClient[index];
+                final client = mutatedList?[index] ?? starterClient[index];
                 final clientName = client.name;
                 final clientFiscalAddress = client.fiscalAdress;
                 return Container(

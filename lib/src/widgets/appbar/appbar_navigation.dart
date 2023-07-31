@@ -1,17 +1,13 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
-import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/place_oder_page.dart';
-import 'package:pwa_sales2go_flutter/src/provider/locale_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/auth.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
@@ -24,7 +20,6 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
     required this.userZoneDocument,
   }) : super(key: key);
 
-  final _auth = AuthService();
   final String message;
   final userZoneDocument;
 
@@ -379,6 +374,7 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
                                               print(e);
                                               print(
                                                   'SENDING ERROR DEFAULT CLIENT');
+                                              return [];
                                             });
 
                                             print(

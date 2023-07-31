@@ -2,26 +2,18 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/promotions_model.dart';
-import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
-import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
-import 'package:pwa_sales2go_flutter/src/pages/products/product_details/product_details.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
-import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class PromotionsWidget extends StatefulWidget {
   const PromotionsWidget({
@@ -40,10 +32,7 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
     List<ProductsWithPromotions>? productsWithPromotionList =
         productsWithPromotions;
     final pricesName = Provider.of<Prices?>(context)?.name ?? {};
-    final linesSummary = Provider.of<LineSummary?>(context)?.summary ?? {};
-    final stockValues = Provider.of<StockModel?>(context)?.stock ?? {};
     final products = Provider.of<List<Products>?>(context) ?? [];
-    final productsList = products;
     final promotions = Provider.of<List<Promotions>?>(context) ?? [];
     List productsWithPromotionID =
         productsWithPromotionList.map((e) => e.promotion).toList();
@@ -52,9 +41,6 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
             productsWithPromotionID.contains(element.firebaseDocumentID))
         .toList();
     final listOfPrices = Provider.of<Prices?>(context)?.prices ?? {};
-    final orderActive = Provider.of<OrderProvider>(context);
-    final currentClientForTheOrder =
-        Provider.of<OrderProvider>(context).clientForTheOrder;
 
     final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
 

@@ -3,7 +3,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
@@ -12,8 +11,6 @@ import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_de
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 
 class ClientList extends StatefulWidget {
   ClientList({
@@ -22,9 +19,8 @@ class ClientList extends StatefulWidget {
     this.controller,
   }) : super(key: key);
 
-  List<Clients>? listOfClients;
-  late List<Clients>? mutatedList = listOfClients;
-  ScrollController? controller;
+  final List<Clients>? listOfClients;
+  final ScrollController? controller;
 
   @override
   State<ClientList> createState() => _ClientListState();
@@ -35,11 +31,18 @@ class _ClientListState extends State<ClientList> {
   final searchClientController = TextEditingController();
   bool isDescending = true;
   bool isSearchingByname = false;
+  List<Clients>? mutatedList;
 
   final List<String> items = ['10', '50', 'Todos'];
   String? selectedValue;
 
   List<Clients> filteredClients = [];
+
+  @override
+  initState() {
+    mutatedList = widget.listOfClients;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -369,11 +372,11 @@ class _ClientListState extends State<ClientList> {
                     shrinkWrap: true,
                     controller: widget.controller,
                     physics: const BouncingScrollPhysics(),
-                    itemCount: widget.mutatedList!.length,
+                    itemCount: mutatedList!.length,
                     itemBuilder: (BuildContext context, index) {
                       final sortedClients = isDescending
-                          ? widget.mutatedList?.reversed.toList()
-                          : widget.mutatedList;
+                          ? mutatedList?.reversed.toList()
+                          : mutatedList;
                       final client = sortedClients?[index];
                       final clientSpecialContributor =
                           client?.specialContributor ?? 'NaN';

@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class NotificacionsExample {
   final String type;
   final String? place;

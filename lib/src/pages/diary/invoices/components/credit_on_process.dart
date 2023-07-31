@@ -6,8 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/account_balance_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/creditnote_card.dart';
-import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/invoice_card.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/loading/loading_widget.dart';
 
 class CreditNotesOnProcess extends StatefulWidget {
   const CreditNotesOnProcess({Key? key}) : super(key: key);

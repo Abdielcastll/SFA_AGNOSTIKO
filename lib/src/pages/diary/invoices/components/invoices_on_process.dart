@@ -7,7 +7,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/account_balance_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/invoice_card.dart';
-import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -33,10 +32,6 @@ class _InvoicesOnProcessState extends State<InvoicesOnProcess> {
     final invoicesList =
         invoices.where((element) => element.isPaid == false).toList();
 
-    final currentDay =
-        Provider.of<CounterLimitFirestore>(context).currentDayInvoice;
-    final currentDateTime = currentDay!.toDate();
-    String formattedDate = dateFormatter.format(currentDateTime);
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,

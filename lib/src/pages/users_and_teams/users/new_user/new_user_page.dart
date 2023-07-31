@@ -2,13 +2,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:flutterfire_ui/auth.dart';
-import 'package:provider/provider.dart';
-import 'package:pwa_sales2go_flutter/examples/usesrs_example.dart';
-import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
-import 'package:pwa_sales2go_flutter/src/pages/role_manager/role_manager.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 
 class NewUserPage extends StatefulWidget {
   const NewUserPage({super.key});

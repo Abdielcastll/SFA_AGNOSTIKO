@@ -48,13 +48,10 @@ void modalBottomSheetForInvoices({
   discount,
   invoiceDate,
 }) {
-  final coinName = Provider.of<Coin?>(context, listen: false)?.name ?? '';
   final coinDecimals =
       Provider.of<Coin?>(context, listen: false)?.decimals ?? 0;
   final coinExchangeRatio =
       Provider.of<Coin?>(context, listen: false)?.exchangeRatio ?? 0;
-  final coinSymbol = Provider.of<Coin?>(context, listen: false)?.symbol ?? '';
-  final coinCode = Provider.of<Coin?>(context, listen: false)?.code ?? '';
   var dateFormatter = DateFormat('dd/MM/yyyy');
   DateTime today = DateTime.now();
   String formattedDate = dateFormatter.format(today);
@@ -466,7 +463,7 @@ void modalBottomSheetForInvoices({
                                             sumOfApprovedPayments,
                                         sumOfPendingPayments:
                                             sumOfPendingPayments,
-                                        completed: completed!,
+                                        completed: completed,
                                       );
                                     });
                               },
@@ -474,7 +471,7 @@ void modalBottomSheetForInvoices({
                           ),
                         ],
                       ),
-                      completed!
+                      completed
                           ? Container()
                           : Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -520,21 +517,6 @@ void modalBottomSheetForInvoices({
                                       ),
                                     ),
                                     onPressed: () {
-                                      //                     // ignore: use_build_context_synchronously
-                                      //                     // /* Navigator.pushNamed(
-                                      //                     //   context,
-                                      //                     //   AmountInputView.route,
-                                      //                     //   arguments: TransactionArgs(
-                                      //                     //     platformInfo: platformInfo,
-                                      //                     //     entryMode: EntryMode.Magstripe,
-                                      //                     //     showNumericKeyboard:
-                                      //                     //         !platformInfo.hasKeypad,
-                                      //                     //     supportedCardTypes:
-                                      //                     //         platformInfo.supportedCardTypes,
-                                      //                     //     emvTransactionType:
-                                      //                     //         EmvTransactionType.Goods,
-                                      //                     //   ),
-                                      //                     // ); */
                                       showDialogForRegisterPayment(
                                         context,
                                         selectedValueA,
@@ -572,218 +554,6 @@ void modalBottomSheetForInvoices({
                             ),
                     ],
                   ),
-                  // child: Column(
-                  //   children: [
-                  //     Container(
-                  //       alignment: Alignment.centerLeft,
-                  //       margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                  //       child: Text(
-                  //         AppLocalizations.of(context)!.options,
-                  //         style: TextStyle(
-                  //           fontSize: 16,
-                  //           fontWeight: FontWeight.bold,
-                  //           color: myTheme.colorScheme.primary,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     Column(
-                  //       children: [
-                  //         Row(
-                  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //           children: [
-                  //             Container(
-                  //               child: ElevatedButton.icon(
-                  //                 onPressed: () {
-                  //                   // Ver resumen de Cliente
-                  //                   Navigator.push(
-                  //                     context,
-                  //                     MaterialPageRoute(
-                  //                       builder: (BuildContext context) =>
-                  //                           ClientDetails(
-                  //                         specialContribuyer:
-                  //                             specialContribuyer,
-                  //                         masterDiscount: masterDiscount,
-                  //                         fiscalAddress: fiscalAddress,
-                  //                         email: email,
-                  //                         listOfPrices: listOfPrices,
-                  //                         name: name,
-                  //                         tlf1: tlf1,
-                  //                         tlf2: tlf2,
-                  //                         zone: zone,
-                  //                         nameId: nameId,
-                  //                         typeId: typeId,
-                  //                         clientDocumentReferenceID:
-                  //                             clientDocumentReferenceID,
-                  //                         dispatchAddress:
-                  //                             currentClientDispatchAdress,
-                  //                       ),
-                  //                     ),
-                  //                   );
-                  //                 },
-                  //                 style: ButtonStyle(
-                  //                   backgroundColor: MaterialStateProperty.all(
-                  //                     myTheme.colorScheme.primary,
-                  //                   ),
-                  //                   shape: MaterialStateProperty.all<
-                  //                       RoundedRectangleBorder>(
-                  //                     RoundedRectangleBorder(
-                  //                       borderRadius:
-                  //                           BorderRadius.circular(18.0),
-                  //                     ),
-                  //                   ),
-                  //                 ),
-                  //                 icon: Icon(Icons.person),
-                  //                 label: Text(
-                  //                   AppLocalizations.of(context)!.seeClient,
-                  //                   style: TextStyle(
-                  //                     fontFamily: 'Poppins-regular',
-                  //                     color: Colors.white,
-                  //                     fontSize: 14,
-                  //                     fontWeight: FontWeight.bold,
-                  //                   ),
-                  //                 ),
-                  //               ),
-                  //             ),
-                  //             // SizedBox(width: 15),
-                  //             Container(
-                  //               child: ElevatedButton.icon(
-                  //                 onPressed: () {
-                  //                   showDialog(
-                  //                       context: context,
-                  //                       builder: (BuildContext context) {
-                  //                         // return Container();
-                  //                         return SeePaymentsALertDialog(
-                  //                           dateFormatter: dateFormatter,
-                  //                           invoiceNumber: invoiceNumber,
-                  //                           client: client,
-                  //                           invoiceDocumentID:
-                  //                               invoiceDocumentID,
-                  //                           invoicePayments: invoicePayments,
-                  //                           coinName: coinName,
-                  //                           coinDecimals: coinDecimals,
-                  //                           coinExchangeRatio:
-                  //                               coinExchangeRatio,
-                  //                           coinSymbol: coinSymbol,
-                  //                           coinCode: coinCode,
-                  //                           remaining: remaining,
-                  //                           sumOfApprovedPayments:
-                  //                               sumOfApprovedPayments,
-                  //                           sumOfPendingPayments:
-                  //                               sumOfPendingPayments,
-                  //                           completed: completed,
-                  //                         );
-                  //                       });
-                  //                 },
-                  //                 style: ButtonStyle(
-                  //                   backgroundColor: MaterialStateProperty.all(
-                  //                     myTheme.colorScheme.primary,
-                  //                   ),
-                  //                   shape: MaterialStateProperty.all<
-                  //                       RoundedRectangleBorder>(
-                  //                     RoundedRectangleBorder(
-                  //                       borderRadius:
-                  //                           BorderRadius.circular(18.0),
-                  //                     ),
-                  //                   ),
-                  //                 ),
-                  //                 icon: Icon(Icons.app_registration),
-                  //                 label: Text(
-                  //                   // Ver Pagos
-                  //                   AppLocalizations.of(context)!.seePayments,
-                  //                   style: TextStyle(
-                  //                     fontFamily: 'Poppins-regular',
-                  //                     color: Colors.white,
-                  //                     fontSize: 14,
-                  //                     fontWeight: FontWeight.bold,
-                  //                   ),
-                  //                 ),
-                  //               ),
-                  //             ),
-                  //           ],
-                  //         ),
-                  //         // Registrar pagos
-                  //         completed
-                  //             ? Container()
-                  //             : Container(
-                  //                 width: MediaQuery.of(context).size.width,
-                  //                 child: ElevatedButton.icon(
-                  //                   onPressed: () {
-                  //                     // ignore: use_build_context_synchronously
-                  //                     // /* Navigator.pushNamed(
-                  //                     //   context,
-                  //                     //   AmountInputView.route,
-                  //                     //   arguments: TransactionArgs(
-                  //                     //     platformInfo: platformInfo,
-                  //                     //     entryMode: EntryMode.Magstripe,
-                  //                     //     showNumericKeyboard:
-                  //                     //         !platformInfo.hasKeypad,
-                  //                     //     supportedCardTypes:
-                  //                     //         platformInfo.supportedCardTypes,
-                  //                     //     emvTransactionType:
-                  //                     //         EmvTransactionType.Goods,
-                  //                     //   ),
-                  //                     // ); */
-                  //                     showDialogForRegisterPayment(
-                  //                       context,
-                  //                       selectedValueA,
-                  //                       formattedDate,
-                  //                       today,
-                  //                       dateFormatter,
-                  //                       selectedCoin,
-                  //                       fieldText,
-                  //                       moneyRecievedForRegisterMoney,
-                  //                       subTotal,
-                  //                       discountPercentage,
-                  //                       discount,
-                  //                       percentageTax,
-                  //                       tax,
-                  //                       invoiceTotal,
-                  //                       change,
-                  //                       paidAmount: paidAmount,
-                  //                       coinDecimals: coinDecimals,
-                  //                       coinExchangeRatio: double.parse(
-                  //                           coinExchangeRatio.toString()),
-                  //                       coinSymbol: coinSymbol,
-                  //                       remaining: remaining,
-                  //                       coinName: coinName,
-                  //                       coinCode: coinCode,
-                  //                       paymentsValidPayQuantity:
-                  //                           paymentsValidPayQuantity,
-                  //                       client: client,
-                  //                       invoiceDocumentID: invoiceDocumentID,
-                  //                       invoiceNumber: invoiceNumber,
-                  //                     );
-                  //                   },
-                  //                   style: ButtonStyle(
-                  //                     backgroundColor:
-                  //                         MaterialStateProperty.all(
-                  //                       myTheme.colorScheme.onPrimaryContainer,
-                  //                     ),
-                  //                     shape: MaterialStateProperty.all<
-                  //                         RoundedRectangleBorder>(
-                  //                       RoundedRectangleBorder(
-                  //                         borderRadius:
-                  //                             BorderRadius.circular(18.0),
-                  //                       ),
-                  //                     ),
-                  //                   ),
-                  //                   icon: Icon(Icons.add_card_outlined),
-                  //                   label: Text(
-                  //                     AppLocalizations.of(context)!
-                  //                         .registerPayment,
-                  //                     style: TextStyle(
-                  //                       fontFamily: 'Poppins-regular',
-                  //                       color: Colors.white,
-                  //                       fontSize: 14,
-                  //                       fontWeight: FontWeight.bold,
-                  //                     ),
-                  //                   ),
-                  //                 ),
-                  //               ),
-                  //       ],
-                  //     ),
-                  //   ],
-                  // ),
                 ),
               ),
             );
@@ -900,10 +670,6 @@ Future<dynamic> showDialogForRegisterPayment(
         'Deposito',
         'Transferencia',
         'Transf-internacional',
-      ];
-      List<String> itemsCoin = [
-        'USD',
-        'MXN',
       ];
       return StatefulBuilder(
         builder: ((context, setState) {
@@ -1169,196 +935,185 @@ Future<dynamic> showDialogForRegisterPayment(
                       ],
                     ),
                   ),
-                  selectedCoin == null
+                  selectedValueA == null
                       ? Container()
-                      : selectedValueA == null
-                          ? Container()
-                          : Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Monto a pagar',
-                                  // '${AppLocalizations.of(context)!.amount}',
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins-regular',
-                                    color: myTheme.colorScheme.primary,
-                                    fontSize: 14,
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Monto a pagar',
+                              // '${AppLocalizations.of(context)!.amount}',
+                              style: TextStyle(
+                                fontFamily: 'Poppins-regular',
+                                color: myTheme.colorScheme.primary,
+                                fontSize: 14,
+                              ),
+                            ),
+                            SizedBox(width: 3),
+                            PointTextWidget(),
+                          ],
+                        ),
+                  selectedValueA == null
+                      ? Container()
+                      : Column(
+                          children: [
+                            Container(
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: Color(0xFFDFE0FF),
+                                    // color: Colors.transparent,
                                   ),
                                 ),
-                                SizedBox(width: 3),
-                                PointTextWidget(),
-                              ],
-                            ),
-                  selectedCoin == null
-                      ? Container()
-                      : selectedValueA == null
-                          ? Container()
-                          : Column(
-                              children: [
-                                Container(
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                        color: Color(0xFFDFE0FF),
-                                        // color: Colors.transparent,
+                                child: TextField(
+                                  onChanged: (value) {
+                                    if (value.isEmpty) {
+                                      setState(() {
+                                        paidAmount = 0;
+                                        if (selectedValueA == 'Efectivo') {
+                                          change = moneyRecievedForRegisterMoney <
+                                                  paidAmount!
+                                              ? 0
+                                              : double.parse((((Decimal.parse(
+                                                                      moneyRecievedForRegisterMoney
+                                                                          .toString()) -
+                                                                  Decimal.parse(
+                                                                      paidAmount!
+                                                                          .toString())) *
+                                                              Decimal.parse(
+                                                                  '100'))
+                                                          .round() /
+                                                      Decimal.parse('100'))
+                                                  // .toDecimal()
+                                                  .toDouble()
+                                                  .toString());
+                                        }
+                                      });
+                                      print('paidAmount setstate: $paidAmount');
+                                    } else {
+                                      setState(() {
+                                        paidAmount = double.parse(value);
+                                        if (selectedValueA == 'Efectivo') {
+                                          change = moneyRecievedForRegisterMoney <
+                                                  paidAmount!
+                                              ? 0
+                                              : double.parse((((Decimal.parse(
+                                                                      moneyRecievedForRegisterMoney
+                                                                          .toString()) -
+                                                                  Decimal.parse(
+                                                                      paidAmount!
+                                                                          .toString())) *
+                                                              Decimal.parse(
+                                                                  '100'))
+                                                          .round() /
+                                                      Decimal.parse('100'))
+                                                  // .toDecimal()
+                                                  .toDouble()
+                                                  .toString());
+                                        }
+                                      });
+                                      print('paidAmount setstate: $paidAmount');
+                                    }
+                                  },
+                                  controller: fieldText,
+                                  readOnly: selectedValueA == 'Efectivo' ||
+                                          selectedValueA == null
+                                      ? true
+                                      : false,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: 'Poppins-regular',
+                                    color: myTheme.colorScheme.primary,
+                                  ),
+                                  inputFormatters: <TextInputFormatter>[
+                                    DecimalTextInputFormatter(decimalRange: 2),
+                                    FilteringTextInputFormatter.allow(
+                                      RegExp(r'[0-9]+[,.]{0,1}[0-9]*'),
+                                    ),
+                                    TextInputFormatter.withFunction(
+                                      (oldValue, newValue) => newValue.copyWith(
+                                        text:
+                                            newValue.text.replaceAll(',', '.'),
                                       ),
                                     ),
-                                    child: TextField(
-                                      onChanged: (value) {
-                                        if (value.isEmpty) {
-                                          setState(() {
-                                            paidAmount = 0;
-                                            if (selectedValueA == 'Efectivo') {
-                                              change = moneyRecievedForRegisterMoney <
-                                                      paidAmount!
-                                                  ? 0
-                                                  : double.parse((((Decimal.parse(
-                                                                          moneyRecievedForRegisterMoney
-                                                                              .toString()) -
-                                                                      Decimal.parse(
-                                                                          paidAmount!
-                                                                              .toString())) *
-                                                                  Decimal.parse(
-                                                                      '100'))
-                                                              .round() /
-                                                          Decimal.parse('100'))
-                                                      // .toDecimal()
-                                                      .toDouble()
-                                                      .toString());
-                                            }
-                                          });
-                                          print(
-                                              'paidAmount setstate: $paidAmount');
-                                        } else {
-                                          setState(() {
-                                            paidAmount = double.parse(value);
-                                            if (selectedValueA == 'Efectivo') {
-                                              change = moneyRecievedForRegisterMoney <
-                                                      paidAmount!
-                                                  ? 0
-                                                  : double.parse((((Decimal.parse(
-                                                                          moneyRecievedForRegisterMoney
-                                                                              .toString()) -
-                                                                      Decimal.parse(
-                                                                          paidAmount!
-                                                                              .toString())) *
-                                                                  Decimal.parse(
-                                                                      '100'))
-                                                              .round() /
-                                                          Decimal.parse('100'))
-                                                      // .toDecimal()
-                                                      .toDouble()
-                                                      .toString());
-                                            }
-                                          });
-                                          print(
-                                              'paidAmount setstate: $paidAmount');
-                                        }
-                                      },
-                                      controller: fieldText,
-                                      readOnly: selectedValueA == 'Efectivo' ||
-                                              selectedValueA == null
-                                          ? true
-                                          : false,
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontFamily: 'Poppins-regular',
-                                        color: myTheme.colorScheme.primary,
+                                  ],
+                                  keyboardType: TextInputType.phone,
+                                  maxLines: 1,
+                                  maxLength: 50,
+                                  textCapitalization:
+                                      TextCapitalization.characters,
+                                  decoration: InputDecoration(
+                                    prefixIcon: Container(
+                                      width: 40,
+                                      height: 40,
+                                      child: Center(
+                                        child: Text(
+                                          '$coinSymbol',
+                                          style: TextStyle(
+                                            fontFamily: 'Poppins-regular',
+                                            fontSize: 14,
+                                            color: myTheme.colorScheme.primary,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
                                       ),
-                                      inputFormatters: <TextInputFormatter>[
-                                        DecimalTextInputFormatter(
-                                            decimalRange: 2),
-                                        FilteringTextInputFormatter.allow(
-                                          RegExp(r'[0-9]+[,.]{0,1}[0-9]*'),
-                                        ),
-                                        TextInputFormatter.withFunction(
-                                          (oldValue, newValue) =>
-                                              newValue.copyWith(
-                                            text: newValue.text
-                                                .replaceAll(',', '.'),
-                                          ),
-                                        ),
-                                      ],
-                                      keyboardType: TextInputType.phone,
-                                      maxLines: 1,
-                                      maxLength: 50,
-                                      textCapitalization:
-                                          TextCapitalization.characters,
-                                      decoration: InputDecoration(
-                                        prefixIcon: Container(
-                                          width: 40,
-                                          height: 40,
-                                          child: Center(
-                                            child: Text(
-                                              '$coinSymbol',
-                                              style: TextStyle(
-                                                fontFamily: 'Poppins-regular',
-                                                fontSize: 14,
-                                                color:
-                                                    myTheme.colorScheme.primary,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        contentPadding: EdgeInsets.fromLTRB(
-                                          14,
-                                          0,
-                                          0,
-                                          0,
-                                        ),
-                                        hintText:
-                                            // 'PAIDAMOUNT',
-                                            '${(formatDecimalPriceByRegion(price: Decimal.parse(paidAmount.toString())))}',
-                                        hintStyle: TextStyle(
-                                          height: 1.85,
-                                          fontFamily: 'Poppins-regular',
-                                          fontSize: 14,
-                                          color: myTheme.colorScheme.primary,
-                                        ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                          borderSide: BorderSide(
-                                            color: selectedValueA != null
-                                                ? selectedValueA!
-                                                        .contains('Tarjeta')
-                                                    ? (paidAmount ?? 0) >
-                                                            double.parse(
-                                                                balanceConverted
-                                                                    .toString())
-                                                        ? Colors.red
-                                                        : Colors.transparent
+                                    ),
+                                    contentPadding: EdgeInsets.fromLTRB(
+                                      14,
+                                      0,
+                                      0,
+                                      0,
+                                    ),
+                                    hintText:
+                                        // 'PAIDAMOUNT',
+                                        '${(formatDecimalPriceByRegion(price: Decimal.parse(paidAmount.toString())))}',
+                                    hintStyle: TextStyle(
+                                      height: 1.85,
+                                      fontFamily: 'Poppins-regular',
+                                      fontSize: 14,
+                                      color: myTheme.colorScheme.primary,
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      borderSide: BorderSide(
+                                        color: selectedValueA != null
+                                            ? selectedValueA!
+                                                    .contains('Tarjeta')
+                                                ? (paidAmount ?? 0) >
+                                                        double.parse(
+                                                            balanceConverted
+                                                                .toString())
+                                                    ? Colors.red
                                                     : Colors.transparent
-                                                : Colors.transparent,
-                                          ),
-                                        ),
-                                        counterText: '',
-                                        border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                          borderSide: BorderSide(
-                                            color: Colors.transparent,
-                                          ),
-                                        ),
+                                                : Colors.transparent
+                                            : Colors.transparent,
                                       ),
-                                    )),
-                                selectedValueA != null
-                                    ? selectedValueA!.contains('Tarjeta')
-                                        ? (paidAmount ?? 0) >
-                                                balanceConverted.toDouble()
-                                            ? Text(
-                                                'El pago es mayor al saldo de la factura.',
-                                                style: TextStyle(
-                                                    color: Colors.red,
-                                                    fontSize: 10),
-                                              )
-                                            : Container()
+                                    ),
+                                    counterText: '',
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      borderSide: BorderSide(
+                                        color: Colors.transparent,
+                                      ),
+                                    ),
+                                  ),
+                                )),
+                            selectedValueA != null
+                                ? selectedValueA!.contains('Tarjeta')
+                                    ? (paidAmount ?? 0) >
+                                            balanceConverted.toDouble()
+                                        ? Text(
+                                            'El pago es mayor al saldo de la factura.',
+                                            style: TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 10),
+                                          )
                                         : Container()
                                     : Container()
-                              ],
-                            ),
+                                : Container()
+                          ],
+                        ),
                   selectedValueA != 'Efectivo'
                       ? Container()
                       : Container(
@@ -1545,304 +1300,299 @@ Future<dynamic> showDialogForRegisterPayment(
                             ),
                           ),
                         ),
-                  selectedCoin != null
-                      ? selectedValueA != null
-                          ? Column(
-                              children: [
-                                moneyRecievedForRegisterMoney < 0.000001
-                                    ? Container()
-                                    : moneyRecievedForRegisterMoney <
-                                            paidAmount!
-                                        ? selectedValueA != 'Efectivo'
-                                            ? Container()
-                                            : Container(
-                                                margin: EdgeInsets.fromLTRB(
-                                                    15, 5, 15, 0),
-                                                child: Text(
-                                                  'EL MONTO RECIBIDO NO PUEDE SER MENOR QUE EL MONTO TOTAL',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    fontFamily:
-                                                        'Poppins-regular',
-                                                    color: myTheme
-                                                        .colorScheme.error,
-                                                    fontSize: 10,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              )
-                                        : Container(),
-                                Container(
-                                  margin: const EdgeInsets.fromLTRB(
-                                    0,
-                                    10,
-                                    0,
-                                    0,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Subtotal: ',
-                                        style: TextStyle(
-                                          fontFamily: 'Poppins-regular',
-                                          color: myTheme.colorScheme.primary,
-                                          fontSize: 10,
-                                        ),
-                                      ),
-                                      Text(
-                                        // 'Subtotal',
-                                        '$coinSymbol $subTotalformatted',
-                                        style: TextStyle(
-                                          fontFamily: 'Poppins-regular',
-                                          color: myTheme.colorScheme.primary,
-                                          fontSize: 10,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  margin: const EdgeInsets.fromLTRB(
-                                    0,
-                                    0,
-                                    0,
-                                    0,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Descuento Maestro ($discountPercentage%): ',
-                                        style: TextStyle(
-                                          fontFamily: 'Poppins-regular',
-                                          color: myTheme.colorScheme.primary,
-                                          fontSize: 10,
-                                        ),
-                                      ),
-                                      Text(
-                                        // 'Descuento maestro',
-                                        ' - $coinSymbol $discountMasterformatted',
-                                        style: TextStyle(
-                                          fontFamily: 'Poppins-regular',
-                                          color: myTheme.colorScheme.primary,
-                                          fontSize: 10,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  margin: const EdgeInsets.fromLTRB(
-                                    0,
-                                    0,
-                                    0,
-                                    0,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'IVA (16%): ',
-                                        style: TextStyle(
-                                          fontFamily: 'Poppins-regular',
-                                          color: myTheme.colorScheme.primary,
-                                          fontSize: 10,
-                                        ),
-                                      ),
-                                      Text(
-                                        // 'Taxes',
-                                        '$coinSymbol $taxformatted',
-                                        style: TextStyle(
-                                          fontFamily: 'Poppins-regular',
-                                          color: myTheme.colorScheme.primary,
-                                          fontSize: 10,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  margin: const EdgeInsets.fromLTRB(
-                                    0,
-                                    0,
-                                    0,
-                                    0,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Total: ',
-                                        style: TextStyle(
-                                          fontFamily: 'Poppins-regular',
-                                          color: myTheme.colorScheme.primary,
-                                          fontSize: 10,
-                                        ),
-                                      ),
-                                      Text(
-                                        // 'total',
-                                        '$coinSymbol $totalformatted',
-                                        style: TextStyle(
-                                          fontFamily: 'Poppins-regular',
-                                          color: myTheme
-                                              .colorScheme.onPrimaryContainer,
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  margin: const EdgeInsets.fromLTRB(
-                                    0,
-                                    0,
-                                    0,
-                                    0,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Monto pagado: ',
-                                        style: TextStyle(
-                                          fontFamily: 'Poppins-regular',
-                                          color: myTheme.colorScheme.primary,
-                                          fontSize: 10,
-                                        ),
-                                      ),
-                                      Text(
-                                        // 'total',
-                                        '$coinSymbol $payedUpformatted',
-                                        style: TextStyle(
-                                          fontFamily: 'Poppins-regular',
-                                          color: myTheme
-                                              .colorScheme.onPrimaryContainer,
-                                          fontSize: 10,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(height: 5),
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Saldo: ',
-                                        style: TextStyle(
-                                          fontFamily: 'Poppins-regular',
-                                          color: myTheme
-                                              .colorScheme.onPrimaryContainer,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Text(
-                                        // 'balance',
-                                        '$coinSymbol $balanceformatted',
-                                        style: TextStyle(
-                                          fontFamily: 'Poppins-regular',
-                                          color: myTheme
-                                              .colorScheme.onPrimaryContainer,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                selectedValueA != 'Efectivo'
-                                    ? Container()
-                                    : Container(
-                                        alignment: Alignment.bottomCenter,
-                                        margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          // selectedValueA != 'Efectivo'
-                                          //     ? MainAxisAlignment.center
-                                          //     : MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Text(
-                                              'Cambio: ',
+                  selectedValueA != null
+                      ? Column(
+                          children: [
+                            moneyRecievedForRegisterMoney < 0.000001
+                                ? Container()
+                                : moneyRecievedForRegisterMoney < paidAmount!
+                                    ? selectedValueA != 'Efectivo'
+                                        ? Container()
+                                        : Container(
+                                            margin: EdgeInsets.fromLTRB(
+                                                15, 5, 15, 0),
+                                            child: Text(
+                                              'EL MONTO RECIBIDO NO PUEDE SER MENOR QUE EL MONTO TOTAL',
+                                              textAlign: TextAlign.center,
                                               style: TextStyle(
                                                 fontFamily: 'Poppins-regular',
-                                                color: Colors.green.shade600,
-                                                fontSize: 12,
+                                                color:
+                                                    myTheme.colorScheme.error,
+                                                fontSize: 10,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
-                                            Text(
-                                              // 'Cambio',
-                                              '$coinSymbol ${formatDecimalPriceByRegion(price: Decimal.parse(change.toString()))}',
-                                              style: TextStyle(
-                                                fontFamily: 'Poppins-regular',
-                                                color: Colors.green.shade600,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                Divider(),
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                                  child: identifyPaymentMethod(
-                                    banks: banks,
-                                    itemsBank: nationalBanks,
-                                    itemsBankInter: internationalBanks,
-                                    coinName: coinName,
-                                    coinDecimals: coinDecimals,
-                                    coinExchangeRatio: coinExchangeRatio,
-                                    coinSymbol: coinSymbol,
-                                    coinCode: coinCode,
-                                    moneyRecievedForRegisterMoney:
-                                        moneyRecievedForRegisterMoney,
-                                    paymentsValidPayQuantity:
-                                        paymentsValidPayQuantity,
-                                    selectedValueA: selectedValueA!,
-                                    client: client,
-                                    invoiceDocumentID: invoiceDocumentID,
-                                    paidAmount: paidAmount ?? 0,
-                                    totalOfTheOrder: invoiceTotal,
-                                    date: today,
-                                    context: context,
-                                    remaining: remaining!,
-                                    remainingConverted: double.parse(
-                                        remainingConverted.toString()),
-                                    selectedCoin: selectedCoin,
-                                    noRetail: true,
-                                    paymentBody: AddPaymentBodyAtt(
-                                      client: client,
-                                      currency: selectedCoin,
-                                      discount: 0,
-                                      discountPercentage: 0,
-                                      invoiceDocumentID: invoiceDocumentID,
-                                      invoiceNumber: invoiceNumber,
-                                      percentageTax: percentageTax,
-                                      remaining: remaining,
-                                      subTotal:
-                                          double.parse(subTotal.toString()),
-                                      currencyExchange: coinExchangeRatio!,
-                                      tax: tax,
+                                          )
+                                    : Container(),
+                            Container(
+                              margin: const EdgeInsets.fromLTRB(
+                                0,
+                                10,
+                                0,
+                                0,
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Subtotal: ',
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins-regular',
+                                      color: myTheme.colorScheme.primary,
+                                      fontSize: 10,
                                     ),
                                   ),
-                                )
-                              ],
+                                  Text(
+                                    // 'Subtotal',
+                                    '$coinSymbol $subTotalformatted',
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins-regular',
+                                      color: myTheme.colorScheme.primary,
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.fromLTRB(
+                                0,
+                                0,
+                                0,
+                                0,
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Descuento Maestro ($discountPercentage%): ',
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins-regular',
+                                      color: myTheme.colorScheme.primary,
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                  Text(
+                                    // 'Descuento maestro',
+                                    ' - $coinSymbol $discountMasterformatted',
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins-regular',
+                                      color: myTheme.colorScheme.primary,
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.fromLTRB(
+                                0,
+                                0,
+                                0,
+                                0,
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'IVA (16%): ',
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins-regular',
+                                      color: myTheme.colorScheme.primary,
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                  Text(
+                                    // 'Taxes',
+                                    '$coinSymbol $taxformatted',
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins-regular',
+                                      color: myTheme.colorScheme.primary,
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.fromLTRB(
+                                0,
+                                0,
+                                0,
+                                0,
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Total: ',
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins-regular',
+                                      color: myTheme.colorScheme.primary,
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                  Text(
+                                    // 'total',
+                                    '$coinSymbol $totalformatted',
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins-regular',
+                                      color: myTheme
+                                          .colorScheme.onPrimaryContainer,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.fromLTRB(
+                                0,
+                                0,
+                                0,
+                                0,
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Monto pagado: ',
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins-regular',
+                                      color: myTheme.colorScheme.primary,
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                  Text(
+                                    // 'total',
+                                    '$coinSymbol $payedUpformatted',
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins-regular',
+                                      color: myTheme
+                                          .colorScheme.onPrimaryContainer,
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 5),
+                            Container(
+                              margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Saldo: ',
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins-regular',
+                                      color: myTheme
+                                          .colorScheme.onPrimaryContainer,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    // 'balance',
+                                    '$coinSymbol $balanceformatted',
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins-regular',
+                                      color: myTheme
+                                          .colorScheme.onPrimaryContainer,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            selectedValueA != 'Efectivo'
+                                ? Container()
+                                : Container(
+                                    alignment: Alignment.bottomCenter,
+                                    margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      // selectedValueA != 'Efectivo'
+                                      //     ? MainAxisAlignment.center
+                                      //     : MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Text(
+                                          'Cambio: ',
+                                          style: TextStyle(
+                                            fontFamily: 'Poppins-regular',
+                                            color: Colors.green.shade600,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          // 'Cambio',
+                                          '$coinSymbol ${formatDecimalPriceByRegion(price: Decimal.parse(change.toString()))}',
+                                          style: TextStyle(
+                                            fontFamily: 'Poppins-regular',
+                                            color: Colors.green.shade600,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                            Divider(),
+                            Container(
+                              margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                              child: identifyPaymentMethod(
+                                banks: banks,
+                                itemsBank: nationalBanks,
+                                itemsBankInter: internationalBanks,
+                                coinName: coinName,
+                                coinDecimals: coinDecimals,
+                                coinExchangeRatio: coinExchangeRatio,
+                                coinSymbol: coinSymbol,
+                                coinCode: coinCode,
+                                moneyRecievedForRegisterMoney:
+                                    moneyRecievedForRegisterMoney,
+                                paymentsValidPayQuantity:
+                                    paymentsValidPayQuantity,
+                                selectedValueA: selectedValueA!,
+                                client: client,
+                                invoiceDocumentID: invoiceDocumentID,
+                                paidAmount: paidAmount ?? 0,
+                                totalOfTheOrder: invoiceTotal,
+                                date: today,
+                                context: context,
+                                remaining: remaining!,
+                                remainingConverted:
+                                    double.parse(remainingConverted.toString()),
+                                selectedCoin: selectedCoin,
+                                noRetail: true,
+                                paymentBody: AddPaymentBodyAtt(
+                                  client: client,
+                                  currency: selectedCoin,
+                                  discount: 0,
+                                  discountPercentage: 0,
+                                  invoiceDocumentID: invoiceDocumentID,
+                                  invoiceNumber: invoiceNumber,
+                                  percentageTax: percentageTax,
+                                  remaining: remaining,
+                                  subTotal: double.parse(subTotal.toString()),
+                                  currencyExchange: coinExchangeRatio!,
+                                  tax: tax,
+                                ),
+                              ),
                             )
-                          : Container()
-                      : Container(),
+                          ],
+                        )
+                      : Container()
                 ],
               ),
             ),
@@ -2006,9 +1756,6 @@ class SeePaymentsALertDialog extends StatelessWidget {
                                   coinDecimals: coinDecimals,
                                   coinExchangeRatio: payment['tasaDeCambio'],
                                 );
-                                var paymentAmountFormatted =
-                                    formatDecimalPriceByRegion(
-                                        price: paymentAmount);
 
                                 final fecha =
                                     (payment['fecha'] as Timestamp).toDate();

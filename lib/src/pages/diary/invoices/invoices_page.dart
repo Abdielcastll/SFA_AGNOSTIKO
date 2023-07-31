@@ -7,12 +7,9 @@ import 'package:flutter_switch/flutter_switch.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:pwa_sales2go_flutter/examples/example_invoices_list.dart';
 import 'package:pwa_sales2go_flutter/src/models/account_balance_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
-import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/credit_on_process.dart';
-import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/filter_invoices.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/invoice_completed.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/invoices_on_process.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
@@ -20,8 +17,6 @@ import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/loading/loading_widget.dart';
 
 class InvoicesPage extends StatefulWidget {
   const InvoicesPage({Key? key}) : super(key: key);
@@ -105,12 +100,12 @@ class _InvoicesPageState extends State<InvoicesPage> {
 }
 
 class InvoicesBody extends StatefulWidget {
-  InvoicesBody({
+  const InvoicesBody({
     Key? key,
     this.isNotesChecked,
   }) : super(key: key);
 
-  bool? isNotesChecked;
+  final bool? isNotesChecked;
 
   @override
   State<InvoicesBody> createState() => _InvoicesBodyState();

@@ -1,34 +1,30 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
-import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void modalBottomSheetForCompleted({
-  context,
-  commentary,
-  currentClientName,
+  required BuildContext context,
+  required String commentary,
+  required String currentClientName,
   idType,
-  id,
+  required String id,
   specialContributor,
   currentClientPhone,
-  currentClientEmail,
-  currentClientAddress,
-  currentClientDispatchAdress,
+  required String currentClientEmail,
+  required String currentClientAddress,
+  required String currentClientDispatchAdress,
   currentClientZones,
   currentClientPrices,
   currentDiscountMaster,
   clientReferenceId,
-  userUID,
-  visitDocumentId,
-  currentClientId,
+  required String userUID,
+  required String visitDocumentId,
+  required String currentClientId,
   currentClientIdType,
-  date,
+  required String date,
 }) {
   showModalBottomSheet(
     isScrollControlled: true,
@@ -53,14 +49,12 @@ void modalBottomSheetForCompleted({
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      child: Text(
-                        currentClientName,
-                        style: TextStyle(
-                          fontSize: 24,
-                          color: Color(0xFF1B1B1F),
-                          fontFamily: 'Poppins-regular',
-                        ),
+                    Text(
+                      currentClientName,
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: Color(0xFF1B1B1F),
+                        fontFamily: 'Poppins-regular',
                       ),
                     ),
                     SizedBox(height: 14),
@@ -90,15 +84,13 @@ void modalBottomSheetForCompleted({
                       child: Divider(),
                     ),
                     SizedBox(height: 12),
-                    Container(
-                      child: Text(
-                        'Comentario',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: myTheme.colorScheme.onPrimaryContainer,
-                          fontFamily: 'Poppins-medium',
-                          letterSpacing: 0.15,
-                        ),
+                    Text(
+                      'Comentario',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: myTheme.colorScheme.onPrimaryContainer,
+                        fontFamily: 'Poppins-medium',
+                        letterSpacing: 0.15,
                       ),
                     ),
                     SizedBox(height: 8),
@@ -129,7 +121,7 @@ void modalBottomSheetForCompleted({
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
+                        SizedBox(
                           width: MediaQuery.of(context).size.width * 0.9,
                           child: ElevatedButton(
                             style: ButtonStyle(
@@ -197,103 +189,6 @@ void modalBottomSheetForCompleted({
               ),
             ),
           );
-          // return SafeArea(
-          //   child: Container(
-          //     padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-          //     child: SingleChildScrollView(
-          //       child: Column(
-          //         children: [
-          //           Container(
-          //             alignment: Alignment.centerLeft,
-          //             margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-          //             child: Text(
-          //               AppLocalizations.of(context)!.commentary,
-          //               style: TextStyle(
-          //                 fontSize: 14,
-          //                 fontWeight: FontWeight.bold,
-          //                 color: myTheme.colorScheme.onPrimaryContainer,
-          //                 fontFamily: 'Poppins-regular',
-          //               ),
-          //             ),
-          //           ),
-          //           Container(
-          //             width: 350,
-          //             height: 40,
-          //             alignment: Alignment.centerLeft,
-          //             margin: EdgeInsets.fromLTRB(10, 15, 0, 10),
-          //             padding: EdgeInsets.fromLTRB(14, 0, 0, 0),
-          //             decoration: BoxDecoration(
-          //               borderRadius: BorderRadius.circular(20),
-          //               color: Colors.grey.shade100,
-          //               border: Border.all(
-          //                 color: myTheme.colorScheme.primary.withOpacity(0.5),
-          //               ),
-          //             ),
-          //             child: Text(
-          //               '$commentary',
-          //               maxLines: 1,
-          //               overflow: TextOverflow.ellipsis,
-          //               style: TextStyle(
-          //                 fontFamily: 'Poppins-regular',
-          //                 fontSize: 14,
-          //                 color: myTheme.colorScheme.primary,
-          //               ),
-          //             ),
-          //           ),
-          //           Container(
-          //             margin: EdgeInsets.fromLTRB(14, 0, 0, 0),
-          //             width: MediaQuery.of(context).size.width,
-          //             child: ElevatedButton.icon(
-          //               onPressed: () {
-          //                 Navigator.push(
-          //                   context,
-          //                   MaterialPageRoute(
-          //                     builder: (BuildContext context) => ClientDetails(
-          //                       specialContribuyer: specialContributor,
-          //                       masterDiscount: currentDiscountMaster,
-          //                       fiscalAddress: currentClientAddress,
-          //                       email: currentClientEmail,
-          //                       listOfPrices: currentClientPrices,
-          //                       name: currentClientName,
-          //                       tlf1: currentClientPhone,
-          //                       tlf2: currentClientPhone,
-          //                       zone: currentClientZones,
-          //                       nameId: currentClientId,
-          //                       typeId: currentClientIdType,
-          //                       clientDocumentReferenceID: clientReferenceId,
-          //                       dispatchAddress: currentClientDispatchAdress,
-          //                     ),
-          //                   ),
-          //                 );
-          //               },
-          //               style: ButtonStyle(
-          //                 backgroundColor: MaterialStateProperty.all(
-          //                   myTheme.colorScheme.primary,
-          //                 ),
-          //                 shape:
-          //                     MaterialStateProperty.all<RoundedRectangleBorder>(
-          //                   RoundedRectangleBorder(
-          //                     borderRadius: BorderRadius.circular(18.0),
-          //                   ),
-          //                 ),
-          //               ),
-          //               icon: Icon(Icons.person),
-          //               label: Text(
-          //                 AppLocalizations.of(context)!.seeClient,
-          //                 style: TextStyle(
-          //                   fontFamily: 'Poppins-regular',
-          //                   color: Colors.white,
-          //                   fontSize: 14,
-          //                   fontWeight: FontWeight.bold,
-          //                 ),
-          //               ),
-          //             ),
-          //           ),
-          //         ],
-          //       ),
-          //     ),
-          //   ),
-          // );
         },
       );
     },
@@ -303,10 +198,10 @@ void modalBottomSheetForCompleted({
 class TextBoxWidget extends StatelessWidget {
   const TextBoxWidget({
     Key? key,
-    this.message,
+    required this.message,
   }) : super(key: key);
 
-  final message;
+  final String message;
 
   @override
   Widget build(BuildContext context) {
@@ -322,7 +217,7 @@ class TextBoxWidget extends StatelessWidget {
         ),
       ),
       child: Text(
-        '$message',
+        message,
         style: TextStyle(
           fontFamily: 'Poppins-regular',
           fontSize: 14,

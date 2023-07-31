@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class CLientsExample {
   final bool active;
   final bool specialContribuyer;

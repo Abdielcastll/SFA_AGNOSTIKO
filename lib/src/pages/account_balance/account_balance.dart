@@ -1,13 +1,11 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/account_balance_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
@@ -18,8 +16,6 @@ import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AccountBalancePage extends StatefulWidget {
   const AccountBalancePage({
@@ -399,7 +395,6 @@ class _ShowInvoicesState extends State<ShowInvoices> {
     var invoicesOnProcessList =
         invoices.where((element) => element.isPaid == false).toList();
     var dateFormatter = DateFormat('yyyy/MM/dd');
-    final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
 
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -423,18 +418,6 @@ class _ShowInvoicesState extends State<ShowInvoices> {
                   note.orderDate ?? Timestamp.fromDate(DateTime.now());
               final date = DateTime.parse(unFormattedDate.toDate().toString());
               final noteDate = dateFormatter.format(date);
-              final noteOriginalAmount = note.totalAmount ?? 0;
-
-              final paymentsValidPay = note.payments
-                  .where((element) => element['anulado'] == false)
-                  .toList();
-              var sumOfValidPayments = paymentsValidPay.fold(0, (i, element) {
-                return i + element['monto'];
-              });
-              double remaining = double.parse(
-                  (noteOriginalAmount - sumOfValidPayments).toStringAsFixed(4));
-              // final noteBalance = 00;
-              final noteBalance = remaining;
 
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4.0),

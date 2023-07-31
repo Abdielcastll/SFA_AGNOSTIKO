@@ -4,10 +4,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pwa_sales2go_flutter/src/services/auth.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_login.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/loading/loading_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -224,7 +222,7 @@ class Button extends StatefulWidget {
   });
 
   final formKey;
-  bool loading;
+  final bool loading;
   final emailController;
   final passwordController;
 
@@ -234,10 +232,16 @@ class Button extends StatefulWidget {
 
 class _ButtonState extends State<Button> {
   final AuthService _auth = AuthService();
+  late bool loading;
+  @override
+  initState() {
+    super.initState();
+    loading = widget.loading;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return widget.loading
+    return loading
         ? Center(
             child: Column(
             children: [
@@ -264,7 +268,7 @@ class _ButtonState extends State<Button> {
               onPressed: () async {
                 if (widget.formKey.currentState!.validate()) {
                   setState(() {
-                    widget.loading = true;
+                    loading = true;
                   });
                   final user = await _auth.signInWithEmailAndPassword(
                     widget.emailController.text.toString(),
@@ -272,7 +276,7 @@ class _ButtonState extends State<Button> {
                   );
                   if (user == null) {
                     setState(() {
-                      widget.loading = false;
+                      loading = false;
                     });
                   }
                 }

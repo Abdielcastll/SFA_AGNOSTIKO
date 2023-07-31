@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class CatalogueExample {
   final String categorie;
   final String imageUrl;

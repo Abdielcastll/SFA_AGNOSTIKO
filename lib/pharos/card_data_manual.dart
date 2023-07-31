@@ -1,13 +1,10 @@
-import 'tags.dart';
-
-class CardDataManual{
+class CardDataManual {
   String readingMethod;
   String cardNumber;
   String secCode;
   String expMonth;
   String expYear;
   String? cardholderName;
-
 
   CardDataManual({
     required this.readingMethod,
@@ -16,9 +13,7 @@ class CardDataManual{
     required this.expMonth,
     required this.expYear,
     this.cardholderName,
-
   });
-
 
   Map<String, dynamic> toJson() {
     return {
@@ -28,11 +23,6 @@ class CardDataManual{
       'exp_month': expMonth,
       'exp_year': expYear,
       'cardholder_name': cardholderName,
-
-
     };
   }
-
 }
-
-

@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class UserExample {
   final bool active;
   final String email;

@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/account_balance_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/components/invoice_card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class InvoicesCompleted extends StatefulWidget {
@@ -31,10 +30,6 @@ class _InvoicesCompletedState extends State<InvoicesCompleted> {
     final invoices = Provider.of<List<Invoices>?>(context) ?? [];
     final invoicesList =
         invoices.where((element) => element.isPaid == true).toList();
-    final currentDay =
-        Provider.of<CounterLimitFirestore>(context).currentDayInvoice;
-    final currentDateTime = currentDay!.toDate();
-    String formattedDate = dateFormatter.format(currentDateTime);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,

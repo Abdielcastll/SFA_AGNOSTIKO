@@ -7,8 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:pwa_sales2go_flutter/pharos/pharos.dart';
 import 'package:pwa_sales2go_flutter/src/services/utils/comm.dart';
-import 'package:pwa_sales2go_flutter/src/utils/multitenant-config.dart';
-
 import '../../services/utils/keypad.dart';
 import '../../services/utils/token.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -256,7 +254,7 @@ class SplashScreenViewState extends State<SplashScreenView> {
     print('Generar mensaje a pharos');
     print(pharosMsgKeyInit);
     final pharosResponse = await processKeyInitPharos(pharosMsgKeyInit);
-    print('pharos responde');
+    print('pharos responde $pharosResponse');
 
     // final encryptedK0 = pharosResponse.encryptedNewKey;
     // final ksn = pharosResponse.newKeyKsn;

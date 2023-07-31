@@ -48,9 +48,9 @@ class AddPaymentPage extends StatefulWidget {
   final String invoiceDocumentID;
   final Client client;
   final int invoiceNumber;
-  List<PayMethod> payments;
-  double? amountPayed;
-  double? invoiceTotal;
+  final List<PayMethod> payments;
+  final double? amountPayed;
+  final double? invoiceTotal;
 
   @override
   State<AddPaymentPage> createState() => _AddPaymentPageState();
@@ -217,9 +217,9 @@ class AddPaymentBody extends StatefulWidget {
   final String invoiceDocumentID;
   final Client client;
   final int invoiceNumber;
-  List<PayMethod> payments;
-  double? amountPayed;
-  double? invoiceTotal;
+  final List<PayMethod> payments;
+  final double? amountPayed;
+  final double? invoiceTotal;
 
   @override
   State<AddPaymentBody> createState() => _AddPaymentBodyState();
@@ -249,7 +249,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
 
   updatePayed(double amount) {
     print('payed $amount');
-    if (amount != null && amount != 0) {
+    if (amount != 0) {
       setState(() {
         amountPayed += amount;
       });
@@ -335,10 +335,6 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
       'Transf-internacional',
       // 'Criptomoneda',
       // 'Nota de credito',
-    ];
-    List<String> itemsCoin = [
-      'USD',
-      'MXN',
     ];
     print('TEST COINNAME');
     print(coinName);
@@ -752,7 +748,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                                               moneyRecievedForRegisterMoney
                                                                   .toString()) -
                                                           Decimal.parse(
-                                                              paidAmount!
+                                                              paidAmount
                                                                   .toString())) *
                                                       Decimal.parse('100'))
                                                   .round() /
@@ -779,7 +775,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                                               moneyRecievedForRegisterMoney
                                                                   .toString()) -
                                                           Decimal.parse(
-                                                              paidAmount!
+                                                              paidAmount
                                                                   .toString())) *
                                                       Decimal.parse('100'))
                                                   .round() /
@@ -916,7 +912,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                                               moneyRecievedForRegisterMoney
                                                                   .toString()) -
                                                           Decimal.parse(
-                                                              paidAmount!
+                                                              paidAmount
                                                                   .toString())) *
                                                       Decimal.parse('100'))
                                                   .round() /
@@ -944,7 +940,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                                               moneyRecievedForRegisterMoney
                                                                   .toString()) -
                                                           Decimal.parse(
-                                                              paidAmount!
+                                                              paidAmount
                                                                   .toString())) *
                                                       Decimal.parse('100'))
                                                   .round() /
@@ -1403,7 +1399,7 @@ class PayMethod {
 
 class DecimalTextInputFormatter extends TextInputFormatter {
   DecimalTextInputFormatter({required this.decimalRange})
-      : assert(decimalRange == null || decimalRange > 0);
+      : assert(decimalRange > 0);
 
   final int decimalRange;
 
@@ -1415,28 +1411,25 @@ class DecimalTextInputFormatter extends TextInputFormatter {
     TextSelection newSelection = newValue.selection;
     String truncated = newValue.text;
 
-    if (decimalRange != null) {
-      String value = newValue.text;
+    String value = newValue.text;
 
-      if (value.contains(".") &&
-          value.substring(value.indexOf(".") + 1).length > decimalRange) {
-        truncated = oldValue.text;
-        newSelection = oldValue.selection;
-      } else if (value == ".") {
-        truncated = "0.";
+    if (value.contains(".") &&
+        value.substring(value.indexOf(".") + 1).length > decimalRange) {
+      truncated = oldValue.text;
+      newSelection = oldValue.selection;
+    } else if (value == ".") {
+      truncated = "0.";
 
-        newSelection = newValue.selection.copyWith(
-          baseOffset: math.min(truncated.length, truncated.length + 1),
-          extentOffset: math.min(truncated.length, truncated.length + 1),
-        );
-      }
-
-      return TextEditingValue(
-        text: truncated,
-        selection: newSelection,
-        composing: TextRange.empty,
+      newSelection = newValue.selection.copyWith(
+        baseOffset: math.min(truncated.length, truncated.length + 1),
+        extentOffset: math.min(truncated.length, truncated.length + 1),
       );
     }
-    return newValue;
+
+    return TextEditingValue(
+      text: truncated,
+      selection: newSelection,
+      composing: TextRange.empty,
+    );
   }
 }

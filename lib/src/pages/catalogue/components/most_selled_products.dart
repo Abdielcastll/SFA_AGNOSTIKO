@@ -2,11 +2,8 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
@@ -39,12 +36,10 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
     final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
     final pricesName = Provider.of<Prices?>(context)?.name ?? {};
 
-    final productsList = products;
-
     return FutureBuilder(
       future: getDataFromBQ(queryProductosMasVendidos),
       builder: (context, snapshot) {
-        final List<ProductsByDate>? productsBySales = [];
+        final List<ProductsByDate> productsBySales = [];
         var productsBySalesList = productsBySales;
         if (snapshot.hasData) {
           final data = snapshot.data! as List;
@@ -72,17 +67,6 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
               String elLine = el['linea'];
               String line = elLine.replaceAll(RegExp('"'), '');
 
-              // print(quality);
-              // print(catalogue);
-              // print(categorie);
-              // print(code);
-              // print(design);
-              // print(brand);
-              // print(name);
-              // print(subcategorie);
-              // print(size);
-              // print(line);
-
               var msp = ProductsByDate(
                 quality: firebase.doc(quality).id,
                 catalogue: firebase.doc(catalogue).id,
@@ -98,7 +82,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                 selected: false,
               );
 
-              productsBySales?.add(msp);
+              productsBySales.add(msp);
             },
           );
           return Container(
@@ -134,16 +118,16 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                   child: ListView.builder(
                     physics: const BouncingScrollPhysics(),
                     scrollDirection: Axis.horizontal,
-                    itemCount: productsBySalesList?.length,
+                    itemCount: productsBySalesList.length,
                     itemBuilder: (BuildContext context, index) {
-                      final product = productsBySalesList?[index];
-                      if ((stockValues[product?.code] ?? 000) > 0) {
+                      final product = productsBySalesList[index];
+                      if ((stockValues[product.code] ?? 000) > 0) {
                         return FutureBuilder<String>(
                           future: storage
                               .ref()
                               .child('imagenes')
                               .child('catalogos')
-                              .child(product?.catalogue)
+                              .child(product.catalogue)
                               .child('1')
                               .getDownloadURL()
                               .catchError((e) {
@@ -159,20 +143,20 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                     MaterialPageRoute(
                                       builder: (BuildContext context) =>
                                           ProductDetails(
-                                        code: product?.code,
-                                        line: linesSummary[product?.line],
+                                        code: product.code,
+                                        line: linesSummary[product.line],
                                         imageUrl: url,
                                         isProductNew: false,
-                                        price: (prices[product?.code] ?? 0),
-                                        name: product?.name,
-                                        stock: stockValues[product?.code] ?? 0,
-                                        list: productsBySalesList!
+                                        price: (prices[product.code] ?? 0),
+                                        name: product.name,
+                                        stock: stockValues[product.code] ?? 0,
+                                        list: productsBySalesList
                                             .where((element) =>
-                                                element.name == product?.name)
+                                                element.name == product.name)
                                             .toList(),
                                         isProductInAPromotion: false,
                                         prices: prices,
-                                        catalogueID: product?.catalogue,
+                                        catalogueID: product.catalogue,
                                         userZoneDocument: userZoneDocument,
                                         showListButton: true,
                                         // pricesName: pricesName,
@@ -181,7 +165,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                   );
                                 },
                                 child: Container(
-                                  margin: productsBySales?.last == product
+                                  margin: productsBySales.last == product
                                       ? const EdgeInsets.fromLTRB(16, 12, 16, 0)
                                       : const EdgeInsets.fromLTRB(16, 12, 0, 0),
                                   width: 140,
@@ -225,7 +209,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                         margin: const EdgeInsets.fromLTRB(
                                             5.0, 0, 0, 18),
                                         child: Text(
-                                          '${product?.name}',
+                                          '${product.name}',
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
@@ -237,48 +221,6 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                           ),
                                         ),
                                       ),
-                                      // Container(
-                                      //   margin:
-                                      //       const EdgeInsets.fromLTRB(5.0, 0.0, 0, 0),
-                                      //   child: Row(
-                                      //     children: [
-                                      //       Container(
-                                      //         margin:
-                                      //             const EdgeInsets.only(right: 3.0),
-                                      //         height: 10,
-                                      //         width: 10,
-                                      //         decoration: BoxDecoration(
-                                      //           color: Colors.amber,
-                                      //           borderRadius:
-                                      //               BorderRadius.circular(20),
-                                      //         ),
-                                      //       ),
-                                      //       Container(
-                                      //         margin:
-                                      //             const EdgeInsets.only(right: 3.0),
-                                      //         height: 10,
-                                      //         width: 10,
-                                      //         decoration: BoxDecoration(
-                                      //           color: myTheme
-                                      //               .colorScheme.onPrimaryContainer,
-                                      //           borderRadius:
-                                      //               BorderRadius.circular(20),
-                                      //         ),
-                                      //       ),
-                                      //       Container(
-                                      //         margin:
-                                      //             const EdgeInsets.only(right: 3.0),
-                                      //         height: 10,
-                                      //         width: 10,
-                                      //         decoration: BoxDecoration(
-                                      //           color: Colors.green.shade900,
-                                      //           borderRadius:
-                                      //               BorderRadius.circular(20),
-                                      //         ),
-                                      //       ),
-                                      //     ],
-                                      //   ),
-                                      // ),
                                     ],
                                   ),
                                 ),
@@ -299,17 +241,17 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                     MaterialPageRoute(
                                       builder: (BuildContext context) =>
                                           ProductDetails(
-                                        code: product?.code,
-                                        price: (prices[product?.code] ?? 0),
-                                        line: linesSummary[product?.line],
+                                        code: product.code,
+                                        price: (prices[product.code] ?? 0),
+                                        line: linesSummary[product.line],
                                         imageUrl:
                                             'https://i.imgur.com/BPbj6Gy.jpg',
                                         isProductNew: false,
-                                        name: product?.name,
-                                        stock: stockValues[product?.code] ?? 0,
-                                        list: productsBySalesList!
+                                        name: product.name,
+                                        stock: stockValues[product.code] ?? 0,
+                                        list: productsBySalesList
                                             .where((element) =>
-                                                element.name == product?.name)
+                                                element.name == product.name)
                                             .toList(),
                                         isProductInAPromotion: false,
                                         prices: prices,
@@ -348,7 +290,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                         margin: const EdgeInsets.fromLTRB(
                                             5, 0, 0, 4),
                                         child: Text(
-                                          '${product?.name}',
+                                          '${product.name}',
                                           textAlign: TextAlign.start,
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
@@ -361,48 +303,6 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                           ),
                                         ),
                                       ),
-                                      // Container(
-                                      //   margin:
-                                      //       const EdgeInsets.fromLTRB(5.0, 0.0, 0, 0),
-                                      //   child: Row(
-                                      //     children: [
-                                      //       Container(
-                                      //         margin:
-                                      //             const EdgeInsets.only(right: 3.0),
-                                      //         height: 10,
-                                      //         width: 10,
-                                      //         decoration: BoxDecoration(
-                                      //           color: Colors.amber,
-                                      //           borderRadius:
-                                      //               BorderRadius.circular(20),
-                                      //         ),
-                                      //       ),
-                                      //       Container(
-                                      //         margin:
-                                      //             const EdgeInsets.only(right: 3.0),
-                                      //         height: 10,
-                                      //         width: 10,
-                                      //         decoration: BoxDecoration(
-                                      //           color: myTheme
-                                      //               .colorScheme.onPrimaryContainer,
-                                      //           borderRadius:
-                                      //               BorderRadius.circular(20),
-                                      //         ),
-                                      //       ),
-                                      //       Container(
-                                      //         margin:
-                                      //             const EdgeInsets.only(right: 3.0),
-                                      //         height: 10,
-                                      //         width: 10,
-                                      //         decoration: BoxDecoration(
-                                      //           color: Colors.green.shade900,
-                                      //           borderRadius:
-                                      //               BorderRadius.circular(20),
-                                      //         ),
-                                      //       ),
-                                      //     ],
-                                      //   ),
-                                      // ),
                                     ],
                                   ),
                                 ),
@@ -424,7 +324,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                               .ref()
                               .child('imagenes')
                               .child('catalogos')
-                              .child(product?.catalogue)
+                              .child(product.catalogue)
                               .child('1')
                               .getDownloadURL()
                               .catchError((e) {
@@ -435,31 +335,6 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                               final url = snapshot.data!.toString();
                               return GestureDetector(
                                 onTap: () {
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //     builder: (BuildContext context) =>
-                                  //         ProductDetails(
-                                  //       code: product?.code,
-                                  //       line: linesSummary[product?.line],
-                                  //       imageUrl: url,
-                                  //       isProductNew: false,
-                                  //       price: (prices[product?.code] ?? 0),
-                                  //       name: product?.name,
-                                  //       stock: stockValues[product?.code] ?? 0,
-                                  //       list: productsBySalesList!
-                                  //           .where((element) =>
-                                  //               element.name == product?.name)
-                                  //           .toList(),
-                                  //       isProductInAPromotion: false,
-                                  //       prices: prices,
-                                  //       catalogueID: product?.catalogue,
-                                  //       userZoneDocument: userZoneDocument,
-                                  //       showListButton: true,
-                                  //       // pricesName: pricesName,
-                                  //     ),
-                                  //   ),
-                                  // );
                                   ScaffoldMessenger.of(context)
                                     ..removeCurrentSnackBar()
                                     ..showSnackBar(
@@ -477,7 +352,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                     );
                                 },
                                 child: Container(
-                                  margin: productsBySales?.last == product
+                                  margin: productsBySales.last == product
                                       ? const EdgeInsets.fromLTRB(16, 12, 16, 0)
                                       : const EdgeInsets.fromLTRB(16, 12, 0, 0),
                                   width: 140,
@@ -521,7 +396,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                         margin: const EdgeInsets.fromLTRB(
                                             5.0, 0, 0, 18),
                                         child: Text(
-                                          '${product?.name}',
+                                          '${product.name}',
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
@@ -533,48 +408,6 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                           ),
                                         ),
                                       ),
-                                      // Container(
-                                      //   margin:
-                                      //       const EdgeInsets.fromLTRB(5.0, 0.0, 0, 0),
-                                      //   child: Row(
-                                      //     children: [
-                                      //       Container(
-                                      //         margin:
-                                      //             const EdgeInsets.only(right: 3.0),
-                                      //         height: 10,
-                                      //         width: 10,
-                                      //         decoration: BoxDecoration(
-                                      //           color: Colors.amber,
-                                      //           borderRadius:
-                                      //               BorderRadius.circular(20),
-                                      //         ),
-                                      //       ),
-                                      //       Container(
-                                      //         margin:
-                                      //             const EdgeInsets.only(right: 3.0),
-                                      //         height: 10,
-                                      //         width: 10,
-                                      //         decoration: BoxDecoration(
-                                      //           color: myTheme
-                                      //               .colorScheme.onPrimaryContainer,
-                                      //           borderRadius:
-                                      //               BorderRadius.circular(20),
-                                      //         ),
-                                      //       ),
-                                      //       Container(
-                                      //         margin:
-                                      //             const EdgeInsets.only(right: 3.0),
-                                      //         height: 10,
-                                      //         width: 10,
-                                      //         decoration: BoxDecoration(
-                                      //           color: Colors.green.shade900,
-                                      //           borderRadius:
-                                      //               BorderRadius.circular(20),
-                                      //         ),
-                                      //       ),
-                                      //     ],
-                                      //   ),
-                                      // ),
                                     ],
                                   ),
                                 ),
@@ -595,17 +428,17 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                     MaterialPageRoute(
                                       builder: (BuildContext context) =>
                                           ProductDetails(
-                                        code: product?.code,
-                                        price: (prices[product?.code] ?? 0),
-                                        line: linesSummary[product?.line],
+                                        code: product.code,
+                                        price: (prices[product.code] ?? 0),
+                                        line: linesSummary[product.line],
                                         imageUrl:
                                             'https://i.imgur.com/BPbj6Gy.jpg',
                                         isProductNew: false,
-                                        name: product?.name,
-                                        stock: stockValues[product?.code] ?? 0,
-                                        list: productsBySalesList!
+                                        name: product.name,
+                                        stock: stockValues[product.code] ?? 0,
+                                        list: productsBySalesList
                                             .where((element) =>
-                                                element.name == product?.name)
+                                                element.name == product.name)
                                             .toList(),
                                         isProductInAPromotion: false,
                                         prices: prices,
@@ -644,7 +477,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                         margin: const EdgeInsets.fromLTRB(
                                             5, 0, 0, 4),
                                         child: Text(
-                                          '${product?.name}',
+                                          '${product.name}',
                                           textAlign: TextAlign.start,
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
@@ -657,48 +490,6 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                           ),
                                         ),
                                       ),
-                                      // Container(
-                                      //   margin:
-                                      //       const EdgeInsets.fromLTRB(5.0, 0.0, 0, 0),
-                                      //   child: Row(
-                                      //     children: [
-                                      //       Container(
-                                      //         margin:
-                                      //             const EdgeInsets.only(right: 3.0),
-                                      //         height: 10,
-                                      //         width: 10,
-                                      //         decoration: BoxDecoration(
-                                      //           color: Colors.amber,
-                                      //           borderRadius:
-                                      //               BorderRadius.circular(20),
-                                      //         ),
-                                      //       ),
-                                      //       Container(
-                                      //         margin:
-                                      //             const EdgeInsets.only(right: 3.0),
-                                      //         height: 10,
-                                      //         width: 10,
-                                      //         decoration: BoxDecoration(
-                                      //           color: myTheme
-                                      //               .colorScheme.onPrimaryContainer,
-                                      //           borderRadius:
-                                      //               BorderRadius.circular(20),
-                                      //         ),
-                                      //       ),
-                                      //       Container(
-                                      //         margin:
-                                      //             const EdgeInsets.only(right: 3.0),
-                                      //         height: 10,
-                                      //         width: 10,
-                                      //         decoration: BoxDecoration(
-                                      //           color: Colors.green.shade900,
-                                      //           borderRadius:
-                                      //               BorderRadius.circular(20),
-                                      //         ),
-                                      //       ),
-                                      //     ],
-                                      //   ),
-                                      // ),
                                     ],
                                   ),
                                 ),

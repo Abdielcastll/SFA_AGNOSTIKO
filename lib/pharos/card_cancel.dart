@@ -1,12 +1,5 @@
-import 'tags.dart';
-
-class CardCancel{
+class CardCancel {
   String readingMethod;
 
-  CardCancel({
-    required this.readingMethod
-  });
-
+  CardCancel({required this.readingMethod});
 }
-
-

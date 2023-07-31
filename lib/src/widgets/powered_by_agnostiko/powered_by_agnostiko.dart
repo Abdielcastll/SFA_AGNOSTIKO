@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/language/language_picker_widget.dart';
 
 class PoweredByAgnostiko extends StatelessWidget {
   const PoweredByAgnostiko({

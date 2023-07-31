@@ -111,16 +111,10 @@ class _CheckoutBodyState extends State<CheckoutBody> {
     print('OPENING CHECKOUT PAGE');
     final userUid = Provider.of<UserModel>(context).uid;
     int? clientMasterDiscount = widget.client?.masterDiscount;
-    String? fiscalAddress = widget.client?.fiscalAdress;
-    String? dispatchAddress =
-        widget.client?.dispatchAdress ?? 'No Hay direccion disponible';
     String formattedDate = dateFormatter.format(today);
-    final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
-    final coinName = Provider.of<Coin?>(context)?.name ?? '';
     final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 0;
     final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 0;
     final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
-    final coinCode = Provider.of<Coin?>(context)?.code ?? '';
 
     // SUB TOTAL
 
@@ -1264,7 +1258,6 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
-                                // ignore: prefer_const_literals_to_create_immutables
                                 children: [
                                   Center(
                                     child: Text(
@@ -1335,7 +1328,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                     print('total:$total');
 
                                     if (selectedValue2 != null) {
-                                      var result = await createOrder(
+                                      await createOrder(
                                         widget.client,
                                         userUid,
                                         commentary,

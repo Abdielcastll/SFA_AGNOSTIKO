@@ -4,21 +4,17 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/utils/determinePosition.dart';
+import 'package:pwa_sales2go_flutter/src/utils/requestFileBottomSheet.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/loading/loading_widget.dart';
 
 class AddClientPage extends StatefulWidget {
@@ -31,17 +27,8 @@ class AddClientPage extends StatefulWidget {
 }
 
 class _AddClientPageState extends State<AddClientPage> {
-  // identifyCoinForFirebaseRequest({String? selectedCoin}) {
-  //   List<String?> split = selectedCoin!.split(' ');
-  //   return split;
-  // }
-
   @override
   Widget build(BuildContext context) {
-    // final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
-    // print('Test split current coin')
-    // print(identifyCoinForFirebaseRequest(selectedCoin: currentCoin));
-
     return MultiProvider(
       providers: [
         StreamProvider<ZoneSummary?>.value(
@@ -50,6 +37,7 @@ class _AddClientPageState extends State<AddClientPage> {
           catchError: (context, error) {
             print('ERRROR ON STREAM PROVIDER OF ZONES SUMMARY IN ADD CLIENT');
             print(error);
+            return null;
           },
         ),
         StreamProvider<PricesSummary?>.value(
@@ -57,6 +45,7 @@ class _AddClientPageState extends State<AddClientPage> {
           catchError: (context, error) {
             print('ERROR ON STREAM PROVIDER OF PRICES IN ADD CLIENT');
             print(error);
+            return null;
           },
           value: listaDePreciosRef
               .doc('resumen')
@@ -68,6 +57,7 @@ class _AddClientPageState extends State<AddClientPage> {
           catchError: (context, error) {
             print('ERROR ON STREAM PROVIDER ON IDTYPES IN ADD CLIENT');
             print(error);
+            return null;
           },
           value: DatabaseServiceStreams().idTypeSummary,
         ),
@@ -127,55 +117,12 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
 
   File? imageFile;
 
-  Future getFromGallery(context) async {
-    try {
-      XFile? pickedFile =
-          await ImagePicker().pickImage(source: ImageSource.gallery);
-      if (pickedFile != null) {
-        return pickedFile;
-      } else {
-        return;
-      }
-    } on PlatformException catch (e) {
-      print('ERROR ESCOGIENDO IMAGEN');
-      print(e);
-    }
-  }
-
-  Future getFromCamera(context) async {
-    try {
-      XFile? pickedFile =
-          await ImagePicker().pickImage(source: ImageSource.camera);
-      if (pickedFile != null) {
-        return pickedFile;
-      } else {
-        return;
-      }
-    } on PlatformException catch (e) {
-      print('ERROR ESCOGIENDO IMAGEN');
-      print(e);
-    }
-  }
-
-  Future cropImage(filePath, imageFile) async {
-    CroppedFile? croppedImage = await ImageCropper().cropImage(
-      sourcePath: filePath,
-      maxHeight: 1080,
-      maxWidth: 1080,
-    );
-    if (croppedImage != null) {
-      return croppedImage;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     determinePosition();
     final pricesSummary = Provider.of<PricesSummary?>(context)?.summary ?? {};
     final idSummary = Provider.of<IdTypeSummary?>(context)?.summary ?? {};
     final zonesSummary = Provider.of<ZoneSummary?>(context)?.summary ?? {};
-    final coinsExhangesRates =
-        Provider.of<List<CoinExchangeRates>?>(context) ?? [];
 
     List<String> idSummaryValues = List.from(idSummary.values);
     List<String> pricesSummaryValues = List.from(pricesSummary.values);
@@ -795,89 +742,11 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                         ),
                         InkWell(
                           onTap: () async {
-                            showModalBottomSheet(
-                              context: context,
-                              builder: (context) {
-                                return Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    ListTile(
-                                      leading: Icon(
-                                        Icons.camera_alt,
-                                        color: myTheme
-                                            .colorScheme.onPrimaryContainer,
-                                      ),
-                                      title: Text(
-                                        'Camara',
-                                        style: TextStyle(
-                                          color: myTheme.colorScheme.primary,
-                                          fontFamily: 'Poppins-regular',
-                                        ),
-                                      ),
-                                      onTap: () async {
-                                        Navigator.of(context).pop();
-                                        var pickedFile =
-                                            await getFromCamera(context);
-                                        if (pickedFile != null) {
-                                          print('Imagen seleccionada');
-                                          var croppedImage = await cropImage(
-                                              pickedFile.path, imageFile);
-                                          if (croppedImage != null) {
-                                            print('Imagen recortada');
-                                            setState(() {
-                                              imageFile =
-                                                  File(croppedImage.path);
-                                            });
-                                          } else {
-                                            print('Error croppeando');
-                                          }
-                                        } else {
-                                          print('error seleccionando');
-                                          return;
-                                        }
-                                      },
-                                    ),
-                                    Divider(),
-                                    ListTile(
-                                      leading: Icon(
-                                        Icons.photo_camera_back_rounded,
-                                        color: myTheme
-                                            .colorScheme.onPrimaryContainer,
-                                      ),
-                                      title: Text(
-                                        'Galeria',
-                                        style: TextStyle(
-                                          color: myTheme.colorScheme.primary,
-                                          fontFamily: 'Poppins-regular',
-                                        ),
-                                      ),
-                                      onTap: () async {
-                                        Navigator.of(context).pop();
-                                        var pickedFile =
-                                            await getFromGallery(context);
-                                        if (pickedFile != null) {
-                                          print('Imagen seleccionada');
-                                          var croppedImage = await cropImage(
-                                              pickedFile.path, imageFile);
-                                          if (croppedImage != null) {
-                                            print('Imagen recortada');
-                                            setState(() {
-                                              imageFile =
-                                                  File(croppedImage.path);
-                                            });
-                                          } else {
-                                            print('Error croppeando');
-                                          }
-                                        } else {
-                                          print('error seleccionando');
-                                          return;
-                                        }
-                                      },
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
+                            requestFileBottomSheet(context, (image) {
+                              setState(() {
+                                imageFile = image;
+                              });
+                            });
                           },
                           child: Container(
                             margin: EdgeInsets.fromLTRB(0, 0, 10, 0),

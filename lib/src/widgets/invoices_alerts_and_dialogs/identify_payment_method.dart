@@ -7,61 +7,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
-import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
+import 'package:pwa_sales2go_flutter/src/utils/requestFileBottomSheet.dart';
 
 import '../../pages/place_order/add_payment.dart';
 import '../payment_method/payment_card.dart';
-
-Future getFromGallery(context) async {
-  try {
-    XFile? pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      return pickedFile;
-    } else {
-      return;
-    }
-  } on PlatformException catch (e) {
-    print('ERROR ESCOGIENDO IMAGEN');
-    print(e);
-  }
-}
-
-Future getFromCamera(context) async {
-  try {
-    XFile? pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.camera);
-    if (pickedFile != null) {
-      return pickedFile;
-    } else {
-      return;
-    }
-  } on PlatformException catch (e) {
-    print('ERROR ESCOGIENDO IMAGEN');
-    print(e);
-  }
-}
-
-Future cropImage(filePath, imageFile) async {
-  CroppedFile? croppedImage = await ImageCropper().cropImage(
-    sourcePath: filePath,
-    maxHeight: 1080,
-    maxWidth: 1080,
-  );
-  if (croppedImage != null) {
-    return croppedImage;
-  }
-}
 
 identifyPaymentMethod({
   String? coinName,
@@ -91,31 +47,11 @@ identifyPaymentMethod({
   File? imageFile;
   String accountHolder = '';
   String accountNumber = '';
-  String transactionId = '';
   String voucherNumber = '';
   String referenceId = '';
   String? selectedBank;
-  // List<String> itemsBank = [
-  //   'BANCO CENTRAL',
-  //   'BANCO BICENTENARIO',
-  //   'BANCO DE VENEZUELA',
-  //   'BANESCO',
-  //   'BOD',
-  //   'BNC',
-  // ];
-  // List<String> itemsBankInter = [
-  //   'BANK OF AMERICA',
-  //   'CITIBANK',
-  //   'HSBC',
-  //   'WELLSFARGO',
-  // ];
 
   final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
-
-  // print('Metodo: $selectedValueA');
-  // print('currentCoin: $currentCoin');
-  // print('paidAmount: $paidAmount');
-  // print('remainingFixed: $remaining');
 
   if (selectedValueA == 'Tarjeta de Debito' ||
       selectedValueA == 'Tarjeta de Credito') {
@@ -371,7 +307,6 @@ identifyPaymentMethod({
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                // AppLocalizations.of(context)!.selectFile,
                 'Subir comprobante',
                 style: TextStyle(
                   fontFamily: 'Poppins-medium',
@@ -384,85 +319,7 @@ identifyPaymentMethod({
                 width: 149,
                 height: 24,
                 child: ElevatedButton(
-                  onPressed: () async {
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (context) {
-                        return Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            ListTile(
-                              leading: Icon(
-                                Icons.camera_alt,
-                                color: myTheme.colorScheme.onPrimaryContainer,
-                              ),
-                              title: Text(
-                                'Camara',
-                                style: TextStyle(
-                                  color: myTheme.colorScheme.primary,
-                                  fontFamily: 'Poppins-regular',
-                                ),
-                              ),
-                              onTap: () async {
-                                Navigator.of(context).pop();
-                                var pickedFile = await getFromCamera(context);
-                                if (pickedFile != null) {
-                                  print('Imagen seleccionada');
-                                  var croppedImage = await cropImage(
-                                      pickedFile.path, imageFile);
-                                  if (croppedImage != null) {
-                                    print('Imagen recortada');
-                                    setState(() {
-                                      imageFile = File(croppedImage.path);
-                                    });
-                                  } else {
-                                    print('Error croppeando');
-                                  }
-                                } else {
-                                  print('error seleccionando');
-                                  return;
-                                }
-                              },
-                            ),
-                            Divider(),
-                            ListTile(
-                              leading: Icon(
-                                Icons.photo_camera_back_rounded,
-                                color: myTheme.colorScheme.onPrimaryContainer,
-                              ),
-                              title: Text(
-                                'Galeria',
-                                style: TextStyle(
-                                  color: myTheme.colorScheme.primary,
-                                  fontFamily: 'Poppins-regular',
-                                ),
-                              ),
-                              onTap: () async {
-                                Navigator.of(context).pop();
-                                var pickedFile = await getFromGallery(context);
-                                if (pickedFile != null) {
-                                  print('Imagen seleccionada');
-                                  var croppedImage = await cropImage(
-                                      pickedFile.path, imageFile);
-                                  if (croppedImage != null) {
-                                    print('Imagen recortada');
-                                    setState(() {
-                                      imageFile = File(croppedImage.path);
-                                    });
-                                  } else {
-                                    print('Error croppeando');
-                                  }
-                                } else {
-                                  print('error seleccionando');
-                                  return;
-                                }
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
+                  onPressed: () async {},
                   style: ElevatedButton.styleFrom(
                     foregroundColor: myTheme.colorScheme.primary,
                     backgroundColor: Color(0xFFDFE0FF),
@@ -664,291 +521,6 @@ identifyPaymentMethod({
         ],
       ),
     );
-  } else if (selectedValueA == 'Criptomoneda') {
-    // return StatefulBuilder(builder: (context, setState) {
-    //   return Column(
-    //     children: [
-    //       Text(
-    //         '${AppLocalizations.of(context)!.transactionID} *',
-    //         style: TextStyle(
-    //           fontFamily: 'Poppins-regular',
-    //           color: myTheme.colorScheme.secondary,
-    //           fontSize: 14,
-    //         ),
-    //       ),
-    //       Container(
-    //         margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-    //         height: 50,
-    //         // width: 200,
-    //         decoration: BoxDecoration(
-    //           borderRadius: BorderRadius.circular(10),
-    //           border: Border.all(
-    //             color: myTheme.colorScheme.primary.withOpacity(0.3),
-    //             // color: Colors.transparent,
-    //           ),
-    //         ),
-    //         child: TextField(
-    //           style: TextStyle(
-    //             fontSize: 14,
-    //             fontFamily: 'Poppins-regular',
-    //             color: myTheme.colorScheme.primary,
-    //           ),
-    //           keyboardType: TextInputType.phone,
-    //           maxLines: 1,
-    //           maxLength: 50,
-    //           textCapitalization: TextCapitalization.characters,
-    //           inputFormatters: [
-    //             FilteringTextInputFormatter.digitsOnly,
-    //           ],
-    //           onChanged: (value) {
-    //             transactionId = value;
-    //             print(transactionId);
-    //           },
-    //           decoration: InputDecoration(
-    //             contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
-    //             hintText: '00000000',
-    //             hintStyle: TextStyle(
-    //               fontFamily: 'Poppins-regular',
-    //               fontSize: 14,
-    //               color: myTheme.colorScheme.primary.withOpacity(0.2),
-    //             ),
-    //             enabledBorder: OutlineInputBorder(
-    //               borderRadius: BorderRadius.circular(5),
-    //               borderSide: BorderSide(
-    //                 color: Colors.transparent,
-    //               ),
-    //             ),
-    //             counterText: '',
-    //             border: OutlineInputBorder(
-    //               borderRadius: BorderRadius.circular(5),
-    //               borderSide: BorderSide(
-    //                 color: Colors.transparent,
-    //               ),
-    //             ),
-    //           ),
-    //           // onChanged: searchClient,
-    //         ),
-    //       ),
-    //       Column(
-    //         children: [
-    //           Text(
-    //             AppLocalizations.of(context)!.selectFile,
-    //             style: TextStyle(
-    //               fontFamily: 'Poppins-regular',
-    //               color: Colors.grey.shade400,
-    //               fontSize: 14,
-    //             ),
-    //           ),
-    //           InkWell(
-    //             onTap: () async {
-    //               showModalBottomSheet(
-    //                 context: context,
-    //                 builder: (context) {
-    //                   return Column(
-    //                     mainAxisSize: MainAxisSize.min,
-    //                     children: [
-    //                       ListTile(
-    //                         leading: Icon(
-    //                           Icons.camera_alt,
-    //                           color: myTheme.colorScheme.onPrimaryContainer,
-    //                         ),
-    //                         title: Text(
-    //                           'Camara',
-    //                           style: TextStyle(
-    //                             color: myTheme.colorScheme.primary,
-    //                             fontFamily: 'Poppins-regular',
-    //                           ),
-    //                         ),
-    //                         onTap: () async {
-    //                           Navigator.of(context).pop();
-    //                           var pickedFile = await getFromCamera(context);
-    //                           if (pickedFile != null) {
-    //                             print('Imagen seleccionada');
-    //                             var croppedImage =
-    //                                 await cropImage(pickedFile.path, imageFile);
-    //                             if (croppedImage != null) {
-    //                               print('Imagen recortada');
-    //                               setState(() {
-    //                                 imageFile = File(croppedImage.path);
-    //                               });
-    //                             } else {
-    //                               print('Error croppeando');
-    //                             }
-    //                           } else {
-    //                             print('error seleccionando');
-    //                             return;
-    //                           }
-    //                         },
-    //                       ),
-    //                       Divider(),
-    //                       ListTile(
-    //                         leading: Icon(
-    //                           Icons.photo_camera_back_rounded,
-    //                           color: myTheme.colorScheme.onPrimaryContainer,
-    //                         ),
-    //                         title: Text(
-    //                           'Galeria',
-    //                           style: TextStyle(
-    //                             color: myTheme.colorScheme.primary,
-    //                             fontFamily: 'Poppins-regular',
-    //                           ),
-    //                         ),
-    //                         onTap: () async {
-    //                           Navigator.of(context).pop();
-    //                           var pickedFile = await getFromGallery(context);
-    //                           if (pickedFile != null) {
-    //                             print('Imagen seleccionada');
-    //                             var croppedImage =
-    //                                 await cropImage(pickedFile.path, imageFile);
-    //                             if (croppedImage != null) {
-    //                               print('Imagen recortada');
-    //                               setState(() {
-    //                                 imageFile = File(croppedImage.path);
-    //                               });
-    //                             } else {
-    //                               print('Error croppeando');
-    //                             }
-    //                           } else {
-    //                             print('error seleccionando');
-    //                             return;
-    //                           }
-    //                         },
-    //                       ),
-    //                     ],
-    //                   );
-    //                 },
-    //               );
-    //             },
-    //             child: Row(
-    //               // ignore: prefer_const_literals_to_create_immutables
-    //               mainAxisAlignment: MainAxisAlignment.center,
-    //               children: [
-    //                 Padding(
-    //                   padding: EdgeInsets.all(4.0),
-    //                   child: Icon(
-    //                     Icons.camera,
-    //                     color: myTheme.colorScheme.secondary,
-    //                   ),
-    //                 ),
-    //                 Text(
-    //                   // AppLocalizations.of(context)!.gallery,
-    //                   'Subir Imagen',
-    //                   style: TextStyle(
-    //                     color: myTheme.colorScheme.primary,
-    //                     fontFamily: 'Poppins-regular',
-    //                   ),
-    //                 ),
-    //               ],
-    //             ),
-    //           ),
-    //           imageFile == null
-    //               ? Container()
-    //               : Container(
-    //                   decoration: BoxDecoration(
-    //                     border: Border.all(
-    //                       color: myTheme.colorScheme.primary,
-    //                     ),
-    //                     borderRadius: BorderRadius.circular(10),
-    //                   ),
-    //                   child: ClipRRect(
-    //                     borderRadius: BorderRadius.circular(9),
-    //                     child: Image.file(
-    //                       imageFile!,
-    //                       fit: BoxFit.contain,
-    //                     ),
-    //                   ),
-    //                 ),
-    //           Container(
-    //             alignment: Alignment.bottomCenter,
-    //             margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-    //             child: Row(
-    //               mainAxisAlignment: MainAxisAlignment.center,
-    //               crossAxisAlignment: CrossAxisAlignment.end,
-    //               children: [
-    //                 TextButton(
-    //                   onPressed: () {
-    //                     Navigator.pop(context);
-    //                     setState(() => imageFile = null);
-    //                   },
-    //                   child: Text(
-    //                     AppLocalizations.of(context)!.goBack,
-    //                     style: TextStyle(
-    //                       fontFamily: 'Poppins-regular',
-    //                       color: myTheme.colorScheme.primary,
-    //                       fontSize: 14,
-    //                       fontWeight: FontWeight.bold,
-    //                     ),
-    //                   ),
-    //                 ),
-    //                 Container(
-    //                   width: 100,
-    //                   height: 40,
-    //                   decoration: BoxDecoration(
-    //                       borderRadius: BorderRadius.circular(16),
-    //                       color: myTheme.colorScheme.primary),
-    //                   child: TextButton(
-    //                     onPressed: () async {
-    //                       // Crear en DB una visita
-    //                       // registerCriptoPayment();
-    //                       if (transactionId != '') {
-    //                         if (paidAmount != null) {
-    //                           // if (paidAmount! >
-    //                           //     priceToCurrencySelected(
-    //                           //         remaining, selectedCoin)) {
-    //                           //   Fluttertoast.showToast(
-    //                           //     msg:
-    //                           //         'La cantidad a pagar excede de la deuda pendiente',
-    //                           //     backgroundColor: myTheme.colorScheme.primary,
-    //                           //     textColor: Colors.white,
-    //                           //   );
-    //                           // } else {
-    //                           print('Cantidad permitida');
-    //                           Fluttertoast.showToast(
-    //                             msg: 'Registrando Pago en Criptomonedas',
-    //                             backgroundColor: myTheme.colorScheme.primary,
-    //                             textColor: Colors.white,
-    //                           );
-    //                           // await registerCriptoPayment(
-    //                           //   client!,
-    //                           //   invoiceDocumentID,
-    //                           //   'BTC',
-    //                           //   priceReturnToOriginal(paidAmount, selectedCoin),
-    //                           //   totalOfTheOrder,
-    //                           //   transactionId,
-    //                           //   imageFile,
-    //                           //   date,
-    //                           //   remaining,
-    //                           // );
-    //                           Navigator.pop(context);
-    //                           Navigator.pop(context);
-    //                           // }
-    //                         }
-    //                       } else {
-    //                         Fluttertoast.showToast(msg: 'Ingrese ID porfavor');
-    //                       }
-    //                     },
-    //                     style: TextButton.styleFrom(
-    //                       foregroundColor: myTheme.colorScheme.primary,
-    //                     ),
-    //                     child: Text(
-    //                       AppLocalizations.of(context)!.orderContinue,
-    //                       style: TextStyle(
-    //                         fontFamily: 'Poppins-regular',
-    //                         color: Colors.white,
-    //                         fontSize: 14,
-    //                         fontWeight: FontWeight.bold,
-    //                       ),
-    //                     ),
-    //                   ),
-    //                 ),
-    //               ],
-    //             ),
-    //           ),
-    //         ],
-    //       )
-    //     ],
-    //   );
-    // });
   } else if (selectedValueA == 'Deposito') {
     return StatefulBuilder(
       builder: (context, setState) => Column(
@@ -1188,83 +760,11 @@ identifyPaymentMethod({
                 height: 24,
                 child: ElevatedButton(
                   onPressed: () async {
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (context) {
-                        return Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            ListTile(
-                              leading: Icon(
-                                Icons.camera_alt,
-                                color: myTheme.colorScheme.onPrimaryContainer,
-                              ),
-                              title: Text(
-                                'Camara',
-                                style: TextStyle(
-                                  color: myTheme.colorScheme.primary,
-                                  fontFamily: 'Poppins-regular',
-                                ),
-                              ),
-                              onTap: () async {
-                                Navigator.of(context).pop();
-                                var pickedFile = await getFromCamera(context);
-                                if (pickedFile != null) {
-                                  print('Imagen seleccionada');
-                                  var croppedImage = await cropImage(
-                                      pickedFile.path, imageFile);
-                                  if (croppedImage != null) {
-                                    print('Imagen recortada');
-                                    setState(() {
-                                      imageFile = File(croppedImage.path);
-                                    });
-                                  } else {
-                                    print('Error croppeando');
-                                  }
-                                } else {
-                                  print('error seleccionando');
-                                  return;
-                                }
-                              },
-                            ),
-                            Divider(),
-                            ListTile(
-                              leading: Icon(
-                                Icons.photo_camera_back_rounded,
-                                color: myTheme.colorScheme.onPrimaryContainer,
-                              ),
-                              title: Text(
-                                'Galeria',
-                                style: TextStyle(
-                                  color: myTheme.colorScheme.primary,
-                                  fontFamily: 'Poppins-regular',
-                                ),
-                              ),
-                              onTap: () async {
-                                Navigator.of(context).pop();
-                                var pickedFile = await getFromGallery(context);
-                                if (pickedFile != null) {
-                                  print('Imagen seleccionada');
-                                  var croppedImage = await cropImage(
-                                      pickedFile.path, imageFile);
-                                  if (croppedImage != null) {
-                                    print('Imagen recortada');
-                                    setState(() {
-                                      imageFile = File(croppedImage.path);
-                                    });
-                                  } else {
-                                    print('Error croppeando');
-                                  }
-                                } else {
-                                  print('error seleccionando');
-                                  return;
-                                }
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    );
+                    requestFileBottomSheet(context, (image) {
+                      setState(() {
+                        imageFile = image;
+                      });
+                    });
                   },
                   style: ElevatedButton.styleFrom(
                     foregroundColor: myTheme.colorScheme.primary,
@@ -1482,83 +982,11 @@ identifyPaymentMethod({
             height: 24,
             child: ElevatedButton(
               onPressed: () async {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (context) {
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ListTile(
-                          leading: Icon(
-                            Icons.camera_alt,
-                            color: myTheme.colorScheme.onPrimaryContainer,
-                          ),
-                          title: Text(
-                            'Camara',
-                            style: TextStyle(
-                              color: myTheme.colorScheme.primary,
-                              fontFamily: 'Poppins-regular',
-                            ),
-                          ),
-                          onTap: () async {
-                            Navigator.of(context).pop();
-                            var pickedFile = await getFromCamera(context);
-                            if (pickedFile != null) {
-                              print('Imagen seleccionada');
-                              var croppedImage =
-                                  await cropImage(pickedFile.path, imageFile);
-                              if (croppedImage != null) {
-                                print('Imagen recortada');
-                                setState(() {
-                                  imageFile = File(croppedImage.path);
-                                });
-                              } else {
-                                print('Error croppeando');
-                              }
-                            } else {
-                              print('error seleccionando');
-                              return;
-                            }
-                          },
-                        ),
-                        Divider(),
-                        ListTile(
-                          leading: Icon(
-                            Icons.photo_camera_back_rounded,
-                            color: myTheme.colorScheme.onPrimaryContainer,
-                          ),
-                          title: Text(
-                            'Galeria',
-                            style: TextStyle(
-                              color: myTheme.colorScheme.primary,
-                              fontFamily: 'Poppins-regular',
-                            ),
-                          ),
-                          onTap: () async {
-                            Navigator.of(context).pop();
-                            var pickedFile = await getFromGallery(context);
-                            if (pickedFile != null) {
-                              print('Imagen seleccionada');
-                              var croppedImage =
-                                  await cropImage(pickedFile.path, imageFile);
-                              if (croppedImage != null) {
-                                print('Imagen recortada');
-                                setState(() {
-                                  imageFile = File(croppedImage.path);
-                                });
-                              } else {
-                                print('Error croppeando');
-                              }
-                            } else {
-                              print('error seleccionando');
-                              return;
-                            }
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
+                requestFileBottomSheet(context, (image) {
+                  setState(() {
+                    imageFile = image;
+                  });
+                });
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: myTheme.colorScheme.primary,
@@ -2124,83 +1552,11 @@ identifyPaymentMethod({
                 height: 24,
                 child: ElevatedButton(
                   onPressed: () async {
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (context) {
-                        return Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            ListTile(
-                              leading: Icon(
-                                Icons.camera_alt,
-                                color: myTheme.colorScheme.onPrimaryContainer,
-                              ),
-                              title: Text(
-                                'Camara',
-                                style: TextStyle(
-                                  color: myTheme.colorScheme.primary,
-                                  fontFamily: 'Poppins-regular',
-                                ),
-                              ),
-                              onTap: () async {
-                                Navigator.of(context).pop();
-                                var pickedFile = await getFromCamera(context);
-                                if (pickedFile != null) {
-                                  print('Imagen seleccionada');
-                                  var croppedImage = await cropImage(
-                                      pickedFile.path, imageFile);
-                                  if (croppedImage != null) {
-                                    print('Imagen recortada');
-                                    setState(() {
-                                      imageFile = File(croppedImage.path);
-                                    });
-                                  } else {
-                                    print('Error croppeando');
-                                  }
-                                } else {
-                                  print('error seleccionando');
-                                  return;
-                                }
-                              },
-                            ),
-                            Divider(),
-                            ListTile(
-                              leading: Icon(
-                                Icons.photo_camera_back_rounded,
-                                color: myTheme.colorScheme.onPrimaryContainer,
-                              ),
-                              title: Text(
-                                'Galeria',
-                                style: TextStyle(
-                                  color: myTheme.colorScheme.primary,
-                                  fontFamily: 'Poppins-regular',
-                                ),
-                              ),
-                              onTap: () async {
-                                Navigator.of(context).pop();
-                                var pickedFile = await getFromGallery(context);
-                                if (pickedFile != null) {
-                                  print('Imagen seleccionada');
-                                  var croppedImage = await cropImage(
-                                      pickedFile.path, imageFile);
-                                  if (croppedImage != null) {
-                                    print('Imagen recortada');
-                                    setState(() {
-                                      imageFile = File(croppedImage.path);
-                                    });
-                                  } else {
-                                    print('Error croppeando');
-                                  }
-                                } else {
-                                  print('error seleccionando');
-                                  return;
-                                }
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    );
+                    requestFileBottomSheet(context, (image) {
+                      setState(() {
+                        imageFile = image;
+                      });
+                    });
                   },
                   style: ElevatedButton.styleFrom(
                     foregroundColor: myTheme.colorScheme.primary,

@@ -1,8 +1,6 @@
 import 'dart:core';
-import 'card_data.dart';
 
-
-class PharosSaleResponse{
+class PharosSaleResponse {
   bool successful;
   String displayMessage;
   String resultCode;
@@ -14,24 +12,20 @@ class PharosSaleResponse{
   String? arpc;
   String? issuerAuthRespCode;
 
-
-  PharosSaleResponse({
-    required this.successful,
-    required this.displayMessage,
-    required this.resultCode,
-    required this.authCode,
-    required this.referenceNumber,
-    required this.script1,
-    required this.script2,
-    required this.script3,
-    required this.arpc,
-    required this.issuerAuthRespCode
-  });
-
-
+  PharosSaleResponse(
+      {required this.successful,
+      required this.displayMessage,
+      required this.resultCode,
+      required this.authCode,
+      required this.referenceNumber,
+      required this.script1,
+      required this.script2,
+      required this.script3,
+      required this.arpc,
+      required this.issuerAuthRespCode});
 
   factory PharosSaleResponse.fromJson(Map<String, dynamic> jsonData) {
-    return  PharosSaleResponse(
+    return PharosSaleResponse(
       successful: jsonData['successful'],
       displayMessage: jsonData['display_message'],
       resultCode: jsonData['result_code'],
@@ -42,7 +36,6 @@ class PharosSaleResponse{
       script3: jsonData['script3'],
       arpc: jsonData['arpc'],
       issuerAuthRespCode: jsonData['issuer_auth_resp_code'],
-
     );
   }
 
@@ -57,10 +50,6 @@ class PharosSaleResponse{
       'script3': script3,
       'arpc': arpc,
       'issuer_auth_resp_code': issuerAuthRespCode,
-
     };
   }
-
-
-
 }

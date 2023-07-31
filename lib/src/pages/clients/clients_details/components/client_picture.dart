@@ -1,10 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
-import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class ClientPicture extends StatelessWidget {
   const ClientPicture({
@@ -34,6 +32,7 @@ class ClientPicture extends StatelessWidget {
               .catchError((e) {
             print('ERROR ON GETTING IMAGE IN CLIENT DETAILS');
             print(e);
+            return e.message;
           }),
           builder: (context, snapshot) {
             if (snapshot.hasData) {

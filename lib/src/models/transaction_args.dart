@@ -1,5 +1,4 @@
 import 'package:agnostiko/agnostiko.dart';
-import 'package:pwa_sales2go_flutter/src/models/account_balance_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'dart:typed_data';
 import '../services/utils/emv.dart';

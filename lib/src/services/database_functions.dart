@@ -461,10 +461,6 @@ Future registerBankCheckPayment({
   final timestampDate = Timestamp.fromDate(date!);
   const method = 'Cheque';
   final paidAmount = amount;
-  final selectedBank = bancosRef.doc(banksDocumentsID);
-  final account = accountNumber;
-  final holder = accountHolder;
-  const nroCN = 0;
   final selectedExchangedRate = coinExchangeRatio;
 
   try {
@@ -494,43 +490,6 @@ Future registerBankCheckPayment({
     });
   } catch (e) {
     print(e);
-  }
-}
-
-//Registrar pagos de cripto
-
-Future registerCriptoPayment(
-  Client client,
-  invoiceDocumentID,
-  currency,
-  amount,
-  totalOfTheOrder,
-  transactionId,
-  imageFile,
-  date,
-  remaining,
-) async {
-  print('/// Registrar pago en BTC en factura: $invoiceDocumentID ///');
-
-  final Map<String, double> exchangeRate = {
-    'BTC': 0.00011,
-    'EUR': 0.89,
-    'VED': 4.58,
-    'MXN': 19.43
-  };
-
-  late var selectedCoinExchangeRate;
-
-  if (currency.toString().contains('USD')) {
-    selectedCoinExchangeRate = 1;
-  } else if (currency.toString().contains('VED')) {
-    selectedCoinExchangeRate = exchangeRate['VED'];
-  } else if (currency.toString().contains('EUR')) {
-    selectedCoinExchangeRate = exchangeRate['EUR'];
-  } else if (currency.toString().contains('BTC')) {
-    selectedCoinExchangeRate = exchangeRate['BTC'];
-  } else if (currency.toString().contains('MXN')) {
-    selectedCoinExchangeRate = exchangeRate['MXN'];
   }
 }
 

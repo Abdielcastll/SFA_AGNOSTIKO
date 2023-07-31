@@ -3,7 +3,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:decimal/decimal.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
@@ -246,7 +245,6 @@ class _ProductsBodyState extends State<ProductsBody> {
     final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 0;
     final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 0;
     final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
-    final coinCode = Provider.of<Coin?>(context)?.code ?? '';
     // Scroll limits
     final productsLimit =
         Provider.of<CounterLimitFirestore>(context).getProductsLimit;
@@ -441,7 +439,6 @@ class _ProductsBodyState extends State<ProductsBody> {
                         child: IconButton(
                           onPressed: () async {
                             // Filtro avanzado de productos
-                            List<String> selectedValues = [];
                             String? selectedCategorie;
                             String? selectedSubCategorie;
                             String? selectedLine;
@@ -2450,6 +2447,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                               .catchError((e) {
                                             print('ERROR GETTING IMG');
                                             print(e);
+                                            return e.message;
                                           }),
                                           builder: (context, snapshot) {
                                             if (snapshot.hasData) {
@@ -2799,7 +2797,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                               final sortedProducts = isDescending
                                   ? filteredProducts.reversed.toList()
                                   : filteredProducts;
-                              final product = sortedProducts![index];
+                              final product = sortedProducts[index];
                               final productStock =
                                   stockValues[product.code] ?? 000;
                               final productBrand =
@@ -2893,6 +2891,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                               .getDownloadURL()
                                               .catchError((e) {
                                             print(e);
+                                            return e.message;
                                           }),
                                           builder: (context, snapshot) {
                                             if (snapshot.hasData) {

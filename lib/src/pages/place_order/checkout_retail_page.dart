@@ -4,26 +4,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
-import 'package:pwa_sales2go_flutter/examples/clients_example.dart';
-import 'package:pwa_sales2go_flutter/examples/products_example.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
-import 'package:pwa_sales2go_flutter/objectbox.g.dart';
-import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/discount.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
-import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/completed_order.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/components/selected_client.dart';
-import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
@@ -122,16 +115,9 @@ class _CheckoutBodyState extends State<CheckoutBody> {
 
     final userUid = Provider.of<UserModel>(context).uid;
     int? clientMasterDiscount = widget.client?.masterDiscount;
-    String? fiscalAddress = widget.client?.fiscalAdress;
-    String? dispatchAddress =
-        widget.client?.dispatchAdress ?? 'No Hay direcciofn disponible';
-    String formattedDate = dateFormatter.format(today);
-    final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
-    final coinName = Provider.of<Coin?>(context)?.name ?? '';
     final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 0;
     final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 0;
     final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
-    final coinCode = Provider.of<Coin?>(context)?.code ?? '';
 
     // SUB TOTAL
 
@@ -269,62 +255,6 @@ class _CheckoutBodyState extends State<CheckoutBody> {
         formatDecimalPriceByRegion(price: totalPriceOfTheOrderConverted);
 
     print('totalPriceOfTheOrderFormatted: $totalPriceOfTheOrderFormatted');
-
-    // double subTotalConverted = priceMultipliedByItsExchangeRatio(
-    //     coinDecimals: coinDecimals,
-    //     coinExchangeRatio: coinExchangeRatio,
-    //     productPrice: widget.subTotal);
-    // print('subTotal: ${widget.subTotal}');
-    // print('subTotalConverted: $subTotalConverted');
-
-    // double subTotalWithMasterDiscount = double.parse(
-    //     (widget.subTotal * (widget.client?.masterDiscount / 100))
-    //         .toStringAsFixed(4));
-    // double subTotalWithMasterDiscountConverted =
-    //     priceMultipliedByItsExchangeRatio(
-    //         coinDecimals: coinDecimals,
-    //         coinExchangeRatio: coinExchangeRatio,
-    //         productPrice: subTotalWithMasterDiscount);
-    // print('subTotalWithMasterDiscount: $subTotalWithMasterDiscount');
-    // print(
-    //     'subTotalWithMasterDiscountConverted: $subTotalWithMasterDiscountConverted');
-
-    // double subTotalWithDiscountApplied = double.parse(
-    //     (widget.subTotal * (discountByInput / 100)).toStringAsFixed(4));
-    // double subTotalWithDiscountAppliedConverted =
-    //     priceMultipliedByItsExchangeRatio(
-    //         coinDecimals: coinDecimals,
-    //         coinExchangeRatio: coinExchangeRatio,
-    //         productPrice: subTotalWithDiscountApplied);
-    // print('subTotalWithDiscountApplied: $subTotalWithDiscountApplied');
-    // print(
-    //     'subTotalWithDiscountAppliedConverted: $subTotalWithDiscountAppliedConverted');
-
-    // double getIVA = double.parse(
-    //   ((widget.subTotal -
-    //               subTotalWithMasterDiscount -
-    //               subTotalWithDiscountApplied) *
-    //           (16 / 100))
-    //       .toStringAsFixed(4),
-    // );
-    // double getIVAConverted = priceMultipliedByItsExchangeRatio(
-    //     coinDecimals: coinDecimals,
-    //     coinExchangeRatio: coinExchangeRatio,
-    //     productPrice: getIVA);
-    // print('getIVA: $getIVA');
-    // print('getIVAConverted: $getIVAConverted');
-
-    // double totalPriceOfTheOrder = double.parse((widget.subTotal -
-    //         subTotalWithMasterDiscount -
-    //         subTotalWithDiscountApplied +
-    //         getIVA)
-    //     .toStringAsFixed(4));
-    // double totalPriceOfTheOrderConverted = priceMultipliedByItsExchangeRatio(
-    //     coinDecimals: coinDecimals,
-    //     coinExchangeRatio: coinExchangeRatio,
-    //     productPrice: totalPriceOfTheOrder);
-    // print('totalPriceOfTheOrder: $totalPriceOfTheOrder');
-    // print('totalPriceOfTheOrderConverted: $totalPriceOfTheOrderConverted');
 
     completeOrder() {
       Navigator.pushReplacement(
@@ -1252,7 +1182,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
 
                                     if (selectedValue2 != null) {
                                       try {
-                                        var result = await createOrder(
+                                        await createOrder(
                                           widget.client,
                                           userUid,
                                           commentary,

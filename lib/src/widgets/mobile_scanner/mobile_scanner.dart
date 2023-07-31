@@ -1,6 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
@@ -29,12 +27,6 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
     print('ScanResult: $scanResult');
     List<ShoppingCartProduct> scannedProducts = [];
     try {
-      final stockProducts = await stockRef.doc('productos').get().then(
-        (value) {
-          return value['valores'];
-        },
-      );
-      // print(stockProducts);
       final priceProducts = await listaDePreciosRef
           .doc(widget.clientPriceList.toString())
           .get()
@@ -198,7 +190,6 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
           if (captured) return;
           Future.delayed(const Duration(seconds: 0), () async {
             final List<Barcode> barcodes = capture.barcodes;
-            final Uint8List? image = capture.image;
             for (final barcode in barcodes) {
               // debugPrint('Barcode found! ${barcode.rawValue}');
               scanResult = barcode.rawValue.toString();

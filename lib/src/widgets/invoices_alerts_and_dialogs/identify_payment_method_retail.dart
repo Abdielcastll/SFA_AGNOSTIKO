@@ -2,21 +2,14 @@
 
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:decimal/decimal.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
-import 'package:pwa_sales2go_flutter/main.dart';
-import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/completed_pay.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
@@ -26,50 +19,10 @@ import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
+import 'package:pwa_sales2go_flutter/src/utils/requestFileBottomSheet.dart';
 
 import '../../pages/place_order/add_payment.dart';
 import '../payment_method/payment_card.dart';
-
-Future getFromGallery(context) async {
-  try {
-    XFile? pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      return pickedFile;
-    } else {
-      return;
-    }
-  } on PlatformException catch (e) {
-    print('ERROR ESCOGIENDO IMAGEN');
-    print(e);
-  }
-}
-
-Future getFromCamera(context) async {
-  try {
-    XFile? pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.camera);
-    if (pickedFile != null) {
-      return pickedFile;
-    } else {
-      return;
-    }
-  } on PlatformException catch (e) {
-    print('ERROR ESCOGIENDO IMAGEN');
-    print(e);
-  }
-}
-
-Future cropImage(filePath, imageFile) async {
-  CroppedFile? croppedImage = await ImageCropper().cropImage(
-    sourcePath: filePath,
-    maxHeight: 1080,
-    maxWidth: 1080,
-  );
-  if (croppedImage != null) {
-    return croppedImage;
-  }
-}
 
 goBackToCatalogue(context) {
   final orderActive = Provider.of<OrderProvider>(context, listen: false);
@@ -180,7 +133,6 @@ identifyPaymentMethodRetail({
   File? imageFile;
   String accountHolder = '';
   String accountNumber = '';
-  String transactionId = '';
   String voucherNumber = '';
   String referenceId = '';
   String? selectedBank;
@@ -205,9 +157,6 @@ identifyPaymentMethodRetail({
     amount: paidAmount,
     exchange: coinExchangeRatio,
   );
-
-  final totalPayed = paymentBody.payments.fold<double>(
-      0.0, (previousValue, element) => previousValue + element.amount);
 
   print('Metodo: $selectedValueA');
   print('currentCoin: $currentCoin');
@@ -489,86 +438,13 @@ identifyPaymentMethodRetail({
               ),
               InkWell(
                 onTap: () async {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ListTile(
-                            leading: Icon(
-                              Icons.camera_alt,
-                              color: myTheme.colorScheme.onPrimaryContainer,
-                            ),
-                            title: Text(
-                              'Camara',
-                              style: TextStyle(
-                                color: myTheme.colorScheme.primary,
-                                fontFamily: 'Poppins-regular',
-                              ),
-                            ),
-                            onTap: () async {
-                              Navigator.of(context).pop();
-                              var pickedFile = await getFromCamera(context);
-                              if (pickedFile != null) {
-                                print('Imagen seleccionada');
-                                var croppedImage =
-                                    await cropImage(pickedFile.path, imageFile);
-                                if (croppedImage != null) {
-                                  print('Imagen recortada');
-                                  setState(() {
-                                    imageFile = File(croppedImage.path);
-                                  });
-                                } else {
-                                  print('Error croppeando');
-                                }
-                              } else {
-                                print('error seleccionando');
-                                return;
-                              }
-                            },
-                          ),
-                          Divider(),
-                          ListTile(
-                            leading: Icon(
-                              Icons.photo_camera_back_rounded,
-                              color: myTheme.colorScheme.onPrimaryContainer,
-                            ),
-                            title: Text(
-                              'Galeria',
-                              style: TextStyle(
-                                color: myTheme.colorScheme.primary,
-                                fontFamily: 'Poppins-regular',
-                              ),
-                            ),
-                            onTap: () async {
-                              Navigator.of(context).pop();
-                              var pickedFile = await getFromGallery(context);
-                              if (pickedFile != null) {
-                                print('Imagen seleccionada');
-                                var croppedImage =
-                                    await cropImage(pickedFile.path, imageFile);
-                                if (croppedImage != null) {
-                                  print('Imagen recortada');
-                                  setState(() {
-                                    imageFile = File(croppedImage.path);
-                                  });
-                                } else {
-                                  print('Error croppeando');
-                                }
-                              } else {
-                                print('error seleccionando');
-                                return;
-                              }
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
+                  requestFileBottomSheet(context, (image) {
+                    setState(() {
+                      imageFile = image;
+                    });
+                  });
                 },
                 child: Row(
-                  // ignore: prefer_const_literals_to_create_immutables
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
@@ -645,7 +521,7 @@ identifyPaymentMethodRetail({
                       ),
                     ),
                   ),
-                  paidAmount! == 0
+                  paidAmount == 0
                       ? Container()
                       : Container(
                           child: ElevatedButton.icon(
@@ -779,604 +655,6 @@ identifyPaymentMethodRetail({
         ],
       ),
     );
-  } else if (selectedValueA == 'Criptomoneda') {
-    // return StatefulBuilder(builder: (context, setState) {
-    //   return Column(
-    //     children: [
-    //       Text(
-    //         '${AppLocalizations.of(context)!.transactionID} *',
-    //         style: TextStyle(
-    //           fontFamily: 'Poppins-regular',
-    //           color: myTheme.colorScheme.secondary,
-    //           fontSize: 14,
-    //         ),
-    //       ),
-    //       Container(
-    //         margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-    //         height: 50,
-    //         // width: 200,
-    //         decoration: BoxDecoration(
-    //           borderRadius: BorderRadius.circular(10),
-    //           border: Border.all(
-    //             color: myTheme.colorScheme.primary.withOpacity(0.3),
-    //             // color: Colors.transparent,
-    //           ),
-    //         ),
-    //         child: TextField(
-    //           style: TextStyle(
-    //             fontSize: 14,
-    //             fontFamily: 'Poppins-regular',
-    //             color: myTheme.colorScheme.primary,
-    //           ),
-    //           keyboardType: TextInputType.phone,
-    //           maxLines: 1,
-    //           maxLength: 50,
-    //           textCapitalization: TextCapitalization.characters,
-    //           inputFormatters: [
-    //             FilteringTextInputFormatter.digitsOnly,
-    //           ],
-    //           onChanged: (value) {
-    //             transactionId = value;
-    //             print(transactionId);
-    //           },
-
-    //           decoration: InputDecoration(
-    //             contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
-    //             hintText: '00000000',
-    //             hintStyle: TextStyle(
-    //               fontFamily: 'Poppins-regular',
-    //               fontSize: 14,
-    //               color: myTheme.colorScheme.primary.withOpacity(0.2),
-    //             ),
-    //             enabledBorder: OutlineInputBorder(
-    //               borderRadius: BorderRadius.circular(5),
-    //               borderSide: BorderSide(
-    //                 color: Colors.transparent,
-    //               ),
-    //             ),
-    //             counterText: '',
-    //             border: OutlineInputBorder(
-    //               borderRadius: BorderRadius.circular(5),
-    //               borderSide: BorderSide(
-    //                 color: Colors.transparent,
-    //               ),
-    //             ),
-    //           ),
-    //           // onChanged: searchClient,
-    //         ),
-    //       ),
-    //       Column(
-    //         children: [
-    //           Text(
-    //             AppLocalizations.of(context)!.selectFile,
-    //             style: TextStyle(
-    //               fontFamily: 'Poppins-regular',
-    //               color: Colors.grey.shade400,
-    //               fontSize: 14,
-    //             ),
-    //           ),
-    //           InkWell(
-    //             onTap: () async {
-    //               showModalBottomSheet(
-    //                 context: context,
-    //                 builder: (context) {
-    //                   return Column(
-    //                     mainAxisSize: MainAxisSize.min,
-    //                     children: [
-    //                       ListTile(
-    //                         leading: Icon(
-    //                           Icons.camera_alt,
-    //                           color: myTheme.colorScheme.onPrimaryContainer,
-    //                         ),
-    //                         title: Text(
-    //                           'Camara',
-    //                           style: TextStyle(
-    //                             color: myTheme.colorScheme.primary,
-    //                             fontFamily: 'Poppins-regular',
-    //                           ),
-    //                         ),
-    //                         onTap: () async {
-    //                           Navigator.of(context).pop();
-    //                           var pickedFile = await getFromCamera(context);
-    //                           if (pickedFile != null) {
-    //                             print('Imagen seleccionada');
-    //                             var croppedImage =
-    //                                 await cropImage(pickedFile.path, imageFile);
-    //                             if (croppedImage != null) {
-    //                               print('Imagen recortada');
-    //                               setState(() {
-    //                                 imageFile = File(croppedImage.path);
-    //                               });
-    //                             } else {
-    //                               print('Error croppeando');
-    //                             }
-    //                           } else {
-    //                             print('error seleccionando');
-    //                             return;
-    //                           }
-    //                         },
-    //                       ),
-    //                       Divider(),
-    //                       ListTile(
-    //                         leading: Icon(
-    //                           Icons.photo_camera_back_rounded,
-    //                           color: myTheme.colorScheme.onPrimaryContainer,
-    //                         ),
-    //                         title: Text(
-    //                           'Galeria',
-    //                           style: TextStyle(
-    //                             color: myTheme.colorScheme.primary,
-    //                             fontFamily: 'Poppins-regular',
-    //                           ),
-    //                         ),
-    //                         onTap: () async {
-    //                           Navigator.of(context).pop();
-    //                           var pickedFile = await getFromGallery(context);
-    //                           if (pickedFile != null) {
-    //                             print('Imagen seleccionada');
-    //                             var croppedImage =
-    //                                 await cropImage(pickedFile.path, imageFile);
-    //                             if (croppedImage != null) {
-    //                               print('Imagen recortada');
-    //                               setState(() {
-    //                                 imageFile = File(croppedImage.path);
-    //                               });
-    //                             } else {
-    //                               print('Error croppeando');
-    //                             }
-    //                           } else {
-    //                             print('error seleccionando');
-    //                             return;
-    //                           }
-    //                         },
-    //                       ),
-    //                     ],
-    //                   );
-    //                 },
-    //               );
-    //             },
-    //             child: Row(
-    //               // ignore: prefer_const_literals_to_create_immutables
-    //               mainAxisAlignment: MainAxisAlignment.center,
-    //               children: [
-    //                 Padding(
-    //                   padding: EdgeInsets.all(4.0),
-    //                   child: Icon(
-    //                     Icons.camera,
-    //                     color: myTheme.colorScheme.secondary,
-    //                   ),
-    //                 ),
-    //                 Text(
-    //                   // AppLocalizations.of(context)!.gallery,
-    //                   'Subir Imagen',
-    //                   style: TextStyle(
-    //                     color: myTheme.colorScheme.primary,
-    //                     fontFamily: 'Poppins-regular',
-    //                   ),
-    //                 ),
-    //               ],
-    //             ),
-    //           ),
-    //           imageFile == null
-    //               ? Container()
-    //               : Container(
-    //                   margin: EdgeInsets.fromLTRB(20, 5, 20, 0),
-    //                   // height: 300,
-    //                   // width: 300,
-    //                   decoration: BoxDecoration(
-    //                     border: Border.all(
-    //                       color: myTheme.colorScheme.primary,
-    //                     ),
-    //                     borderRadius: BorderRadius.circular(10),
-    //                   ),
-    //                   child: ClipRRect(
-    //                     borderRadius: BorderRadius.circular(9),
-    //                     child: Image.file(
-    //                       imageFile!,
-    //                       fit: BoxFit.contain,
-    //                       // height: 300,
-    //                       // width: 300,
-    //                     ),
-    //                   ),
-    //                 ),
-    //           Container(
-    //             alignment: Alignment.bottomCenter,
-    //             margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-    //             child: Row(
-    //               mainAxisAlignment: MainAxisAlignment.center,
-    //               crossAxisAlignment: CrossAxisAlignment.end,
-    //               children: [
-    //                 TextButton(
-    //                   onPressed: () {
-    //                     Navigator.pop(context);
-    //                     setState(() => imageFile = null);
-    //                   },
-    //                   child: Text(
-    //                     AppLocalizations.of(context)!.goBack,
-    //                     style: TextStyle(
-    //                       fontFamily: 'Poppins-regular',
-    //                       color: myTheme.colorScheme.primary,
-    //                       fontSize: 14,
-    //                       fontWeight: FontWeight.bold,
-    //                     ),
-    //                   ),
-    //                 ),
-    //                 Container(
-    //                   width: 100,
-    //                   height: 40,
-    //                   decoration: BoxDecoration(
-    //                       borderRadius: BorderRadius.circular(16),
-    //                       color: myTheme.colorScheme.primary),
-    //                   child: TextButton(
-    //                     onPressed: () async {
-    //                       // Crear en DB una visita
-    //                       if (transactionId != '') {
-    //                         if (paidAmount != null) {
-    //                           /* if (exchangeAmount(selectedCoin, paidAmount) >
-    //                               remaining) {
-    //                             Fluttertoast.showToast(
-    //                               msg:
-    //                                   'La cantidad a pagar excede de la deuda pendiente',
-    //                               backgroundColor: myTheme.colorScheme.primary,
-    //                               textColor: Colors.white,
-    //                             );
-    //                           } else { */
-    //                           print('Cantidad permitida');
-    //                           Fluttertoast.showToast(
-    //                             msg: 'Registrando Pago en Criptomonedas',
-    //                             backgroundColor: myTheme.colorScheme.primary,
-    //                             textColor: Colors.white,
-    //                           );
-
-    //                           try {
-    //                             // await registerCriptoPayment(
-    //                             //   client!,
-    //                             //   invoiceDocumentID,
-    //                             //   'BTC',
-    //                             //   paidAmount,
-    //                             //   totalOfTheOrder,
-    //                             //   transactionId,
-    //                             //   imageFile,
-    //                             //   date,
-    //                             //   remaining,
-    //                             // );
-
-    //                             // paymentBody.payments.add(
-    //                             //     PayMethod('Criptomoneda', amountExchanged));
-
-    //                             // print('IDENTIFY PAYMENTS');
-    //                             // print(paymentBody?.payments.length);
-
-    //                             if (amountExchanged <
-    //                                 double.parse(
-    //                                     (remaining).toStringAsFixed(4))) {
-    //                               showDialog(
-    //                                   context: context,
-    //                                   builder: (BuildContext context) {
-    //                                     return AlertDialog(
-    //                                       contentPadding: EdgeInsets.zero,
-    //                                       shape: RoundedRectangleBorder(
-    //                                         borderRadius:
-    //                                             BorderRadius.circular(20),
-    //                                       ),
-    //                                       content: SingleChildScrollView(
-    //                                         child: Stack(
-    //                                           children: [
-    //                                             Container(
-    //                                               height: 400,
-    //                                               width: 300,
-    //                                               child: Opacity(
-    //                                                 opacity: 1,
-    //                                                 child: ClipRRect(
-    //                                                   borderRadius:
-    //                                                       BorderRadius.circular(
-    //                                                           20),
-    //                                                   child: Image.asset(
-    //                                                     'assets/images/payment-background.png',
-    //                                                     fit: BoxFit.fill,
-    //                                                   ),
-    //                                                 ),
-    //                                               ),
-    //                                             ),
-    //                                             Container(
-    //                                               margin: EdgeInsets.all(18),
-    //                                               child: Center(
-    //                                                 child: Column(
-    //                                                   children: [
-    //                                                     Text(
-    //                                                       "¡PAGO REGISTRADO!",
-    //                                                       style: TextStyle(
-    //                                                         fontFamily:
-    //                                                             'Poppins-regular',
-    //                                                         fontSize: 18,
-    //                                                         color: myTheme
-    //                                                             .colorScheme
-    //                                                             .onPrimaryContainer,
-    //                                                         // color: Colors.green,
-    //                                                         fontWeight:
-    //                                                             FontWeight.bold,
-    //                                                       ),
-    //                                                     ),
-    //                                                     Container(
-    //                                                       margin: EdgeInsets
-    //                                                           .fromLTRB(
-    //                                                               0, 15, 0, 0),
-    //                                                       decoration: BoxDecoration(
-    //                                                           shape: BoxShape
-    //                                                               .circle,
-    //                                                           color: myTheme
-    //                                                               .colorScheme
-    //                                                               .primary
-    //                                                               .withOpacity(
-    //                                                                   0.6)),
-    //                                                       width: 100,
-    //                                                       height: 100,
-    //                                                       child: Opacity(
-    //                                                           opacity: 0.8,
-    //                                                           child: Icon(
-    //                                                             Icons.check,
-    //                                                             color: myTheme
-    //                                                                 .colorScheme
-    //                                                                 .onPrimaryContainer,
-    //                                                             size: 50,
-    //                                                           )),
-    //                                                     ),
-    //                                                     Container(
-    //                                                       margin: EdgeInsets
-    //                                                           .fromLTRB(
-    //                                                               0, 10, 0, 0),
-    //                                                       alignment:
-    //                                                           Alignment.center,
-    //                                                       child: Column(
-    //                                                         mainAxisAlignment:
-    //                                                             MainAxisAlignment
-    //                                                                 .center,
-    //                                                         crossAxisAlignment:
-    //                                                             CrossAxisAlignment
-    //                                                                 .center,
-    //                                                         children: [
-    //                                                           Container(
-    //                                                             margin: EdgeInsets
-    //                                                                 .only(
-    //                                                                     top:
-    //                                                                         10),
-    //                                                             child: Text(
-    //                                                               'Monto pagado: $coinSymbol $paidAmount',
-    //                                                               style:
-    //                                                                   TextStyle(
-    //                                                                 fontFamily:
-    //                                                                     'Poppins-regular',
-    //                                                                 fontSize:
-    //                                                                     12,
-    //                                                                 color: myTheme
-    //                                                                     .colorScheme
-    //                                                                     .primary,
-    //                                                                 // color: Colors.green,
-    //                                                                 fontWeight:
-    //                                                                     FontWeight
-    //                                                                         .bold,
-    //                                                               ),
-    //                                                             ),
-    //                                                           ),
-    //                                                           Container(
-    //                                                             margin: EdgeInsets
-    //                                                                 .only(
-    //                                                                     top:
-    //                                                                         10),
-    //                                                             child: Text(
-    //                                                               '${client!.name}',
-    //                                                               style:
-    //                                                                   TextStyle(
-    //                                                                 fontFamily:
-    //                                                                     'Poppins-regular',
-    //                                                                 fontSize:
-    //                                                                     12,
-    //                                                                 color: myTheme
-    //                                                                     .colorScheme
-    //                                                                     .primary,
-    //                                                                 // color: Colors.green,
-    //                                                                 fontWeight:
-    //                                                                     FontWeight
-    //                                                                         .bold,
-    //                                                               ),
-    //                                                             ),
-    //                                                           ),
-    //                                                           Container(
-    //                                                             margin: EdgeInsets
-    //                                                                 .only(
-    //                                                                     top:
-    //                                                                         10),
-    //                                                             child: Text(
-    //                                                               'Fecha: $date',
-    //                                                               style:
-    //                                                                   TextStyle(
-    //                                                                 fontFamily:
-    //                                                                     'Poppins-regular',
-    //                                                                 fontSize:
-    //                                                                     12,
-    //                                                                 color: myTheme
-    //                                                                     .colorScheme
-    //                                                                     .primary,
-    //                                                                 // color: Colors.green,
-    //                                                                 fontWeight:
-    //                                                                     FontWeight
-    //                                                                         .bold,
-    //                                                               ),
-    //                                                             ),
-    //                                                           ),
-    //                                                           Container(
-    //                                                             margin: EdgeInsets
-    //                                                                 .only(
-    //                                                                     top:
-    //                                                                         10),
-    //                                                             child: Text(
-    //                                                               '$selectedValueA',
-    //                                                               style:
-    //                                                                   TextStyle(
-    //                                                                 fontFamily:
-    //                                                                     'Poppins-regular',
-    //                                                                 fontSize:
-    //                                                                     12,
-    //                                                                 color: myTheme
-    //                                                                     .colorScheme
-    //                                                                     .primary,
-    //                                                                 // color: Colors.green,
-    //                                                                 fontWeight:
-    //                                                                     FontWeight
-    //                                                                         .bold,
-    //                                                               ),
-    //                                                             ),
-    //                                                           ),
-    //                                                         ],
-    //                                                       ),
-    //                                                     ),
-    //                                                     Container(
-    //                                                       margin:
-    //                                                           EdgeInsets.only(
-    //                                                               top: 50),
-    //                                                       alignment:
-    //                                                           Alignment.center,
-    //                                                       child: ElevatedButton
-    //                                                           .icon(
-    //                                                         onPressed: () {
-    //                                                           print(
-    //                                                               'paymentBody.payments:${paymentBody.payments}');
-    //                                                           // Navigator
-    //                                                           //     .pushReplacement(
-    //                                                           //   context,
-    //                                                           //   MaterialPageRoute(
-    //                                                           //       settings:
-    //                                                           //           const RouteSettings(
-    //                                                           //               name:
-    //                                                           //                   'PAGO-DIRECTO'),
-    //                                                           //       builder: (BuildContext
-    //                                                           //               context) =>
-    //                                                           //           AddPaymentPage(
-    //                                                           //             remaining:
-    //                                                           //                 paymentBody.remaining - amountExchanged,
-    //                                                           //             subTotal:
-    //                                                           //                 paymentBody.subTotal,
-    //                                                           //             discountPercentage:
-    //                                                           //                 paymentBody.discountPercentage,
-    //                                                           //             discount:
-    //                                                           //                 paymentBody.discount,
-    //                                                           //             tax: paymentBody
-    //                                                           //                 .tax,
-    //                                                           //             percentageTax:
-    //                                                           //                 paymentBody.percentageTax,
-    //                                                           //             client:
-    //                                                           //                 paymentBody.client,
-    //                                                           //             invoiceDocumentID:
-    //                                                           //                 paymentBody.invoiceDocumentID,
-    //                                                           //             invoiceNumber:
-    //                                                           //                 paymentBody.invoiceNumber,
-    //                                                           //             amountPayed:
-    //                                                           //                 (paymentBody.amountPaied ?? 0) + amountExchanged,
-    //                                                           //             payments:
-    //                                                           //                 paymentBody.payments,
-    //                                                           //             // updatePayed: updatePayed,
-    //                                                           //           )),
-    //                                                           // );
-    //                                                           // Navigator.pop(
-    //                                                           //     context);
-    //                                                         },
-    //                                                         style: ButtonStyle(
-    //                                                           backgroundColor:
-    //                                                               MaterialStateProperty
-    //                                                                   .all(
-    //                                                             myTheme
-    //                                                                 .colorScheme
-    //                                                                 .primary,
-    //                                                           ),
-    //                                                           shape: MaterialStateProperty
-    //                                                               .all<
-    //                                                                   RoundedRectangleBorder>(
-    //                                                             RoundedRectangleBorder(
-    //                                                               borderRadius:
-    //                                                                   BorderRadius
-    //                                                                       .circular(
-    //                                                                           18.0),
-    //                                                             ),
-    //                                                           ),
-    //                                                         ),
-    //                                                         icon: Icon(
-    //                                                           MaterialIcons
-    //                                                               .arrow_back_ios,
-    //                                                           size: 12,
-    //                                                         ),
-    //                                                         label: Text(
-    //                                                           'Aceptar',
-    //                                                           style: TextStyle(
-    //                                                             color: Colors
-    //                                                                 .white,
-    //                                                             fontFamily:
-    //                                                                 'Poppins-regular',
-    //                                                             fontSize: 12,
-    //                                                             fontWeight:
-    //                                                                 FontWeight
-    //                                                                     .bold,
-    //                                                           ),
-    //                                                         ),
-    //                                                       ),
-    //                                                     )
-    //                                                   ],
-    //                                                 ),
-    //                                               ),
-    //                                             ),
-    //                                           ],
-    //                                         ),
-    //                                       ),
-    //                                     );
-    //                                   });
-    //                             } else {
-    //                               Navigator.pushReplacement(
-    //                                 context,
-    //                                 MaterialPageRoute(
-    //                                   builder: (BuildContext context) =>
-    //                                       CompletedPayPage(
-    //                                           client: client,
-    //                                           total:
-    //                                               totalPayed + amountExchanged,
-    //                                           method: "Criptomoneda",
-    //                                           date:
-    //                                               '${date.day}-${date.month}-${date.year} ${(date as DateTime).hour}:${(date).minute}',
-    //                                           address: '',
-    //                                           coinsExchangeRates: const [],
-    //                                           addPaymentBody: paymentBody),
-    //                                 ),
-    //                               );
-    //                             }
-    //                           } catch (e) {
-    //                             print(e);
-    //                           }
-    //                           /* } */
-    //                         }
-    //                       } else {
-    //                         Fluttertoast.showToast(msg: 'Ingrese ID porfavor');
-    //                       }
-    //                     },
-    //                     style: TextButton.styleFrom(
-    //                       foregroundColor: myTheme.colorScheme.primary,
-    //                     ),
-    //                     child: Text(
-    //                       AppLocalizations.of(context)!.orderContinue,
-    //                       style: TextStyle(
-    //                         fontFamily: 'Poppins-regular',
-    //                         color: Colors.white,
-    //                         fontSize: 14,
-    //                         fontWeight: FontWeight.bold,
-    //                       ),
-    //                     ),
-    //                   ),
-    //                 ),
-    //               ],
-    //             ),
-    //           ),
-    //         ],
-    //       )
-    //     ],
-    //   );
-    // });
   } else if (selectedValueA == 'Deposito') {
     return StatefulBuilder(
       builder: (context, setState) => Column(
@@ -1613,86 +891,13 @@ identifyPaymentMethodRetail({
               ),
               InkWell(
                 onTap: () async {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ListTile(
-                            leading: Icon(
-                              Icons.camera_alt,
-                              color: myTheme.colorScheme.onPrimaryContainer,
-                            ),
-                            title: Text(
-                              'Camara',
-                              style: TextStyle(
-                                color: myTheme.colorScheme.primary,
-                                fontFamily: 'Poppins-regular',
-                              ),
-                            ),
-                            onTap: () async {
-                              Navigator.of(context).pop();
-                              var pickedFile = await getFromCamera(context);
-                              if (pickedFile != null) {
-                                print('Imagen seleccionada');
-                                var croppedImage =
-                                    await cropImage(pickedFile.path, imageFile);
-                                if (croppedImage != null) {
-                                  print('Imagen recortada');
-                                  setState(() {
-                                    imageFile = File(croppedImage.path);
-                                  });
-                                } else {
-                                  print('Error croppeando');
-                                }
-                              } else {
-                                print('error seleccionando');
-                                return;
-                              }
-                            },
-                          ),
-                          Divider(),
-                          ListTile(
-                            leading: Icon(
-                              Icons.photo_camera_back_rounded,
-                              color: myTheme.colorScheme.onPrimaryContainer,
-                            ),
-                            title: Text(
-                              'Galeria',
-                              style: TextStyle(
-                                color: myTheme.colorScheme.primary,
-                                fontFamily: 'Poppins-regular',
-                              ),
-                            ),
-                            onTap: () async {
-                              Navigator.of(context).pop();
-                              var pickedFile = await getFromGallery(context);
-                              if (pickedFile != null) {
-                                print('Imagen seleccionada');
-                                var croppedImage =
-                                    await cropImage(pickedFile.path, imageFile);
-                                if (croppedImage != null) {
-                                  print('Imagen recortada');
-                                  setState(() {
-                                    imageFile = File(croppedImage.path);
-                                  });
-                                } else {
-                                  print('Error croppeando');
-                                }
-                              } else {
-                                print('error seleccionando');
-                                return;
-                              }
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
+                  requestFileBottomSheet(context, (image) {
+                    setState(() {
+                      imageFile = image;
+                    });
+                  });
                 },
                 child: Row(
-                  // ignore: prefer_const_literals_to_create_immutables
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
@@ -1930,86 +1135,13 @@ identifyPaymentMethodRetail({
               ),
               InkWell(
                 onTap: () async {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ListTile(
-                            leading: Icon(
-                              Icons.camera_alt,
-                              color: myTheme.colorScheme.onPrimaryContainer,
-                            ),
-                            title: Text(
-                              'Camara',
-                              style: TextStyle(
-                                color: myTheme.colorScheme.primary,
-                                fontFamily: 'Poppins-regular',
-                              ),
-                            ),
-                            onTap: () async {
-                              Navigator.of(context).pop();
-                              var pickedFile = await getFromCamera(context);
-                              if (pickedFile != null) {
-                                print('Imagen seleccionada');
-                                var croppedImage =
-                                    await cropImage(pickedFile.path, imageFile);
-                                if (croppedImage != null) {
-                                  print('Imagen recortada');
-                                  setState(() {
-                                    imageFile = File(croppedImage.path);
-                                  });
-                                } else {
-                                  print('Error croppeando');
-                                }
-                              } else {
-                                print('error seleccionando');
-                                return;
-                              }
-                            },
-                          ),
-                          Divider(),
-                          ListTile(
-                            leading: Icon(
-                              Icons.photo_camera_back_rounded,
-                              color: myTheme.colorScheme.onPrimaryContainer,
-                            ),
-                            title: Text(
-                              'Galeria',
-                              style: TextStyle(
-                                color: myTheme.colorScheme.primary,
-                                fontFamily: 'Poppins-regular',
-                              ),
-                            ),
-                            onTap: () async {
-                              Navigator.of(context).pop();
-                              var pickedFile = await getFromGallery(context);
-                              if (pickedFile != null) {
-                                print('Imagen seleccionada');
-                                var croppedImage =
-                                    await cropImage(pickedFile.path, imageFile);
-                                if (croppedImage != null) {
-                                  print('Imagen recortada');
-                                  setState(() {
-                                    imageFile = File(croppedImage.path);
-                                  });
-                                } else {
-                                  print('Error croppeando');
-                                }
-                              } else {
-                                print('error seleccionando');
-                                return;
-                              }
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
+                  requestFileBottomSheet(context, (image) {
+                    setState(() {
+                      imageFile = image;
+                    });
+                  });
                 },
                 child: Row(
-                  // ignore: prefer_const_literals_to_create_immutables
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
@@ -2478,83 +1610,11 @@ identifyPaymentMethodRetail({
               ),
               InkWell(
                 onTap: () async {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ListTile(
-                            leading: Icon(
-                              Icons.camera_alt,
-                              color: myTheme.colorScheme.onPrimaryContainer,
-                            ),
-                            title: Text(
-                              'Camara',
-                              style: TextStyle(
-                                color: myTheme.colorScheme.primary,
-                                fontFamily: 'Poppins-regular',
-                              ),
-                            ),
-                            onTap: () async {
-                              Navigator.of(context).pop();
-                              var pickedFile = await getFromCamera(context);
-                              if (pickedFile != null) {
-                                print('Imagen seleccionada');
-                                var croppedImage =
-                                    await cropImage(pickedFile.path, imageFile);
-                                if (croppedImage != null) {
-                                  print('Imagen recortada');
-                                  setState(() {
-                                    imageFile = File(croppedImage.path);
-                                  });
-                                } else {
-                                  print('Error croppeando');
-                                }
-                              } else {
-                                print('error seleccionando');
-                                return;
-                              }
-                            },
-                          ),
-                          Divider(),
-                          ListTile(
-                            leading: Icon(
-                              Icons.photo_camera_back_rounded,
-                              color: myTheme.colorScheme.onPrimaryContainer,
-                            ),
-                            title: Text(
-                              'Galeria',
-                              style: TextStyle(
-                                color: myTheme.colorScheme.primary,
-                                fontFamily: 'Poppins-regular',
-                              ),
-                            ),
-                            onTap: () async {
-                              Navigator.of(context).pop();
-                              var pickedFile = await getFromGallery(context);
-                              if (pickedFile != null) {
-                                print('Imagen seleccionada');
-                                var croppedImage =
-                                    await cropImage(pickedFile.path, imageFile);
-                                if (croppedImage != null) {
-                                  print('Imagen recortada');
-                                  setState(() {
-                                    imageFile = File(croppedImage.path);
-                                  });
-                                } else {
-                                  print('Error croppeando');
-                                }
-                              } else {
-                                print('error seleccionando');
-                                return;
-                              }
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
+                  requestFileBottomSheet(context, (image) {
+                    setState(() {
+                      imageFile = image;
+                    });
+                  });
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -3058,4 +2118,3 @@ Future<dynamic> showDialogForConfirmedPaymentRetail(
         );
       });
 }
-// }

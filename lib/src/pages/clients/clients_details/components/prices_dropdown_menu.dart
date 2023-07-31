@@ -1,6 +1,4 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -34,7 +32,6 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
 
   @override
   Widget build(BuildContext context) {
-    String? selectedDiscount = widget.masterDiscount.toString();
     return SingleChildScrollView(
       child: Container(
         margin: const EdgeInsets.fromLTRB(8, 10, 8, 20),

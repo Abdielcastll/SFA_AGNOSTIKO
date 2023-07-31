@@ -7,10 +7,11 @@ import '../../models/transaction_args.dart';
 import '../../pages/exp_date_input/exp_date_input.dart';
 import '../../widgets/sdk/on_screen_keypad.dart';
 import '../../services/utils/keypad.dart';
-import '../../services/utils/locale.dart';
 
 class PanInputView extends StatefulWidget {
   static String route = "/panInput";
+
+  const PanInputView({super.key});
 
   @override
   _PanInputViewState createState() => _PanInputViewState();

@@ -1,22 +1,18 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/loading/loading_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void showCreateClientDialog(context, uid) {
@@ -25,8 +21,6 @@ void showCreateClientDialog(context, uid) {
   String formattedDate = dateFormatter.format(today);
   final nameOfCurrentUser =
       Provider.of<CurrentUserInfo>(context, listen: false).name;
-
-  final List<ClientName> allClientsFromZone = [];
 
   String? selectedValueA;
   String? selectedValueB;
@@ -56,7 +50,6 @@ void showCreateClientDialog(context, uid) {
               Provider.of<ZoneSummary?>(context)?.summary ?? {};
           final zonesList = zonesSummary.values.toList();
           final List<String> zonesStrings = List<String>.from(zonesList);
-          final zonesKeys = zonesSummary.keys.toList();
 
           return StatefulBuilder(builder: (context, setState) {
             final clients = Provider.of<List<ClientName>?>(context) ?? [];

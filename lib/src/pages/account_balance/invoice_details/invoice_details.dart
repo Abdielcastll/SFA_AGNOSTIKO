@@ -1,14 +1,11 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:pwa_sales2go_flutter/src/models/account_balance_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/order_model.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
-import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 
@@ -64,6 +61,7 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
         catchError: (context, error) {
           print('ERROR ON GETTING ORDER IN TICKET DETAILS');
           print(error);
+          return null;
         },
       ),
     ], child: InvoiceDetailsBody(widget: widget));

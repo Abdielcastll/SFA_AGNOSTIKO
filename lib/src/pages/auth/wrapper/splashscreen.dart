@@ -3,10 +3,6 @@
 
 import 'dart:async';
 import 'package:flutter/material.dart';
-//Firebase
-import 'package:provider/provider.dart';
-import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
-import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class SplashScreenWidget extends StatefulWidget {
   const SplashScreenWidget({Key? key}) : super(key: key);

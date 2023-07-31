@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:agnostiko/agnostiko.dart';
-import 'package:pwa_sales2go_flutter/dialogs/info_dialog.dart';
 
 import '../../../dialogs/cancel_transaction_dialog.dart';
 import '../../models/transaction_args.dart';
