@@ -21,7 +21,7 @@ class SelectClient extends StatefulWidget {
 
 class _SelectClientState extends State<SelectClient> {
   final clientController = TextEditingController();
-  List<Clients> starterClient = [Clients(name: 'NaN', fiscalAdress: 'NaN')];
+  List<Clients> starterClient = [genericClients];
   List<Clients>? mutatedList = [];
 
   @override
@@ -130,7 +130,7 @@ class _SelectClientState extends State<SelectClient> {
                     subtitle: Container(
                       margin: const EdgeInsets.fromLTRB(0, 5, 0, 10),
                       child: Text(
-                        clientFiscalAddress,
+                        clientFiscalAddress ?? '-',
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       ),

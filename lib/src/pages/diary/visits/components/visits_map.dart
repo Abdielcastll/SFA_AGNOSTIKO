@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/visit_model.dart';
+import 'package:pwa_sales2go_flutter/src/pages/diary/visits/components/client_marker.dart';
+import 'package:pwa_sales2go_flutter/src/pages/diary/visits/components/client_marker_popup.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
+import 'package:pwa_sales2go_flutter/src/utils/determinePosition.dart';
+import 'package:open_route_service/open_route_service.dart';
 
 class VisitsMap extends StatelessWidget {
   const VisitsMap({super.key});
@@ -34,30 +41,17 @@ class VisitMapBody extends StatefulWidget {
 
 class _VisitMapBodyState extends State<VisitMapBody> {
   final MapController _mapController = MapController();
+  final PopupController _popupController = PopupController();
+  OpenRouteService openRouteService = OpenRouteService(
+      apiKey: '5b3ce3597851110001cf6248dc5bbb1e901c4342bcd66f2ba2067204');
 
-  List<Marker> markers = [
-    Marker(
-      width: 80,
-      height: 80,
-      point: LatLng(19.465796, -99.486712),
-      builder: (context) => Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(8)),
-          child: const Column(
-            children: [
-              Icon(
-                Icons.storefront,
-                size: 36,
-              ),
-              Text(
-                'Marker de prueba',
-                textAlign: TextAlign.center,
-              ),
-            ],
-          )),
-    )
-  ];
+  List<LatLng> routePoints = [];
+
+  LatLng? visitFocused;
+
+  Marker? userMarker;
+
+  List<Marker> markers = [];
 
   double centerLat = 19.47;
   double centerLng = -99.49;
@@ -93,34 +87,11 @@ class _VisitMapBodyState extends State<VisitMapBody> {
         minLng = client.localization!.longitude;
       }
 
-      final newMarker = Marker(
-        width: 56,
-        height: 56,
-        point: LatLng(
-            client.localization!.latitude, client.localization!.longitude),
-        builder: (context) => Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(8)),
-            child: const Column(
-              children: [
-                Icon(
-                  Icons.storefront,
-                  size: 40,
-                ),
-              ],
-            )),
-      );
+      final newMarker = ClientMarker(client: client);
       markersAux.add(newMarker);
     }
-    print(minLat);
-    print(maxLat);
-    print(maxLng);
-    print(minLng);
 
     setState(() {
-      centerLat = minLat + ((maxLat.abs() - minLat.abs()) / 2);
-      centerLng = minLng + ((maxLng.abs() - minLng.abs()) / 2);
       markers = markersAux;
     });
 
@@ -129,8 +100,82 @@ class _VisitMapBodyState extends State<VisitMapBody> {
     return markersAux;
   }
 
+  getRoute(LatLng endCoordinate) async {
+    if (userMarker == null) {
+      return;
+    }
+
+    final List<ORSCoordinate> routeCoordinates =
+        await openRouteService.directionsRouteCoordsGet(
+      profileOverride: ORSProfile.drivingCar,
+      startCoordinate: ORSCoordinate(
+          latitude: userMarker!.point.latitude,
+          longitude: userMarker!.point.longitude),
+      endCoordinate: ORSCoordinate(
+          latitude: endCoordinate.latitude, longitude: endCoordinate.longitude),
+    );
+
+    final List<LatLng> route = routeCoordinates
+        .map((coordinate) => LatLng(coordinate.latitude, coordinate.longitude))
+        .toList();
+    print(route);
+    setState(() {
+      routePoints = route;
+    });
+  }
+
+  buildUserMarker() async {
+    final position = await determinePosition();
+
+    if (position == null) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Ubicacion del dispositivo no disponible.')));
+      return;
+    }
+
+    setState(() {
+      userMarker = Marker(
+        point:
+            LatLng(position.latitude, position.longitude), // 10.4746, -66.9473
+        builder: (context) => Icon(
+          Icons.location_on_rounded,
+          size: 42,
+          color: Colors.blue.shade600,
+        ),
+      );
+    });
+
+    centerLat = position.latitude;
+    centerLng = position.longitude;
+
+    _mapController.move(LatLng(position.latitude, position.longitude), 15);
+  }
+
+  onSelectToRoute(LatLng latLng) {
+    setState(() {
+      visitFocused = latLng;
+    });
+    getRoute(latLng);
+
+    _mapController.move(latLng, 15);
+  }
+
+  focusNextVisit() {
+    final newFocus = visitFocused != null
+        ? markers.firstWhere((element) =>
+            element.point.latitude != visitFocused!.latitude &&
+            element.point.longitude != visitFocused!.longitude)
+        : markers.first;
+    onSelectToRoute(newFocus.point);
+  }
+
+  focusLocation() {
+    _mapController.move(userMarker!.point, 15);
+  }
+
   @override
   initState() {
+    buildUserMarker();
     super.initState();
   }
 
@@ -142,30 +187,109 @@ class _VisitMapBodyState extends State<VisitMapBody> {
 
   @override
   Widget build(BuildContext context) {
-    print('widget.visits');
-    print(widget.visits);
-    print('centerLat');
-    print(centerLat);
-    print('centerLng');
-    print(centerLng);
-    return FlutterMap(
-      mapController: _mapController,
-      options: MapOptions(
-        maxZoom: 20,
-        minZoom: 1,
-        center: LatLng(centerLat, centerLng),
-        interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
-        zoom: 15.0,
-      ),
-      children: [
-        TileLayer(
-          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-          userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+    return MultiProvider(
+      providers: [
+        StreamProvider<ZoneSummary?>.value(
+          value: DatabaseServiceStreams().zoneSummary,
+          initialData: null,
+          catchError: (context, error) {
+            return;
+          },
         ),
-        MarkerLayer(
-          markers: markers,
-        )
       ],
+      child: Stack(alignment: Alignment.bottomRight, children: [
+        FlutterMap(
+          mapController: _mapController,
+          options: MapOptions(
+            maxZoom: 20,
+            minZoom: 1,
+            center: LatLng(centerLat, centerLng),
+            interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
+            zoom: 15.0,
+          ),
+          children: [
+            TileLayer(
+              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+              userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+            ),
+            MarkerLayer(
+              markers: userMarker == null ? [] : [userMarker!],
+            ),
+            if (routePoints.isNotEmpty)
+              PolylineLayer(
+                polylineCulling: false,
+                polylines: [
+                  Polyline(
+                      points: routePoints, color: Colors.blue, strokeWidth: 5),
+                ],
+              ),
+            PopupMarkerLayer(
+              options: PopupMarkerLayerOptions(
+                  popupDisplayOptions: PopupDisplayOptions(
+                    builder: (_, Marker marker) {
+                      if (marker is ClientMarker) {
+                        return ClientMarkerPopup(
+                          client: marker.client,
+                          onSelectToRoute: onSelectToRoute,
+                        );
+                      }
+                      return const Card(
+                        child: Text('Error'),
+                      );
+                    },
+                  ),
+                  popupController: _popupController,
+                  markers: markers),
+            ),
+          ],
+        ),
+        if (markers.length > 1 || visitFocused == null)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                margin: const EdgeInsets.only(bottom: 4, left: 8),
+                width: 162,
+                child: Row(
+                  children: [
+                    ElevatedButton(
+                        onPressed: focusLocation,
+                        child: const Row(
+                          children: [
+                            Text('Centrar'),
+                            Icon(
+                              Icons.location_on_rounded,
+                              color: Colors.white,
+                            ),
+                          ],
+                        )),
+                  ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                margin: const EdgeInsets.only(bottom: 4, right: 8),
+                width: 162,
+                child: Row(
+                  children: [
+                    ElevatedButton(
+                        onPressed: focusNextVisit,
+                        child: const Row(
+                          children: [
+                            Text('Siguiente Visita'),
+                            Icon(
+                              Icons.navigate_next_rounded,
+                              color: Colors.white,
+                            ),
+                          ],
+                        )),
+                  ],
+                ),
+              ),
+            ],
+          ),
+      ]),
     );
   }
 }

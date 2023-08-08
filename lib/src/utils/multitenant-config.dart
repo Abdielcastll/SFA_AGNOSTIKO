@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:agnostiko/agnostiko.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:pwa_sales2go_flutter/firebase_options.dart';
 import 'package:tms_agent_communication/tms_agent_communication.dart';
 import 'package:collection/collection.dart';
 
@@ -78,6 +79,18 @@ class _MultitenantConfig {
 
       tenantApp =
           await Firebase.initializeApp(name: 'tenant-app', options: tenantInfo);
+
+      return true;
+    } catch (e) {
+      throw Exception(
+          'No se pudo inicializar la configuracion Multitenant: $e');
+    }
+  }
+
+  Future<bool> initializePhone() async {
+    try {
+      tenantApp = await Firebase.initializeApp(
+          name: 'tenant-app', options: DefaultFirebaseOptions.currentPlatform);
 
       return true;
     } catch (e) {

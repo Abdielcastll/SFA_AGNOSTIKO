@@ -38,7 +38,7 @@ class _LogoutButtonState extends State<LogoutButton> {
               final orderActive =
                   Provider.of<OrderProvider>(context, listen: false);
               objectBox.delelteAllShoppingCart();
-              orderActive.setOrder(false, Clients());
+              orderActive.setOrder(false);
               _auth.signOut();
             },
             icon: const Icon(

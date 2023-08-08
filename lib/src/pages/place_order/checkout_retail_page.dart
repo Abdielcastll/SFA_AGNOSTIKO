@@ -1202,7 +1202,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                         print('ERROR AL GUARDAR PEDIDO');
                                         print(e);
                                       }
-                                      orderActive.setOrder(false, Clients());
+                                      orderActive.setOrder(false);
                                       objectBox.delelteAllShoppingCart();
                                       completeOrder();
                                     } else {

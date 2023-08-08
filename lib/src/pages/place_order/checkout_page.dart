@@ -889,8 +889,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                   width: MediaQuery.of(context).size.width,
                   child: Text(
                     isFiscalSelected
-                        ? widget.client?.fiscalAdress
-                        : widget.client?.dispatchAdress,
+                        ? widget.client!.fiscalAdress!
+                        : widget.client!.dispatchAdress,
                     style: TextStyle(
                       fontSize: 14,
                       color: Color(0xFF4353C2),
@@ -1344,7 +1344,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                         discountByInput,
                                         false,
                                       );
-                                      orderActive.setOrder(false, Clients());
+                                      orderActive.setOrder(false);
                                       completeOrder();
                                     } else {
                                       Fluttertoast.showToast(

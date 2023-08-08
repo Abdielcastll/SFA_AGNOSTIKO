@@ -1,17 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Clients {
-  final active;
+  final bool active;
   final specialContributor;
   final madeBy;
   final masterDiscount;
-  final fiscalAdress;
-  final dispatchAdress;
-  final email;
+  final String? fiscalAdress;
+  final String dispatchAdress;
+  final String email;
   final prices;
   final modified;
-  final name;
-  final id;
+  final String name;
+  final int id;
   final prospect;
   final phone1;
   final phone2;
@@ -20,17 +20,17 @@ class Clients {
   final clientDocumentId;
 
   Clients({
-    this.active,
+    required this.active,
+    required this.email,
+    required this.name,
+    required this.id,
+    required this.dispatchAdress,
     this.specialContributor,
     this.madeBy,
     this.masterDiscount,
     this.fiscalAdress,
-    this.dispatchAdress,
-    this.email,
     this.prices,
     this.modified,
-    this.name,
-    this.id,
     this.prospect,
     this.phone1,
     this.phone2,
@@ -96,6 +96,26 @@ List<Clients> clientListfromSnapshot(QuerySnapshot snapshot) {
     );
   }).toList();
 }
+
+final genericClients = Clients(
+  active: true,
+  specialContributor: false,
+  madeBy: '',
+  masterDiscount: 0,
+  fiscalAdress: 'Sin direccion',
+  dispatchAdress: 'Sin Direccion',
+  email: '',
+  prices: 'TPGBASE',
+  modified: Timestamp.now(),
+  name: 'Usuario Default Administrador',
+  id: 0,
+  prospect: false,
+  phone1: '',
+  phone2: '',
+  idType: '',
+  zone: 'NaN',
+  clientDocumentId: 'hEIOO4qTPYTqYChVeqxo',
+);
 
 class Client {
   final active;

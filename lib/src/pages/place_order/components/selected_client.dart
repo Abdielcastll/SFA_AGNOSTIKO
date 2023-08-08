@@ -63,7 +63,7 @@ class SelectedClient extends StatelessWidget {
                     width: 250,
                     margin: EdgeInsets.fromLTRB(14, 8, 0, 10),
                     child: Text(
-                      client?.name,
+                      client?.name ?? '',
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -135,7 +135,7 @@ class SelectedClient extends StatelessWidget {
                                         final orderActive =
                                             Provider.of<OrderProvider>(context,
                                                 listen: false);
-                                        orderActive.setOrder(false, Clients());
+                                        orderActive.setOrder(false);
                                         objectBox.delelteAllShoppingCart();
                                         Navigator.of(context).pop();
                                         Navigator.of(context).pop();

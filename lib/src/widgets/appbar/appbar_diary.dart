@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
@@ -152,27 +151,8 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
                                             // Escoger lista de clientes
                                             // var client =
                                             print('SELECTING DEFAULT CLIENT');
-                                            Clients? defaultClient = Clients(
-                                              active: true,
-                                              specialContributor: false,
-                                              madeBy: '',
-                                              masterDiscount: 0,
-                                              fiscalAdress: 'Sin direccion',
-                                              dispatchAdress: 'Sin Direccion',
-                                              email: '',
-                                              prices: 'TPGBASE',
-                                              modified: Timestamp.now(),
-                                              name:
-                                                  'Usuario Default Administrador',
-                                              id: 0,
-                                              prospect: false,
-                                              phone1: '',
-                                              phone2: '',
-                                              idType: '',
-                                              zone: 'NaN',
-                                              clientDocumentId:
-                                                  'hEIOO4qTPYTqYChVeqxo',
-                                            );
+                                            Clients? defaultClient =
+                                                genericClients;
                                             await clientsCollection
                                                 .where('zona',
                                                     isEqualTo: userZoneDocument)
@@ -187,159 +167,13 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
                                                         '000A Cliente Default')) {
                                                   print(
                                                       'SENDING DATA BASE DEFAULT CLIENT');
-                                                  defaultClient = Clients(
-                                                    active: snapshot
-                                                            .data()
-                                                            .toString()
-                                                            .contains('activo')
-                                                        ? snapshot.get('activo')
-                                                        : false,
-                                                    specialContributor: snapshot
-                                                            .data()
-                                                            .toString()
-                                                            .contains(
-                                                                'contribuyenteEspecial')
-                                                        ? snapshot.get(
-                                                            'contribuyenteEspecial')
-                                                        : false,
-                                                    madeBy: snapshot
-                                                            .data()
-                                                            .toString()
-                                                            .contains(
-                                                                'creadoPor')
-                                                        ? snapshot
-                                                            .get('creadoPor')
-                                                            .id
-                                                        : 'NaN',
-                                                    masterDiscount: snapshot
-                                                            .data()
-                                                            .toString()
-                                                            .contains(
-                                                                'descuentoMaestro')
-                                                        ? snapshot.get(
-                                                            'descuentoMaestro')
-                                                        : 0,
-                                                    fiscalAdress: snapshot
-                                                            .data()
-                                                            .toString()
-                                                            .contains(
-                                                                'direccionFiscal')
-                                                        ? snapshot.get(
-                                                            'direccionFiscal')
-                                                        : 'NaN',
-                                                    dispatchAdress: snapshot
-                                                            .data()
-                                                            .toString()
-                                                            .contains(
-                                                                'direccionDespacho')
-                                                        ? snapshot.get(
-                                                            'direccionDespacho')
-                                                        : 'No hay direccion de despacho',
-                                                    email: snapshot
-                                                            .data()
-                                                            .toString()
-                                                            .contains('email')
-                                                        ? snapshot.get('email')
-                                                        : 'NaN',
-                                                    prices: snapshot
-                                                            .data()
-                                                            .toString()
-                                                            .contains(
-                                                                'listaDePrecios')
-                                                        ? snapshot
-                                                            .get(
-                                                                'listaDePrecios')
-                                                            .id
-                                                        : 'TPGBASE',
-                                                    modified: snapshot
-                                                            .data()
-                                                            .toString()
-                                                            .contains(
-                                                                'modificado')
-                                                        ? snapshot
-                                                            .get('modificado')
-                                                        : Timestamp.now(),
-                                                    name: snapshot
-                                                            .data()
-                                                            .toString()
-                                                            .contains('nombre')
-                                                        ? snapshot.get('nombre')
-                                                        : 'NaN',
-                                                    id: snapshot
-                                                            .data()
-                                                            .toString()
-                                                            .contains(
-                                                                'numeroId')
-                                                        ? snapshot
-                                                            .get('numeroId')
-                                                        : 0,
-                                                    prospect: snapshot
-                                                            .data()
-                                                            .toString()
-                                                            .contains(
-                                                                'prospecto')
-                                                        ? snapshot
-                                                            .get('prospecto')
-                                                        : false,
-                                                    phone1: snapshot
-                                                            .data()
-                                                            .toString()
-                                                            .contains(
-                                                                'telefono')
-                                                        ? snapshot
-                                                            .get('telefono')
-                                                        : 'NaN',
-                                                    phone2: snapshot
-                                                            .data()
-                                                            .toString()
-                                                            .contains(
-                                                                'telefono2')
-                                                        ? snapshot
-                                                            .get('telefono2')
-                                                        : 'NaN',
-                                                    idType: snapshot
-                                                            .data()
-                                                            .toString()
-                                                            .contains('tipoId')
-                                                        ? snapshot
-                                                            .get('tipoId')
-                                                            .id
-                                                        : 'NaN',
-                                                    zone: snapshot
-                                                            .data()
-                                                            .toString()
-                                                            .contains('zona')
-                                                        ? snapshot
-                                                            .get('zona')
-                                                            .id
-                                                        : 'NaN',
-                                                    clientDocumentId:
-                                                        snapshot.reference.id,
-                                                  );
+                                                  defaultClient =
+                                                      genericClients;
                                                 } else {
                                                   print(
                                                       'SENDING ERROR DEFAULT CLIENT');
-                                                  defaultClient = Clients(
-                                                    active: true,
-                                                    specialContributor: false,
-                                                    madeBy: 'NaN',
-                                                    masterDiscount: 0,
-                                                    fiscalAdress: 'NaN',
-                                                    dispatchAdress: 'NaN',
-                                                    email: 'NaN',
-                                                    prices: 'TPGBASE',
-                                                    modified: Timestamp.now(),
-                                                    name:
-                                                        'Usuario Default Administrador',
-                                                    id: 0,
-                                                    prospect: false,
-                                                    phone1: '0',
-                                                    phone2: '0',
-                                                    idType: 'V',
-                                                    zone: 'NaN',
-                                                    clientDocumentId:
-                                                        'hEIOO4qTPYTqYChVeqxo',
-                                                  );
+                                                  defaultClient =
+                                                      genericClients;
                                                 }
                                               }).toList();
                                             }).catchError((e) {

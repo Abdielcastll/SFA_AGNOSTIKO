@@ -3,11 +3,8 @@ import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 
 class OrderProvider extends ChangeNotifier {
   bool? _orderActive = false;
-  Clients? _clientForTheOrder = Clients(
-    name: 'no-name',
-    prices: 'GENER-03',
-  );
-
+  Clients genericClient = genericClients;
+  late Clients? _clientForTheOrder = genericClient;
   int _navigationIndex = 0;
   int _diaryIndex = 0;
 
@@ -34,7 +31,7 @@ class OrderProvider extends ChangeNotifier {
     return;
   }
 
-  void setOrder(bool? orderActive, Clients? client) {
+  void setOrder(bool? orderActive, [Clients? client]) {
     if (orderActive == true) {
       _orderActive = orderActive;
       _clientForTheOrder = client;
@@ -46,7 +43,7 @@ class OrderProvider extends ChangeNotifier {
       return;
     } else if (orderActive == false) {
       _orderActive = orderActive;
-      _clientForTheOrder = Clients(name: 'no-name', prices: 'GENER-03');
+      _clientForTheOrder = genericClient;
       notifyListeners();
 
       // print('Orden activa: $_orderActive');

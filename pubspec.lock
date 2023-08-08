@@ -40,6 +40,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.0"
+  animated_stack_widget:
+    dependency: transitive
+    description:
+      name: animated_stack_widget
+      sha256: ce4788dd158768c9d4388354b6fb72600b78e041a37afc4c279c63ecafcb9408
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.4"
   archive:
     dependency: transitive
     description:
@@ -72,22 +80,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
-  barcode:
-    dependency: transitive
-    description:
-      name: barcode
-      sha256: "52570564684bbb0240a9f1fdb6bad12adc5e0540103c1c96d6dd550bd928b1c9"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.2.3"
-  barcode_widget:
-    dependency: "direct main"
-    description:
-      name: barcode_widget
-      sha256: ea0c0578b5db3ca3a583d80e05eb47bfb70419e3a23b920d93ae7968c45c20ce
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.3"
   boolean_selector:
     dependency: transitive
     description:
@@ -489,7 +481,7 @@ packages:
     source: hosted
     version: "0.2.4"
   firebase_performance:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: firebase_performance
       sha256: e49c00647e8363155193de566af1803bcf3a449e934b7d5fbfea06648840d59b
@@ -642,6 +634,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.0"
+  flutter_map_marker_popup:
+    dependency: "direct main"
+    description:
+      name: flutter_map_marker_popup
+      sha256: "71457476f91d6174c132577d37c11a78ad9502be65e699b22aa7a745b07414a5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.1.0"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -666,14 +666,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.6"
-  flutter_swiper_plus:
-    dependency: "direct main"
-    description:
-      name: flutter_swiper_plus
-      sha256: cf2e39b230c570f6bdb87f8a19d1c94be47441ffacb09ddc371c7a628e0dbe6a
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.4"
   flutter_switch:
     dependency: "direct main"
     description:
@@ -892,14 +884,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
-  image_downloader:
-    dependency: "direct main"
-    description:
-      name: image_downloader
-      sha256: "2b1c1d1fcfb6677175d009af3fc86914aee07684c12ea061f380ef1f44cae8df"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.31.0"
   image_picker:
     dependency: "direct main"
     description:
@@ -1084,14 +1068,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
-  objectbox_flutter_libs:
-    dependency: "direct main"
-    description:
-      name: objectbox_flutter_libs
-      sha256: "03801ed3b35d73dacef612880f0a84ed0cce6b3b2efee2c93d47356584e8c942"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
   objectbox_generator:
     dependency: "direct dev"
     description:
@@ -1108,6 +1084,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
+  open_route_service:
+    dependency: "direct main"
+    description:
+      name: open_route_service
+      sha256: f43dc63796d414441893d2e81d69a47dbc5da976705d9099980ed82aa982b75a
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.2"
   package_config:
     dependency: transitive
     description:
@@ -1220,14 +1204,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.1.0"
-  photo_view:
-    dependency: "direct main"
-    description:
-      name: photo_view
-      sha256: "8036802a00bae2a78fc197af8a158e3e2f7b500561ed23b4c458107685e645bb"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.14.0"
   platform:
     dependency: transitive
     description:
@@ -1308,14 +1284,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.2"
-  qr:
-    dependency: transitive
-    description:
-      name: qr
-      sha256: "64957a3930367bf97cc211a5af99551d630f2f4625e38af10edd6b19131b64b3"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.1"
   quiver:
     dependency: transitive
     description:
@@ -1552,14 +1520,6 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
-  transparent_image:
-    dependency: "direct main"
-    description:
-      name: transparent_image
-      sha256: e8991d955a2094e197ca24c645efec2faf4285772a4746126ca12875e54ca02f
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.1"
   tuple:
     dependency: transitive
     description:
@@ -1666,4 +1626,4 @@ packages:
     version: "3.1.1"
 sdks:
   dart: ">=3.0.0 <4.0.0"
-  flutter: ">=3.3.0"
+  flutter: ">=3.10.0"

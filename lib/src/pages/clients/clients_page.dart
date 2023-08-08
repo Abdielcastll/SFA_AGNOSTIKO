@@ -26,7 +26,6 @@ class _ClientsPageState extends State<ClientsPage> {
     final clientsLimit =
         Provider.of<CounterLimitFirestore>(context).getClientsLimit;
 
-    // print(currentUserActive.zone);
     return MultiProvider(
       providers: [
         StreamProvider<List<Clients>?>.value(
@@ -75,11 +74,7 @@ class _ClientsPageState extends State<ClientsPage> {
           userZoneDocument: userZoneDocument,
         ),
         floatingActionButton: Wrap(
-          // direction: Axis.horizontal,
           children: [
-            // Container(
-            // margin: const EdgeInsets.all(10.0),
-            // child:
             FloatingActionButton(
               heroTag: 1,
               elevation: 10,
@@ -124,12 +119,10 @@ class _ClientsBodyState extends State<ClientsBody> {
   void initState() {
     super.initState();
     controller.addListener(() {
-      final clientsLimitProvider =
-          Provider.of<CounterLimitFirestore>(context, listen: false);
+      final clientsLimitProvider = context.read<CounterLimitFirestore>();
       if (controller.position.atEdge) {
         bool isTop = controller.position.pixels == 0;
         if (isTop) {
-          // Fluttertoast.showToast(msg: 'Tope de pagina');
           print('Top Clients page');
         } else {
           if (clientsLimitProvider.getScrollClientLimit == 0) {
@@ -153,13 +146,7 @@ class _ClientsBodyState extends State<ClientsBody> {
 
   @override
   Widget build(BuildContext context) {
-    List<Clients>? clients = Provider.of<List<Clients>?>(context) ?? [];
-    List<Clients>? clientsList = clients;
-    // final currentUserActive =
-    //     Provider.of<CurrentUserProvider>(context).currentUserInfo;
-    // print(
-    //     clientsList.where((element) => element.zone == cur rentUserActive.zone));
-    // print(clients);
+    List<Clients> clients = context.watch<List<Clients>?>() ?? [];
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -168,7 +155,7 @@ class _ClientsBodyState extends State<ClientsBody> {
           // Center(
           //   child: CircularProgressIndicator(),
           // ),
-          ClientList(listOfClients: clientsList, controller: controller),
+          ClientList(listOfClients: clients, controller: controller),
         ],
       ),
     );

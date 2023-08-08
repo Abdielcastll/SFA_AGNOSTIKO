@@ -394,7 +394,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                     Provider.of<OrderProvider>(context, listen: false);
                 objectBox.delelteAllShoppingCart();
                 Navigator.popUntil(context, (route) => route.isFirst);
-                orderActive.setOrder(false, Clients());
+                orderActive.setOrder(false);
                 final j =
                     Provider.of<CounterLimitFirestore>(context, listen: false);
                 j.setNewScreen(1);

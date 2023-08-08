@@ -65,7 +65,7 @@ goBackToCatalogue(context) {
           onPressed: () {
             Navigator.popUntil(context, (route) => route.isFirst);
             objectBox.delelteAllShoppingCart();
-            orderActive.setOrder(false, Clients());
+            orderActive.setOrder(false);
             final j =
                 Provider.of<CounterLimitFirestore>(context, listen: false);
             j.setNewScreen(1);
