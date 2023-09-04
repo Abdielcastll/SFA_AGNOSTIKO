@@ -2,7 +2,6 @@
 
 import 'dart:ui' as ui;
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -10,9 +9,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/visit_model.dart';
-import 'package:pwa_sales2go_flutter/src/pages/diary/visits/components/visits_completed.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/visits/components/visits_map.dart';
-import 'package:pwa_sales2go_flutter/src/pages/diary/visits/components/visits_on_process.dart';
+import 'package:pwa_sales2go_flutter/src/pages/diary/visits/components/visits_list.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -26,143 +24,186 @@ class VisitsPage extends StatefulWidget {
 }
 
 class _VisitsPageState extends State<VisitsPage> {
+  bool seeCompleted = false;
+  bool isDescending = false;
+  DateTime dateSelected =
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+
+  toggleSeeCompleted() {
+    print('toggleSeeCompleted');
+    setState(() {
+      seeCompleted = !seeCompleted;
+    });
+  }
+
+  toggleOrder() {
+    print('toggleOrder');
+    setState(() {
+      isDescending = !isDescending;
+    });
+  }
+
+  onDateSelected(DateTime date) {
+    print('onDateSelected');
+    setState(() {
+      dateSelected = date;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final currentDayProvider = Provider.of<CounterLimitFirestore>(context);
+    final currentDayProvider = context.watch<CounterLimitFirestore>();
     final currentDay = currentDayProvider.currentDayVisits;
 
     final currentDayDateTime = currentDayProvider.currentDayVisits.toDate();
     DateTime tomorrow = currentDayDateTime;
     tomorrow = tomorrow.add(Duration(days: 1));
 
-    final user = Provider.of<UserModel?>(context);
-    // print('VISITAS');
-    // print(user?.uid);
-    return StreamProvider<List<Visits>>.value(
-      value: currentDay !=
-              Timestamp.fromDate(DateTime(
-                DateTime.now().year + 99,
-                DateTime.now().month + 99,
-                DateTime.now().day + 99,
-                0,
-                0,
-                0,
-                0,
-                0,
-              ))
-          ? usuariosRef
-              .doc(user?.uid)
-              .collection('visitas')
-              .orderBy('fecha', descending: true)
-              .where('fecha',
-                  isGreaterThanOrEqualTo: currentDayProvider.currentDayVisits)
-              .where('fecha', isLessThan: tomorrow)
-              .snapshots()
-              .map(visitsFromSnasphot)
-          : usuariosRef
-              .doc(user?.uid)
-              .collection('visitas')
-              .orderBy('fecha', descending: true)
-              .snapshots()
-              .map(visitsFromSnasphot),
-      initialData: const [],
-      catchError: (context, error) {
-        print('ERROR ON VISITS PROVIDER ON VISIT PAGE');
-        print(error);
-        return [];
-      },
-      child: SafeArea(
-        child: Scaffold(
-          backgroundColor: myTheme.colorScheme.background,
-          floatingActionButton: Wrap(
-            direction: Axis.vertical,
-            children: [
-              FloatingActionButton(
-                elevation: 10,
-                heroTag: null,
-                backgroundColor: myTheme.colorScheme.primary,
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            StreamProvider<List<Visits>>.value(
-                              value: currentDay !=
-                                      Timestamp.fromDate(DateTime(
-                                        DateTime.now().year + 99,
-                                        DateTime.now().month + 99,
-                                        DateTime.now().day + 99,
-                                        0,
-                                        0,
-                                        0,
-                                        0,
-                                        0,
-                                      ))
-                                  ? usuariosRef
-                                      .doc(user?.uid)
-                                      .collection('visitas')
-                                      .orderBy('fecha', descending: true)
-                                      .where('fecha',
-                                          isGreaterThanOrEqualTo:
-                                              currentDayProvider
-                                                  .currentDayVisits)
-                                      .where('fecha', isLessThan: tomorrow)
-                                      .snapshots()
-                                      .map(visitsFromSnasphot)
-                                  : usuariosRef
-                                      .doc(user?.uid)
-                                      .collection('visitas')
-                                      .orderBy('fecha', descending: true)
-                                      .snapshots()
-                                      .map(visitsFromSnasphot),
-                              initialData: [],
-                              lazy: true,
-                              child: VisitsMap(),
-                            )),
-                  );
-                },
-                child: const Icon(
-                  MaterialCommunityIcons.map,
-                  color: Colors.white,
-                ),
+    final user = context.watch<UserModel?>();
+
+    return StreamBuilder<List<Visits>>(
+        stream: currentDay !=
+                Timestamp.fromDate(DateTime(
+                  DateTime.now().year + 99,
+                  DateTime.now().month + 99,
+                  DateTime.now().day + 99,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                ))
+            ? usuariosRef
+                .doc(user?.uid)
+                .collection('visitas')
+                .where('fecha',
+                    isGreaterThanOrEqualTo: currentDayProvider.currentDayVisits)
+                .where('fecha', isLessThan: tomorrow)
+                .orderBy('fecha', descending: isDescending)
+                .snapshots()
+                .map(visitsFromSnasphot)
+            : usuariosRef
+                .doc(user?.uid)
+                .collection('visitas')
+                .orderBy('fecha', descending: isDescending)
+                .snapshots()
+                .map(visitsFromSnasphot),
+        initialData: const [],
+        builder: (context, snapshot) {
+          print('snapshot.data');
+          print(snapshot.data);
+          print(snapshot.error);
+          return SafeArea(
+            child: Scaffold(
+              backgroundColor: myTheme.colorScheme.background,
+              floatingActionButton: Wrap(
+                direction: Axis.vertical,
+                children: [
+                  FloatingActionButton(
+                    elevation: 10,
+                    heroTag: null,
+                    backgroundColor: myTheme.colorScheme.primary,
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                StreamProvider<List<Visits>>.value(
+                                  value: currentDay !=
+                                          Timestamp.fromDate(DateTime(
+                                            DateTime.now().year + 99,
+                                            DateTime.now().month + 99,
+                                            DateTime.now().day + 99,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                          ))
+                                      ? usuariosRef
+                                          .doc(user?.uid)
+                                          .collection('visitas')
+                                          .orderBy('fecha',
+                                              descending: isDescending)
+                                          .where('fecha',
+                                              isGreaterThanOrEqualTo:
+                                                  currentDayProvider
+                                                      .currentDayVisits)
+                                          .where('fecha', isLessThan: tomorrow)
+                                          .snapshots()
+                                          .map(visitsFromSnasphot)
+                                      : usuariosRef
+                                          .doc(user?.uid)
+                                          .collection('visitas')
+                                          .orderBy('fecha',
+                                              descending: isDescending)
+                                          .snapshots()
+                                          .map(visitsFromSnasphot),
+                                  initialData: snapshot.data ?? [],
+                                  lazy: true,
+                                  child: VisitsMap(),
+                                )),
+                      );
+                    },
+                    child: const Icon(
+                      MaterialCommunityIcons.map,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  FloatingActionButton(
+                    heroTag: null,
+                    elevation: 10,
+                    backgroundColor: myTheme.colorScheme.primary,
+                    onPressed: () {
+                      // ShowDialog de a;adir visita
+                      showCreateClientDialog(context, user?.uid);
+                    },
+                    child: const Icon(
+                      MaterialCommunityIcons.calendar_plus,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(height: 20),
-              FloatingActionButton(
-                heroTag: null,
-                elevation: 10,
-                backgroundColor: myTheme.colorScheme.primary,
-                onPressed: () {
-                  // ShowDialog de a;adir visita
-                  showCreateClientDialog(context, user?.uid);
-                },
-                child: const Icon(
-                  MaterialCommunityIcons.calendar_plus,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
-          body: const VisitsBody(),
-        ),
-      ),
-    );
+              body: VisitsBody(
+                  toggleSeeCompleted: toggleSeeCompleted,
+                  seeCompleted: seeCompleted,
+                  isDescending: isDescending,
+                  toggleOrder: toggleOrder,
+                  onDateSelected: onDateSelected,
+                  dateSelected: dateSelected,
+                  isLoading:
+                      snapshot.connectionState == ConnectionState.waiting,
+                  visits: snapshot.data ?? []),
+            ),
+          );
+        });
   }
 }
 
-class VisitsBody extends StatefulWidget {
-  const VisitsBody({
-    Key? key,
-  }) : super(key: key);
+class VisitsBody extends StatelessWidget {
+  VisitsBody(
+      {Key? key,
+      required this.toggleSeeCompleted,
+      required this.seeCompleted,
+      required this.toggleOrder,
+      required this.isDescending,
+      required this.onDateSelected,
+      required this.dateSelected,
+      required this.isLoading,
+      required this.visits})
+      : super(key: key);
 
-  @override
-  State<VisitsBody> createState() => _VisitsBodyState();
-}
+  final Function() toggleSeeCompleted;
+  final bool seeCompleted;
+  final Function() toggleOrder;
+  final bool isDescending;
+  final Function(DateTime) onDateSelected;
+  final DateTime dateSelected;
+  final bool isLoading;
+  final List<Visits> visits;
 
-class _VisitsBodyState extends State<VisitsBody> {
-  bool seeCompleted = false;
-  bool isDescending = false;
-  bool light = false;
-  DateTime today = DateTime.now();
-  var dateFormatter = DateFormat('dd-MM-yyyy');
+  final dateFormatter = DateFormat('dd-MM-yyyy');
 
   @override
   Widget build(BuildContext context) {
@@ -184,7 +225,7 @@ class _VisitsBodyState extends State<VisitsBody> {
                 margin: EdgeInsets.only(top: 16),
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    setState(() => isDescending = !isDescending);
+                    toggleOrder();
                     print('descending: $isDescending');
                   },
                   icon: Icon(
@@ -267,18 +308,16 @@ class _VisitsBodyState extends State<VisitsBody> {
                       if (newDate == null) {
                         return;
                       }
-                      setState(() {
-                        today = newDate;
-                        formattedDate = dateFormatter.format(newDate);
-                        final newDay = Timestamp.fromDate(newDate);
-                        currentDayProvider.setNewDayVisits(newDay);
-                      });
+                      formattedDate = dateFormatter.format(newDate);
+                      onDateSelected(newDate);
+                      final newDay = Timestamp.fromDate(newDate);
+                      currentDayProvider.setNewDayVisits(newDay);
                     },
                     icon: Icon(
                       MaterialIcons.event,
                       color: myTheme.colorScheme.onPrimaryContainer,
                     ),
-                    label: Container(
+                    label: SizedBox(
                       width: 100,
                       child: Text(
                         currentDay !=
@@ -335,15 +374,12 @@ class _VisitsBodyState extends State<VisitsBody> {
                 SizedBox(width: 8),
                 FlutterSwitch(
                   onToggle: (val) {
-                    setState(() {
-                      light = val;
-                      seeCompleted = !seeCompleted;
-                    });
+                    toggleSeeCompleted();
                   },
                   width: 39,
                   height: 24,
                   toggleSize: 12,
-                  value: light,
+                  value: seeCompleted,
                   borderRadius: 26,
                   padding: 6,
                   activeColor: Colors.green.shade300,
@@ -357,9 +393,18 @@ class _VisitsBodyState extends State<VisitsBody> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Divider(),
           ),
-          seeCompleted == false
-              ? VisitsOnProcess(isDescending: isDescending)
-              : VisitsCompleted(isDescending: isDescending),
+          VisitsList(
+              visits: seeCompleted
+                  ? visits
+                      .where((element) =>
+                          element.isCancelled == seeCompleted ||
+                          element.isCompleted == seeCompleted)
+                      .toList()
+                  : visits
+                      .where((element) =>
+                          !element.isCancelled && !element.isCompleted)
+                      .toList(),
+              isLoading: isLoading)
         ],
       ),
     );

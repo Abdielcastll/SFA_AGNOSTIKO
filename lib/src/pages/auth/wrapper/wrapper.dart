@@ -9,6 +9,7 @@ import 'package:pwa_sales2go_flutter/src/pages/navigation/navigation.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/auth.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
+import 'package:pwa_sales2go_flutter/src/utils/notifications.dart';
 
 class Wrapper extends StatefulWidget {
   const Wrapper({Key? key}) : super(key: key);

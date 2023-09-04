@@ -87,7 +87,8 @@ class _VisitMapBodyState extends State<VisitMapBody> {
         minLng = client.localization!.longitude;
       }
 
-      final newMarker = ClientMarker(client: client);
+      final newMarker = ClientMarker(
+          client: client, completed: visit.isCancelled || visit.isCompleted);
       markersAux.add(newMarker);
     }
 
@@ -243,30 +244,32 @@ class _VisitMapBodyState extends State<VisitMapBody> {
             ),
           ],
         ),
-        if (markers.length > 1 || visitFocused == null)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                margin: const EdgeInsets.only(bottom: 4, left: 8),
-                width: 162,
-                child: Row(
-                  children: [
-                    ElevatedButton(
-                        onPressed: focusLocation,
-                        child: const Row(
-                          children: [
-                            Text('Centrar'),
-                            Icon(
-                              Icons.location_on_rounded,
-                              color: Colors.white,
-                            ),
-                          ],
-                        )),
-                  ],
-                ),
+        Row(
+          mainAxisAlignment: markers.length > 1 || visitFocused == null
+              ? MainAxisAlignment.spaceBetween
+              : MainAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              margin: const EdgeInsets.only(bottom: 4, left: 8),
+              width: 162,
+              child: Row(
+                children: [
+                  ElevatedButton(
+                      onPressed: focusLocation,
+                      child: const Row(
+                        children: [
+                          Text('Centrar'),
+                          Icon(
+                            Icons.location_on_rounded,
+                            color: Colors.white,
+                          ),
+                        ],
+                      )),
+                ],
               ),
+            ),
+            if (markers.length > 1 || visitFocused == null)
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 4),
                 margin: const EdgeInsets.only(bottom: 4, right: 8),
@@ -287,8 +290,8 @@ class _VisitMapBodyState extends State<VisitMapBody> {
                   ],
                 ),
               ),
-            ],
-          ),
+          ],
+        ),
       ]),
     );
   }

@@ -31,6 +31,7 @@ import 'package:pwa_sales2go_flutter/src/utils/determinePosition.dart';
 import 'package:pwa_sales2go_flutter/src/pages/auth/login/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/src/utils/multitenant-config.dart';
+import 'package:pwa_sales2go_flutter/src/utils/notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -133,24 +134,27 @@ class SfaAgnostiko extends StatelessWidget {
                                   //'wrapper' for mobile to avoid checking terminal
                                   // token, SplashScreenView.route to activate
                                   // in terminals
-                                  // 'wrapper',
+                                  //'wrapper',
                                   SplashScreenView.route,
                               routes: {
                                 SplashScreenView.route:
                                     (BuildContext context) =>
                                         const SplashScreenView(),
                                 PinInputView.route: (context) => PinInputView(),
-                                PanInputView.route: (context) => PanInputView(),
+                                PanInputView.route: (context) =>
+                                    const PanInputView(),
                                 ExpDateInputView.route: (context) =>
                                     ExpDateInputView(),
                                 EmvTransactionInfoView.route: (context) =>
                                     const EmvTransactionInfoView(),
-                                CvvInputView.route: (context) => CvvInputView(),
+                                CvvInputView.route: (context) =>
+                                    const CvvInputView(),
                                 CardInputView.route: (context) =>
                                     CardInputView(),
                                 AmountInputView.route: (context) =>
                                     AmountInputView(),
-                                'wrapper': (BuildContext context) => Wrapper(),
+                                'wrapper': (BuildContext context) =>
+                                    const Wrapper(),
                                 'login': (BuildContext context) =>
                                     const LoginPage(),
                                 'navigation': (BuildContext context) =>

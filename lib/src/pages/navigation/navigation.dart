@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/profile/profile_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/catalogue_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_page.dart';
@@ -9,29 +10,31 @@ import 'package:pwa_sales2go_flutter/src/pages/diary/diary_tabs.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pwa_sales2go_flutter/src/utils/notifications.dart';
 
-class NavigationPages extends StatefulWidget {
+class NavigationPages extends StatelessWidget {
   const NavigationPages({Key? key}) : super(key: key);
 
   @override
-  State<NavigationPages> createState() => _NavigationPagesState();
-}
-
-class _NavigationPagesState extends State<NavigationPages> {
-  // int index = 0;
-  final screens = [
-    const CataloguePage(),
-    const DiaryTabs(),
-    const ClientsPage(),
-    const ProfilePage(),
-  ];
-
-  @override
   Widget build(BuildContext context) {
-    int index = Provider.of<CounterLimitFirestore>(context).currentScreen;
+    final screens = [
+      const CataloguePage(),
+      const DiaryTabs(),
+      const ClientsPage(),
+      const ProfilePage(),
+    ];
+
+    CounterLimitFirestore counterLimitFirestore =
+        Provider.of<CounterLimitFirestore>(context);
+    CurrentUserInfo user = Provider.of<CurrentUserInfo>(context);
+
+    if (user.role != null && user.role != '') {
+      notificationService.initialize(user.role);
+    }
+
     return Scaffold(
       body: IndexedStack(
-        index: index,
+        index: counterLimitFirestore.currentScreen,
         children: screens,
       ),
       // screens[index],
@@ -54,14 +57,9 @@ class _NavigationPagesState extends State<NavigationPages> {
           backgroundColor: myTheme.colorScheme.primary,
           labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
           animationDuration: const Duration(seconds: 1),
-          selectedIndex: index,
+          selectedIndex: counterLimitFirestore.currentScreen,
           onDestinationSelected: (int i) {
-            // setState(() => index = i);
-            setState(() {
-              final j =
-                  Provider.of<CounterLimitFirestore>(context, listen: false);
-              j.setNewScreen(i);
-            });
+            counterLimitFirestore.setNewScreen(i);
           },
           destinations: [
             NavigationDestination(

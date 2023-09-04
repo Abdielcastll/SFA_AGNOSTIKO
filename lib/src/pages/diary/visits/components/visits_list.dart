@@ -1,66 +1,41 @@
-import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/visit_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/visits/components/visit_card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
-class VisitsOnProcess extends StatefulWidget {
-  const VisitsOnProcess({
-    Key? key,
-    required this.isDescending,
-  }) : super(key: key);
+class VisitsList extends StatelessWidget {
+  const VisitsList({Key? key, required this.visits, required this.isLoading})
+      : super(key: key);
 
-  final bool isDescending;
-
-  @override
-  State<VisitsOnProcess> createState() => _VisitsOnProcessState();
-}
-
-class _VisitsOnProcessState extends State<VisitsOnProcess> {
-  bool _isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    Timer(Duration(seconds: 2), () {
-      setState(() {
-        _isLoading = false;
-      });
-    });
-  }
+  final List<Visits> visits;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
     var dateFormatter = DateFormat('dd-MM-yyyy');
-    final visits = Provider.of<List<Visits>?>(context) ?? [];
-    final visitsOnProcess = visits
-        .where((element) =>
-            element.isCancelled == false && element.isCompleted == false)
-        .toList();
+
     return Column(
       children: [
-        visitsOnProcess.isNotEmpty
-            ? Container(
+        visits.isNotEmpty
+            ? SizedBox(
                 height: MediaQuery.of(context).size.height * 0.52,
                 child: Scrollbar(
                   child: ListView.builder(
                     // physics: const BouncingScrollPhysics(),
-                    itemCount: visitsOnProcess.length,
+                    itemCount: visits.length,
                     itemBuilder: (BuildContext context, int index) {
-                      final sortedVisits = widget.isDescending
-                          ? visitsOnProcess.reversed.toList()
-                          : visitsOnProcess;
-                      final visit = sortedVisits[index];
+                      final visit = visits[index];
                       final unformattedDate =
                           visit.date ?? Timestamp.fromDate(DateTime.now());
-                      final visitStatus =
-                          AppLocalizations.of(context)!.onProcess;
+                      final visitStatus = visit.isCancelled
+                          ? AppLocalizations.of(context)!.canceled
+                          : visit.isCompleted
+                              ? AppLocalizations.of(context)!.completed
+                              : AppLocalizations.of(context)!.onProcess;
                       final date =
                           DateTime.parse(unformattedDate.toDate().toString());
                       final visitDate = dateFormatter.format(date);
@@ -84,8 +59,8 @@ class _VisitsOnProcessState extends State<VisitsOnProcess> {
                 margin: const EdgeInsets.fromLTRB(0, 100, 0, 0),
                 child: Column(
                   children: [
-                    if (_isLoading) ...[
-                      Center(child: const CircularProgressIndicator()),
+                    if (isLoading) ...[
+                      const Center(child: CircularProgressIndicator()),
                     ] else ...[
                       Container(
                         margin: const EdgeInsets.fromLTRB(0, 0, 0, 20),
