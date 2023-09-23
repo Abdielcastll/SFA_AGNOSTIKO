@@ -1,26 +1,49 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:pwa_sales2go_flutter/src/services/auth.dart';
+import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/utils/multitenant-config.dart';
 
 class Notification {
+  String id;
   String title;
   String body;
+  DateTime date;
+  bool read;
   String? icon;
 
-  Notification({required this.title, required this.body, this.icon});
+  Notification(
+      {required this.title,
+      required this.id,
+      required this.body,
+      this.icon,
+      required this.date,
+      this.read = false});
 
-  factory Notification.fromJson(Map<dynamic, dynamic> data) {
-    return Notification(title: data['title'], body: data['body']);
+  factory Notification.fromJson(Map<dynamic, dynamic> data, String date) {
+    return Notification(
+        id: date,
+        title: data['titulo'],
+        body: data['descripcion'],
+        date: DateTime.parse(date),
+        read: data['leido'] ?? false);
   }
 }
 
-class NotificationService {
+class NotificationService extends ChangeNotifier {
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   StreamSubscription<DatabaseEvent>? _notificacionStreamSubscription;
+  StreamSubscription? roleNotificationStream;
+  StreamSubscription? userNotificationStream;
+
+  DatabaseReference? roleNotificationRef;
+  DatabaseReference? userNotificationRef;
 
   final AndroidNotificationChannel _channel = const AndroidNotificationChannel(
     'field_sales_notifications', // id
@@ -29,7 +52,9 @@ class NotificationService {
     importance: Importance.max,
   );
 
-  initialize(String notificationsGroupId) async {
+  List<Notification> notifications = [];
+
+  initialize(String userID) async {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('agn');
     const InitializationSettings initializationSettings =
@@ -40,33 +65,76 @@ class NotificationService {
     FirebaseDatabase database =
         FirebaseDatabase.instanceFor(app: multitenantConfig.tenantApp!);
 
-    DatabaseReference notificationsRef =
-        database.ref('notificaciones/$notificationsGroupId');
+    DatabaseReference notificationsRef = database.ref('notificaciones/$userID');
 
-    print('notificationsGroupId $notificationsGroupId');
+    print('notificationsGroupId $userID');
 
     if (_notificacionStreamSubscription != null) return;
 
     _notificacionStreamSubscription =
-        notificationsRef.onValue.listen((DatabaseEvent event) {
+        notificationsRef.onChildAdded.listen((DatabaseEvent event) {
       final data = event.snapshot.value as Map<dynamic, dynamic>;
       print('notificationData $data');
-      final notification = Notification.fromJson(data.values.last);
+      final notification = Notification.fromJson(data, event.snapshot.key!);
 
-      showNotification(notification);
+      if (!notification.read) {
+        showNotification(notification);
+      }
     });
 
-    /* FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification?.android;
+    usersCollection.doc(userID).get().then((value) {
+      final userData = AuthService().userDataFromsnapshot(value);
 
-      // If `onMessage` is triggered with a notification, construct our own
-      // local notification to show to users using the created channel.
-      if (notification != null && android != null) {
-        showNotification(
-            notification.title, notification.body, android.smallIcon);
+      userNotificationRef = database.ref('notificaciones/${userData.uid}');
+      roleNotificationRef = database.ref('notificaciones/${userData.role}');
+
+      roleNotificationStream = streamNotificationsGroupId(userData.uid)
+          .listen(onListenNotifications);
+
+      userNotificationStream = streamNotificationsGroupId(userData.role)
+          .listen(onListenNotifications);
+    });
+  }
+
+  Future markNotificationAsRead(String notificationID) {
+    return roleNotificationRef!.child(notificationID).update({'leido': true});
+  }
+
+  onListenNotifications(List<Notification>? event) {
+    final notiAux = notifications;
+
+    for (var not in notiAux) {
+      if (event?.firstWhereOrNull((element) => element.date == not.date) !=
+          null) {
+        continue;
       }
-    }); */
+
+      event?.add(not);
+    }
+
+    event?.sort((not1, not2) => not2.date.compareTo(not1.date));
+
+    notifications = event ?? [];
+
+    print("onlistenNoti ${notifications}");
+
+    notifyListeners();
+  }
+
+  Stream<List<Notification>?> streamNotificationsGroupId(String groupId) {
+    FirebaseDatabase database =
+        FirebaseDatabase.instanceFor(app: multitenantConfig.tenantApp!);
+
+    return database.ref('notificaciones/$groupId').onValue.map((event) {
+      final data = event.snapshot.value as Map<dynamic, dynamic>?;
+      print('notificationData $data');
+      final notifications = data?.entries
+          .map((e) => Notification.fromJson(e.value, e.key))
+          .sorted((a, b) => b.date.compareTo(a.date))
+          .toList();
+
+      return notifications;
+    });
   }
 
   showNotification(Notification notification) async {
@@ -112,5 +180,3 @@ class NotificationService {
     });
   }
 } */
-
-final notificationService = NotificationService();

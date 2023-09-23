@@ -80,8 +80,13 @@ class SfaAgnostiko extends StatelessWidget {
         return StreamProvider<UserModel?>.value(
           value: AuthService().user,
           initialData: null,
-          child: ChangeNotifierProvider(
-            create: (context) => LocaleProvider(),
+          child: MultiProvider(
+            providers: [
+              ChangeNotifierProvider<LocaleProvider>(
+                  create: (context) => LocaleProvider()),
+              ChangeNotifierProvider<NotificationService>(
+                  create: (context) => NotificationService()),
+            ],
             builder: (context, child) {
               final localeProvider = Provider.of<LocaleProvider>(context);
               return ChangeNotifierProvider(

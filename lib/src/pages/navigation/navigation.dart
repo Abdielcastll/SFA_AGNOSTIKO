@@ -27,9 +27,11 @@ class NavigationPages extends StatelessWidget {
     CounterLimitFirestore counterLimitFirestore =
         Provider.of<CounterLimitFirestore>(context);
     CurrentUserInfo user = Provider.of<CurrentUserInfo>(context);
+    NotificationService notificationService =
+        context.watch<NotificationService>();
 
     if (user.role != null && user.role != '') {
-      notificationService.initialize(user.role);
+      notificationService.initialize(user.uid);
     }
 
     return Scaffold(

@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/examples/notificacions_example.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:pwa_sales2go_flutter/src/utils/notifications.dart' as not;
 
-class NotificationsPage extends StatefulWidget {
+class NotificationsPage extends StatelessWidget {
   const NotificationsPage({Key? key}) : super(key: key);
 
   @override
-  State<NotificationsPage> createState() => _NotificationsPageState();
-}
-
-class _NotificationsPageState extends State<NotificationsPage> {
-  @override
   Widget build(BuildContext context) {
+    final notifications =
+        context.watch<not.NotificationService>().notifications;
+
+    print("NotificationsPage $notifications");
+
     return Scaffold(
       appBar: AppBar(
         shape: const RoundedRectangleBorder(
@@ -32,50 +33,15 @@ class _NotificationsPageState extends State<NotificationsPage> {
         elevation: 0,
       ),
       backgroundColor: Colors.grey.shade200,
-      body: const NotificationsBody(),
+      body: NotificationsBody(notifications: notifications),
     );
   }
 }
 
-class NotificationsBody extends StatefulWidget {
-  const NotificationsBody({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  State<NotificationsBody> createState() => _NotificationsBodyState();
-}
-
-class _NotificationsBodyState extends State<NotificationsBody> {
-  final List<NotificacionsExample> notifications = allNotifications;
-
-  identifyTypeIcon(notificationType) {
-    if (notificationType == 'pedido') {
-      return Icons.shopping_cart_outlined;
-    } else if (notificationType == 'visita') {
-      return Icons.calendar_today_outlined;
-    }
-  }
-
-  identifyStatusColor(notificationStatus) {
-    if (notificationStatus == 'Completada') {
-      return Colors.green;
-    } else if (notificationStatus == 'Pendiente') {
-      return Colors.orange;
-    } else if (notificationStatus == 'Cancelada') {
-      return Colors.red;
-    }
-  }
-
-  identifyStatusBGColor(notificationStatus) {
-    if (notificationStatus == 'Completada') {
-      return Colors.green.shade100;
-    } else if (notificationStatus == 'Pendiente') {
-      return Colors.orange.shade100;
-    } else if (notificationStatus == 'Cancelada') {
-      return Colors.red.shade100;
-    }
-  }
+class NotificationsBody extends StatelessWidget {
+  final List<not.Notification> notifications;
+  const NotificationsBody({Key? key, required this.notifications})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -91,34 +57,8 @@ class _NotificationsBodyState extends State<NotificationsBody> {
               itemCount: notifications.length,
               itemBuilder: (BuildContext context, index) {
                 final notification = notifications[index];
-                return Container(
-                  margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                  child: ListTile(
-                    leading: Container(
-                      height: 30,
-                      width: 30,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: identifyStatusBGColor(notification.status),
-                      ),
-                      child: Icon(
-                        identifyTypeIcon(
-                          notification.type,
-                        ),
-                        size: 20,
-                        color: identifyStatusColor(notification.status),
-                      ),
-                    ),
-                    title: Text(notification.message),
-                    subtitle: Row(
-                      children: [
-                        Text(notification.brand),
-                        notification.place == null
-                            ? const Text('')
-                            : Text('- ${notification.place}'),
-                      ],
-                    ),
-                  ),
+                return NotificationTile(
+                  notification: notification,
                 );
               },
             ),
@@ -126,5 +66,30 @@ class _NotificationsBodyState extends State<NotificationsBody> {
         ],
       ),
     );
+  }
+}
+
+class NotificationTile extends StatelessWidget {
+  final not.Notification notification;
+  const NotificationTile({super.key, required this.notification});
+
+  @override
+  Widget build(BuildContext context) {
+    not.NotificationService notificationService =
+        context.watch<not.NotificationService>();
+    return GestureDetector(
+        onTap: () =>
+            notificationService.markNotificationAsRead(notification.id),
+        child: Container(
+          margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+          child: ListTile(
+            title: Text(notification.title),
+            subtitle: Row(
+              children: [
+                Text(notification.body),
+              ],
+            ),
+          ),
+        ));
   }
 }
