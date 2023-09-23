@@ -92,6 +92,9 @@ class _MultitenantConfig {
       tenantApp = await Firebase.initializeApp(
           name: 'tenant-app', options: DefaultFirebaseOptions.currentPlatform);
 
+      await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform);
+
       return true;
     } catch (e) {
       throw Exception(

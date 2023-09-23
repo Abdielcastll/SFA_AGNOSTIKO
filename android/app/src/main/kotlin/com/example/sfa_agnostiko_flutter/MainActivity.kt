@@ -1,4 +1,4 @@
-package com.agnostiko.fied_sales
+package com.agnostiko.field_sales
 
 import io.flutter.embedding.android.FlutterActivity
 
