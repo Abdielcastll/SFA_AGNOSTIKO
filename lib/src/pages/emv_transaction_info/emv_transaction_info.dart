@@ -223,7 +223,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                 textAlign: TextAlign.center,
               ),
             const Divider(),
-            if (!transactionArgs!.isFallback && infoTags?.cardNo != null)
+            if (!transactionArgs!.isFallback && transactionArgs!.pan != null)
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
