@@ -9,10 +9,10 @@ import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 
-import '../../../dialogs/circular_progress_dialog.dart';
-import '../../models/transaction_args.dart';
-import '../../pages/place_order/add_payment.dart';
-import '../../services/utils/emv.dart';
+import '../../../../dialogs/circular_progress_dialog.dart';
+import '../../../models/transaction_args.dart';
+import '../../../pages/place_order/add_payment.dart';
+import '../../../services/utils/emv.dart';
 
 Future _acceptAmount(
   BuildContext context,
