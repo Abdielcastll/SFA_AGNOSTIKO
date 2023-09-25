@@ -32,7 +32,8 @@ class SplashScreenViewState extends State<SplashScreenView> {
   @override
   void initState() {
     super.initState();
-    initSplashScreen();
+
+    if (widget.redirect) initSplashScreen();
   }
 
   void loadingCardMsg(String cardMsg) {
