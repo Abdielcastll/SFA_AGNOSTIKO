@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -41,6 +43,9 @@ paymentTransferRetail(
     exchange: coinExchangeRatio,
   );
 
+  final bankItems =
+      selectedValueA == 'Transferencia' ? itemsBank : itemsBankInter;
+
   return StatefulBuilder(
     builder: (context, setState) => Column(
       children: [
@@ -52,181 +57,91 @@ paymentTransferRetail(
             fontSize: 14,
           ),
         ),
-        selectedValueA == 'Transferencia'
-            ? Container(
-                margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton2(
-                    isExpanded: true,
-                    hint: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            selectedBank ?? 'Seleccione una opción',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color:
-                                  myTheme.colorScheme.primary.withOpacity(0.7),
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                    items: itemsBank
-                        .map((item) => DropdownMenuItem<String>(
-                              value: item,
-                              child: Text(
-                                item,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: myTheme.colorScheme.primary,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ))
-                        .toList(),
-                    value: selectedBank,
-                    onChanged: (value) {
-                      setState(
-                        () {
-                          selectedBank = value as String;
-                        },
-                      );
-                    },
-                    iconStyleData: IconStyleData(
-                      icon: const Icon(
-                        Icons.arrow_forward_ios_outlined,
+        Container(
+          margin: const EdgeInsets.fromLTRB(10, 5, 10, 10),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton2(
+              isExpanded: true,
+              hint: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      selectedBank ?? 'Seleccione una opción',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: myTheme.colorScheme.primary.withOpacity(0.7),
                       ),
-                      iconSize: 11,
-                      iconEnabledColor:
-                          myTheme.colorScheme.primary.withOpacity(0.5),
-                      iconDisabledColor: Colors.grey,
-                    ),
-                    buttonStyleData: ButtonStyleData(
-                      height: 50,
-                      padding: const EdgeInsets.only(left: 14, right: 14),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(
-                          color: myTheme.colorScheme.primary.withOpacity(0.3),
-                        ),
-                        color: Colors.white,
-                      ),
-                      elevation: 0,
-                    ),
-                    menuItemStyleData: MenuItemStyleData(
-                      height: 40,
-                      padding: const EdgeInsets.only(left: 14, right: 14),
-                    ),
-                    dropdownStyleData: DropdownStyleData(
-                      maxHeight: 200,
-                      width: 200,
-                      padding: null,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white,
-                      ),
-                      elevation: 8,
-                      scrollbarTheme: ScrollbarThemeData(
-                        radius: const Radius.circular(10),
-                        thickness: MaterialStateProperty.all<double>(6),
-                        thumbVisibility: MaterialStateProperty.all<bool>(true),
-                      ),
-                      offset: const Offset(0, 0),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                ),
-              )
-            : Container(
-                margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton2(
-                    isExpanded: true,
-                    hint: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            selectedBank ?? 'Seleccione una opción',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color:
-                                  myTheme.colorScheme.primary.withOpacity(0.7),
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                    items: itemsBankInter
-                        .map((item) => DropdownMenuItem<String>(
-                              value: item,
-                              child: Text(
-                                item,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: myTheme.colorScheme.primary,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ))
-                        .toList(),
-                    value: selectedBank,
-                    onChanged: (value) {
-                      setState(
-                        () {
-                          selectedBank = value as String;
-                        },
-                      );
-                    },
-                    iconStyleData: IconStyleData(
-                      icon: const Icon(
-                        Icons.arrow_forward_ios_outlined,
-                      ),
-                      iconSize: 11,
-                      iconEnabledColor:
-                          myTheme.colorScheme.primary.withOpacity(0.5),
-                      iconDisabledColor: Colors.grey,
-                    ),
-                    buttonStyleData: ButtonStyleData(
-                      height: 50,
-                      padding: const EdgeInsets.only(left: 14, right: 14),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(
-                          color: myTheme.colorScheme.primary.withOpacity(0.3),
-                        ),
-                        color: Colors.white,
-                      ),
-                      elevation: 0,
-                    ),
-                    menuItemStyleData: MenuItemStyleData(
-                      height: 40,
-                      padding: const EdgeInsets.only(left: 14, right: 14),
-                    ),
-                    dropdownStyleData: DropdownStyleData(
-                      maxHeight: 200,
-                      width: 200,
-                      padding: null,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white,
-                      ),
-                      elevation: 8,
-                      scrollbarTheme: ScrollbarThemeData(
-                        radius: const Radius.circular(10),
-                        thickness: MaterialStateProperty.all<double>(6),
-                        thumbVisibility: MaterialStateProperty.all<bool>(true),
-                      ),
-                      offset: const Offset(0, 0),
-                    ),
-                  ),
-                ),
+                ],
               ),
+              items: bankItems
+                  .map((item) => DropdownMenuItem<String>(
+                        value: item,
+                        child: Text(
+                          item,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: myTheme.colorScheme.primary,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ))
+                  .toList(),
+              value: selectedBank,
+              onChanged: (value) {
+                setState(
+                  () {
+                    selectedBank = value as String;
+                  },
+                );
+              },
+              iconStyleData: IconStyleData(
+                icon: const Icon(
+                  Icons.arrow_forward_ios_outlined,
+                ),
+                iconSize: 11,
+                iconEnabledColor: myTheme.colorScheme.primary.withOpacity(0.5),
+                iconDisabledColor: Colors.grey,
+              ),
+              buttonStyleData: ButtonStyleData(
+                height: 50,
+                padding: const EdgeInsets.only(left: 14, right: 14),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(
+                    color: myTheme.colorScheme.primary.withOpacity(0.3),
+                  ),
+                  color: Colors.white,
+                ),
+                elevation: 0,
+              ),
+              menuItemStyleData: const MenuItemStyleData(
+                height: 40,
+                padding: EdgeInsets.only(left: 14, right: 14),
+              ),
+              dropdownStyleData: DropdownStyleData(
+                maxHeight: 200,
+                width: 200,
+                padding: null,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                ),
+                elevation: 8,
+                scrollbarTheme: ScrollbarThemeData(
+                  radius: const Radius.circular(10),
+                  thickness: MaterialStateProperty.all<double>(6),
+                  thumbVisibility: MaterialStateProperty.all<bool>(true),
+                ),
+                offset: const Offset(0, 0),
+              ),
+            ),
+          ),
+        ),
         Text(
           '${AppLocalizations.of(context)!.referenceNumber}*',
           style: TextStyle(
@@ -236,16 +151,8 @@ paymentTransferRetail(
           ),
         ),
         Container(
-          margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+          margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
           height: 70,
-          // width: 200,
-          // decoration: BoxDecoration(
-          //   borderRadius: BorderRadius.circular(10),
-          //   border: Border.all(
-          //     color: myTheme.colorScheme.primary.withOpacity(0.3),
-          //     // color: Colors.transparent,
-          //   ),
-          // ),
           child: TextField(
             style: TextStyle(
               fontSize: 14,
@@ -265,7 +172,7 @@ paymentTransferRetail(
             },
 
             decoration: InputDecoration(
-              contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
+              contentPadding: const EdgeInsets.fromLTRB(14, 0, 0, 0),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
                 borderSide: const BorderSide(
@@ -278,7 +185,7 @@ paymentTransferRetail(
                 borderSide: BorderSide(
                   color: myTheme.colorScheme.primary.withOpacity(0.3),
                 ),
-                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
               ),
               hintText: '00000000',
               hintStyle: TextStyle(
@@ -290,7 +197,7 @@ paymentTransferRetail(
               // counterText: '',
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(5),
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: Colors.transparent,
                 ),
               ),
@@ -301,7 +208,7 @@ paymentTransferRetail(
         Column(
           children: [
             Text(
-              '${AppLocalizations.of(context)!.selectFile}',
+              AppLocalizations.of(context)!.selectFile,
               style: TextStyle(
                 fontFamily: 'Poppins-regular',
                 color: Colors.grey.shade400,
@@ -320,7 +227,7 @@ paymentTransferRetail(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
-                    padding: EdgeInsets.all(4.0),
+                    padding: const EdgeInsets.all(4.0),
                     child: Icon(
                       Icons.camera,
                       color: myTheme.colorScheme.secondary,
@@ -337,31 +244,30 @@ paymentTransferRetail(
                 ],
               ),
             ),
-            imageFile == null
-                ? Container()
-                : Container(
-                    margin: EdgeInsets.fromLTRB(20, 5, 20, 0),
+            if (imageFile != null)
+              Container(
+                margin: const EdgeInsets.fromLTRB(20, 5, 20, 0),
+                // height: 300,
+                // width: 300,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: myTheme.colorScheme.primary,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(9),
+                  child: Image.file(
+                    imageFile!,
+                    fit: BoxFit.contain,
                     // height: 300,
                     // width: 300,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: myTheme.colorScheme.primary,
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(9),
-                      child: Image.file(
-                        imageFile!,
-                        fit: BoxFit.contain,
-                        // height: 300,
-                        // width: 300,
-                      ),
-                    ),
                   ),
+                ),
+              ),
             Container(
               alignment: Alignment.bottomCenter,
-              margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+              margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
               child: Row(
                 mainAxisAlignment: paidAmount == 0
                     ? MainAxisAlignment.center
@@ -384,11 +290,11 @@ paymentTransferRetail(
                         ),
                       ),
                     ),
-                    icon: Icon(
+                    icon: const Icon(
                       MaterialIcons.arrow_back_ios,
                       size: 14,
                     ),
-                    label: Text(
+                    label: const Text(
                       'Cancelar',
                       style: TextStyle(
                         color: Colors.white,
@@ -474,7 +380,7 @@ paymentTransferRetail(
                                             total: totalOfTheOrder,
                                             method: "Transferencia",
                                             date:
-                                                '${date.day}-${date.month}-${date.year} ${(date as DateTime).hour}:${(date).minute}',
+                                                '${date.day}-${date.month}-${date.year} ${date.hour}:${(date).minute}',
                                             address: '',
                                             coinsExchangeRates: const [],
                                             addPaymentBody: paymentBody,
@@ -564,7 +470,7 @@ paymentTransferRetail(
                                             method:
                                                 "Transferencia - Internacional",
                                             date:
-                                                '${date.day}-${date.month}-${date.year} ${(date as DateTime).hour}:${(date).minute}',
+                                                '${date.day}-${date.month}-${date.year} ${date.hour}:${(date).minute}',
                                             address: '',
                                             coinsExchangeRates: const [],
                                             addPaymentBody: paymentBody,
@@ -592,11 +498,11 @@ paymentTransferRetail(
                               ),
                             ),
                           ),
-                          icon: Icon(
+                          icon: const Icon(
                             MaterialCommunityIcons.card,
                             size: 14,
                           ),
-                          label: Text(
+                          label: const Text(
                             'Continuar',
                             style: TextStyle(
                               color: Colors.white,

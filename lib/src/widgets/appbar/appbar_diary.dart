@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -182,6 +182,7 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
                                               print(e);
                                               print(
                                                   'SENDING ERROR DEFAULT CLIENT');
+                                              return <Null>[];
                                             });
 
                                             print(

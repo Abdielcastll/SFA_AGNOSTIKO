@@ -308,33 +308,3 @@ Future printCancelTicket(int stan, String referenceNumber, double monto) async {
       PrinterScript(listOfTextLine, gray: GrayIntensity.Medium);
   printScript(printerScript);
 }
-
-String? getMonth(String monthNum) {
-  switch (monthNum) {
-    case "01":
-      return "ENE";
-    case "02":
-      return "FEB";
-    case "03":
-      return "MAR";
-    case "04":
-      return "ABR";
-    case "05":
-      return "MAY";
-    case "06":
-      return "JUN";
-    case "07":
-      return "JUL";
-    case "08":
-      return "AGO";
-    case "09":
-      return "SEP";
-    case "10":
-      return "OCT";
-    case "11":
-      return "NOV";
-    case "12":
-      return "DIC";
-  }
-  return null;
-}

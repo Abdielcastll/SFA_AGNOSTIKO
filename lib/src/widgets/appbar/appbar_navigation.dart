@@ -188,7 +188,7 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
                                             print(e);
                                             print(
                                                 'SENDING ERROR DEFAULT CLIENT');
-                                            return null;
+                                            return <Null>[];
                                           });
 
                                           print(
