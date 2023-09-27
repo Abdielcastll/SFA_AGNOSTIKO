@@ -50,6 +50,17 @@ final CollectionReference tiposIdRef = firebase.collection('tipos_id');
 final CollectionReference usuariosRef = firebase.collection('usuarios');
 final CollectionReference zonasRef = firebase.collection('zonas');
 
+Future<List<String>> getUserDevices(String id) async {
+  final devicesDocs =
+      await usersCollection.doc(id).collection("dispositivos").get();
+  final devices = <String>[];
+  for (var element in devicesDocs.docs) {
+    devices.add(element.id);
+  }
+
+  return devices;
+}
+
 Future createVisitData(
   String userUid,
   String clientDocumentId,

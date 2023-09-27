@@ -8,11 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:agnostiko/agnostiko.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/dialogs/confirm_dialog.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/completed_pay.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
+import 'package:pwa_sales2go_flutter/src/utils/notifications.dart';
 
 import '../../models/transaction_args.dart';
 import '../../services/utils/emv.dart';
@@ -93,6 +95,10 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       final transactionResult = transactionInfo?.result;
       this.transactionResult = transactionResult;
 
+      final notificationService = context.read<NotificationService>();
+      final paymentBody = (ModalRoute.of(context)?.settings.arguments!
+          as List)[2] as AddPaymentBodyAtt;
+
       if (transactionArgs!.emvTransactionType != EmvTransactionType.Refund) {
         switch (transactionResult) {
           case EmvTransactionResult.Approved:
@@ -119,6 +125,13 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                 );
               });
             });
+
+            print('enviando notificacion');
+            notificationService.sendNotificationToId(
+                'DC8jpgQh4IRIKTI8PJ06c2uGwud2',
+                'Pago registrado',
+                'Pago registrado en factura ${paymentBody.invoiceNumber}');
+
             break;
           case EmvTransactionResult.Denied:
             errorResultStr = 'Denegado';

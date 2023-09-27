@@ -23,3 +23,10 @@ WHERE timestamp_diff(CURRENT_TIMESTAMP(), ped.fecha, DAY) <= 90
 group by ped.codigo, ped.nombre, prod.catalogo, prod.linea, prod.calidad, prod.categoria, prod.diseno, prod.marca, prod.subcategoria, prod.tamano
 order by cantidad desc
 LIMIT 10''';
+
+Future sendNotification(String subjectId, String title, String body) async {
+  HttpsCallable function =
+      FirebaseFunctions.instance.httpsCallable('sendNotification');
+
+  function({'recieverId': subjectId, 'title': title, 'body': body});
+}

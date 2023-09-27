@@ -3,9 +3,12 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:pwa_sales2go_flutter/src/services/auth.dart';
+import 'package:pwa_sales2go_flutter/src/services/cloud_functions.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/utils/multitenant-config.dart';
 
@@ -101,20 +104,24 @@ class NotificationService extends ChangeNotifier {
   }
 
   onListenNotifications(List<Notification>? event) {
+    if (event == null) return;
+
     final notiAux = notifications;
 
-    for (var not in notiAux) {
-      if (event?.firstWhereOrNull((element) => element.date == not.date) !=
+    for (var not in event) {
+      if (notiAux.firstWhereOrNull((element) => element.date == not.date) !=
           null) {
         continue;
       }
 
-      event?.add(not);
+      if (not.read) continue;
+
+      notiAux.add(not);
     }
 
-    event?.sort((not1, not2) => not2.date.compareTo(not1.date));
+    notiAux.sort((not1, not2) => not2.date.compareTo(not1.date));
 
-    notifications = event ?? [];
+    notifications = notiAux;
 
     print("onlistenNoti ${notifications}");
 
@@ -153,30 +160,20 @@ class NotificationService extends ChangeNotifier {
           ),
         ));
   }
-}
 
-/* registerDeviceToUser(String userId) async {
-  final deviceToken = await FirebaseMessaging.instance.getToken(
-      vapidKey:
-          'BDq3VPxu0XinNqDIvfq252EsxPNO89Ns74fEtfRYiGxIYnwqXw3i6dRBL9J1zEI--alE2-7IjShWMJY5qHnq9Rw');
-  print('deviceToken $deviceToken');
+  sendNotificationToId(String subjectId, String title, [String? body]) async {
+    sendNotification(subjectId, title, body ?? '');
 
-  final dispositivosRef =
-      usuariosRef.doc(userId).collection('dispositivos').doc('dispositivos');
+    FirebaseDatabase database =
+        FirebaseDatabase.instanceFor(app: multitenantConfig.tenantApp!);
+    final notKey = DateTime.now().toIso8601String().split('.')[0];
 
-  final dispotivosSnapshot = await dispositivosRef.get();
+    print({
+      notKey: {"titulo": title, "descripcion": body ?? ''}
+    });
 
-  try {
-    final List<String> tokens = dispotivosSnapshot.get('tokens');
-
-    if (tokens.contains(deviceToken!)) return;
-
-    tokens.add(deviceToken);
-
-    await dispositivosRef.update({'tokens': tokens});
-  } catch (err) {
-    dispositivosRef.set({
-      'tokens': [deviceToken]
+    database.ref('notificaciones/$subjectId').set({
+      notKey: {"titulo": title, "descripcion": body ?? ''}
     });
   }
-} */
+}
