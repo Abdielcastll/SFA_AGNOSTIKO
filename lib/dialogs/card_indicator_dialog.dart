@@ -14,6 +14,7 @@ void Function(bool) showCardIndicatorDialog(
 
   StateSetter? setStateDialog;
 
+  // ignore: unused_local_variable
   Future? timer;
 
   showDialog(

@@ -545,6 +545,7 @@ void modalBottomSheetForInvoices({
   );
 }
 
+// ignore: must_be_immutable
 class SeePaymentsALertDialog extends StatelessWidget {
   SeePaymentsALertDialog({
     super.key,

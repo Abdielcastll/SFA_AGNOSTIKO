@@ -3,12 +3,10 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:pwa_sales2go_flutter/src/services/auth.dart';
 import 'package:pwa_sales2go_flutter/src/services/cloud_functions.dart';
-import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/utils/multitenant-config.dart';
 
@@ -73,7 +71,7 @@ class NotificationService extends ChangeNotifier {
     print('notificationsGroupId $userID');
 
     if (_notificacionStreamSubscription != null) return;
-
+/* Aqui se envia las notificaciones push a usuarios */
     _notificacionStreamSubscription =
         notificationsRef.onChildAdded.listen((DatabaseEvent event) {
       final data = event.snapshot.value as Map<dynamic, dynamic>;
@@ -159,6 +157,7 @@ class NotificationService extends ChangeNotifier {
             // other properties...
           ),
         ));
+    print('showNotification');
   }
 
   sendNotificationToId(String subjectId, String title, [String? body]) async {
