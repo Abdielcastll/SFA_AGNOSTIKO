@@ -29,8 +29,8 @@ class Notification {
   factory Notification.fromJson(Map<dynamic, dynamic> data, String date) {
     return Notification(
         id: date,
-        title: data['titulo'],
-        body: data['descripcion'],
+        title: data['titulo'] ?? '',
+        body: data['descripcion'] ?? '',
         date: DateTime.parse(date),
         read: data['leido'] ?? false);
   }
@@ -98,28 +98,37 @@ class NotificationService extends ChangeNotifier {
   }
 
   Future markNotificationAsRead(String notificationID) {
-    return roleNotificationRef!.child(notificationID).update({'leido': true});
+    roleNotificationRef!.child(notificationID).update({'leido': true});
+    return userNotificationRef!.child(notificationID).update({'leido': true});
   }
 
   onListenNotifications(List<Notification>? event) {
     if (event == null) return;
 
     final notiAux = notifications;
+    final newNots = <Notification>[];
+
+    final notsToAdd = <Notification>[];
 
     for (var not in event) {
-      if (notiAux.firstWhereOrNull((element) => element.date == not.date) !=
-          null) {
-        continue;
-      }
-
       if (not.read) continue;
 
-      notiAux.add(not);
+      newNots.add(not);
     }
 
-    notiAux.sort((not1, not2) => not2.date.compareTo(not1.date));
+    for (var not in notiAux) {
+      bool isNotPresent =
+          newNots.where((oldElement) => oldElement.date == not.date).isEmpty;
+      if (isNotPresent) {
+        // add now
+        notsToAdd.add(not);
+      }
+    }
 
-    notifications = notiAux;
+    // newNots.addAll(notsToAdd);
+    newNots.sort((not1, not2) => not2.date.compareTo(not1.date));
+
+    notifications = newNots;
 
     print("onlistenNoti ${notifications}");
 
@@ -157,7 +166,6 @@ class NotificationService extends ChangeNotifier {
             // other properties...
           ),
         ));
-    print('showNotification');
   }
 
   sendNotificationToId(String subjectId, String title, [String? body]) async {
