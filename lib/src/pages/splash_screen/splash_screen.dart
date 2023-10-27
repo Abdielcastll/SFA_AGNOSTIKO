@@ -263,14 +263,15 @@ class SplashScreenViewState extends State<SplashScreenView> {
     // await capx.loadEncryptedIPEK(ksn.toHexBytes(), encryptedK0.toHexBytes());
 
     // cargamos la llave fija del entorno de prueba
-    // esta llave está encriptada con un KEK de valor '33333333333333333333333333333333'
+    // esta llave está encriptada con un KEK de valor '1D7BA112D144429260D2C219A6A80798'
     // la llave en claro es 'A66AB26590D3186E8A4C5A40D6F4F15D'
-    /* ---------------
-    Carga de llaves en terminales de forma manual
-    await loadTestKEK();  ----- */
+    
+    //Carga de llaves en terminales de forma manual
+    await loadTestKEK();
     await cryptoLoadIPEK(1, "FFFF7790169673800001".toHexBytes(),
-        "b8b2fc9b033410594aed0b45f571bb04".toHexBytes(),
-        kekIndex: 1);
+        "B566BD27A7839A31A8CC265A1A7702A1".toHexBytes(),
+        kekIndex: 1, kcv: "2764ba".toHexBytes());
+  
   }
 
   @override
