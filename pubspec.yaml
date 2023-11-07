@@ -46,7 +46,10 @@ dependencies:
       name: agnostiko
 
   tms_agent_communication:
-    path: ../tms_agent_communication
+    version: 0.0.1 # reemplazar con la versión que se quiere utilizar
+    hosted: 
+      url: https://server-agnostiko-web-gnbxyenkeq-ue.a.run.app
+      name: tms_agent_communication
 
   # Firebase
   cloud_firestore: ^4.3.1

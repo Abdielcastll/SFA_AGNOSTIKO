@@ -1493,9 +1493,10 @@ packages:
   tms_agent_communication:
     dependency: "direct main"
     description:
-      path: "../tms_agent_communication"
-      relative: true
-    source: path
+      name: tms_agent_communication
+      sha256: "905ea056add90a7b26fef64517757938729a7a3f266307d369c8caf3c514b49e"
+      url: "https://server-agnostiko-web-gnbxyenkeq-ue.a.run.app"
+    source: hosted
     version: "0.0.1"
   tuple:
     dependency: transitive
