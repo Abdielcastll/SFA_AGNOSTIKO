@@ -56,7 +56,8 @@ dependencies:
   firebase_auth: ^4.2.5
   firebase_storage: ^11.0.10
   firebase_core: ^2.4.1
-
+  firebase_remote_config: ^4.3.6
+  
   # Flutter packages
   geolocator: ^9.0.2
   full_screen_image: ^2.0.0

@@ -57,7 +57,7 @@ class SfaAgnostiko extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<bool>(
-        future: multitenantConfig.initializePhone(),
+        future: multitenantConfig.initialize(),
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
             return MaterialApp(
