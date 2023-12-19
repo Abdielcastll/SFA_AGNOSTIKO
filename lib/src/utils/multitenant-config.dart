@@ -81,7 +81,6 @@ class _MultitenantConfig {
         name: 'tenant-app',
         options: tenantInfo,
       );
-      print("get remote config");
       RemoteConfigProvider provider = RemoteConfigProvider();
       provider.getRemoteConfig();
       return true;

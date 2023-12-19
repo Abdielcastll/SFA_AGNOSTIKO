@@ -15,6 +15,7 @@ import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/most_selled_
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/new_products.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/product_list_button.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
+import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -35,7 +36,6 @@ class _CataloguePageState extends State<CataloguePage> {
         Provider.of<OrderProvider>(context).clientForTheOrder;
     final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
     final userRole = Provider.of<CurrentUserInfo>(context).role;
-
     print('zoneDocument: $userZoneDocument');
     print('currentClientForTheOrder: ${currentClientForTheOrder?.prices}');
     print('userRole: $userRole');
