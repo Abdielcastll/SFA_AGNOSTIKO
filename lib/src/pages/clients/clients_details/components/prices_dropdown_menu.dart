@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -157,94 +158,95 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
                 // ),
               ],
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Container(
-                  margin: const EdgeInsets.fromLTRB(0, 10, 10, 0),
-                  child: Text(
-                    AppLocalizations.of(context)!.masterDiscount,
-                    style: TextStyle(
-                      color: myTheme.colorScheme.primary,
-                      fontFamily: 'Poppins-medium',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 11,
+            if (globalRemoteConfig.configDescuentoMaestro == true)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(0, 10, 10, 0),
+                    child: Text(
+                      AppLocalizations.of(context)!.masterDiscount,
+                      style: TextStyle(
+                        color: myTheme.colorScheme.primary,
+                        fontFamily: 'Poppins-medium',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 11,
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                    alignment: Alignment.center,
-                    margin: const EdgeInsets.fromLTRB(0, 5, 10, 10),
-                    height: 50,
-                    width: 130,
-                    decoration: BoxDecoration(
-                        color: Colors.transparent,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
+                  Container(
+                      alignment: Alignment.center,
+                      margin: const EdgeInsets.fromLTRB(0, 5, 10, 10),
+                      height: 50,
+                      width: 130,
+                      decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: myTheme.colorScheme.primary.withOpacity(0.7),
+                          )),
+                      child: Text(
+                        '${widget.masterDiscount}%',
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontFamily: 'Poppins-medium',
+                          fontSize: 14,
                           color: myTheme.colorScheme.primary.withOpacity(0.7),
-                        )),
-                    child: Text(
-                      '${widget.masterDiscount}%',
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontFamily: 'Poppins-medium',
-                        fontSize: 14,
-                        color: myTheme.colorScheme.primary.withOpacity(0.7),
-                      ),
-                    )),
-                // Container(
-                //   margin: const EdgeInsets.fromLTRB(10, 5, 10, 10),
-                //   height: 50,
-                //   width: 100,
-                //   decoration: BoxDecoration(
-                //     borderRadius: BorderRadius.circular(10),
-                //     border: Border.all(
-                //       color: myTheme.colorScheme.primary.withOpacity(0.3),
-                //       // color: Colors.transparent,
-                //     ),
-                //   ),
-                //   child: TextField(
-                //     style: TextStyle(
-                //       fontSize: 14,
-                //       fontFamily: 'Poppins-regular',
-                //       color: myTheme.colorScheme.primary,
-                //     ),
-                //     keyboardType: TextInputType.number,
-                //     maxLines: 1,
-                //     maxLength: 3,
-                //     textCapitalization: TextCapitalization.characters,
-                //     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                //     controller: discountController,
+                        ),
+                      )),
+                  // Container(
+                  //   margin: const EdgeInsets.fromLTRB(10, 5, 10, 10),
+                  //   height: 50,
+                  //   width: 100,
+                  //   decoration: BoxDecoration(
+                  //     borderRadius: BorderRadius.circular(10),
+                  //     border: Border.all(
+                  //       color: myTheme.colorScheme.primary.withOpacity(0.3),
+                  //       // color: Colors.transparent,
+                  //     ),
+                  //   ),
+                  //   child: TextField(
+                  //     style: TextStyle(
+                  //       fontSize: 14,
+                  //       fontFamily: 'Poppins-regular',
+                  //       color: myTheme.colorScheme.primary,
+                  //     ),
+                  //     keyboardType: TextInputType.number,
+                  //     maxLines: 1,
+                  //     maxLength: 3,
+                  //     textCapitalization: TextCapitalization.characters,
+                  //     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  //     controller: discountController,
 
-                //     decoration: InputDecoration(
-                //       contentPadding: const EdgeInsets.fromLTRB(14, 0, 0, 0),
-                //       hintText: '${widget.masterDiscount}%',
-                //       hintStyle: TextStyle(
-                //         fontFamily: 'Poppins-regular',
-                //         fontSize: 14,
-                //         color: myTheme.colorScheme.primary,
-                //       ),
-                //       enabledBorder: OutlineInputBorder(
-                //         borderRadius: BorderRadius.circular(5),
-                //         borderSide: const BorderSide(
-                //           color: Colors.transparent,
-                //         ),
-                //       ),
-                //       counterText: '',
-                //       border: OutlineInputBorder(
-                //         borderRadius: BorderRadius.circular(5),
-                //         borderSide: const BorderSide(
-                //           color: Colors.transparent,
-                //         ),
-                //       ),
-                //     ),
-                //     // onChanged: searchClient,
-                //   ),
-                // ),
-              ],
-            ),
+                  //     decoration: InputDecoration(
+                  //       contentPadding: const EdgeInsets.fromLTRB(14, 0, 0, 0),
+                  //       hintText: '${widget.masterDiscount}%',
+                  //       hintStyle: TextStyle(
+                  //         fontFamily: 'Poppins-regular',
+                  //         fontSize: 14,
+                  //         color: myTheme.colorScheme.primary,
+                  //       ),
+                  //       enabledBorder: OutlineInputBorder(
+                  //         borderRadius: BorderRadius.circular(5),
+                  //         borderSide: const BorderSide(
+                  //           color: Colors.transparent,
+                  //         ),
+                  //       ),
+                  //       counterText: '',
+                  //       border: OutlineInputBorder(
+                  //         borderRadius: BorderRadius.circular(5),
+                  //         borderSide: const BorderSide(
+                  //           color: Colors.transparent,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     // onChanged: searchClient,
+                  //   ),
+                  // ),
+                ],
+              ),
           ],
         ),
       ),

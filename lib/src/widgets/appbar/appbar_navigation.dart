@@ -8,6 +8,7 @@ import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/place_oder_page.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
+import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/auth.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -127,8 +128,9 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
                                             MaterialPageRoute(
                                               builder: (BuildContext context) =>
                                                   PlaceOrderPage(
-                                                      userZoneDocument:
-                                                          userZoneDocument),
+                                                userZoneDocument:
+                                                    userZoneDocument,
+                                              ),
                                             ),
                                           );
                                         },
@@ -166,30 +168,38 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
                                                   isEqualTo: userZoneDocument)
                                               .where('numeroId', isEqualTo: 0)
                                               .get()
-                                              .then((value) {
-                                            return value.docs.map((snapshot) {
-                                              if (snapshot
-                                                  .get('nombre')
-                                                  .toString()
-                                                  .contains(
-                                                      '000A Cliente Default')) {
-                                                print(
-                                                    'SENDING DATA BASE DEFAULT CLIENT');
-                                                defaultClient = genericClients;
-                                              } else {
-                                                print(
-                                                    'SENDING ERROR DEFAULT CLIENT');
-                                                defaultClient = genericClients;
-                                              }
-                                            }).toList();
-                                          }).catchError((e) {
-                                            print(
-                                                'ERROR ON GETTING CLIENT DEFAULT ON APPBAR NAVIGATION');
-                                            print(e);
-                                            print(
-                                                'SENDING ERROR DEFAULT CLIENT');
-                                            return <Null>[];
-                                          });
+                                              .then(
+                                            (value) {
+                                              return value.docs.map(
+                                                (snapshot) {
+                                                  if (snapshot
+                                                      .get('nombre')
+                                                      .toString()
+                                                      .contains(
+                                                          '000A Cliente Default')) {
+                                                    print(
+                                                        'SENDING DATA BASE DEFAULT CLIENT');
+                                                    defaultClient =
+                                                        genericClients;
+                                                  } else {
+                                                    print(
+                                                        'SENDING ERROR DEFAULT CLIENT');
+                                                    defaultClient =
+                                                        genericClients;
+                                                  }
+                                                },
+                                              ).toList();
+                                            },
+                                          ).catchError(
+                                            (e) {
+                                              print(
+                                                  'ERROR ON GETTING CLIENT DEFAULT ON APPBAR NAVIGATION');
+                                              print(e);
+                                              print(
+                                                  'SENDING ERROR DEFAULT CLIENT');
+                                              return <Null>[];
+                                            },
+                                          );
 
                                           print(
                                               'defaultClient?.zone: ${defaultClient?.zone}');
@@ -205,15 +215,18 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
                                               context,
                                               MaterialPageRoute(
                                                 settings: const RouteSettings(
-                                                    name: "ORDER"),
+                                                  name: "ORDER",
+                                                ),
                                                 builder: (context) =>
                                                     StreamProvider<
                                                         CurrentUserInfo?>.value(
                                                   value: usersCollection
                                                       .doc(user.uid)
                                                       .snapshots()
-                                                      .map(AuthService()
-                                                          .userDataFromsnapshot),
+                                                      .map(
+                                                        AuthService()
+                                                            .userDataFromsnapshot,
+                                                      ),
                                                   initialData: CurrentUserInfo(
                                                     name: '',
                                                     dni: '',

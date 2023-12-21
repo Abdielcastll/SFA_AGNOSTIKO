@@ -117,11 +117,12 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                builder: (BuildContext
-                                                        context) =>
-                                                    PlaceOrderPage(
-                                                        userZoneDocument:
-                                                            userZoneDocument),
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        PlaceOrderPage(
+                                                  userZoneDocument:
+                                                      userZoneDocument,
+                                                ),
                                               ),
                                             );
                                           },
@@ -145,8 +146,8 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
                                           style: ButtonStyle(
                                             overlayColor:
                                                 MaterialStateColor.resolveWith(
-                                                    (states) =>
-                                                        Colors.transparent),
+                                              (states) => Colors.transparent,
+                                            ),
                                           ),
                                           onPressed: () async {
                                             // Escoger lista de clientes
@@ -159,32 +160,38 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
                                                     isEqualTo: userZoneDocument)
                                                 .where('numeroId', isEqualTo: 0)
                                                 .get()
-                                                .then((value) {
-                                              return value.docs.map((snapshot) {
-                                                if (snapshot
-                                                    .get('nombre')
-                                                    .toString()
-                                                    .contains(
-                                                        '000A Cliente Default')) {
-                                                  print(
-                                                      'SENDING DATA BASE DEFAULT CLIENT');
-                                                  defaultClient =
-                                                      genericClients;
-                                                } else {
-                                                  print(
-                                                      'SENDING ERROR DEFAULT CLIENT');
-                                                  defaultClient =
-                                                      genericClients;
-                                                }
-                                              }).toList();
-                                            }).catchError((e) {
-                                              print(
-                                                  'ERROR ON GETTING CLIENT DEFAULT ON APPBAR NAVIGATION');
-                                              print(e);
-                                              print(
-                                                  'SENDING ERROR DEFAULT CLIENT');
-                                              return <Null>[];
-                                            });
+                                                .then(
+                                              (value) {
+                                                return value.docs.map(
+                                                  (snapshot) {
+                                                    if (snapshot
+                                                        .get('nombre')
+                                                        .toString()
+                                                        .contains(
+                                                            '000A Cliente Default')) {
+                                                      print(
+                                                          'SENDING DATA BASE DEFAULT CLIENT');
+                                                      defaultClient =
+                                                          genericClients;
+                                                    } else {
+                                                      print(
+                                                          'SENDING ERROR DEFAULT CLIENT');
+                                                      defaultClient =
+                                                          genericClients;
+                                                    }
+                                                  },
+                                                ).toList();
+                                              },
+                                            ).catchError(
+                                              (e) {
+                                                print(
+                                                    'ERROR ON GETTING CLIENT DEFAULT ON APPBAR NAVIGATION');
+                                                print(e);
+                                                print(
+                                                    'SENDING ERROR DEFAULT CLIENT');
+                                                return <Null>[];
+                                              },
+                                            );
 
                                             print(
                                                 'defaultClient?.zone: ${defaultClient?.zone}');

@@ -31,6 +31,7 @@ class RemoteConfig {
   bool? vistasGeolocalizadas;
   bool? visualizacionCatalogo;
   bool? zonasDeVenta;
+  bool? notificaciones;
 
   RemoteConfig({
     this.aplicacionDescuentoMaestro,

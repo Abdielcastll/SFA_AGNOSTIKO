@@ -174,7 +174,8 @@ class _CatalogueBodyState extends State<CatalogueBody> {
                 //   },
                 //   child: Text('get data'),
                 // ),
-                PromotionsWidget(),
+                if (globalRemoteConfig.promocionesVisualizacion == true)
+                  PromotionsWidget(),
                 NewProductsWidget(),
                 ListOfProductsButton(),
                 ListOfCategories(),

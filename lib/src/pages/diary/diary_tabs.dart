@@ -6,6 +6,7 @@ import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/invoices/invoices_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/orders/orders_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/visits/visits_page.dart';
+import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_diary.dart';
 
@@ -47,8 +48,8 @@ class _DiaryBodyState extends State<DiaryBody> {
   Widget build(BuildContext context) {
     return Container(
       child: TabBarView(
-        children: const [
-          VisitsPage(),
+        children: [
+          if (globalRemoteConfig.visitas == true) VisitsPage(),
           OrdersPage(),
           InvoicesPage(),
         ],

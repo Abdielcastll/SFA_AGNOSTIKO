@@ -8,6 +8,7 @@ import 'package:pwa_sales2go_flutter/src/pages/catalogue/catalogue_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/diary_tabs.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
+import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/utils/notifications.dart';
@@ -18,7 +19,8 @@ class NavigationPages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screens = [
-      const CataloguePage(),
+      if (globalRemoteConfig.visualizacionCatalogo == true)
+        const CataloguePage(),
       const DiaryTabs(),
       const ClientsPage(),
       const ProfilePage(),
@@ -64,21 +66,22 @@ class NavigationPages extends StatelessWidget {
             counterLimitFirestore.setNewScreen(i);
           },
           destinations: [
-            NavigationDestination(
-              icon: Icon(
-                Icons.sell_outlined,
-                // color: myTheme.colorScheme.background,
-                size: 24,
-                color: Color.fromARGB(255, 196, 196, 196),
+            if (globalRemoteConfig.visualizacionCatalogo == true)
+              NavigationDestination(
+                icon: Icon(
+                  Icons.sell_outlined,
+                  // color: myTheme.colorScheme.background,
+                  size: 24,
+                  color: Color.fromARGB(255, 196, 196, 196),
+                ),
+                selectedIcon: Icon(
+                  Icons.sell,
+                  // color: myTheme.colorScheme.background,
+                  size: 24,
+                  color: Color.fromARGB(255, 196, 196, 196),
+                ),
+                label: AppLocalizations.of(context)!.home,
               ),
-              selectedIcon: Icon(
-                Icons.sell,
-                // color: myTheme.colorScheme.background,
-                size: 24,
-                color: Color.fromARGB(255, 196, 196, 196),
-              ),
-              label: AppLocalizations.of(context)!.home,
-            ),
             NavigationDestination(
               icon: Icon(
                 Icons.calendar_today_outlined,

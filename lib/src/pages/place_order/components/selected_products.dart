@@ -16,6 +16,7 @@ import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/checkout_retail_page.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
+import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/checkout_page.dart';
@@ -423,7 +424,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                       child: ClipRRect(
                                                         borderRadius:
                                                             const BorderRadius
-                                                                    .only(
+                                                                .only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         8),
@@ -463,7 +464,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                     children: [
                                                       Container(
                                                         margin: const EdgeInsets
-                                                                .fromLTRB(
+                                                            .fromLTRB(
                                                             10, 10, 0, 0),
                                                         color:
                                                             Colors.transparent,
@@ -482,7 +483,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                       ),
                                                       Container(
                                                         margin: const EdgeInsets
-                                                                .fromLTRB(
+                                                            .fromLTRB(
                                                             15, 0, 0, 0),
                                                         height: 30,
                                                         width: 30,
@@ -698,7 +699,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                         Container(
                                                           margin:
                                                               const EdgeInsets
-                                                                      .fromLTRB(
+                                                                  .fromLTRB(
                                                                   0, 0, 0, 0),
                                                           child: Text(
                                                             'U/P:$coinSymbol $productPriceConvertedFormatted',
@@ -718,7 +719,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                               .centerRight,
                                                           margin:
                                                               const EdgeInsets
-                                                                      .fromLTRB(
+                                                                  .fromLTRB(
                                                                   10, 0, 0, 0),
                                                           child: Text(
                                                             '$coinSymbol $productTotalByQuantityConvertedFormatted',
@@ -758,66 +759,71 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
                                     children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(16),
-                                        ),
-                                        width: 160,
-                                        height: 56,
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(16),
-                                          child: ElevatedButton.icon(
-                                            style: ButtonStyle(
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      myTheme
-                                                          .colorScheme.primary),
-                                              foregroundColor:
-                                                  MaterialStateProperty.all(
-                                                      Colors.white),
-                                              shape: MaterialStateProperty.all(
-                                                RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(16),
+                                      if (globalRemoteConfig
+                                              .escannerDeProductos ==
+                                          true)
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(16),
+                                          ),
+                                          width: 160,
+                                          height: 56,
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(16),
+                                            child: ElevatedButton.icon(
+                                              style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateProperty.all(
+                                                        myTheme.colorScheme
+                                                            .primary),
+                                                foregroundColor:
+                                                    MaterialStateProperty.all(
+                                                        Colors.white),
+                                                shape:
+                                                    MaterialStateProperty.all(
+                                                  RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            16),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            onPressed: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (BuildContext
-                                                            context) =>
-                                                        NewBardcodeScanner(
-                                                      clientPriceList:
-                                                          clientPriceList,
-                                                      products: products,
-                                                    ),
-                                                  ));
+                                              onPressed: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (BuildContext
+                                                              context) =>
+                                                          NewBardcodeScanner(
+                                                        clientPriceList:
+                                                            clientPriceList,
+                                                        products: products,
+                                                      ),
+                                                    ));
 
-                                              addProductFromBarcodeResult(
-                                                  scanResult.toString(),
-                                                  products);
-                                            },
-                                            label: Text(
-                                              'Escanear código',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontFamily: 'Poppins-medium',
-                                                fontSize: 12,
+                                                addProductFromBarcodeResult(
+                                                    scanResult.toString(),
+                                                    products);
+                                              },
+                                              label: Text(
+                                                'Escanear código',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontFamily: 'Poppins-medium',
+                                                  fontSize: 12,
+                                                ),
                                               ),
-                                            ),
-                                            icon: const Icon(
-                                              MaterialCommunityIcons
-                                                  .barcode_scan,
-                                              color: Colors.white,
-                                              size: 20,
+                                              icon: const Icon(
+                                                MaterialCommunityIcons
+                                                    .barcode_scan,
+                                                color: Colors.white,
+                                                size: 20,
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
                                       Container(
                                         decoration: BoxDecoration(
                                           borderRadius:
