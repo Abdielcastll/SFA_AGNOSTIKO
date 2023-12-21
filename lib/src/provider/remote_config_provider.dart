@@ -8,7 +8,6 @@ RemoteConfig globalRemoteConfig = RemoteConfig();
 class RemoteConfig {
   bool? aplicacionDescuentoMaestro;
   bool? aplicacionModuloDescuentos;
-  bool? cobranza;
   bool? configAplicaciones;
   bool? configDescuentoMaestro;
   bool? configModuloDescuentos;
@@ -36,7 +35,6 @@ class RemoteConfig {
   RemoteConfig({
     this.aplicacionDescuentoMaestro,
     this.aplicacionModuloDescuentos,
-    this.cobranza,
     this.configAplicaciones,
     this.configDescuentoMaestro,
     this.configModuloDescuentos,
@@ -65,7 +63,6 @@ class RemoteConfig {
     return {
       'aplicacionDescuentoMaestro': aplicacionDescuentoMaestro,
       'aplicacionModuloDescuentos': aplicacionModuloDescuentos,
-      'cobranza': cobranza,
       'configAplicaciones': configAplicaciones,
       'configDescuentoMaestro': configDescuentoMaestro,
       'configModuloDescuentos': configModuloDescuentos,
@@ -110,7 +107,6 @@ class RemoteConfigProvider {
           allConfigs['aplicacionDescuentoMaestro']?.asBool() ?? true,
       aplicacionModuloDescuentos:
           allConfigs['aplicacionModuloDescuentos']?.asBool() ?? true,
-      cobranza: allConfigs['cobranza']?.asBool() ?? true,
       configAplicaciones: allConfigs['configAplicaciones']?.asBool() ?? true,
       configDescuentoMaestro:
           allConfigs['configDescuentoMaestro']?.asBool() ?? true,
