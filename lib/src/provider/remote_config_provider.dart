@@ -31,6 +31,7 @@ class RemoteConfig {
   bool? visualizacionCatalogo;
   bool? zonasDeVenta;
   bool? notificaciones;
+  bool? conversionKiosko;
 
   RemoteConfig({
     this.aplicacionDescuentoMaestro,
@@ -57,6 +58,7 @@ class RemoteConfig {
     this.vistasGeolocalizadas,
     this.visualizacionCatalogo,
     this.zonasDeVenta,
+    this.conversionKiosko,
   });
 
   Map<String, dynamic> toMap() {
@@ -85,6 +87,7 @@ class RemoteConfig {
       'vistasGeolocalizadas': vistasGeolocalizadas,
       'visualizacionCatalogo': visualizacionCatalogo,
       'zonasDeVenta': zonasDeVenta,
+      'conversionKiosko': conversionKiosko,
     };
   }
 }
@@ -138,6 +141,7 @@ class RemoteConfigProvider {
       visualizacionCatalogo:
           allConfigs['visualizacionCatalogo']?.asBool() ?? true,
       zonasDeVenta: allConfigs['zonasDeVenta']?.asBool() ?? true,
+      conversionKiosko: allConfigs['conversionKiosko']?.asBool() ?? true,
     );
 
     globalRemoteConfig = remoteConfigModel;

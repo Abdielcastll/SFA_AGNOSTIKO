@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
+import 'package:pwa_sales2go_flutter/src/pages/catalogue/catalogue_page_kiosko.dart';
 import 'package:pwa_sales2go_flutter/src/pages/profile/profile_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/catalogue_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_page.dart';
@@ -36,100 +37,106 @@ class NavigationPages extends StatelessWidget {
       notificationService.initialize(user.uid);
     }
 
-    return Scaffold(
-      body: IndexedStack(
-        index: counterLimitFirestore.currentScreen,
-        children: screens,
-      ),
-      // screens[index],
-      bottomNavigationBar: NavigationBarTheme(
-        data: NavigationBarThemeData(
-          indicatorColor: myTheme.colorScheme.tertiary.withOpacity(0.2),
-          labelTextStyle: MaterialStateProperty.all(
-            const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              color: Color.fromARGB(255, 196, 196, 196),
+    if (globalRemoteConfig.conversionKiosko == true) {
+      return Scaffold(
+        body: const CataloguePageKiosko(),
+      );
+    } else {
+      return Scaffold(
+        body: IndexedStack(
+          index: counterLimitFirestore.currentScreen,
+          children: screens,
+        ),
+        // screens[index],
+        bottomNavigationBar: NavigationBarTheme(
+          data: NavigationBarThemeData(
+            indicatorColor: myTheme.colorScheme.tertiary.withOpacity(0.2),
+            labelTextStyle: MaterialStateProperty.all(
+              const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: Color.fromARGB(255, 196, 196, 196),
 
-              // color: Colors.white,
-              fontFamily: 'Poppins-regular',
+                // color: Colors.white,
+                fontFamily: 'Poppins-regular',
+              ),
             ),
           ),
-        ),
-        child: NavigationBar(
-          height: 56.0,
-          backgroundColor: myTheme.colorScheme.primary,
-          labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-          animationDuration: const Duration(seconds: 1),
-          selectedIndex: counterLimitFirestore.currentScreen,
-          onDestinationSelected: (int i) {
-            counterLimitFirestore.setNewScreen(i);
-          },
-          destinations: [
-            if (globalRemoteConfig.visualizacionCatalogo == true)
+          child: NavigationBar(
+            height: 56.0,
+            backgroundColor: myTheme.colorScheme.primary,
+            labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+            animationDuration: const Duration(seconds: 1),
+            selectedIndex: counterLimitFirestore.currentScreen,
+            onDestinationSelected: (int i) {
+              counterLimitFirestore.setNewScreen(i);
+            },
+            destinations: [
+              if (globalRemoteConfig.visualizacionCatalogo == true)
+                NavigationDestination(
+                  icon: Icon(
+                    Icons.sell_outlined,
+                    // color: myTheme.colorScheme.background,
+                    size: 24,
+                    color: Color.fromARGB(255, 196, 196, 196),
+                  ),
+                  selectedIcon: Icon(
+                    Icons.sell,
+                    // color: myTheme.colorScheme.background,
+                    size: 24,
+                    color: Color.fromARGB(255, 196, 196, 196),
+                  ),
+                  label: AppLocalizations.of(context)!.home,
+                ),
               NavigationDestination(
                 icon: Icon(
-                  Icons.sell_outlined,
+                  Icons.calendar_today_outlined,
                   // color: myTheme.colorScheme.background,
                   size: 24,
                   color: Color.fromARGB(255, 196, 196, 196),
                 ),
                 selectedIcon: Icon(
-                  Icons.sell,
+                  Icons.calendar_today,
                   // color: myTheme.colorScheme.background,
                   size: 24,
                   color: Color.fromARGB(255, 196, 196, 196),
                 ),
-                label: AppLocalizations.of(context)!.home,
+                label: AppLocalizations.of(context)!.diary,
               ),
-            NavigationDestination(
-              icon: Icon(
-                Icons.calendar_today_outlined,
-                // color: myTheme.colorScheme.background,
-                size: 24,
-                color: Color.fromARGB(255, 196, 196, 196),
+              NavigationDestination(
+                icon: Icon(
+                  Icons.store_outlined,
+                  // color: myTheme.colorScheme.background,
+                  size: 24,
+                  color: Color.fromARGB(255, 196, 196, 196),
+                ),
+                selectedIcon: Icon(
+                  Icons.store,
+                  // color: myTheme.colorScheme.background,
+                  size: 24,
+                  color: Color.fromARGB(255, 196, 196, 196),
+                ),
+                label: AppLocalizations.of(context)!.clients,
               ),
-              selectedIcon: Icon(
-                Icons.calendar_today,
-                // color: myTheme.colorScheme.background,
-                size: 24,
-                color: Color.fromARGB(255, 196, 196, 196),
+              NavigationDestination(
+                icon: Icon(
+                  Icons.person_outline,
+                  // color: myTheme.colorScheme.background,
+                  size: 24,
+                  color: Color.fromARGB(255, 196, 196, 196),
+                ),
+                selectedIcon: Icon(
+                  Icons.person_outline,
+                  // color: myTheme.colorScheme.background,
+                  size: 24,
+                  color: Color.fromARGB(255, 196, 196, 196),
+                ),
+                label: AppLocalizations.of(context)!.profile,
               ),
-              label: AppLocalizations.of(context)!.diary,
-            ),
-            NavigationDestination(
-              icon: Icon(
-                Icons.store_outlined,
-                // color: myTheme.colorScheme.background,
-                size: 24,
-                color: Color.fromARGB(255, 196, 196, 196),
-              ),
-              selectedIcon: Icon(
-                Icons.store,
-                // color: myTheme.colorScheme.background,
-                size: 24,
-                color: Color.fromARGB(255, 196, 196, 196),
-              ),
-              label: AppLocalizations.of(context)!.clients,
-            ),
-            NavigationDestination(
-              icon: Icon(
-                Icons.person_outline,
-                // color: myTheme.colorScheme.background,
-                size: 24,
-                color: Color.fromARGB(255, 196, 196, 196),
-              ),
-              selectedIcon: Icon(
-                Icons.person_outline,
-                // color: myTheme.colorScheme.background,
-                size: 24,
-                color: Color.fromARGB(255, 196, 196, 196),
-              ),
-              label: AppLocalizations.of(context)!.profile,
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 }
