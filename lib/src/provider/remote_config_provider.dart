@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/src/utils/multitenant-config.dart';
 
 RemoteConfig globalRemoteConfig = RemoteConfig();
@@ -96,8 +97,12 @@ class RemoteConfigProvider {
   Future<void> getRemoteConfig() async {
     FirebaseRemoteConfig remoteConfig =
         FirebaseRemoteConfig.instanceFor(app: multitenantConfig.tenantApp!);
+    var configSettings = RemoteConfigSettings(
+        fetchTimeout: Durations.short1, minimumFetchInterval: Durations.short1);
+    await remoteConfig.setConfigSettings(configSettings);
     await remoteConfig.fetch();
     await remoteConfig.activate();
+
     var allConfigs = remoteConfig.getAll();
 
     // print('RemoteConfig firebase:');
@@ -143,7 +148,8 @@ class RemoteConfigProvider {
       zonasDeVenta: allConfigs['zonasDeVenta']?.asBool() ?? true,
       conversionKiosko: allConfigs['conversionKiosko']?.asBool() ?? true,
     );
-
+    print("es visitas?: ");
+    print(remoteConfigModel.visitas);
     globalRemoteConfig = remoteConfigModel;
     //printProperties(globalRemoteConfig);
   }
