@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:pwa_sales2go_flutter/firebase_options.dart';
 import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
-import 'package:tms_agent_communication/tms_agent_communication.dart';
+//import 'package:tms_agent_communication/tms_agent_communication.dart';
 import 'package:collection/collection.dart';
 
 class _MultitenantConfig {
@@ -14,27 +14,27 @@ class _MultitenantConfig {
   FirebaseApp? baseApp;
   FirebaseApp? tenantApp;
 
-  final _tmsAgentCommunication =
-      TmsAgentCommunication(appId: 'com.agnostiko.field_sales');
+  //final _tmsAgentCommunication =
+  //    TmsAgentCommunication(appId: 'com.agnostiko.field_sales');
 
-  _MultitenantConfig() {
-    _tmsAgentCommunication.streamConfigChanges.stream.listen((configs) async {
-      if (configs == null) {
-        return;
-      }
+  // _MultitenantConfig() {
+  //   _tmsAgentCommunication.streamConfigChanges.stream.listen((configs) async {
+  //     if (configs == null) {
+  //       return;
+  //     }
 
-      final fsConfig = configs.firstWhereOrNull(
-          (element) => element['templateName'] == 'Field Sales');
+  //     final fsConfig = configs.firstWhereOrNull(
+  //         (element) => element['templateName'] == 'Field Sales');
 
-      if (fsConfig == null) {
-        return;
-      }
+  //     if (fsConfig == null) {
+  //       return;
+  //     }
 
-      await saveConfigFile(fsConfig);
+  //     await saveConfigFile(fsConfig);
 
-      fieldSalesConfig = await readLocalFile();
-    });
-  }
+  //     fieldSalesConfig = await readLocalFile();
+  //   });
+  // }
 
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
@@ -174,7 +174,7 @@ class _MultitenantConfig {
   }
 
   Future<Map<String, dynamic>> getAppConfig() async {
-    final configs = await _tmsAgentCommunication.getConfig;
+    const configs = null; //await _tmsAgentCommunication.getConfig;
     if (configs == null) {
       throw Exception('Error al recibir la configuracion del dispositivo');
     }

@@ -176,6 +176,14 @@ class SplashScreenViewState extends State<SplashScreenView> {
         } else {
           await initSDK(authToken: authToken);
         }
+      } else if (deviceType == DeviceType.PINPAD) {
+        await connectPinpad();
+        authToken = await _initToken();
+        if (authToken == null) {
+          return false;
+        } else {
+          await initSDK(authToken: authToken);
+        }
       } else {
         await initSDK();
       }

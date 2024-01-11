@@ -40,16 +40,16 @@ dependencies:
   material_design_icons_flutter: ^6.0.7096
 
   agnostiko:
-    version: 1.5.0 # reemplazar con la versión que se quiere utilizar
+    version: 1.7.0 # reemplazar con la versión que se quiere utilizar
     hosted: 
       url: https://server-agnostiko-web-gnbxyenkeq-ue.a.run.app
       name: agnostiko
 
-  tms_agent_communication:
-    version: 0.0.1 # reemplazar con la versión que se quiere utilizar
-    hosted: 
-      url: https://server-agnostiko-web-gnbxyenkeq-ue.a.run.app
-      name: tms_agent_communication
+  # tms_agent_communication:
+  #   version: 0.0.1 # reemplazar con la versión que se quiere utilizar
+  #   hosted: 
+  #     url: https://server-agnostiko-web-gnbxyenkeq-ue.a.run.app
+  #     name: tms_agent_communication
 
   # Firebase
   cloud_firestore: ^4.3.1

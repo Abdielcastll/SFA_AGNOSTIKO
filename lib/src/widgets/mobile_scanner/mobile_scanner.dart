@@ -156,9 +156,15 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
               builder: (context, state, child) {
                 switch (state as TorchState) {
                   case TorchState.off:
-                    return const Icon(Icons.flash_off, color: Colors.grey);
+                    return const Icon(
+                      Icons.flash_off,
+                      color: Colors.grey,
+                    );
                   case TorchState.on:
-                    return const Icon(Icons.flash_on, color: Colors.yellow);
+                    return const Icon(
+                      Icons.flash_on,
+                      color: Colors.yellow,
+                    );
                 }
               },
             ),

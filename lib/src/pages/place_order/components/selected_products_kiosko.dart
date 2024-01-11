@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:agnostiko/device/src/device.dart';
+import 'package:agnostiko/scanner/src/scanner.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,7 @@ class SelectedProductsKiosko extends StatefulWidget {
 
 class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
   DeviceType? deviceType;
+  bool hasLaserScanner = false;
   late String? clientPriceList = widget.client?.prices;
   late Stream<List<ShoppingCartProduct>> streamShoppingCartProducts;
 
@@ -41,6 +43,15 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
     super.initState();
     streamShoppingCartProducts = objectBox.getShoppingCartProducts();
     localGetDeviceType();
+  }
+
+  localGetDeviceType() async {
+    final dType = await getDeviceType();
+    final platformInfo = await getPlatformInfo();
+    setState(() {
+      hasLaserScanner = platformInfo.hasScannerHw;
+      deviceType = dType;
+    });
   }
 
   addProductFromBarcodeResult(
@@ -164,14 +175,6 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
     print(scannedProducts);
   }
 
-  localGetDeviceType() async {
-    final dType = await getDeviceType();
-
-    setState(() {
-      deviceType = dType;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final coinName = Provider.of<Coin?>(context)?.name ?? '';
@@ -222,7 +225,6 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                       bufferDuration: Duration(milliseconds: 500),
                       onBarcodeScanned: (barcode) {
                         print(barcode);
-
                         addProductFromBarcodeResult(barcode, products);
                       },
                       child: SingleChildScrollView(
@@ -244,12 +246,14 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                               padding:
                                                   const EdgeInsets.all(8.0),
                                               child: Text(
-                                                'Acerca el código de barras al escáner.',
+                                                deviceType != DeviceType.PINPAD
+                                                    ? 'Inicia un escaneo dando click en el botón'
+                                                    : 'Acerca el código de barras al escáner.',
                                                 style: TextStyle(
-                                                    fontFamily:
-                                                        'Poppins-medium',
-                                                    fontSize: 16,
-                                                    color: Colors.white),
+                                                  fontFamily: 'Poppins-medium',
+                                                  fontSize: 16,
+                                                  color: Colors.white,
+                                                ),
                                                 textAlign: TextAlign.center,
                                               ),
                                             ),
@@ -274,7 +278,8 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                           final ShoppingCartProduct product =
                                               products[index];
                                           var productPrice = Decimal.parse(
-                                              product.unitPrice.toString());
+                                            product.unitPrice.toString(),
+                                          );
 
                                           var productPriceConverted =
                                               // final double productPriceConverted =
@@ -289,11 +294,14 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                   price: productPriceConverted);
 
                                           var productTotalByQuantity =
-                                              Decimal.parse(product.unitPrice
-                                                      .toString()) *
-                                                  Decimal.parse(product
-                                                      .productQuantity
-                                                      .toString());
+                                              Decimal.parse(
+                                                    product.unitPrice
+                                                        .toString(),
+                                                  ) *
+                                                  Decimal.parse(
+                                                    product.productQuantity
+                                                        .toString(),
+                                                  );
 
                                           var productTotalByQuantityConverted =
                                               priceMultipliedByItsExchangeRatio2(
@@ -306,8 +314,9 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
 
                                           var productTotalByQuantityConvertedFormatted =
                                               formatDecimalPriceByRegion(
-                                                  price:
-                                                      productTotalByQuantityConverted);
+                                            price:
+                                                productTotalByQuantityConverted,
+                                          );
 
                                           return Container(
                                             margin: const EdgeInsets.fromLTRB(
@@ -795,8 +804,19 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                     ),
                                                   ),
                                                 ),
-                                                onPressed: () {
-                                                  Navigator.push(
+                                                onPressed: () async {
+                                                  if (hasLaserScanner) {
+                                                    final content =
+                                                        await startScannerHw(
+                                                            timeout: 30);
+                                                    var scanResult =
+                                                        content?.trim();
+                                                    addProductFromBarcodeResult(
+                                                      scanResult,
+                                                      products,
+                                                    );
+                                                  } else {
+                                                    Navigator.push(
                                                       context,
                                                       MaterialPageRoute(
                                                         builder: (BuildContext
@@ -806,7 +826,9 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                               clientPriceList,
                                                           products: products,
                                                         ),
-                                                      ));
+                                                      ),
+                                                    );
+                                                  }
                                                 },
                                                 label: Text(
                                                   'Escanear código',
@@ -842,16 +864,18 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                             //     .orderSubTotal,
                                             'Subtotal',
                                             style: const TextStyle(
-                                                fontFamily: 'Poppins-regular',
-                                                fontSize: 14,
-                                                color: Colors.white),
+                                              fontFamily: 'Poppins-regular',
+                                              fontSize: 14,
+                                              color: Colors.white,
+                                            ),
                                           ),
                                           Text(
                                             '$coinSymbol $subTotalFormatted',
                                             style: const TextStyle(
-                                                fontFamily: 'Poppins-regular',
-                                                fontSize: 14,
-                                                color: Colors.white),
+                                              fontFamily: 'Poppins-regular',
+                                              fontSize: 14,
+                                              color: Colors.white,
+                                            ),
                                           ),
                                         ],
                                       ),
