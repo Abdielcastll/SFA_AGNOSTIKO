@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 final myTheme = ThemeData.light().copyWith(
-  useMaterial3: false,
   colorScheme: const ColorScheme.light(
     // Colores primarios
     // primary: Color.fromRGBO(46, 62, 174, 1),
