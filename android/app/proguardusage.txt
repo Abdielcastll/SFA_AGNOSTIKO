@@ -1,32 +1,3 @@
-agnostikoplugin.c.a:
-    public final void a(com.newland.nsdk.core.internal.card.contact.CPUContactCardImpl)
-    public final void b(com.newland.nsdk.core.internal.card.contact.CPUContactCardImpl)
-    public final void c(com.newland.nsdk.core.internal.card.contact.CPUContactCardImpl)
-    public final void d(com.newland.nsdk.core.internal.card.contact.CPUContactCardImpl)
-    public final void e(com.newland.nsdk.core.internal.card.contact.CPUContactCardImpl)
-    public final com.newland.nsdk.core.internal.card.contact.CPUContactCardImpl f()
-    public final com.newland.nsdk.core.internal.card.contact.CPUContactCardImpl g()
-    public final com.newland.nsdk.core.internal.card.contact.CPUContactCardImpl h()
-    public final com.newland.nsdk.core.internal.card.contact.CPUContactCardImpl i()
-    public final com.newland.nsdk.core.internal.card.contact.CPUContactCardImpl j()
-agnostikoplugin.c.d:
-    public final int J()
-agnostikoplugin.c.f:
-    public final com.newland.sdk.emvl3.internal.configuration.AidImpl s()
-    public final com.newland.sdk.emvl3.internal.configuration.AidImpl t()
-    public final com.newland.sdk.emvl3.internal.configuration.CapkImpl u()
-    public final com.newland.sdk.emvl3.internal.transaction.EmvL3Impl v()
-agnostikoplugin.c.g:
-    public final com.newland.sdk.emvl3.api.internal.listener.PerfromTransactionListener n()
-agnostikoplugin.c.h:
-    public final void a(com.newland.nsdk.core.api.internal.pinentry.PINEntryListener)
-    public final com.newland.nsdk.core.api.internal.pinentry.PINEntryListener c()
-    public final boolean e()
-agnostikoplugin.d.a$a
-agnostikoplugin.d.a:
-    public void <init>(android.content.Context,android.util.AttributeSet)
-    public final android.view.View a(int)
-    public final void a()
 android.annotation.SuppressLint
 android.annotation.TargetApi
 android.support.customtabs.ICustomTabsCallback$Default
@@ -8202,11 +8173,7 @@ androidx.core.graphics.drawable.DrawableCompat$Api23Impl:
 androidx.core.graphics.drawable.DrawableCompat:
     private static final java.lang.String TAG
     private void <init>()
-androidx.core.graphics.drawable.DrawableKt:
-    public static final android.graphics.Bitmap toBitmapOrNull(android.graphics.drawable.Drawable,int,int,android.graphics.Bitmap$Config)
-    public static synthetic android.graphics.Bitmap toBitmapOrNull$default(android.graphics.drawable.Drawable,int,int,android.graphics.Bitmap$Config,int,java.lang.Object)
-    public static final void updateBounds(android.graphics.drawable.Drawable,int,int,int,int)
-    public static synthetic void updateBounds$default(android.graphics.drawable.Drawable,int,int,int,int,int,java.lang.Object)
+androidx.core.graphics.drawable.DrawableKt
 androidx.core.graphics.drawable.IconCompat$Api23Impl:
     private void <init>()
     static androidx.core.graphics.drawable.IconCompat createFromIcon(android.content.Context,android.graphics.drawable.Icon)
@@ -14428,22 +14395,6 @@ com.agnostiko.field_sales.R$style
 com.agnostiko.field_sales.R$styleable
 com.agnostiko.field_sales.R$xml
 com.agnostiko.field_sales.R
-com.agnostiko.tms_agent_communication.BuildConfig
-com.agnostiko.tms_agent_communication.R$anim
-com.agnostiko.tms_agent_communication.R$attr
-com.agnostiko.tms_agent_communication.R$bool
-com.agnostiko.tms_agent_communication.R$color
-com.agnostiko.tms_agent_communication.R$dimen
-com.agnostiko.tms_agent_communication.R$drawable
-com.agnostiko.tms_agent_communication.R$id
-com.agnostiko.tms_agent_communication.R$integer
-com.agnostiko.tms_agent_communication.R$layout
-com.agnostiko.tms_agent_communication.R$string
-com.agnostiko.tms_agent_communication.R$style
-com.agnostiko.tms_agent_communication.R$styleable
-com.agnostiko.tms_agent_communication.R$xml
-com.agnostiko.tms_agent_communication.R
-com.agnostiko.tms_agent_communication.TMSCommunicationPluginKt
 com.amolg.flutterbarcodescanner.BarcodeCaptureActivity:
     public static final java.lang.String BarcodeObject
     private static final int RC_HANDLE_CAMERA_PERM
@@ -15309,20 +15260,33 @@ com.apps2go.agnostiko.R$styleable
 com.apps2go.agnostiko.R$xml
 com.apps2go.agnostiko.R
 com.apps2go.agnostiko.common.IImplementation:
-    private com.apps2go.agnostiko.imp.bluetooth.BluetoothHandler bluetoothHandler
     private com.apps2go.agnostiko.imp.mdb.IMDB mdb
+    private com.apps2go.agnostiko.imp.ped.PinEntryHandler pinEntryHandler
     private com.apps2go.agnostiko.imp.scanner.IScanner scanner
     public final android.app.Activity getActivity()
-    public final io.flutter.embedding.engine.plugins.FlutterPlugin$FlutterPluginBinding getPluginBinding()
     public final void setActivity(android.app.Activity)
-    public final void setBluetoothHandler(com.apps2go.agnostiko.imp.bluetooth.BluetoothHandler)
     public final void setMdb(com.apps2go.agnostiko.imp.mdb.IMDB)
+    public final void setPinEntryHandler(com.apps2go.agnostiko.imp.ped.PinEntryHandler)
     public final void setScanner(com.apps2go.agnostiko.imp.scanner.IScanner)
-com.apps2go.agnostiko.common.bluetooth.BluetoothConnection$Companion
-com.apps2go.agnostiko.common.bluetooth.BluetoothConnection$ConnectionThread
-com.apps2go.agnostiko.common.bluetooth.BluetoothConnection
-com.apps2go.agnostiko.common.bluetooth.BluetoothDevice$Companion
-com.apps2go.agnostiko.common.bluetooth.BluetoothDevice
+com.apps2go.agnostiko.common.bluetooth.BluetoothConnection$Companion:
+    public final java.util.UUID getDEFAULT_UUID()
+com.apps2go.agnostiko.common.bluetooth.BluetoothConnection$ConnectionThread:
+    public final java.io.InputStream getInput()
+    public final java.io.OutputStream getOutput()
+    public final android.bluetooth.BluetoothSocket getSocket()
+    public final void setInput(java.io.InputStream)
+    public final void setOutput(java.io.OutputStream)
+    public final void setRequestedClosing(boolean)
+com.apps2go.agnostiko.common.bluetooth.BluetoothConnection:
+    public static final synthetic java.util.UUID access$getDEFAULT_UUID$cp()
+    public final android.bluetooth.BluetoothAdapter getBluetoothAdapter()
+com.apps2go.agnostiko.common.bluetooth.BluetoothDevice$Companion:
+    public final com.apps2go.agnostiko.common.bluetooth.BluetoothDevice fromHashMap(java.util.HashMap)
+com.apps2go.agnostiko.common.bluetooth.BluetoothDevice:
+    public static final com.apps2go.agnostiko.common.bluetooth.BluetoothDevice fromHashMap(java.util.HashMap)
+    public final java.lang.String getAddress()
+    public final java.lang.String getName()
+    public final boolean isConnected()
 com.apps2go.agnostiko.common.cards.DUKPTEncryptedTracksData$Companion
 com.apps2go.agnostiko.common.cards.DUKPTEncryptedTracksData
 com.apps2go.agnostiko.common.cards.TracksData$Companion:
@@ -15404,6 +15368,8 @@ com.apps2go.agnostiko.common.emv.EmvLog:
     public static final synthetic byte[] access$getTagPrefix$cp()
     public final android.content.Context getContext()
     public final boolean getEnabled()
+    public final void requestAPDU(byte[])
+    public final void responseAPDU(byte[])
 com.apps2go.agnostiko.common.emv.EmvOnlineRequestedEvent$Companion:
     public final java.lang.String getEventName()
 com.apps2go.agnostiko.common.emv.EmvOnlineRequestedEvent:
@@ -15415,22 +15381,23 @@ com.apps2go.agnostiko.common.emv.EmvOnlineResponse:
     public static final com.apps2go.agnostiko.common.emv.EmvOnlineResponse fromJSON(org.json.JSONObject)
     public final java.util.HashMap toHashMap()
     public final org.json.JSONObject toJSON()
-com.apps2go.agnostiko.common.emv.EmvPinRequestedEvent$Companion:
-    public final com.apps2go.agnostiko.common.emv.EmvPinRequestedEvent fromHashMap(java.util.HashMap)
-    public final java.lang.String getEventName()
+com.apps2go.agnostiko.common.emv.EmvPinRequestedEvent$Companion
 com.apps2go.agnostiko.common.emv.EmvPinRequestedEvent:
+    public static final com.apps2go.agnostiko.common.emv.EmvPinRequestedEvent$Companion Companion
+    private static final java.lang.String eventName
+    private final com.apps2go.agnostiko.common.ped.PinRSAData pinRSAData
+    private final java.lang.Integer remainingTries
+    public static void <clinit>()
+    public void <init>(java.lang.Integer,com.apps2go.agnostiko.common.ped.PinRSAData)
     public static final synthetic java.lang.String access$getEventName$cp()
     public static final com.apps2go.agnostiko.common.emv.EmvPinRequestedEvent fromHashMap(java.util.HashMap)
     public final com.apps2go.agnostiko.common.ped.PinRSAData getPinRSAData()
     public final java.lang.Integer getRemainingTries()
-com.apps2go.agnostiko.common.emv.EmvPinpadEntryEvent$Companion
-com.apps2go.agnostiko.common.emv.EmvPinpadEntryEvent:
-    public static final com.apps2go.agnostiko.common.emv.EmvPinpadEntryEvent$Companion Companion
-    private static final java.lang.String eventName
-    public static void <clinit>()
-    public void <init>()
-    public static final synthetic java.lang.String access$getEventName$cp()
     public java.util.HashMap toHashMap()
+com.apps2go.agnostiko.common.emv.EmvPinpadEntryEvent$Companion:
+    public final java.lang.String getEventName()
+com.apps2go.agnostiko.common.emv.EmvPinpadEntryEvent:
+    public static final synthetic java.lang.String access$getEventName$cp()
 com.apps2go.agnostiko.common.emv.EmvTransactionInfo$Companion:
     public final com.apps2go.agnostiko.common.emv.EmvTransactionInfo fromHashMap(java.util.HashMap)
 com.apps2go.agnostiko.common.emv.EmvTransactionInfo:
@@ -15473,40 +15440,31 @@ com.apps2go.agnostiko.common.ped.DUKPTResult:
     public final int getActualDataLen()
     public final byte[] getData()
     public final byte[] getKsn()
-com.apps2go.agnostiko.common.ped.IPinEvent$Companion:
-    public final com.apps2go.agnostiko.common.ped.IPinEvent fromHashMap(java.util.HashMap)
-com.apps2go.agnostiko.common.ped.IPinEvent:
-    public static final com.apps2go.agnostiko.common.ped.IPinEvent fromHashMap(java.util.HashMap)
-com.apps2go.agnostiko.common.ped.PinCancelledEvent$Companion:
-    public final java.lang.String getEventName()
-com.apps2go.agnostiko.common.ped.PinCancelledEvent:
-    public static final synthetic java.lang.String access$getEventName$cp()
+com.apps2go.agnostiko.common.ped.IPinEvent$Companion
+com.apps2go.agnostiko.common.ped.IPinEvent
+com.apps2go.agnostiko.common.ped.PinCancelledEvent$Companion
+com.apps2go.agnostiko.common.ped.PinCancelledEvent
 com.apps2go.agnostiko.common.ped.PinEntryParameters:
     public static final com.apps2go.agnostiko.common.ped.PinEntryParameters fromHashMap(java.util.HashMap)
+    public final com.apps2go.agnostiko.common.ped.PinRSAData getPinRSAData()
     public final java.util.HashMap toHashMap()
-com.apps2go.agnostiko.common.ped.PinFinishedEvent$Companion:
-    public final com.apps2go.agnostiko.common.ped.PinFinishedEvent fromHashMap(java.util.HashMap)
-    public final java.lang.String getEventName()
-com.apps2go.agnostiko.common.ped.PinFinishedEvent:
-    public static final synthetic java.lang.String access$getEventName$cp()
-    public static final com.apps2go.agnostiko.common.ped.PinFinishedEvent fromHashMap(java.util.HashMap)
-    public final byte[] getPinResultSw()
-com.apps2go.agnostiko.common.ped.PinInputChangedEvent$Companion:
-    public final com.apps2go.agnostiko.common.ped.PinInputChangedEvent fromHashMap(java.util.HashMap)
-    public final java.lang.String getEventName()
-com.apps2go.agnostiko.common.ped.PinInputChangedEvent:
-    public static final synthetic java.lang.String access$getEventName$cp()
-    public static final com.apps2go.agnostiko.common.ped.PinInputChangedEvent fromHashMap(java.util.HashMap)
-    public final int getInputLength()
+com.apps2go.agnostiko.common.ped.PinFinishedEvent$Companion
+com.apps2go.agnostiko.common.ped.PinFinishedEvent
+com.apps2go.agnostiko.common.ped.PinInputChangedEvent$Companion
+com.apps2go.agnostiko.common.ped.PinInputChangedEvent
 com.apps2go.agnostiko.common.ped.PinRSAData:
     public static final com.apps2go.agnostiko.common.ped.PinRSAData fromHashMap(java.util.HashMap)
+    public final byte[] getExponent()
     public final byte[] getIccChallenge()
-com.apps2go.agnostiko.common.ped.PinTimeoutEvent$Companion:
-    public final java.lang.String getEventName()
-com.apps2go.agnostiko.common.ped.PinTimeoutEvent:
-    public static final synthetic java.lang.String access$getEventName$cp()
+    public final byte[] getModulus()
+    public final java.util.HashMap toHashMap()
+com.apps2go.agnostiko.common.ped.PinTimeoutEvent$Companion
+com.apps2go.agnostiko.common.ped.PinTimeoutEvent
 com.apps2go.agnostiko.common.ped.TransportKey$Companion
 com.apps2go.agnostiko.common.ped.TransportKey
+com.apps2go.agnostiko.common.pinpad.PinpadTextParameters:
+    public static final com.apps2go.agnostiko.common.pinpad.PinpadTextParameters fromHashMap(java.util.HashMap)
+    public final java.util.HashMap toHashMap()
 com.apps2go.agnostiko.common.printer.PrinterImage$Companion
 com.apps2go.agnostiko.common.printer.PrinterImage
 com.apps2go.agnostiko.common.printer.PrinterObject
@@ -15534,7 +15492,8 @@ com.apps2go.agnostiko.common.utils.HexExtensionsKt:
     public static final java.lang.String toHexStr(int)
     public static final java.lang.String toHexStr(long)
     public static final java.lang.String toHexStr(short)
-com.apps2go.agnostiko.common.utils.ImageKt
+com.apps2go.agnostiko.common.utils.ImageKt:
+    public static final byte[] bitmapToRgba(android.graphics.Bitmap)
 com.apps2go.agnostiko.common.utils.ImageNative$Companion
 com.apps2go.agnostiko.common.utils.ImageNative
 com.apps2go.agnostiko.common.utils.JSONExtensionsKt
@@ -15572,44 +15531,6 @@ com.apps2go.agnostiko.common.utils.TlvTag$Companion:
 com.apps2go.agnostiko.common.utils.TlvTag:
     public final int getSize()
     public static final com.apps2go.agnostiko.common.utils.TlvTag unpack(byte[])
-com.apps2go.agnostiko.imp.cards.ICardReader:
-    public final void a(com.apps2go.agnostiko.common.cards.CardType)
-    public final com.apps2go.agnostiko.common.IImplementation c()
-com.apps2go.agnostiko.imp.device.IDevice:
-    public final java.lang.Object f()
-com.apps2go.agnostiko.imp.emv.IEmvModule:
-    public final java.util.List g()
-    public final java.lang.Object h()
-    public final java.util.List i()
-    public final boolean r()
-com.apps2go.agnostiko.imp.emv.IEmvTransaction:
-    public final void a(java.lang.String,java.lang.String,java.lang.Object)
-    public final com.apps2go.agnostiko.imp.cards.ICardReader c()
-    public final com.apps2go.agnostiko.common.IImplementation e()
-    public final boolean i()
-com.apps2go.agnostiko.imp.ped.ICrypto:
-    public final java.lang.Object c()
-    public final com.apps2go.agnostiko.common.IImplementation d()
-com.apps2go.agnostiko.imp.printer.IPrinter:
-    public final java.lang.Object d()
-com.apps2go.agnostiko.imp.utils.UtilsKt:
-    public static final byte[] a(byte[])
-com.apps2go.agnostiko.newland_nsdk.NSDKInstallationReceiver$Companion:
-    public final java.lang.String getACTION_DELETE_APP_HIDE()
-    public final java.lang.String getACTION_INSTALL_APP_HIDE()
-com.apps2go.agnostiko.newland_nsdk.NSDKInstallationReceiver:
-    public static final synthetic java.lang.String access$getACTION_DELETE_APP_HIDE$cp()
-    public static final synthetic java.lang.String access$getACTION_INSTALL_APP_HIDE$cp()
-com.apps2go.agnostiko.newland_nsdk.OtaUpgradeResultReceiver$a:
-    public final java.lang.String a()
-    public final java.lang.String b()
-com.apps2go.agnostiko.newland_nsdk.OtaUpgradeResultReceiver:
-    public static final synthetic java.lang.String a()
-    public static final synthetic java.lang.String b()
-com.apps2go.agnostiko.newland_nsdk.activity.KeyBoardNumberActivity:
-    public void _$_clearFindViewByIdCache()
-    public android.view.View _$_findCachedViewById(int)
-    public final void setInternalListener(com.newland.nsdk.core.api.internal.pinentry.PINEntryListener)
 com.baseflow.geolocator.BuildConfig
 com.baseflow.geolocator.GeolocatorLocationService:
     private static final java.lang.String CHANNEL_ID
@@ -26068,6 +25989,14 @@ com.google.firebase.FirebaseCommonRegistrar:
     private static final java.lang.String TARGET_SDK
 com.google.firebase.FirebaseError
 com.google.firebase.FirebaseExceptionMapper
+com.google.firebase.FirebaseKt$coroutineDispatcher$1
+com.google.firebase.FirebaseKt:
+    public static final com.google.firebase.FirebaseApp app(com.google.firebase.Firebase,java.lang.String)
+    private static final synthetic com.google.firebase.components.Component coroutineDispatcher()
+    public static final com.google.firebase.FirebaseOptions getOptions(com.google.firebase.Firebase)
+    public static final com.google.firebase.FirebaseApp initialize(com.google.firebase.Firebase,android.content.Context)
+    public static final com.google.firebase.FirebaseApp initialize(com.google.firebase.Firebase,android.content.Context,com.google.firebase.FirebaseOptions)
+    public static final com.google.firebase.FirebaseApp initialize(com.google.firebase.Firebase,android.content.Context,com.google.firebase.FirebaseOptions,java.lang.String)
 com.google.firebase.FirebaseOptions$Builder:
     public void <init>(com.google.firebase.FirebaseOptions)
 com.google.firebase.FirebaseOptions:
@@ -26147,8 +26076,88 @@ com.google.firebase.analytics.connector.R
 com.google.firebase.annotations.DeferredApi
 com.google.firebase.annotations.PreviewApi
 com.google.firebase.annotations.PublicApi
-com.google.firebase.appcheck.interop.AppCheckTokenListener:
-    public abstract void onAppCheckTokenChanged(com.google.firebase.appcheck.AppCheckTokenResult)
+com.google.firebase.appcheck.AppCheckProviderFactory
+com.google.firebase.appcheck.BuildConfig
+com.google.firebase.appcheck.FirebaseAppCheck:
+    public abstract void addAppCheckListener(com.google.firebase.appcheck.FirebaseAppCheck$AppCheckListener)
+    public abstract com.google.android.gms.tasks.Task getAppCheckToken(boolean)
+    public static com.google.firebase.appcheck.FirebaseAppCheck getInstance()
+    public static com.google.firebase.appcheck.FirebaseAppCheck getInstance(com.google.firebase.FirebaseApp)
+    public abstract com.google.android.gms.tasks.Task getLimitedUseAppCheckToken()
+    public abstract void installAppCheckProviderFactory(com.google.firebase.appcheck.AppCheckProviderFactory)
+    public abstract void installAppCheckProviderFactory(com.google.firebase.appcheck.AppCheckProviderFactory,boolean)
+    public abstract void removeAppCheckListener(com.google.firebase.appcheck.FirebaseAppCheck$AppCheckListener)
+    public abstract void setTokenAutoRefreshEnabled(boolean)
+com.google.firebase.appcheck.FirebaseAppCheckKt
+com.google.firebase.appcheck.FirebaseAppCheckRegistrar:
+    private static final java.lang.String LIBRARY_NAME
+com.google.firebase.appcheck.R$attr
+com.google.firebase.appcheck.R$color
+com.google.firebase.appcheck.R$dimen
+com.google.firebase.appcheck.R$drawable
+com.google.firebase.appcheck.R$id
+com.google.firebase.appcheck.R$integer
+com.google.firebase.appcheck.R$layout
+com.google.firebase.appcheck.R$raw
+com.google.firebase.appcheck.R$string
+com.google.firebase.appcheck.R$style
+com.google.firebase.appcheck.R$styleable
+com.google.firebase.appcheck.R
+com.google.firebase.appcheck.internal.AppCheckTokenResponse
+com.google.firebase.appcheck.internal.DefaultAppCheckToken:
+    static final java.lang.String EXPIRATION_TIME_KEY
+    static final java.lang.String EXPIRES_IN_MILLIS_KEY
+    static final java.lang.String ISSUED_AT_KEY
+    private static final long ONE_SECOND_MILLIS
+    static final java.lang.String RECEIVED_AT_TIMESTAMP_KEY
+    static final java.lang.String TOKEN_KEY
+    void <init>(java.lang.String,long)
+    public static com.google.firebase.appcheck.internal.DefaultAppCheckToken constructFromAppCheckTokenResponse(com.google.firebase.appcheck.internal.AppCheckTokenResponse)
+com.google.firebase.appcheck.internal.DefaultAppCheckTokenResult:
+    static final java.lang.String DUMMY_TOKEN
+com.google.firebase.appcheck.internal.DefaultFirebaseAppCheck:
+    private static final long BUFFER_TIME_MILLIS
+    private com.google.firebase.appcheck.AppCheckProviderFactory appCheckProviderFactory
+    public void addAppCheckListener(com.google.firebase.appcheck.FirebaseAppCheck$AppCheckListener)
+    public com.google.android.gms.tasks.Task getAppCheckToken(boolean)
+    com.google.firebase.inject.Provider getHeartbeatControllerProvider()
+    public com.google.firebase.appcheck.AppCheckProviderFactory getInstalledAppCheckProviderFactory()
+    public void installAppCheckProviderFactory(com.google.firebase.appcheck.AppCheckProviderFactory)
+    public void installAppCheckProviderFactory(com.google.firebase.appcheck.AppCheckProviderFactory,boolean)
+    private synthetic com.google.android.gms.tasks.Task lambda$getAppCheckToken$4(boolean,com.google.android.gms.tasks.Task)
+    public void removeAppCheckListener(com.google.firebase.appcheck.FirebaseAppCheck$AppCheckListener)
+    public void resetAppCheckState()
+    public void setTokenAutoRefreshEnabled(boolean)
+com.google.firebase.appcheck.internal.DefaultTokenRefresher:
+    static final long INITIAL_DELAY_SECONDS
+    static final long MAX_DELAY_SECONDS
+    private static final long UNSET_DELAY
+com.google.firebase.appcheck.internal.HttpErrorResponse
+com.google.firebase.appcheck.internal.NetworkClient$AttestationTokenType
+com.google.firebase.appcheck.internal.NetworkClient
+com.google.firebase.appcheck.internal.RetryManager
+com.google.firebase.appcheck.internal.StorageHelper:
+    static final java.lang.String PREFS_TEMPLATE
+    static final java.lang.String TOKEN_KEY
+    static final java.lang.String TOKEN_TYPE_KEY
+com.google.firebase.appcheck.internal.TokenRefreshManager:
+    private static final long FIVE_MINUTES_IN_MILLIS
+    private static final long REFRESH_BUFFER_ABSOLUTE_MILLIS
+    private static final double REFRESH_BUFFER_FRACTION
+    private static final long UNSET_REFRESH_TIME
+    public void setIsAutoRefreshEnabled(boolean)
+com.google.firebase.appcheck.internal.util.Logger:
+    public static final java.lang.String TAG
+    public void i(java.lang.String)
+    public void i(java.lang.String,java.lang.Throwable)
+    public void log(int,java.lang.String)
+    public void log(int,java.lang.String,boolean)
+    public void v(java.lang.String)
+    public void v(java.lang.String,java.lang.Throwable)
+    public void w(java.lang.String)
+    public void w(java.lang.String,java.lang.Throwable)
+com.google.firebase.appcheck.internal.util.TokenParser:
+    public void <init>()
 com.google.firebase.appcheck.interop.BuildConfig
 com.google.firebase.appcheck.interop.R$attr
 com.google.firebase.appcheck.interop.R$color
@@ -26161,6 +26170,7 @@ com.google.firebase.appcheck.interop.R$string
 com.google.firebase.appcheck.interop.R$style
 com.google.firebase.appcheck.interop.R$styleable
 com.google.firebase.appcheck.interop.R
+com.google.firebase.appcheck.ktx.FirebaseAppCheckKt
 com.google.firebase.auth.ActionCodeMultiFactorInfo:
     public abstract com.google.firebase.auth.MultiFactorInfo getMultiFactorInfo()
 com.google.firebase.auth.ActionCodeResult$ActionDataKey
@@ -26177,7 +26187,6 @@ com.google.firebase.auth.ActionCodeResult:
     public static final int VERIFY_EMAIL
     public abstract java.lang.String getData(int)
 com.google.firebase.auth.ActionCodeSettings$Builder:
-    private void <init>()
     public java.lang.String getDynamicLinkDomain()
     public boolean getHandleCodeInApp()
     public java.lang.String getIOSBundleId()
@@ -26186,6 +26195,7 @@ com.google.firebase.auth.ActionCodeUrl:
     public java.lang.String getApiKey()
     public java.lang.String getContinueUrl()
     public java.lang.String getLanguageCode()
+com.google.firebase.auth.AuthKt
 com.google.firebase.auth.EmailAuthProvider:
     public static final java.lang.String EMAIL_LINK_SIGN_IN_METHOD
     public static final java.lang.String EMAIL_PASSWORD_SIGN_IN_METHOD
@@ -26195,14 +26205,16 @@ com.google.firebase.auth.FacebookAuthProvider:
     public static final java.lang.String FACEBOOK_SIGN_IN_METHOD
     public static final java.lang.String PROVIDER_ID
     private void <init>()
+com.google.firebase.auth.FirebaseAuth$zzc
 com.google.firebase.auth.FirebaseAuth:
     public com.google.android.gms.tasks.Task getPendingAuthResult()
     public com.google.android.gms.tasks.Task initializeRecaptchaConfig()
     public boolean isSignInWithEmailLink(java.lang.String)
+    public com.google.android.gms.tasks.Task revokeAccessToken(java.lang.String)
     public com.google.android.gms.tasks.Task setFirebaseUIVersion(java.lang.String)
     public com.google.android.gms.tasks.Task updateCurrentUser(com.google.firebase.auth.FirebaseUser)
-    private final com.google.android.gms.tasks.Task zzY(com.google.firebase.auth.FirebaseUser,com.google.firebase.auth.EmailAuthCredential,boolean)
-    public final com.google.android.gms.tasks.Task zzg(com.google.firebase.auth.FirebaseUser,com.google.firebase.auth.AuthCredential)
+    private final com.google.android.gms.tasks.Task zza(com.google.firebase.auth.FirebaseUser,com.google.firebase.auth.EmailAuthCredential,boolean)
+    public final com.google.android.gms.tasks.Task zzb(com.google.firebase.auth.FirebaseUser,com.google.firebase.auth.AuthCredential)
 com.google.firebase.auth.FirebaseAuthProvider
 com.google.firebase.auth.FirebaseUser:
     public abstract java.lang.String getProviderId()
@@ -26221,9 +26233,6 @@ com.google.firebase.auth.MultiFactorAssertion:
     public abstract java.lang.String getFactorId()
 com.google.firebase.auth.MultiFactorInfo:
     public static final java.lang.String FACTOR_ID_KEY
-com.google.firebase.auth.OAuthCredential:
-    public abstract java.lang.String getIdToken()
-    public abstract java.lang.String getSecret()
 com.google.firebase.auth.OAuthProvider$Builder:
     public com.google.firebase.auth.OAuthProvider$Builder addCustomParameter(java.lang.String,java.lang.String)
     public java.util.List getScopes()
@@ -26234,7 +26243,7 @@ com.google.firebase.auth.OAuthProvider:
     public static com.google.firebase.auth.AuthCredential getCredential(java.lang.String,java.lang.String,java.lang.String)
     public java.lang.String getProviderId()
 com.google.firebase.auth.PhoneAuthOptions$Builder:
-    public com.google.firebase.auth.PhoneAuthOptions$Builder requireSmsValidation(boolean)
+    public final com.google.firebase.auth.PhoneAuthOptions$Builder requireSmsValidation(boolean)
 com.google.firebase.auth.PhoneAuthOptions:
     public static com.google.firebase.auth.PhoneAuthOptions$Builder newBuilder()
     public static com.google.firebase.auth.PhoneAuthOptions$Builder newBuilder(com.google.firebase.auth.FirebaseAuth)
@@ -26269,27 +26278,27 @@ com.google.firebase.auth.UserProfileChangeRequest$Builder:
     public java.lang.String getDisplayName()
     public android.net.Uri getPhotoUri()
 com.google.firebase.auth.internal.R
-com.google.firebase.auth.internal.zzac:
+com.google.firebase.auth.internal.zzaa:
+    public static com.google.firebase.auth.FirebaseUser zza(com.google.firebase.FirebaseApp,com.google.firebase.auth.FirebaseUser)
+com.google.firebase.auth.internal.zzae:
     public final com.google.android.gms.tasks.Task unenroll(com.google.firebase.auth.MultiFactorInfo)
-com.google.firebase.auth.internal.zzbf:
+com.google.firebase.auth.internal.zzbj:
     public final com.google.android.gms.tasks.Task zza()
-com.google.firebase.auth.internal.zzbw:
+com.google.firebase.auth.internal.zzby:
     public final void openInOtpApp(java.lang.String,java.lang.String,android.app.Activity)
-    private static final void zzb(java.lang.String,android.app.Activity)
-com.google.firebase.auth.internal.zzbz:
+    private static void zza(java.lang.String,android.app.Activity)
+com.google.firebase.auth.internal.zzcc:
     public final com.google.android.gms.tasks.Task zza()
-com.google.firebase.auth.internal.zzn:
+com.google.firebase.auth.internal.zzq:
     public final com.google.firebase.auth.MultiFactorInfo getMultiFactorInfo()
-com.google.firebase.auth.internal.zzo:
+com.google.firebase.auth.internal.zzt:
     public final java.lang.String getData(int)
-com.google.firebase.auth.internal.zzx:
-    public static com.google.firebase.auth.FirebaseUser zzk(com.google.firebase.FirebaseApp,com.google.firebase.auth.FirebaseUser)
+com.google.firebase.auth.ktx.AuthKt
 com.google.firebase.auth.zzab
-com.google.firebase.auth.zzae
-com.google.firebase.auth.zze:
-    public final java.lang.String getIdToken()
-    public final java.lang.String getSecret()
-com.google.firebase.auth.zzy
+com.google.firebase.auth.zzac
+com.google.firebase.auth.zzf:
+    public static com.google.firebase.auth.zzf zza(java.lang.String,java.lang.String,java.lang.String)
+com.google.firebase.auth.zzx
 com.google.firebase.components.BuildConfig
 com.google.firebase.components.Component$Builder:
     public com.google.firebase.components.Component$Builder publishes(java.lang.Class)
@@ -26351,6 +26360,11 @@ com.google.firebase.concurrent.PausableExecutorServiceImpl
 com.google.firebase.concurrent.PausableScheduledExecutorService
 com.google.firebase.concurrent.PausableScheduledExecutorServiceImpl
 com.google.firebase.database.BuildConfig
+com.google.firebase.database.ChildEvent$Added
+com.google.firebase.database.ChildEvent$Changed
+com.google.firebase.database.ChildEvent$Moved
+com.google.firebase.database.ChildEvent$Removed
+com.google.firebase.database.ChildEvent
 com.google.firebase.database.DataSnapshot:
     public com.google.firebase.database.DataSnapshot child(java.lang.String)
     public java.lang.Object getValue(com.google.firebase.database.GenericTypeIndicator)
@@ -26371,6 +26385,19 @@ com.google.firebase.database.DatabaseError:
     public static final int UNKNOWN_ERROR
     public static final int USER_CODE_EXCEPTION
     public static final int WRITE_CANCELED
+com.google.firebase.database.DatabaseKt$childEvents$1$1
+com.google.firebase.database.DatabaseKt$childEvents$1$listener$1
+com.google.firebase.database.DatabaseKt$childEvents$1
+com.google.firebase.database.DatabaseKt$getValue$1
+com.google.firebase.database.DatabaseKt$getValue$2
+com.google.firebase.database.DatabaseKt$snapshots$1$1
+com.google.firebase.database.DatabaseKt$snapshots$1$listener$1
+com.google.firebase.database.DatabaseKt$snapshots$1
+com.google.firebase.database.DatabaseKt$values$$inlined$map$1$1
+com.google.firebase.database.DatabaseKt$values$$inlined$map$1$2$1
+com.google.firebase.database.DatabaseKt$values$$inlined$map$1$2
+com.google.firebase.database.DatabaseKt$values$$inlined$map$1
+com.google.firebase.database.DatabaseKt
 com.google.firebase.database.DatabaseReference$5
 com.google.firebase.database.DatabaseReference:
     private static com.google.firebase.database.core.DatabaseConfig defaultConfig
@@ -26458,12 +26485,7 @@ com.google.firebase.database.R
 com.google.firebase.database.ServerValue
 com.google.firebase.database.Transaction:
     public void <init>()
-com.google.firebase.database.android.AndroidAppCheckTokenProvider$$InternalSyntheticLambda$5$d69fbf9aa7e09b53d2866e4f991ce24e249b5421c5a4b05d2a6010ad159c7431$0:
-    public final void onAppCheckTokenChanged(com.google.firebase.appcheck.AppCheckTokenResult)
 com.google.firebase.database.android.AndroidAppCheckTokenProvider:
-    public static synthetic void $r8$lambda$60vFfzkhuN4dN7asQDMFpqCxmE0(java.util.concurrent.ExecutorService,com.google.firebase.database.core.TokenProvider$TokenChangeListener,com.google.firebase.appcheck.AppCheckTokenResult)
-    private static synthetic void lambda$addTokenChangeListener$3(com.google.firebase.database.core.TokenProvider$TokenChangeListener,com.google.firebase.appcheck.AppCheckTokenResult)
-    private static synthetic void lambda$addTokenChangeListener$4(java.util.concurrent.ExecutorService,com.google.firebase.database.core.TokenProvider$TokenChangeListener,com.google.firebase.appcheck.AppCheckTokenResult)
     public void removeTokenChangeListener(com.google.firebase.database.core.TokenProvider$TokenChangeListener)
 com.google.firebase.database.android.AndroidAuthTokenProvider:
     public void removeTokenChangeListener(com.google.firebase.database.core.TokenProvider$TokenChangeListener)
@@ -26846,6 +26868,24 @@ com.google.firebase.database.core.view.View:
     java.util.List getEventRegistrations()
 com.google.firebase.database.core.view.filter.package-info
 com.google.firebase.database.core.view.package-info
+com.google.firebase.database.ktx.ChildEvent$Added
+com.google.firebase.database.ktx.ChildEvent$Changed
+com.google.firebase.database.ktx.ChildEvent$Moved
+com.google.firebase.database.ktx.ChildEvent$Removed
+com.google.firebase.database.ktx.ChildEvent
+com.google.firebase.database.ktx.DatabaseKt$childEvents$1$1
+com.google.firebase.database.ktx.DatabaseKt$childEvents$1$listener$1
+com.google.firebase.database.ktx.DatabaseKt$childEvents$1
+com.google.firebase.database.ktx.DatabaseKt$getValue$1
+com.google.firebase.database.ktx.DatabaseKt$getValue$2
+com.google.firebase.database.ktx.DatabaseKt$snapshots$1$1
+com.google.firebase.database.ktx.DatabaseKt$snapshots$1$listener$1
+com.google.firebase.database.ktx.DatabaseKt$snapshots$1
+com.google.firebase.database.ktx.DatabaseKt$values$$inlined$map$1$1
+com.google.firebase.database.ktx.DatabaseKt$values$$inlined$map$1$2$1
+com.google.firebase.database.ktx.DatabaseKt$values$$inlined$map$1$2
+com.google.firebase.database.ktx.DatabaseKt$values$$inlined$map$1
+com.google.firebase.database.ktx.DatabaseKt
 com.google.firebase.database.logging.package-info
 com.google.firebase.database.snapshot.ChildKey:
     public static final java.lang.String MAX_KEY_NAME
@@ -26925,7 +26965,6 @@ com.google.firebase.dynamicloading.ComponentLoader:
     public abstract void discoverComponents()
 com.google.firebase.encoders.ObjectEncoderContext:
     public abstract com.google.firebase.encoders.ObjectEncoderContext add(com.google.firebase.encoders.FieldDescriptor,float)
-    public abstract com.google.firebase.encoders.ObjectEncoderContext add(com.google.firebase.encoders.FieldDescriptor,boolean)
     public abstract com.google.firebase.encoders.ObjectEncoderContext add(java.lang.String,double)
     public abstract com.google.firebase.encoders.ObjectEncoderContext add(java.lang.String,int)
     public abstract com.google.firebase.encoders.ObjectEncoderContext add(java.lang.String,long)
@@ -26953,7 +26992,6 @@ com.google.firebase.encoders.json.JsonDataEncoderBuilder:
 com.google.firebase.encoders.json.JsonValueObjectEncoderContext:
     private void <init>(com.google.firebase.encoders.json.JsonValueObjectEncoderContext)
     public com.google.firebase.encoders.ObjectEncoderContext add(com.google.firebase.encoders.FieldDescriptor,float)
-    public com.google.firebase.encoders.ObjectEncoderContext add(com.google.firebase.encoders.FieldDescriptor,boolean)
     public synthetic bridge com.google.firebase.encoders.ObjectEncoderContext add(java.lang.String,double)
     public synthetic bridge com.google.firebase.encoders.ObjectEncoderContext add(java.lang.String,int)
     public synthetic bridge com.google.firebase.encoders.ObjectEncoderContext add(java.lang.String,long)
@@ -26965,7 +27003,6 @@ com.google.firebase.encoders.json.JsonValueObjectEncoderContext:
     public synthetic bridge com.google.firebase.encoders.ValueEncoderContext add(long)
     public synthetic bridge com.google.firebase.encoders.ValueEncoderContext add(byte[])
     public com.google.firebase.encoders.json.JsonValueObjectEncoderContext add(float)
-    public com.google.firebase.encoders.json.JsonValueObjectEncoderContext add(java.lang.String,boolean)
     public com.google.firebase.encoders.ObjectEncoderContext inline(java.lang.Object)
     public com.google.firebase.encoders.ObjectEncoderContext nested(com.google.firebase.encoders.FieldDescriptor)
     public com.google.firebase.encoders.ObjectEncoderContext nested(java.lang.String)
@@ -26974,13 +27011,11 @@ com.google.firebase.encoders.proto.AtProtobuf:
     public com.google.firebase.encoders.proto.AtProtobuf intEncoding(com.google.firebase.encoders.proto.Protobuf$IntEncoding)
 com.google.firebase.encoders.proto.ProtobufDataEncoderContext:
     public com.google.firebase.encoders.ObjectEncoderContext add(com.google.firebase.encoders.FieldDescriptor,float)
-    public synthetic bridge com.google.firebase.encoders.ObjectEncoderContext add(com.google.firebase.encoders.FieldDescriptor,boolean)
     public com.google.firebase.encoders.ObjectEncoderContext add(java.lang.String,double)
     public com.google.firebase.encoders.ObjectEncoderContext add(java.lang.String,int)
     public com.google.firebase.encoders.ObjectEncoderContext add(java.lang.String,long)
     public com.google.firebase.encoders.ObjectEncoderContext add(java.lang.String,java.lang.Object)
     public com.google.firebase.encoders.ObjectEncoderContext add(java.lang.String,boolean)
-    public com.google.firebase.encoders.proto.ProtobufDataEncoderContext add(com.google.firebase.encoders.FieldDescriptor,boolean)
     public com.google.firebase.encoders.ObjectEncoderContext inline(java.lang.Object)
     public com.google.firebase.encoders.ObjectEncoderContext nested(com.google.firebase.encoders.FieldDescriptor)
     public com.google.firebase.encoders.ObjectEncoderContext nested(java.lang.String)
@@ -27104,6 +27139,19 @@ com.google.firebase.firestore.FirebaseFirestoreSettings:
     static final long DEFAULT_CACHE_SIZE_BYTES
     public static final java.lang.String DEFAULT_HOST
     static final long MINIMUM_CACHE_BYTES
+com.google.firebase.firestore.FirestoreKt$dataObjects$$inlined$map$1$1
+com.google.firebase.firestore.FirestoreKt$dataObjects$$inlined$map$1$2$1
+com.google.firebase.firestore.FirestoreKt$dataObjects$$inlined$map$1$2
+com.google.firebase.firestore.FirestoreKt$dataObjects$$inlined$map$1
+com.google.firebase.firestore.FirestoreKt$dataObjects$$inlined$map$2$1
+com.google.firebase.firestore.FirestoreKt$dataObjects$$inlined$map$2$2$1
+com.google.firebase.firestore.FirestoreKt$dataObjects$$inlined$map$2$2
+com.google.firebase.firestore.FirestoreKt$dataObjects$$inlined$map$2
+com.google.firebase.firestore.FirestoreKt$snapshots$1$1
+com.google.firebase.firestore.FirestoreKt$snapshots$1
+com.google.firebase.firestore.FirestoreKt$snapshots$2$1
+com.google.firebase.firestore.FirestoreKt$snapshots$2
+com.google.firebase.firestore.FirestoreKt
 com.google.firebase.firestore.LoadBundleTask:
     public com.google.firebase.firestore.LoadBundleTask addOnProgressListener(android.app.Activity,com.google.firebase.firestore.OnProgressListener)
     public com.google.firebase.firestore.LoadBundleTask addOnProgressListener(java.util.concurrent.Executor,com.google.firebase.firestore.OnProgressListener)
@@ -27182,13 +27230,8 @@ com.google.firebase.firestore.WriteBatch$Function
 com.google.firebase.firestore.WriteBatch:
     public varargs com.google.firebase.firestore.WriteBatch update(com.google.firebase.firestore.DocumentReference,com.google.firebase.firestore.FieldPath,java.lang.Object,java.lang.Object[])
     public varargs com.google.firebase.firestore.WriteBatch update(com.google.firebase.firestore.DocumentReference,java.lang.String,java.lang.Object,java.lang.Object[])
-com.google.firebase.firestore.auth.FirebaseAppCheckTokenProvider$$InternalSyntheticLambda$1$27ff23f4c9e6d8454f7d9eaf228b10ce44c2a4d037cebaccfc40ced46a6a17f7$0:
-    public final void onAppCheckTokenChanged(com.google.firebase.appcheck.AppCheckTokenResult)
 com.google.firebase.firestore.auth.FirebaseAppCheckTokenProvider:
     private static final java.lang.String LOG_TAG
-    public static synthetic void $r8$lambda$hu48mr03bfT6X2LDSOXJket2KbA(com.google.firebase.firestore.auth.FirebaseAppCheckTokenProvider,com.google.firebase.appcheck.AppCheckTokenResult)
-    private synthetic void lambda$new$0(com.google.firebase.appcheck.AppCheckTokenResult)
-    private synchronized void onTokenChanged(com.google.firebase.appcheck.AppCheckTokenResult)
 com.google.firebase.firestore.auth.FirebaseAuthCredentialsProvider:
     private static final java.lang.String LOG_TAG
 com.google.firebase.firestore.auth.Token
@@ -27202,6 +27245,8 @@ com.google.firebase.firestore.core.ActivityScope:
     private static final java.lang.String FRAGMENT_TAG
     private static final java.lang.String SUPPORT_FRAGMENT_TAG
     public void <init>()
+com.google.firebase.firestore.core.CompositeFilter:
+    private com.google.firebase.firestore.core.FieldFilter findFirstMatchingFilter(com.google.firebase.firestore.util.Function)
 com.google.firebase.firestore.core.FirestoreClient:
     private static final java.lang.String LOG_TAG
     private static final int MAX_CONCURRENT_LIMBO_RESOLUTIONS
@@ -27269,6 +27314,19 @@ com.google.firebase.firestore.index.OrderedCodeWriter:
     public static final byte SEPARATOR
     public void reset()
 com.google.firebase.firestore.index.package-info
+com.google.firebase.firestore.ktx.FirestoreKt$dataObjects$$inlined$map$1$1
+com.google.firebase.firestore.ktx.FirestoreKt$dataObjects$$inlined$map$1$2$1
+com.google.firebase.firestore.ktx.FirestoreKt$dataObjects$$inlined$map$1$2
+com.google.firebase.firestore.ktx.FirestoreKt$dataObjects$$inlined$map$1
+com.google.firebase.firestore.ktx.FirestoreKt$dataObjects$$inlined$map$2$1
+com.google.firebase.firestore.ktx.FirestoreKt$dataObjects$$inlined$map$2$2$1
+com.google.firebase.firestore.ktx.FirestoreKt$dataObjects$$inlined$map$2$2
+com.google.firebase.firestore.ktx.FirestoreKt$dataObjects$$inlined$map$2
+com.google.firebase.firestore.ktx.FirestoreKt$snapshots$1$1
+com.google.firebase.firestore.ktx.FirestoreKt$snapshots$1
+com.google.firebase.firestore.ktx.FirestoreKt$snapshots$2$1
+com.google.firebase.firestore.ktx.FirestoreKt$snapshots$2
+com.google.firebase.firestore.ktx.FirestoreKt
 com.google.firebase.firestore.local.EncodedPath:
     private static final char ENCODED_ESCAPE
     private static final char ENCODED_NUL
@@ -27827,11 +27885,6 @@ com.google.firebase.firestore.util.package-info
 com.google.firebase.functions.BuildConfig
 com.google.firebase.functions.DaggerFunctionsComponent:
     private void <init>()
-com.google.firebase.functions.FirebaseContextProvider$$InternalSyntheticLambda$3$9f8af96c98a9d7d952135de52aab70adf1456c590731f059b4af13976b540236$0:
-    public final void onAppCheckTokenChanged(com.google.firebase.appcheck.AppCheckTokenResult)
-com.google.firebase.functions.FirebaseContextProvider:
-    public static synthetic void $r8$lambda$qxwpW2MXdQeNzRquYTOSrwCOtMQ(com.google.firebase.appcheck.AppCheckTokenResult)
-    private static synthetic void lambda$new$0(com.google.firebase.appcheck.AppCheckTokenResult)
 com.google.firebase.functions.FirebaseFunctions:
     public com.google.firebase.functions.HttpsCallableReference getHttpsCallable(java.lang.String)
     public com.google.firebase.functions.HttpsCallableReference getHttpsCallableFromUrl(java.net.URL)
@@ -27842,6 +27895,7 @@ com.google.firebase.functions.FirebaseFunctions:
 com.google.firebase.functions.FirebaseFunctionsException$Code:
     static com.google.firebase.functions.FirebaseFunctionsException$Code fromValue(int)
 com.google.firebase.functions.FunctionsComponent$MainModule
+com.google.firebase.functions.FunctionsKt
 com.google.firebase.functions.HttpsCallOptions:
     private static final long DEFAULT_TIMEOUT
     void <init>()
@@ -27890,6 +27944,7 @@ com.google.firebase.functions.dagger.internal.Preconditions:
     public static java.lang.Object checkNotNullFromComponent(java.lang.Object)
 com.google.firebase.functions.dagger.internal.QualifierMetadata
 com.google.firebase.functions.dagger.internal.ScopeMetadata
+com.google.firebase.functions.ktx.FunctionsKt
 com.google.firebase.heartbeatinfo.AutoValue_SdkHeartBeatResult
 com.google.firebase.heartbeatinfo.HeartBeatConsumerComponent:
     private void <init>()
@@ -27973,6 +28028,7 @@ com.google.firebase.installations.FirebaseInstallationsException:
     public com.google.firebase.installations.FirebaseInstallationsException$Status getStatus()
 com.google.firebase.installations.InstallationTokenResult:
     public abstract com.google.firebase.installations.InstallationTokenResult$Builder toBuilder()
+com.google.firebase.installations.InstallationsKt
 com.google.firebase.installations.R$attr
 com.google.firebase.installations.R$color
 com.google.firebase.installations.R$dimen
@@ -28002,6 +28058,7 @@ com.google.firebase.installations.interop.R$string
 com.google.firebase.installations.interop.R$style
 com.google.firebase.installations.interop.R$styleable
 com.google.firebase.installations.interop.R
+com.google.firebase.installations.ktx.InstallationsKt
 com.google.firebase.installations.local.IidStore:
     private static final java.lang.String IID_SHARED_PREFS_NAME
     private static final java.lang.String JSON_ENCODED_PREFIX
@@ -28076,6 +28133,7 @@ com.google.firebase.ktx.BuildConfig
 com.google.firebase.ktx.Firebase
 com.google.firebase.ktx.FirebaseKt$coroutineDispatcher$1
 com.google.firebase.ktx.FirebaseKt
+com.google.firebase.ktx.LoggingKt
 com.google.firebase.ktx.R$attr
 com.google.firebase.ktx.R$color
 com.google.firebase.ktx.R$dimen
@@ -28098,7 +28156,7 @@ com.google.firebase.messaging.ByteStreams:
     private void <init>()
     static byte[] createBuffer()
 com.google.firebase.messaging.CommonNotificationBuilder:
-    private static final java.lang.String ACTION_MESSAGING_EVENT
+    private static final java.lang.String ACTION_RECEIVER
     public static final java.lang.String FCM_FALLBACK_NOTIFICATION_CHANNEL
     public static final java.lang.String FCM_FALLBACK_NOTIFICATION_CHANNEL_LABEL
     private static final java.lang.String FCM_FALLBACK_NOTIFICATION_CHANNEL_NAME_NO_RESOURCE
@@ -28228,6 +28286,7 @@ com.google.firebase.messaging.MessagingAnalytics:
     private static int getMessagePriority(java.lang.String)
     static int getMessagePriorityForFirelog(android.os.Bundle)
     static int getPriority(android.os.Bundle)
+com.google.firebase.messaging.MessagingKt
 com.google.firebase.messaging.Metadata:
     private static final java.lang.String ACTION_C2DM_REGISTER
     private static final java.lang.String ACTION_IID_TOKEN_REQUEST
@@ -28356,6 +28415,7 @@ com.google.firebase.messaging.WakeLockHolder:
     static void acquireWakeLock(android.content.Intent,long)
     static void initWakeLock(android.content.Context)
     static void reset()
+com.google.firebase.messaging.ktx.MessagingKt
 com.google.firebase.messaging.reporting.MessagingClientEvent$Builder:
     public com.google.firebase.messaging.reporting.MessagingClientEvent$Builder setBulkId(long)
     public com.google.firebase.messaging.reporting.MessagingClientEvent$Builder setCampaignId(long)
@@ -28410,6 +28470,7 @@ com.google.firebase.perf.FirebasePerformance:
     public void setPerformanceCollectionEnabled(boolean)
     public static com.google.firebase.perf.metrics.Trace startTrace(java.lang.String)
 com.google.firebase.perf.FirebasePerformanceAttributable
+com.google.firebase.perf.PerformanceKt
 com.google.firebase.perf.R$anim
 com.google.firebase.perf.R$attr
 com.google.firebase.perf.R$bool
@@ -28430,14 +28491,10 @@ com.google.firebase.perf.application.AppStateMonitor:
     com.google.firebase.perf.util.Timer getPauseTime()
     com.google.firebase.perf.util.Timer getResumeTime()
     java.util.WeakHashMap getResumed()
-    public boolean isColdStart()
     public boolean isForeground()
     public void setIsColdStart(boolean)
     void setStopTime(com.google.firebase.perf.util.Timer)
     public synchronized void unregisterActivityLifecycleCallbacks(android.content.Context)
-com.google.firebase.perf.application.AppStateUpdateHandler:
-    protected void <init>()
-    public java.lang.ref.WeakReference getAppStateCallback()
 com.google.firebase.perf.application.FragmentStateMonitor:
     java.util.WeakHashMap getFragmentToTraceMap()
 com.google.firebase.perf.application.FrameMetricsRecorder:
@@ -28445,6 +28502,7 @@ com.google.firebase.perf.application.FrameMetricsRecorder:
 com.google.firebase.perf.config.ConfigResolver:
     public static void clearInstance()
     private java.lang.Long getRemoteConfigValue(com.google.firebase.perf.config.ConfigurationFlag)
+    public boolean isCollectionEnabledConfigValueAvailable()
     public void setContentProviderContext(android.content.Context)
     public void setDeviceCacheManager(com.google.firebase.perf.config.DeviceCacheManager)
 com.google.firebase.perf.config.ConfigurationConstants$CollectionDeactivated:
@@ -28501,6 +28559,7 @@ com.google.firebase.perf.config.DeviceCacheManager:
     private static final java.lang.String PREFS_NAME
     public static void clearInstance()
     public boolean containsKey(java.lang.String)
+com.google.firebase.perf.ktx.PerformanceKt
 com.google.firebase.perf.logging.AndroidLogger:
     public void verbose(java.lang.String)
     public varargs void verbose(java.lang.String,java.lang.Object[])
@@ -29412,7 +29471,6 @@ com.google.firebase.provider.FirebaseInitProvider:
     static final java.lang.String EMPTY_APPLICATION_ID_PROVIDER_AUTHORITY
     private static final java.lang.String TAG
 com.google.firebase.remoteconfig.BuildConfig
-com.google.firebase.remoteconfig.ConfigUpdateListenerRegistration
 com.google.firebase.remoteconfig.FirebaseRemoteConfig:
     public static final boolean DEFAULT_VALUE_FOR_BOOLEAN
     public static final double DEFAULT_VALUE_FOR_DOUBLE
@@ -29426,37 +29484,26 @@ com.google.firebase.remoteconfig.FirebaseRemoteConfig:
     public static final int VALUE_SOURCE_DEFAULT
     public static final int VALUE_SOURCE_REMOTE
     public static final int VALUE_SOURCE_STATIC
-    public com.google.firebase.remoteconfig.ConfigUpdateListenerRegistration addOnConfigUpdateListener(com.google.firebase.remoteconfig.ConfigUpdateListener)
-    public com.google.android.gms.tasks.Task ensureInitialized()
     public com.google.android.gms.tasks.Task fetch(long)
     public boolean getBoolean(java.lang.String)
     public double getDouble(java.lang.String)
     public static com.google.firebase.remoteconfig.FirebaseRemoteConfig getInstance()
-    public static com.google.firebase.remoteconfig.FirebaseRemoteConfig getInstance(com.google.firebase.FirebaseApp)
     public java.util.Set getKeysByPrefix(java.lang.String)
     public long getLong(java.lang.String)
+    com.google.firebase.remoteconfig.internal.rollouts.RolloutsStateSubscriptionsHandler getRolloutsStateSubscriptionsHandler()
     public java.lang.String getString(java.lang.String)
     public com.google.firebase.remoteconfig.FirebaseRemoteConfigValue getValue(java.lang.String)
-    private static synthetic com.google.firebase.remoteconfig.FirebaseRemoteConfigInfo lambda$ensureInitialized$0(com.google.android.gms.tasks.Task,com.google.android.gms.tasks.Task)
     private static synthetic com.google.android.gms.tasks.Task lambda$fetch$4(com.google.firebase.remoteconfig.internal.ConfigFetchHandler$FetchResponse)
     private synthetic java.lang.Void lambda$reset$6()
-    private synthetic java.lang.Void lambda$setConfigSettingsAsync$5(com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings)
-    private static synthetic com.google.android.gms.tasks.Task lambda$setDefaultsWithStringsMapAsync$7(com.google.firebase.remoteconfig.internal.ConfigContainer)
     public com.google.android.gms.tasks.Task reset()
     public void schedule(java.lang.Runnable)
-    public com.google.android.gms.tasks.Task setConfigSettingsAsync(com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings)
     public com.google.android.gms.tasks.Task setDefaultsAsync(int)
-    public com.google.android.gms.tasks.Task setDefaultsAsync(java.util.Map)
-    private com.google.android.gms.tasks.Task setDefaultsWithStringsMapAsync(java.util.Map)
 com.google.firebase.remoteconfig.FirebaseRemoteConfigException$Code:
     public int value()
 com.google.firebase.remoteconfig.FirebaseRemoteConfigException:
     public com.google.firebase.remoteconfig.FirebaseRemoteConfigException$Code getCode()
 com.google.firebase.remoteconfig.FirebaseRemoteConfigFetchThrottledException:
     public long getThrottleEndTimeMillis()
-com.google.firebase.remoteconfig.FirebaseRemoteConfigInfo:
-    public abstract com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings getConfigSettings()
-    public abstract long getFetchTimeMillis()
 com.google.firebase.remoteconfig.FirebaseRemoteConfigServerException:
     public void <init>(int,java.lang.String,java.lang.Throwable,com.google.firebase.remoteconfig.FirebaseRemoteConfigException$Code)
     public void <init>(java.lang.String,java.lang.Throwable,com.google.firebase.remoteconfig.FirebaseRemoteConfigException$Code)
@@ -29464,11 +29511,7 @@ com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings$Builder:
     public long getFetchTimeoutInSeconds()
     public long getMinimumFetchIntervalInSeconds()
 com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings:
-    public long getFetchTimeoutInSeconds()
-    public long getMinimumFetchIntervalInSeconds()
     public com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings$Builder toBuilder()
-com.google.firebase.remoteconfig.FirebaseRemoteConfigValue:
-    public abstract byte[] asByteArray()
 com.google.firebase.remoteconfig.R$attr
 com.google.firebase.remoteconfig.R$color
 com.google.firebase.remoteconfig.R$dimen
@@ -29489,11 +29532,16 @@ com.google.firebase.remoteconfig.RemoteConfigComponent:
     public static final java.lang.String FETCH_FILE_NAME
     private static final java.lang.String FIREBASE_REMOTE_CONFIG_FILE_NAME_PREFIX
     private static final java.lang.String PREFERENCES_FILE_NAME
+    public void registerRolloutsStateSubscriber(java.lang.String,com.google.firebase.remoteconfig.interop.rollouts.RolloutsStateSubscriber)
     public synchronized void setCustomHeaders(java.util.Map)
 com.google.firebase.remoteconfig.RemoteConfigConstants$ExperimentDescriptionFieldKey
 com.google.firebase.remoteconfig.RemoteConfigConstants$RequestFieldKey
 com.google.firebase.remoteconfig.RemoteConfigConstants$ResponseFieldKey
 com.google.firebase.remoteconfig.RemoteConfigConstants
+com.google.firebase.remoteconfig.RemoteConfigKt$configUpdates$1$1
+com.google.firebase.remoteconfig.RemoteConfigKt$configUpdates$1$registration$1
+com.google.firebase.remoteconfig.RemoteConfigKt$configUpdates$1
+com.google.firebase.remoteconfig.RemoteConfigKt
 com.google.firebase.remoteconfig.internal.Code
 com.google.firebase.remoteconfig.internal.ConfigAutoFetch:
     private static final int MAXIMUM_FETCH_ATTEMPTS
@@ -29507,12 +29555,15 @@ com.google.firebase.remoteconfig.internal.ConfigCacheClient:
     synchronized com.google.android.gms.tasks.Task getCachedContainerTask()
 com.google.firebase.remoteconfig.internal.ConfigContainer$Builder:
     public void <init>(com.google.firebase.remoteconfig.internal.ConfigContainer)
-    public com.google.firebase.remoteconfig.internal.ConfigContainer$Builder replaceConfigsWith(java.util.Map)
 com.google.firebase.remoteconfig.internal.ConfigContainer:
     static final java.lang.String ABT_EXPERIMENTS_KEY
     static final java.lang.String CONFIGS_KEY
     static final java.lang.String FETCH_TIME_KEY
     static final java.lang.String PERSONALIZATION_METADATA_KEY
+    public static final java.lang.String ROLLOUT_METADATA_AFFECTED_KEYS
+    public static final java.lang.String ROLLOUT_METADATA_ID
+    static final java.lang.String ROLLOUT_METADATA_KEY
+    public static final java.lang.String ROLLOUT_METADATA_VARIANT_ID
     static final java.lang.String TEMPLATE_VERSION_NUMBER_KEY
     public static com.google.firebase.remoteconfig.internal.ConfigContainer$Builder newBuilder(com.google.firebase.remoteconfig.internal.ConfigContainer)
 com.google.firebase.remoteconfig.internal.ConfigFetchHandler$FetchResponse$Status
@@ -29543,7 +29594,6 @@ com.google.firebase.remoteconfig.internal.ConfigGetParameterHandler:
     private static java.util.TreeSet getKeysByPrefix(java.lang.String,com.google.firebase.remoteconfig.internal.ConfigContainer)
     public long getLong(java.lang.String)
     private static java.lang.Long getLongFromCache(com.google.firebase.remoteconfig.internal.ConfigCacheClient,java.lang.String)
-    public java.lang.String getString(java.lang.String)
 com.google.firebase.remoteconfig.internal.ConfigMetadataClient:
     private static final java.lang.String BACKOFF_END_TIME_IN_MILLIS_KEY
     private static final java.lang.String FETCH_TIMEOUT_IN_SECONDS_KEY
@@ -29561,13 +29611,7 @@ com.google.firebase.remoteconfig.internal.ConfigMetadataClient:
     private static final java.lang.String REALTIME_BACKOFF_END_TIME_IN_MILLIS_KEY
     public void clear()
     int getLastFetchStatus()
-    public void setConfigSettings(com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings)
     public void setConfigSettingsWithoutWaitingOnDiskWrite(com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings)
-com.google.firebase.remoteconfig.internal.ConfigRealtimeHandler$ConfigUpdateListenerRegistrationInternal
-com.google.firebase.remoteconfig.internal.ConfigRealtimeHandler:
-    static synthetic void access$000(com.google.firebase.remoteconfig.internal.ConfigRealtimeHandler,com.google.firebase.remoteconfig.ConfigUpdateListener)
-    public synchronized com.google.firebase.remoteconfig.ConfigUpdateListenerRegistration addRealtimeConfigUpdateListener(com.google.firebase.remoteconfig.ConfigUpdateListener)
-    private synchronized void removeRealtimeConfigUpdateListener(com.google.firebase.remoteconfig.ConfigUpdateListener)
 com.google.firebase.remoteconfig.internal.ConfigRealtimeHttpClient:
     private static final java.lang.String API_KEY_HEADER
     private static final java.lang.String INSTALLATIONS_AUTH_TOKEN_HEADER
@@ -29581,12 +29625,8 @@ com.google.firebase.remoteconfig.internal.ConfigStorageClient:
     private static final java.lang.String JSON_STRING_ENCODING
     public static synchronized void clearInstancesForTest()
 com.google.firebase.remoteconfig.internal.DefaultsXmlParser
-com.google.firebase.remoteconfig.internal.FirebaseRemoteConfigInfoImpl:
-    public com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings getConfigSettings()
-    public long getFetchTimeMillis()
 com.google.firebase.remoteconfig.internal.FirebaseRemoteConfigValueImpl:
     private static final java.lang.String ILLEGAL_ARGUMENT_STRING_FORMAT
-    public byte[] asByteArray()
 com.google.firebase.remoteconfig.internal.Personalization:
     public static final java.lang.String ANALYTICS_ORIGIN_PERSONALIZATION
     public static final java.lang.String ARM_INDEX
@@ -29601,13 +29641,37 @@ com.google.firebase.remoteconfig.internal.Personalization:
     public static final java.lang.String INTERNAL_CHOICE_ID_PARAM
     public static final java.lang.String INTERNAL_EVENT
     public static final java.lang.String PERSONALIZATION_ID
+com.google.firebase.remoteconfig.internal.rollouts.RolloutsStateSubscriptionsHandler:
+    private static synthetic void lambda$registerRolloutsStateSubscriber$0(com.google.firebase.remoteconfig.interop.rollouts.RolloutsStateSubscriber,com.google.firebase.remoteconfig.interop.rollouts.RolloutsState)
+    private synthetic void lambda$registerRolloutsStateSubscriber$1(com.google.android.gms.tasks.Task,com.google.firebase.remoteconfig.interop.rollouts.RolloutsStateSubscriber,com.google.firebase.remoteconfig.internal.ConfigContainer)
+    public void registerRolloutsStateSubscriber(com.google.firebase.remoteconfig.interop.rollouts.RolloutsStateSubscriber)
+com.google.firebase.remoteconfig.interop.FirebaseRemoteConfigInterop:
+    public abstract void registerRolloutsStateSubscriber(java.lang.String,com.google.firebase.remoteconfig.interop.rollouts.RolloutsStateSubscriber)
+com.google.firebase.remoteconfig.interop.rollouts.AutoRolloutAssignmentEncoder:
+    public static final int CODEGEN_VERSION
+com.google.firebase.remoteconfig.interop.rollouts.RolloutAssignment:
+    private static final java.lang.String PARAMETER_KEY
+    private static final java.lang.String PARAMETER_VALUE
+    private static final java.lang.String ROLLOUT_ID
+    private static final java.lang.String TEMPLATE_VERSION
+    private static final java.lang.String VARIANT_ID
+    public static com.google.firebase.remoteconfig.interop.rollouts.RolloutAssignment create(java.lang.String)
+    public static com.google.firebase.remoteconfig.interop.rollouts.RolloutAssignment create(org.json.JSONObject)
+com.google.firebase.remoteconfig.ktx.RemoteConfigKt$configUpdates$1$1
+com.google.firebase.remoteconfig.ktx.RemoteConfigKt$configUpdates$1$registration$1
+com.google.firebase.remoteconfig.ktx.RemoteConfigKt$configUpdates$1
+com.google.firebase.remoteconfig.ktx.RemoteConfigKt
+com.google.firebase.remoteconfiginterop.BuildConfig
+com.google.firebase.remoteconfiginterop.R
 com.google.firebase.sessions.AndroidApplicationInfo:
     public final java.lang.String component1()
     public final java.lang.String component2()
     public final java.lang.String component3()
     public final java.lang.String component4()
-    public final com.google.firebase.sessions.AndroidApplicationInfo copy(java.lang.String,java.lang.String,java.lang.String,java.lang.String)
-    public static synthetic com.google.firebase.sessions.AndroidApplicationInfo copy$default(com.google.firebase.sessions.AndroidApplicationInfo,java.lang.String,java.lang.String,java.lang.String,java.lang.String,int,java.lang.Object)
+    public final com.google.firebase.sessions.ProcessDetails component5()
+    public final java.util.List component6()
+    public final com.google.firebase.sessions.AndroidApplicationInfo copy(java.lang.String,java.lang.String,java.lang.String,java.lang.String,com.google.firebase.sessions.ProcessDetails,java.util.List)
+    public static synthetic com.google.firebase.sessions.AndroidApplicationInfo copy$default(com.google.firebase.sessions.AndroidApplicationInfo,java.lang.String,java.lang.String,java.lang.String,java.lang.String,com.google.firebase.sessions.ProcessDetails,java.util.List,int,java.lang.Object)
 com.google.firebase.sessions.ApplicationInfo:
     public final java.lang.String component1()
     public final java.lang.String component2()
@@ -29631,12 +29695,19 @@ com.google.firebase.sessions.EventGDTLogger:
     private static final java.lang.String TAG
 com.google.firebase.sessions.FirebaseSessions$Companion:
     public final com.google.firebase.sessions.FirebaseSessions getInstance()
-    public final com.google.firebase.sessions.FirebaseSessions getInstance(com.google.firebase.FirebaseApp)
-    public static synthetic void getInstance$annotations()
 com.google.firebase.sessions.FirebaseSessions:
     private static final java.lang.String TAG
-    public static final com.google.firebase.sessions.FirebaseSessions getInstance()
-    public static final com.google.firebase.sessions.FirebaseSessions getInstance(com.google.firebase.FirebaseApp)
+com.google.firebase.sessions.FirebaseSessionsData:
+    public final java.lang.String component1()
+    public final com.google.firebase.sessions.FirebaseSessionsData copy(java.lang.String)
+    public static synthetic com.google.firebase.sessions.FirebaseSessionsData copy$default(com.google.firebase.sessions.FirebaseSessionsData,java.lang.String,int,java.lang.Object)
+com.google.firebase.sessions.ProcessDetails:
+    public final java.lang.String component1()
+    public final int component2()
+    public final int component3()
+    public final boolean component4()
+    public final com.google.firebase.sessions.ProcessDetails copy(java.lang.String,int,int,boolean)
+    public static synthetic com.google.firebase.sessions.ProcessDetails copy$default(com.google.firebase.sessions.ProcessDetails,java.lang.String,int,int,boolean,int,java.lang.Object)
 com.google.firebase.sessions.R$attr
 com.google.firebase.sessions.R$color
 com.google.firebase.sessions.R$dimen
@@ -29649,7 +29720,9 @@ com.google.firebase.sessions.R$string
 com.google.firebase.sessions.R$style
 com.google.firebase.sessions.R$styleable
 com.google.firebase.sessions.R
-com.google.firebase.sessions.SessionCoordinator:
+com.google.firebase.sessions.SessionDatastoreImpl$special$$inlined$map$1$2$1:
+    java.lang.Object L$0
+com.google.firebase.sessions.SessionDatastoreImpl:
     private static final java.lang.String TAG
 com.google.firebase.sessions.SessionDetails:
     public final java.lang.String component1()
@@ -29665,8 +29738,13 @@ com.google.firebase.sessions.SessionEvent:
     public final com.google.firebase.sessions.SessionEvent copy(com.google.firebase.sessions.EventType,com.google.firebase.sessions.SessionInfo,com.google.firebase.sessions.ApplicationInfo)
     public static synthetic com.google.firebase.sessions.SessionEvent copy$default(com.google.firebase.sessions.SessionEvent,com.google.firebase.sessions.EventType,com.google.firebase.sessions.SessionInfo,com.google.firebase.sessions.ApplicationInfo,int,java.lang.Object)
 com.google.firebase.sessions.SessionEvents:
-    public static synthetic com.google.firebase.sessions.SessionEvent startSession$default(com.google.firebase.sessions.SessionEvents,com.google.firebase.FirebaseApp,com.google.firebase.sessions.SessionDetails,com.google.firebase.sessions.settings.SessionsSettings,java.util.Map,int,java.lang.Object)
+    public static synthetic com.google.firebase.sessions.SessionEvent buildSession$default(com.google.firebase.sessions.SessionEvents,com.google.firebase.FirebaseApp,com.google.firebase.sessions.SessionDetails,com.google.firebase.sessions.settings.SessionsSettings,com.google.firebase.sessions.ProcessDetails,java.util.List,java.util.Map,java.lang.String,int,java.lang.Object)
+com.google.firebase.sessions.SessionFirelogPublisherImpl:
+    private static final java.lang.String TAG
+com.google.firebase.sessions.SessionGenerator:
+    public final boolean getHasGenerateSession()
 com.google.firebase.sessions.SessionInfo:
+    public synthetic void <init>(java.lang.String,java.lang.String,int,long,com.google.firebase.sessions.DataCollectionStatus,java.lang.String,int,kotlin.jvm.internal.DefaultConstructorMarker)
     public final java.lang.String component1()
     public final java.lang.String component2()
     public final int component3()
@@ -29675,22 +29753,48 @@ com.google.firebase.sessions.SessionInfo:
     public final java.lang.String component6()
     public final com.google.firebase.sessions.SessionInfo copy(java.lang.String,java.lang.String,int,long,com.google.firebase.sessions.DataCollectionStatus,java.lang.String)
     public static synthetic com.google.firebase.sessions.SessionInfo copy$default(com.google.firebase.sessions.SessionInfo,java.lang.String,java.lang.String,int,long,com.google.firebase.sessions.DataCollectionStatus,java.lang.String,int,java.lang.Object)
-    public final void setDataCollectionStatus(com.google.firebase.sessions.DataCollectionStatus)
-    public final void setEventTimestampUs(long)
-com.google.firebase.sessions.Time:
+com.google.firebase.sessions.SessionLifecycleClient:
+    private static final int MAX_QUEUED_MESSAGES
+    public static final java.lang.String TAG
+com.google.firebase.sessions.SessionLifecycleService:
+    public static final int BACKGROUNDED
+    private static final int CLIENT_BOUND
+    public static final java.lang.String CLIENT_CALLBACK_MESSENGER
+    public static final int FOREGROUNDED
+    public static final int SESSION_UPDATED
+    public static final java.lang.String SESSION_UPDATE_EXTRA
+    public static final java.lang.String TAG
+    public final android.os.HandlerThread getHandlerThread$com_google_firebase_firebase_sessions()
+com.google.firebase.sessions.SessionLifecycleServiceBinderImpl:
+    public static final java.lang.String TAG
+com.google.firebase.sessions.SessionsActivityLifecycleCallbacks:
+    public final boolean getHasPendingForeground$com_google_firebase_firebase_sessions()
+    public static synthetic void getHasPendingForeground$com_google_firebase_firebase_sessions$annotations()
+    public final com.google.firebase.sessions.SessionLifecycleClient getLifecycleClient()
+    public final void setHasPendingForeground$com_google_firebase_firebase_sessions(boolean)
+com.google.firebase.sessions.TimeProvider:
+    public abstract long elapsedRealtime-UwyO8pc()
+com.google.firebase.sessions.WallClock:
     private static final long US_PER_MILLIS
+    public long elapsedRealtime-UwyO8pc()
 com.google.firebase.sessions.api.FirebaseSessionsDependencies$Dependency:
+    public void <init>(kotlinx.coroutines.sync.Mutex,com.google.firebase.sessions.api.SessionSubscriber)
+    public synthetic void <init>(kotlinx.coroutines.sync.Mutex,com.google.firebase.sessions.api.SessionSubscriber,int,kotlin.jvm.internal.DefaultConstructorMarker)
     public final kotlinx.coroutines.sync.Mutex component1()
     public final com.google.firebase.sessions.api.SessionSubscriber component2()
     public final com.google.firebase.sessions.api.FirebaseSessionsDependencies$Dependency copy(kotlinx.coroutines.sync.Mutex,com.google.firebase.sessions.api.SessionSubscriber)
     public static synthetic com.google.firebase.sessions.api.FirebaseSessionsDependencies$Dependency copy$default(com.google.firebase.sessions.api.FirebaseSessionsDependencies$Dependency,kotlinx.coroutines.sync.Mutex,com.google.firebase.sessions.api.SessionSubscriber,int,java.lang.Object)
+    public final void setSubscriber(com.google.firebase.sessions.api.SessionSubscriber)
 com.google.firebase.sessions.api.FirebaseSessionsDependencies:
     private static final java.lang.String TAG
+    public final void addDependency(com.google.firebase.sessions.api.SessionSubscriber$Name)
+    public static final void register(com.google.firebase.sessions.api.SessionSubscriber)
     public final void reset$com_google_firebase_firebase_sessions()
 com.google.firebase.sessions.api.SessionSubscriber$SessionDetails:
     public final java.lang.String component1()
     public final com.google.firebase.sessions.api.SessionSubscriber$SessionDetails copy(java.lang.String)
     public static synthetic com.google.firebase.sessions.api.SessionSubscriber$SessionDetails copy$default(com.google.firebase.sessions.api.SessionSubscriber$SessionDetails,java.lang.String,int,java.lang.Object)
+    public final java.lang.String getSessionId()
 com.google.firebase.sessions.settings.LocalOverrideSettings:
     public static final java.lang.String SAMPLING_RATE
     public static final java.lang.String SESSIONS_ENABLED
@@ -29714,8 +29818,6 @@ com.google.firebase.sessions.settings.SessionConfigs:
     public final java.lang.Long component5()
     public final com.google.firebase.sessions.settings.SessionConfigs copy(java.lang.Boolean,java.lang.Double,java.lang.Integer,java.lang.Integer,java.lang.Long)
     public static synthetic com.google.firebase.sessions.settings.SessionConfigs copy$default(com.google.firebase.sessions.settings.SessionConfigs,java.lang.Boolean,java.lang.Double,java.lang.Integer,java.lang.Integer,java.lang.Long,int,java.lang.Object)
-com.google.firebase.sessions.settings.SessionsSettings:
-    public static final java.lang.String SESSION_CONFIGS_NAME
 com.google.firebase.sessions.settings.SettingsCache$Companion:
     public final androidx.datastore.preferences.core.Preferences$Key getCACHE_DURATION_SECONDS()
     public final androidx.datastore.preferences.core.Preferences$Key getCACHE_UPDATED_TIME()
@@ -29756,13 +29858,12 @@ com.google.firebase.storage.FileDownloadTask:
     static final int PREFERRED_CHUNK_SIZE
     private static final java.lang.String TAG
     long getDownloadedSizeInBytes()
-com.google.firebase.storage.FirebaseStorage$1:
-    public void onAppCheckTokenChanged(com.google.firebase.appcheck.AppCheckTokenResult)
 com.google.firebase.storage.FirebaseStorage:
     private static final java.lang.String STORAGE_BUCKET_WITH_PATH_EXCEPTION
     private static final java.lang.String STORAGE_URI_PARSE_EXCEPTION
     private static final java.lang.String TAG
     public static com.google.firebase.storage.FirebaseStorage getInstance()
+    public static com.google.firebase.storage.FirebaseStorage getInstance(com.google.firebase.FirebaseApp)
     public static com.google.firebase.storage.FirebaseStorage getInstance(java.lang.String)
     public com.google.firebase.storage.StorageReference getReferenceFromUrl(java.lang.String)
     public void setMaxChunkUploadRetry(long)
@@ -29808,6 +29909,9 @@ com.google.firebase.storage.StorageException:
     private static final java.lang.String TAG
     public int getHttpResultCode()
     public boolean getIsRecoverableException()
+com.google.firebase.storage.StorageKt$taskState$1$1
+com.google.firebase.storage.StorageKt$taskState$1
+com.google.firebase.storage.StorageKt
 com.google.firebase.storage.StorageMetadata$Builder:
     public void <init>(com.google.firebase.storage.StorageMetadata)
     public java.lang.String getCacheControl()
@@ -29869,12 +29973,12 @@ com.google.firebase.storage.StorageTask:
     public synthetic bridge com.google.firebase.storage.ControllableTask addOnPausedListener(com.google.firebase.storage.OnPausedListener)
     public synthetic bridge com.google.firebase.storage.ControllableTask addOnPausedListener(java.util.concurrent.Executor,com.google.firebase.storage.OnPausedListener)
     public com.google.firebase.storage.StorageTask addOnPausedListener(android.app.Activity,com.google.firebase.storage.OnPausedListener)
-    public com.google.firebase.storage.StorageTask addOnPausedListener(com.google.firebase.storage.OnPausedListener)
+    public com.google.firebase.storage.StorageTask addOnPausedListener(java.util.concurrent.Executor,com.google.firebase.storage.OnPausedListener)
     public synthetic bridge com.google.firebase.storage.CancellableTask addOnProgressListener(android.app.Activity,com.google.firebase.storage.OnProgressListener)
     public synthetic bridge com.google.firebase.storage.CancellableTask addOnProgressListener(com.google.firebase.storage.OnProgressListener)
     public synthetic bridge com.google.firebase.storage.CancellableTask addOnProgressListener(java.util.concurrent.Executor,com.google.firebase.storage.OnProgressListener)
     public com.google.firebase.storage.StorageTask addOnProgressListener(android.app.Activity,com.google.firebase.storage.OnProgressListener)
-    public com.google.firebase.storage.StorageTask addOnProgressListener(com.google.firebase.storage.OnProgressListener)
+    public com.google.firebase.storage.StorageTask addOnProgressListener(java.util.concurrent.Executor,com.google.firebase.storage.OnProgressListener)
     public com.google.firebase.storage.StorageTask removeOnCanceledListener(com.google.android.gms.tasks.OnCanceledListener)
     public com.google.firebase.storage.StorageTask removeOnCompleteListener(com.google.android.gms.tasks.OnCompleteListener)
     public com.google.firebase.storage.StorageTask removeOnFailureListener(com.google.android.gms.tasks.OnFailureListener)
@@ -29899,6 +30003,9 @@ com.google.firebase.storage.StreamDownloadTask:
     long getTotalBytes()
 com.google.firebase.storage.TaskListenerImpl:
     public int getListenerCount()
+com.google.firebase.storage.TaskState$InProgress
+com.google.firebase.storage.TaskState$Paused
+com.google.firebase.storage.TaskState
 com.google.firebase.storage.UpdateMetadataTask:
     private static final java.lang.String TAG
 com.google.firebase.storage.UploadTask$TaskSnapshot:
@@ -29931,6 +30038,12 @@ com.google.firebase.storage.internal.Util:
     private static final java.lang.String TAG
     public void <init>()
 com.google.firebase.storage.internal.package-info
+com.google.firebase.storage.ktx.StorageKt$taskState$1$1
+com.google.firebase.storage.ktx.StorageKt$taskState$1
+com.google.firebase.storage.ktx.StorageKt
+com.google.firebase.storage.ktx.TaskState$InProgress
+com.google.firebase.storage.ktx.TaskState$Paused
+com.google.firebase.storage.ktx.TaskState
 com.google.firebase.storage.network.GetNetworkRequest:
     private static final java.lang.String TAG
 com.google.firebase.storage.network.NetworkRequest:
@@ -35435,80 +35548,258 @@ com.google.type.TimeZone$1
 com.google.type.TimeZone$Builder
 com.google.type.TimeZone
 com.google.type.TimeZoneOrBuilder
+com.icod.libusb.UsbIcodDevice
+com.icod.libusb.UsbNative
+com.icod.serial.SerialPort
+com.icod.serial.SerialPortFinder$Driver
+com.icod.serial.SerialPortFinder
 com.newland.me.module.printer.TTFPrint:
     public native int GetStrPrnSize(byte[],int,int[],int[])
-com.nt4f04und.android_content_provider.AndroidContentProvider$Companion
-com.nt4f04und.android_content_provider.AndroidContentProvider
-com.nt4f04und.android_content_provider.AndroidContentProviderMessageCodec:
-    public static final byte BUNDLE
-    public static final byte BYTE
-    public static final byte BYTE_ARRAY
-    public static final byte CONTENT_VALUES
-    public static final byte DOUBLE
-    public static final byte FALSE
-    public static final byte FLOAT
-    public static final byte INTEGER
-    public static final byte LONG
-    public static final byte NULL
-    public static final byte SHORT
-    public static final byte STRING
-    public static final byte TRUE
-    public static final byte URI
-com.nt4f04und.android_content_provider.AndroidContentProviderPlugin:
-    public static final java.lang.String channelPrefix
-com.nt4f04und.android_content_provider.BuildConfig
-com.nt4f04und.android_content_provider.DataMatrixCursor$RowBuilder
-com.nt4f04und.android_content_provider.DataMatrixCursor
-com.nt4f04und.android_content_provider.Interoperable$InteroperableEventChannel$1
-com.nt4f04und.android_content_provider.Interoperable$InteroperableEventChannel
-com.nt4f04und.android_content_provider.Interoperable$InteroperableMethodChannel:
-    public final void setChannel(io.flutter.plugin.common.MethodChannel)
-com.nt4f04und.android_content_provider.Interoperable:
-    protected final void setChannel(com.nt4f04und.android_content_provider.Interoperable$InteroperableChannel)
-com.nt4f04und.android_content_provider.InteroperableCancellationSignal:
-    public void <init>(io.flutter.plugin.common.BinaryMessenger,java.lang.String)
-    public synthetic void <init>(io.flutter.plugin.common.BinaryMessenger,java.lang.String,int,kotlin.jvm.internal.DefaultConstructorMarker)
-    synthetic void <init>(io.flutter.plugin.common.BinaryMessenger,java.lang.String,boolean,int,kotlin.jvm.internal.DefaultConstructorMarker)
-    public java.util.Map asMap(java.lang.Object)
-    public java.lang.Long getLong(java.lang.Object)
-    public android.net.Uri getUri(java.lang.Object)
-    public java.util.List getUris(java.lang.Object)
-    public android.os.Bundle mapToBundle(java.util.Map)
-    public final void setSignal(android.os.CancellationSignal)
-    public void throwApiLevelError(int)
-com.nt4f04und.android_content_provider.InteroperableCursor:
-    public void throwApiLevelError(int)
-com.nt4f04und.android_content_provider.R$attr
-com.nt4f04und.android_content_provider.R$color
-com.nt4f04und.android_content_provider.R$dimen
-com.nt4f04und.android_content_provider.R$drawable
-com.nt4f04und.android_content_provider.R$id
-com.nt4f04und.android_content_provider.R$integer
-com.nt4f04und.android_content_provider.R$layout
-com.nt4f04und.android_content_provider.R$string
-com.nt4f04und.android_content_provider.R$style
-com.nt4f04und.android_content_provider.R$styleable
-com.nt4f04und.android_content_provider.R
-com.nt4f04und.android_content_provider.Registrable$RegistrableCompanion
-com.nt4f04und.android_content_provider.RegistrableCallingIdentity$Companion
-com.nt4f04und.android_content_provider.RegistrableCallingIdentity
-com.nt4f04und.android_content_provider.RegistrableContentObserver$Companion:
-    public synthetic bridge com.nt4f04und.android_content_provider.Registrable get(io.flutter.plugin.common.BinaryMessenger,java.lang.String)
-    public synthetic bridge com.nt4f04und.android_content_provider.Registrable register(io.flutter.plugin.common.BinaryMessenger,java.lang.String)
-    public synthetic bridge com.nt4f04und.android_content_provider.Registrable unregister(io.flutter.plugin.common.BinaryMessenger,java.lang.String)
-com.nt4f04und.android_content_provider.RegistrableContentObserver:
-    synthetic void <init>(io.flutter.plugin.common.BinaryMessenger,java.lang.String,int,kotlin.jvm.internal.DefaultConstructorMarker)
-com.nt4f04und.android_content_provider.SynchronousMethodChannel$invokeMethod$1$1
-com.nt4f04und.android_content_provider.SynchronousMethodChannel
-com.nt4f04und.android_content_provider.Utils:
-    public abstract java.util.Map asMap(java.lang.Object)
-    public abstract java.lang.Long getLong(java.lang.Object)
-    public abstract android.net.Uri getUri(java.lang.Object)
-    public abstract java.util.List getUris(java.lang.Object)
-    public abstract android.os.Bundle mapToBundle(java.util.Map)
-    public abstract void methodCallFail(io.flutter.plugin.common.MethodChannel$Result,java.lang.Exception)
-    public abstract void throwApiLevelError(int)
-com.nt4f04und.android_content_provider.UtilsKt
+com.szsicod.print.BuildConfig
+com.szsicod.print.escpos.PrinterAPI$FirmwareListener
+com.szsicod.print.escpos.PrinterAPI:
+    public static final int BOXOPEN
+    public static final int CORRECTINGERROR
+    public static final int ERR_PARAM
+    public static final int FAIL
+    public static final int FEEDING
+    public static final int FEEDING_10
+    public static final int HAPPENERROR
+    public static final int IMPACT_PRINTER
+    public static final int MACHINEERROR
+    public static final int NOSUPPROT
+    public static final int NOTCORRECTERROR
+    public static final int OFF_LINE
+    public static final int OUTOFPAPER
+    public static final int OUTOFPAPER_8
+    public static final int PAPERFEW
+    public static final java.lang.String PRINTERNAME
+    public static final int STRINGLONG
+    public static final int SUCCESS
+    public static final int THERMAL_PRINTER
+    private com.szsicod.print.escpos.PrinterAPI$FirmwareListener mFirmwareListener
+    private static volatile com.szsicod.print.escpos.PrinterAPI mPrinterAPI
+    public static final int waitTime
+    private int GetSum(byte[])
+    public synchronized int changeBd(int)
+    private boolean check0_255(int)
+    private boolean check48_57(byte[],byte,int,int)
+    public synchronized int chineseFontSet(int)
+    public synchronized int closeMark()
+    public synchronized int comeInHex()
+    public synchronized int cutMark()
+    public synchronized int doTestPrint(int,int)
+    public synchronized int downLoadNvBitmap(android.graphics.Bitmap[])
+    public synchronized int feedToStartPos()
+    private static byte[] fileGetBytes(java.io.InputStream)
+    private static byte[] fileGetBytes(java.lang.String)
+    public synchronized int fontSizeSet(int)
+    public synchronized int fullCut()
+    public com.szsicod.print.io.InterfaceAPI getIO()
+    public static com.szsicod.print.escpos.PrinterAPI getInstance()
+    public synchronized int getPrinterCutStatus()
+    public synchronized int getPrinterStatus(int)
+    public synchronized java.lang.String getPrinterVersion()
+    public synchronized int getStatusByControl()
+    public synchronized int getStatusForPrinting(int)
+    public synchronized int getStatusV1()
+    public synchronized int getStatusV2()
+    public synchronized int getStatusWithASC()
+    public synchronized int getStatusWithASC(boolean)
+    public synchronized int getSwitch1Value()
+    public synchronized int getSwitch2Value()
+    public synchronized int halfCut()
+    public synchronized int hexMsg(java.lang.String,boolean)
+    public synchronized int init()
+    public synchronized int initAllPrinter(int)
+    public synchronized boolean isBlackMark()
+    public synchronized boolean isYKPrinter()
+    public synchronized int markDefalut()
+    public synchronized int markLengthSet(int,int,int,int,int,int,int)
+    public synchronized int openCashDrawer(int,int,int)
+    public synchronized int openMark()
+    public synchronized int pageMode()
+    public synchronized int pageModeArea(int,int,int,int)
+    public synchronized int pagePrint()
+    public synchronized int pagePrintAndBack2Standard()
+    public synchronized int pageRemoveAllData()
+    public synchronized int pageSelectDirection(int)
+    private int parseStatusWith(byte[])
+    public synchronized int pointTest()
+    public synchronized int printAndBackToStd()
+    public synchronized int printAndFeedLine(int)
+    public synchronized int printBackFlow(int)
+    public synchronized int printBackFlow2(int)
+    public synchronized int printBarCode(int,int,java.lang.String)
+    public synchronized int printCode128(java.lang.String)
+    public synchronized int printCode128(java.lang.String,java.lang.String)
+    public synchronized int printCostomString(android.content.Context,java.lang.String,float)
+    public synchronized int printImageForPin(android.graphics.Bitmap)
+    public synchronized int printKanjiQRCode(java.lang.String,boolean)
+    public synchronized int printPDFCode(java.lang.String,int,int,int)
+    public synchronized int printQRCode(java.lang.String,int,boolean)
+    public synchronized int printQRCode2(java.lang.String)
+    public synchronized int printString(java.lang.String)
+    public synchronized int printString(java.lang.String,java.lang.String,boolean)
+    public synchronized int printTab()
+    public synchronized int printTheBitmap()
+    public synchronized int printerRequestsRealTime(int)
+    public synchronized int readPrinterFlash()
+    public synchronized int resetPrinter()
+    public synchronized int selfTestPage()
+    public synchronized int sendOrder(byte[])
+    public synchronized int sendOrder(byte[],int)
+    public synchronized int sendOrder(byte[],int,int)
+    public synchronized int set2400()
+    public synchronized int set58mm()
+    public synchronized int set80mm()
+    public synchronized int setAbsolutePosition(int,int)
+    public synchronized int setAlignMode(int)
+    public synchronized int setBarCodeHeight(int)
+    public synchronized int setBarCodeWidth(int)
+    public synchronized int setBlackSwitch(int)
+    public synchronized int setCharCodeTable(int)
+    public synchronized int setCharRightSpace(int)
+    public synchronized int setCharSize(int,int)
+    public synchronized int setDefaultLineSpace()
+    public synchronized int setEmphasizedMode(int)
+    public synchronized int setEnablePanelButton(int)
+    public synchronized int setEnableSmoothPrn(int)
+    public synchronized int setEnableUnderLine(int)
+    public synchronized int setFontStyle(int)
+    public synchronized int setFontStyle(int,boolean,boolean,boolean,boolean)
+    public synchronized int setHorizontalTab(int[],boolean)
+    public synchronized int setInterCharSet(int)
+    public synchronized int setLeftMargin(int,int)
+    public synchronized int setLineSpace(int)
+    public synchronized int setNullPointer()
+    public void setOutput(boolean)
+    public synchronized int setOverlapMode(int)
+    public synchronized int setPageAbsolutePosition(int,int)
+    public synchronized int setPageRelativePosition(int,int)
+    public synchronized int setPaperSensor(int)
+    public synchronized int setPaperType(int)
+    public synchronized int setPrintColorSize2(int)
+    public synchronized int setPrintQRCodeErrCL(int)
+    public synchronized int setPrintQRCodeSize(int)
+    public synchronized int setPrintQRCodeType(int)
+    public synchronized int setPrnAreaWidth(int,int)
+    public synchronized int setRelativePosition(int,int)
+    public synchronized int setReverse(boolean)
+    public synchronized int setRotate(int)
+    public synchronized int setSensorToStopPrint(int)
+    public void setmFirmwareListener(com.szsicod.print.escpos.PrinterAPI$FirmwareListener)
+    public synchronized int smallFontSizeSet()
+    public synchronized int standardMode()
+    public synchronized int updateFirmware(java.io.File)
+    public int updateFirmware(java.io.InputStream)
+com.szsicod.print.io.BluetoothAPI$1
+com.szsicod.print.io.BluetoothAPI$BluetoothListener
+com.szsicod.print.io.BluetoothAPI$BluetoothReceiver
+com.szsicod.print.io.BluetoothAPI
+com.szsicod.print.io.SerialAPI:
+    private boolean ThreadFlg
+    private static final int WRITEBYTEMAX
+    private boolean isNeedOutTime
+    private int mBaudRate
+    private java.io.File mFile
+    private int mFlowContorl
+    private static com.icod.serial.SerialPort mSerialPort
+    private int readMinSize
+    private int sleepReadTime
+    static void <clinit>()
+    public void <init>(java.io.File,int,int)
+    private int blockSend(byte[],int,int,long)
+    private int blockSizeCustom(byte[],int,int,int)
+    public void clear()
+    public int closeDevice()
+    public synchronized int getStatus()
+    public java.lang.Boolean isOpen()
+    public int openDevice()
+    public int readBuffer(byte[],int,int,int)
+    public void setNeedOutTime(boolean)
+    public void setReadMinSize(int)
+    public void setSleepReadTime(int)
+    public int writeBuffer(byte[],int,int,int)
+com.szsicod.print.io.SocketAPI
+com.szsicod.print.io.USBAPI:
+    private static final java.lang.String ACTION_USB_PERMISSION
+    private static final int LIBUSB_DT_STRING
+    private static final int MAXSZIE
+    private static final int STD_USB_REQUEST_GET_DESCRIPTOR
+    public void <init>(android.content.Context,android.hardware.usb.UsbDevice)
+    public int getStateByControl()
+com.szsicod.print.io.UsbConnection$1
+com.szsicod.print.io.UsbConnection$UsbCheckSRT
+com.szsicod.print.io.UsbConnection
+com.szsicod.print.io.UsbNativeAPI:
+    private static final int MAXSIZE
+    private com.szsicod.print.io.UsbConnection mUsbConnection
+    private com.icod.libusb.UsbNative mUsbNative
+    public void <init>()
+    public void clear()
+    public int closeDevice()
+    public java.lang.String getProductName()
+    public int getStateByControl()
+    public com.icod.libusb.UsbIcodDevice getUsbIcodDevice()
+    public java.lang.Boolean isOpen()
+    public int openDevice()
+    public int readBuffer(byte[],int,int,int)
+    public int writeBuffer(byte[],int,int,int)
+com.szsicod.print.io.UsbTerminal
+com.szsicod.print.log.AndroidLogCatStrategy
+com.szsicod.print.log.DecorDiskLogStrategy$Builder
+com.szsicod.print.log.DecorDiskLogStrategy
+com.szsicod.print.log.DiskLogStrategy$WriteHandler
+com.szsicod.print.log.DiskLogStrategy
+com.szsicod.print.log.Logger:
+    private static final java.lang.String TAG
+    public void <init>()
+    public static void addLogStrategy(com.szsicod.print.log.LogStrategy)
+    public static void clearLogAdapters()
+    public static void d(java.lang.Object)
+    public static varargs void d(java.lang.String,java.lang.Object[])
+    public static void setCurrentLevel(java.lang.String)
+    public static varargs void v(java.lang.String,java.lang.Object[])
+    public static varargs void w(java.lang.String,java.lang.Object[])
+    public static varargs void wtf(java.lang.String,java.lang.Object[])
+com.szsicod.print.log.Utils:
+    static final java.lang.String DEFAULT_TAG
+    public static final java.lang.String LASTTIME
+    private static android.content.Context context
+    public static long lastTime
+    protected void <init>()
+    static boolean equals(java.lang.CharSequence,java.lang.CharSequence)
+    public static long getLastTime()
+    public static void init(android.content.Context)
+    public static java.lang.String logLevel(int)
+    public static void setLastTime(long)
+com.szsicod.print.utils.BitmapUtils:
+    byte[] mask
+    public void <init>()
+    public static int changePointPx(byte[])
+    private static boolean checkBound(int,int,int,int)
+    public static android.graphics.Bitmap convertGreyImgByFloyd(android.graphics.Bitmap)
+    private static void format_K_dither16x16(int[],int,int,byte[])
+    private static void format_K_dither16x16_int(int[],int,int,int[])
+    public static byte format_K_dither8x8_int(int,int,int)
+    public static android.graphics.Bitmap getBitmapForMutable(android.graphics.Bitmap)
+    public static byte[] parseBmpToByteNOCMD(android.graphics.Bitmap)
+    public static void parseBmpToNVCMD(java.util.ArrayList,android.graphics.Bitmap)
+    public static byte parseDot(int,int,int)
+    public static byte[] pixCrudeToEscRastBitImageCmd(byte[],int,int)
+    public static byte[] pixToEscRastBitImageCmd(byte[],int,int)
+    public static byte[] pixToEscRastBitImageCmd(int[],int,int)
+    public static byte[] pixToNVCMD(byte[],int,int)
+    public static byte[] printImageForPin(android.graphics.Bitmap)
+    public static android.graphics.Bitmap reSize(android.graphics.Bitmap,int,int)
+    public static android.graphics.Bitmap reSizeByWidth(android.graphics.Bitmap,int)
+    private static void setPixel(android.graphics.Bitmap,int,int,int)
+    public static android.graphics.Bitmap sizeCompress(android.graphics.Bitmap,int)
+    public static android.graphics.Bitmap strConvertBmp(android.content.Context,java.lang.String,float)
+    public static void writeToFileWithHex(byte[],java.lang.String,boolean)
+    public static void writeToFileWithHex(byte[],boolean)
+com.szsicod.print.utils.BluetoothUtils
 com.tekartik.sqflite.BuildConfig
 com.tekartik.sqflite.Constant:
     static final java.lang.String CMD_GET
@@ -36913,20 +37204,6 @@ dagger.multibindings.IntoSet
 dagger.multibindings.LongKey
 dagger.multibindings.Multibinds
 dagger.multibindings.StringKey
-dev.fluttercommunity.plus.packageinfo.BuildConfig
-dev.fluttercommunity.plus.packageinfo.PackageInfoPlugin:
-    private static final java.lang.String CHANNEL_NAME
-dev.fluttercommunity.plus.packageinfo.R$attr
-dev.fluttercommunity.plus.packageinfo.R$color
-dev.fluttercommunity.plus.packageinfo.R$dimen
-dev.fluttercommunity.plus.packageinfo.R$drawable
-dev.fluttercommunity.plus.packageinfo.R$id
-dev.fluttercommunity.plus.packageinfo.R$integer
-dev.fluttercommunity.plus.packageinfo.R$layout
-dev.fluttercommunity.plus.packageinfo.R$string
-dev.fluttercommunity.plus.packageinfo.R$style
-dev.fluttercommunity.plus.packageinfo.R$styleable
-dev.fluttercommunity.plus.packageinfo.R
 dev.steenbakker.mobile_scanner.BuildConfig
 dev.steenbakker.mobile_scanner.MobileScanner:
     public final androidx.camera.core.ImageAnalysis$Analyzer getCaptureOutput()
@@ -37000,10 +37277,10 @@ io.flutter.embedding.android.AndroidTouchProcessor$PointerDeviceKind
 io.flutter.embedding.android.AndroidTouchProcessor$PointerSignalKind
 io.flutter.embedding.android.AndroidTouchProcessor:
     static final int BYTES_PER_FIELD
+    static final int DEFAULT_HORIZONTAL_SCROLL_FACTOR
+    static final int DEFAULT_VERTICAL_SCROLL_FACTOR
     private static final int POINTER_DATA_FIELD_COUNT
     private static final int POINTER_DATA_FLAG_BATCHED
-io.flutter.embedding.android.DrawableSplashScreen$DrawableSplashScreenView:
-    public void <init>(android.content.Context,android.util.AttributeSet)
 io.flutter.embedding.android.FlutterActivity$CachedEngineIntentBuilder
 io.flutter.embedding.android.FlutterActivity$NewEngineInGroupIntentBuilder
 io.flutter.embedding.android.FlutterActivity$NewEngineIntentBuilder
@@ -37044,8 +37321,6 @@ io.flutter.embedding.android.FlutterImageView:
     public void <init>(android.content.Context)
     public void <init>(android.content.Context,android.util.AttributeSet)
 io.flutter.embedding.android.FlutterPlayStoreSplitApplication
-io.flutter.embedding.android.FlutterSplashView:
-    public void <init>(android.content.Context,android.util.AttributeSet)
 io.flutter.embedding.android.FlutterSurfaceView:
     private static final java.lang.String TAG
     public void <init>(android.content.Context)
@@ -37061,8 +37336,11 @@ io.flutter.embedding.android.FlutterView:
     public void <init>(android.content.Context,io.flutter.embedding.android.RenderMode)
     public void <init>(android.content.Context,io.flutter.embedding.android.RenderMode,io.flutter.embedding.android.TransparencyMode)
     public void <init>(android.content.Context,io.flutter.embedding.android.TransparencyMode)
+    public void addFlutterEngineAttachmentListener(io.flutter.embedding.android.FlutterView$FlutterEngineAttachmentListener)
     private android.view.View findViewByAccessibilityIdRootedAtCurrentView(int,android.view.View)
     public android.view.View findViewByAccessibilityIdTraversal(int)
+    public boolean hasRenderedFirstFrame()
+    public void removeFlutterEngineAttachmentListener(io.flutter.embedding.android.FlutterView$FlutterEngineAttachmentListener)
 io.flutter.embedding.android.KeyChannelResponder:
     private static final java.lang.String TAG
 io.flutter.embedding.android.KeyData$Type:
@@ -37086,7 +37364,6 @@ io.flutter.embedding.android.KeyboardMap:
     public static final long kUnicodePlane
     public static final long kValueMask
     public void <init>()
-io.flutter.embedding.android.SplashScreenProvider
 io.flutter.embedding.engine.FlutterEngine:
     private static final java.lang.String TAG
     public void <init>(android.content.Context,io.flutter.embedding.engine.loader.FlutterLoader,io.flutter.embedding.engine.FlutterJNI)
@@ -37184,6 +37461,7 @@ io.flutter.embedding.engine.FlutterShellArgs:
     public static final java.lang.String ARG_KEY_TRACE_SKIA_ALLOWLIST
     public static final java.lang.String ARG_KEY_TRACE_STARTUP
     public static final java.lang.String ARG_KEY_TRACE_SYSTRACE
+    public static final java.lang.String ARG_KEY_TRACE_TO_FILE
     public static final java.lang.String ARG_KEY_USE_TEST_FONTS
     public static final java.lang.String ARG_KEY_VERBOSE_LOGGING
     public static final java.lang.String ARG_KEY_VM_SERVICE_PORT
@@ -37195,6 +37473,7 @@ io.flutter.embedding.engine.FlutterShellArgs:
     public static final java.lang.String ARG_TRACE_SKIA_ALLOWLIST
     public static final java.lang.String ARG_TRACE_STARTUP
     public static final java.lang.String ARG_TRACE_SYSTRACE
+    public static final java.lang.String ARG_TRACE_TO_FILE
     public static final java.lang.String ARG_USE_TEST_FONTS
     public static final java.lang.String ARG_VERBOSE_LOGGING
     public static final java.lang.String ARG_VM_SERVICE_PORT
@@ -37210,6 +37489,7 @@ io.flutter.embedding.engine.dart.DartExecutor:
     public void disableBufferingIncomingMessages()
     public void enableBufferingIncomingMessages()
     public void executeDartEntrypoint(io.flutter.embedding.engine.dart.DartExecutor$DartEntrypoint)
+    public java.lang.String getIsolateServiceId()
     public int getPendingChannelResponseCount()
     public void setIsolateServiceIdListener(io.flutter.embedding.engine.dart.DartExecutor$IsolateServiceIdListener)
 io.flutter.embedding.engine.dart.DartMessenger:
@@ -37377,6 +37657,7 @@ io.flutter.embedding.engine.systemchannels.SettingsChannel:
     private static final java.lang.String ALWAYS_USE_24_HOUR_FORMAT
     private static final java.lang.String BRIEFLY_SHOW_PASSWORD
     public static final java.lang.String CHANNEL_NAME
+    private static final java.lang.String CONFIGURATION_ID
     private static final java.lang.String NATIVE_SPELL_CHECK_SERVICE_DEFINED
     private static final java.lang.String PLATFORM_BRIGHTNESS
     private static final java.lang.String TAG
@@ -37391,9 +37672,14 @@ io.flutter.plugin.common.ActivityLifecycleListener
 io.flutter.plugin.common.BasicMessageChannel:
     public static final java.lang.String CHANNEL_BUFFERS_CHANNEL
     private static final java.lang.String TAG
+    private static java.nio.ByteBuffer packetFromEncodedMessage(java.nio.ByteBuffer)
     public void resizeChannelBuffer(int)
-    static void resizeChannelBuffer(io.flutter.plugin.common.BinaryMessenger,java.lang.String,int)
+    public static void resizeChannelBuffer(io.flutter.plugin.common.BinaryMessenger,java.lang.String,int)
+    public static void setWarnsOnChannelOverflow(io.flutter.plugin.common.BinaryMessenger,java.lang.String,boolean)
+    public void setWarnsOnChannelOverflow(boolean)
 io.flutter.plugin.common.BinaryCodec
+io.flutter.plugin.common.BinaryMessenger$TaskQueueOptions:
+    public io.flutter.plugin.common.BinaryMessenger$TaskQueueOptions setIsSerial(boolean)
 io.flutter.plugin.common.BinaryMessenger:
     public void disableBufferingIncomingMessages()
     public void enableBufferingIncomingMessages()
@@ -37408,6 +37694,7 @@ io.flutter.plugin.common.JSONUtil:
 io.flutter.plugin.common.MethodChannel:
     private static final java.lang.String TAG
     public void resizeChannelBuffer(int)
+    public void setWarnsOnChannelOverflow(boolean)
 io.flutter.plugin.common.PluginRegistry$PluginRegistrantCallback
 io.flutter.plugin.common.PluginRegistry$Registrar:
     public abstract android.content.Context activeContext()
@@ -37477,6 +37764,10 @@ io.flutter.plugin.editing.TextInputPlugin:
     public android.view.inputmethod.InputConnection getLastInputConnection()
 io.flutter.plugin.mouse.MouseCursorPlugin$2:
     private static final long serialVersionUID
+io.flutter.plugin.platform.ImageReaderPlatformViewRenderTarget:
+    private static final int MAX_IMAGES
+    private static final java.lang.String TAG
+    public boolean isReleased()
 io.flutter.plugin.platform.PlatformOverlayView:
     public void <init>(android.content.Context)
     public void <init>(android.content.Context,android.util.AttributeSet)
@@ -37490,17 +37781,20 @@ io.flutter.plugin.platform.PlatformViewRegistry:
     public abstract boolean registerViewFactory(java.lang.String,io.flutter.plugin.platform.PlatformViewFactory)
 io.flutter.plugin.platform.PlatformViewRegistryImpl:
     public boolean registerViewFactory(java.lang.String,io.flutter.plugin.platform.PlatformViewFactory)
+io.flutter.plugin.platform.PlatformViewRenderTarget:
+    public abstract boolean isReleased()
 io.flutter.plugin.platform.PlatformViewWrapper:
     private static final java.lang.String TAG
-    public android.graphics.SurfaceTexture getTexture()
 io.flutter.plugin.platform.PlatformViewsController:
     private static final java.lang.String TAG
     public void disposePlatformView(int)
     public android.util.SparseArray getOverlayLayerViews()
 io.flutter.plugin.platform.SingleViewPresentation$WindowManagerHandler:
     private static final java.lang.String TAG
+io.flutter.plugin.platform.SurfaceTexturePlatformViewRenderTarget:
+    private static final java.lang.String TAG
+    public boolean isReleased()
 io.flutter.plugin.platform.VirtualDisplayController:
-    public void dispose()
     void onFlutterViewAttached(android.view.View)
     void onFlutterViewDetached()
 io.flutter.plugins.firebase.auth.BuildConfig
@@ -37509,6 +37803,7 @@ io.flutter.plugins.firebase.auth.FlutterFirebaseAuthPlugin:
     private static final java.lang.String METHOD_CHANNEL_NAME
 io.flutter.plugins.firebase.auth.FlutterFirebaseAuthPluginException:
     public void <init>()
+io.flutter.plugins.firebase.auth.GeneratedAndroidFirebaseAuth$AuthPigeonFirebaseApp$Builder
 io.flutter.plugins.firebase.auth.GeneratedAndroidFirebaseAuth$GenerateInterfaces
 io.flutter.plugins.firebase.auth.GeneratedAndroidFirebaseAuth$GenerateInterfacesCodec
 io.flutter.plugins.firebase.auth.GeneratedAndroidFirebaseAuth$PigeonActionCodeInfo:
@@ -37531,7 +37826,6 @@ io.flutter.plugins.firebase.auth.GeneratedAndroidFirebaseAuth$PigeonAuthCredenti
     public java.lang.Long getNativeId()
     public java.lang.String getProviderId()
     public java.lang.String getSignInMethod()
-io.flutter.plugins.firebase.auth.GeneratedAndroidFirebaseAuth$PigeonFirebaseApp$Builder
 io.flutter.plugins.firebase.auth.GeneratedAndroidFirebaseAuth$PigeonFirebaseAuthSettings$Builder
 io.flutter.plugins.firebase.auth.GeneratedAndroidFirebaseAuth$PigeonFirebaseAuthSettings:
     public java.lang.String getUserAccessGroup()
@@ -37602,6 +37896,8 @@ io.flutter.plugins.firebase.auth.R$styleable
 io.flutter.plugins.firebase.auth.R$xml
 io.flutter.plugins.firebase.auth.R
 io.flutter.plugins.firebase.core.BuildConfig
+io.flutter.plugins.firebase.core.GeneratedAndroidFirebaseCore$FlutterError:
+    public void <init>(java.lang.String,java.lang.String,java.lang.Object)
 io.flutter.plugins.firebase.core.GeneratedAndroidFirebaseCore$PigeonFirebaseOptions$Builder:
     public io.flutter.plugins.firebase.core.GeneratedAndroidFirebaseCore$PigeonFirebaseOptions$Builder setAndroidClientId(java.lang.String)
     public io.flutter.plugins.firebase.core.GeneratedAndroidFirebaseCore$PigeonFirebaseOptions$Builder setAppGroupId(java.lang.String)
@@ -37613,7 +37909,6 @@ io.flutter.plugins.firebase.core.GeneratedAndroidFirebaseCore$PigeonFirebaseOpti
 io.flutter.plugins.firebase.core.GeneratedAndroidFirebaseCore$PigeonFirebaseOptions:
     public java.lang.String getAndroidClientId()
     public java.lang.String getAppGroupId()
-    public java.lang.String getAuthDomain()
     public java.lang.String getDeepLinkURLScheme()
     public java.lang.String getIosBundleId()
     public java.lang.String getIosClientId()
@@ -37623,6 +37918,8 @@ io.flutter.plugins.firebase.core.GeneratedAndroidFirebaseCore$PigeonInitializeRe
     public java.lang.String getName()
     public io.flutter.plugins.firebase.core.GeneratedAndroidFirebaseCore$PigeonFirebaseOptions getOptions()
     public java.util.Map getPluginConstants()
+io.flutter.plugins.firebase.core.GeneratedAndroidFirebaseCore:
+    public void <init>()
 io.flutter.plugins.firebase.core.R$attr
 io.flutter.plugins.firebase.core.R$color
 io.flutter.plugins.firebase.core.R$dimen
@@ -37655,6 +37952,23 @@ io.flutter.plugins.firebase.database.R$string
 io.flutter.plugins.firebase.database.R$style
 io.flutter.plugins.firebase.database.R$styleable
 io.flutter.plugins.firebase.database.R
+io.flutter.plugins.firebase.firebaseremoteconfig.BuildConfig
+io.flutter.plugins.firebase.firebaseremoteconfig.FirebaseRemoteConfigPlugin:
+    static final java.lang.String EVENT_CHANNEL
+    static final java.lang.String METHOD_CHANNEL
+    static final java.lang.String TAG
+io.flutter.plugins.firebase.firebaseremoteconfig.R$attr
+io.flutter.plugins.firebase.firebaseremoteconfig.R$color
+io.flutter.plugins.firebase.firebaseremoteconfig.R$dimen
+io.flutter.plugins.firebase.firebaseremoteconfig.R$drawable
+io.flutter.plugins.firebase.firebaseremoteconfig.R$id
+io.flutter.plugins.firebase.firebaseremoteconfig.R$integer
+io.flutter.plugins.firebase.firebaseremoteconfig.R$layout
+io.flutter.plugins.firebase.firebaseremoteconfig.R$raw
+io.flutter.plugins.firebase.firebaseremoteconfig.R$string
+io.flutter.plugins.firebase.firebaseremoteconfig.R$style
+io.flutter.plugins.firebase.firebaseremoteconfig.R$styleable
+io.flutter.plugins.firebase.firebaseremoteconfig.R
 io.flutter.plugins.firebase.firestore.BuildConfig
 io.flutter.plugins.firebase.firestore.FlutterFirebaseFirestoreException:
     private static final java.lang.String ERROR_ABORTED
@@ -37696,6 +38010,33 @@ io.flutter.plugins.firebase.firestore.FlutterFirebaseFirestoreMessageCodec:
 io.flutter.plugins.firebase.firestore.FlutterFirebaseFirestorePlugin:
     public static final java.lang.String DEFAULT_ERROR_CODE
     private static final java.lang.String METHOD_CHANNEL_NAME
+io.flutter.plugins.firebase.firestore.GeneratedAndroidFirebaseFirestore$DocumentReferenceRequest$Builder
+io.flutter.plugins.firebase.firestore.GeneratedAndroidFirebaseFirestore$FirestorePigeonFirebaseApp$Builder
+io.flutter.plugins.firebase.firestore.GeneratedAndroidFirebaseFirestore$PigeonDocumentChange:
+    public io.flutter.plugins.firebase.firestore.GeneratedAndroidFirebaseFirestore$PigeonDocumentSnapshot getDocument()
+    public java.lang.Long getNewIndex()
+    public java.lang.Long getOldIndex()
+    public io.flutter.plugins.firebase.firestore.GeneratedAndroidFirebaseFirestore$DocumentChangeType getType()
+io.flutter.plugins.firebase.firestore.GeneratedAndroidFirebaseFirestore$PigeonDocumentOption$Builder
+io.flutter.plugins.firebase.firestore.GeneratedAndroidFirebaseFirestore$PigeonDocumentSnapshot:
+    public java.util.Map getData()
+    public io.flutter.plugins.firebase.firestore.GeneratedAndroidFirebaseFirestore$PigeonSnapshotMetadata getMetadata()
+    public java.lang.String getPath()
+io.flutter.plugins.firebase.firestore.GeneratedAndroidFirebaseFirestore$PigeonFirebaseSettings$Builder
+io.flutter.plugins.firebase.firestore.GeneratedAndroidFirebaseFirestore$PigeonFirebaseSettings:
+    public java.lang.Boolean getIgnoreUndefinedProperties()
+io.flutter.plugins.firebase.firestore.GeneratedAndroidFirebaseFirestore$PigeonGetOptions$Builder
+io.flutter.plugins.firebase.firestore.GeneratedAndroidFirebaseFirestore$PigeonQueryParameters$Builder
+io.flutter.plugins.firebase.firestore.GeneratedAndroidFirebaseFirestore$PigeonQuerySnapshot:
+    public java.util.List getDocumentChanges()
+    public java.util.List getDocuments()
+    public io.flutter.plugins.firebase.firestore.GeneratedAndroidFirebaseFirestore$PigeonSnapshotMetadata getMetadata()
+io.flutter.plugins.firebase.firestore.GeneratedAndroidFirebaseFirestore$PigeonSnapshotMetadata:
+    public java.lang.Boolean getHasPendingWrites()
+    public java.lang.Boolean getIsFromCache()
+io.flutter.plugins.firebase.firestore.GeneratedAndroidFirebaseFirestore$PigeonTransactionCommand$Builder
+io.flutter.plugins.firebase.firestore.GeneratedAndroidFirebaseFirestore:
+    public void <init>()
 io.flutter.plugins.firebase.firestore.R$attr
 io.flutter.plugins.firebase.firestore.R$color
 io.flutter.plugins.firebase.firestore.R$dimen
@@ -37710,8 +38051,7 @@ io.flutter.plugins.firebase.firestore.R$styleable
 io.flutter.plugins.firebase.firestore.R
 io.flutter.plugins.firebase.firestore.utils.ExceptionConverter:
     public void <init>()
-io.flutter.plugins.firebase.firestore.utils.ServerTimestampBehaviorConverter:
-    public void <init>()
+io.flutter.plugins.firebase.firestore.utils.ServerTimestampBehaviorConverter
 io.flutter.plugins.firebase.functions.BuildConfig
 io.flutter.plugins.firebase.functions.FlutterFirebaseFunctionsPlugin:
     private static final java.lang.String METHOD_CHANNEL_NAME
@@ -37802,6 +38142,28 @@ io.flutter.plugins.firebase.performance.R$style
 io.flutter.plugins.firebase.performance.R$styleable
 io.flutter.plugins.firebase.performance.R
 io.flutter.plugins.firebase.storage.BuildConfig
+io.flutter.plugins.firebase.storage.FlutterFirebaseStorageException:
+    void <init>()
+io.flutter.plugins.firebase.storage.FlutterFirebaseStoragePlugin:
+    static final java.lang.String DEFAULT_ERROR_CODE
+    static final java.lang.String STORAGE_METHOD_CHANNEL_NAME
+    static final java.lang.String STORAGE_TASK_EVENT_NAME
+io.flutter.plugins.firebase.storage.GeneratedAndroidFirebaseStorage$PigeonFullMetaData:
+    public java.util.Map getMetadata()
+io.flutter.plugins.firebase.storage.GeneratedAndroidFirebaseStorage$PigeonListOptions$Builder
+io.flutter.plugins.firebase.storage.GeneratedAndroidFirebaseStorage$PigeonListResult:
+    public java.util.List getItems()
+    public java.lang.String getPageToken()
+    public java.util.List getPrefixs()
+io.flutter.plugins.firebase.storage.GeneratedAndroidFirebaseStorage$PigeonSettableMetadata$Builder
+io.flutter.plugins.firebase.storage.GeneratedAndroidFirebaseStorage$PigeonStorageFirebaseApp$Builder
+io.flutter.plugins.firebase.storage.GeneratedAndroidFirebaseStorage$PigeonStorageFirebaseApp:
+    public java.lang.String getTenantId()
+io.flutter.plugins.firebase.storage.GeneratedAndroidFirebaseStorage$PigeonStorageReference:
+    public java.lang.String getBucket()
+    public java.lang.String getName()
+io.flutter.plugins.firebase.storage.GeneratedAndroidFirebaseStorage:
+    public void <init>()
 io.flutter.plugins.firebase.storage.R$attr
 io.flutter.plugins.firebase.storage.R$color
 io.flutter.plugins.firebase.storage.R$dimen
@@ -37977,6 +38339,7 @@ io.flutter.view.FlutterView$SurfaceTextureRegistryEntry
 io.flutter.view.FlutterView$ViewportMetrics
 io.flutter.view.FlutterView$ZeroSides
 io.flutter.view.FlutterView
+io.flutter.view.TextureRegistry$TextureEntry
 io.flutter.view.TextureRegistry:
     public void onTrimMemory(int)
     public abstract io.flutter.view.TextureRegistry$SurfaceTextureEntry registerSurfaceTexture(android.graphics.SurfaceTexture)
@@ -40486,6 +40849,7 @@ kotlin.ExceptionsKt__ExceptionsKt:
     private static final void printStackTrace(java.lang.Throwable)
     private static final void printStackTrace(java.lang.Throwable,java.io.PrintStream)
     private static final void printStackTrace(java.lang.Throwable,java.io.PrintWriter)
+    public static final java.lang.String stackTraceToString(java.lang.Throwable)
 kotlin.ExperimentalMultiplatform
 kotlin.ExperimentalStdlibApi
 kotlin.ExperimentalSubclassOptIn
@@ -41432,6 +41796,7 @@ kotlin.collections.ArraysKt___ArraysKt:
     public static final int first(int[],kotlin.jvm.functions.Function1)
     public static final long first(long[])
     public static final long first(long[],kotlin.jvm.functions.Function1)
+    public static final java.lang.Object first(java.lang.Object[])
     public static final java.lang.Object first(java.lang.Object[],kotlin.jvm.functions.Function1)
     public static final short first(short[])
     public static final short first(short[],kotlin.jvm.functions.Function1)
@@ -42723,7 +43088,6 @@ kotlin.collections.CollectionsKt__CollectionsKt:
     public static final java.util.List listOfNotNull(java.lang.Object)
     public static final varargs java.util.List listOfNotNull(java.lang.Object[])
     private static final java.util.List mutableListOf()
-    public static final varargs java.util.List mutableListOf(java.lang.Object[])
     private static final java.util.Collection orEmpty(java.util.Collection)
     private static final java.util.List orEmpty(java.util.List)
     private static final void rangeCheck$CollectionsKt__CollectionsKt(int,int,int)
@@ -42753,7 +43117,6 @@ kotlin.collections.CollectionsKt__MutableCollectionsJVMKt:
     public static final void sort(java.util.List)
     private static final void sort(java.util.List,java.util.Comparator)
     private static final void sort(java.util.List,kotlin.jvm.functions.Function2)
-    public static final void sortWith(java.util.List,java.util.Comparator)
 kotlin.collections.CollectionsKt__MutableCollectionsKt:
     public void <init>()
     public static final boolean addAll(java.util.Collection,kotlin.sequences.Sequence)
@@ -42871,8 +43234,6 @@ kotlin.collections.CollectionsKt___CollectionsKt:
     public static final synthetic java.util.List filterIsInstance(java.lang.Iterable)
     public static final synthetic java.util.Collection filterIsInstanceTo(java.lang.Iterable,java.util.Collection)
     public static final java.util.List filterNot(java.lang.Iterable,kotlin.jvm.functions.Function1)
-    public static final java.util.List filterNotNull(java.lang.Iterable)
-    public static final java.util.Collection filterNotNullTo(java.lang.Iterable,java.util.Collection)
     public static final java.util.Collection filterNotTo(java.lang.Iterable,java.util.Collection,kotlin.jvm.functions.Function1)
     public static final java.util.Collection filterTo(java.lang.Iterable,java.util.Collection,kotlin.jvm.functions.Function1)
     private static final java.lang.Object find(java.lang.Iterable,kotlin.jvm.functions.Function1)
@@ -43018,7 +43379,6 @@ kotlin.collections.CollectionsKt___CollectionsKt:
     public static final java.util.List sortedBy(java.lang.Iterable,kotlin.jvm.functions.Function1)
     public static final java.util.List sortedByDescending(java.lang.Iterable,kotlin.jvm.functions.Function1)
     public static final java.util.List sortedDescending(java.lang.Iterable)
-    public static final java.util.List sortedWith(java.lang.Iterable,java.util.Comparator)
     public static final java.util.Set subtract(java.lang.Iterable,java.lang.Iterable)
     public static final int sumBy(java.lang.Iterable,kotlin.jvm.functions.Function1)
     public static final double sumByDouble(java.lang.Iterable,kotlin.jvm.functions.Function1)
@@ -43225,6 +43585,7 @@ kotlin.collections.MapsKt___MapsKt:
     public static final boolean none(java.util.Map,kotlin.jvm.functions.Function1)
     public static final java.util.Map onEach(java.util.Map,kotlin.jvm.functions.Function1)
     public static final java.util.Map onEachIndexed(java.util.Map,kotlin.jvm.functions.Function2)
+    public static final java.util.List toList(java.util.Map)
 kotlin.collections.MovingSubList
 kotlin.collections.MutableMapWithDefault
 kotlin.collections.MutableMapWithDefaultImpl
@@ -43545,13 +43906,32 @@ kotlin.internal.jdk8.JDK8PlatformImplementations:
     public kotlin.text.MatchGroup getMatchResultNamedGroup(java.util.regex.MatchResult,java.lang.String)
 kotlin.io.AccessDeniedException
 kotlin.io.ByteStreamsKt$iterator$1
-kotlin.io.ByteStreamsKt
+kotlin.io.ByteStreamsKt:
+    private static final java.io.BufferedInputStream buffered(java.io.InputStream,int)
+    private static final java.io.BufferedOutputStream buffered(java.io.OutputStream,int)
+    static synthetic java.io.BufferedInputStream buffered$default(java.io.InputStream,int,int,java.lang.Object)
+    static synthetic java.io.BufferedOutputStream buffered$default(java.io.OutputStream,int,int,java.lang.Object)
+    private static final java.io.BufferedReader bufferedReader(java.io.InputStream,java.nio.charset.Charset)
+    static synthetic java.io.BufferedReader bufferedReader$default(java.io.InputStream,java.nio.charset.Charset,int,java.lang.Object)
+    private static final java.io.BufferedWriter bufferedWriter(java.io.OutputStream,java.nio.charset.Charset)
+    static synthetic java.io.BufferedWriter bufferedWriter$default(java.io.OutputStream,java.nio.charset.Charset,int,java.lang.Object)
+    private static final java.io.ByteArrayInputStream byteInputStream(java.lang.String,java.nio.charset.Charset)
+    static synthetic java.io.ByteArrayInputStream byteInputStream$default(java.lang.String,java.nio.charset.Charset,int,java.lang.Object)
+    private static final java.io.ByteArrayInputStream inputStream(byte[])
+    private static final java.io.ByteArrayInputStream inputStream(byte[],int,int)
+    public static final kotlin.collections.ByteIterator iterator(java.io.BufferedInputStream)
+    public static final byte[] readBytes(java.io.InputStream)
+    public static final byte[] readBytes(java.io.InputStream,int)
+    public static synthetic byte[] readBytes$default(java.io.InputStream,int,int,java.lang.Object)
+    private static final java.io.InputStreamReader reader(java.io.InputStream,java.nio.charset.Charset)
+    static synthetic java.io.InputStreamReader reader$default(java.io.InputStream,java.nio.charset.Charset,int,java.lang.Object)
+    private static final java.io.OutputStreamWriter writer(java.io.OutputStream,java.nio.charset.Charset)
+    static synthetic java.io.OutputStreamWriter writer$default(java.io.OutputStream,java.nio.charset.Charset,int,java.lang.Object)
 kotlin.io.CloseableKt:
     private static final java.lang.Object use(java.io.Closeable,kotlin.jvm.functions.Function1)
 kotlin.io.ConsoleKt
 kotlin.io.ConstantsKt
 kotlin.io.ExceptionsKt
-kotlin.io.ExposingBufferByteArrayOutputStream
 kotlin.io.FileAlreadyExistsException
 kotlin.io.FilePathComponents
 kotlin.io.FileSystemException
@@ -43591,7 +43971,6 @@ kotlin.io.FilesKt__FileReadWriteKt:
     private static final java.io.FileOutputStream outputStream(java.io.File)
     private static final java.io.PrintWriter printWriter(java.io.File,java.nio.charset.Charset)
     static synthetic java.io.PrintWriter printWriter$default(java.io.File,java.nio.charset.Charset,int,java.lang.Object)
-    public static final byte[] readBytes(java.io.File)
     public static final java.util.List readLines(java.io.File,java.nio.charset.Charset)
     public static synthetic java.util.List readLines$default(java.io.File,java.nio.charset.Charset,int,java.lang.Object)
     public static final java.lang.String readText(java.io.File,java.nio.charset.Charset)
@@ -43839,7 +44218,13 @@ kotlin.jvm.internal.FloatSpreadBuilder
 kotlin.jvm.internal.FunInterfaceConstructorReference
 kotlin.jvm.internal.FunctionAdapter
 kotlin.jvm.internal.FunctionImpl
-kotlin.jvm.internal.InlineMarker
+kotlin.jvm.internal.InlineMarker:
+    public void <init>()
+    public static void afterInlineCall()
+    public static void beforeInlineCall()
+    public static void finallyEnd(int)
+    public static void finallyStart(int)
+    public static void mark(java.lang.String)
 kotlin.jvm.internal.IntCompanionObject
 kotlin.jvm.internal.IntSpreadBuilder
 kotlin.jvm.internal.Intrinsics$Kotlin
@@ -45102,7 +45487,6 @@ kotlin.text.StringsKt__StringsJVMKt:
     public static final java.lang.String decodeToString(byte[])
     public static final java.lang.String decodeToString(byte[],int,int,boolean)
     public static synthetic java.lang.String decodeToString$default(byte[],int,int,boolean,int,java.lang.Object)
-    public static final byte[] encodeToByteArray(java.lang.String)
     public static final byte[] encodeToByteArray(java.lang.String,int,int,boolean)
     public static synthetic byte[] encodeToByteArray$default(java.lang.String,int,int,boolean,int,java.lang.Object)
     public static final boolean equals(java.lang.String,java.lang.String,boolean)
@@ -45165,9 +45549,7 @@ kotlin.text.StringsKt__StringsKt:
     public static final boolean contentEqualsIgnoreCaseImpl(java.lang.CharSequence,java.lang.CharSequence)
     public static final boolean contentEqualsImpl(java.lang.CharSequence,java.lang.CharSequence)
     public static final boolean endsWith(java.lang.CharSequence,char,boolean)
-    public static final boolean endsWith(java.lang.CharSequence,java.lang.CharSequence,boolean)
     public static synthetic boolean endsWith$default(java.lang.CharSequence,char,boolean,int,java.lang.Object)
-    public static synthetic boolean endsWith$default(java.lang.CharSequence,java.lang.CharSequence,boolean,int,java.lang.Object)
     public static final kotlin.Pair findAnyOf(java.lang.CharSequence,java.util.Collection,int,boolean)
     public static synthetic kotlin.Pair findAnyOf$default(java.lang.CharSequence,java.util.Collection,int,boolean,int,java.lang.Object)
     public static final kotlin.Pair findLastAnyOf(java.lang.CharSequence,java.util.Collection,int,boolean)
@@ -45193,12 +45575,12 @@ kotlin.text.StringsKt__StringsKt:
     public static synthetic java.lang.CharSequence padStart$default(java.lang.CharSequence,int,char,int,java.lang.Object)
     public static synthetic java.lang.String padStart$default(java.lang.String,int,char,int,java.lang.Object)
     public static final java.lang.CharSequence removePrefix(java.lang.CharSequence,java.lang.CharSequence)
+    public static final java.lang.String removePrefix(java.lang.String,java.lang.CharSequence)
     public static final java.lang.CharSequence removeRange(java.lang.CharSequence,int,int)
     public static final java.lang.CharSequence removeRange(java.lang.CharSequence,kotlin.ranges.IntRange)
     private static final java.lang.String removeRange(java.lang.String,int,int)
     private static final java.lang.String removeRange(java.lang.String,kotlin.ranges.IntRange)
     public static final java.lang.CharSequence removeSuffix(java.lang.CharSequence,java.lang.CharSequence)
-    public static final java.lang.String removeSuffix(java.lang.String,java.lang.CharSequence)
     public static final java.lang.CharSequence removeSurrounding(java.lang.CharSequence,java.lang.CharSequence)
     public static final java.lang.CharSequence removeSurrounding(java.lang.CharSequence,java.lang.CharSequence,java.lang.CharSequence)
     public static final java.lang.String removeSurrounding(java.lang.String,java.lang.CharSequence)
@@ -45229,15 +45611,19 @@ kotlin.text.StringsKt__StringsKt:
     private static final java.lang.String replaceRange(java.lang.String,int,int,java.lang.CharSequence)
     private static final java.lang.String replaceRange(java.lang.String,kotlin.ranges.IntRange,java.lang.CharSequence)
     private static final java.util.List split(java.lang.CharSequence,kotlin.text.Regex,int)
+    public static final java.util.List split(java.lang.CharSequence,java.lang.String[],boolean,int)
     static synthetic java.util.List split$default(java.lang.CharSequence,kotlin.text.Regex,int,int,java.lang.Object)
+    public static synthetic java.util.List split$default(java.lang.CharSequence,java.lang.String[],boolean,int,int,java.lang.Object)
     private static final kotlin.sequences.Sequence splitToSequence(java.lang.CharSequence,kotlin.text.Regex,int)
     public static final kotlin.sequences.Sequence splitToSequence(java.lang.CharSequence,char[],boolean,int)
     static synthetic kotlin.sequences.Sequence splitToSequence$default(java.lang.CharSequence,kotlin.text.Regex,int,int,java.lang.Object)
     public static synthetic kotlin.sequences.Sequence splitToSequence$default(java.lang.CharSequence,char[],boolean,int,int,java.lang.Object)
     public static final boolean startsWith(java.lang.CharSequence,char,boolean)
     public static final boolean startsWith(java.lang.CharSequence,java.lang.CharSequence,int,boolean)
+    public static final boolean startsWith(java.lang.CharSequence,java.lang.CharSequence,boolean)
     public static synthetic boolean startsWith$default(java.lang.CharSequence,char,boolean,int,java.lang.Object)
     public static synthetic boolean startsWith$default(java.lang.CharSequence,java.lang.CharSequence,int,boolean,int,java.lang.Object)
+    public static synthetic boolean startsWith$default(java.lang.CharSequence,java.lang.CharSequence,boolean,int,java.lang.Object)
     public static final java.lang.CharSequence subSequence(java.lang.CharSequence,kotlin.ranges.IntRange)
     private static final java.lang.CharSequence subSequence(java.lang.String,int,int)
     private static final java.lang.String substring(java.lang.CharSequence,int,int)
@@ -45552,6 +45938,7 @@ kotlin.time.Duration:
     public static final synthetic long access$getINFINITE$cp()
     public static final synthetic long access$getNEG_INFINITE$cp()
     public static final synthetic long access$getZERO$cp()
+    private static final long addValuesMixedRanges-UwyO8pc(long,long,long)
     public static final double div-LRDsOJo(long,long)
     public static final long div-UwyO8pc(long,double)
     public static final long div-UwyO8pc(long,int)
@@ -45572,12 +45959,13 @@ kotlin.time.Duration:
     public static synthetic void getInSeconds$annotations()
     public static final synthetic double getInSeconds-impl(long)
     public static final long getInWholeMicroseconds-impl(long)
-    public static final long getInWholeMilliseconds-impl(long)
     public static final long getInWholeNanoseconds-impl(long)
     public static synthetic void getMinutesComponent$annotations()
     public static synthetic void getNanosecondsComponent$annotations()
     public static synthetic void getSecondsComponent$annotations()
     private static final int getUnitDiscriminator-impl(long)
+    public static final long minus-LRDsOJo(long,long)
+    public static final long plus-LRDsOJo(long,long)
     public static final long times-UwyO8pc(long,double)
     public static final long times-UwyO8pc(long,int)
     public static final java.lang.Object toComponents-impl(long,kotlin.jvm.functions.Function2)
@@ -45601,7 +45989,13 @@ kotlin.time.DurationKt:
     public static final long MAX_NANOS
     private static final long MAX_NANOS_IN_MILLIS
     public static final int NANOS_IN_MILLIS
+    public static final synthetic long access$durationOfMillisNormalized(long)
+    public static final synthetic long access$durationOfNanos(long)
+    public static final synthetic long access$durationOfNanosNormalized(long)
+    public static final synthetic long access$nanosToMillis(long)
     public static final synthetic long access$parseDuration(java.lang.String,boolean)
+    private static final long durationOfMillisNormalized(long)
+    private static final long durationOfNanosNormalized(long)
     public static final synthetic long getDays(double)
     public static final synthetic long getDays(int)
     public static final synthetic long getDays(long)
@@ -45644,6 +46038,7 @@ kotlin.time.DurationKt:
     public static synthetic void getSeconds$annotations(double)
     public static synthetic void getSeconds$annotations(int)
     public static synthetic void getSeconds$annotations(long)
+    private static final long nanosToMillis(long)
     private static final long parseDuration(java.lang.String,boolean)
     private static final long parseOverLongIsoComponent(java.lang.String)
     private static final int skipWhile(java.lang.String,int,kotlin.jvm.functions.Function1)
@@ -45901,7 +46296,6 @@ kotlinx.coroutines.Job:
     public synthetic abstract void cancel()
     public synthetic abstract boolean cancel(java.lang.Throwable)
     public abstract kotlinx.coroutines.selects.SelectClause0 getOnJoin()
-    public abstract boolean isCancelled()
     public abstract boolean isCompleted()
     public abstract kotlinx.coroutines.Job plus(kotlinx.coroutines.Job)
 kotlinx.coroutines.JobImpl:
@@ -45957,7 +46351,6 @@ kotlinx.coroutines.JobSupport:
     protected final java.lang.Throwable getCompletionCause()
     protected final boolean getCompletionCauseHandled()
     public final kotlinx.coroutines.selects.SelectClause0 getOnJoin()
-    public final boolean isCancelled()
     private final boolean isCancelling(kotlinx.coroutines.Incomplete)
     public final boolean isCompletedExceptionally()
     private final java.lang.Void loopOnState(kotlin.jvm.functions.Function1)
@@ -46333,8 +46726,6 @@ kotlinx.coroutines.flow.FlowKt:
     public static final kotlinx.coroutines.flow.Flow cache(kotlinx.coroutines.flow.Flow)
     public static final kotlinx.coroutines.flow.Flow callbackFlow(kotlin.jvm.functions.Function2)
     public static final kotlinx.coroutines.flow.Flow cancellable(kotlinx.coroutines.flow.Flow)
-    public static final kotlinx.coroutines.flow.Flow catch(kotlinx.coroutines.flow.Flow,kotlin.jvm.functions.Function3)
-    public static final java.lang.Object catchImpl(kotlinx.coroutines.flow.Flow,kotlinx.coroutines.flow.FlowCollector,kotlin.coroutines.Continuation)
     public static final kotlinx.coroutines.flow.Flow channelFlow(kotlin.jvm.functions.Function2)
     public static final java.lang.Object collect(kotlinx.coroutines.flow.Flow,kotlin.coroutines.Continuation)
     public static final synthetic java.lang.Object collect(kotlinx.coroutines.flow.Flow,kotlin.jvm.functions.Function2,kotlin.coroutines.Continuation)
@@ -46577,16 +46968,14 @@ kotlinx.coroutines.flow.FlowKt__EmittersKt:
     public static final kotlinx.coroutines.flow.Flow onStart(kotlinx.coroutines.flow.Flow,kotlin.jvm.functions.Function2)
     public static final kotlinx.coroutines.flow.Flow transform(kotlinx.coroutines.flow.Flow,kotlin.jvm.functions.Function3)
     public static final kotlinx.coroutines.flow.Flow unsafeTransform(kotlinx.coroutines.flow.Flow,kotlin.jvm.functions.Function3)
-kotlinx.coroutines.flow.FlowKt__ErrorsKt$catch$$inlined$unsafeFlow$1$1
-kotlinx.coroutines.flow.FlowKt__ErrorsKt$catch$$inlined$unsafeFlow$1
-kotlinx.coroutines.flow.FlowKt__ErrorsKt$catchImpl$1
-kotlinx.coroutines.flow.FlowKt__ErrorsKt$catchImpl$2$emit$1
-kotlinx.coroutines.flow.FlowKt__ErrorsKt$catchImpl$2
 kotlinx.coroutines.flow.FlowKt__ErrorsKt$retry$1
 kotlinx.coroutines.flow.FlowKt__ErrorsKt$retry$3
 kotlinx.coroutines.flow.FlowKt__ErrorsKt$retryWhen$$inlined$unsafeFlow$1$1
 kotlinx.coroutines.flow.FlowKt__ErrorsKt$retryWhen$$inlined$unsafeFlow$1
-kotlinx.coroutines.flow.FlowKt__ErrorsKt
+kotlinx.coroutines.flow.FlowKt__ErrorsKt:
+    public static final kotlinx.coroutines.flow.Flow retry(kotlinx.coroutines.flow.Flow,long,kotlin.jvm.functions.Function2)
+    public static synthetic kotlinx.coroutines.flow.Flow retry$default(kotlinx.coroutines.flow.Flow,long,kotlin.jvm.functions.Function2,int,java.lang.Object)
+    public static final kotlinx.coroutines.flow.Flow retryWhen(kotlinx.coroutines.flow.Flow,kotlin.jvm.functions.Function4)
 kotlinx.coroutines.flow.FlowKt__LimitKt$collectWhile$1
 kotlinx.coroutines.flow.FlowKt__LimitKt$collectWhile$collector$1$emit$1
 kotlinx.coroutines.flow.FlowKt__LimitKt$collectWhile$collector$1
@@ -47190,10 +47579,7 @@ kotlinx.coroutines.selects.UnbiasedSelectBuilderImpl
 kotlinx.coroutines.selects.WhileSelectKt$whileSelect$1
 kotlinx.coroutines.selects.WhileSelectKt
 kotlinx.coroutines.sync.CancelSemaphoreAcquisitionHandler
-kotlinx.coroutines.sync.Mutex$DefaultImpls:
-    public static synthetic void getOnLock$annotations()
-    public static synthetic java.lang.Object lock$default(kotlinx.coroutines.sync.Mutex,java.lang.Object,kotlin.coroutines.Continuation,int,java.lang.Object)
-    public static synthetic boolean tryLock$default(kotlinx.coroutines.sync.Mutex,java.lang.Object,int,java.lang.Object)
+kotlinx.coroutines.sync.Mutex$DefaultImpls
 kotlinx.coroutines.sync.Mutex:
     public abstract kotlinx.coroutines.selects.SelectClause2 getOnLock()
     public abstract boolean holdsLock(java.lang.Object)
@@ -48856,15 +49242,13 @@ androidx.viewpager2.adapter.FragmentStateAdapter$FragmentMaxLifecycleEnforcer$3:
 androidx.viewpager2.adapter.FragmentStateAdapter$FragmentMaxLifecycleEnforcer
 androidx.viewpager2.adapter.FragmentStateAdapter
 androidx.viewpager2.adapter.FragmentViewHolder
-com.agnostiko.tms_agent_communication.TMSCommunicationPlugin$onMethodCall$1$$InternalSyntheticLambda$2$64b74cb67e29a29d2cd49f4e9db8a3e07654a03e72f2da96ef19231604b98668$0
-com.agnostiko.tms_agent_communication.TMSCommunicationPlugin$onMethodCall$1:
-    public static synthetic void $r8$lambda$Zk9tiXQvV4w_7sK-OC5P-0B2WMU(io.flutter.plugin.common.MethodChannel$Result,java.lang.Throwable)
-    public static final void invokeSuspend$lambda$0(io.flutter.plugin.common.MethodChannel$Result,java.lang.Throwable)
 com.amolg.flutterbarcodescanner.camera.CameraSource$FrameProcessingRunnable:
     public static final synthetic boolean $assertionsDisabled
 com.amolg.flutterbarcodescanner.camera.CameraSource:
     public static synthetic java.lang.Thread access$2000(com.amolg.flutterbarcodescanner.camera.CameraSource)
-com.apps2go.agnostiko.common.emv.EmvPinpadEntryEvent
+com.apps2go.agnostiko.common.emv.EmvLog:
+    public final void pinRequested()
+com.apps2go.agnostiko.common.emv.EmvPinRequestedEvent
 com.baseflow.geolocator.location.LocationClient:
     public abstract boolean checkLocationService(android.content.Context)
 com.google.android.datatransport.runtime.dagger.internal.DoubleCheck:
@@ -48935,14 +49319,6 @@ com.google.common.util.concurrent.AbstractFuture$TrustedFuture
 com.google.common.util.concurrent.AbstractFuture
 com.google.common.util.concurrent.SettableFuture
 com.google.common.util.concurrent.internal.InternalFutureFailureAccess
-com.google.firebase.auth.FirebaseAuth:
-    public static final synthetic int zza
-com.google.firebase.auth.internal.GenericIdpActivity:
-    public static final synthetic int zzb
-com.google.firebase.auth.internal.zzbs:
-    public void <init>(java.lang.String)
-com.google.firebase.auth.internal.zzby:
-    public static final synthetic int zzb
 com.google.firebase.firestore.AggregateField$AverageAggregateField
 com.google.firebase.firestore.AggregateField$SumAggregateField
 com.google.firebase.functions.dagger.internal.DoubleCheck:
@@ -49018,6 +49394,11 @@ com.google.protobuf.MessageSchema:
 com.google.protobuf.OneofInfo
 com.google.protobuf.UnsafeUtil:
     public static long objectFieldOffset(java.lang.reflect.Field)
+com.szsicod.print.escpos.PrinterAPI:
+    public final int clearASC(byte[])
+    public final int resolveBitmap()
+com.szsicod.print.io.SerialAPI
+com.szsicod.print.io.UsbNativeAPI
 com.tekartik.sqflite.Utils:
     public static java.util.Locale localeForLanguageTagPre21(java.lang.String)
 com.yalantis.ucrop.util.EglUtils:
@@ -49045,6 +49426,8 @@ io.flutter.embedding.engine.FlutterEngineConnectionRegistry:
 io.flutter.embedding.engine.loader.ResourceExtractor:
     public void waitForCompletion()
 io.flutter.embedding.engine.systemchannels.PlatformChannel$PlatformMessageHandler$-CC
+io.flutter.embedding.engine.systemchannels.SettingsChannel:
+    public static final synthetic boolean $assertionsDisabled
 io.flutter.plugin.common.BinaryMessenger$-CC:
     public static io.flutter.plugin.common.BinaryMessenger$TaskQueue $default$makeBackgroundTaskQueue(io.flutter.plugin.common.BinaryMessenger,io.flutter.plugin.common.BinaryMessenger$TaskQueueOptions)
     public static void $default$setMessageHandler(io.flutter.plugin.common.BinaryMessenger,java.lang.String,io.flutter.plugin.common.BinaryMessenger$BinaryMessageHandler,io.flutter.plugin.common.BinaryMessenger$TaskQueue)
@@ -49060,9 +49443,16 @@ io.flutter.plugins.firebase.auth.FlutterFirebaseTotpMultiFactor:
     public static final synthetic boolean $assertionsDisabled
 io.flutter.plugins.firebase.auth.FlutterFirebaseTotpSecret:
     public static final synthetic boolean $assertionsDisabled
-io.flutter.plugins.firebase.core.GeneratedAndroidFirebaseCore:
+io.flutter.plugins.firebase.firestore.FlutterFirebaseFirestorePlugin:
+    public static final synthetic boolean $assertionsDisabled
+io.flutter.plugins.firebase.firestore.utils.PigeonParser:
+    public static final synthetic boolean $assertionsDisabled
     public void <init>()
+io.flutter.plugins.firebase.messaging.FlutterFirebaseMessagingBackgroundService:
+    public static final synthetic boolean $assertionsDisabled
 io.flutter.plugins.firebase.messaging.PluginRegistrantException
+io.flutter.plugins.firebase.storage.FlutterFirebaseStoragePlugin:
+    public static final synthetic boolean $assertionsDisabled
 io.flutter.view.TextureRegistry$SurfaceTextureEntry$-CC
 io.flutter.view.VsyncWaiter:
     public static io.flutter.view.VsyncWaiter getInstance(float,io.flutter.embedding.engine.FlutterJNI)
@@ -49195,13 +49585,13 @@ kotlin.ExceptionsKt
 kotlin.LazyKt
 kotlin.LazyKt__LazyKt
 kotlin.collections.ArraysKt
-kotlin.collections.ArraysKt___ArraysJvmKt:
-    public static final void sortWith(java.lang.Object[],java.util.Comparator)
 kotlin.collections.ArraysKt___ArraysKt:
     public static final java.lang.Object[] sortedArrayWith(java.lang.Object[],java.util.Comparator)
     public static final java.util.List sortedWith(java.lang.Object[],java.util.Comparator)
 kotlin.collections.CollectionsKt
 kotlin.collections.MapsKt
+kotlin.collections.MapsKt___MapsJvmKt
+kotlin.collections.MapsKt___MapsKt
 kotlin.collections.SetsKt
 kotlin.collections.SetsKt___SetsKt
 kotlin.comparisons.ComparisonsKt

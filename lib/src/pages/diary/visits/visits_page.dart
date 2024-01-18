@@ -12,6 +12,7 @@ import 'package:pwa_sales2go_flutter/src/models/visit_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/visits/components/visits_map.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/visits/components/visits_list.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
+import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/visits_alerts_and_dialogs/create_visit_dialog.dart';
@@ -60,10 +61,10 @@ class _VisitsPageState extends State<VisitsPage> {
     tomorrow = tomorrow.add(Duration(days: 1));
 
     final user = context.watch<UserModel?>();
-
     return StreamBuilder<List<Visits>>(
-        stream: currentDay !=
-                Timestamp.fromDate(DateTime(
+      stream: currentDay !=
+              Timestamp.fromDate(
+                DateTime(
                   DateTime.now().year + 99,
                   DateTime.now().month + 99,
                   DateTime.now().day + 99,
@@ -72,112 +73,115 @@ class _VisitsPageState extends State<VisitsPage> {
                   0,
                   0,
                   0,
-                ))
-            ? usuariosRef
-                .doc(user?.uid)
-                .collection('visitas')
-                .where('fecha',
-                    isGreaterThanOrEqualTo: currentDayProvider.currentDayVisits)
-                .where('fecha', isLessThan: tomorrow)
-                .orderBy('fecha', descending: isDescending)
-                .snapshots()
-                .map(visitsFromSnasphot)
-            : usuariosRef
-                .doc(user?.uid)
-                .collection('visitas')
-                .orderBy('fecha', descending: isDescending)
-                .snapshots()
-                .map(visitsFromSnasphot),
-        initialData: const [],
-        builder: (context, snapshot) {
-          print('snapshot.data');
-          print(snapshot.data);
-          print(snapshot.error);
-          return SafeArea(
-            child: Scaffold(
-              backgroundColor: myTheme.colorScheme.background,
-              floatingActionButton: Wrap(
-                direction: Axis.vertical,
-                children: [
-                  FloatingActionButton(
-                    elevation: 10,
-                    heroTag: null,
-                    backgroundColor: myTheme.colorScheme.primary,
-                    onPressed: () {
+                ),
+              )
+          ? usuariosRef
+              .doc(user?.uid)
+              .collection('visitas')
+              .where('fecha',
+                  isGreaterThanOrEqualTo: currentDayProvider.currentDayVisits)
+              .where('fecha', isLessThan: tomorrow)
+              .orderBy('fecha', descending: isDescending)
+              .snapshots()
+              .map(visitsFromSnasphot)
+          : usuariosRef
+              .doc(user?.uid)
+              .collection('visitas')
+              .orderBy('fecha', descending: isDescending)
+              .snapshots()
+              .map(visitsFromSnasphot),
+      initialData: const [],
+      builder: (context, snapshot) {
+        print('snapshot.data');
+        print(snapshot.data);
+        print(snapshot.error);
+        return SafeArea(
+          child: Scaffold(
+            backgroundColor: myTheme.colorScheme.background,
+            floatingActionButton: Wrap(
+              direction: Axis.vertical,
+              children: [
+                FloatingActionButton(
+                  elevation: 10,
+                  heroTag: null,
+                  backgroundColor: myTheme.colorScheme.primary,
+                  onPressed: () {
+                    if (globalRemoteConfig.visitas == true)
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                StreamProvider<List<Visits>>.value(
-                                  value: currentDay !=
-                                          Timestamp.fromDate(DateTime(
-                                            DateTime.now().year + 99,
-                                            DateTime.now().month + 99,
-                                            DateTime.now().day + 99,
-                                            0,
-                                            0,
-                                            0,
-                                            0,
-                                            0,
-                                          ))
-                                      ? usuariosRef
-                                          .doc(user?.uid)
-                                          .collection('visitas')
-                                          .orderBy('fecha',
-                                              descending: isDescending)
-                                          .where('fecha',
-                                              isGreaterThanOrEqualTo:
-                                                  currentDayProvider
-                                                      .currentDayVisits)
-                                          .where('fecha', isLessThan: tomorrow)
-                                          .snapshots()
-                                          .map(visitsFromSnasphot)
-                                      : usuariosRef
-                                          .doc(user?.uid)
-                                          .collection('visitas')
-                                          .orderBy('fecha',
-                                              descending: isDescending)
-                                          .snapshots()
-                                          .map(visitsFromSnasphot),
-                                  initialData: snapshot.data ?? [],
-                                  lazy: true,
-                                  child: VisitsMap(),
-                                )),
+                          builder: (BuildContext context) =>
+                              StreamProvider<List<Visits>>.value(
+                            value: currentDay !=
+                                    Timestamp.fromDate(
+                                      DateTime(
+                                        DateTime.now().year + 99,
+                                        DateTime.now().month + 99,
+                                        DateTime.now().day + 99,
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                      ),
+                                    )
+                                ? usuariosRef
+                                    .doc(user?.uid)
+                                    .collection('visitas')
+                                    .orderBy('fecha', descending: isDescending)
+                                    .where('fecha',
+                                        isGreaterThanOrEqualTo:
+                                            currentDayProvider.currentDayVisits)
+                                    .where('fecha', isLessThan: tomorrow)
+                                    .snapshots()
+                                    .map(visitsFromSnasphot)
+                                : usuariosRef
+                                    .doc(user?.uid)
+                                    .collection('visitas')
+                                    .orderBy('fecha', descending: isDescending)
+                                    .snapshots()
+                                    .map(visitsFromSnasphot),
+                            initialData: snapshot.data ?? [],
+                            lazy: true,
+                            child: VisitsMap(),
+                          ),
+                        ),
                       );
-                    },
-                    child: const Icon(
-                      MaterialCommunityIcons.map,
-                      color: Colors.white,
-                    ),
+                  },
+                  child: const Icon(
+                    MaterialCommunityIcons.map,
+                    color: Colors.white,
                   ),
-                  SizedBox(height: 20),
-                  FloatingActionButton(
-                    heroTag: null,
-                    elevation: 10,
-                    backgroundColor: myTheme.colorScheme.primary,
-                    onPressed: () {
-                      // ShowDialog de a;adir visita
-                      showCreateClientDialog(context, user?.uid);
-                    },
-                    child: const Icon(
-                      MaterialCommunityIcons.calendar_plus,
-                      color: Colors.white,
-                    ),
+                ),
+                SizedBox(height: 20),
+                FloatingActionButton(
+                  heroTag: null,
+                  elevation: 10,
+                  backgroundColor: myTheme.colorScheme.primary,
+                  onPressed: () {
+                    // ShowDialog de a;adir visita
+                    showCreateClientDialog(context, user?.uid);
+                  },
+                  child: const Icon(
+                    MaterialCommunityIcons.calendar_plus,
+                    color: Colors.white,
                   ),
-                ],
-              ),
-              body: VisitsBody(
-                  toggleSeeCompleted: toggleSeeCompleted,
-                  seeCompleted: seeCompleted,
-                  isDescending: isDescending,
-                  toggleOrder: toggleOrder,
-                  onDateSelected: onDateSelected,
-                  dateSelected: dateSelected,
-                  isLoading:
-                      snapshot.connectionState == ConnectionState.waiting,
-                  visits: snapshot.data ?? []),
+                ),
+              ],
             ),
-          );
-        });
+            body: VisitsBody(
+              toggleSeeCompleted: toggleSeeCompleted,
+              seeCompleted: seeCompleted,
+              isDescending: isDescending,
+              toggleOrder: toggleOrder,
+              onDateSelected: onDateSelected,
+              dateSelected: dateSelected,
+              isLoading: snapshot.connectionState == ConnectionState.waiting,
+              visits: snapshot.data ?? [],
+            ),
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -394,17 +398,21 @@ class VisitsBody extends StatelessWidget {
             child: Divider(),
           ),
           VisitsList(
-              visits: seeCompleted
-                  ? visits
-                      .where((element) =>
+            visits: seeCompleted
+                ? visits
+                    .where(
+                      (element) =>
                           element.isCancelled == seeCompleted ||
-                          element.isCompleted == seeCompleted)
-                      .toList()
-                  : visits
-                      .where((element) =>
-                          !element.isCancelled && !element.isCompleted)
-                      .toList(),
-              isLoading: isLoading)
+                          element.isCompleted == seeCompleted,
+                    )
+                    .toList()
+                : visits
+                    .where(
+                      (element) => !element.isCancelled && !element.isCompleted,
+                    )
+                    .toList(),
+            isLoading: isLoading,
+          )
         ],
       ),
     );

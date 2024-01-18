@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors
+
 import 'package:agnostiko/device/src/device.dart';
 import 'package:agnostiko/scanner/src/scanner.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -6,28 +7,21 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_listener/flutter_barcode_listener.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
-import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/checkout_retail_page.dart';
-import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
-import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
-import 'package:pwa_sales2go_flutter/src/pages/place_order/checkout_page.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/mobile_scanner/mobile_scanner.dart';
 
-class SelectedProducts extends StatefulWidget {
-  const SelectedProducts({
+class SelectedProductsKiosko extends StatefulWidget {
+  const SelectedProductsKiosko({
     Key? key,
     required this.client,
   }) : super(key: key);
@@ -35,13 +29,12 @@ class SelectedProducts extends StatefulWidget {
   final Clients? client;
 
   @override
-  State<SelectedProducts> createState() => _SelectedProductsState();
+  State<SelectedProductsKiosko> createState() => _SelectedProductsKioskoState();
 }
 
-class _SelectedProductsState extends State<SelectedProducts> {
+class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
   DeviceType? deviceType;
   bool hasLaserScanner = false;
-  String? scanResult = '';
   late String? clientPriceList = widget.client?.prices;
   late Stream<List<ShoppingCartProduct>> streamShoppingCartProducts;
 
@@ -71,10 +64,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
 
     if (scanResult == '') return;
 
-    if (deviceType == DeviceType.PINPAD) {
-      Fluttertoast.showToast(
-          msg: 'Cargando producto $scanResult', fontSize: 20);
-    }
+    Fluttertoast.showToast(msg: 'Cargando producto $scanResult', fontSize: 20);
 
     try {
       // print(stockProducts);
@@ -191,12 +181,8 @@ class _SelectedProductsState extends State<SelectedProducts> {
     final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 2;
     final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 1;
     final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
-    // print("clientPriceList: $clientPriceList");
-    final userRole = Provider.of<UserRole?>(context, listen: true);
-    // print('User Role ${userRole?.name}');
-    // print("Retail: ${userRole?.isRetail}");
 
-    return coinName == ''
+    return coinName == '' || deviceType == null
         ? Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -239,7 +225,6 @@ class _SelectedProductsState extends State<SelectedProducts> {
                       bufferDuration: Duration(milliseconds: 500),
                       onBarcodeScanned: (barcode) {
                         print(barcode);
-
                         addProductFromBarcodeResult(barcode, products);
                       },
                       child: SingleChildScrollView(
@@ -249,64 +234,41 @@ class _SelectedProductsState extends State<SelectedProducts> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               products!.isEmpty
-                                  ? Container(
+                                  ? SizedBox(
                                       height:
                                           MediaQuery.of(context).size.height *
-                                              0.50,
+                                              0.40,
                                       width: MediaQuery.of(context).size.width,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            deviceType == DeviceType.PINPAD
-                                                ? CrossAxisAlignment.center
-                                                : CrossAxisAlignment.start,
-                                        children: [
-                                          deviceType == DeviceType.PINPAD
-                                              ? Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Column(
-                                                    children: [
-                                                      Text(
-                                                        'No hay productos seleccionados\nAcerca el código de barras al escáner.',
-                                                        style: TextStyle(
-                                                          fontFamily:
-                                                              'Poppins-medium',
-                                                          fontSize: 16,
-                                                          color: Colors.black,
-                                                        ),
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                      ),
-                                                      Image.asset(
-                                                        'assets/images/scan_barcode.png',
-                                                        height: 150,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                )
-                                              : Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      16, 8, 0, 0),
-                                                  child: Text(
-                                                    'No hay productos seleccionados',
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontFamily:
-                                                          'Poppins-medium',
-                                                      fontSize: 14,
-                                                    ),
-                                                  ),
+                                      child: Center(
+                                        child: Column(
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Text(
+                                                deviceType != DeviceType.PINPAD
+                                                    ? 'Inicia un escaneo dando click en el botón'
+                                                    : 'Acerca el código de barras al escáner.',
+                                                style: TextStyle(
+                                                  fontFamily: 'Poppins-medium',
+                                                  fontSize: 16,
+                                                  color: Colors.white,
                                                 ),
-                                        ],
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                            Image.asset(
+                                              'assets/images/scan_barcode.png',
+                                              height: 150,
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     )
-                                  : Container(
-                                      color: Colors.grey.shade100,
+                                  : SizedBox(
                                       height:
                                           MediaQuery.of(context).size.height *
-                                              0.50,
+                                              0.45,
                                       width: MediaQuery.of(context).size.width,
                                       child: ListView.builder(
                                         shrinkWrap: true,
@@ -316,7 +278,8 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                           final ShoppingCartProduct product =
                                               products[index];
                                           var productPrice = Decimal.parse(
-                                              product.unitPrice.toString());
+                                            product.unitPrice.toString(),
+                                          );
 
                                           var productPriceConverted =
                                               // final double productPriceConverted =
@@ -331,11 +294,14 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                   price: productPriceConverted);
 
                                           var productTotalByQuantity =
-                                              Decimal.parse(product.unitPrice
-                                                      .toString()) *
-                                                  Decimal.parse(product
-                                                      .productQuantity
-                                                      .toString());
+                                              Decimal.parse(
+                                                    product.unitPrice
+                                                        .toString(),
+                                                  ) *
+                                                  Decimal.parse(
+                                                    product.productQuantity
+                                                        .toString(),
+                                                  );
 
                                           var productTotalByQuantityConverted =
                                               priceMultipliedByItsExchangeRatio2(
@@ -348,8 +314,9 @@ class _SelectedProductsState extends State<SelectedProducts> {
 
                                           var productTotalByQuantityConvertedFormatted =
                                               formatDecimalPriceByRegion(
-                                                  price:
-                                                      productTotalByQuantityConverted);
+                                            price:
+                                                productTotalByQuantityConverted,
+                                          );
 
                                           return Container(
                                             margin: const EdgeInsets.fromLTRB(
@@ -802,14 +769,13 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     const SizedBox(height: 10),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        if (globalRemoteConfig
-                                                    .escannerDeProductos ==
-                                                true &&
-                                            deviceType != DeviceType.PINPAD)
+                                    /* Quitar boton de scaner para el apk del pinpad */
+
+                                    if (deviceType != DeviceType.PINPAD)
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
                                           Container(
                                             decoration: BoxDecoration(
                                               borderRadius:
@@ -834,8 +800,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                     RoundedRectangleBorder(
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                        16,
-                                                      ),
+                                                              16),
                                                     ),
                                                   ),
                                                 ),
@@ -882,53 +847,10 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                          ),
-                                          width: 182,
-                                          height: 56,
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(16),
-                                            child: ElevatedButton.icon(
-                                              onPressed: () {
-                                                final test = Provider.of<
-                                                        CounterLimitFirestore>(
-                                                    context,
-                                                    listen: false);
-                                                Navigator.popUntil(
-                                                  context,
-                                                  (route) => route.isFirst,
-                                                );
-                                                test.setNewScreen(0);
-                                              },
-                                              icon: const Icon(
-                                                MaterialCommunityIcons.tag_plus,
-                                                size: 17,
-                                              ),
-                                              label: Text(
-                                                AppLocalizations.of(context)!
-                                                    .addProducts,
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontFamily: 'Poppins-medium',
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                              style: ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStateProperty.all(
-                                                  myTheme.colorScheme.primary,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                          )
+                                        ],
+                                      ),
+                                    /* Aqui termina el row del escaner a comentar para pinpad */
                                     Container(
                                       alignment: Alignment.bottomCenter,
                                       margin: const EdgeInsets.fromLTRB(
@@ -944,7 +866,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                             style: const TextStyle(
                                               fontFamily: 'Poppins-regular',
                                               fontSize: 14,
-                                              color: Color(0xff000C99),
+                                              color: Colors.white,
                                             ),
                                           ),
                                           Text(
@@ -952,7 +874,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                             style: const TextStyle(
                                               fontFamily: 'Poppins-regular',
                                               fontSize: 14,
-                                              color: Color(0xff000C99),
+                                              color: Colors.white,
                                             ),
                                           ),
                                         ],
@@ -972,39 +894,19 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                           onPressed: products.isEmpty
                                               ? null
                                               : () {
-                                                  userRole?.isRetail == false
-                                                      ? Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                CheckoutPage(
-                                                              client:
-                                                                  widget.client,
-                                                              cart: products,
-                                                              subTotal:
-                                                                  double.parse(
-                                                                subTotal
-                                                                    .toString(),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        )
-                                                      : Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                CheckoutRetailPage(
-                                                              client:
-                                                                  widget.client,
-                                                              cart: products,
-                                                              subTotal:
-                                                                  double.parse(
-                                                                subTotal
-                                                                    .toString(),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        );
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          CheckoutRetailPage(
+                                                        client: widget.client,
+                                                        cart: products,
+                                                        subTotal: double.parse(
+                                                          subTotal.toString(),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  );
                                                 },
                                           style: ButtonStyle(
                                             backgroundColor:
@@ -1042,23 +944,18 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                       : Colors.white,
                                                 ),
                                               ),
-                                              Container(
-                                                margin:
-                                                    const EdgeInsets.fromLTRB(
-                                                        0, 0, 0, 2),
-                                                child: Icon(
-                                                  SimpleLineIcons.arrow_right,
-                                                  size: 14,
-                                                  color: products.isEmpty
-                                                      ? Colors.grey.shade700
-                                                      : Colors.grey.shade300,
-                                                ),
+                                              Icon(
+                                                SimpleLineIcons.arrow_right,
+                                                size: 14,
+                                                color: products.isEmpty
+                                                    ? Colors.grey.shade700
+                                                    : Colors.grey.shade300,
                                               ),
                                             ],
                                           ),
                                         ),
                                       ),
-                                    ),
+                                    )
                                   ],
                                 ),
                               ),

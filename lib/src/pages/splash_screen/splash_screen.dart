@@ -176,6 +176,14 @@ class SplashScreenViewState extends State<SplashScreenView> {
         } else {
           await initSDK(authToken: authToken);
         }
+      } else if (deviceType == DeviceType.PINPAD) {
+        await connectPinpad();
+        authToken = await _initToken();
+        if (authToken == null) {
+          return false;
+        } else {
+          await initSDK(authToken: authToken);
+        }
       } else {
         await initSDK();
       }
@@ -265,13 +273,12 @@ class SplashScreenViewState extends State<SplashScreenView> {
     // cargamos la llave fija del entorno de prueba
     // esta llave está encriptada con un KEK de valor '1D7BA112D144429260D2C219A6A80798'
     // la llave en claro es 'A66AB26590D3186E8A4C5A40D6F4F15D'
-    
+
     //Carga de llaves en terminales de forma manual
     await loadTestKEK();
     await cryptoLoadIPEK(1, "FFFF7790169673800001".toHexBytes(),
         "B566BD27A7839A31A8CC265A1A7702A1".toHexBytes(),
         kekIndex: 1, kcv: "2764ba".toHexBytes());
-  
   }
 
   @override
@@ -301,83 +308,90 @@ class SplashScreenViewState extends State<SplashScreenView> {
           constraints:
               BoxConstraints(maxWidth: screenWidth, maxHeight: screenHeight),
           color: const Color(0xFF03045E),
-          child: Column(children: [
-            Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.only(top: screenHeight / 6),
-              height: screenHeight / 3,
-              width: 400.0,
-              decoration: const BoxDecoration(
+          child: Column(
+            children: [
+              Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.only(top: screenHeight / 6),
+                height: screenHeight / 3,
+                width: 400.0,
+                decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage(
-                        'assets/images/logo_agnostiko_blanco_eslogan.png'),
+                      'assets/images/logo_agnostiko_blanco_eslogan.png',
+                    ),
                   ),
-                  shape: BoxShape.rectangle),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Card(
-              color: const Color(0xFF03045E),
-              child: ListTile(
-                title: Center(
-                  child: Text(
-                    label,
-                    style: const TextStyle(
+                  shape: BoxShape.rectangle,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Card(
+                color: const Color(0xFF03045E),
+                child: ListTile(
+                  title: Center(
+                    child: Text(
+                      label,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 20,
-                        fontWeight: FontWeight.bold),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            Visibility(
-              visible: !_visibility,
-              child: LoadingAnimationWidget.staggeredDotsWave(
-                color: Colors.white,
-                size: 120,
-                //size: 150,
+              const SizedBox(
+                height: 5,
               ),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            Visibility(
-              visible: _visibility,
-              child: SizedBox(
-                width: 150,
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                    foregroundColor: const Color(0xFF03045E),
-                    elevation: 10,
-                    shadowColor: Colors.black45,
-                    shape: RoundedRectangleBorder(
+              Visibility(
+                visible: !_visibility,
+                child: LoadingAnimationWidget.staggeredDotsWave(
+                  color: Colors.white,
+                  size: 120,
+                  //size: 150,
+                ),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Visibility(
+                visible: _visibility,
+                child: SizedBox(
+                  width: 150,
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      foregroundColor: const Color(0xFF03045E),
+                      elevation: 10,
+                      shadowColor: Colors.black45,
+                      shape: RoundedRectangleBorder(
                         side: const BorderSide(
                             color: Colors.white,
                             width: 3,
                             style: BorderStyle.solid),
-                        borderRadius: BorderRadius.circular(30)),
-                  ),
-                  onPressed: () {
-                    onTapButton();
-                  },
-                  child: Text(
-                    _buttonTitle,
-                    style: const TextStyle(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    onPressed: () {
+                      onTapButton();
+                    },
+                    child: Text(
+                      _buttonTitle,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 20,
-                        fontWeight: FontWeight.bold),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-          ])
+              const SizedBox(
+                height: 5,
+              ),
+            ],
+          )
           //child:FlutterLogo(size:MediaQuery.of(context).size.height)
           ),
     );

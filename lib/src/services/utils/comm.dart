@@ -19,12 +19,19 @@ final pharosUsername = "NECS01Oeyx";
 final pharosPassword = dotenv.env['pharosPassword'] ?? '';
 
 Future<Uint8List> getToken(String serialNumber) async {
-  final response = await http.get(
-    Uri.parse(
-      'https://server-agnostiko-web-gnbxyenkeq-ue.a.run.app/token/${serialNumber.toUpperCase()}',
-    ),
-  );
-  return response.bodyBytes;
+  final brand = (await getPlatformInfo()).deviceBrand;
+  const appId = "com.agnostiko.field_sales";
+  var authToken;
+  try {
+    const productionUrl = "https://insightone-server.agnostiko.com";
+    authToken = await getSDKToken(productionUrl, brand, serialNumber, appId);
+  } catch (e) {
+    try {
+      const demoUrl = "https://tms-server-demo.apps2go.tech";
+      authToken = await getSDKToken(demoUrl, brand, serialNumber, appId);
+    } catch (e) {}
+  }
+  return authToken;
 }
 
 Future<PharosSaleResponse> processSalePharos(

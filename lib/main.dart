@@ -53,124 +53,127 @@ Future<void> main() async {
 
 class SfaAgnostiko extends StatelessWidget {
   const SfaAgnostiko({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<bool>(
-        future: multitenantConfig.initializePhone(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return MaterialApp(
-              debugShowCheckedModeBanner: false,
-              supportedLocales: L10n.all,
-              localizationsDelegates: const [
-                AppLocalizations.delegate,
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
-              title: 'Field Sales',
-              theme: myTheme,
-              home: const SplashScreenView(redirect: false),
-            );
-          }
+      future: multitenantConfig.initializePhone(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            supportedLocales: L10n.all,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            title: 'Field Sales',
+            theme: myTheme,
+            home: const SplashScreenView(redirect: false),
+          );
+        }
 
-          return StreamProvider<UserModel?>.value(
-              value: AuthService().user,
-              initialData: null,
-              child: MultiProvider(
-                  providers: [
-                    ChangeNotifierProvider<LocaleProvider>(
-                        create: (context) => LocaleProvider()),
-                    ChangeNotifierProvider<NotificationService>(
-                        create: (context) => NotificationService()),
-                    ChangeNotifierProvider<CurrencyProvider>(
-                        create: (context) => CurrencyProvider()),
-                    ChangeNotifierProvider<OrderProvider>(
-                        create: (context) => OrderProvider()),
-                    ChangeNotifierProvider<CounterLimitFirestore>(
-                        create: (context) => CounterLimitFirestore()),
+        return StreamProvider<UserModel?>.value(
+          value: AuthService().user,
+          initialData: null,
+          child: MultiProvider(
+            providers: [
+              ChangeNotifierProvider<LocaleProvider>(
+                create: (context) => LocaleProvider(),
+              ),
+              ChangeNotifierProvider<NotificationService>(
+                create: (context) => NotificationService(),
+              ),
+              ChangeNotifierProvider<CurrencyProvider>(
+                create: (context) => CurrencyProvider(),
+              ),
+              ChangeNotifierProvider<OrderProvider>(
+                create: (context) => OrderProvider(),
+              ),
+              ChangeNotifierProvider<CounterLimitFirestore>(
+                create: (context) => CounterLimitFirestore(),
+              ),
+            ],
+            builder: (context, child) {
+              final localeProvider = Provider.of<LocaleProvider>(context);
+              final productsLimit =
+                  Provider.of<CounterLimitFirestore>(context).getProductsLimit;
+              // final productsScrollLimit =
+              //     Provider.of<CounterLimitFirestore>(context)
+              //         .getScrollProductLimit;
+              return StreamProvider<List<Products>?>.value(
+                value: productsLimit == 0
+                    ? productsCollection
+                        // .where('marca', isEqualTo: aceites)
+                        .orderBy('codigo')
+                        .snapshots()
+                        .map(productsListFromSnapshot)
+                    : productsCollection
+                        // .where('marca', isEqualTo: aceites)
+                        .orderBy('codigo')
+                        .limit(productsLimit)
+                        .snapshots()
+                        .map(productsListFromSnapshot),
+                initialData: const [],
+                catchError: (context, error) {
+                  print(error);
+                  print('PROVIDER PRODUCT ERROR');
+                  return;
+                },
+                child: MaterialApp(
+                  debugShowCheckedModeBanner: false,
+                  locale: localeProvider.locale,
+                  supportedLocales: L10n.all,
+                  localizationsDelegates: const [
+                    AppLocalizations.delegate,
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
                   ],
-                  builder: (context, child) {
-                    final localeProvider = Provider.of<LocaleProvider>(context);
-                    final productsLimit =
-                        Provider.of<CounterLimitFirestore>(context)
-                            .getProductsLimit;
-                    // final productsScrollLimit =
-                    //     Provider.of<CounterLimitFirestore>(context)
-                    //         .getScrollProductLimit;
-                    return StreamProvider<List<Products>?>.value(
-                      value: productsLimit == 0
-                          ? productsCollection
-                              // .where('marca', isEqualTo: aceites)
-                              .orderBy('codigo')
-                              .snapshots()
-                              .map(productsListFromSnapshot)
-                          : productsCollection
-                              // .where('marca', isEqualTo: aceites)
-                              .orderBy('codigo')
-                              .limit(productsLimit)
-                              .snapshots()
-                              .map(productsListFromSnapshot),
-                      initialData: const [],
-                      catchError: (context, error) {
-                        print(error);
-                        print('PROVIDER PRODUCT ERROR');
-                        return;
-                      },
-                      child: MaterialApp(
-                        debugShowCheckedModeBanner: false,
-                        locale: localeProvider.locale,
-                        supportedLocales: L10n.all,
-                        localizationsDelegates: const [
-                          AppLocalizations.delegate,
-                          GlobalMaterialLocalizations.delegate,
-                          GlobalWidgetsLocalizations.delegate,
-                          GlobalCupertinoLocalizations.delegate,
-                        ],
-                        title: 'Field Sales',
-                        theme: myTheme,
-                        initialRoute:
-                            //'wrapper' for mobile to avoid checking terminal
-                            // token, SplashScreenView.route to activate
-                            // in terminals
-                            //'wrapper',
-                            SplashScreenView.route,
-                        routes: {
-                          SplashScreenView.route: (BuildContext context) =>
-                              const SplashScreenView(),
-                          PinInputView.route: (context) => PinInputView(),
-                          PanInputView.route: (context) => const PanInputView(),
-                          ExpDateInputView.route: (context) =>
-                              ExpDateInputView(),
-                          EmvTransactionInfoView.route: (context) =>
-                              const EmvTransactionInfoView(),
-                          CvvInputView.route: (context) => const CvvInputView(),
-                          CardInputView.route: (context) => CardInputView(),
-                          AmountInputView.route: (context) => AmountInputView(),
-                          'wrapper': (BuildContext context) => const Wrapper(),
-                          'login': (BuildContext context) => const LoginPage(),
-                          'navigation': (BuildContext context) =>
-                              const NavigationPages(),
-                          'notifications': (BuildContext context) =>
-                              const NotificationsPage(),
-                          'place_order': (BuildContext context) =>
-                              const PlaceOrderPage(),
-                          'catalogue': (BuildContext context) =>
-                              const CataloguePage(),
-                          // 'products': (BuildContext context) =>
-                          //     const ProductsPage(pricesName: 'GENER-03'),
-                          'clients': (BuildContext context) =>
-                              const ClientsPage(),
-                          'profile': (BuildContext context) =>
-                              const ProfilePage(),
-                          DiaryTabs.route: (BuildContext context) =>
-                              const DiaryTabs(),
-                          'order': (BuildContext context) => const OrderPage(),
-                        },
-                      ),
-                    );
-                  }));
-        });
+                  title: 'Field Sales',
+                  theme: myTheme,
+                  initialRoute:
+                      //'wrapper' for mobile to avoid checking terminal
+                      // token, SplashScreenView.route to activate
+                      // in terminals
+                      //'wrapper',
+                      SplashScreenView.route,
+                  routes: {
+                    SplashScreenView.route: (BuildContext context) =>
+                        const SplashScreenView(),
+                    PinInputView.route: (context) => PinInputView(),
+                    PanInputView.route: (context) => const PanInputView(),
+                    ExpDateInputView.route: (context) => ExpDateInputView(),
+                    EmvTransactionInfoView.route: (context) =>
+                        const EmvTransactionInfoView(),
+                    CvvInputView.route: (context) => const CvvInputView(),
+                    CardInputView.route: (context) => CardInputView(),
+                    AmountInputView.route: (context) => AmountInputView(),
+                    'wrapper': (BuildContext context) => const Wrapper(),
+                    'login': (BuildContext context) => const LoginPage(),
+                    'navigation': (BuildContext context) =>
+                        const NavigationPages(),
+                    'notifications': (BuildContext context) =>
+                        const NotificationsPage(),
+                    'place_order': (BuildContext context) =>
+                        const PlaceOrderPage(),
+                    'catalogue': (BuildContext context) =>
+                        const CataloguePage(),
+                    // 'products': (BuildContext context) =>
+                    //     const ProductsPage(pricesName: 'GENER-03'),
+                    'clients': (BuildContext context) => const ClientsPage(),
+                    'profile': (BuildContext context) => const ProfilePage(),
+                    DiaryTabs.route: (BuildContext context) =>
+                        const DiaryTabs(),
+                    'order': (BuildContext context) => const OrderPage(),
+                  },
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
   }
 }
