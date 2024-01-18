@@ -388,6 +388,11 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                       StatefulBuilder(
                                     builder: (context, StateSetter setState) =>
                                         AlertDialog(
+                                      actionsOverflowButtonSpacing: 1,
+                                      actionsPadding: EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 10,
+                                      ),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(20),
                                       ),
@@ -830,6 +835,11 @@ class _CheckoutBodyState extends State<CheckoutBody> {
 
                         return StatefulBuilder(
                           builder: (context, setState) => AlertDialog(
+                            actionsOverflowButtonSpacing: 1,
+                            actionsPadding: EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 10,
+                            ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.all(
                                 Radius.circular(16.0),
@@ -878,24 +888,30 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                                 MaterialStateProperty.all(
                                               myTheme.colorScheme.primary,
                                             ),
-                                            shape: MaterialStateProperty.all<
-                                                RoundedRectangleBorder>(
+                                            foregroundColor:
+                                                MaterialStateProperty.all(
+                                              Colors.white,
+                                            ),
+                                            shape: MaterialStateProperty.all(
                                               RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(18.0),
+                                                    BorderRadius.circular(
+                                                  16,
+                                                ),
                                               ),
                                             ),
                                           ),
                                           icon: Icon(
                                             MaterialCommunityIcons.backspace,
                                             size: 16,
+                                            color: Colors.white,
                                           ),
                                           label: Text(
                                             'Cancelar',
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontFamily: 'Poppins-regular',
-                                              fontSize: 14,
+                                              fontSize: 12,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -1025,28 +1041,33 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                           style: ButtonStyle(
                                             backgroundColor:
                                                 MaterialStateProperty.all(
-                                              myTheme.colorScheme
-                                                  .onPrimaryContainer,
+                                              myTheme.colorScheme.primary,
                                             ),
-                                            shape: MaterialStateProperty.all<
-                                                RoundedRectangleBorder>(
+                                            foregroundColor:
+                                                MaterialStateProperty.all(
+                                              Colors.white,
+                                            ),
+                                            shape: MaterialStateProperty.all(
                                               RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(18.0),
+                                                    BorderRadius.circular(
+                                                  16,
+                                                ),
                                               ),
                                             ),
                                           ),
                                           icon: Icon(
                                             MaterialCommunityIcons
                                                 .contactless_payment_circle,
-                                            size: 20,
+                                            size: 16,
+                                            color: Colors.white,
                                           ),
                                           label: Text(
                                             'Continuar',
                                             style: TextStyle(
-                                              color: Colors.white,
+                                              color: Colors.grey.shade300,
                                               fontFamily: 'Poppins-regular',
-                                              fontSize: 14,
+                                              fontSize: 12,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -1058,8 +1079,20 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         );
                       });
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: myTheme.colorScheme.onPrimaryContainer,
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                    myTheme.colorScheme.primary,
+                  ),
+                  foregroundColor: MaterialStateProperty.all(
+                    Colors.white,
+                  ),
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        16,
+                      ),
+                    ),
+                  ),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1069,6 +1102,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       style: TextStyle(
                         fontFamily: 'Poppins-regular',
                         fontSize: 14,
+                        color: Colors.grey.shade300,
                       ),
                     ),
                     Container(
@@ -1099,6 +1133,11 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
+                          actionsOverflowButtonSpacing: 1,
+                          actionsPadding: EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 10,
+                          ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(
                               Radius.circular(16.0),
@@ -1135,24 +1174,28 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                     backgroundColor: MaterialStateProperty.all(
                                       myTheme.colorScheme.primary,
                                     ),
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
+                                    foregroundColor: MaterialStateProperty.all(
+                                      Colors.white,
+                                    ),
+                                    shape: MaterialStateProperty.all(
                                       RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(18.0),
+                                        borderRadius: BorderRadius.circular(
+                                          16,
+                                        ),
                                       ),
                                     ),
                                   ),
                                   icon: Icon(
                                     MaterialCommunityIcons.backspace,
                                     size: 16,
+                                    color: Colors.white,
                                   ),
                                   label: Text(
                                     'Cancelar',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontFamily: 'Poppins-regular',
-                                      fontSize: 14,
+                                      fontSize: 12,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -1213,26 +1256,30 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                   },
                                   style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(
-                                      myTheme.colorScheme.onPrimaryContainer,
+                                      myTheme.colorScheme.primary,
                                     ),
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
+                                    foregroundColor: MaterialStateProperty.all(
+                                      Colors.white,
+                                    ),
+                                    shape: MaterialStateProperty.all(
                                       RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(18.0),
+                                        borderRadius: BorderRadius.circular(
+                                          16,
+                                        ),
                                       ),
                                     ),
                                   ),
                                   icon: Icon(
                                     MaterialCommunityIcons.content_save,
-                                    size: 20,
+                                    size: 16,
+                                    color: Colors.white,
                                   ),
                                   label: Text(
                                     'Continuar',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontFamily: 'Poppins-regular',
-                                      fontSize: 14,
+                                      fontSize: 12,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -1243,8 +1290,20 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         );
                       });
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: myTheme.colorScheme.primary,
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                    myTheme.colorScheme.onPrimaryContainer,
+                  ),
+                  foregroundColor: MaterialStateProperty.all(
+                    Colors.white,
+                  ),
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        16,
+                      ),
+                    ),
+                  ),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1254,6 +1313,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       style: TextStyle(
                         fontFamily: 'Poppins-regular',
                         fontSize: 14,
+                        color: Colors.grey.shade300,
                       ),
                     ),
                     Container(

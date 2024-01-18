@@ -328,8 +328,20 @@ class _CompletedPayBody extends State<CompletedPayBody> {
 
                   onGoBack();
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: myTheme.colorScheme.primary,
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                    myTheme.colorScheme.primary,
+                  ),
+                  foregroundColor: MaterialStateProperty.all(
+                    Colors.white,
+                  ),
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        16,
+                      ),
+                    ),
+                  ),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -339,6 +351,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
                       style: TextStyle(
                         fontFamily: 'Poppins-regular',
                         fontSize: 14,
+                        color: Colors.white,
                       ),
                     ),
                     Container(
@@ -358,8 +371,20 @@ class _CompletedPayBody extends State<CompletedPayBody> {
                     ticketPrinted = true;
                   });
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: myTheme.colorScheme.primary,
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                    myTheme.colorScheme.primary,
+                  ),
+                  foregroundColor: MaterialStateProperty.all(
+                    Colors.white,
+                  ),
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        16,
+                      ),
+                    ),
+                  ),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -369,6 +394,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
                       style: TextStyle(
                         fontFamily: 'Poppins-regular',
                         fontSize: 14,
+                        color: Colors.white,
                       ),
                     ),
                     Container(

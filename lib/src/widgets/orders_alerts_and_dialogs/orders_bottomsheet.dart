@@ -872,6 +872,11 @@ class SeeProductsAlertDialog extends StatelessWidget {
     var totalFormatted = formatDecimalPriceByRegion(price: totalConverted);
 
     return AlertDialog(
+      actionsOverflowButtonSpacing: 1,
+      actionsPadding: EdgeInsets.symmetric(
+        horizontal: 10,
+        vertical: 10,
+      ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),

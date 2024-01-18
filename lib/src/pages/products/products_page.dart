@@ -488,6 +488,11 @@ class _ProductsBodyState extends State<ProductsBody> {
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         AlertDialog(
+                                          actionsOverflowButtonSpacing: 1,
+                                          actionsPadding: EdgeInsets.symmetric(
+                                            horizontal: 10,
+                                            vertical: 10,
+                                          ),
                                           scrollable: true,
                                           shape: RoundedRectangleBorder(
                                             borderRadius:

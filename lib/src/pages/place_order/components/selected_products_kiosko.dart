@@ -790,17 +790,19 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                 style: ButtonStyle(
                                                   backgroundColor:
                                                       MaterialStateProperty.all(
-                                                          myTheme.colorScheme
-                                                              .primary),
+                                                    myTheme.colorScheme.primary,
+                                                  ),
                                                   foregroundColor:
                                                       MaterialStateProperty.all(
-                                                          Colors.white),
+                                                    Colors.white,
+                                                  ),
                                                   shape:
                                                       MaterialStateProperty.all(
                                                     RoundedRectangleBorder(
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                              16),
+                                                        16,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
@@ -891,23 +893,6 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(16),
                                         child: ElevatedButton(
-                                          onPressed: products.isEmpty
-                                              ? null
-                                              : () {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          CheckoutRetailPage(
-                                                        client: widget.client,
-                                                        cart: products,
-                                                        subTotal: double.parse(
-                                                          subTotal.toString(),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
                                           style: ButtonStyle(
                                             backgroundColor:
                                                 MaterialStateProperty
@@ -927,7 +912,36 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                 }
                                               },
                                             ),
+                                            foregroundColor:
+                                                MaterialStateProperty.all(
+                                              Colors.white,
+                                            ),
+                                            shape: MaterialStateProperty.all(
+                                              RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                  16,
+                                                ),
+                                              ),
+                                            ),
                                           ),
+                                          onPressed: products.isEmpty
+                                              ? null
+                                              : () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          CheckoutRetailPage(
+                                                        client: widget.client,
+                                                        cart: products,
+                                                        subTotal: double.parse(
+                                                          subTotal.toString(),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
                                           child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,

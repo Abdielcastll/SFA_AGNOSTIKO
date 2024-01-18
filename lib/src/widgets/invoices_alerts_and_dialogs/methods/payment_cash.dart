@@ -52,10 +52,20 @@ paymentCash(
                 });
               });
             },
-            style: ElevatedButton.styleFrom(
-              foregroundColor: myTheme.colorScheme.primary,
-              backgroundColor: Color(0xFFDFE0FF),
-              elevation: 0,
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(
+                Colors.white,
+              ),
+              foregroundColor: MaterialStateProperty.all(
+                myTheme.colorScheme.primary,
+              ),
+              shape: MaterialStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                    16,
+                  ),
+                ),
+              ),
             ),
             child: Text(
               'Seleccionar archivo',
@@ -126,7 +136,7 @@ paymentCash(
                   splashFactory: NoSplash.splashFactory,
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(100),
+                      borderRadius: BorderRadius.circular(16),
                       side: BorderSide(
                         color: myTheme.colorScheme.primary,
                       ),

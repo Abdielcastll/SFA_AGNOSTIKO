@@ -24,6 +24,11 @@ Future<T?> showConfirmDialog<T>(
           onEscape: onCancel,
         ),
         child: AlertDialog(
+          actionsOverflowButtonSpacing: 1,
+          actionsPadding: EdgeInsets.symmetric(
+            horizontal: 10,
+            vertical: 10,
+          ),
           contentPadding: const EdgeInsets.only(left: 25, right: 25),
           title: Center(child: Text(title)),
           shape: const RoundedRectangleBorder(

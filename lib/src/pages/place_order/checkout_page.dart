@@ -388,6 +388,11 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                       StatefulBuilder(
                                     builder: (context, StateSetter setState) =>
                                         AlertDialog(
+                                      actionsOverflowButtonSpacing: 1,
+                                      actionsPadding: EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 10,
+                                      ),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(20),
                                       ),
@@ -587,12 +592,12 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                                   myTheme.colorScheme.primary,
                                                 ),
                                                 shape:
-                                                    MaterialStateProperty.all<
-                                                        RoundedRectangleBorder>(
+                                                    MaterialStateProperty.all(
                                                   RoundedRectangleBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            18.0),
+                                                      16,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -632,12 +637,12 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                                       .onPrimaryContainer,
                                                 ),
                                                 shape:
-                                                    MaterialStateProperty.all<
-                                                        RoundedRectangleBorder>(
+                                                    MaterialStateProperty.all(
                                                   RoundedRectangleBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            18.0),
+                                                      16,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -1243,6 +1248,11 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
+                          actionsOverflowButtonSpacing: 1,
+                          actionsPadding: EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 10,
+                          ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(
                               Radius.circular(16.0),
@@ -1282,11 +1292,11 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                     backgroundColor: MaterialStateProperty.all(
                                       myTheme.colorScheme.primary,
                                     ),
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
+                                    shape: MaterialStateProperty.all(
                                       RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(18.0),
+                                        borderRadius: BorderRadius.circular(
+                                          16,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -1356,11 +1366,11 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                     backgroundColor: MaterialStateProperty.all(
                                       myTheme.colorScheme.onPrimaryContainer,
                                     ),
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
+                                    shape: MaterialStateProperty.all(
                                       RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(18.0),
+                                        borderRadius: BorderRadius.circular(
+                                          16,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -1384,8 +1394,20 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         );
                       });
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: myTheme.colorScheme.primary,
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                    myTheme.colorScheme.primary,
+                  ),
+                  foregroundColor: MaterialStateProperty.all(
+                    Colors.white,
+                  ),
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        16,
+                      ),
+                    ),
+                  ),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

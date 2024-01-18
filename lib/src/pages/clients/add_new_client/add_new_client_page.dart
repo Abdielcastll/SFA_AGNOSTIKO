@@ -151,6 +151,11 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                 context: context,
                 builder: (context) {
                   return AlertDialog(
+                    actionsOverflowButtonSpacing: 1,
+                    actionsPadding: EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 10,
+                    ),
                     title: Center(
                       child: Text(
                         'Confirmación',
@@ -865,6 +870,11 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                               showDialog(
                                 context: context,
                                 builder: (context) => AlertDialog(
+                                  actionsOverflowButtonSpacing: 1,
+                                  actionsPadding: EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 10,
+                                  ),
                                   title: Center(
                                     child: Text(
                                       'Confirmación',

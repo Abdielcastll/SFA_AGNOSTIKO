@@ -17,6 +17,11 @@ Future<EmvConfigBitmap?> showParamBitmapDialog(
 
       return StatefulBuilder(builder: (context, setState) {
         return AlertDialog(
+          actionsOverflowButtonSpacing: 1,
+          actionsPadding: EdgeInsets.symmetric(
+            horizontal: 10,
+            vertical: 10,
+          ),
           contentPadding: EdgeInsets.only(left: 25, right: 25),
           title: Center(child: Text(_bitmap.name)),
           shape: RoundedRectangleBorder(

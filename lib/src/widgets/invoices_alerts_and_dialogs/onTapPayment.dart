@@ -165,6 +165,11 @@ Future refund(BuildContext context, payment, String pleaseWait, Client client,
         }
 
         return AlertDialog(
+          actionsOverflowButtonSpacing: 1,
+          actionsPadding: EdgeInsets.symmetric(
+            horizontal: 10,
+            vertical: 10,
+          ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
