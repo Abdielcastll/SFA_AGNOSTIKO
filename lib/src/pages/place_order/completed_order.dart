@@ -360,8 +360,20 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                 objectBox.delelteAllShoppingCart();
                 Navigator.popUntil(context, (route) => route.isFirst);
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: myTheme.colorScheme.primary,
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                  myTheme.colorScheme.primary,
+                ),
+                foregroundColor: MaterialStateProperty.all(
+                  Colors.white,
+                ),
+                shape: MaterialStateProperty.all(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      16,
+                    ),
+                  ),
+                ),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -369,9 +381,9 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                   Text(
                     'REGRESAR AL INICIO',
                     style: TextStyle(
-                      fontFamily: 'Poppins-medium',
-                      fontSize: 14,
-                    ),
+                        fontFamily: 'Poppins-medium',
+                        fontSize: 14,
+                        color: Colors.white),
                   ),
                 ],
               ),
