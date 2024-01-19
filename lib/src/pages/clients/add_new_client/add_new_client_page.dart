@@ -947,6 +947,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                           icon: Icon(
                                             MaterialIcons.arrow_back_ios,
                                             size: 16,
+                                            color: Colors.white,
                                           ),
                                           label: Text(
                                             'No',

@@ -43,6 +43,7 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Poppins-regular',
+                  color: Colors.white,
                 ),
               ),
             )

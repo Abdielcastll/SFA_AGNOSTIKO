@@ -542,6 +542,8 @@ void modalBottomSheetForOrders(
                                                                               .arrow_back_ios,
                                                                           size:
                                                                               15,
+                                                                          color:
+                                                                              Colors.white,
                                                                         ),
                                                                         style:
                                                                             ButtonStyle(
@@ -766,7 +768,11 @@ class DeleteOrderAlertDialog extends StatelessWidget {
                 ),
               ),
             ),
-            icon: Icon(Icons.arrow_back_ios, size: 15),
+            icon: Icon(
+              Icons.arrow_back_ios,
+              size: 15,
+              color: Colors.white,
+            ),
           ),
           Container(
             child: ElevatedButton(
@@ -1086,6 +1092,7 @@ class SeeProductsAlertDialog extends StatelessWidget {
               icon: Icon(
                 Icons.arrow_back_ios,
                 size: 15,
+                color: Colors.white,
               ),
               label: Text(
                 AppLocalizations.of(context)!.goBack,

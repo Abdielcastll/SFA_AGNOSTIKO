@@ -144,6 +144,7 @@ paymentCard(
                     icon: const Icon(
                       MaterialIcons.arrow_back_ios,
                       size: 14,
+                      color: Colors.white,
                     ),
                     label: const Text(
                       'Cancelar',
