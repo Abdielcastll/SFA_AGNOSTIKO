@@ -206,7 +206,10 @@ void modalBottomSheetForOrders(
                                       ),
                                     );
                                   },
-                                  icon: Icon(Icons.person),
+                                  icon: Icon(
+                                    Icons.person,
+                                    color: Colors.white,
+                                  ),
                                   style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(
                                       myTheme.colorScheme.primary,
@@ -229,50 +232,51 @@ void modalBottomSheetForOrders(
                                     ),
                                   ),
                                 ),
-                                // const SizedBox(width: 15),
-                                Container(
-                                  child: ElevatedButton.icon(
-                                    onPressed: () {
-                                      showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return SeeProductsAlertDialog(
-                                              products: products,
-                                              discountMaster: discountMaster,
-                                              subTotal: subTotal,
-                                              tax: tax,
-                                              total: total,
-                                              coinDecimals: coinDecimals,
-                                              coinExchangeRatio: double.parse(
-                                                  coinExchangeRatio.toString()),
-                                              coinSymbol: coinSymbol,
-                                              coinExchangeRateFromDB:
-                                                  coinExchangeRateFromDB,
-                                            );
-                                          });
-                                    },
-                                    style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                        myTheme.colorScheme.primary,
-                                      ),
-                                      shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(18.0),
-                                        ),
+                                const SizedBox(width: 1),
+                                ElevatedButton.icon(
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return SeeProductsAlertDialog(
+                                          products: products,
+                                          discountMaster: discountMaster,
+                                          subTotal: subTotal,
+                                          tax: tax,
+                                          total: total,
+                                          coinDecimals: coinDecimals,
+                                          coinExchangeRatio: double.parse(
+                                              coinExchangeRatio.toString()),
+                                          coinSymbol: coinSymbol,
+                                          coinExchangeRateFromDB:
+                                              coinExchangeRateFromDB,
+                                        );
+                                      },
+                                    );
+                                  },
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                      myTheme.colorScheme.primary,
+                                    ),
+                                    shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(18.0),
                                       ),
                                     ),
-                                    icon: Icon(Icons.shopping_basket_rounded),
-                                    label: Text(
-                                      AppLocalizations.of(context)!.seeProducts,
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins-regular',
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                  ),
+                                  icon: Icon(
+                                    Icons.shopping_basket_rounded,
+                                    color: Colors.white,
+                                  ),
+                                  label: Text(
+                                    AppLocalizations.of(context)!.seeProducts,
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins-regular',
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
@@ -611,8 +615,10 @@ void modalBottomSheetForOrders(
                                                               },
                                                             );
                                                     },
-                                                    icon: Icon(Icons
-                                                        .inventory_outlined),
+                                                    icon: Icon(
+                                                      Icons.inventory_outlined,
+                                                      color: Colors.white,
+                                                    ),
                                                     style: ButtonStyle(
                                                       backgroundColor:
                                                           MaterialStateProperty
@@ -686,7 +692,8 @@ void modalBottomSheetForOrders(
                                                 style: ButtonStyle(
                                                   backgroundColor:
                                                       MaterialStateProperty.all(
-                                                          Colors.red),
+                                                    Colors.red,
+                                                  ),
                                                   shape:
                                                       MaterialStateProperty.all<
                                                           RoundedRectangleBorder>(
@@ -698,9 +705,10 @@ void modalBottomSheetForOrders(
                                                   ),
                                                 ),
                                                 icon: const Icon(
-                                                    MaterialCommunityIcons
-                                                        .delete_circle_outline,
-                                                    color: Colors.white),
+                                                  MaterialCommunityIcons
+                                                      .delete_circle_outline,
+                                                  color: Colors.white,
+                                                ),
                                               ),
                                             ),
                                           ),
