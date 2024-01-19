@@ -14,6 +14,7 @@ class AppBarPlaceOrder extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      foregroundColor: Colors.white,
       title: Text(
         'Nuevo Pedido',
         style: TextStyle(

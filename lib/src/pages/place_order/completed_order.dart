@@ -44,6 +44,7 @@ class CompletedOrderPage extends StatelessWidget {
           automaticallyImplyLeading: false,
           elevation: 0,
           backgroundColor: myTheme.colorScheme.primary,
+          foregroundColor: Colors.white,
         ),
       ),
       body: SingleChildScrollView(

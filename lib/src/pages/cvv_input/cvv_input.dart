@@ -40,6 +40,7 @@ class _CvvInputViewState extends State<CvvInputView> {
           ),
           child: Scaffold(
             appBar: AppBar(
+              foregroundColor: Colors.white,
               title: Text("sale"),
             ),
             body: Column(children: [

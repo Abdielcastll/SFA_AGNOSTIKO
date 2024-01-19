@@ -128,7 +128,7 @@ void modalBottomSheetForOrders(
             return SafeArea(
               child: Container(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 18),
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
@@ -298,7 +298,7 @@ void modalBottomSheetForOrders(
                                                   width: MediaQuery.of(context)
                                                           .size
                                                           .width *
-                                                      0.75,
+                                                      0.73,
                                                   margin:
                                                       const EdgeInsets.fromLTRB(
                                                           0, 0, 0, 0),
@@ -313,6 +313,16 @@ void modalBottomSheetForOrders(
                                                                 print(
                                                                     'Retomar proceso de Retail');
                                                                 return AlertDialog(
+                                                                  actionsOverflowButtonSpacing:
+                                                                      1,
+                                                                  actionsPadding:
+                                                                      EdgeInsets
+                                                                          .symmetric(
+                                                                    horizontal:
+                                                                        10,
+                                                                    vertical:
+                                                                        10,
+                                                                  ),
                                                                   shape:
                                                                       RoundedRectangleBorder(
                                                                     borderRadius:

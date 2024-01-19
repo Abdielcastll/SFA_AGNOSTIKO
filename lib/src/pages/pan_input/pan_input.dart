@@ -43,6 +43,7 @@ class _PanInputViewState extends State<PanInputView> {
         ),
         child: Scaffold(
           appBar: AppBar(
+            foregroundColor: Colors.white,
             title: Text("sale"),
           ),
           body: Column(children: [

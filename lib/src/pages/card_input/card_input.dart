@@ -94,6 +94,7 @@ class _CardInputViewState extends State<CardInputView> {
         ),
         child: Scaffold(
           appBar: AppBar(
+            foregroundColor: Colors.white,
             title: Text(appBarText),
           ),
           body: Column(mainAxisSize: MainAxisSize.max, children: [

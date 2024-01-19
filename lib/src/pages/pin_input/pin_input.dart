@@ -95,6 +95,7 @@ class _PinInputViewState extends State<PinInputView> {
       onWillPop: cancelTransactionDialogFn(context),
       child: Scaffold(
         appBar: AppBar(
+          foregroundColor: Colors.white,
           title: Text(appBarText),
         ),
         body: Column(children: [

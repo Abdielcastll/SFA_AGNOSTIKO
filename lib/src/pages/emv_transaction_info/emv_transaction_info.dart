@@ -207,8 +207,10 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       onWillPop: showModalNoTicketPrinted,
       child: Scaffold(
         appBar: AppBar(
-            title: Text(AppLocalizations.of(context)!.emvTransactionInfo),
-            automaticallyImplyLeading: false),
+          foregroundColor: Colors.white,
+          title: Text(AppLocalizations.of(context)!.emvTransactionInfo),
+          automaticallyImplyLeading: false,
+        ),
         body: ListView(
           children: [
             const Text(''),

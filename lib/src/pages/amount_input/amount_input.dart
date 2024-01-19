@@ -58,6 +58,7 @@ class _AmountInputViewState extends State<AmountInputView> {
         ),
         child: Scaffold(
           appBar: AppBar(
+            foregroundColor: Colors.white,
             title: Text(appBarText),
           ),
           body: Column(mainAxisSize: MainAxisSize.max, children: [

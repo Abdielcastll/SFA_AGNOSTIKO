@@ -12,6 +12,7 @@ class AppBarUsersAndTeams extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      foregroundColor: Colors.white,
       title: const Text(
         'Usuarios y Equipos',
         style: TextStyle(

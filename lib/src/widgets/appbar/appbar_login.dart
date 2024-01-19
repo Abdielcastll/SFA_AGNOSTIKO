@@ -15,6 +15,7 @@ class AppBarLogin extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      foregroundColor: Colors.white,
       automaticallyImplyLeading: false,
       title: Container(),
       centerTitle: true,

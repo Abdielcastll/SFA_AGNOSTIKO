@@ -40,6 +40,7 @@ class _ExpDateInputViewState extends State<ExpDateInputView> {
         ),
         child: Scaffold(
           appBar: AppBar(
+            foregroundColor: Colors.white,
             title: Text("sale"),
           ),
           body: Column(children: [

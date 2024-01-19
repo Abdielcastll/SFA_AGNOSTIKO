@@ -271,6 +271,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
             child: Scaffold(
               backgroundColor: Colors.grey[200],
               appBar: AppBar(
+                foregroundColor: Colors.white,
                 elevation: 0,
                 leadingWidth: 24.0,
                 title: Row(

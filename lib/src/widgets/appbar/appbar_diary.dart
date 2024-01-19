@@ -34,6 +34,7 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
         Provider.of<OrderProvider>(context).clientForTheOrder;
 
     return AppBar(
+      foregroundColor: Colors.white,
       title: orderActive.orderActive == false
           ? Padding(
               padding: EdgeInsets.only(left: 5, top: 5),

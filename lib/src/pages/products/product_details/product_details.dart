@@ -67,7 +67,11 @@ class _ProductDetailsState extends State<ProductDetails> {
     String currentCoinSelectedCode = currentCoinSplit.last;
     // print(currentCoinSelectedCode);
     return Scaffold(
-      appBar: AppBar(elevation: 0, toolbarHeight: 40),
+      appBar: AppBar(
+        elevation: 0,
+        toolbarHeight: 40,
+        foregroundColor: Colors.white,
+      ),
       backgroundColor: myTheme.colorScheme.surface,
       body: MultiProvider(
         providers: [

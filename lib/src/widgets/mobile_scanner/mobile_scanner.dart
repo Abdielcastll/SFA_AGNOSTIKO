@@ -147,6 +147,7 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
     String? scanResult;
     return Scaffold(
       appBar: AppBar(
+        foregroundColor: Colors.white,
         title: const Text('Escaner de barras'),
         actions: [
           IconButton(
