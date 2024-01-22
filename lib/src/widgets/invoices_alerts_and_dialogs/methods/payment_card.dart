@@ -56,13 +56,16 @@ Future _acceptAmount(
 
   final deviceType = await getDeviceType();
   if (hasCardReader) {
-    if (hasEmvModule && deviceType == DeviceType.POS) {
+    if (hasEmvModule && deviceType == DeviceType.POS ||
+        deviceType == DeviceType.PINPAD) {
       // mostramos un popup mientras se realiza la carga de parámetros EMV
       showCircularProgressDialog(
         context,
         AppLocalizations.of(context)!.pleaseWait,
       );
-      await emvPreTransaction();
+      if (deviceType != DeviceType.PINPAD) {
+        await emvPreTransaction();
+      }
       Navigator.pop(context); // y cerramos el popup antes de seguir
     }
 
