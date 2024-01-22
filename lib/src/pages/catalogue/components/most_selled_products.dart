@@ -149,9 +149,8 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                         imageUrl: url,
                                         isProductNew: false,
                                         price: (double.parse(
-                                              prices[product.code].toString(),
-                                            ) ??
-                                            0.0),
+                                          prices[product.code].toString(),
+                                        )),
                                         name: product.name,
                                         stock: stockValues[product.code] ?? 0,
                                         list: productsBySalesList
