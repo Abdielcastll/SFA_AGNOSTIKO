@@ -245,7 +245,9 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                       builder: (BuildContext context) =>
                                           ProductDetails(
                                         code: product.code,
-                                        price: (prices[product.code] ?? 0),
+                                        price: (double.parse(
+                                          prices[product.code].toString(),
+                                        )),
                                         line: linesSummary[product.line],
                                         imageUrl:
                                             'https://i.imgur.com/BPbj6Gy.jpg',
@@ -432,7 +434,9 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                       builder: (BuildContext context) =>
                                           ProductDetails(
                                         code: product.code,
-                                        price: (prices[product.code] ?? 0),
+                                        price: (double.parse(
+                                          prices[product.code].toString(),
+                                        )),
                                         line: linesSummary[product.line],
                                         imageUrl:
                                             'https://i.imgur.com/BPbj6Gy.jpg',
