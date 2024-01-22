@@ -214,8 +214,5 @@ List<ProductsByDate> productsByDateListFromSnapshot(QuerySnapshot snapshot) {
     );
   }).toList();
 
-  // Sort the list by lastModifiedDate in descending order
-  productList.sort((a, b) => b.lastModifiedDate.compareTo(a.lastModifiedDate));
-
   return productList;
 }

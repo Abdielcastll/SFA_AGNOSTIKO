@@ -70,7 +70,6 @@ Future _acceptAmount(
     }
 
     Navigator.pushNamed(
-      // Navigator.pushReplacementNamed(
       context,
       CardInputView.route,
       arguments: [transactionArgs, updatePayed, paymentBody, noRetail],
