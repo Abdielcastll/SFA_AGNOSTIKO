@@ -728,7 +728,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     listOfTextLine.add(PrinterText.emptyLine(16));
 
     final printerScript =
-        PrinterScript(listOfTextLine, gray: GrayIntensity.Medium);
+        PrinterScript(listOfTextLine, gray: GrayIntensity.Dark);
     await printScript(printerScript, bottomFeed: true);
     await cutPaper();
   }
