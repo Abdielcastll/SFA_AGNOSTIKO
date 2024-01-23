@@ -311,5 +311,6 @@ Future printCancelTicket(int stan, String referenceNumber, double monto) async {
 
   final printerScript =
       PrinterScript(listOfTextLine, gray: GrayIntensity.Medium);
-  printScript(printerScript);
+  await printScript(printerScript, bottomFeed: true);
+  await cutPaper();
 }

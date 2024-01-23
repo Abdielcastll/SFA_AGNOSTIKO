@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/devices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/checkout_retail_page.dart';
@@ -40,6 +41,7 @@ class SelectedProducts extends StatefulWidget {
 
 class _SelectedProductsState extends State<SelectedProducts> {
   DeviceType? deviceType;
+  String? deviceName;
   bool hasLaserScanner = false;
   String? scanResult = '';
   late String? clientPriceList = widget.client?.prices;
@@ -55,9 +57,11 @@ class _SelectedProductsState extends State<SelectedProducts> {
   localGetDeviceType() async {
     final dType = await getDeviceType();
     final platformInfo = await getPlatformInfo();
+    final model = await getModel();
     setState(() {
       hasLaserScanner = platformInfo.hasScannerHw;
       deviceType = dType;
+      deviceName = model;
     });
   }
 
@@ -258,11 +262,13 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         crossAxisAlignment:
-                                            deviceType == DeviceType.PINPAD
+                                            deviceType == DeviceType.PINPAD ||
+                                                    deviceName == "N850"
                                                 ? CrossAxisAlignment.center
                                                 : CrossAxisAlignment.start,
                                         children: [
-                                          deviceType == DeviceType.PINPAD
+                                          deviceType == DeviceType.PINPAD ||
+                                                  deviceName == "N850"
                                               ? Padding(
                                                   padding:
                                                       const EdgeInsets.all(8.0),
@@ -809,7 +815,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                         if (globalRemoteConfig
                                                     .escannerDeProductos ==
                                                 true &&
-                                            deviceType != DeviceType.PINPAD)
+                                            (deviceType != DeviceType.PINPAD))
                                           Container(
                                             decoration: BoxDecoration(
                                               borderRadius:

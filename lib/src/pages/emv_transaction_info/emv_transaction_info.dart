@@ -306,22 +306,23 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
                 child: OutlinedButton(
-                    onPressed: () async {
-                      await printTicket();
-                      ticketPrinted = true;
-                    },
-                    style: TextButton.styleFrom(
-                        foregroundColor: myTheme.colorScheme.primary,
-                        backgroundColor: Colors.blue.shade800),
-                    child: Text(
-                      'imprimir comprobante'.toUpperCase(),
-                      style: const TextStyle(
-                        fontFamily: 'Poppins-regular',
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )),
+                  onPressed: () async {
+                    await printTicket();
+                    ticketPrinted = true;
+                  },
+                  style: TextButton.styleFrom(
+                      foregroundColor: myTheme.colorScheme.primary,
+                      backgroundColor: Colors.blue.shade800),
+                  child: Text(
+                    'imprimir comprobante'.toUpperCase(),
+                    style: const TextStyle(
+                      fontFamily: 'Poppins-regular',
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ),
             Padding(
               padding:
@@ -578,23 +579,54 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                 ? 'TIEMPO DE ESPERA AGOTADO'
                 : 'PAGO FALLIDO';
 
-    listOfTextLine.add(PrinterText(ticketMessage,
-        format: TextFormat(fontSize: 16, fontFamily: regularFont)));
-    listOfTextLine.add(PrinterSplitText("Total:".toUpperCase(), _amountString,
-        format: TextFormat(fontSize: 16, fontFamily: regularFont)));
+    listOfTextLine.add(
+      PrinterText(
+        ticketMessage,
+        format: TextFormat(
+          fontSize: 16,
+          fontFamily: regularFont,
+        ),
+      ),
+    );
+    listOfTextLine.add(
+      PrinterSplitText(
+        "Total:".toUpperCase(),
+        _amountString,
+        format: TextFormat(
+          fontSize: 16,
+          fontFamily: regularFont,
+        ),
+      ),
+    );
 
     final contactlessBool = transactionArgs?.transactionInfo?.isContactless;
 
     listOfTextLine.add(PrinterText.emptyLine(16));
-    listOfTextLine.add(PrinterText(
+    listOfTextLine.add(
+      PrinterText(
         "Stan: ${transactionArgs!.stan}".toUpperCase(),
-        format: TextFormat(fontSize: 16, fontFamily: regularFont)));
-    listOfTextLine.add(PrinterText(
+        format: TextFormat(
+          fontSize: 16,
+          fontFamily: regularFont,
+        ),
+      ),
+    );
+    listOfTextLine.add(
+      PrinterText(
         "Numero de Referencia: ${int.parse(transactionArgs!.referenceNumber ?? '0')}"
             .toUpperCase(),
-        format: TextFormat(fontSize: 16, fontFamily: regularFont)));
-    listOfTextLine.add(PrinterText("ARQC: E47BF856EDEB5B31".toUpperCase(),
-        format: TextFormat(fontSize: 16, fontFamily: regularFont)));
+        format: TextFormat(fontSize: 16, fontFamily: regularFont),
+      ),
+    );
+    listOfTextLine.add(
+      PrinterText(
+        "ARQC: E47BF856EDEB5B31".toUpperCase(),
+        format: TextFormat(
+          fontSize: 16,
+          fontFamily: regularFont,
+        ),
+      ),
+    );
 
     String? aid;
     final auxAid1 = await emv.getTagValue(0x9f06);
@@ -605,8 +637,15 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       aid = auxAid2.toHexStr();
     }
     if (aid != null) {
-      listOfTextLine.add(PrinterText("AID:".toUpperCase() + aid.toUpperCase(),
-          format: TextFormat(fontSize: 16, fontFamily: regularFont)));
+      listOfTextLine.add(
+        PrinterText(
+          "AID:".toUpperCase() + aid.toUpperCase(),
+          format: TextFormat(
+            fontSize: 16,
+            fontFamily: regularFont,
+          ),
+        ),
+      );
     }
 
     listOfTextLine.add(PrinterText.emptyLine(16));
@@ -614,8 +653,15 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     if (!transactionArgs!.timeout &&
         transactionArgs!.stan != null &&
         transactionResult == EmvTransactionResult.Approved)
-      listOfTextLine.add(PrinterText('FIRMA:______________________________',
-          format: TextFormat(fontSize: 16, fontFamily: regularFont)));
+      listOfTextLine.add(
+        PrinterText(
+          'FIRMA:______________________________',
+          format: TextFormat(
+            fontSize: 16,
+            fontFamily: regularFont,
+          ),
+        ),
+      );
 
     listOfTextLine.add(PrinterText.emptyLine(16));
 
@@ -657,10 +703,13 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
             format: TextFormat(fontSize: 12, fontFamily: regularFont),
             alignment: TextAlignment.Center));
         if (nombreTarjetahabiente != null) {
-          listOfTextLine.add(PrinterText(
+          listOfTextLine.add(
+            PrinterText(
               const AsciiCodec().decode(nombreTarjetahabiente).toUpperCase(),
               format: TextFormat(fontSize: 12, fontFamily: regularFont),
-              alignment: TextAlignment.Center));
+              alignment: TextAlignment.Center,
+            ),
+          );
         }
         break;
     }
@@ -680,7 +729,8 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
 
     final printerScript =
         PrinterScript(listOfTextLine, gray: GrayIntensity.Medium);
-    printScript(printerScript);
+    await printScript(printerScript, bottomFeed: true);
+    await cutPaper();
   }
 
   String get _amountString {

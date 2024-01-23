@@ -177,7 +177,8 @@ Future invoicePrintLayout(AddPaymentBodyAtt invoice, String currentCoin) async {
 
   final printerScript =
       PrinterScript(listOfTextLine, gray: GrayIntensity.Medium);
-  printScript(printerScript);
+  await printScript(printerScript, bottomFeed: true);
+  await cutPaper();
 }
 
 double _amountOfPayments(List<PayMethod> payments) {
