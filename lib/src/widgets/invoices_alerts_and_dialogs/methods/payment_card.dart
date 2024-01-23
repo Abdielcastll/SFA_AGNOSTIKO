@@ -3,6 +3,7 @@
 import 'package:agnostiko/agnostiko.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:intl/intl.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/card_input/card_input.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -56,16 +57,14 @@ Future _acceptAmount(
 
   final deviceType = await getDeviceType();
   if (hasCardReader) {
-    if (hasEmvModule && deviceType == DeviceType.POS ||
-        deviceType == DeviceType.PINPAD) {
+    if (hasEmvModule &&
+        (deviceType == DeviceType.POS || deviceType == DeviceType.PINPAD)) {
       // mostramos un popup mientras se realiza la carga de parámetros EMV
       showCircularProgressDialog(
         context,
         AppLocalizations.of(context)!.pleaseWait,
       );
-      if (deviceType != DeviceType.PINPAD) {
-        await emvPreTransaction();
-      }
+      await emvPreTransaction();
       Navigator.pop(context); // y cerramos el popup antes de seguir
     }
 

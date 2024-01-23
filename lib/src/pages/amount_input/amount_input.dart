@@ -134,16 +134,18 @@ class _AmountInputViewState extends State<AmountInputView> {
 
         final deviceType = await getDeviceType();
         if (hasCardReader) {
-          if (hasEmvModule && deviceType == DeviceType.POS ||
-              deviceType == DeviceType.PINPAD) {
+          if (hasEmvModule &&
+              (deviceType == DeviceType.POS ||
+                  deviceType == DeviceType.PINPAD)) {
             // mostramos un popup mientras se realiza la carga de parámetros EMV
             showCircularProgressDialog(
               context,
               AppLocalizations.of(context)!.pleaseWait,
             );
-            if (deviceType != DeviceType.PINPAD) {
-              await emvPreTransaction();
-            }
+            final date = DateTime.now();
+            final dateFormat = DateFormat('yyyyMMddHHmmss');
+            await setDateTime(dateFormat.format(date));
+            await emvPreTransaction();
             Navigator.pop(context); // y cerramos el popup antes de seguir
           }
 
