@@ -71,6 +71,7 @@ class _ProductDetailsState extends State<ProductDetails> {
         elevation: 0,
         toolbarHeight: 40,
         foregroundColor: Colors.white,
+        backgroundColor: myTheme.colorScheme.primary,
       ),
       backgroundColor: myTheme.colorScheme.surface,
       body: MultiProvider(

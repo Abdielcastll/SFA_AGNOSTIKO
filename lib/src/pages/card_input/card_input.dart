@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:agnostiko/agnostiko.dart';
 import 'package:intl/intl.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
+import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 /* import '../../config/app_config.dart'; */
 import '../../../dialogs/info_dialog.dart';
@@ -94,6 +95,7 @@ class _CardInputViewState extends State<CardInputView> {
         ),
         child: Scaffold(
           appBar: AppBar(
+            backgroundColor: myTheme.colorScheme.primary,
             foregroundColor: Colors.white,
             title: Text(appBarText),
           ),

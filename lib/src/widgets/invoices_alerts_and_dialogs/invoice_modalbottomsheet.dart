@@ -618,6 +618,7 @@ class SeePaymentsALertDialog extends StatelessWidget {
         print('sumOfPendingPaymensFormatted: $sumOfPendingPaymensFormatted');
 
         return AlertDialog(
+          surfaceTintColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -820,9 +821,13 @@ class SeePaymentsALertDialog extends StatelessWidget {
                                                 Icons.block_rounded,
                                                 size: 16,
                                               ),
-                                              label: Text('Cancelación',
-                                                  style:
-                                                      TextStyle(fontSize: 12)),
+                                              label: Text(
+                                                'Cancelación',
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
                                             ),
                                           ElevatedButton.icon(
                                             onPressed: () async {
@@ -845,9 +850,14 @@ class SeePaymentsALertDialog extends StatelessWidget {
                                               Icons.currency_exchange_rounded,
                                               size: 16,
                                             ),
-                                            label: Text('Devolución',
-                                                style: TextStyle(fontSize: 12)),
-                                          )
+                                            label: Text(
+                                              'Devolución',
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
                                         ],
                                       ),
                                     if (!isLast)

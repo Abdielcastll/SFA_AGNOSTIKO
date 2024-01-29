@@ -325,7 +325,7 @@ void modalBottomSheetForOnProcess({
                               style: TextStyle(
                                 fontFamily: 'Poppins-medium',
                                 color: myTheme.colorScheme.primary,
-                                fontSize: 12,
+                                fontSize: 11,
                               ),
                             ),
                             onPressed: () {
@@ -386,7 +386,7 @@ void modalBottomSheetForOnProcess({
                               style: TextStyle(
                                 fontFamily: 'Poppins-medium',
                                 color: myTheme.colorScheme.primary,
-                                fontSize: 12,
+                                fontSize: 11,
                               ),
                             ),
                             onPressed: () async {
@@ -452,7 +452,7 @@ void modalBottomSheetForOnProcess({
                                               fontFamily: 'Poppins-regular',
                                               color:
                                                   myTheme.colorScheme.primary,
-                                              fontSize: 14,
+                                              fontSize: 12,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -485,7 +485,7 @@ void modalBottomSheetForOnProcess({
                                               style: const TextStyle(
                                                 fontFamily: 'Poppins-regular',
                                                 color: Colors.white,
-                                                fontSize: 14,
+                                                fontSize: 12,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),

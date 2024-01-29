@@ -765,7 +765,7 @@ class DeleteOrderAlertDialog extends StatelessWidget {
         style: TextStyle(
           fontFamily: 'Poppins-regular',
           color: myTheme.colorScheme.primary,
-          fontSize: 16,
+          fontSize: 14,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -896,6 +896,8 @@ class SeeProductsAlertDialog extends StatelessWidget {
     var totalFormatted = formatDecimalPriceByRegion(price: totalConverted);
 
     return AlertDialog(
+      surfaceTintColor: Colors.white,
+      backgroundColor: Colors.white,
       actionsOverflowButtonSpacing: 1,
       actionsPadding: EdgeInsets.symmetric(
         horizontal: 10,

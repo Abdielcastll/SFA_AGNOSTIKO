@@ -25,6 +25,7 @@ class VisitsMap extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           foregroundColor: Colors.white,
+          backgroundColor: myTheme.colorScheme.primary,
           title: const Text('Mapa de visitas'),
         ),
         body: VisitMapBody(

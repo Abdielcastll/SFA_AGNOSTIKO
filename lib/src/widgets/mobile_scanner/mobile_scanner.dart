@@ -4,6 +4,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
+import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class NewBardcodeScanner extends StatefulWidget {
   const NewBardcodeScanner(
@@ -147,6 +148,7 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
     String? scanResult;
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: myTheme.colorScheme.primary,
         foregroundColor: Colors.white,
         title: const Text('Escaner de barras'),
         actions: [

@@ -84,6 +84,8 @@ void showCreateClientDialog(context, uid) {
                 : AppLocalizations.of(context)!.selectClient;
 
             return AlertDialog(
+              surfaceTintColor: Colors.white,
+              backgroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(28),
               ),

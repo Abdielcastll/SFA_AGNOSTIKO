@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 import '../src/services/utils/keypad.dart';
 
@@ -49,8 +50,18 @@ Future<T?> showConfirmDialog<T>(
           ),
           actions: <Widget>[
             ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                  myTheme.colorScheme.primary,
+                ),
+                foregroundColor:
+                    MaterialStateProperty.all(Colors.grey.shade400),
+              ),
               onPressed: onAccept,
-              child: Text(textAccept),
+              child: Text(
+                textAccept,
+                style: TextStyle(color: Colors.white),
+              ),
             ),
             ElevatedButton(
               onPressed: onCancel,
