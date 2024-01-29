@@ -110,6 +110,7 @@ class SelectedClient extends StatelessWidget {
                               barrierDismissible: false, // User must tap button
                               builder: (context) {
                                 return AlertDialog(
+                                  surfaceTintColor: Colors.white,
                                   title: Text(
                                     'Al cambiar el cliente la lista de precios estara cambiando, por lo que el carrito se reiniciara',
                                   ),

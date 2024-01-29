@@ -21,6 +21,7 @@ Future<dynamic> showDialogForConfirmedPaymentRetail(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          surfaceTintColor: Colors.white,
           contentPadding: EdgeInsets.zero,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),

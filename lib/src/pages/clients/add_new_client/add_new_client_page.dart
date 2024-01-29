@@ -151,6 +151,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                 context: context,
                 builder: (context) {
                   return AlertDialog(
+                    surfaceTintColor: Colors.white,
                     actionsOverflowButtonSpacing: 1,
                     actionsPadding: EdgeInsets.symmetric(
                       horizontal: 10,

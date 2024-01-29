@@ -424,6 +424,7 @@ void modalBottomSheetForOnProcess({
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
+                                    surfaceTintColor: Colors.white,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20),
                                     ),

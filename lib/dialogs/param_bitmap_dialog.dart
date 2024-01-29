@@ -17,6 +17,7 @@ Future<EmvConfigBitmap?> showParamBitmapDialog(
 
       return StatefulBuilder(builder: (context, setState) {
         return AlertDialog(
+          surfaceTintColor: Colors.white,
           actionsOverflowButtonSpacing: 1,
           actionsPadding: EdgeInsets.symmetric(
             horizontal: 10,

@@ -105,6 +105,7 @@ Future<dynamic> showDialogForRegisterPayment(
       return StatefulBuilder(
         builder: ((context, setState) {
           return AlertDialog(
+            surfaceTintColor: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),

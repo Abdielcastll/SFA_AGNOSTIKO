@@ -23,6 +23,7 @@ Future<List<CardType>?> showCardReaderDialog(BuildContext context) {
         }
 
         return AlertDialog(
+          surfaceTintColor: Colors.white,
           actionsOverflowButtonSpacing: 1,
           actionsPadding: EdgeInsets.symmetric(
             horizontal: 10,

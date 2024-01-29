@@ -58,6 +58,7 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
+                    surfaceTintColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
@@ -137,6 +138,7 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
+                    surfaceTintColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
@@ -203,6 +205,7 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
+                    surfaceTintColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),

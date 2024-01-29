@@ -165,6 +165,7 @@ Future refund(BuildContext context, payment, String pleaseWait, Client client,
         }
 
         return AlertDialog(
+          surfaceTintColor: Colors.white,
           actionsOverflowButtonSpacing: 1,
           actionsPadding: EdgeInsets.symmetric(
             horizontal: 10,

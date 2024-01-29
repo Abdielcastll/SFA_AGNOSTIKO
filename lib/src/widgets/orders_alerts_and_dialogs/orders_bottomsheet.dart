@@ -313,6 +313,9 @@ void modalBottomSheetForOrders(
                                                                 print(
                                                                     'Retomar proceso de Retail');
                                                                 return AlertDialog(
+                                                                  surfaceTintColor:
+                                                                      Colors
+                                                                          .white,
                                                                   actionsOverflowButtonSpacing:
                                                                       1,
                                                                   actionsPadding:
@@ -512,6 +515,9 @@ void modalBottomSheetForOrders(
                                                                   (BuildContext
                                                                       context) {
                                                                 return AlertDialog(
+                                                                  surfaceTintColor:
+                                                                      Colors
+                                                                          .white,
                                                                   shape:
                                                                       RoundedRectangleBorder(
                                                                     borderRadius:
@@ -756,6 +762,7 @@ class DeleteOrderAlertDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      surfaceTintColor: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
