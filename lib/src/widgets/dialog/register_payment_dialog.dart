@@ -958,7 +958,9 @@ Future<dynamic> showDialogForRegisterPayment(
                               ],
                             ),
                           ),
-                        const Divider(),
+                        const Divider(
+                          color: Colors.grey,
+                        ),
                         Container(
                           margin: const EdgeInsets.fromLTRB(0, 5, 0, 0),
                           child: identifyPaymentMethod(

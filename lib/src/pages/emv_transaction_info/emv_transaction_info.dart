@@ -238,7 +238,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                 ),
                 textAlign: TextAlign.center,
               ),
-            const Divider(),
+            const Divider(
+              color: Colors.grey,
+            ),
             if (!transactionArgs!.isFallback && transactionArgs!.pan != null)
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -279,7 +281,10 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                       )),
                 ],
               ),
-            if (!transactionArgs!.isFallback) const Divider(),
+            if (!transactionArgs!.isFallback)
+              const Divider(
+                color: Colors.grey,
+              ),
             ListTile(
               enableFeedback: true,
               title:
@@ -312,8 +317,15 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                     ticketPrinted = true;
                   },
                   style: TextButton.styleFrom(
-                      foregroundColor: myTheme.colorScheme.primary,
-                      backgroundColor: Colors.blue.shade800),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    side: BorderSide(
+                      color: Colors.black12,
+                    ),
+                    foregroundColor: myTheme.colorScheme.primary,
+                    backgroundColor: Colors.blue.shade800,
+                  ),
                   child: Text(
                     'imprimir comprobante'.toUpperCase(),
                     style: const TextStyle(
@@ -337,6 +349,12 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                     onAccept();
                   },
                   style: TextButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      side: BorderSide(
+                        color: Colors.black12,
+                      ),
                       foregroundColor: myTheme.colorScheme.primary,
                       backgroundColor: Colors.blue.shade800),
                   child: Text(

@@ -96,7 +96,9 @@ void modalBottomSheetForOnProcess({
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 12),
-                      child: Divider(),
+                      child: Divider(
+                        color: Colors.grey,
+                      ),
                     ),
                     SizedBox(height: 8),
                     Container(

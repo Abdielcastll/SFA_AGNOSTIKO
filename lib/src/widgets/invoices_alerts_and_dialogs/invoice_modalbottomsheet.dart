@@ -195,7 +195,9 @@ void modalBottomSheetForInvoices({
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 12),
-                        child: Divider(),
+                        child: Divider(
+                          color: Colors.grey,
+                        ),
                       ),
                       SizedBox(height: 12),
                       Row(
@@ -222,7 +224,9 @@ void modalBottomSheetForInvoices({
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 12),
-                        child: Divider(),
+                        child: Divider(
+                          color: Colors.grey,
+                        ),
                       ),
                       SizedBox(height: 12),
                       Row(
@@ -820,6 +824,7 @@ class SeePaymentsALertDialog extends StatelessWidget {
                                               icon: Icon(
                                                 Icons.block_rounded,
                                                 size: 16,
+                                                color: Colors.white,
                                               ),
                                               label: Text(
                                                 'Cancelación',
@@ -849,6 +854,7 @@ class SeePaymentsALertDialog extends StatelessWidget {
                                             icon: Icon(
                                               Icons.currency_exchange_rounded,
                                               size: 16,
+                                              color: Colors.white,
                                             ),
                                             label: Text(
                                               'Devolución',
@@ -862,6 +868,7 @@ class SeePaymentsALertDialog extends StatelessWidget {
                                       ),
                                     if (!isLast)
                                       Divider(
+                                        color: Colors.grey,
                                         endIndent: 8,
                                         indent: 8,
                                       )

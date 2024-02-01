@@ -324,7 +324,9 @@ class _OrdersBodyState extends State<OrdersBody> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Divider(),
+            child: Divider(
+              color: Colors.grey,
+            ),
           ),
           // Row(
           //   mainAxisAlignment: MainAxisAlignment.spaceAround,
