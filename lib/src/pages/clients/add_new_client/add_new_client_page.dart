@@ -151,7 +151,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                    surfaceTintColor: Colors.white,
+                    surfaceTintColor: Color.fromARGB(255, 222, 222, 222),
                     actionsOverflowButtonSpacing: 1,
                     actionsPadding: EdgeInsets.symmetric(
                       horizontal: 10,
@@ -221,6 +221,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                             icon: Icon(
                               MaterialIcons.arrow_back_ios,
                               size: 16,
+                              color: Colors.white,
                             ),
                             label: Text(
                               'No',
@@ -250,6 +251,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                             icon: Icon(
                               Icons.check,
                               size: 20,
+                              color: Colors.white,
                             ),
                             label: Text(
                               'Si',

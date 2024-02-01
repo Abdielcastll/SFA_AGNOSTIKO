@@ -314,8 +314,11 @@ void modalBottomSheetForOrders(
                                                                     'Retomar proceso de Retail');
                                                                 return AlertDialog(
                                                                   surfaceTintColor:
-                                                                      Colors
-                                                                          .white,
+                                                                      Color.fromARGB(
+                                                                          255,
+                                                                          222,
+                                                                          222,
+                                                                          222),
                                                                   actionsOverflowButtonSpacing:
                                                                       1,
                                                                   actionsPadding:
@@ -516,8 +519,11 @@ void modalBottomSheetForOrders(
                                                                       context) {
                                                                 return AlertDialog(
                                                                   surfaceTintColor:
-                                                                      Colors
-                                                                          .white,
+                                                                      Color.fromARGB(
+                                                                          255,
+                                                                          222,
+                                                                          222,
+                                                                          222),
                                                                   shape:
                                                                       RoundedRectangleBorder(
                                                                     borderRadius:
@@ -762,7 +768,7 @@ class DeleteOrderAlertDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      surfaceTintColor: Colors.white,
+      surfaceTintColor: Color.fromARGB(255, 222, 222, 222),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
@@ -903,7 +909,7 @@ class SeeProductsAlertDialog extends StatelessWidget {
     var totalFormatted = formatDecimalPriceByRegion(price: totalConverted);
 
     return AlertDialog(
-      surfaceTintColor: Colors.white,
+      surfaceTintColor: Color.fromARGB(255, 222, 222, 222),
       backgroundColor: Colors.white,
       actionsOverflowButtonSpacing: 1,
       actionsPadding: EdgeInsets.symmetric(

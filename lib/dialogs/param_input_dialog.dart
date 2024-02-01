@@ -19,7 +19,7 @@ Future<String?> showParamInputDialog(
     barrierDismissible: false,
     builder: (context) {
       return AlertDialog(
-        surfaceTintColor: Colors.white,
+        surfaceTintColor: Color.fromARGB(255, 222, 222, 222),
         actionsOverflowButtonSpacing: 1,
         actionsPadding: EdgeInsets.symmetric(
           horizontal: 10,

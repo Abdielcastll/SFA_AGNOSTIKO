@@ -1133,7 +1133,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          surfaceTintColor: Colors.white,
+                          surfaceTintColor: Color.fromARGB(255, 222, 222, 222),
                           actionsOverflowButtonSpacing: 1,
                           actionsPadding: EdgeInsets.symmetric(
                             horizontal: 10,
