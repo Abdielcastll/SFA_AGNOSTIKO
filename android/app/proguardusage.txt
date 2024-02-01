@@ -48415,4 +48415,1052 @@ org.checkerframework.common.subtyping.qual.Bottom
 org.checkerframework.common.subtyping.qual.Unqualified
 org.checkerframework.common.util.report.qual.ReportCall
 org.checkerframework.common.util.report.qual.ReportCreation
-org.checkerframework.common.util.repor
+org.checkerframework.common.util.report.qual.ReportInherit
+org.checkerframework.common.util.report.qual.ReportOverride
+org.checkerframework.common.util.report.qual.ReportReadWrite
+org.checkerframework.common.util.report.qual.ReportUnqualified
+org.checkerframework.common.util.report.qual.ReportUse
+org.checkerframework.common.util.report.qual.ReportWrite
+org.checkerframework.common.value.qual.ArrayLen
+org.checkerframework.common.value.qual.ArrayLenRange
+org.checkerframework.common.value.qual.BoolVal
+org.checkerframework.common.value.qual.BottomVal
+org.checkerframework.common.value.qual.DoubleVal
+org.checkerframework.common.value.qual.EnsuresMinLenIf$List
+org.checkerframework.common.value.qual.EnsuresMinLenIf
+org.checkerframework.common.value.qual.EnumVal
+org.checkerframework.common.value.qual.IntRange
+org.checkerframework.common.value.qual.IntRangeFromGTENegativeOne
+org.checkerframework.common.value.qual.IntRangeFromNonNegative
+org.checkerframework.common.value.qual.IntRangeFromPositive
+org.checkerframework.common.value.qual.IntVal
+org.checkerframework.common.value.qual.MatchesRegex
+org.checkerframework.common.value.qual.MinLen
+org.checkerframework.common.value.qual.MinLenFieldInvariant
+org.checkerframework.common.value.qual.PolyValue
+org.checkerframework.common.value.qual.StaticallyExecutable
+org.checkerframework.common.value.qual.StringVal
+org.checkerframework.common.value.qual.UnknownVal
+org.checkerframework.dataflow.qual.Deterministic
+org.checkerframework.dataflow.qual.Pure$Kind
+org.checkerframework.dataflow.qual.Pure
+org.checkerframework.dataflow.qual.SideEffectFree
+org.checkerframework.dataflow.qual.TerminatesExecution
+org.checkerframework.framework.qual.AnnotatedFor
+org.checkerframework.framework.qual.CFComment
+org.checkerframework.framework.qual.ConditionalPostconditionAnnotation
+org.checkerframework.framework.qual.Covariant
+org.checkerframework.framework.qual.DefaultFor
+org.checkerframework.framework.qual.DefaultQualifier$List
+org.checkerframework.framework.qual.DefaultQualifier
+org.checkerframework.framework.qual.DefaultQualifierForUse
+org.checkerframework.framework.qual.DefaultQualifierInHierarchy
+org.checkerframework.framework.qual.EnsuresQualifier$List
+org.checkerframework.framework.qual.EnsuresQualifier
+org.checkerframework.framework.qual.EnsuresQualifierIf$List
+org.checkerframework.framework.qual.EnsuresQualifierIf
+org.checkerframework.framework.qual.FieldInvariant
+org.checkerframework.framework.qual.FromByteCode
+org.checkerframework.framework.qual.FromStubFile
+org.checkerframework.framework.qual.HasQualifierParameter
+org.checkerframework.framework.qual.IgnoreInWholeProgramInference
+org.checkerframework.framework.qual.InheritedAnnotation
+org.checkerframework.framework.qual.InvisibleQualifier
+org.checkerframework.framework.qual.JavaExpression
+org.checkerframework.framework.qual.LiteralKind
+org.checkerframework.framework.qual.MonotonicQualifier
+org.checkerframework.framework.qual.NoDefaultQualifierForUse
+org.checkerframework.framework.qual.NoQualifierParameter
+org.checkerframework.framework.qual.PolymorphicQualifier
+org.checkerframework.framework.qual.PostconditionAnnotation
+org.checkerframework.framework.qual.PreconditionAnnotation
+org.checkerframework.framework.qual.PurityUnqualified
+org.checkerframework.framework.qual.QualifierArgument
+org.checkerframework.framework.qual.QualifierForLiterals
+org.checkerframework.framework.qual.RelevantJavaTypes
+org.checkerframework.framework.qual.RequiresQualifier$List
+org.checkerframework.framework.qual.RequiresQualifier
+org.checkerframework.framework.qual.StubFiles
+org.checkerframework.framework.qual.SubtypeOf
+org.checkerframework.framework.qual.TargetLocations
+org.checkerframework.framework.qual.TypeKind
+org.checkerframework.framework.qual.TypeUseLocation
+org.checkerframework.framework.qual.Unused
+org.checkerframework.framework.qual.UpperBoundFor
+org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+org.greenrobot.essentials.DateUtils$DefaultCalendarThreadLocal
+org.greenrobot.essentials.DateUtils
+org.greenrobot.essentials.ObjectCache$CacheEntry
+org.greenrobot.essentials.ObjectCache$ReferenceType
+org.greenrobot.essentials.ObjectCache
+org.greenrobot.essentials.PrimitiveArrayUtils$1
+org.greenrobot.essentials.PrimitiveArrayUtils$SafeImpl
+org.greenrobot.essentials.PrimitiveArrayUtils$UnsafeImpl
+org.greenrobot.essentials.PrimitiveArrayUtils
+org.greenrobot.essentials.StringUtils
+org.greenrobot.essentials.collections.AbstractMultimap
+org.greenrobot.essentials.collections.LongHashMap$Entry
+org.greenrobot.essentials.collections.LongHashMap$Synchronized
+org.greenrobot.essentials.collections.LongHashMap
+org.greenrobot.essentials.collections.LongHashSet$Entry
+org.greenrobot.essentials.collections.LongHashSet$Synchronized
+org.greenrobot.essentials.collections.LongHashSet
+org.greenrobot.essentials.collections.Multimap$1
+org.greenrobot.essentials.collections.Multimap$ListType
+org.greenrobot.essentials.collections.Multimap
+org.greenrobot.essentials.collections.MultimapSet$1
+org.greenrobot.essentials.collections.MultimapSet$SetType
+org.greenrobot.essentials.collections.MultimapSet
+org.greenrobot.essentials.hash.Checksum128
+org.greenrobot.essentials.hash.FNV32
+org.greenrobot.essentials.hash.FNV64
+org.greenrobot.essentials.hash.Murmur3A
+org.greenrobot.essentials.hash.Murmur3F
+org.greenrobot.essentials.hash.PrimitiveDataChecksum
+org.greenrobot.essentials.io.CircularByteBuffer
+org.greenrobot.essentials.io.FileUtils
+org.greenrobot.essentials.io.IoUtils
+org.greenrobot.essentials.io.LimitedInputStream
+org.greenrobot.essentials.io.PipelineOutputStream$PipelineInputStream
+org.greenrobot.essentials.io.PipelineOutputStream
+org.greenrobot.essentials.io.RepeaterInputStream
+org.intellij.lang.annotations.Flow
+org.intellij.lang.annotations.Identifier
+org.intellij.lang.annotations.JdkConstants$AdjustableOrientation
+org.intellij.lang.annotations.JdkConstants$BoxLayoutAxis
+org.intellij.lang.annotations.JdkConstants$CalendarMonth
+org.intellij.lang.annotations.JdkConstants$CursorType
+org.intellij.lang.annotations.JdkConstants$FlowLayoutAlignment
+org.intellij.lang.annotations.JdkConstants$FontStyle
+org.intellij.lang.annotations.JdkConstants$HorizontalAlignment
+org.intellij.lang.annotations.JdkConstants$InputEventMask
+org.intellij.lang.annotations.JdkConstants$ListSelectionMode
+org.intellij.lang.annotations.JdkConstants$PatternFlags
+org.intellij.lang.annotations.JdkConstants$TabLayoutPolicy
+org.intellij.lang.annotations.JdkConstants$TabPlacement
+org.intellij.lang.annotations.JdkConstants$TitledBorderJustification
+org.intellij.lang.annotations.JdkConstants$TitledBorderTitlePosition
+org.intellij.lang.annotations.JdkConstants$TreeSelectionMode
+org.intellij.lang.annotations.JdkConstants
+org.intellij.lang.annotations.Language
+org.intellij.lang.annotations.MagicConstant
+org.intellij.lang.annotations.Pattern
+org.intellij.lang.annotations.PrintFormat
+org.intellij.lang.annotations.PrintFormatPattern
+org.intellij.lang.annotations.RegExp
+org.intellij.lang.annotations.Subst
+org.jetbrains.annotations.Contract
+org.jetbrains.annotations.Nls
+org.jetbrains.annotations.NonNls
+org.jetbrains.annotations.NotNull
+org.jetbrains.annotations.Nullable
+org.jetbrains.annotations.PropertyKey
+org.jetbrains.annotations.TestOnly
+vn.hunghd.flutter.plugins.imagecropper.BuildConfig
+vn.hunghd.flutter.plugins.imagecropper.ImageCropperDelegate:
+    static final java.lang.String FILENAME_CACHE_KEY
+vn.hunghd.flutter.plugins.imagecropper.ImageCropperPlugin:
+    private static final java.lang.String CHANNEL
+    public static void registerWith(io.flutter.plugin.common.PluginRegistry$Registrar)
+vn.hunghd.flutter.plugins.imagecropper.R$anim
+vn.hunghd.flutter.plugins.imagecropper.R$animator
+vn.hunghd.flutter.plugins.imagecropper.R$attr
+vn.hunghd.flutter.plugins.imagecropper.R$bool
+vn.hunghd.flutter.plugins.imagecropper.R$color
+vn.hunghd.flutter.plugins.imagecropper.R$dimen
+vn.hunghd.flutter.plugins.imagecropper.R$drawable
+vn.hunghd.flutter.plugins.imagecropper.R$id
+vn.hunghd.flutter.plugins.imagecropper.R$integer
+vn.hunghd.flutter.plugins.imagecropper.R$interpolator
+vn.hunghd.flutter.plugins.imagecropper.R$layout
+vn.hunghd.flutter.plugins.imagecropper.R$menu
+vn.hunghd.flutter.plugins.imagecropper.R$string:
+    public static final int abc_action_bar_home_description
+    public static final int abc_action_bar_up_description
+    public static final int abc_action_menu_overflow_description
+    public static final int abc_action_mode_done
+    public static final int abc_activity_chooser_view_see_all
+    public static final int abc_activitychooserview_choose_application
+    public static final int abc_capital_off
+    public static final int abc_capital_on
+    public static final int abc_menu_alt_shortcut_label
+    public static final int abc_menu_ctrl_shortcut_label
+    public static final int abc_menu_delete_shortcut_label
+    public static final int abc_menu_enter_shortcut_label
+    public static final int abc_menu_function_shortcut_label
+    public static final int abc_menu_meta_shortcut_label
+    public static final int abc_menu_shift_shortcut_label
+    public static final int abc_menu_space_shortcut_label
+    public static final int abc_menu_sym_shortcut_label
+    public static final int abc_prepend_shortcut_label
+    public static final int abc_search_hint
+    public static final int abc_searchview_description_clear
+    public static final int abc_searchview_description_query
+    public static final int abc_searchview_description_search
+    public static final int abc_searchview_description_submit
+    public static final int abc_searchview_description_voice
+    public static final int abc_shareactionprovider_share_with
+    public static final int abc_shareactionprovider_share_with_application
+    public static final int abc_toolbar_collapse_description
+    public static final int search_menu_title
+    public static final int status_bar_notification_info_overflow
+    public static final int ucrop_crop
+    public static final int ucrop_error_input_data_is_absent
+    public static final int ucrop_label_edit_photo
+    public static final int ucrop_menu_crop
+    public static final int ucrop_mutate_exception_hint
+    public static final int ucrop_rotate
+    public static final int ucrop_scale
+    private void <init>()
+vn.hunghd.flutter.plugins.imagecropper.R$style
+vn.hunghd.flutter.plugins.imagecropper.R$styleable
+vn.hunghd.flutter.plugins.imagecropper.R
+android.support.v4.app.INotificationSideChannel$Stub$Proxy:
+    public void cancel(java.lang.String,int,java.lang.String)
+    public void cancelAll(java.lang.String)
+android.support.v4.app.INotificationSideChannel:
+    public abstract void cancel(java.lang.String,int,java.lang.String)
+    public abstract void cancelAll(java.lang.String)
+android.support.v4.media.MediaBrowserCompat$CustomActionCallback
+android.support.v4.media.MediaBrowserCompat$CustomActionResultReceiver:
+    public final java.lang.String mAction
+    public final android.support.v4.media.MediaBrowserCompat$CustomActionCallback mCallback
+    public final android.os.Bundle mExtras
+android.support.v4.media.MediaBrowserCompat$ItemCallback
+android.support.v4.media.MediaBrowserCompat$ItemReceiver:
+    public final android.support.v4.media.MediaBrowserCompat$ItemCallback mCallback
+    public final java.lang.String mMediaId
+android.support.v4.media.MediaBrowserCompat$SearchCallback
+android.support.v4.media.MediaBrowserCompat$SearchResultReceiver:
+    public final android.support.v4.media.MediaBrowserCompat$SearchCallback mCallback
+    public final android.os.Bundle mExtras
+    public final java.lang.String mQuery
+android.support.v4.media.MediaDescriptionCompat:
+    public void <init>(android.os.Parcel)
+android.support.v4.media.session.MediaControllerCompat$Callback$MessageHandler
+android.support.v4.media.session.MediaControllerCompat$Callback$StubCompat:
+    public void onExtrasChanged(android.os.Bundle)
+    public void onMetadataChanged(android.support.v4.media.MediaMetadataCompat)
+    public void onQueueChanged(java.util.List)
+    public void onQueueTitleChanged(java.lang.CharSequence)
+    public void onSessionDestroyed()
+    public void onVolumeInfoChanged(android.support.v4.media.session.ParcelableVolumeInfo)
+android.support.v4.media.session.MediaControllerCompat$Callback:
+    public android.support.v4.media.session.MediaControllerCompat$Callback$MessageHandler mHandler
+android.support.v4.media.session.MediaControllerCompat$PlaybackInfo:
+    public void <init>(int,int,int,int,int)
+androidx.activity.ComponentActivity$ReportFullyDrawnExecutorApi1
+androidx.appcompat.app.AppCompatDelegateImpl$1
+androidx.appcompat.app.AppCompatDelegateImpl$4
+androidx.appcompat.app.AppCompatDelegateImpl:
+    public static boolean sInstalledExceptionHandler
+androidx.appcompat.widget.AppCompatTextViewAutoSizeHelper:
+    public static java.lang.Object accessAndReturnWithDefault(java.lang.Object,java.lang.String,java.lang.Object)
+    public final android.text.StaticLayout createStaticLayoutForMeasuringPre16(java.lang.CharSequence,android.text.Layout$Alignment,int)
+    public static java.lang.reflect.Field getTextViewField(java.lang.String)
+androidx.appcompat.widget.ContentFrameLayout:
+    public void dispatchFitSystemWindows(android.graphics.Rect)
+androidx.appcompat.widget.DrawableUtils:
+    public static void fixVectorDrawableTinting(android.graphics.drawable.Drawable)
+androidx.appcompat.widget.FitWindowsViewGroup
+androidx.camera.camera2.internal.Camera2CameraControlImpl:
+    public android.graphics.Rect getSensorRect()
+androidx.camera.core.ImageAnalysis:
+    public void setSensorToBufferTransformMatrix(android.graphics.Matrix)
+    public void setViewPortCropRect(android.graphics.Rect)
+androidx.camera.core.ImageAnalysisAbstractAnalyzer:
+    public void setSensorToBufferTransformMatrix(android.graphics.Matrix)
+    public void setViewPortCropRect(android.graphics.Rect)
+androidx.camera.core.ImageCapture$Metadata:
+    public android.location.Location getLocation()
+    public boolean isReversedHorizontal()
+    public boolean isReversedVertical()
+androidx.camera.core.ImageCapture$OnImageCapturedCallback:
+    public void <init>()
+androidx.camera.core.ImageCapture$OutputFileOptions:
+    public final android.content.ContentResolver mContentResolver
+    public final android.content.ContentValues mContentValues
+    public final java.io.File mFile
+    public final androidx.camera.core.ImageCapture$Metadata mMetadata
+    public final java.io.OutputStream mOutputStream
+    public final android.net.Uri mSaveCollection
+androidx.camera.core.ImageInfo$-CC
+androidx.camera.core.Preview:
+    public void setViewPortCropRect(android.graphics.Rect)
+androidx.camera.core.UseCase:
+    public void setSensorToBufferTransformMatrix(android.graphics.Matrix)
+    public void setViewPortCropRect(android.graphics.Rect)
+androidx.camera.core.ViewPort:
+    public android.util.Rational getAspectRatio()
+    public int getLayoutDirection()
+    public int getRotation()
+    public int getScaleType()
+androidx.camera.core.impl.CameraCaptureResult$-CC:
+    public static android.hardware.camera2.CaptureResult $default$getCaptureResult(androidx.camera.core.impl.CameraCaptureResult)
+androidx.camera.core.impl.CameraCaptureResult$EmptyCameraCaptureResult
+androidx.camera.core.impl.CameraControlInternal$1:
+    public android.graphics.Rect getSensorRect()
+androidx.camera.core.impl.CameraControlInternal:
+    public abstract android.graphics.Rect getSensorRect()
+androidx.camera.core.impl.CameraInternal$-CC:
+    public static androidx.camera.core.impl.CameraConfig $default$getExtendedConfig(androidx.camera.core.impl.CameraInternal)
+    public static void $default$setActiveResumingMode(androidx.camera.core.impl.CameraInternal,boolean)
+    public static void $default$setExtendedConfig(androidx.camera.core.impl.CameraInternal,androidx.camera.core.impl.CameraConfig)
+androidx.camera.core.impl.CameraInternal:
+    public abstract androidx.camera.core.CameraControl getCameraControl()
+androidx.camera.core.impl.CaptureProcessor$-CC
+androidx.camera.core.impl.PreviewConfig:
+    public synthetic java.util.concurrent.Executor getBackgroundExecutor(java.util.concurrent.Executor)
+androidx.camera.core.impl.ReadableConfig:
+    public abstract void findOptions(java.lang.String,androidx.camera.core.impl.Config$OptionMatcher)
+    public abstract java.util.Set getPriorities(androidx.camera.core.impl.Config$Option)
+    public abstract java.lang.Object retrieveOptionWithPriority(androidx.camera.core.impl.Config$Option,androidx.camera.core.impl.Config$OptionPriority)
+androidx.camera.core.impl.VideoCaptureConfig:
+    public synthetic java.util.concurrent.Executor getBackgroundExecutor(java.util.concurrent.Executor)
+androidx.camera.core.impl.utils.Exif:
+    public final void attachLastModifiedTimestamp()
+    public void attachLocation(android.location.Location)
+    public static java.lang.String convertToExifDateTime(long)
+    public void flipHorizontally()
+    public void flipVertically()
+    public void save()
+androidx.camera.core.internal.CameraUseCaseAdapter:
+    public androidx.camera.core.ViewPort mViewPort
+    public static android.graphics.Matrix calculateSensorToBufferTransformMatrix(android.graphics.Rect,android.util.Size)
+androidx.camera.core.internal.ThreadConfig:
+    public abstract java.util.concurrent.Executor getBackgroundExecutor(java.util.concurrent.Executor)
+androidx.camera.core.internal.ViewPorts
+androidx.camera.core.internal.utils.ImageUtil:
+    public static android.util.Rational getRotatedAspectRatio(int,android.util.Rational)
+    public static android.util.Rational inverseRational(android.util.Rational)
+androidx.cardview.widget.CardViewApi17Impl$1
+androidx.cardview.widget.CardViewApi17Impl
+androidx.cardview.widget.CardViewBaseImpl$1
+androidx.cardview.widget.CardViewBaseImpl
+androidx.cardview.widget.CardViewDelegate:
+    public abstract void setMinWidthHeightInternal(int,int)
+androidx.cardview.widget.RoundRectDrawableWithShadow$RoundRectHelper
+androidx.cardview.widget.RoundRectDrawableWithShadow:
+    public boolean mAddPaddingForCorners
+    public android.content.res.ColorStateList mBackground
+    public final android.graphics.RectF mCardBounds
+    public float mCornerRadius
+    public android.graphics.Paint mCornerShadowPaint
+    public android.graphics.Path mCornerShadowPath
+    public boolean mDirty
+    public android.graphics.Paint mEdgeShadowPaint
+    public final int mInsetShadow
+    public android.graphics.Paint mPaint
+    public boolean mPrintedShadowClipWarning
+    public float mRawMaxShadowSize
+    public float mRawShadowSize
+    public final int mShadowEndColor
+    public float mShadowSize
+    public final int mShadowStartColor
+    public static androidx.cardview.widget.RoundRectDrawableWithShadow$RoundRectHelper sRoundRectHelper
+    public final void buildComponents(android.graphics.Rect)
+    public final void buildShadowCorners()
+    public void draw(android.graphics.Canvas)
+    public final void drawShadow(android.graphics.Canvas)
+    public android.content.res.ColorStateList getColor()
+    public float getCornerRadius()
+    public void getMaxShadowAndCornerPadding(android.graphics.Rect)
+    public float getMaxShadowSize()
+    public float getMinHeight()
+    public float getMinWidth()
+    public int getOpacity()
+    public boolean getPadding(android.graphics.Rect)
+    public float getShadowSize()
+    public boolean isStateful()
+    public void onBoundsChange(android.graphics.Rect)
+    public boolean onStateChange(int[])
+    public void setAddPaddingForCorners(boolean)
+    public void setAlpha(int)
+    public final void setBackground(android.content.res.ColorStateList)
+    public void setColor(android.content.res.ColorStateList)
+    public void setColorFilter(android.graphics.ColorFilter)
+    public void setCornerRadius(float)
+    public void setMaxShadowSize(float)
+    public void setShadowSize(float)
+    public final void setShadowSize(float,float)
+    public final int toEven(float)
+androidx.constraintlayout.solver.LinearSystem:
+    public static androidx.constraintlayout.solver.Metrics sMetrics
+androidx.constraintlayout.solver.Metrics:
+    public long bfs
+    public long constraints
+    public long errors
+    public long extravariables
+    public long fullySolved
+    public long graphOptimizer
+    public long graphSolved
+    public long iterations
+    public long lastTableSize
+    public long linearSolved
+    public long maxRows
+    public long maxTableSize
+    public long maxVariables
+    public long measuredMatchWidgets
+    public long measuredWidgets
+    public long measures
+    public long minimize
+    public long minimizeGoal
+    public long nonresolvedWidgets
+    public long optimize
+    public long pivots
+    public long simpleconstraints
+    public long slackvariables
+    public long tableSizeIncrease
+    public long widgets
+androidx.constraintlayout.solver.SolverVariable:
+    public static int uniqueConstantId
+    public static int uniqueId
+    public static int uniqueSlackId
+    public static int uniqueUnrestrictedId
+androidx.constraintlayout.solver.widgets.ConstraintWidgetContainer:
+    public androidx.constraintlayout.solver.Metrics mMetrics
+androidx.constraintlayout.widget.ConstraintLayout:
+    public androidx.constraintlayout.widget.ConstraintsChangedListener mConstraintsChangedListener
+androidx.constraintlayout.widget.ConstraintLayoutStates:
+    public androidx.constraintlayout.widget.ConstraintsChangedListener mConstraintsChangedListener
+androidx.core.R$drawable:
+    public static final int ic_call_answer_low
+    public static final int ic_call_answer_video_low
+    public static final int ic_call_decline_low
+    public static final int notification_bg
+    public static final int notification_bg_low
+    public static final int notification_template_icon_bg
+    public static final int notification_template_icon_low_bg
+androidx.core.R$id:
+    public static final int notification_background
+    public static final int tag_transition_group
+androidx.core.app.ActivityOptionsCompat:
+    public android.os.Bundle toBundle()
+androidx.core.app.BundleCompat$BeforeApi18Impl
+androidx.core.app.NotificationCompat$Action:
+    public androidx.core.app.RemoteInput[] getDataOnlyRemoteInputs()
+    public int getIcon()
+androidx.core.app.NotificationCompat$BubbleMetadata$Api29Impl
+androidx.core.app.NotificationCompat$BubbleMetadata$Api30Impl
+androidx.core.app.NotificationCompat$BubbleMetadata:
+    public boolean getAutoExpandBubble()
+    public android.app.PendingIntent getDeleteIntent()
+    public int getDesiredHeight()
+    public int getDesiredHeightResId()
+    public androidx.core.graphics.drawable.IconCompat getIcon()
+    public android.app.PendingIntent getIntent()
+    public java.lang.String getShortcutId()
+    public boolean isNotificationSuppressed()
+androidx.core.app.NotificationCompat$Builder:
+    public androidx.core.app.NotificationCompat$BubbleMetadata mBubbleMetadata
+    public androidx.core.content.LocusIdCompat mLocusId
+androidx.core.app.NotificationCompat$Style:
+    public android.graphics.Bitmap createColoredBitmap(int,int)
+androidx.core.app.NotificationCompatJellybean:
+    public static java.lang.reflect.Field sExtrasField
+    public static boolean sExtrasFieldAccessFailed
+    public static android.util.SparseArray buildActionExtrasMap(java.util.List)
+    public static android.os.Bundle getExtras(android.app.Notification)
+    public static android.os.Bundle writeActionAndGetExtras(android.app.Notification$Builder,androidx.core.app.NotificationCompat$Action)
+androidx.core.app.NotificationManagerCompat$CancelTask
+androidx.core.app.RemoteInput$Api16Impl
+androidx.core.app.RemoteInput:
+    public static android.content.Intent getClipDataIntentFromIntent(android.content.Intent)
+androidx.core.app.SharedElementCallback:
+    public abstract void onMapSharedElements(java.util.List,java.util.Map)
+    public abstract void onSharedElementEnd(java.util.List,java.util.List,java.util.List)
+    public abstract void onSharedElementStart(java.util.List,java.util.List,java.util.List)
+androidx.core.content.LocusIdCompat
+androidx.core.graphics.TypefaceCompat:
+    public static android.graphics.Typeface getBestFontFromFamily(android.content.Context,android.graphics.Typeface,int)
+androidx.core.graphics.TypefaceCompatApi29Impl:
+    public android.graphics.Typeface createFromInputStream(android.content.Context,java.io.InputStream)
+androidx.core.graphics.TypefaceCompatBaseImpl$2
+androidx.core.graphics.TypefaceCompatBaseImpl:
+    public final void addFontFamily(android.graphics.Typeface,androidx.core.content.res.FontResourcesParserCompat$FontFamilyFilesResourceEntry)
+    public final androidx.core.content.res.FontResourcesParserCompat$FontFileResourceEntry findBestEntry(androidx.core.content.res.FontResourcesParserCompat$FontFamilyFilesResourceEntry,int)
+    public androidx.core.content.res.FontResourcesParserCompat$FontFamilyFilesResourceEntry getFontFamily(android.graphics.Typeface)
+    public static long getUniqueKey(android.graphics.Typeface)
+androidx.core.graphics.drawable.TintAwareDrawable:
+    public abstract void setTint(int)
+    public abstract void setTintList(android.content.res.ColorStateList)
+    public abstract void setTintMode(android.graphics.PorterDuff$Mode)
+androidx.core.location.LocationListenerCompat$-CC:
+    public static void $default$onProviderDisabled(androidx.core.location.LocationListenerCompat,java.lang.String)
+    public static void $default$onProviderEnabled(androidx.core.location.LocationListenerCompat,java.lang.String)
+    public static void $default$onStatusChanged(androidx.core.location.LocationListenerCompat,java.lang.String,int,android.os.Bundle)
+androidx.core.text.ICUCompat$Api21Impl
+androidx.core.text.ICUCompat$Api24Impl
+androidx.core.text.ICUCompat
+androidx.core.text.PrecomputedTextCompat:
+    public static java.util.concurrent.Executor sExecutor
+androidx.core.text.TextUtilsCompat:
+    public static int getLayoutDirectionFromFirstChar(java.util.Locale)
+androidx.core.view.LayoutInflaterCompat:
+    public static boolean sCheckedField
+    public static java.lang.reflect.Field sLayoutInflaterFactory2Field
+    public static void forceSetFactory2(android.view.LayoutInflater,android.view.LayoutInflater$Factory2)
+androidx.core.view.MenuProvider$-CC
+androidx.core.view.NestedScrollingChild:
+    public abstract boolean isNestedScrollingEnabled()
+    public abstract void stopNestedScroll()
+androidx.core.view.NestedScrollingParent
+androidx.core.view.TintableBackgroundView
+androidx.core.view.ViewCompat:
+    public static java.lang.reflect.Field sMinHeightField
+    public static boolean sMinHeightFieldFetched
+    public static java.lang.reflect.Field sMinWidthField
+    public static boolean sMinWidthFieldFetched
+    public static java.util.WeakHashMap sTransitionNameMap
+androidx.core.view.ViewPropertyAnimatorCompat$ViewPropertyAnimatorListenerApi14
+androidx.core.widget.TextViewOnReceiveContentListener$ApiImpl
+androidx.core.widget.TintableCompoundButton
+androidx.core.widget.TintableImageSourceView
+androidx.datastore.preferences.PreferenceDataStoreSingletonDelegate:
+    public final androidx.datastore.core.handlers.ReplaceFileCorruptionHandler corruptionHandler
+androidx.datastore.preferences.protobuf.ExtensionRegistryLite:
+    public static volatile boolean eagerlyParseMessageSets
+androidx.datastore.preferences.protobuf.FieldInfo:
+    public java.lang.reflect.Field getCachedSizeField()
+    public androidx.datastore.preferences.protobuf.Internal$EnumVerifier getEnumVerifier()
+    public java.lang.reflect.Field getField()
+    public int getFieldNumber()
+    public java.lang.Object getMapDefaultEntry()
+    public java.lang.Class getMessageFieldClass()
+    public androidx.datastore.preferences.protobuf.OneofInfo getOneof()
+    public java.lang.reflect.Field getPresenceField()
+    public int getPresenceMask()
+    public androidx.datastore.preferences.protobuf.FieldType getType()
+    public boolean isEnforceUtf8()
+    public boolean isRequired()
+androidx.datastore.preferences.protobuf.FieldType$Collection:
+    public boolean isList()
+androidx.datastore.preferences.protobuf.FieldType:
+    public boolean isList()
+    public boolean isMap()
+androidx.datastore.preferences.protobuf.MessageSchema:
+    public static void storeFieldData(androidx.datastore.preferences.protobuf.FieldInfo,int[],int,boolean,java.lang.Object[])
+androidx.datastore.preferences.protobuf.OneofInfo
+androidx.datastore.preferences.protobuf.UnsafeUtil:
+    public static long objectFieldOffset(java.lang.reflect.Field)
+androidx.exifinterface.media.ExifInterface:
+    public final java.lang.String convertDecimalDegree(double)
+    public void setAltitude(double)
+    public void setGpsInfo(android.location.Location)
+    public void setLatLong(double,double)
+androidx.fragment.app.Fragment$AnimationInfo:
+    public androidx.core.app.SharedElementCallback mEnterTransitionCallback
+    public androidx.core.app.SharedElementCallback mExitTransitionCallback
+androidx.fragment.app.FragmentTransition:
+    public static java.lang.String findKeyForValue(androidx.collection.ArrayMap,java.lang.String)
+androidx.lifecycle.DefaultLifecycleObserver$-CC
+androidx.lifecycle.ViewModelProvider$Factory$Companion
+androidx.lifecycle.ViewModelProvider$Factory:
+    public static final androidx.lifecycle.ViewModelProvider$Factory$Companion Companion
+    public static void <clinit>()
+androidx.lifecycle.ViewModelProvider$NewInstanceFactory:
+    public synthetic androidx.lifecycle.ViewModel create(java.lang.Class,androidx.lifecycle.viewmodel.CreationExtras)
+androidx.loader.app.LoaderManagerImpl$LoaderInfo:
+    public final androidx.loader.content.Loader mLoader
+    public androidx.loader.app.LoaderManagerImpl$LoaderObserver mObserver
+    public androidx.loader.content.Loader mPriorLoader
+    public androidx.loader.content.Loader getLoader()
+androidx.loader.app.LoaderManagerImpl$LoaderObserver
+androidx.loader.content.Loader$OnLoadCompleteListener
+androidx.loader.content.Loader:
+    public void abandon()
+    public boolean cancelLoad()
+    public java.lang.String dataToString(java.lang.Object)
+    public void dump(java.lang.String,java.io.FileDescriptor,java.io.PrintWriter,java.lang.String[])
+    public void reset()
+    public final void startLoading()
+    public void stopLoading()
+    public void unregisterListener(androidx.loader.content.Loader$OnLoadCompleteListener)
+androidx.media.AudioAttributesCompat$Builder
+androidx.media.AudioAttributesImpl$Builder
+androidx.media.AudioAttributesImplApi21$Builder
+androidx.media.AudioAttributesImplApi26$Builder
+androidx.media.AudioAttributesImplBase$Builder
+androidx.media.AudioAttributesImplBase:
+    public void <init>(int,int,int,int)
+androidx.media.R$id
+androidx.media.R$integer
+androidx.media.R$layout
+androidx.media.app.NotificationCompat$MediaStyle:
+    public android.app.PendingIntent mCancelButtonIntent
+    public boolean mShowCancelButton
+    public android.widget.RemoteViews generateBigContentView()
+    public android.widget.RemoteViews generateContentView()
+    public final android.widget.RemoteViews generateMediaActionButton(androidx.core.app.NotificationCompat$Action)
+    public int getBigContentViewLayoutResource(int)
+    public int getContentViewLayoutResource()
+androidx.recyclerview.widget.RecyclerView$Recycler:
+    public androidx.recyclerview.widget.RecyclerView$ViewCacheExtension mViewCacheExtension
+androidx.recyclerview.widget.RecyclerView$ViewCacheExtension:
+    public abstract android.view.View getViewForPositionAndType(androidx.recyclerview.widget.RecyclerView$Recycler,int,int)
+androidx.startup.StartupLogger
+androidx.transition.AnimatorUtils$AnimatorPauseListenerCompat
+androidx.transition.PathProperty
+androidx.transition.R$id:
+    public static final int save_non_transition_alpha
+    public static final int transition_layout_save
+androidx.transition.Transition:
+    public androidx.transition.TransitionPropagation mPropagation
+androidx.transition.TransitionPropagation:
+    public abstract void captureValues(androidx.transition.TransitionValues)
+    public abstract java.lang.String[] getPropagationProperties()
+    public abstract long getStartDelay(android.view.ViewGroup,androidx.transition.Transition,androidx.transition.TransitionValues,androidx.transition.TransitionValues)
+androidx.transition.ViewGroupOverlayApi14
+androidx.transition.ViewGroupUtilsApi14$1
+androidx.transition.ViewGroupUtilsApi14
+androidx.transition.ViewOverlayApi14$OverlayViewGroup
+androidx.transition.ViewOverlayApi14
+androidx.transition.ViewUtilsApi21:
+    public static boolean sTryHiddenSetAnimationMatrix
+androidx.transition.ViewUtilsBase:
+    public static boolean sSetFrameFetched
+    public static java.lang.reflect.Method sSetFrameMethod
+    public final void fetchSetFrame()
+androidx.transition.WindowIdApi14
+androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat:
+    public final void setupColorAnimator(android.animation.Animator)
+androidx.vectordrawable.graphics.drawable.AnimationUtilsCompat:
+    public static android.view.animation.Interpolator createInterpolatorFromXml(android.content.Context,android.content.res.Resources,android.content.res.Resources$Theme,org.xmlpull.v1.XmlPullParser)
+androidx.vectordrawable.graphics.drawable.PathInterpolatorCompat
+androidx.viewpager2.adapter.FragmentStateAdapter$2:
+    public final synthetic androidx.viewpager2.adapter.FragmentStateAdapter this$0
+    public final synthetic androidx.viewpager2.adapter.FragmentViewHolder val$holder
+androidx.viewpager2.adapter.FragmentStateAdapter$FragmentMaxLifecycleEnforcer$3:
+    public final synthetic androidx.viewpager2.adapter.FragmentStateAdapter$FragmentMaxLifecycleEnforcer this$1
+androidx.viewpager2.adapter.FragmentStateAdapter$FragmentMaxLifecycleEnforcer
+androidx.viewpager2.adapter.FragmentStateAdapter
+androidx.viewpager2.adapter.FragmentViewHolder
+com.amolg.flutterbarcodescanner.camera.CameraSource$FrameProcessingRunnable:
+    public static final synthetic boolean $assertionsDisabled
+com.amolg.flutterbarcodescanner.camera.CameraSource:
+    public static synthetic java.lang.Thread access$2000(com.amolg.flutterbarcodescanner.camera.CameraSource)
+com.apps2go.agnostiko.common.emv.EmvPinpadEntryEvent
+com.baseflow.geolocator.location.LocationClient:
+    public abstract boolean checkLocationService(android.content.Context)
+com.google.android.datatransport.runtime.dagger.internal.DoubleCheck:
+    public static final synthetic boolean $assertionsDisabled
+com.google.android.datatransport.runtime.dagger.internal.MemoizedSentinel
+com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerScheduler
+com.google.android.gms.cloudmessaging.IMessengerCompat$Proxy
+com.google.android.gms.common.GooglePlayServicesUtilLight:
+    public static boolean zza
+    public static boolean zzb
+com.google.android.gms.common.api.internal.zadb:
+    public final synthetic com.google.android.gms.common.api.internal.zadc zaa
+com.google.android.gms.common.api.internal.zadc
+com.google.android.gms.common.internal.service.zao:
+    public static final synthetic int zab
+com.google.android.gms.common.moduleinstall.internal.zay:
+    public static final synthetic int zab
+com.google.android.gms.common.util.AndroidUtilsLight:
+    public static volatile int zza
+com.google.android.gms.signin.internal.SignInClientImpl:
+    public static final synthetic int zaa
+com.google.android.gms.vision.Frame$zza:
+    public final android.media.Image$Plane[] zza()
+com.google.android.gms.vision.Frame:
+    public com.google.android.gms.vision.Frame$zza zzc
+com.google.android.material.appbar.AppBarLayout$BaseBehavior$BaseDragCallback
+com.google.android.material.appbar.AppBarLayout$BaseBehavior:
+    public com.google.android.material.appbar.AppBarLayout$BaseBehavior$BaseDragCallback onDragCallback
+com.google.android.material.button.MaterialButtonHelper:
+    public void updateMaskBounds(int,int)
+com.google.android.material.card.MaterialCardView:
+    public final com.google.android.material.card.MaterialCardViewHelper cardViewHelper
+com.google.android.material.card.MaterialCardViewHelper
+com.google.android.material.circularreveal.CircularRevealFrameLayout:
+    public final com.google.android.material.circularreveal.CircularRevealHelper helper
+com.google.android.material.circularreveal.CircularRevealHelper:
+    public void buildCircularRevealCache()
+    public void destroyCircularRevealCache()
+    public void draw(android.graphics.Canvas)
+    public android.graphics.drawable.Drawable getCircularRevealOverlayDrawable()
+    public int getCircularRevealScrimColor()
+    public com.google.android.material.circularreveal.CircularRevealWidget$RevealInfo getRevealInfo()
+    public boolean isOpaque()
+    public void setCircularRevealOverlayDrawable(android.graphics.drawable.Drawable)
+    public void setCircularRevealScrimColor(int)
+    public void setRevealInfo(com.google.android.material.circularreveal.CircularRevealWidget$RevealInfo)
+com.google.android.material.circularreveal.cardview.CircularRevealCardView:
+    public final com.google.android.material.circularreveal.CircularRevealHelper helper
+com.google.android.material.expandable.ExpandableWidgetHelper
+com.google.android.material.floatingactionbutton.BorderDrawable
+com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton$3:
+    public final synthetic com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton$OnChangedCallback val$callback
+com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton$ExtendedFloatingActionButtonBehavior:
+    public com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton$OnChangedCallback internalAutoHideCallback
+    public com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton$OnChangedCallback internalAutoShrinkCallback
+com.google.android.material.floatingactionbutton.FloatingActionButton:
+    public final com.google.android.material.expandable.ExpandableWidgetHelper expandableWidgetHelper
+com.google.android.material.floatingactionbutton.FloatingActionButtonImpl:
+    public com.google.android.material.floatingactionbutton.BorderDrawable borderDrawable
+com.google.android.material.internal.StateListAnimator:
+    public final void cancel()
+    public void jumpToCurrentState()
+    public void setState(int[])
+    public final void start(com.google.android.material.internal.StateListAnimator$Tuple)
+com.google.android.material.shape.MaterialShapeDrawable:
+    public void setShadowCompatRotation(int)
+com.google.common.util.concurrent.AbstractFuture$TrustedFuture
+com.google.common.util.concurrent.AbstractFuture
+com.google.common.util.concurrent.SettableFuture
+com.google.common.util.concurrent.internal.InternalFutureFailureAccess
+com.google.firebase.functions.dagger.internal.DoubleCheck:
+    public static final synthetic boolean $assertionsDisabled
+com.google.firebase.heartbeatinfo.HeartBeatInfoStorage:
+    public static com.google.firebase.heartbeatinfo.HeartBeatInfoStorage instance
+com.google.firebase.perf.session.gauges.GaugeMetadataManager:
+    public int readTotalRAM(java.lang.String)
+com.google.firebase.perf.util.Rate:
+    public static final synthetic boolean $assertionsDisabled
+com.google.firebase.storage.FirebaseStorage:
+    public static final synthetic boolean $assertionsDisabled
+com.google.firebase.storage.StorageException:
+    public static final synthetic boolean $assertionsDisabled
+com.google.firebase.storage.StorageReference$1:
+    public static final synthetic boolean $assertionsDisabled
+com.google.firebase.storage.StorageReference:
+    public static final synthetic boolean $assertionsDisabled
+com.google.firebase.storage.network.NetworkRequest:
+    public static final synthetic boolean $assertionsDisabled
+com.google.gson.internal.LinkedTreeMap:
+    public static final synthetic boolean $assertionsDisabled
+com.google.mlkit.common.internal.CommonComponentRegistrar:
+    public static final synthetic int zza
+com.google.mlkit.vision.barcode.internal.BarcodeRegistrar:
+    public static final synthetic int zza
+com.google.mlkit.vision.common.internal.MobileVisionBase:
+    public static final synthetic int zza
+com.google.mlkit.vision.common.internal.VisionCommonRegistrar:
+    public static final synthetic int zza
+com.google.protobuf.ExtensionRegistryLite:
+    public static volatile boolean eagerlyParseMessageSets
+com.google.protobuf.FieldInfo:
+    public java.lang.reflect.Field getCachedSizeField()
+    public com.google.protobuf.Internal$EnumVerifier getEnumVerifier()
+    public java.lang.reflect.Field getField()
+    public int getFieldNumber()
+    public java.lang.Object getMapDefaultEntry()
+    public java.lang.Class getMessageFieldClass()
+    public com.google.protobuf.OneofInfo getOneof()
+    public java.lang.reflect.Field getPresenceField()
+    public int getPresenceMask()
+    public com.google.protobuf.FieldType getType()
+    public boolean isEnforceUtf8()
+    public boolean isRequired()
+com.google.protobuf.FieldType$Collection:
+    public boolean isList()
+com.google.protobuf.FieldType:
+    public boolean isList()
+    public boolean isMap()
+com.google.protobuf.MessageSchema:
+    public static void storeFieldData(com.google.protobuf.FieldInfo,int[],int,java.lang.Object[])
+com.google.protobuf.OneofInfo
+com.google.protobuf.UnsafeUtil:
+    public static long objectFieldOffset(java.lang.reflect.Field)
+com.tekartik.sqflite.Utils:
+    public static java.util.Locale localeForLanguageTagPre21(java.lang.String)
+com.yalantis.ucrop.util.EglUtils:
+    public static int getMaxTextureEgl10()
+dagger.internal.DoubleCheck:
+    public static final synthetic boolean $assertionsDisabled
+dagger.internal.MemoizedSentinel
+dev.steenbakker.mobile_scanner.NoCamera
+dev.steenbakker.mobile_scanner.TorchError
+io.flutter.Log:
+    public static int ASSERT
+    public static int DEBUG
+    public static int ERROR
+    public static int INFO
+    public static int VERBOSE
+    public static int WARN
+    public static int logLevel
+io.flutter.embedding.engine.FlutterEngineConnectionRegistry$FlutterEngineBroadcastReceiverPluginBinding
+io.flutter.embedding.engine.FlutterEngineConnectionRegistry$FlutterEngineContentProviderPluginBinding
+io.flutter.embedding.engine.FlutterEngineConnectionRegistry$FlutterEngineServicePluginBinding
+io.flutter.embedding.engine.FlutterEngineConnectionRegistry:
+    public io.flutter.embedding.engine.FlutterEngineConnectionRegistry$FlutterEngineBroadcastReceiverPluginBinding broadcastReceiverPluginBinding
+    public io.flutter.embedding.engine.FlutterEngineConnectionRegistry$FlutterEngineContentProviderPluginBinding contentProviderPluginBinding
+    public io.flutter.embedding.engine.FlutterEngineConnectionRegistry$FlutterEngineServicePluginBinding servicePluginBinding
+io.flutter.embedding.engine.loader.ResourceExtractor:
+    public void waitForCompletion()
+io.flutter.embedding.engine.systemchannels.PlatformChannel$PlatformMessageHandler$-CC
+io.flutter.embedding.engine.systemchannels.SettingsChannel:
+    public static final synthetic boolean $assertionsDisabled
+io.flutter.plugin.common.BinaryMessenger$-CC:
+    public static io.flutter.plugin.common.BinaryMessenger$TaskQueue $default$makeBackgroundTaskQueue(io.flutter.plugin.common.BinaryMessenger,io.flutter.plugin.common.BinaryMessenger$TaskQueueOptions)
+    public static void $default$setMessageHandler(io.flutter.plugin.common.BinaryMessenger,java.lang.String,io.flutter.plugin.common.BinaryMessenger$BinaryMessageHandler,io.flutter.plugin.common.BinaryMessenger$TaskQueue)
+io.flutter.plugin.platform.PlatformPlugin$PlatformPluginDelegate$-CC
+io.flutter.plugin.platform.PlatformView$-CC
+io.flutter.plugin.platform.VirtualDisplayController:
+    public static java.lang.String TAG
+io.flutter.plugins.firebase.auth.FlutterFirebaseAuthPlugin:
+    public static final synthetic boolean $assertionsDisabled
+io.flutter.plugins.firebase.auth.FlutterFirebaseMultiFactor:
+    public static final synthetic boolean $assertionsDisabled
+io.flutter.plugins.firebase.auth.FlutterFirebaseTotpMultiFactor:
+    public static final synthetic boolean $assertionsDisabled
+io.flutter.plugins.firebase.auth.FlutterFirebaseTotpSecret:
+    public static final synthetic boolean $assertionsDisabled
+io.flutter.plugins.firebase.firestore.FlutterFirebaseFirestorePlugin:
+    public static final synthetic boolean $assertionsDisabled
+io.flutter.plugins.firebase.firestore.utils.PigeonParser:
+    public static final synthetic boolean $assertionsDisabled
+    public void <init>()
+io.flutter.plugins.firebase.messaging.FlutterFirebaseMessagingBackgroundService:
+    public static final synthetic boolean $assertionsDisabled
+io.flutter.plugins.firebase.messaging.PluginRegistrantException
+io.flutter.plugins.firebase.storage.FlutterFirebaseStoragePlugin:
+    public static final synthetic boolean $assertionsDisabled
+io.flutter.view.TextureRegistry$SurfaceTextureEntry$-CC
+io.flutter.view.VsyncWaiter:
+    public static io.flutter.view.VsyncWaiter getInstance(float,io.flutter.embedding.engine.FlutterJNI)
+io.grpc.Attributes$Builder:
+    public static final synthetic boolean $assertionsDisabled
+io.grpc.Attributes:
+    public static final synthetic boolean $assertionsDisabled
+io.grpc.BinaryLog
+io.grpc.Context$CancellableContext$1
+io.grpc.Context$CancellableContext
+io.grpc.Context$CancellationListener:
+    public abstract void cancelled(io.grpc.Context)
+io.grpc.Context$DirectExecutor
+io.grpc.Context$ExecutableListener
+io.grpc.Context:
+    public final io.grpc.Context$CancellableContext cancellableAncestor
+io.grpc.GlobalInterceptors:
+    public static java.util.List serverInterceptors
+    public static java.util.List serverStreamTracerFactories
+io.grpc.InternalChannelz$OtherSecurity
+io.grpc.InternalChannelz$Security:
+    public final io.grpc.InternalChannelz$OtherSecurity other
+io.grpc.InternalChannelz:
+    public static final synthetic boolean $assertionsDisabled
+io.grpc.Metadata:
+    public static final synthetic boolean $assertionsDisabled
+io.grpc.MethodDescriptor:
+    public static final synthetic boolean $assertionsDisabled
+io.grpc.NameResolver$ConfigOrError:
+    public static final synthetic boolean $assertionsDisabled
+io.grpc.Status:
+    public static final synthetic boolean $assertionsDisabled
+io.grpc.internal.AtomicBackoff$State:
+    public static final synthetic boolean $assertionsDisabled
+io.grpc.internal.ClientCallImpl$ContextCancellationListener:
+    public void cancelled(io.grpc.Context)
+io.grpc.internal.DelayedClientCall$DelayedListener:
+    public static final synthetic boolean $assertionsDisabled
+io.grpc.internal.DelayedClientCall:
+    public static final synthetic boolean $assertionsDisabled
+io.grpc.internal.DelayedStream$DelayedStreamListener:
+    public static final synthetic boolean $assertionsDisabled
+io.grpc.internal.DelayedStream:
+    public static final synthetic boolean $assertionsDisabled
+io.grpc.internal.DnsNameResolver:
+    public static final synthetic boolean $assertionsDisabled
+io.grpc.internal.JndiResourceResolverFactory$JndiRecordFetcher:
+    public static final synthetic boolean $assertionsDisabled
+io.grpc.internal.JndiResourceResolverFactory$JndiResourceResolver:
+    public static final synthetic boolean $assertionsDisabled
+io.grpc.internal.JsonUtil:
+    public static final synthetic boolean $assertionsDisabled
+    public void <init>()
+io.grpc.internal.ManagedChannelImpl:
+    public final io.grpc.ChannelCredentials originalChannelCreds
+io.grpc.internal.ManagedChannelImplBuilder:
+    public io.grpc.BinaryLog binlog
+    public final io.grpc.ChannelCredentials channelCredentials
+io.grpc.internal.RetriableStream$Sublistener:
+    public static final synthetic boolean $assertionsDisabled
+io.grpc.internal.ThreadOptimizedDeframer
+io.grpc.okhttp.OkHttpClientTransport:
+    public com.google.common.util.concurrent.SettableFuture connectedFuture
+io.grpc.stub.AbstractAsyncStub:
+    public static final synthetic boolean $assertionsDisabled
+io.grpc.stub.ClientCalls:
+    public static final synthetic boolean $assertionsDisabled
+io.objectbox.Box
+io.objectbox.BoxStore:
+    public final java.lang.ThreadLocal activeTx
+    public final java.util.Map boxes
+    public volatile int commitCount
+    public final java.util.Map dbNameByClass
+    public final boolean debugTxRead
+    public final java.util.Map propertiesByClass
+    public io.objectbox.Transaction beginReadTx()
+    public io.objectbox.Box boxFor(java.lang.Class)
+    public io.objectbox.EntityInfo getEntityInfo(java.lang.Class)
+    public static native long nativeBeginReadTx(long)
+io.objectbox.Cursor
+io.objectbox.EntityInfo
+io.objectbox.Property
+io.objectbox.Transaction:
+    public static boolean TRACK_CREATION_STACK
+    public void <init>(io.objectbox.BoxStore,long,int)
+    public void checkOpen()
+    public io.objectbox.Cursor createCursor(java.lang.Class)
+    public io.objectbox.BoxStore getStore()
+    public boolean isClosed()
+    public boolean isReadOnly()
+    public boolean isRecycled()
+    public native long nativeCreateCursor(long,java.lang.String,java.lang.Class)
+    public native boolean nativeIsReadOnly(long)
+    public native void nativeRecycle(long)
+    public native void nativeRenew(long)
+    public void recycle()
+    public void renew()
+io.objectbox.flatbuffers.FlexBuffers$Blob:
+    public static final synthetic boolean $assertionsDisabled
+io.objectbox.flatbuffers.FlexBuffers:
+    public static final synthetic boolean $assertionsDisabled
+    public void <init>()
+io.objectbox.flatbuffers.FlexBuffersBuilder$Value:
+    public static final synthetic boolean $assertionsDisabled
+io.objectbox.flatbuffers.FlexBuffersBuilder:
+    public static final synthetic boolean $assertionsDisabled
+io.objectbox.flatbuffers.Utf8:
+    public static final synthetic boolean $assertionsDisabled
+    public void <init>()
+io.objectbox.internal.CursorFactory
+io.objectbox.internal.IdGetter
+io.objectbox.internal.ReflectionCache:
+    public synchronized java.lang.reflect.Field getField(java.lang.Class,java.lang.String)
+io.objectbox.relation.ListFactory$CopyOnWriteArrayListFactory
+io.objectbox.relation.ListFactory
+io.objectbox.relation.RelationInfo
+io.objectbox.relation.ToMany:
+    public transient io.objectbox.BoxStore boxStore
+    public transient java.util.Comparator comparator
+    public final java.lang.Object entity
+    public transient io.objectbox.Box entityBox
+    public volatile io.objectbox.relation.ListFactory listFactory
+    public final io.objectbox.relation.RelationInfo relationInfo
+    public volatile transient io.objectbox.Box targetBox
+    public final void ensureBoxes()
+    public io.objectbox.relation.ListFactory getListFactory()
+io.objectbox.relation.ToOne:
+    public final io.objectbox.relation.RelationInfo relationInfo
+kotlin.ExceptionsKt
+kotlin.LazyKt
+kotlin.LazyKt__LazyKt
+kotlin.collections.ArraysKt
+kotlin.collections.ArraysKt___ArraysKt:
+    public static final java.lang.Object[] sortedArrayWith(java.lang.Object[],java.util.Comparator)
+    public static final java.util.List sortedWith(java.lang.Object[],java.util.Comparator)
+kotlin.collections.CollectionsKt
+kotlin.collections.MapsKt
+kotlin.collections.MapsKt___MapsJvmKt
+kotlin.collections.MapsKt___MapsKt
+kotlin.collections.SetsKt
+kotlin.collections.SetsKt___SetsKt
+kotlin.comparisons.ComparisonsKt
+kotlin.comparisons.ComparisonsKt___ComparisonsJvmKt
+kotlin.comparisons.ComparisonsKt___ComparisonsKt
+kotlin.coroutines.intrinsics.IntrinsicsKt
+kotlin.coroutines.jvm.internal.CoroutineStackFrame:
+    public abstract java.lang.StackTraceElement getStackTraceElement()
+kotlin.io.FilesKt
+kotlin.jvm.JvmClassMappingKt:
+    public static final kotlin.reflect.KClass getKotlinClass(java.lang.Class)
+kotlin.jvm.internal.PropertyReference2:
+    public void <init>()
+kotlin.math.MathKt
+kotlin.ranges.RangesKt
+kotlin.sequences.SequencesKt
+kotlin.text.CharsKt
+kotlin.text.StringsKt
+kotlin.time.DurationUnitKt
+kotlin.time.DurationUnitKt__DurationUnitKt
+kotlinx.coroutines.AbstractTimeSource:
+    public abstract long nanoTime()
+    public abstract void parkNanos(java.lang.Object,long)
+    public abstract void registerTimeLoopThread()
+    public abstract void trackTask()
+    public abstract void unTrackTask()
+    public abstract void unpark(java.lang.Thread)
+    public abstract void unregisterTimeLoopThread()
+    public abstract java.lang.Runnable wrapTask(java.lang.Runnable)
+kotlinx.coroutines.AbstractTimeSourceKt:
+    public static kotlinx.coroutines.AbstractTimeSource timeSource
+kotlinx.coroutines.CancellableContinuationImpl:
+    public java.lang.StackTraceElement getStackTraceElement()
+kotlinx.coroutines.CopyableThrowable
+kotlinx.coroutines.CoroutineId$$InternalSyntheticBackport$1$88b55f898e619a095cc84362698f8c48db09cb4c6a8de7e7316829eafb79037d$0
+kotlinx.coroutines.CoroutineId$Key
+kotlinx.coroutines.CoroutineId
+kotlinx.coroutines.CoroutineName$Key
+kotlinx.coroutines.CoroutineName
+kotlinx.coroutines.DebugKt
+kotlinx.coroutines.JobCancellationException:
+    public synthetic bridge java.lang.Throwable createCopy()
+    public kotlinx.coroutines.JobCancellationException createCopy()
+kotlinx.coroutines.NodeList:
+    public final java.lang.String getString(java.lang.String)
+kotlinx.coroutines.TimeoutCancellationException:
+    public synthetic bridge java.lang.Throwable createCopy()
+    public kotlinx.coroutines.TimeoutCancellationException createCopy()
+kotlinx.coroutines.flow.SharedFlowImpl
+kotlinx.coroutines.flow.internal.AbstractSharedFlow:
+    public kotlinx.coroutines.flow.internal.SubscriptionCountStateFlow _subscriptionCount
+kotlinx.coroutines.flow.internal.SubscriptionCountStateFlow
+kotlinx.coroutines.internal.AtomicDesc
+kotlinx.coroutines.internal.ClassValueCtorCache$cache$1
+kotlinx.coroutines.internal.ClassValueCtorCache
+kotlinx.coroutines.internal.CtorCache
+kotlinx.coroutines.internal.DispatchedContinuation:
+    public java.lang.StackTraceElement getStackTraceElement()
+kotlinx.coroutines.internal.ExceptionsConstructorKt$createConstructor$$inlined$sortedByDescending$1
+kotlinx.coroutines.internal.ExceptionsConstructorKt$createConstructor$nullResult$1
+kotlinx.coroutines.internal.ExceptionsConstructorKt$createSafeConstructor$$inlined$safeCtor$1
+kotlinx.coroutines.internal.ExceptionsConstructorKt$createSafeConstructor$$inlined$safeCtor$2
+kotlinx.coroutines.internal.ExceptionsConstructorKt$createSafeConstructor$$inlined$safeCtor$3
+kotlinx.coroutines.internal.ExceptionsConstructorKt$createSafeConstructor$$inlined$safeCtor$4
+kotlinx.coroutines.internal.ExceptionsConstructorKt
+kotlinx.coroutines.internal.LockFreeLinkedListNode$AbstractAtomicDesc
+kotlinx.coroutines.internal.LockFreeLinkedListNode$PrepareOp:
+    public final kotlinx.coroutines.internal.LockFreeLinkedListNode$AbstractAtomicDesc desc
+    public final void finishPrepare()
+kotlinx.coroutines.internal.ScopeCoroutine:
+    public final java.lang.StackTraceElement getStackTraceElement()
+kotlinx.coroutines.internal.StackTraceRecoveryKt:
+    public static final synthetic java.lang.Throwable access$recoverFromStackFrame(java.lang.Throwable,kotlin.coroutines.jvm.internal.CoroutineStackFrame)
+    public static final java.lang.StackTraceElement artificialFrame(java.lang.String)
+    public static final kotlin.Pair causeAndStacktrace(java.lang.Throwable)
+    public static final java.lang.Throwable createFinalException(java.lang.Throwable,java.lang.Throwable,java.util.ArrayDeque)
+    public static final java.util.ArrayDeque createStackTrace(kotlin.coroutines.jvm.internal.CoroutineStackFrame)
+    public static final boolean elementWiseEquals(java.lang.StackTraceElement,java.lang.StackTraceElement)
+    public static final int frameIndex(java.lang.StackTraceElement[],java.lang.String)
+    public static final boolean isArtificial(java.lang.StackTraceElement)
+    public static final void mergeRecoveredTraces(java.lang.StackTraceElement[],java.util.ArrayDeque)
+    public static final java.lang.Throwable recoverFromStackFrame(java.lang.Throwable,kotlin.coroutines.jvm.internal.CoroutineStackFrame)
+    public static final java.lang.Throwable sanitizeStackTrace(java.lang.Throwable)
+    public static final java.lang.Throwable tryCopyAndVerify(java.lang.Throwable)
+    public static final java.lang.Throwable unwrapImpl(java.lang.Throwable)
+kotlinx.coroutines.internal.WeakMapCtorCache
+okhttp3.Cache
+okhttp3.ConnectionPool:
+    public static final synthetic boolean $assertionsDisabled
+okhttp3.Dispatcher:
+    public static final synthetic boolean $assertionsDisabled
+okhttp3.OkHttpClient$Builder:
+    public okhttp3.Cache cache
+okhttp3.OkHttpClient:
+    public final okhttp3.Cache cache
+okhttp3.RealCall$AsyncCall:
+    public static final synthetic boolean $assertionsDisabled
+okhttp3.internal.connection.StreamAllocation:
+    public static final synthetic boolean $assertionsDisabled
+okhttp3.internal.http.UnrepeatableRequestBody
+okhttp3.internal.http2.Http2Connection:
+    public static final synthetic boolean $assertionsDisabled
+okhttp3.internal.http2.Http2Stream$FramingSink:
+    public static final synthetic boolean $assertionsDisabled
+okhttp3.internal.http2.Http2Stream$FramingSource:
+    public static final synthetic boolean $assertionsDisabled
+okhttp3.internal.http2.Http2Stream:
+    public static final synthetic boolean $assertionsDisabled

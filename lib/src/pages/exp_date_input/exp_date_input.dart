@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 import '../../pages/cvv_input/cvv_input.dart';
 
@@ -40,6 +41,7 @@ class _ExpDateInputViewState extends State<ExpDateInputView> {
         ),
         child: Scaffold(
           appBar: AppBar(
+            backgroundColor: myTheme.colorScheme.primary,
             foregroundColor: Colors.white,
             title: Text("sale"),
           ),

@@ -274,6 +274,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
             child: Scaffold(
               backgroundColor: Colors.grey[200],
               appBar: AppBar(
+                backgroundColor: myTheme.colorScheme.primary,
                 foregroundColor: Colors.white,
                 elevation: 0,
                 leadingWidth: 24.0,
@@ -1121,7 +1122,10 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                               ),
                             ),
                           ),
-                          icon: Icon(Icons.person_add_alt_1),
+                          icon: Icon(
+                            Icons.person_add_alt_1,
+                            color: Colors.white,
+                          ),
                           label: Text(
                             'Registrar Cliente',
                             style: TextStyle(

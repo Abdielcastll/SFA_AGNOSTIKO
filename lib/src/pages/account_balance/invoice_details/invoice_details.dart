@@ -95,6 +95,7 @@ class InvoiceDetailsBody extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: myTheme.colorScheme.primary,
         foregroundColor: Colors.white,
         title: Text(
           'Ticket #${widget.number}',
