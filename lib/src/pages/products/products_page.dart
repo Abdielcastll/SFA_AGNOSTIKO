@@ -411,7 +411,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(100),
                             color: Color(0xFFDFE0FF)),
-                        child: IconButton.filled(
+                        child: IconButton(
                           onPressed: () =>
                               setState(() => isDescending = !isDescending),
                           icon: isDescending
@@ -488,6 +488,11 @@ class _ProductsBodyState extends State<ProductsBody> {
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         AlertDialog(
+                                          actionsOverflowButtonSpacing: 1,
+                                          actionsPadding: EdgeInsets.symmetric(
+                                            horizontal: 10,
+                                            vertical: 10,
+                                          ),
                                           scrollable: true,
                                           shape: RoundedRectangleBorder(
                                             borderRadius:

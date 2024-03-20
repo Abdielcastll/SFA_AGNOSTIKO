@@ -20,6 +20,7 @@ class AccountTabs extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.grey.shade200,
         appBar: AppBar(
+          foregroundColor: Colors.white,
           title: Text(
             '$clientName',
             // 'Estado de cuenta',

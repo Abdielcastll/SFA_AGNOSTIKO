@@ -9,6 +9,7 @@ showDialogForConfirmedPayment(BuildContext context, String? coinSymbol,
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          surfaceTintColor: Color.fromARGB(255, 222, 222, 222),
           contentPadding: EdgeInsets.zero,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),

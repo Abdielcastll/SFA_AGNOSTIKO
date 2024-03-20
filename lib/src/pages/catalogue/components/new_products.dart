@@ -101,7 +101,9 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                 builder: (BuildContext context) =>
                                     ProductDetails(
                                   code: product.code,
-                                  price: (prices[product.code] ?? 0.00),
+                                  price: (double.parse(
+                                    prices[product.code].toString(),
+                                  )),
                                   line: linesSummary[product.line],
                                   imageUrl: url!,
                                   isProductNew: true,
@@ -235,7 +237,9 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                 builder: (BuildContext context) =>
                                     ProductDetails(
                                   code: product.code,
-                                  price: (prices[product.code] ?? 0.00),
+                                  price: (double.parse(
+                                    prices[product.code].toString(),
+                                  )),
                                   line: linesSummary[product.line],
                                   imageUrl: 'https://i.imgur.com/BPbj6Gy.jpg',
                                   isProductNew: true,

@@ -182,23 +182,8 @@ List<ProductsWithPromotions> productsWithPromotionListFromSnapshot(
 }
 
 List<ProductsByDate> productsByDateListFromSnapshot(QuerySnapshot snapshot) {
-  return snapshot.docs.map((doc) {
+  List<ProductsByDate> productList = snapshot.docs.map((doc) {
     return ProductsByDate(
-      // quality: doc.get('calidad').id,
-      // catalogue: doc.get('catalogo').id,
-      // categorie: doc.get('categoria').id,
-      // code: doc.get('codigo'),
-      // design: doc.get('diseno').id,
-      // line: doc.get('linea').id,
-      // brand: doc.get('marca').id,
-      // lastModifiedDate: doc.get('modificado'),
-      // name: doc.get('nombre'),
-      // subCategorie: doc.get('subcategoria').id,
-      // size: doc.get('tamano').id,
-      // promotion: doc.data().toString().contains('promocion')
-      //     ? doc.get('promocion').id
-      //     : null,
-      // selected: false,
       quality: doc.data().toString().contains('calidad')
           ? doc.get('calidad').id
           : '',
@@ -228,4 +213,6 @@ List<ProductsByDate> productsByDateListFromSnapshot(QuerySnapshot snapshot) {
       selected: false,
     );
   }).toList();
+
+  return productList;
 }

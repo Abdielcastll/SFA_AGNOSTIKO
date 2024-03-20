@@ -81,7 +81,9 @@ void modalBottomSheetForCompleted({
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 12),
-                      child: Divider(),
+                      child: Divider(
+                        color: Colors.grey,
+                      ),
                     ),
                     SizedBox(height: 12),
                     Text(

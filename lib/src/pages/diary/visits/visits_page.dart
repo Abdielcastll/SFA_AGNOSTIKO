@@ -395,7 +395,9 @@ class VisitsBody extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Divider(),
+            child: Divider(
+              color: Colors.grey,
+            ),
           ),
           VisitsList(
             visits: seeCompleted

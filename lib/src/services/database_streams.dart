@@ -50,7 +50,7 @@ class DatabaseServiceStreams {
   Stream<List<ProductsByDate>> get productsByDate {
     return productsCollection
         .orderBy('modificado', descending: true)
-        .where('marca', isEqualTo: prissa)
+        //.where('marca', isEqualTo: prissa)
         .limit(10)
         .snapshots()
         .map(productsByDateListFromSnapshot);

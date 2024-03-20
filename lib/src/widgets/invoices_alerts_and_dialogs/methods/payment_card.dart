@@ -3,6 +3,7 @@
 import 'package:agnostiko/agnostiko.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:intl/intl.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/card_input/card_input.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -56,7 +57,8 @@ Future _acceptAmount(
 
   final deviceType = await getDeviceType();
   if (hasCardReader) {
-    if (hasEmvModule && deviceType == DeviceType.POS) {
+    if (hasEmvModule &&
+        (deviceType == DeviceType.POS || deviceType == DeviceType.PINPAD)) {
       // mostramos un popup mientras se realiza la carga de parámetros EMV
       showCircularProgressDialog(
         context,
@@ -67,7 +69,6 @@ Future _acceptAmount(
     }
 
     Navigator.pushNamed(
-      // Navigator.pushReplacementNamed(
       context,
       CardInputView.route,
       arguments: [transactionArgs, updatePayed, paymentBody, noRetail],
@@ -144,6 +145,7 @@ paymentCard(
                     icon: const Icon(
                       MaterialIcons.arrow_back_ios,
                       size: 14,
+                      color: Colors.white,
                     ),
                     label: const Text(
                       'Cancelar',

@@ -293,7 +293,10 @@ class _ButtonState extends State<Button> {
                   ),
                 ),
               ),
-              child: Text('Ingresar'),
+              child: Text(
+                'Ingresar',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           );
   }

@@ -57,7 +57,7 @@ class _LogoutButtonState extends State<LogoutButton> {
               style: const TextStyle(
                 color: Colors.red,
                 fontFamily: 'Poppins-regular',
-                fontSize: 13,
+                fontSize: 12,
                 fontWeight: FontWeight.bold,
               ),
             ),

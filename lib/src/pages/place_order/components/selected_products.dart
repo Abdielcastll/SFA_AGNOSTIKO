@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/devices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/checkout_retail_page.dart';
@@ -40,6 +41,7 @@ class SelectedProducts extends StatefulWidget {
 
 class _SelectedProductsState extends State<SelectedProducts> {
   DeviceType? deviceType;
+  String? deviceName;
   bool hasLaserScanner = false;
   String? scanResult = '';
   late String? clientPriceList = widget.client?.prices;
@@ -55,9 +57,11 @@ class _SelectedProductsState extends State<SelectedProducts> {
   localGetDeviceType() async {
     final dType = await getDeviceType();
     final platformInfo = await getPlatformInfo();
+    final model = await getModel();
     setState(() {
       hasLaserScanner = platformInfo.hasScannerHw;
       deviceType = dType;
+      deviceName = model;
     });
   }
 
@@ -258,11 +262,13 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         crossAxisAlignment:
-                                            deviceType == DeviceType.PINPAD
+                                            deviceType == DeviceType.PINPAD ||
+                                                    deviceName == "N850"
                                                 ? CrossAxisAlignment.center
                                                 : CrossAxisAlignment.start,
                                         children: [
-                                          deviceType == DeviceType.PINPAD
+                                          deviceType == DeviceType.PINPAD ||
+                                                  deviceName == "N850"
                                               ? Padding(
                                                   padding:
                                                       const EdgeInsets.all(8.0),
@@ -809,7 +815,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                         if (globalRemoteConfig
                                                     .escannerDeProductos ==
                                                 true &&
-                                            deviceType != DeviceType.PINPAD)
+                                            (deviceType != DeviceType.PINPAD))
                                           Container(
                                             decoration: BoxDecoration(
                                               borderRadius:
@@ -824,11 +830,12 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                 style: ButtonStyle(
                                                   backgroundColor:
                                                       MaterialStateProperty.all(
-                                                          myTheme.colorScheme
-                                                              .primary),
+                                                    myTheme.colorScheme.primary,
+                                                  ),
                                                   foregroundColor:
                                                       MaterialStateProperty.all(
-                                                          Colors.white),
+                                                    Colors.white,
+                                                  ),
                                                   shape:
                                                       MaterialStateProperty.all(
                                                     RoundedRectangleBorder(
@@ -894,6 +901,25 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                             borderRadius:
                                                 BorderRadius.circular(16),
                                             child: ElevatedButton.icon(
+                                              style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateProperty.all(
+                                                  myTheme.colorScheme.primary,
+                                                ),
+                                                foregroundColor:
+                                                    MaterialStateProperty.all(
+                                                  Colors.white,
+                                                ),
+                                                shape:
+                                                    MaterialStateProperty.all(
+                                                  RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                      16,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
                                               onPressed: () {
                                                 final test = Provider.of<
                                                         CounterLimitFirestore>(
@@ -907,7 +933,8 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                               },
                                               icon: const Icon(
                                                 MaterialCommunityIcons.tag_plus,
-                                                size: 17,
+                                                color: Colors.white,
+                                                size: 20,
                                               ),
                                               label: Text(
                                                 AppLocalizations.of(context)!
@@ -916,12 +943,6 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                   color: Colors.white,
                                                   fontFamily: 'Poppins-medium',
                                                   fontSize: 12,
-                                                ),
-                                              ),
-                                              style: ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStateProperty.all(
-                                                  myTheme.colorScheme.primary,
                                                 ),
                                               ),
                                             ),
@@ -969,6 +990,38 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(16),
                                         child: ElevatedButton(
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty
+                                                    .resolveWith<Color>(
+                                              (Set<MaterialState> states) {
+                                                if (states.contains(
+                                                    MaterialState.pressed)) {
+                                                  return myTheme
+                                                      .colorScheme.primary
+                                                      .withOpacity(0.8);
+                                                } else if (states.contains(
+                                                    MaterialState.disabled)) {
+                                                  return Colors.grey.shade500;
+                                                } else {
+                                                  return myTheme
+                                                      .colorScheme.primary;
+                                                }
+                                              },
+                                            ),
+                                            foregroundColor:
+                                                MaterialStateProperty.all(
+                                              Colors.white,
+                                            ),
+                                            shape: MaterialStateProperty.all(
+                                              RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                  16,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
                                           onPressed: products.isEmpty
                                               ? null
                                               : () {
@@ -1006,26 +1059,6 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                           ),
                                                         );
                                                 },
-                                          style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty
-                                                    .resolveWith<Color>(
-                                              (Set<MaterialState> states) {
-                                                if (states.contains(
-                                                    MaterialState.pressed)) {
-                                                  return myTheme
-                                                      .colorScheme.primary
-                                                      .withOpacity(0.8);
-                                                } else if (states.contains(
-                                                    MaterialState.disabled)) {
-                                                  return Colors.grey.shade500;
-                                                } else {
-                                                  return myTheme
-                                                      .colorScheme.primary;
-                                                }
-                                              },
-                                            ),
-                                          ),
                                           child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,

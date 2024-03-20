@@ -56,6 +56,7 @@ class _ClientDetailsState extends State<ClientDetails> {
         toolbarHeight: 40,
         elevation: 0,
         backgroundColor: myTheme.colorScheme.primary,
+        foregroundColor: Colors.white,
       ),
       body: ClientDetailsBody(
         specialContribuyer: widget.specialContribuyer,

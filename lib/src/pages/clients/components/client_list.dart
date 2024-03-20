@@ -209,6 +209,11 @@ class _ClientListState extends State<ClientList> {
                       borderRadius: BorderRadius.circular(100),
                       color: Color(0xFFDFE0FF)),
                   child: IconButton.filled(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                        myTheme.colorScheme.primaryContainer,
+                      ),
+                    ),
                     onPressed: () =>
                         setState(() => isDescending = !isDescending),
                     icon: isDescending

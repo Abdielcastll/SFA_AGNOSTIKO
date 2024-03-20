@@ -1304,7 +1304,9 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                         ],
                                       ),
                                     ),
-                              Divider(),
+                              Divider(
+                                color: Colors.grey,
+                              ),
                               Container(
                                 margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                                 child: identifyPaymentMethodRetail(

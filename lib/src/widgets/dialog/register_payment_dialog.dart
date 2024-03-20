@@ -105,6 +105,7 @@ Future<dynamic> showDialogForRegisterPayment(
       return StatefulBuilder(
         builder: ((context, setState) {
           return AlertDialog(
+            surfaceTintColor: Color.fromARGB(255, 222, 222, 222),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
@@ -957,7 +958,9 @@ Future<dynamic> showDialogForRegisterPayment(
                               ],
                             ),
                           ),
-                        const Divider(),
+                        const Divider(
+                          color: Colors.grey,
+                        ),
                         Container(
                           margin: const EdgeInsets.fromLTRB(0, 5, 0, 0),
                           child: identifyPaymentMethod(

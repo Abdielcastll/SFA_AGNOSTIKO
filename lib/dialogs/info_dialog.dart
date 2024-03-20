@@ -24,6 +24,11 @@ Future<void> showInfoDialog(
           child: WillPopScope(
             onWillPop: () async => false,
             child: AlertDialog(
+              actionsOverflowButtonSpacing: 1,
+              actionsPadding: EdgeInsets.symmetric(
+                horizontal: 10,
+                vertical: 10,
+              ),
               contentPadding: EdgeInsets.only(left: 25, right: 25),
               title: Center(child: Text("Info")),
               shape: RoundedRectangleBorder(

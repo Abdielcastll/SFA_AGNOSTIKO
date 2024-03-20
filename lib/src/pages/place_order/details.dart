@@ -142,7 +142,7 @@ class _SettingsFormState extends State<SettingsForm> {
                         Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: myTheme.colorScheme.secondary,
+                        backgroundColor: myTheme.colorScheme.secondary,
                       ),
                       icon: Icon(Feather.check_circle),
                       label: Text(

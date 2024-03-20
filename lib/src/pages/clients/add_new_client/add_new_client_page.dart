@@ -151,6 +151,12 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                 context: context,
                 builder: (context) {
                   return AlertDialog(
+                    surfaceTintColor: Color.fromARGB(255, 222, 222, 222),
+                    actionsOverflowButtonSpacing: 1,
+                    actionsPadding: EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 10,
+                    ),
                     title: Center(
                       child: Text(
                         'Confirmación',
@@ -215,6 +221,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                             icon: Icon(
                               MaterialIcons.arrow_back_ios,
                               size: 16,
+                              color: Colors.white,
                             ),
                             label: Text(
                               'No',
@@ -244,6 +251,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                             icon: Icon(
                               Icons.check,
                               size: 20,
+                              color: Colors.white,
                             ),
                             label: Text(
                               'Si',
@@ -266,6 +274,8 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
             child: Scaffold(
               backgroundColor: Colors.grey[200],
               appBar: AppBar(
+                backgroundColor: myTheme.colorScheme.primary,
+                foregroundColor: Colors.white,
                 elevation: 0,
                 leadingWidth: 24.0,
                 title: Row(
@@ -865,6 +875,11 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                               showDialog(
                                 context: context,
                                 builder: (context) => AlertDialog(
+                                  actionsOverflowButtonSpacing: 1,
+                                  actionsPadding: EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 10,
+                                  ),
                                   title: Center(
                                     child: Text(
                                       'Confirmación',
@@ -937,6 +952,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                           icon: Icon(
                                             MaterialIcons.arrow_back_ios,
                                             size: 16,
+                                            color: Colors.white,
                                           ),
                                           label: Text(
                                             'No',
@@ -1106,7 +1122,10 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                               ),
                             ),
                           ),
-                          icon: Icon(Icons.person_add_alt_1),
+                          icon: Icon(
+                            Icons.person_add_alt_1,
+                            color: Colors.white,
+                          ),
                           label: Text(
                             'Registrar Cliente',
                             style: TextStyle(

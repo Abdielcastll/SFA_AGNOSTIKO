@@ -96,7 +96,9 @@ void modalBottomSheetForOnProcess({
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 12),
-                      child: Divider(),
+                      child: Divider(
+                        color: Colors.grey,
+                      ),
                     ),
                     SizedBox(height: 8),
                     Container(
@@ -325,7 +327,7 @@ void modalBottomSheetForOnProcess({
                               style: TextStyle(
                                 fontFamily: 'Poppins-medium',
                                 color: myTheme.colorScheme.primary,
-                                fontSize: 12,
+                                fontSize: 11,
                               ),
                             ),
                             onPressed: () {
@@ -386,7 +388,7 @@ void modalBottomSheetForOnProcess({
                               style: TextStyle(
                                 fontFamily: 'Poppins-medium',
                                 color: myTheme.colorScheme.primary,
-                                fontSize: 12,
+                                fontSize: 11,
                               ),
                             ),
                             onPressed: () async {
@@ -424,6 +426,8 @@ void modalBottomSheetForOnProcess({
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
+                                    surfaceTintColor:
+                                        Color.fromARGB(255, 222, 222, 222),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20),
                                     ),
@@ -452,7 +456,7 @@ void modalBottomSheetForOnProcess({
                                               fontFamily: 'Poppins-regular',
                                               color:
                                                   myTheme.colorScheme.primary,
-                                              fontSize: 14,
+                                              fontSize: 12,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -485,7 +489,7 @@ void modalBottomSheetForOnProcess({
                                               style: const TextStyle(
                                                 fontFamily: 'Poppins-regular',
                                                 color: Colors.white,
-                                                fontSize: 14,
+                                                fontSize: 12,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 import '../../../dialogs/cancel_transaction_dialog.dart';
 import '../../models/transaction_args.dart';
@@ -40,6 +41,8 @@ class _CvvInputViewState extends State<CvvInputView> {
           ),
           child: Scaffold(
             appBar: AppBar(
+              backgroundColor: myTheme.colorScheme.primary,
+              foregroundColor: Colors.white,
               title: Text("sale"),
             ),
             body: Column(children: [

@@ -27,6 +27,7 @@ class _NewUserPageState extends State<NewUserPage> {
         elevation: 0,
         leadingWidth: 24.0,
         backgroundColor: myTheme.colorScheme.primary,
+        foregroundColor: Colors.white,
       ),
       backgroundColor: Colors.white,
       body: const NewUserBody(),

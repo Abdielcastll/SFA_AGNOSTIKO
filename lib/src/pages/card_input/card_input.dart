@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:agnostiko/agnostiko.dart';
 import 'package:intl/intl.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
+import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 /* import '../../config/app_config.dart'; */
 import '../../../dialogs/info_dialog.dart';
@@ -94,6 +95,8 @@ class _CardInputViewState extends State<CardInputView> {
         ),
         child: Scaffold(
           appBar: AppBar(
+            backgroundColor: myTheme.colorScheme.primary,
+            foregroundColor: Colors.white,
             title: Text(appBarText),
           ),
           body: Column(mainAxisSize: MainAxisSize.max, children: [
@@ -185,22 +188,13 @@ class _CardInputViewState extends State<CardInputView> {
       _startCardDetection(_supportedCardTypes
           .where((type) => type != CardType.Magnetic)
           .toList());
-    } on TimeoutException {
-      await closeCardReader();
-      transactionArgs?.timeout = true;
-      print('TimeoutException');
-      showInfoDialog(context, 'Tiempo de espera agotado.', onClose: () {
-        Navigator.pop(context);
-        _processEMVException('Timeout', 'Tiempo de espera agotado.');
-      });
     } catch (e, stackTrace) {
-      await closeCardReader();
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Error al detectar la tarjeta"),
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Error en la deteccion"),
       ));
       print("Error: $e");
       print(stackTrace);
-      _startCardDetection(cardTypes);
+      Navigator.popUntil(context, (route) => route.isFirst == true);
     }
     print("****************CARD READER CLOSED*****************");
   }
@@ -229,8 +223,6 @@ class _CardInputViewState extends State<CardInputView> {
           transactionArgs?.emvTransactionType ?? EmvTransactionType.Goods,
       transactionSequenceCounter: sequenceCounter,
       amount: amount,
-      //amountOther: 357,
-      //forceOnline: true,
     );
 
     _pinProcessFlag = false;
@@ -249,6 +241,8 @@ class _CardInputViewState extends State<CardInputView> {
           await _onAppSelected(event);
         } else if (event is EmvPinRequestedEvent) {
           await _onPinRequested(event);
+        } else if (event is EmvPinpadEntryEvent) {
+          await _onPinpadEntry();
         } else if (event is EmvOnlineRequestedEvent) {
           await _onOnlineRequested(event);
         } else if (event is EmvFinishedEvent) {
@@ -308,6 +302,28 @@ class _CardInputViewState extends State<CardInputView> {
       PinInputView.route,
       arguments: transactionArgs,
     );
+  }
+
+  Future<void> _onPinpadEntry() async {
+    Navigator.pop(context);
+    showCircularProgressDialog(
+      context,
+      "Por favor ingrese el PIN en el Pinpad.",
+    );
+    final pinEntryParameters = PinEntryParameters(
+      timeout: 60,
+      pinRSAData: null,
+      allowedLength: [0, 4, 8, 23, 13, 6],
+    );
+    try {
+      await emvConfirmPinpadEntry(pinEntryParameters);
+      return;
+    } catch (e) {
+      print("PIN Error: $e");
+    }
+    // si llegamos aquí, hubo cancelación, timeout o error
+    await cancelEmvTransaction();
+    print("****************PIN ENTRY CLOSED*****************");
   }
 
   getCurrencyFromPaymentBody() {

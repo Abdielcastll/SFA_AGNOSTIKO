@@ -195,7 +195,9 @@ void modalBottomSheetForInvoices({
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 12),
-                        child: Divider(),
+                        child: Divider(
+                          color: Colors.grey,
+                        ),
                       ),
                       SizedBox(height: 12),
                       Row(
@@ -222,7 +224,9 @@ void modalBottomSheetForInvoices({
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 12),
-                        child: Divider(),
+                        child: Divider(
+                          color: Colors.grey,
+                        ),
                       ),
                       SizedBox(height: 12),
                       Row(
@@ -618,6 +622,7 @@ class SeePaymentsALertDialog extends StatelessWidget {
         print('sumOfPendingPaymensFormatted: $sumOfPendingPaymensFormatted');
 
         return AlertDialog(
+          surfaceTintColor: Color.fromARGB(255, 222, 222, 222),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -819,10 +824,15 @@ class SeePaymentsALertDialog extends StatelessWidget {
                                               icon: Icon(
                                                 Icons.block_rounded,
                                                 size: 16,
+                                                color: Colors.white,
                                               ),
-                                              label: Text('Cancelación',
-                                                  style:
-                                                      TextStyle(fontSize: 12)),
+                                              label: Text(
+                                                'Cancelación',
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
                                             ),
                                           ElevatedButton.icon(
                                             onPressed: () async {
@@ -844,14 +854,21 @@ class SeePaymentsALertDialog extends StatelessWidget {
                                             icon: Icon(
                                               Icons.currency_exchange_rounded,
                                               size: 16,
+                                              color: Colors.white,
                                             ),
-                                            label: Text('Devolución',
-                                                style: TextStyle(fontSize: 12)),
-                                          )
+                                            label: Text(
+                                              'Devolución',
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
                                         ],
                                       ),
                                     if (!isLast)
                                       Divider(
+                                        color: Colors.grey,
                                         endIndent: 8,
                                         indent: 8,
                                       )

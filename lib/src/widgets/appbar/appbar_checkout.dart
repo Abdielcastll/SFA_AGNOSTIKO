@@ -29,6 +29,7 @@ class AppBarCheckout extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       backgroundColor: myTheme.colorScheme.primary,
+      foregroundColor: Colors.white,
       elevation: 0,
     );
   }

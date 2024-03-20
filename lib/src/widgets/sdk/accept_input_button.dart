@@ -6,7 +6,7 @@ class AcceptInputButton extends ElevatedButton {
           onPressed: onPressed,
           child: Text(label, style: TextStyle(fontFamily: "Roboto")),
           style: ElevatedButton.styleFrom(
-            primary: Colors.blue,
+            backgroundColor: Colors.blue,
             textStyle: TextStyle(color: Colors.white),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),

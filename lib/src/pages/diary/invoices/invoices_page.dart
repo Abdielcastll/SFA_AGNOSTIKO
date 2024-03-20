@@ -310,7 +310,9 @@ class _InvoicesBodyState extends State<InvoicesBody> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Divider(),
+            child: Divider(
+              color: Colors.grey,
+            ),
           ),
           seeCompleted == true
               ? InvoicesCompleted(isDescending: isDescending)

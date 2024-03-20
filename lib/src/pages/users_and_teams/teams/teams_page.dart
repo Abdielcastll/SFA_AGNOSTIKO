@@ -121,6 +121,8 @@ class _TeamsBodyState extends State<TeamsBody> {
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
+                            surfaceTintColor:
+                                Color.fromARGB(255, 222, 222, 222),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),

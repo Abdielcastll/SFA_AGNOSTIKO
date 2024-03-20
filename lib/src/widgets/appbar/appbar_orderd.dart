@@ -15,6 +15,7 @@ class AppBarOrder extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      foregroundColor: Colors.white,
       // shape: RoundedRectangleBorder(
       //   borderRadius: BorderRadius.vertical(
       //     bottom: Radius.circular(20),
