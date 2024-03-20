@@ -95,6 +95,8 @@ class InvoiceDetailsBody extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: myTheme.colorScheme.primary,
+        foregroundColor: Colors.white,
         title: Text(
           'Ticket #${widget.number}',
           style: TextStyle(
@@ -197,7 +199,9 @@ class InvoiceDetailsBody extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Divider(),
+              child: Divider(
+                color: Colors.grey,
+              ),
             ),
             Padding(
               padding:

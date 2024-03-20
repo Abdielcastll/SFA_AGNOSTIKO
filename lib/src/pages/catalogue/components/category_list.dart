@@ -293,7 +293,7 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontFamily: 'Poppins-regular',
-                              fontSize: 14,
+                              fontSize: 12,
                               color: Colors.white,
                             ),
                           ),

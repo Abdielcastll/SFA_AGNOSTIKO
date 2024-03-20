@@ -67,7 +67,12 @@ class _ProductDetailsState extends State<ProductDetails> {
     String currentCoinSelectedCode = currentCoinSplit.last;
     // print(currentCoinSelectedCode);
     return Scaffold(
-      appBar: AppBar(elevation: 0, toolbarHeight: 40),
+      appBar: AppBar(
+        elevation: 0,
+        toolbarHeight: 40,
+        foregroundColor: Colors.white,
+        backgroundColor: myTheme.colorScheme.primary,
+      ),
       backgroundColor: myTheme.colorScheme.surface,
       body: MultiProvider(
         providers: [
@@ -303,7 +308,7 @@ class ProductDetailsBody extends StatelessWidget {
                                     // width: 160,
                                     width: orderActive.orderActive == false
                                         ? 300
-                                        : 200,
+                                        : 180,
                                     height: 46,
 
                                     child: ClipRRect(
@@ -374,14 +379,20 @@ class ProductDetailsBody extends StatelessWidget {
                             orderActive.orderActive == false
                                 ? Container()
                                 : Container(
+                                    width: 5,
+                                  ),
+                            orderActive.orderActive == false
+                                ? Container()
+                                : Container(
                                     // margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                                     // alignment: Alignment.center,
                                     child: Container(
                                       // margin: const EdgeInsets.only(left: 30.0),
                                       height: 46,
                                       decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(100)),
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                      ),
                                       child: ClipRRect(
                                         borderRadius:
                                             BorderRadius.circular(100),

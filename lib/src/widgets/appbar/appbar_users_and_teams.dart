@@ -12,6 +12,8 @@ class AppBarUsersAndTeams extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      backgroundColor: myTheme.colorScheme.primary,
+      foregroundColor: Colors.white,
       title: const Text(
         'Usuarios y Equipos',
         style: TextStyle(
@@ -22,7 +24,6 @@ class AppBarUsersAndTeams extends StatelessWidget
       ),
       centerTitle: true,
       elevation: 0,
-      backgroundColor: myTheme.colorScheme.primary,
       bottom: const UsersAndTeamsTabBar(),
     );
   }

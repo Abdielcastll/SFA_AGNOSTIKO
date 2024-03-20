@@ -345,7 +345,9 @@ class _ClientOrdersBodyState extends State<ClientOrdersBody> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Divider(),
+            child: Divider(
+              color: Colors.grey,
+            ),
           ),
           seeCompleted == false
               ? ClientsOrdersOnProcess(controller: _controller)

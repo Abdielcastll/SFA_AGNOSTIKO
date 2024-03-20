@@ -21,6 +21,7 @@ class SelectedClientKiosko extends StatelessWidget {
             child: SizedBox(
               width: MediaQuery.of(context).size.width,
               child: Divider(
+                color: Colors.grey,
                 height: 10,
               ),
             ),

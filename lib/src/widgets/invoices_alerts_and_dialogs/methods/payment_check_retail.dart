@@ -354,15 +354,21 @@ paymentCheckRetail(
                     backgroundColor: MaterialStateProperty.all(
                       myTheme.colorScheme.primary,
                     ),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    foregroundColor: MaterialStateProperty.all(
+                      Colors.white,
+                    ),
+                    shape: MaterialStateProperty.all(
                       RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
+                        borderRadius: BorderRadius.circular(
+                          16,
+                        ),
                       ),
                     ),
                   ),
                   icon: Icon(
                     MaterialIcons.arrow_back_ios,
                     size: 14,
+                    color: Colors.white,
                   ),
                   label: Text(
                     'Cancelar',
@@ -472,18 +478,23 @@ paymentCheckRetail(
                           },
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(
-                              myTheme.colorScheme.onPrimaryContainer,
+                              myTheme.colorScheme.primary,
                             ),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
+                            foregroundColor: MaterialStateProperty.all(
+                              Colors.white,
+                            ),
+                            shape: MaterialStateProperty.all(
                               RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
+                                borderRadius: BorderRadius.circular(
+                                  16,
+                                ),
                               ),
                             ),
                           ),
                           icon: const Icon(
                             MaterialCommunityIcons.bank,
                             size: 14,
+                            color: Colors.white,
                           ),
                           label: const Text(
                             'Continuar',

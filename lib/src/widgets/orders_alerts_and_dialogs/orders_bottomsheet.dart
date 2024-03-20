@@ -128,7 +128,7 @@ void modalBottomSheetForOrders(
             return SafeArea(
               child: Container(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 18),
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
@@ -206,7 +206,10 @@ void modalBottomSheetForOrders(
                                       ),
                                     );
                                   },
-                                  icon: Icon(Icons.person),
+                                  icon: Icon(
+                                    Icons.person,
+                                    color: Colors.white,
+                                  ),
                                   style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(
                                       myTheme.colorScheme.primary,
@@ -229,50 +232,51 @@ void modalBottomSheetForOrders(
                                     ),
                                   ),
                                 ),
-                                // const SizedBox(width: 15),
-                                Container(
-                                  child: ElevatedButton.icon(
-                                    onPressed: () {
-                                      showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return SeeProductsAlertDialog(
-                                              products: products,
-                                              discountMaster: discountMaster,
-                                              subTotal: subTotal,
-                                              tax: tax,
-                                              total: total,
-                                              coinDecimals: coinDecimals,
-                                              coinExchangeRatio: double.parse(
-                                                  coinExchangeRatio.toString()),
-                                              coinSymbol: coinSymbol,
-                                              coinExchangeRateFromDB:
-                                                  coinExchangeRateFromDB,
-                                            );
-                                          });
-                                    },
-                                    style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                        myTheme.colorScheme.primary,
-                                      ),
-                                      shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(18.0),
-                                        ),
+                                const SizedBox(width: 1),
+                                ElevatedButton.icon(
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return SeeProductsAlertDialog(
+                                          products: products,
+                                          discountMaster: discountMaster,
+                                          subTotal: subTotal,
+                                          tax: tax,
+                                          total: total,
+                                          coinDecimals: coinDecimals,
+                                          coinExchangeRatio: double.parse(
+                                              coinExchangeRatio.toString()),
+                                          coinSymbol: coinSymbol,
+                                          coinExchangeRateFromDB:
+                                              coinExchangeRateFromDB,
+                                        );
+                                      },
+                                    );
+                                  },
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                      myTheme.colorScheme.primary,
+                                    ),
+                                    shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(18.0),
                                       ),
                                     ),
-                                    icon: Icon(Icons.shopping_basket_rounded),
-                                    label: Text(
-                                      AppLocalizations.of(context)!.seeProducts,
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins-regular',
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                  ),
+                                  icon: Icon(
+                                    Icons.shopping_basket_rounded,
+                                    color: Colors.white,
+                                  ),
+                                  label: Text(
+                                    AppLocalizations.of(context)!.seeProducts,
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins-regular',
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
@@ -294,7 +298,7 @@ void modalBottomSheetForOrders(
                                                   width: MediaQuery.of(context)
                                                           .size
                                                           .width *
-                                                      0.75,
+                                                      0.73,
                                                   margin:
                                                       const EdgeInsets.fromLTRB(
                                                           0, 0, 0, 0),
@@ -309,6 +313,22 @@ void modalBottomSheetForOrders(
                                                                 print(
                                                                     'Retomar proceso de Retail');
                                                                 return AlertDialog(
+                                                                  surfaceTintColor:
+                                                                      Color.fromARGB(
+                                                                          255,
+                                                                          222,
+                                                                          222,
+                                                                          222),
+                                                                  actionsOverflowButtonSpacing:
+                                                                      1,
+                                                                  actionsPadding:
+                                                                      EdgeInsets
+                                                                          .symmetric(
+                                                                    horizontal:
+                                                                        10,
+                                                                    vertical:
+                                                                        10,
+                                                                  ),
                                                                   shape:
                                                                       RoundedRectangleBorder(
                                                                     borderRadius:
@@ -498,6 +518,12 @@ void modalBottomSheetForOrders(
                                                                   (BuildContext
                                                                       context) {
                                                                 return AlertDialog(
+                                                                  surfaceTintColor:
+                                                                      Color.fromARGB(
+                                                                          255,
+                                                                          222,
+                                                                          222,
+                                                                          222),
                                                                   shape:
                                                                       RoundedRectangleBorder(
                                                                     borderRadius:
@@ -542,6 +568,8 @@ void modalBottomSheetForOrders(
                                                                               .arrow_back_ios,
                                                                           size:
                                                                               15,
+                                                                          color:
+                                                                              Colors.white,
                                                                         ),
                                                                         style:
                                                                             ButtonStyle(
@@ -609,8 +637,10 @@ void modalBottomSheetForOrders(
                                                               },
                                                             );
                                                     },
-                                                    icon: Icon(Icons
-                                                        .inventory_outlined),
+                                                    icon: Icon(
+                                                      Icons.inventory_outlined,
+                                                      color: Colors.white,
+                                                    ),
                                                     style: ButtonStyle(
                                                       backgroundColor:
                                                           MaterialStateProperty
@@ -684,7 +714,8 @@ void modalBottomSheetForOrders(
                                                 style: ButtonStyle(
                                                   backgroundColor:
                                                       MaterialStateProperty.all(
-                                                          Colors.red),
+                                                    Colors.red,
+                                                  ),
                                                   shape:
                                                       MaterialStateProperty.all<
                                                           RoundedRectangleBorder>(
@@ -696,9 +727,10 @@ void modalBottomSheetForOrders(
                                                   ),
                                                 ),
                                                 icon: const Icon(
-                                                    MaterialCommunityIcons
-                                                        .delete_circle_outline,
-                                                    color: Colors.white),
+                                                  MaterialCommunityIcons
+                                                      .delete_circle_outline,
+                                                  color: Colors.white,
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -736,6 +768,7 @@ class DeleteOrderAlertDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      surfaceTintColor: Color.fromARGB(255, 222, 222, 222),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
@@ -745,7 +778,7 @@ class DeleteOrderAlertDialog extends StatelessWidget {
         style: TextStyle(
           fontFamily: 'Poppins-regular',
           color: myTheme.colorScheme.primary,
-          fontSize: 16,
+          fontSize: 14,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -766,7 +799,11 @@ class DeleteOrderAlertDialog extends StatelessWidget {
                 ),
               ),
             ),
-            icon: Icon(Icons.arrow_back_ios, size: 15),
+            icon: Icon(
+              Icons.arrow_back_ios,
+              size: 15,
+              color: Colors.white,
+            ),
           ),
           Container(
             child: ElevatedButton(
@@ -872,6 +909,13 @@ class SeeProductsAlertDialog extends StatelessWidget {
     var totalFormatted = formatDecimalPriceByRegion(price: totalConverted);
 
     return AlertDialog(
+      surfaceTintColor: Color.fromARGB(255, 222, 222, 222),
+      backgroundColor: Colors.white,
+      actionsOverflowButtonSpacing: 1,
+      actionsPadding: EdgeInsets.symmetric(
+        horizontal: 10,
+        vertical: 10,
+      ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
@@ -1081,6 +1125,7 @@ class SeeProductsAlertDialog extends StatelessWidget {
               icon: Icon(
                 Icons.arrow_back_ios,
                 size: 15,
+                color: Colors.white,
               ),
               label: Text(
                 AppLocalizations.of(context)!.goBack,

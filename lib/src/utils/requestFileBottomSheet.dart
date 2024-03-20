@@ -42,7 +42,9 @@ requestFileBottomSheet(BuildContext context, Function(File) onFileSelected) {
               }
             },
           ),
-          const Divider(),
+          const Divider(
+            color: Colors.grey,
+          ),
           ListTile(
             leading: Icon(
               Icons.photo_camera_back_rounded,

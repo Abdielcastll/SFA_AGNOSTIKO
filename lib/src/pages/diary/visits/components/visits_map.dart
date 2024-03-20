@@ -10,6 +10,7 @@ import 'package:pwa_sales2go_flutter/src/pages/diary/visits/components/client_ma
 import 'package:pwa_sales2go_flutter/src/pages/diary/visits/components/client_marker_popup.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
+import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/utils/determinePosition.dart';
 import 'package:open_route_service/open_route_service.dart';
 
@@ -23,6 +24,8 @@ class VisitsMap extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(
+          foregroundColor: Colors.white,
+          backgroundColor: myTheme.colorScheme.primary,
           title: const Text('Mapa de visitas'),
         ),
         body: VisitMapBody(
@@ -252,20 +255,20 @@ class _VisitMapBodyState extends State<VisitMapBody> {
             Container(
               padding: const EdgeInsets.symmetric(vertical: 4),
               margin: const EdgeInsets.only(bottom: 4, left: 8),
-              width: 162,
               child: Row(
                 children: [
                   ElevatedButton(
-                      onPressed: focusLocation,
-                      child: const Row(
-                        children: [
-                          Text('Centrar'),
-                          Icon(
-                            Icons.location_on_rounded,
-                            color: Colors.white,
-                          ),
-                        ],
-                      )),
+                    onPressed: focusLocation,
+                    child: Row(
+                      children: [
+                        Text('Centrar'),
+                        Icon(
+                          Icons.location_on_rounded,
+                          color: myTheme.colorScheme.onPrimaryContainer,
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -273,20 +276,20 @@ class _VisitMapBodyState extends State<VisitMapBody> {
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 4),
                 margin: const EdgeInsets.only(bottom: 4, right: 8),
-                width: 162,
                 child: Row(
                   children: [
                     ElevatedButton(
-                        onPressed: focusNextVisit,
-                        child: const Row(
-                          children: [
-                            Text('Siguiente Visita'),
-                            Icon(
-                              Icons.navigate_next_rounded,
-                              color: Colors.white,
-                            ),
-                          ],
-                        )),
+                      onPressed: focusNextVisit,
+                      child: Row(
+                        children: [
+                          Text('Siguiente Visita'),
+                          Icon(
+                            Icons.navigate_next_rounded,
+                            color: myTheme.colorScheme.onPrimaryContainer,
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),

@@ -29,6 +29,7 @@ class NotificationsPage extends StatelessWidget {
             color: Colors.white,
           ),
         ),
+        foregroundColor: Colors.white,
         backgroundColor: myTheme.colorScheme.primary,
         elevation: 0,
       ),

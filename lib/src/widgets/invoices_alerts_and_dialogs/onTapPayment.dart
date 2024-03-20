@@ -165,6 +165,12 @@ Future refund(BuildContext context, payment, String pleaseWait, Client client,
         }
 
         return AlertDialog(
+          surfaceTintColor: Color.fromARGB(255, 222, 222, 222),
+          actionsOverflowButtonSpacing: 1,
+          actionsPadding: EdgeInsets.symmetric(
+            horizontal: 10,
+            vertical: 10,
+          ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -304,7 +310,7 @@ Future printCancelTicket(int stan, String referenceNumber, double monto) async {
 
   listOfTextLine.add(PrinterText.emptyLine(16));
 
-  final printerScript =
-      PrinterScript(listOfTextLine, gray: GrayIntensity.Medium);
-  printScript(printerScript);
+  final printerScript = PrinterScript(listOfTextLine, gray: GrayIntensity.Dark);
+  await printScript(printerScript, bottomFeed: true);
+  await cutPaper();
 }

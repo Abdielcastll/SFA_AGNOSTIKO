@@ -138,6 +138,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                               final url = snapshot.data!.toString();
                               return GestureDetector(
                                 onTap: () {
+                                  print(prices[product.code]);
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -147,7 +148,9 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                         line: linesSummary[product.line],
                                         imageUrl: url,
                                         isProductNew: false,
-                                        price: (prices[product.code] ?? 0),
+                                        price: (double.parse(
+                                          prices[product.code].toString(),
+                                        )),
                                         name: product.name,
                                         stock: stockValues[product.code] ?? 0,
                                         list: productsBySalesList
@@ -242,7 +245,9 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                       builder: (BuildContext context) =>
                                           ProductDetails(
                                         code: product.code,
-                                        price: (prices[product.code] ?? 0),
+                                        price: (double.parse(
+                                          prices[product.code].toString(),
+                                        )),
                                         line: linesSummary[product.line],
                                         imageUrl:
                                             'https://i.imgur.com/BPbj6Gy.jpg',
@@ -429,7 +434,9 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                       builder: (BuildContext context) =>
                                           ProductDetails(
                                         code: product.code,
-                                        price: (prices[product.code] ?? 0),
+                                        price: (double.parse(
+                                          prices[product.code].toString(),
+                                        )),
                                         line: linesSummary[product.line],
                                         imageUrl:
                                             'https://i.imgur.com/BPbj6Gy.jpg',

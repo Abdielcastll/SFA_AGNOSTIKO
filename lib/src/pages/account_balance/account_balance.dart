@@ -613,6 +613,7 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
                     child: StatefulBuilder(
                       builder: ((context, setState) {
                         return AlertDialog(
+                          surfaceTintColor: Color.fromARGB(255, 222, 222, 222),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),

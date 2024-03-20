@@ -12,7 +12,10 @@ class NotificationBell extends StatelessWidget {
     return Stack(
       children: <Widget>[
         IconButton(
-            icon: const Icon(Icons.notifications),
+            icon: const Icon(
+              Icons.notifications,
+              color: Color.fromARGB(255, 196, 196, 196),
+            ),
             onPressed: () {
               Navigator.of(context).pushNamed('notifications');
             }),

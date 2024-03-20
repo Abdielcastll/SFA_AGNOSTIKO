@@ -38,6 +38,7 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
     // print('userZoneDocument: $userZoneDocument');
 
     return AppBar(
+      foregroundColor: Colors.white,
       title: orderActive.orderActive == true
           ? Container(
               margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -335,7 +336,10 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
                         ),
                       ],
                     ),
-                    style: ElevatedButton.styleFrom(elevation: 0),
+                    style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      backgroundColor: myTheme.colorScheme.primary,
+                    ),
                   ),
             NotificationBell()
           ],

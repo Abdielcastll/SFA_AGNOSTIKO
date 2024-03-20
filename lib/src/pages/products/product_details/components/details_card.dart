@@ -76,7 +76,7 @@ class DetailsCard extends StatelessWidget {
                           // Añadir Producto
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: myTheme.colorScheme.secondary,
+                          backgroundColor: myTheme.colorScheme.secondary,
                         ),
                         icon: Icon(
                           Icons.add_shopping_cart_outlined,

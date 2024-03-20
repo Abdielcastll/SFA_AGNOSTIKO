@@ -28,6 +28,7 @@ class PlaceOrderPage extends StatelessWidget {
         ),
         backgroundColor: myTheme.colorScheme.primary,
         elevation: 0,
+        foregroundColor: Colors.white,
       ),
       body: MultiProvider(
         providers: [

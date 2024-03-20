@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:agnostiko/agnostiko.dart';
+import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 import '../../../dialogs/cancel_transaction_dialog.dart';
 import '../../models/transaction_args.dart';
@@ -95,6 +96,8 @@ class _PinInputViewState extends State<PinInputView> {
       onWillPop: cancelTransactionDialogFn(context),
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: myTheme.colorScheme.primary,
+          foregroundColor: Colors.white,
           title: Text(appBarText),
         ),
         body: Column(children: [
