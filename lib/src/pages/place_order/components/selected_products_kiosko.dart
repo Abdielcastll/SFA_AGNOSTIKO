@@ -241,13 +241,13 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                       );
 
                       var subTotalFormatted =
-                          formatDecimalPriceByRegion(price: ivaConverted);
+                          formatDecimalPriceByRegion(price: subTotalConverted);
 
                       var ivaFormatted =
-                          formatDecimalPriceByRegion(price: totalConverted);
+                          formatDecimalPriceByRegion(price: ivaConverted);
 
                       var totalFormatted =
-                          formatDecimalPriceByRegion(price: subTotalConverted);
+                          formatDecimalPriceByRegion(price: totalConverted);
 
                       return BarcodeKeyboardListener(
                         bufferDuration: Duration(milliseconds: 500),
