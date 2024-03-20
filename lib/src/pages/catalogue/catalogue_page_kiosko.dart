@@ -12,7 +12,7 @@ import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_kiosko.dart';
 
 class CataloguePageKiosko extends StatefulWidget {
   const CataloguePageKiosko({Key? key}) : super(key: key);
@@ -29,8 +29,8 @@ class _CataloguePageKioskoState extends State<CataloguePageKiosko> {
     print('zoneDocument: $userZoneDocument');
 
     return Scaffold(
-      appBar: AppBarNavigation(
-        message: 'Agnostiko',
+      appBar: AppBarKiosko(
+        message: 'Orden',
         userZoneDocument: userZoneDocument,
       ),
       backgroundColor: myTheme.colorScheme.surface,
@@ -117,12 +117,6 @@ class _CatalogueBodyState extends State<CatalogueBody> {
       ],
       child: Container(
         height: MediaQuery.of(context).size.height - 60,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: AssetImage('assets/images/bimbo_background.jpg'),
-          ),
-        ),
         child: SingleChildScrollView(
           child: Column(
             children: [

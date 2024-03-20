@@ -16,6 +16,7 @@ import 'package:pwa_sales2go_flutter/src/pages/products/product_details/product_
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
+import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
@@ -292,6 +293,9 @@ class _ProductsBodyState extends State<ProductsBody> {
                               ),
                             ),
                           );
+                        if (globalRemoteConfig.conversionKiosko == true) {
+                          Navigator.pop(context);
+                        }
                       },
                       child: const Icon(
                         Icons.add_shopping_cart_rounded,

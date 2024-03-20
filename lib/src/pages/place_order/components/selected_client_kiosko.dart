@@ -11,9 +11,13 @@ class SelectedClientKiosko extends StatelessWidget {
       children: [
         Center(
           child: Container(
-              margin: EdgeInsets.symmetric(vertical: 12),
-              width: 300,
-              child: Image.asset('assets/images/bimboPay.png')),
+            margin: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+            width: 400,
+            child: Image.asset(
+              'assets/images/placeholder_company.png',
+              fit: BoxFit.fitWidth,
+            ),
+          ),
         ),
         Container(
           margin: EdgeInsets.symmetric(horizontal: 16),
