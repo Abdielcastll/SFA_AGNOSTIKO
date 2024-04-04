@@ -84,7 +84,7 @@ class _ListOfProductsButtonKioskoState
                 },
                 label: Text(
                   AppLocalizations.of(context)!.addProducts,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontFamily: 'Poppins-medium',
                     fontSize: 14,
