@@ -3,20 +3,23 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
+import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 goBackToCatalogue(BuildContext context) {
   final orderActive = context.read<OrderProvider>();
-
+  bool isKiosko = globalRemoteConfig.conversionKiosko!;
   showDialog(
     context: context,
     builder: (context) => AlertDialog(
-      title: Text("Advertencia"),
+      title: const Text("Advertencia"),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            "Salir de este proceso hara que deba continuarlo desde el menu de facturas como registro manual",
+            isKiosko
+                ? "Desea regresar a revisar su carrito?"
+                : "Salir de este proceso hara que deba continuarlo desde el menu de facturas como registro manual",
             style: TextStyle(
               color: myTheme.colorScheme.primary,
               fontFamily: 'Poppins-regular',
@@ -25,7 +28,7 @@ goBackToCatalogue(BuildContext context) {
             ),
           ),
           Text(
-            " ¿Esta seguro que quiere salir?",
+            " ¿Esta seguro?",
             textAlign: TextAlign.center,
             style: TextStyle(
               color: myTheme.colorScheme.primary,
@@ -40,44 +43,43 @@ goBackToCatalogue(BuildContext context) {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text("No"),
+          child: const Text("No"),
         ),
         TextButton(
           onPressed: () {
             Navigator.popUntil(context, (route) => route.isFirst);
-            objectBox.delelteAllShoppingCart();
-            orderActive.setOrder(false);
-            final j = context.read<CounterLimitFirestore>();
-            j.setNewScreen(1);
-            ScaffoldMessenger.of(context)
-              ..removeCurrentSnackBar()
-              ..showSnackBar(
-                SnackBar(
-                  backgroundColor: myTheme.colorScheme.onPrimaryContainer,
-                  duration: const Duration(seconds: 3),
-                  content: Column(
-                    children: const [
-                      Text(
-                        "Facturación Pausada",
-                        style: TextStyle(
-                          fontFamily: 'Poppins-regular',
+            if (isKiosko == false) {
+              objectBox.delelteAllShoppingCart();
+              orderActive.setOrder(false);
+              final j = context.read<CounterLimitFirestore>();
+              j.setNewScreen(1);
+              ScaffoldMessenger.of(context)
+                ..removeCurrentSnackBar()
+                ..showSnackBar(
+                  SnackBar(
+                    backgroundColor: myTheme.colorScheme.onPrimaryContainer,
+                    duration: const Duration(seconds: 3),
+                    content: const Column(
+                      children: [
+                        Text(
+                          "Facturación Pausada",
+                          style: TextStyle(
+                            fontFamily: 'Poppins-regular',
+                          ),
                         ),
-                      ),
-                      Text(
-                        "Consulte lista de facturas",
-                        style: TextStyle(
-                          fontFamily: 'Poppins-regular',
+                        Text(
+                          "Consulte lista de facturas",
+                          style: TextStyle(
+                            fontFamily: 'Poppins-regular',
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              );
-            // Navigator.of(context).pop();
-            // Navigator.of(context).pop();
-            // Navigator.of(context).pop();
+                );
+            }
           },
-          child: Text("Si"),
+          child: const Text("Si"),
         ),
       ],
     ),

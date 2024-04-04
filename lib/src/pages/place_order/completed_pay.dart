@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +11,7 @@ import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/invoicePrintLayout.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
+import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
@@ -76,6 +79,7 @@ class CompletedPayPage extends StatelessWidget {
             orderNumber: orderNumber,
             coinsExchangeRates: coinsExchangeRates,
             addPaymentBody: addPaymentBody,
+            currentCoin: currentCoin,
           ),
         ),
       ),
@@ -94,6 +98,7 @@ class CompletedPayBody extends StatefulWidget {
     required this.orderNumber,
     required this.coinsExchangeRates,
     required this.addPaymentBody,
+    required this.currentCoin,
   }) : super(key: key);
   final Client client;
   final total;
@@ -103,6 +108,7 @@ class CompletedPayBody extends StatefulWidget {
   final orderNumber;
   final coinsExchangeRates;
   final AddPaymentBodyAtt addPaymentBody;
+  final currentCoin;
 
   @override
   State<CompletedPayBody> createState() => _CompletedPayBody();
@@ -112,7 +118,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
   late List<double> coinsExchangeRates = widget.coinsExchangeRates;
   late double totalPayed = widget.addPaymentBody.payments.fold<double>(
       0.0, (previousValue, element) => previousValue + element.amount);
-
+  bool isKiosko = globalRemoteConfig.conversionKiosko!;
   bool ticketPrinted = false;
 
   onGoBack() {
@@ -136,6 +142,40 @@ class _CompletedPayBody extends State<CompletedPayBody> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (isKiosko) {
+        startTimer();
+      }
+    });
+  }
+
+  void startTimer() {
+    invoicePrintLayout(widget.addPaymentBody, widget.currentCoin);
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        Future.delayed(Duration(seconds: 3), () {
+          onGoBack();
+        });
+        return AlertDialog(
+          title: Padding(
+            padding: const EdgeInsets.all(25),
+            child: Text(
+              'Por favor retire su comprobante y ticket de compra.',
+              style: TextStyle(
+                fontFamily: 'Poppins-regular',
+                color: myTheme.colorScheme.primary,
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 0;
     final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 0;
@@ -148,38 +188,6 @@ class _CompletedPayBody extends State<CompletedPayBody> {
       double convertedAmount = double.parse(
           (correctAmount * coinExchangeRatio).toStringAsFixed(coinDecimals));
       return convertedAmount;
-
-      // if (currentCoin.contains('USD')) {
-      //   return NumberFormat.simpleCurrency(locale: 'en-US', decimalDigits: 2)
-      //       .format(productPrice)
-      //       .toString();
-      // } else if (currentCoin.contains('VED')) {
-      //   return NumberFormat.currency(
-      //     locale: 'es_VE',
-      //     decimalDigits: 2,
-      //     symbol: "Bs.",
-      //   ).format(correctAmount * 4.58).toString();
-      // } else if (currentCoin.contains('EUR')) {
-      //   return NumberFormat.currency(
-      //     locale: 'es_ES',
-      //     decimalDigits: 2,
-      //     symbol: '€',
-      //   ).format(correctAmount * 0.89).toString();
-      // } else if (currentCoin.contains('MXN')) {
-      //   return NumberFormat.currency(
-      //     locale: 'es_MX',
-      //     decimalDigits: 2,
-      //     symbol: '\$',
-      //   ).format(correctAmount * 19.43);
-      // } else if (currentCoin.contains('BTC')) {
-      //   return '฿ ${(correctAmount * 0.00011).toString()}';
-      // } else {
-      //   return NumberFormat.currency(
-      //     locale: 'es_VE',
-      //     decimalDigits: 2,
-      //     symbol: "PPR.",
-      //   ).format(correctAmount * 4.58).toString();
-      // }
     }
 
     return Column(
@@ -222,7 +230,6 @@ class _CompletedPayBody extends State<CompletedPayBody> {
                           ),
                         ),
                         SizedBox(
-                          // height: 60,
                           width: 140,
                           child: Text(
                             widget.client.name,
@@ -289,9 +296,6 @@ class _CompletedPayBody extends State<CompletedPayBody> {
                             child: Text(
                               '$coinSymbol ${priceFormat(widget.total).toStringAsFixed(2)}',
                               textAlign: TextAlign.center,
-                              // currentCoin != 'Dolares - USD'
-                              //     ? '${priceFormat(widget.total)} = \$ ${widget.total.toStringAsFixed(4)}'
-                              //     : '${priceFormat(widget.total)}',
                               style: TextStyle(
                                 color: myTheme.colorScheme.onPrimaryContainer,
                                 fontFamily: 'Poppins-regular',
@@ -309,108 +313,110 @@ class _CompletedPayBody extends State<CompletedPayBody> {
           ),
         ),
         const SizedBox(height: 20),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          width: 340,
-          height: 100,
-          child: /*  ClipRRect(
+        if (isKiosko == false)
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            width: 340,
+            height: 100,
+            child: /*  ClipRRect(
             borderRadius: BorderRadius.circular(16),
             child: */
-              Column(
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  if (!ticketPrinted) {
-                    showModalNoTicketPrinted();
-                    return;
-                  }
+                Column(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    if (!ticketPrinted) {
+                      showModalNoTicketPrinted();
+                      return;
+                    }
 
-                  onGoBack();
-                },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                    myTheme.colorScheme.primary,
-                  ),
-                  foregroundColor: MaterialStateProperty.all(
-                    Colors.white,
-                  ),
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        16,
+                    onGoBack();
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                      myTheme.colorScheme.primary,
+                    ),
+                    foregroundColor: MaterialStateProperty.all(
+                      Colors.white,
+                    ),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                          16,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Regresar al Inicio',
-                      style: TextStyle(
-                        fontFamily: 'Poppins-regular',
-                        fontSize: 14,
-                        color: Colors.white,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Regresar al Inicio',
+                        style: TextStyle(
+                          fontFamily: 'Poppins-regular',
+                          fontSize: 14,
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
-                      child: const Icon(
-                        SimpleLineIcons.check,
-                        size: 14,
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+                        child: const Icon(
+                          SimpleLineIcons.check,
+                          size: 14,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  await invoicePrintLayout(widget.addPaymentBody, currentCoin);
-                  setState(() {
-                    ticketPrinted = true;
-                  });
-                },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                    myTheme.colorScheme.primary,
-                  ),
-                  foregroundColor: MaterialStateProperty.all(
-                    Colors.white,
-                  ),
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        16,
-                      ),
-                    ),
+                    ],
                   ),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Imprimir Factura',
-                      style: TextStyle(
-                        fontFamily: 'Poppins-regular',
-                        fontSize: 14,
-                        color: Colors.white,
+                ElevatedButton(
+                  onPressed: () async {
+                    await invoicePrintLayout(
+                        widget.addPaymentBody, currentCoin);
+                    setState(() {
+                      ticketPrinted = true;
+                    });
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                      myTheme.colorScheme.primary,
+                    ),
+                    foregroundColor: MaterialStateProperty.all(
+                      Colors.white,
+                    ),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                          16,
+                        ),
                       ),
                     ),
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
-                      child: const Icon(
-                        SimpleLineIcons.check,
-                        size: 14,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Imprimir Factura',
+                        style: TextStyle(
+                          fontFamily: 'Poppins-regular',
+                          fontSize: 14,
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                  ],
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+                        child: const Icon(
+                          SimpleLineIcons.check,
+                          size: 14,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
         Image.asset(
           'assets/images/receipt.png',
           fit: BoxFit.cover,

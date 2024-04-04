@@ -13,8 +13,9 @@ import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/product_list_button_kiosko.dart';
-import 'package:pwa_sales2go_flutter/src/pages/place_order/checkout_retail_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/place_order/components/payment_method_dialog_kiosko.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
@@ -55,25 +56,18 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
 
   addProductFromBarcodeResult(
       String? scanResult, List<ShoppingCartProduct>? productsInCart) async {
-    print('productsInCart: $productsInCart');
     final String? productScanResult = scanResult;
-    print('BARCODE SCAN RESULT: ////////////////////////');
-    print('ScanResult: $scanResult');
     List<ShoppingCartProduct> scannedProducts = [];
 
     if (scanResult == '') return;
 
-    Fluttertoast.showToast(msg: 'Cargando producto $scanResult', fontSize: 20);
-
     try {
-      // print(stockProducts);
       final priceProducts = await listaDePreciosRef
           .doc(clientPriceList.toString())
           .get()
           .then((value) {
         return value['precios'];
       });
-      print(priceProducts);
 
       await productosRef.doc(productScanResult).get().then((doc) {
         if (!doc.exists) {
@@ -97,15 +91,6 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
         final productPrice = priceProducts[doc.get('codigo')] ?? '0';
         final productTotalAmount = productPrice * productQuantity;
 
-        print('stock:$stock');
-        print('productQuantity:$productQuantity');
-        print('code:$code');
-        print('pricesList:$pricesList');
-        print('name:$name');
-        print('catalogue:$catalogue');
-        print('productPrice:$productPrice');
-        print('productTotalAmount:$productTotalAmount');
-
         if (productsInCart!.isEmpty) {
           final result = ShoppingCartProduct(
             availableStock: stock,
@@ -118,18 +103,18 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
             totalAmount: productTotalAmount.toString(),
             urlPicture: catalogue.toString(),
           );
-          print(result);
           scannedProducts.add(result);
           objectBox.insertShoppingCartProduct(result);
+          Fluttertoast.showToast(
+            msg: 'Se ha agregado exitosamente al carrito',
+            fontSize: 20,
+            backgroundColor: const Color.fromARGB(255, 149, 231, 184),
+          );
         } else {
           bool isProductAlreadyInCart = false;
-          print('cart is not empty');
           productsInCart.forEach((element) {
             if (element.code == code) {
-              print('product is already in the cart, increasing 1');
               isProductAlreadyInCart = true;
-
-              Fluttertoast.showToast(msg: '${element.code} + 1');
               final result = ShoppingCartProduct(
                 id: element.id,
                 availableStock: element.availableStock,
@@ -143,11 +128,14 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                 urlPicture: element.urlPicture.toString(),
               );
               objectBox.insertShoppingCartProduct(result);
+              Fluttertoast.showToast(
+                msg: 'Se ha agregado exitosamente al carrito',
+                fontSize: 20,
+                backgroundColor: const Color.fromARGB(255, 149, 231, 184),
+              );
             }
           });
           if (isProductAlreadyInCart == false) {
-            print('product is not in the order, adding now');
-
             final result = ShoppingCartProduct(
               availableStock: stock,
               productQuantity: productQuantity,
@@ -160,6 +148,11 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
               urlPicture: catalogue.toString(),
             );
             objectBox.insertShoppingCartProduct(result);
+            Fluttertoast.showToast(
+              msg: 'Se ha agregado exitosamente al carrito',
+              fontSize: 20,
+              backgroundColor: const Color.fromARGB(255, 149, 231, 184),
+            );
           }
         }
       });
@@ -180,6 +173,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
     final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 2;
     final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 1;
     final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
+    final userUid = Provider.of<UserModel>(context).uid;
 
     return coinName == '' || deviceType == null
         ? Column(
@@ -1000,19 +994,14 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                             onPressed: products.isEmpty
                                                 ? null
                                                 : () {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            CheckoutRetailPage(
-                                                          client: widget.client,
-                                                          cart: products,
-                                                          subTotal:
-                                                              double.parse(
-                                                            subTotal.toString(),
-                                                          ),
-                                                        ),
-                                                      ),
+                                                    //TODO: aqui se va a poner el popup que te pregunta si efectivo o tarjeta
+                                                    showSelectPaymentMethodDialog(
+                                                      userUid,
+                                                      products,
+                                                      ivaConverted.toDouble(),
+                                                      subTotalConverted
+                                                          .toDouble(),
+                                                      totalConverted.toDouble(),
                                                     );
                                                   },
                                             child: Row(
@@ -1059,5 +1048,28 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
               ],
             ),
           );
+  }
+
+  showSelectPaymentMethodDialog(
+    userUid,
+    products,
+    ivaConverted,
+    subTotalConverted,
+    totalConverted,
+  ) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return PaymentMethodDialog(
+          userUid: userUid,
+          products: products,
+          ivaConverted: ivaConverted,
+          subTotalConverted: subTotalConverted,
+          totalConverted: totalConverted,
+          client: widget.client,
+        );
+      },
+    );
   }
 }

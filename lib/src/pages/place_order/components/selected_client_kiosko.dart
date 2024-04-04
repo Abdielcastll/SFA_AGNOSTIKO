@@ -11,7 +11,7 @@ class SelectedClientKiosko extends StatelessWidget {
       children: [
         Center(
           child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
             width: 400,
             child: Image.asset(
               'assets/images/placeholder_company.png',
@@ -20,11 +20,11 @@ class SelectedClientKiosko extends StatelessWidget {
           ),
         ),
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 16),
+          margin: const EdgeInsets.symmetric(horizontal: 16),
           child: Center(
             child: SizedBox(
               width: MediaQuery.of(context).size.width,
-              child: Divider(
+              child: const Divider(
                 color: Colors.grey,
                 height: 10,
               ),

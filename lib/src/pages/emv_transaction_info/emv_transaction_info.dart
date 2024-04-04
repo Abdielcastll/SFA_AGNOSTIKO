@@ -6,12 +6,17 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
 import 'package:agnostiko/agnostiko.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/dialogs/confirm_dialog.dart';
+import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/completed_pay.dart';
+import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
+import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
+import 'package:pwa_sales2go_flutter/src/services/utils/keypad.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 import 'package:pwa_sales2go_flutter/src/utils/notifications.dart';
@@ -54,17 +59,108 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   }
 
   Future<bool> showModalNoTicketPrinted() async {
-    return await showConfirmDialog(context,
-        title: '¿Estas seguro?',
-        message:
-            'No has imprimido el comprobante. ¿Seguro que deseas continuar?',
-        textAccept: 'Si',
-        textCancel: 'No', onAccept: () {
-      Navigator.pop(context, true);
-      onAccept();
-    }, onCancel: () {
-      Navigator.pop(context, false);
+    return await showConfirmDialog(
+      context,
+      title: '¿Estas seguro?',
+      message: 'No has imprimido el comprobante. ¿Seguro que deseas continuar?',
+      textAccept: 'Si',
+      textCancel: 'No',
+      onAccept: () {
+        Navigator.pop(context);
+        onAccept();
+      },
+      onCancel: () {
+        Navigator.pop(context);
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (globalRemoteConfig.conversionKiosko == true) {
+        kioskoDialog();
+      }
     });
+    super.initState();
+  }
+
+  void kioskoDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return RawKeyboardListener(
+          autofocus: true,
+          focusNode: FocusNode(),
+          onKey: rawKeypadHandler(
+            context,
+            onEnter: onAccept,
+            onEscape: onCancel,
+          ),
+          child: AlertDialog(
+            actionsOverflowButtonSpacing: 1,
+            actionsPadding: const EdgeInsets.symmetric(
+              horizontal: 10,
+              vertical: 10,
+            ),
+            contentPadding: const EdgeInsets.only(left: 25, right: 25),
+            title: Center(
+              child: Text(
+                "Por favor intente de nuevo.",
+                style: TextStyle(
+                  color: myTheme.colorScheme.primary,
+                ),
+              ),
+            ),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0)),
+            ),
+            content: const Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "O\nSolicite ayuda antes de continuar",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 13),
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              ElevatedButton(
+                onPressed: onCancel,
+                style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.all(
+                    myTheme.colorScheme.primary,
+                  ),
+                ),
+                child: const Text(
+                  "Cancelar",
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                    myTheme.colorScheme.primary,
+                  ),
+                  foregroundColor:
+                      MaterialStateProperty.all(Colors.grey.shade400),
+                ),
+                onPressed: onAccept,
+                child: const Text(
+                  "Continuar",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -204,7 +300,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     }
 
     return WillPopScope(
-      onWillPop: showModalNoTicketPrinted,
+      onWillPop: globalRemoteConfig.conversionKiosko!
+          ? null
+          : showModalNoTicketPrinted,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: myTheme.colorScheme.primary,
@@ -308,39 +406,41 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
               onTap: () {},
             ),
             if (!transactionArgs!.isFallback)
+              if (globalRemoteConfig.conversionKiosko == false)
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 4.0, horizontal: 16.0),
+                  child: OutlinedButton(
+                    onPressed: () async {
+                      await printTicket();
+                      ticketPrinted = true;
+                    },
+                    style: TextButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      side: const BorderSide(
+                        color: Colors.black12,
+                      ),
+                      foregroundColor: myTheme.colorScheme.primary,
+                      backgroundColor: Colors.blue.shade800,
+                    ),
+                    child: Text(
+                      'imprimir comprobante'.toUpperCase(),
+                      style: const TextStyle(
+                        fontFamily: 'Poppins-regular',
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+            if (globalRemoteConfig.conversionKiosko == false)
               Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
                 child: OutlinedButton(
-                  onPressed: () async {
-                    await printTicket();
-                    ticketPrinted = true;
-                  },
-                  style: TextButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    side: BorderSide(
-                      color: Colors.black12,
-                    ),
-                    foregroundColor: myTheme.colorScheme.primary,
-                    backgroundColor: Colors.blue.shade800,
-                  ),
-                  child: Text(
-                    'imprimir comprobante'.toUpperCase(),
-                    style: const TextStyle(
-                      fontFamily: 'Poppins-regular',
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
-              child: OutlinedButton(
                   onPressed: () {
                     if (!ticketPrinted && !transactionArgs!.isFallback) {
                       showModalNoTicketPrinted();
@@ -352,7 +452,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
-                      side: BorderSide(
+                      side: const BorderSide(
                         color: Colors.black12,
                       ),
                       foregroundColor: myTheme.colorScheme.primary,
@@ -365,11 +465,40 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                     ),
-                  )),
-            )
+                  ),
+                ),
+              )
           ],
         ),
       ),
+    );
+  }
+
+  onCancel() {
+    Navigator.pop(context);
+    printTicket();
+    final orderActive = Provider.of<OrderProvider>(context, listen: false);
+    objectBox.delelteAllShoppingCart();
+    orderActive.setOrder(false);
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        Future.delayed(const Duration(seconds: 3), () {
+          Navigator.popUntil(context, (route) => route.isFirst);
+        });
+        return AlertDialog(
+          title: Padding(
+            padding: const EdgeInsets.all(25),
+            child: Text(
+              'Se ha cancelado su compra',
+              style: TextStyle(
+                fontFamily: 'Poppins-regular',
+                color: myTheme.colorScheme.primary,
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -386,6 +515,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       Navigator.pop(context);
       return;
     }
+    if (globalRemoteConfig.conversionKiosko == false) {}
     final paymentBody = (ModalRoute.of(context)?.settings.arguments! as List)[2]
         as AddPaymentBodyAtt;
     final payed = transactionResult == EmvTransactionResult.Approved
@@ -402,7 +532,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     print(paymentBody.amountPaied);
     print(payed);
 
-    paymentBody.payments.add(PayMethod('Tarjeta', _amountDouble));
+    if (globalRemoteConfig.conversionKiosko == false) {
+      paymentBody.payments.add(PayMethod('Tarjeta', _amountDouble));
+    }
 
     final remainingConverted = priceMultipliedByItsExchangeRatio(
         coinDecimals: 2,
@@ -416,45 +548,50 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
         context,
         MaterialPageRoute(
           builder: (BuildContext context) => CompletedPayPage(
-              client: transactionArgs!.invoice!.client,
-              total: transactionArgs!.invoice!.totalOfTheOrder,
-              method: "Tarjeta",
-              date:
-                  '${date.day}-${date.month}-${date.year} ${date.hour}:${date.minute}',
-              address: '',
-              coinsExchangeRates: [],
-              addPaymentBody: paymentBody),
-        ),
-      );
-    } else {
-      print(paymentBody.remaining);
-      print(paymentBody.amountPaied);
-      print(payed);
-
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          settings: const RouteSettings(name: 'PAGO-DIRECTO'),
-          builder: (BuildContext context) => AddPaymentPage(
-            remaining: double.parse(
-                (Decimal.parse(paymentBody.remaining.toString()) -
-                        Decimal.parse(payed.toString()))
-                    .toString()),
-            subTotal: paymentBody.subTotal,
-            discountPercentage: paymentBody.discountPercentage,
-            discount: paymentBody.discount,
-            tax: paymentBody.tax,
-            percentageTax: paymentBody.percentageTax,
-            client: paymentBody.client,
-            invoiceDocumentID: paymentBody.invoiceDocumentID,
-            invoiceNumber: paymentBody.invoiceNumber,
-            payments: paymentBody.payments,
-            amountPayed: (paymentBody.amountPaied ?? 0) + payed,
-            invoiceTotal: transactionArgs!.invoice!.totalOfTheOrder,
-            // updatePayed: updatePayed,
+            client: transactionArgs!.invoice!.client,
+            total: transactionArgs!.invoice!.totalOfTheOrder,
+            method: "Tarjeta",
+            date:
+                '${date.day}-${date.month}-${date.year} ${date.hour}:${date.minute}',
+            address: '',
+            coinsExchangeRates: [],
+            addPaymentBody: paymentBody,
           ),
         ),
       );
+    } else {
+      if (globalRemoteConfig.conversionKiosko!) {
+        Navigator.popUntil(context, (route) => route.isFirst);
+      } else {
+        print(paymentBody.remaining);
+        print(paymentBody.amountPaied);
+        print(payed);
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            settings: const RouteSettings(name: 'PAGO-DIRECTO'),
+            builder: (BuildContext context) => AddPaymentPage(
+              remaining: double.parse(
+                  (Decimal.parse(paymentBody.remaining.toString()) -
+                          Decimal.parse(payed.toString()))
+                      .toString()),
+              subTotal: paymentBody.subTotal,
+              discountPercentage: paymentBody.discountPercentage,
+              discount: paymentBody.discount,
+              tax: paymentBody.tax,
+              percentageTax: paymentBody.percentageTax,
+              client: paymentBody.client,
+              invoiceDocumentID: paymentBody.invoiceDocumentID,
+              invoiceNumber: paymentBody.invoiceNumber,
+              payments: paymentBody.payments,
+              amountPayed: (paymentBody.amountPaied ?? 0) + payed,
+              invoiceTotal: transactionArgs!.invoice!.totalOfTheOrder,
+              // updatePayed: updatePayed,
+            ),
+          ),
+        );
+      }
     }
   }
 
@@ -671,7 +808,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
 
     if (!transactionArgs!.timeout &&
         transactionArgs!.stan != null &&
-        transactionResult == EmvTransactionResult.Approved)
+        transactionResult == EmvTransactionResult.Approved) {
       listOfTextLine.add(
         PrinterText(
           'FIRMA:______________________________',
@@ -681,6 +818,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
           ),
         ),
       );
+    }
 
     listOfTextLine.add(PrinterText.emptyLine(16));
 

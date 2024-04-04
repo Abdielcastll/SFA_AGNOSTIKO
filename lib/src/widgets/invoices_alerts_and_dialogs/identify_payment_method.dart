@@ -41,6 +41,8 @@ identifyPaymentMethod({
   if (selectedValueA == 'Tarjeta de Debito' ||
       selectedValueA == 'Tarjeta de Credito') {
     return paymentCard(
+      context,
+      false,
       paidAmount,
       client,
       invoiceDocumentID,

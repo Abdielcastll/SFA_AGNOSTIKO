@@ -409,168 +409,177 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                       ),
                                       content: Container(
                                         child: SingleChildScrollView(
-                                          child: Column(children: [
-                                            Center(
-                                              child:
-                                                  DropdownButtonHideUnderline(
-                                                child: DropdownButton2(
-                                                  isExpanded: true,
-                                                  hint: Row(
-                                                    children: [
-                                                      Icon(
-                                                        Icons.list,
+                                          child: Column(
+                                            children: [
+                                              Center(
+                                                child:
+                                                    DropdownButtonHideUnderline(
+                                                  child: DropdownButton2(
+                                                    isExpanded: true,
+                                                    hint: Row(
+                                                      children: [
+                                                        Icon(
+                                                          Icons.list,
+                                                          size: 16,
+                                                          color: myTheme
+                                                              .colorScheme
+                                                              .primary,
+                                                        ),
+                                                        SizedBox(
+                                                          width: 4,
+                                                        ),
+                                                        Expanded(
+                                                          child: Text(
+                                                            'Seleccionar descuento',
+                                                            style: TextStyle(
+                                                              fontSize: 14,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color: myTheme
+                                                                  .colorScheme
+                                                                  .primary,
+                                                            ),
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    items: discountsStrings
+                                                        .map(
+                                                          (item) =>
+                                                              DropdownMenuItem<
+                                                                  String>(
+                                                            value: item,
+                                                            child: Center(
+                                                              child: Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  Text(
+                                                                    item,
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontSize:
+                                                                          14,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      color: myTheme
+                                                                          .colorScheme
+                                                                          .primary,
+                                                                      fontFamily:
+                                                                          'Poppins-regular',
+                                                                    ),
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                  ),
+                                                                  Icon(
+                                                                    MaterialCommunityIcons
+                                                                        .percent,
+                                                                    size: 14,
+                                                                    color: myTheme
+                                                                        .colorScheme
+                                                                        .primary,
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        )
+                                                        .toList(),
+                                                    value: selectedDiscount,
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        selectedDiscount =
+                                                            value as String;
+                                                      });
+                                                    },
+                                                    iconStyleData:
+                                                        IconStyleData(
+                                                      icon: Icon(
+                                                        Icons.arrow_drop_down,
                                                         size: 16,
                                                         color: myTheme
                                                             .colorScheme
                                                             .primary,
                                                       ),
-                                                      SizedBox(
-                                                        width: 4,
-                                                      ),
-                                                      Expanded(
-                                                        child: Text(
-                                                          'Seleccionar descuento',
-                                                          style: TextStyle(
-                                                            fontSize: 14,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color: myTheme
-                                                                .colorScheme
-                                                                .primary,
-                                                          ),
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  items: discountsStrings
-                                                      .map(
-                                                          (item) =>
-                                                              DropdownMenuItem<
-                                                                  String>(
-                                                                value: item,
-                                                                child: Center(
-                                                                  child: Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .center,
-                                                                    children: [
-                                                                      Text(
-                                                                        item,
-                                                                        style:
-                                                                            TextStyle(
-                                                                          fontSize:
-                                                                              14,
-                                                                          fontWeight:
-                                                                              FontWeight.bold,
-                                                                          color: myTheme
-                                                                              .colorScheme
-                                                                              .primary,
-                                                                          fontFamily:
-                                                                              'Poppins-regular',
-                                                                        ),
-                                                                        overflow:
-                                                                            TextOverflow.ellipsis,
-                                                                      ),
-                                                                      Icon(
-                                                                        MaterialCommunityIcons
-                                                                            .percent,
-                                                                        size:
-                                                                            14,
-                                                                        color: myTheme
-                                                                            .colorScheme
-                                                                            .primary,
-                                                                      )
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                              ))
-                                                      .toList(),
-                                                  value: selectedDiscount,
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      selectedDiscount =
-                                                          value as String;
-                                                    });
-                                                  },
-                                                  iconStyleData: IconStyleData(
-                                                    icon: Icon(
-                                                      Icons.arrow_drop_down,
-                                                      size: 16,
-                                                      color: myTheme
+                                                      iconSize: 14,
+                                                      iconEnabledColor: myTheme
                                                           .colorScheme.primary,
+                                                      iconDisabledColor:
+                                                          Colors.grey,
                                                     ),
-                                                    iconSize: 14,
-                                                    iconEnabledColor: myTheme
-                                                        .colorScheme.primary,
-                                                    iconDisabledColor:
-                                                        Colors.grey,
-                                                  ),
-                                                  buttonStyleData:
-                                                      ButtonStyleData(
-                                                    height: 50,
-                                                    width: 160,
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 14,
-                                                            right: 14),
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              14),
-                                                      border: Border.all(
-                                                        color: myTheme
-                                                            .colorScheme
-                                                            .primary,
+                                                    buttonStyleData:
+                                                        ButtonStyleData(
+                                                      height: 50,
+                                                      width: 160,
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 14,
+                                                              right: 14),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(14),
+                                                        border: Border.all(
+                                                          color: myTheme
+                                                              .colorScheme
+                                                              .primary,
+                                                        ),
+                                                        color: Colors.white,
                                                       ),
-                                                      color: Colors.white,
+                                                      elevation: 0,
                                                     ),
-                                                    elevation: 0,
-                                                  ),
-                                                  menuItemStyleData:
-                                                      MenuItemStyleData(
-                                                    height: 40,
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 14,
-                                                            right: 14),
-                                                  ),
-                                                  dropdownStyleData:
-                                                      DropdownStyleData(
-                                                    width: 160,
-                                                    padding: null,
-                                                    decoration: BoxDecoration(
-                                                      border: Border.all(
-                                                        color: myTheme
-                                                            .colorScheme
-                                                            .primary,
+                                                    menuItemStyleData:
+                                                        MenuItemStyleData(
+                                                      height: 40,
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 14,
+                                                              right: 14),
+                                                    ),
+                                                    dropdownStyleData:
+                                                        DropdownStyleData(
+                                                      width: 160,
+                                                      padding: null,
+                                                      decoration: BoxDecoration(
+                                                        border: Border.all(
+                                                          color: myTheme
+                                                              .colorScheme
+                                                              .primary,
+                                                        ),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(14),
+                                                        color: Colors.white,
                                                       ),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              14),
-                                                      color: Colors.white,
+                                                      elevation: 0,
+                                                      scrollbarTheme:
+                                                          ScrollbarThemeData(
+                                                        radius: const Radius
+                                                            .circular(40),
+                                                        thickness:
+                                                            MaterialStateProperty
+                                                                .all<double>(6),
+                                                        thumbVisibility:
+                                                            MaterialStateProperty
+                                                                .all<bool>(
+                                                                    true),
+                                                      ),
+                                                      maxHeight: 200,
+                                                      offset:
+                                                          const Offset(0, 0),
                                                     ),
-                                                    elevation: 0,
-                                                    scrollbarTheme:
-                                                        ScrollbarThemeData(
-                                                      radius:
-                                                          const Radius.circular(
-                                                              40),
-                                                      thickness:
-                                                          MaterialStateProperty
-                                                              .all<double>(6),
-                                                      thumbVisibility:
-                                                          MaterialStateProperty
-                                                              .all<bool>(true),
-                                                    ),
-                                                    maxHeight: 200,
-                                                    offset: const Offset(0, 0),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          ]),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                       actions: [
@@ -828,256 +837,256 @@ class _CheckoutBodyState extends State<CheckoutBody> {
               child: ElevatedButton(
                 onPressed: () async {
                   showDialog(
-                      barrierDismissible: false,
-                      context: context,
-                      builder: (BuildContext context) {
-                        bool loading = false;
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (BuildContext context) {
+                      bool loading = false;
 
-                        return StatefulBuilder(
-                          builder: (context, setState) => AlertDialog(
-                            actionsOverflowButtonSpacing: 1,
-                            actionsPadding: EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 10,
+                      return StatefulBuilder(
+                        builder: (context, setState) => AlertDialog(
+                          actionsOverflowButtonSpacing: 1,
+                          actionsPadding: EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 10,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(16.0),
                             ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(16.0),
+                          ),
+                          title: Center(
+                            child: Text(
+                              'Confirmación',
+                              style: TextStyle(
+                                fontFamily: 'Poppins-regular',
                               ),
                             ),
-                            title: Center(
-                              child: Text(
-                                'Confirmación',
-                                style: TextStyle(
-                                  fontFamily: 'Poppins-regular',
-                                ),
-                              ),
-                            ),
-                            content: SingleChildScrollView(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Center(
-                                    child: Text(
-                                      '¿Pasar a procesar pago?',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins-regular',
-                                      ),
+                          ),
+                          content: SingleChildScrollView(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Center(
+                                  child: Text(
+                                    '¿Pasar a procesar pago?',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins-regular',
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                            actions: [
-                              Row(
-                                mainAxisAlignment: loading
-                                    ? MainAxisAlignment.center
-                                    : MainAxisAlignment.spaceAround,
-                                children: [
-                                  loading
-                                      ? Container()
-                                      : ElevatedButton.icon(
-                                          onPressed: () {
-                                            // Cancelar
-                                            Navigator.pop(context);
-                                          },
-                                          style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                              myTheme.colorScheme.primary,
-                                            ),
-                                            foregroundColor:
-                                                MaterialStateProperty.all(
-                                              Colors.white,
-                                            ),
-                                            shape: MaterialStateProperty.all(
-                                              RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                  16,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          icon: Icon(
-                                            MaterialCommunityIcons.backspace,
-                                            size: 16,
-                                            color: Colors.white,
-                                          ),
-                                          label: Text(
-                                            'Cancelar',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: 'Poppins-regular',
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                  loading
-                                      ? Container(
-                                          margin:
-                                              EdgeInsets.fromLTRB(0, 0, 0, 10),
-                                          child: CircularProgressIndicator())
-                                      : ElevatedButton.icon(
-                                          onPressed: () async {
-                                            print(
-                                                'Iniciar proceso de pago directo');
-
-                                            setState(() {
-                                              loading = true;
-                                            });
-
-                                            final firebaseID = FirebaseFirestore
-                                                .instance
-                                                .collection('clientes')
-                                                .doc(widget
-                                                    .client!.clientDocumentId)
-                                                .collection('pedidos')
-                                                .doc()
-                                                .id;
-
-                                            print(firebaseID);
-
-                                            final double subTotalToDouble =
-                                                widget.subTotal;
-                                            final double masterDiscount =
-                                                subTotalWithMasterDiscountRounded
-                                                    .toDouble();
-                                            final double appliedDiscount =
-                                                discountAppliedRounded
-                                                    .toDouble();
-                                            final double taxes =
-                                                taxRounded.toDouble();
-                                            final double total =
-                                                totalPriceOfTheOrder.toDouble();
-
-                                            print(
-                                                'subTotalToDouble:$subTotalToDouble');
-                                            print(
-                                                'masterDiscount:$masterDiscount');
-                                            print(
-                                                'appliedDiscount:$appliedDiscount');
-                                            print('taxes:$taxes');
-                                            print('total:$total');
-
-                                            final invoiceNumber =
-                                                await completePaymentProcess(
-                                              widget.client,
-                                              userUid,
-                                              commentary,
-                                              masterDiscount,
-                                              widget.cart,
-                                              selectedValue2,
-                                              selectedValue,
-                                              today,
-                                              taxes,
-                                              numberOrder,
-                                              subTotalToDouble,
-                                              total,
-                                              discountByInput,
-                                              firebaseID,
-                                            );
-
-                                            Client currentClient = Client(
-                                              active: widget.client!.active,
-                                              specialContributor: widget
-                                                  .client!.specialContributor,
-                                              madeBy: widget.client!.madeBy,
-                                              masterDiscount:
-                                                  widget.client!.masterDiscount,
-                                              fiscalAdress:
-                                                  widget.client!.fiscalAdress,
-                                              dispatchAdress:
-                                                  widget.client!.dispatchAdress,
-                                              email: widget.client!.email,
-                                              prices: widget.client!.prices,
-                                              modified: widget.client!.modified,
-                                              name: widget.client!.name,
-                                              id: widget.client!.id,
-                                              prospect: widget.client!.prospect,
-                                              phone1: widget.client!.phone1,
-                                              phone2: widget.client!.phone2,
-                                              idType: widget.client!.idType,
-                                              zone: widget.client!.zone,
-                                              clientDocumentId: widget
-                                                  .client!.clientDocumentId,
-                                            );
-
-                                            Navigator.pushReplacement(
-                                              context,
-                                              MaterialPageRoute(
-                                                settings: RouteSettings(
-                                                    name: 'PAGO-DIRECTO'),
-                                                builder:
-                                                    (BuildContext context) =>
-                                                        AddPaymentPage(
-                                                  invoiceTotal: total,
-                                                  remaining: total,
-                                                  subTotal: widget.subTotal,
-                                                  discountPercentage:
-                                                      discountByInput,
-                                                  // discountPercentage:
-                                                  //     widget.client?.masterDiscount,
-                                                  discount: masterDiscount,
-
-                                                  tax: taxes,
-                                                  percentageTax: 16,
-                                                  client: currentClient,
-                                                  invoiceDocumentID: firebaseID,
-                                                  invoiceNumber: invoiceNumber,
-                                                  payments: [],
-                                                  // updatePayed: updatePayed,
-                                                ),
-                                              ),
-                                            );
-
-                                            // setState(() {
-                                            //   loading = false;
-                                            // });
-                                          },
-                                          style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                              myTheme.colorScheme.primary,
-                                            ),
-                                            foregroundColor:
-                                                MaterialStateProperty.all(
-                                              Colors.white,
-                                            ),
-                                            shape: MaterialStateProperty.all(
-                                              RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                  16,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          icon: Icon(
-                                            MaterialCommunityIcons
-                                                .contactless_payment_circle,
-                                            size: 16,
-                                            color: Colors.white,
-                                          ),
-                                          label: Text(
-                                            'Continuar',
-                                            style: TextStyle(
-                                              color: Colors.grey.shade300,
-                                              fontFamily: 'Poppins-regular',
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                ],
-                              )
-                            ],
                           ),
-                        );
-                      });
+                          actions: [
+                            Row(
+                              mainAxisAlignment: loading
+                                  ? MainAxisAlignment.center
+                                  : MainAxisAlignment.spaceAround,
+                              children: [
+                                loading
+                                    ? Container()
+                                    : ElevatedButton.icon(
+                                        onPressed: () {
+                                          // Cancelar
+                                          Navigator.pop(context);
+                                        },
+                                        style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                            myTheme.colorScheme.primary,
+                                          ),
+                                          foregroundColor:
+                                              MaterialStateProperty.all(
+                                            Colors.white,
+                                          ),
+                                          shape: MaterialStateProperty.all(
+                                            RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                16,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        icon: Icon(
+                                          MaterialCommunityIcons.backspace,
+                                          size: 16,
+                                          color: Colors.white,
+                                        ),
+                                        label: Text(
+                                          'Cancelar',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontFamily: 'Poppins-regular',
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                loading
+                                    ? Container(
+                                        margin:
+                                            EdgeInsets.fromLTRB(0, 0, 0, 10),
+                                        child: CircularProgressIndicator(),
+                                      )
+                                    : ElevatedButton.icon(
+                                        onPressed: () async {
+                                          print(
+                                              'Iniciar proceso de pago directo');
+
+                                          setState(() {
+                                            loading = true;
+                                          });
+
+                                          final firebaseID = FirebaseFirestore
+                                              .instance
+                                              .collection('clientes')
+                                              .doc(widget
+                                                  .client!.clientDocumentId)
+                                              .collection('pedidos')
+                                              .doc()
+                                              .id;
+
+                                          print(firebaseID);
+
+                                          final double subTotalToDouble =
+                                              widget.subTotal;
+                                          final double masterDiscount =
+                                              subTotalWithMasterDiscountRounded
+                                                  .toDouble();
+                                          final double appliedDiscount =
+                                              discountAppliedRounded.toDouble();
+                                          final double taxes =
+                                              taxRounded.toDouble();
+                                          final double total =
+                                              totalPriceOfTheOrder.toDouble();
+
+                                          print(
+                                              'subTotalToDouble:$subTotalToDouble');
+                                          print(
+                                              'masterDiscount:$masterDiscount');
+                                          print(
+                                              'appliedDiscount:$appliedDiscount');
+                                          print('taxes:$taxes');
+                                          print('total:$total');
+
+                                          final invoiceNumber =
+                                              await completePaymentProcess(
+                                            widget.client,
+                                            userUid,
+                                            commentary,
+                                            masterDiscount,
+                                            widget.cart,
+                                            selectedValue2,
+                                            selectedValue,
+                                            today,
+                                            taxes,
+                                            numberOrder,
+                                            subTotalToDouble,
+                                            total,
+                                            discountByInput,
+                                            firebaseID,
+                                          );
+
+                                          Client currentClient = Client(
+                                            active: widget.client!.active,
+                                            specialContributor: widget
+                                                .client!.specialContributor,
+                                            madeBy: widget.client!.madeBy,
+                                            masterDiscount:
+                                                widget.client!.masterDiscount,
+                                            fiscalAdress:
+                                                widget.client!.fiscalAdress,
+                                            dispatchAdress:
+                                                widget.client!.dispatchAdress,
+                                            email: widget.client!.email,
+                                            prices: widget.client!.prices,
+                                            modified: widget.client!.modified,
+                                            name: widget.client!.name,
+                                            id: widget.client!.id,
+                                            prospect: widget.client!.prospect,
+                                            phone1: widget.client!.phone1,
+                                            phone2: widget.client!.phone2,
+                                            idType: widget.client!.idType,
+                                            zone: widget.client!.zone,
+                                            clientDocumentId:
+                                                widget.client!.clientDocumentId,
+                                          );
+
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              settings: RouteSettings(
+                                                  name: 'PAGO-DIRECTO'),
+                                              builder: (BuildContext context) =>
+                                                  AddPaymentPage(
+                                                invoiceTotal: total,
+                                                remaining: total,
+                                                subTotal: widget.subTotal,
+                                                discountPercentage:
+                                                    discountByInput,
+                                                // discountPercentage:
+                                                //     widget.client?.masterDiscount,
+                                                discount: masterDiscount,
+
+                                                tax: taxes,
+                                                percentageTax: 16,
+                                                client: currentClient,
+                                                invoiceDocumentID: firebaseID,
+                                                invoiceNumber: invoiceNumber,
+                                                payments: [],
+                                                // updatePayed: updatePayed,
+                                              ),
+                                            ),
+                                          );
+
+                                          // setState(() {
+                                          //   loading = false;
+                                          // });
+                                        },
+                                        style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                            myTheme.colorScheme.primary,
+                                          ),
+                                          foregroundColor:
+                                              MaterialStateProperty.all(
+                                            Colors.white,
+                                          ),
+                                          shape: MaterialStateProperty.all(
+                                            RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                16,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        icon: Icon(
+                                          MaterialCommunityIcons
+                                              .contactless_payment_circle,
+                                          size: 16,
+                                          color: Colors.white,
+                                        ),
+                                        label: Text(
+                                          'Continuar',
+                                          style: TextStyle(
+                                            color: Colors.grey.shade300,
+                                            fontFamily: 'Poppins-regular',
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                              ],
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                  );
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
@@ -1130,166 +1139,167 @@ class _CheckoutBodyState extends State<CheckoutBody> {
               child: ElevatedButton(
                 onPressed: () async {
                   showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          surfaceTintColor: Color.fromARGB(255, 222, 222, 222),
-                          actionsOverflowButtonSpacing: 1,
-                          actionsPadding: EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 10,
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        surfaceTintColor: Color.fromARGB(255, 222, 222, 222),
+                        actionsOverflowButtonSpacing: 1,
+                        actionsPadding: EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 10,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(16.0),
                           ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(16.0),
-                            ),
+                        ),
+                        title: Center(
+                          child: Text(
+                            'Confirmación',
                           ),
-                          title: Center(
-                            child: Text(
-                              'Confirmación',
-                            ),
-                          ),
-                          content: SingleChildScrollView(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Center(
-                                  child: Text(
-                                    '¿Seguro que quiere guardar el pedido y pagar de forma manual?',
-                                    textAlign: TextAlign.center,
-                                  ),
+                        ),
+                        content: SingleChildScrollView(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Center(
+                                child: Text(
+                                  '¿Seguro que quiere guardar el pedido y pagar de forma manual?',
+                                  textAlign: TextAlign.center,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                          actions: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                ElevatedButton.icon(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                      myTheme.colorScheme.primary,
-                                    ),
-                                    foregroundColor: MaterialStateProperty.all(
-                                      Colors.white,
-                                    ),
-                                    shape: MaterialStateProperty.all(
-                                      RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                          16,
-                                        ),
+                        ),
+                        actions: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              ElevatedButton.icon(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                    myTheme.colorScheme.primary,
+                                  ),
+                                  foregroundColor: MaterialStateProperty.all(
+                                    Colors.white,
+                                  ),
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                        16,
                                       ),
                                     ),
                                   ),
-                                  icon: Icon(
-                                    MaterialCommunityIcons.backspace,
-                                    size: 16,
+                                ),
+                                icon: Icon(
+                                  MaterialCommunityIcons.backspace,
+                                  size: 16,
+                                  color: Colors.white,
+                                ),
+                                label: Text(
+                                  'Cancelar',
+                                  style: TextStyle(
                                     color: Colors.white,
-                                  ),
-                                  label: Text(
-                                    'Cancelar',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'Poppins-regular',
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                    fontFamily: 'Poppins-regular',
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                ElevatedButton.icon(
-                                  onPressed: () async {
-                                    print('GUARDAR PEDIDO');
-                                    final orderActive =
-                                        Provider.of<OrderProvider>(context,
-                                            listen: false);
-                                    final double subTotalToDouble =
-                                        widget.subTotal;
-                                    final double masterDiscount =
-                                        subTotalWithMasterDiscountRounded
-                                            .toDouble();
-                                    final double appliedDiscount =
-                                        discountAppliedRounded.toDouble();
-                                    final double taxes = taxRounded.toDouble();
-                                    final double total =
-                                        totalPriceOfTheOrder.toDouble();
+                              ),
+                              ElevatedButton.icon(
+                                onPressed: () async {
+                                  print('GUARDAR PEDIDO');
+                                  final orderActive =
+                                      Provider.of<OrderProvider>(context,
+                                          listen: false);
+                                  final double subTotalToDouble =
+                                      widget.subTotal;
+                                  final double masterDiscount =
+                                      subTotalWithMasterDiscountRounded
+                                          .toDouble();
+                                  final double appliedDiscount =
+                                      discountAppliedRounded.toDouble();
+                                  final double taxes = taxRounded.toDouble();
+                                  final double total =
+                                      totalPriceOfTheOrder.toDouble();
 
-                                    print('subTotalToDouble:$subTotalToDouble');
-                                    print('masterDiscount:$masterDiscount');
-                                    print('appliedDiscount:$appliedDiscount');
-                                    print('taxes:$taxes');
-                                    print('total:$total');
+                                  print('subTotalToDouble:$subTotalToDouble');
+                                  print('masterDiscount:$masterDiscount');
+                                  print('appliedDiscount:$appliedDiscount');
+                                  print('taxes:$taxes');
+                                  print('total:$total');
 
-                                    if (selectedValue2 != null) {
-                                      try {
-                                        await createOrder(
-                                          widget.client,
-                                          userUid,
-                                          commentary,
-                                          masterDiscount,
-                                          widget.cart,
-                                          selectedValue2,
-                                          selectedValue,
-                                          today,
-                                          taxes,
-                                          numberOrder,
-                                          subTotalToDouble,
-                                          total,
-                                          discountByInput,
-                                          true,
-                                        );
-                                      } catch (e) {
-                                        print('ERROR AL GUARDAR PEDIDO');
-                                        print(e);
-                                      }
-                                      orderActive.setOrder(false);
-                                      objectBox.delelteAllShoppingCart();
-                                      completeOrder();
-                                    } else {
-                                      Fluttertoast.showToast(
-                                          msg:
-                                              'Seleccione un tipo de Negociacion por favor');
+                                  if (selectedValue2 != null) {
+                                    try {
+                                      await createOrder(
+                                        widget.client,
+                                        userUid,
+                                        commentary,
+                                        masterDiscount,
+                                        widget.cart,
+                                        selectedValue2,
+                                        selectedValue,
+                                        today,
+                                        taxes,
+                                        numberOrder,
+                                        subTotalToDouble,
+                                        total,
+                                        discountByInput,
+                                        true,
+                                      );
+                                    } catch (e) {
+                                      print('ERROR AL GUARDAR PEDIDO');
+                                      print(e);
                                     }
-                                  },
-                                  style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                      myTheme.colorScheme.primary,
-                                    ),
-                                    foregroundColor: MaterialStateProperty.all(
-                                      Colors.white,
-                                    ),
-                                    shape: MaterialStateProperty.all(
-                                      RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                          16,
-                                        ),
+                                    orderActive.setOrder(false);
+                                    objectBox.delelteAllShoppingCart();
+                                    completeOrder();
+                                  } else {
+                                    Fluttertoast.showToast(
+                                        msg:
+                                            'Seleccione un tipo de Negociacion por favor');
+                                  }
+                                },
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                    myTheme.colorScheme.primary,
+                                  ),
+                                  foregroundColor: MaterialStateProperty.all(
+                                    Colors.white,
+                                  ),
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                        16,
                                       ),
                                     ),
                                   ),
-                                  icon: Icon(
-                                    MaterialCommunityIcons.content_save,
-                                    size: 16,
+                                ),
+                                icon: Icon(
+                                  MaterialCommunityIcons.content_save,
+                                  size: 16,
+                                  color: Colors.white,
+                                ),
+                                label: Text(
+                                  'Continuar',
+                                  style: TextStyle(
                                     color: Colors.white,
-                                  ),
-                                  label: Text(
-                                    'Continuar',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'Poppins-regular',
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                    fontFamily: 'Poppins-regular',
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                              ],
-                            )
-                          ],
-                        );
-                      });
+                              ),
+                            ],
+                          )
+                        ],
+                      );
+                    },
+                  );
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(

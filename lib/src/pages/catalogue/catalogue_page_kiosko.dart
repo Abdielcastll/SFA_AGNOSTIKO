@@ -61,7 +61,6 @@ class _CatalogueBodyState extends State<CatalogueBody> {
     final orderActive = context.read<OrderProvider>();
     final userZoneDocument = context.read<CurrentUserInfo>().zoneDocument;
 
-    print('SELECTING DEFAULT CLIENT');
     Clients? defaultClient = genericClients;
     await clientsCollection
         .where('zona', isEqualTo: userZoneDocument)
@@ -73,17 +72,14 @@ class _CatalogueBodyState extends State<CatalogueBody> {
             .get('nombre')
             .toString()
             .contains('000A Cliente Default')) {
-          print('SENDING DATA BASE DEFAULT CLIENT');
           defaultClient = genericClients;
         } else {
-          print('SENDING ERROR DEFAULT CLIENT');
           defaultClient = genericClients;
         }
       }).toList();
     }).catchError((e) async {
       print('ERROR ON GETTING CLIENT DEFAULT ON APPBAR NAVIGATION');
       print(e);
-      print('SENDING ERROR DEFAULT CLIENT');
       return <Null>[];
     });
 
@@ -115,7 +111,7 @@ class _CatalogueBodyState extends State<CatalogueBody> {
               .map(coinFromSnapshot),
         ),
       ],
-      child: Container(
+      child: SizedBox(
         height: MediaQuery.of(context).size.height - 60,
         child: SingleChildScrollView(
           child: Column(
@@ -127,59 +123,5 @@ class _CatalogueBodyState extends State<CatalogueBody> {
         ),
       ),
     );
-
-    /* return Container(
-      height: MediaQuery.of(context).size.height - 60,
-      decoration: BoxDecoration(
-          image: DecorationImage(
-              fit: BoxFit.cover,
-              image: AssetImage('assets/images/bimbo_background.jpg'))),
-      child: Center(
-        child: ListView(
-          shrinkWrap: true,
-          physics: const BouncingScrollPhysics(),
-          children: [
-            Center(
-              child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 12),
-                  width: 300,
-                  child: Image.asset('assets/images/bimboPay.png')),
-            ),
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12.0),
-                child: ElevatedButton(
-                  onPressed: createOrder,
-                  style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.all(12),
-                      backgroundColor: Colors.white60,
-                      shape: CircleBorder()),
-                  child: Padding(
-                    padding: const EdgeInsets.all(30.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(
-                          MdiIcons.cartOutline,
-                          size: 120,
-                          color: myTheme.colorScheme.onPrimaryContainer,
-                        ),
-                        Text(
-                          'Llenar Carrito',
-                          style: TextStyle(
-                              fontSize: 24,
-                              color: myTheme.colorScheme.onPrimaryContainer,
-                              fontFamily: 'Poppins-bold'),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    ); */
   }
 }

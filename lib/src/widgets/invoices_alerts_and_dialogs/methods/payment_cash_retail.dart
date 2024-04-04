@@ -17,6 +17,7 @@ import 'package:pwa_sales2go_flutter/src/widgets/dialog/go_back_to_catalogue_dia
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 paymentCashRetail(
+    bool? isKiosko,
     double paidAmount,
     Client client,
     String invoiceDocumentID,
@@ -43,65 +44,68 @@ paymentCashRetail(
       children: [
         Column(
           children: [
-            Text(
-              AppLocalizations.of(context)!.selectFile,
-              style: TextStyle(
-                fontFamily: 'Poppins-regular',
-                color: Colors.grey.shade400,
-                fontSize: 14,
+            if (isKiosko = false)
+              Text(
+                AppLocalizations.of(context)!.selectFile,
+                style: TextStyle(
+                  fontFamily: 'Poppins-regular',
+                  color: Colors.grey.shade400,
+                  fontSize: 14,
+                ),
               ),
-            ),
-            InkWell(
-              onTap: () async {
-                requestFileBottomSheet(context, (image) {
-                  setState(() {
-                    imageFile = image;
+            if (isKiosko = false)
+              InkWell(
+                onTap: () async {
+                  requestFileBottomSheet(context, (image) {
+                    setState(() {
+                      imageFile = image;
+                    });
                   });
-                });
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(4.0),
-                    child: Icon(
-                      Icons.camera,
-                      color: myTheme.colorScheme.secondary,
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(4.0),
+                      child: Icon(
+                        Icons.camera,
+                        color: myTheme.colorScheme.secondary,
+                      ),
                     ),
-                  ),
-                  Text(
-                    // AppLocalizations.of(context)!.gallery,
-                    'Subir Imagen',
-                    style: TextStyle(
-                      color: myTheme.colorScheme.primary,
-                      fontFamily: 'Poppins-regular',
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            imageFile == null
-                ? Container()
-                : Container(
-                    margin: const EdgeInsets.fromLTRB(20, 5, 20, 0),
-                    // height: 300,
-                    // width: 300,
-                    decoration: BoxDecoration(
-                      border: Border.all(
+                    Text(
+                      // AppLocalizations.of(context)!.gallery,
+                      'Subir Imagen',
+                      style: TextStyle(
                         color: myTheme.colorScheme.primary,
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(9),
-                      child: Image.file(
-                        imageFile!,
-                        fit: BoxFit.contain,
-                        // height: 300,
-                        // width: 300,
+                        fontFamily: 'Poppins-regular',
                       ),
                     ),
-                  ),
+                  ],
+                ),
+              ),
+            if (isKiosko = false)
+              imageFile == null
+                  ? Container()
+                  : Container(
+                      margin: const EdgeInsets.fromLTRB(20, 5, 20, 0),
+                      // height: 300,
+                      // width: 300,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: myTheme.colorScheme.primary,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(9),
+                        child: Image.file(
+                          imageFile!,
+                          fit: BoxFit.contain,
+                          // height: 300,
+                          // width: 300,
+                        ),
+                      ),
+                    ),
             Container(
               alignment: Alignment.bottomCenter,
               margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
@@ -186,9 +190,10 @@ paymentCashRetail(
                                       invoiceDocumentID: invoiceDocumentID,
                                     );
                                   });
-                                  paymentBody.payments
-                                      .add(PayMethod('Efectivo', paidAmount));
-
+                                  if (isKiosko == false) {
+                                    paymentBody.payments
+                                        .add(PayMethod('Efectivo', paidAmount));
+                                  }
                                   print('IDENTIFY PAYMENTS');
                                   print(paymentBody.payments.length);
 

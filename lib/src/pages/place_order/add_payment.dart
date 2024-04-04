@@ -37,6 +37,8 @@ class AddPaymentPage extends StatefulWidget {
     required this.payments,
     required this.invoiceTotal,
     this.amountPayed,
+    this.isKiosko = false,
+    this.paymentType,
   });
 
   final double remaining;
@@ -50,6 +52,8 @@ class AddPaymentPage extends StatefulWidget {
   final int invoiceNumber;
   final List<PayMethod> payments;
   final double? amountPayed;
+  final bool isKiosko;
+  final String? paymentType;
   final double? invoiceTotal;
 
   @override
@@ -184,6 +188,8 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
             invoiceNumber: widget.invoiceNumber,
             payments: widget.payments,
             invoiceTotal: widget.invoiceTotal,
+            isKiosko: widget.isKiosko,
+            paymentMethod: widget.paymentType ?? '',
           ),
         ),
       ),
@@ -206,6 +212,8 @@ class AddPaymentBody extends StatefulWidget {
     required this.payments,
     required this.invoiceTotal,
     this.amountPayed,
+    this.isKiosko = false,
+    this.paymentMethod = '',
   });
 
   final double remaining;
@@ -220,6 +228,8 @@ class AddPaymentBody extends StatefulWidget {
   final List<PayMethod> payments;
   final double? amountPayed;
   final double? invoiceTotal;
+  final bool isKiosko;
+  final String paymentMethod;
 
   @override
   State<AddPaymentBody> createState() => _AddPaymentBodyState();
@@ -258,7 +268,11 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
 
   @override
   void initState() {
+    if (widget.isKiosko) {
+      selectedValueA = widget.paymentMethod;
+    }
     amountPayed = widget.amountPayed ?? 0;
+    //setState(() {});
     super.initState();
   }
 
@@ -325,17 +339,23 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
     print('remaining: ${widget.remaining}');
     print('Remaining converted: $remainingConverted');
     print('PaidAmount inicial: $paidAmount');
-    final List<String> items = [
-      'Tarjeta de Debito',
-      'Tarjeta de Credito',
-      'Efectivo',
-      'Cheque',
-      'Deposito',
-      'Transferencia',
-      'Transf-internacional',
-      // 'Criptomoneda',
-      // 'Nota de credito',
-    ];
+    final List<String> items = widget.isKiosko
+        ? [
+            'Efectivo',
+            'Tarjeta de Debito',
+            'Tarjeta de Credito',
+          ]
+        : [
+            'Tarjeta de Debito',
+            'Tarjeta de Credito',
+            'Efectivo',
+            'Cheque',
+            'Deposito',
+            'Transferencia',
+            'Transf-internacional',
+            // 'Criptomoneda',
+            // 'Nota de credito',
+          ];
     print('TEST COINNAME');
     print(coinName);
     double? paymentsTotalAmount = 0;
@@ -343,9 +363,10 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
       paymentsTotalAmount = paymentsTotalAmount! + payment.amount;
     }
     double paymentsTotalAmountConverted = priceMultipliedByItsExchangeRatio(
-        coinDecimals: coinDecimals,
-        coinExchangeRatio: coinExchangeRatio,
-        productPrice: paymentsTotalAmount);
+      coinDecimals: coinDecimals,
+      coinExchangeRatio: coinExchangeRatio,
+      productPrice: paymentsTotalAmount,
+    );
     print('paymentsTotalAmount: $paymentsTotalAmount');
     print('paymentsTotalAmountConverted: $paymentsTotalAmountConverted');
 
@@ -356,22 +377,23 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
       physics: const BouncingScrollPhysics(),
       // child: Container());
       child: paymentForm(
-          context,
-          items,
-          formattedDate,
-          double.parse(paidAmount.toString()),
-          coinSymbol,
-          double.parse(subTotalConverted.toString()),
-          double.parse(discountMasterConverted.toString()),
-          double.parse(taxConverted.toString()),
-          double.parse(totalConverted.toString()),
-          paymentsTotalAmount!,
-          double.parse(balanceConverted.toString()),
-          coinName,
-          coinDecimals,
-          coinExchangeRatio,
-          coinCode,
-          double.parse(remainingConverted.toString())),
+        context,
+        items,
+        formattedDate,
+        double.parse(paidAmount.toString()),
+        coinSymbol,
+        double.parse(subTotalConverted.toString()),
+        double.parse(discountMasterConverted.toString()),
+        double.parse(taxConverted.toString()),
+        double.parse(totalConverted.toString()),
+        paymentsTotalAmount!,
+        double.parse(balanceConverted.toString()),
+        coinName,
+        coinDecimals,
+        coinExchangeRatio,
+        coinCode,
+        double.parse(remainingConverted.toString()),
+      ),
     );
   }
 
@@ -415,8 +437,9 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                 Text(
                   AppLocalizations.of(context)!.paymentMethod,
                   style: TextStyle(
-                      fontFamily: 'Poppins-regular',
-                      color: myTheme.colorScheme.onPrimaryContainer),
+                    fontFamily: 'Poppins-regular',
+                    color: myTheme.colorScheme.onPrimaryContainer,
+                  ),
                 ),
                 Container(
                   margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
@@ -429,10 +452,11 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                             child: Text(
                               selectedValueA ?? 'Seleccione medio de pago',
                               style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  color: myTheme.colorScheme.onPrimaryContainer,
-                                  fontFamily: 'Poppins-regular'),
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: myTheme.colorScheme.onPrimaryContainer,
+                                fontFamily: 'Poppins-regular',
+                              ),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
@@ -453,50 +477,56 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                               ))
                           .toList(),
                       value: selectedValueA,
-                      onChanged: (value) async {
-                        setState(
-                          () {
-                            selectedValueA = value as String;
-                          },
-                        );
-                        if (value.toString().toLowerCase() == "transferencia" ||
-                            value.toString().toLowerCase() == "deposito" ||
-                            value.toString().toLowerCase() == "cheque") {
-                          print('fetching banks');
-                          await banksCollection
-                              .where('internacional', isEqualTo: false)
-                              .snapshots()
-                              .forEach((snapshot) {
-                            for (var doc in snapshot.docs) {
-                              print('Nacionales');
-                              doc.data().toString().contains('nombre')
-                                  ? setState(() {
-                                      nationalBanks.add(doc.get('nombre'));
-                                    })
-                                  : null;
-                            }
-                          }).whenComplete(() => print('done'));
-                        } else if (value.toString().toLowerCase() ==
-                            "transf-internacional") {
-                          print('fetching banks');
-                          await banksCollection
-                              .where('internacional', isEqualTo: true)
-                              .snapshots()
-                              .forEach((snapshot) {
-                            print('Internacionales');
+                      onChanged: widget.isKiosko
+                          ? null
+                          : (value) async {
+                              setState(
+                                () {
+                                  selectedValueA = value as String;
+                                },
+                              );
+                              if (value.toString().toLowerCase() ==
+                                      "transferencia" ||
+                                  value.toString().toLowerCase() ==
+                                      "deposito" ||
+                                  value.toString().toLowerCase() == "cheque") {
+                                print('fetching banks');
+                                await banksCollection
+                                    .where('internacional', isEqualTo: false)
+                                    .snapshots()
+                                    .forEach((snapshot) {
+                                  for (var doc in snapshot.docs) {
+                                    print('Nacionales');
+                                    doc.data().toString().contains('nombre')
+                                        ? setState(() {
+                                            nationalBanks
+                                                .add(doc.get('nombre'));
+                                          })
+                                        : null;
+                                  }
+                                }).whenComplete(() => print('done'));
+                              } else if (value.toString().toLowerCase() ==
+                                  "transf-internacional") {
+                                print('fetching banks');
+                                await banksCollection
+                                    .where('internacional', isEqualTo: true)
+                                    .snapshots()
+                                    .forEach((snapshot) {
+                                  print('Internacionales');
 
-                            for (var doc in snapshot.docs) {
-                              doc.data().toString().contains('nombre')
-                                  ? setState(() {
-                                      internationalBanks.add(doc.get('nombre'));
-                                    })
-                                  : null;
-                            }
-                          }).whenComplete(() => print('done'));
-                        }
-                        setState(() {});
-                        print(selectedValueA);
-                      },
+                                  for (var doc in snapshot.docs) {
+                                    doc.data().toString().contains('nombre')
+                                        ? setState(() {
+                                            internationalBanks
+                                                .add(doc.get('nombre'));
+                                          })
+                                        : null;
+                                  }
+                                }).whenComplete(() => print('done'));
+                              }
+                              setState(() {});
+                              print(selectedValueA);
+                            },
                       iconStyleData: IconStyleData(
                         icon: const Icon(
                           Icons.arrow_forward_ios_outlined,
@@ -744,18 +774,19 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                   change = moneyRecievedForRegisterMoney <
                                           paidAmount
                                       ? 0
-                                      : double.parse((((Decimal.parse(
-                                                              moneyRecievedForRegisterMoney
+                                      : double.parse(
+                                          (((Decimal.parse(moneyRecievedForRegisterMoney
                                                                   .toString()) -
-                                                          Decimal.parse(
-                                                              paidAmount
-                                                                  .toString())) *
-                                                      Decimal.parse('100'))
-                                                  .round() /
-                                              Decimal.parse('100'))
-                                          // .toDecimal()
-                                          .toDouble()
-                                          .toString());
+                                                              Decimal.parse(
+                                                                  paidAmount
+                                                                      .toString())) *
+                                                          Decimal.parse('100'))
+                                                      .round() /
+                                                  Decimal.parse('100'))
+                                              // .toDecimal()
+                                              .toDouble()
+                                              .toString(),
+                                        );
                                   // : double.parse(
                                   //     (moneyRecievedForRegisterMoney -
                                   //             paidAmount)
@@ -1310,13 +1341,15 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                               Container(
                                 margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                                 child: identifyPaymentMethodRetail(
+                                  isKiosko: widget.isKiosko,
                                   banks: banks,
                                   itemsBank: nationalBanks,
                                   itemsBankInter: internationalBanks,
                                   coinName: coinName,
                                   coinDecimals: coinDecimals,
                                   coinExchangeRatio: double.parse(
-                                      coinExchangeRatio.toString()),
+                                    coinExchangeRatio.toString(),
+                                  ),
                                   coinSymbol: coinSymbol,
                                   coinCode: coinCode,
                                   moneyRecievedForRegisterMoney:
@@ -1333,21 +1366,21 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                   selectedCoin: selectedCoin!,
                                   updatePayed: updatePayed,
                                   paymentBody: AddPaymentBodyAtt(
-                                      client: widget.client,
-                                      discount: widget.discount,
-                                      discountPercentage:
-                                          widget.discountPercentage,
-                                      invoiceDocumentID:
-                                          widget.invoiceDocumentID,
-                                      percentageTax: widget.percentageTax,
-                                      remaining: widget.remaining,
-                                      subTotal: widget.subTotal,
-                                      tax: widget.tax,
-                                      invoiceNumber: widget.invoiceNumber,
-                                      currency: selectedCoin!,
-                                      currencyExchange: double.parse(
-                                          coinExchangeRatio.toString()))
-                                    ..payments = widget.payments,
+                                    client: widget.client,
+                                    discount: widget.discount,
+                                    discountPercentage:
+                                        widget.discountPercentage,
+                                    invoiceDocumentID: widget.invoiceDocumentID,
+                                    percentageTax: widget.percentageTax,
+                                    remaining: widget.remaining,
+                                    subTotal: widget.subTotal,
+                                    tax: widget.tax,
+                                    invoiceNumber: widget.invoiceNumber,
+                                    currency: selectedCoin!,
+                                    currencyExchange: double.parse(
+                                      coinExchangeRatio.toString(),
+                                    ),
+                                  )..payments = widget.payments,
                                 ),
                               ),
                             ],

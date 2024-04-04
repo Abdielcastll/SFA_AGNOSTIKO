@@ -3,9 +3,9 @@
 import 'package:agnostiko/agnostiko.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:intl/intl.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/card_input/card_input.dart';
+import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
@@ -15,7 +15,7 @@ import '../../../models/transaction_args.dart';
 import '../../../pages/place_order/add_payment.dart';
 import '../../../services/utils/emv.dart';
 
-Future _acceptAmount(
+Future acceptAmount(
   BuildContext context,
   double amount,
   InvoiceData invoiceData, {
@@ -85,6 +85,8 @@ Future _acceptAmount(
 }
 
 paymentCard(
+    BuildContext context,
+    bool? isKiosko,
     double amount,
     Client client,
     String invoiceDocumentID,
@@ -113,7 +115,20 @@ paymentCard(
       coinExchangeRatio);
   print(invoiceData.currentCoin);
   print('GET COIN FROM PAYMENTCARD');
+  if (isKiosko == true && amount != 0.0) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      acceptAmount(
+        context,
+        amount,
+        invoiceData,
+        updatePayed: updatePayed,
+        paymentBody: paymentBody,
+        noRetail: noRetail,
+      );
+    });
 
+    return Container();
+  }
   return StatefulBuilder(
     builder: (context, setState) => Column(
       children: [
@@ -130,7 +145,12 @@ paymentCard(
                 children: [
                   ElevatedButton.icon(
                     onPressed: () {
-                      Navigator.pop(context);
+                      if (globalRemoteConfig.conversionKiosko == true) {
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      } else {
+                        Navigator.pop(context);
+                      }
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
@@ -165,10 +185,14 @@ paymentCard(
                             size: 14,
                           ),
                           onPressed: () {
-                            _acceptAmount(context, amount, invoiceData,
-                                updatePayed: updatePayed,
-                                paymentBody: paymentBody,
-                                noRetail: noRetail);
+                            acceptAmount(
+                              context,
+                              amount,
+                              invoiceData,
+                              updatePayed: updatePayed,
+                              paymentBody: paymentBody,
+                              noRetail: noRetail,
+                            );
                           },
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(
