@@ -79,7 +79,11 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (globalRemoteConfig.conversionKiosko == true) {
-        kioskoDialog();
+        if (transactionResult == EmvTransactionResult.Approved) {
+          onAccept();
+        } else {
+          kioskoDialog();
+        }
       }
     });
     super.initState();

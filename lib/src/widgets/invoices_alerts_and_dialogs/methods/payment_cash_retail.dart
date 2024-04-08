@@ -44,7 +44,7 @@ paymentCashRetail(
       children: [
         Column(
           children: [
-            if (isKiosko = false)
+            if (isKiosko == false)
               Text(
                 AppLocalizations.of(context)!.selectFile,
                 style: TextStyle(
@@ -53,7 +53,7 @@ paymentCashRetail(
                   fontSize: 14,
                 ),
               ),
-            if (isKiosko = false)
+            if (isKiosko == false)
               InkWell(
                 onTap: () async {
                   requestFileBottomSheet(context, (image) {
@@ -83,7 +83,7 @@ paymentCashRetail(
                   ],
                 ),
               ),
-            if (isKiosko = false)
+            if (isKiosko == false)
               imageFile == null
                   ? Container()
                   : Container(
@@ -191,23 +191,23 @@ paymentCashRetail(
                                     );
                                   });
                                   if (isKiosko == false) {
+                                    print("addig to list");
                                     paymentBody.payments
                                         .add(PayMethod('Efectivo', paidAmount));
                                   }
-                                  print('IDENTIFY PAYMENTS');
-                                  print(paymentBody.payments.length);
 
                                   if (paidAmount < remainingConverted) {
                                     showDialogForConfirmedPaymentRetail(
-                                        context,
-                                        coinSymbol,
-                                        paidAmount,
-                                        client,
-                                        date,
-                                        selectedValueA,
-                                        paymentBody,
-                                        amountExchanged,
-                                        totalOfTheOrder);
+                                      context,
+                                      coinSymbol,
+                                      paidAmount,
+                                      client,
+                                      date,
+                                      selectedValueA,
+                                      paymentBody,
+                                      amountExchanged,
+                                      totalOfTheOrder,
+                                    );
                                   } else {
                                     Navigator.pushReplacement(
                                       context,
