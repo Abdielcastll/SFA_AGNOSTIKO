@@ -507,6 +507,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   }
 
   onAccept() {
+    if (globalRemoteConfig.conversionKiosko == true) {
+      printTicket();
+    }
     if (transactionArgs!.emvTransactionType == EmvTransactionType.Refund) {
       Navigator.popUntil(context, (route) => route.isFirst == true);
       return;
