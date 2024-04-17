@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/helper/object_box.dart';
@@ -55,6 +56,7 @@ class SfaAgnostiko extends StatelessWidget {
   const SfaAgnostiko({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     return FutureBuilder<bool>(
       future: multitenantConfig.initializePhone(),
       builder: (context, snapshot) {

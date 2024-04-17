@@ -46,7 +46,7 @@ class _ListOfProductsButtonKioskoState
               child: ElevatedButton.icon(
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
-                    myTheme.colorScheme.primary,
+                    Color.fromARGB(255, 78, 146, 200),
                   ),
                   foregroundColor: MaterialStateProperty.all(
                     Colors.white,

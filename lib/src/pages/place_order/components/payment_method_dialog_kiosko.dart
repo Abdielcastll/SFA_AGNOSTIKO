@@ -49,6 +49,7 @@ class _PaymentMethodDialogState extends State<PaymentMethodDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: Colors.white,
       actionsOverflowButtonSpacing: 1,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(16.0)),
@@ -66,46 +67,34 @@ class _PaymentMethodDialogState extends State<PaymentMethodDialog> {
           ),
         ],
       ),
-      content: loading
-          ? SizedBox(width: 50, height: 200, child: CircularProgressIndicator())
-          : SizedBox(
-              height: 200,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Fecha',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: myTheme.colorScheme.primary,
-                      fontFamily: 'Poppins-regular',
+      content: SizedBox(
+        height: 150,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Metodo de Pago',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: myTheme.colorScheme.primary,
+                fontFamily: 'Poppins-regular',
+              ),
+            ),
+            const SizedBox(height: 10),
+            loading
+                ? const Padding(
+                    padding: EdgeInsets.only(top: 35),
+                    child: Row(
+                      children: [
+                        Spacer(),
+                        CircularProgressIndicator(),
+                        Spacer(),
+                      ],
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    DateFormat('dd/MM/yyyy').format(DateTime.now()),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontFamily: 'Poppins-regular',
-                      color: myTheme.colorScheme.primary,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    'Tipo de Pago',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: myTheme.colorScheme.primary,
-                      fontFamily: 'Poppins-regular',
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Container(
+                  )
+                : Container(
                     margin: const EdgeInsets.fromLTRB(10, 5, 10, 10),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
@@ -151,9 +140,9 @@ class _PaymentMethodDialogState extends State<PaymentMethodDialog> {
                       ),
                     ),
                   ),
-                ],
-              ),
-            ),
+          ],
+        ),
+      ),
     );
   }
 

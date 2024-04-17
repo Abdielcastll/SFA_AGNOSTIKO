@@ -72,6 +72,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
       await productosRef.doc(productScanResult).get().then((doc) {
         if (!doc.exists) {
           Fluttertoast.showToast(
+              gravity: ToastGravity.TOP,
               msg: 'Producto no encontrado $scanResult',
               fontSize: 20,
               backgroundColor: Colors.red.shade700);
@@ -106,6 +107,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
           scannedProducts.add(result);
           objectBox.insertShoppingCartProduct(result);
           Fluttertoast.showToast(
+            gravity: ToastGravity.TOP,
             msg: 'Se ha agregado exitosamente al carrito',
             fontSize: 20,
             backgroundColor: const Color.fromARGB(255, 149, 231, 184),
@@ -129,6 +131,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
               );
               objectBox.insertShoppingCartProduct(result);
               Fluttertoast.showToast(
+                gravity: ToastGravity.TOP,
                 msg: 'Se ha agregado exitosamente al carrito',
                 fontSize: 20,
                 backgroundColor: const Color.fromARGB(255, 149, 231, 184),
@@ -149,6 +152,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
             );
             objectBox.insertShoppingCartProduct(result);
             Fluttertoast.showToast(
+              gravity: ToastGravity.TOP,
               msg: 'Se ha agregado exitosamente al carrito',
               fontSize: 20,
               backgroundColor: const Color.fromARGB(255, 149, 231, 184),
@@ -158,6 +162,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
       });
     } catch (e) {
       Fluttertoast.showToast(
+          gravity: ToastGravity.TOP,
           msg: 'Producto no encontrado $scanResult',
           fontSize: 20,
           backgroundColor: Colors.red.shade700);
@@ -308,7 +313,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                               maxHeight: 325,
                                             ),
                                             child: Image.asset(
-                                              'assets/images/scan_indicator.png',
+                                              'assets/images/acerca_codigo.gif',
                                               fit: BoxFit.fitHeight,
                                             ),
                                           ),
@@ -368,7 +373,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                         return Container(
                                           margin: const EdgeInsets.fromLTRB(
                                               16, 10, 16, 0),
-                                          height: 95,
+                                          height: 130,
                                           width:
                                               MediaQuery.of(context).size.width,
                                           decoration: BoxDecoration(
@@ -403,8 +408,8 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                     final url = snapshot.data!
                                                         .toString();
                                                     return Container(
-                                                      height: 95,
-                                                      width: 80,
+                                                      height: 130,
+                                                      width: 95,
                                                       decoration:
                                                           const BoxDecoration(
                                                         color:
@@ -457,8 +462,8 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                   } else if (snapshot
                                                       .hasError) {
                                                     return Container(
-                                                      height: 95,
-                                                      width: 80,
+                                                      height: 130,
+                                                      width: 95,
                                                       decoration:
                                                           const BoxDecoration(
                                                         color:
@@ -491,7 +496,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                     );
                                                   } else {
                                                     return const SizedBox(
-                                                      width: 80,
+                                                      width: 95,
                                                       child: Center(
                                                         child:
                                                             CircularProgressIndicator(),
@@ -520,14 +525,14 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                             10, 10, 0, 0),
                                                         color:
                                                             Colors.transparent,
-                                                        height: 50,
-                                                        width: 180,
+                                                        height: 65,
+                                                        width: 200,
                                                         child: Text(
                                                           '${product.name}',
                                                           style:
                                                               const TextStyle(
                                                             letterSpacing: 0.4,
-                                                            fontSize: 10,
+                                                            fontSize: 14,
                                                             fontFamily:
                                                                 'Poppins-regular',
                                                           ),
@@ -550,7 +555,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                             icon: Icon(
                                                               Icons
                                                                   .delete_outline_rounded,
-                                                              size: 20,
+                                                              size: 22,
                                                               color: myTheme
                                                                   .colorScheme
                                                                   .error,
@@ -592,9 +597,9 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                                         child:
                                                                             IconButton(
                                                                           iconSize:
-                                                                              15,
+                                                                              17,
                                                                           splashRadius:
-                                                                              15,
+                                                                              17,
                                                                           icon:
                                                                               Icon(
                                                                             Icons.remove,
@@ -634,8 +639,8 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                                         width:
                                                                             30,
                                                                         child: IconButton(
-                                                                            iconSize: 15,
-                                                                            splashRadius: 15,
+                                                                            iconSize: 17,
+                                                                            splashRadius: 17,
                                                                             icon: const Icon(
                                                                               Icons.remove,
                                                                               color: Colors.grey,
@@ -661,7 +666,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                                     style:
                                                                         const TextStyle(
                                                                       fontSize:
-                                                                          12,
+                                                                          16,
                                                                       fontFamily:
                                                                           'Poppins-regular',
                                                                     ),
@@ -685,9 +690,9 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                                         child:
                                                                             IconButton(
                                                                           iconSize:
-                                                                              15,
+                                                                              17,
                                                                           splashRadius:
-                                                                              15,
+                                                                              17,
                                                                           icon:
                                                                               Icon(
                                                                             Icons.add,
@@ -729,9 +734,9 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                                         child:
                                                                             IconButton(
                                                                           iconSize:
-                                                                              15,
+                                                                              17,
                                                                           splashRadius:
-                                                                              15,
+                                                                              17,
                                                                           icon:
                                                                               const Icon(
                                                                             Icons.add,
@@ -759,7 +764,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                                 const TextStyle(
                                                               letterSpacing:
                                                                   0.4,
-                                                              fontSize: 10,
+                                                              fontSize: 14,
                                                               fontFamily:
                                                                   'Poppins-regular',
                                                             ),
@@ -777,15 +782,17 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                             '$coinSymbol $productTotalByQuantityConvertedFormatted',
                                                             textAlign:
                                                                 TextAlign.end,
-                                                            style: const TextStyle(
-                                                                letterSpacing:
-                                                                    0.4,
-                                                                fontSize: 10,
-                                                                fontFamily:
-                                                                    'Poppins-regular',
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
+                                                            style:
+                                                                const TextStyle(
+                                                              letterSpacing:
+                                                                  0.4,
+                                                              fontSize: 14,
+                                                              fontFamily:
+                                                                  'Poppins-regular',
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
                                                           ),
                                                         ),
                                                       ],
@@ -1031,7 +1038,6 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
     totalConverted,
   ) {
     showDialog(
-      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return PaymentMethodDialog(
