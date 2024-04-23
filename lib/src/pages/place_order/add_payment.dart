@@ -81,7 +81,9 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Salir de este proceso hara que deba continuarlo desde el menu de facturas como registro manual",
+                    widget.isKiosko
+                        ? "Desea volver al carrito?"
+                        : "Salir de este proceso hara que deba continuarlo desde el menu de facturas como registro manual",
                     style: TextStyle(
                       color: myTheme.colorScheme.primary,
                       fontFamily: 'Poppins-regular',
@@ -109,44 +111,51 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                 ),
                 TextButton(
                   onPressed: () {
-                    final orderActive =
-                        Provider.of<OrderProvider>(context, listen: false);
+                    if (widget.isKiosko) {
+                      setState(() {
+                        _canPop = true;
+                      });
+                      Navigator.popUntil(context, (route) => route.isFirst);
+                    } else {
+                      final orderActive =
+                          Provider.of<OrderProvider>(context, listen: false);
 
-                    setState(() {
-                      _canPop = true;
-                    });
-                    Navigator.popUntil(context, (route) => route.isFirst);
-                    objectBox.delelteAllShoppingCart();
-                    orderActive.setOrder(false);
-                    final j = Provider.of<CounterLimitFirestore>(context,
-                        listen: false);
-                    j.setNewScreen(1);
+                      setState(() {
+                        _canPop = true;
+                      });
+                      Navigator.popUntil(context, (route) => route.isFirst);
+                      objectBox.delelteAllShoppingCart();
+                      orderActive.setOrder(false);
+                      final j = Provider.of<CounterLimitFirestore>(context,
+                          listen: false);
+                      j.setNewScreen(1);
 
-                    ScaffoldMessenger.of(context)
-                      ..removeCurrentSnackBar()
-                      ..showSnackBar(
-                        SnackBar(
-                          backgroundColor:
-                              myTheme.colorScheme.onPrimaryContainer,
-                          duration: const Duration(seconds: 3),
-                          content: Column(
-                            children: const [
-                              Text(
-                                "Facturación Pausada",
-                                style: TextStyle(
-                                  fontFamily: 'Poppins-regular',
+                      ScaffoldMessenger.of(context)
+                        ..removeCurrentSnackBar()
+                        ..showSnackBar(
+                          SnackBar(
+                            backgroundColor:
+                                myTheme.colorScheme.onPrimaryContainer,
+                            duration: const Duration(seconds: 3),
+                            content: Column(
+                              children: const [
+                                Text(
+                                  "Facturación Pausada",
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins-regular',
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                "Consulte lista de facturas",
-                                style: TextStyle(
-                                  fontFamily: 'Poppins-regular',
+                                Text(
+                                  "Consulte lista de facturas",
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins-regular',
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                    }
                   },
                   child: Text("Si"),
                 ),
