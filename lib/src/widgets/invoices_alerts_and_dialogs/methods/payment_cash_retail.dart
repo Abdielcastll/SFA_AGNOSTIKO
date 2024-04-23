@@ -8,6 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/completed_pay.dart';
+import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
@@ -161,11 +162,14 @@ paymentCashRetail(
                                   paidAmount = paidAmount;
                                 }
                                 print('Cantidad permitida');
-                                Fluttertoast.showToast(
-                                  msg: 'Registrando Pago en Efectivo',
-                                  backgroundColor: myTheme.colorScheme.primary,
-                                  textColor: Colors.white,
-                                );
+                                if (!globalRemoteConfig.conversionKiosko!) {
+                                  Fluttertoast.showToast(
+                                    msg: 'Registrando Pago en Efectivo',
+                                    backgroundColor:
+                                        myTheme.colorScheme.primary,
+                                    textColor: Colors.white,
+                                  );
+                                }
                                 try {
                                   await registerMoneyPayment(
                                     originalAmount: paidAmount,

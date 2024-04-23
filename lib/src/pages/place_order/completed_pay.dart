@@ -122,9 +122,11 @@ class _CompletedPayBody extends State<CompletedPayBody> {
   bool ticketPrinted = false;
 
   onGoBack() {
-    final orderActive = Provider.of<OrderProvider>(context, listen: false);
+    if (!isKiosko) {
+      final orderActive = Provider.of<OrderProvider>(context, listen: false);
+      orderActive.setOrder(false);
+    }
     objectBox.delelteAllShoppingCart();
-    orderActive.setOrder(false);
     print('Going back');
     Navigator.popUntil(context, (route) => route.isFirst);
   }
