@@ -4,9 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
-import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/products/products_page_kiosko.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
-import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ListOfProductsButtonKiosko extends StatefulWidget {
@@ -72,7 +71,7 @@ class _ListOfProductsButtonKioskoState
                   }
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (BuildContext context) => ProductsPage(
+                      builder: (BuildContext context) => ProductsPageKiosko(
                         listOfPrices: prices,
                         userZoneDocument: userZoneDocument,
                         listOfProducts: const [],

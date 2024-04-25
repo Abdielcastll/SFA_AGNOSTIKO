@@ -408,6 +408,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                   selected: false,
                                 );
                                 setState(() {
+                                  print("adimg products");
                                   filteredProducts.add(product);
                                 });
                               }

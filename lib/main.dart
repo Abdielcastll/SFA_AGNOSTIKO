@@ -26,6 +26,7 @@ import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/locale_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
+import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/auth.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/utils/determinePosition.dart';
@@ -105,18 +106,19 @@ class SfaAgnostiko extends StatelessWidget {
               //     Provider.of<CounterLimitFirestore>(context)
               //         .getScrollProductLimit;
               return StreamProvider<List<Products>?>.value(
-                value: productsLimit == 0
-                    ? productsCollection
-                        // .where('marca', isEqualTo: aceites)
-                        .orderBy('codigo')
-                        .snapshots()
-                        .map(productsListFromSnapshot)
-                    : productsCollection
-                        // .where('marca', isEqualTo: aceites)
-                        .orderBy('codigo')
-                        .limit(productsLimit)
-                        .snapshots()
-                        .map(productsListFromSnapshot),
+                value:
+                    productsLimit == 0 || globalRemoteConfig.conversionKiosko!
+                        ? productsCollection
+                            // .where('marca', isEqualTo: aceites)
+                            .orderBy('codigo')
+                            .snapshots()
+                            .map(productsListFromSnapshot)
+                        : productsCollection
+                            // .where('marca', isEqualTo: aceites)
+                            .orderBy('codigo')
+                            .limit(productsLimit)
+                            .snapshots()
+                            .map(productsListFromSnapshot),
                 initialData: const [],
                 catchError: (context, error) {
                   print(error);
