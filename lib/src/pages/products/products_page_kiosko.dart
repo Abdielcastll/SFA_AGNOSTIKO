@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -12,6 +13,7 @@ import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -329,6 +331,90 @@ class _ProductsBodyState extends State<ProductsBody> {
                       ),
                     ],
                   ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 10,
+                    ),
+                    child: Row(
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 17,
+                              width: 17,
+                              margin: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                color: Colors.grey.shade400,
+                              ),
+                              child: Checkbox(
+                                value: false,
+                                side: MaterialStateBorderSide.resolveWith(
+                                  (states) => const BorderSide(
+                                      width: 1.0, color: Colors.transparent),
+                                ),
+                                shape: const CircleBorder(),
+                                activeColor: myTheme.colorScheme.primary,
+                                onChanged: (bool? value) {
+                                  null;
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(width: 20),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            SizedBox(
+                              width: 140,
+                              child: TextFieldForCard(
+                                message: "Nombre",
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(width: 10),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            SizedBox(
+                              width: 150,
+                              child: TextFieldForCard(
+                                message: "Codigo de producto",
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(width: 10),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            SizedBox(
+                              width: 50,
+                              child: TextFieldForCard(
+                                message: "Stock",
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(width: 10),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            SizedBox(
+                              width: 50,
+                              child: TextFieldForCard(
+                                message: 'Precio',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
                   SizedBox(height: 8),
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
@@ -416,7 +502,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                         height: 17,
                                         width: 17,
                                         margin: const EdgeInsets.fromLTRB(
-                                            5, 0, 0, 0),
+                                            10, 0, 0, 0),
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(16),
@@ -509,7 +595,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       SizedBox(
-                                        width: 100,
+                                        width: 150,
                                         child: TextFieldForCard(
                                           message: product.code,
                                         ),
@@ -541,6 +627,117 @@ class _ProductsBodyState extends State<ProductsBody> {
                                       ),
                                     ],
                                   ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Column(
+                                    children: [
+                                      Container(
+                                        height: 110,
+                                        width: 110,
+                                        child: FutureBuilder(
+                                          future: storage
+                                              .ref()
+                                              .child('imagenes')
+                                              .child('catalogos')
+                                              .child(
+                                                  product.catalogue.toString())
+                                              .child('1')
+                                              .getDownloadURL()
+                                              .catchError((e) {
+                                            print(e);
+                                            print(
+                                                'ERROR OBTENIENDO IMG DE PRODUCTO EN ARRITO');
+                                            return e.message;
+                                          }),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.hasData) {
+                                              final url =
+                                                  snapshot.data!.toString();
+                                              return Container(
+                                                height: 130,
+                                                width: 95,
+                                                decoration: const BoxDecoration(
+                                                  color: Colors.transparent,
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topLeft: Radius.circular(8),
+                                                    bottomLeft:
+                                                        Radius.circular(8),
+                                                  ),
+                                                ),
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      const BorderRadius.only(
+                                                    topLeft: Radius.circular(8),
+                                                    bottomLeft:
+                                                        Radius.circular(8),
+                                                  ),
+                                                  child: CachedNetworkImage(
+                                                    fit: BoxFit.cover,
+                                                    imageUrl: url,
+                                                    placeholder:
+                                                        (context, url) =>
+                                                            Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      width: 80,
+                                                      child: const Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      ),
+                                                    ),
+                                                    errorWidget:
+                                                        (context, url, error) =>
+                                                            Image.asset(
+                                                      'assets/images/noproduct.jpg',
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            } else if (snapshot.hasError) {
+                                              return Container(
+                                                height: 130,
+                                                width: 95,
+                                                decoration: const BoxDecoration(
+                                                  color: Colors.transparent,
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topLeft: Radius.circular(8),
+                                                    bottomLeft:
+                                                        Radius.circular(8),
+                                                  ),
+                                                ),
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      const BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  8),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  8)),
+                                                  child: Image.asset(
+                                                    'assets/images/noproduct.jpg',
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                              );
+                                            } else {
+                                              return const SizedBox(
+                                                width: 95,
+                                                child: Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                ),
+                                              );
+                                            }
+                                          },
+                                        ),
+                                      )
+                                    ],
+                                  )
                                 ],
                               ),
                             ),
