@@ -3,6 +3,7 @@
 import 'package:agnostiko/agnostiko.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:pwa_sales2go_flutter/dialogs/go_to_pinpad_dialog.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/card_input/card_input.dart';
 import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
@@ -22,6 +23,7 @@ Future acceptAmount(
   Function? updatePayed,
   AddPaymentBodyAtt? paymentBody,
   noRetail = false,
+  isKiosko = false,
 }) async {
   print(invoiceData.totalOfTheOrder);
   print(paymentBody?.remaining);
@@ -60,10 +62,18 @@ Future acceptAmount(
     if (hasEmvModule &&
         (deviceType == DeviceType.POS || deviceType == DeviceType.PINPAD)) {
       // mostramos un popup mientras se realiza la carga de parámetros EMV
-      showCircularProgressDialog(
-        context,
-        AppLocalizations.of(context)!.pleaseWait,
-      );
+      if (isKiosko) {
+        showGoToPinpadDialog(
+          context,
+          "Por favor dirigase al Pinpad",
+        );
+      } else {
+        showCircularProgressDialog(
+          context,
+          AppLocalizations.of(context)!.pleaseWait,
+        );
+      }
+
       await emvPreTransaction();
       Navigator.pop(context); // y cerramos el popup antes de seguir
     }
@@ -124,6 +134,7 @@ paymentCard(
         updatePayed: updatePayed,
         paymentBody: paymentBody,
         noRetail: noRetail,
+        isKiosko: true,
       );
     });
 
