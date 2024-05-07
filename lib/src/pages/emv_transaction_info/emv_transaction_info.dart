@@ -142,7 +142,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                   ),
                 ),
                 child: const Text(
-                  "Cancelar",
+                  "Cancelar venta",
                   style: TextStyle(color: Colors.black),
                 ),
               ),
@@ -156,7 +156,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                 ),
                 onPressed: onAccept,
                 child: const Text(
-                  "Continuar",
+                  "Reintentar pago",
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -522,7 +522,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       Navigator.pop(context);
       return;
     }
-    if (globalRemoteConfig.conversionKiosko == false) {}
+
     final paymentBody = (ModalRoute.of(context)?.settings.arguments! as List)[2]
         as AddPaymentBodyAtt;
     final payed = transactionResult == EmvTransactionResult.Approved
@@ -567,38 +567,39 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
         ),
       );
     } else {
+      print(paymentBody.remaining);
+      print(paymentBody.amountPaied);
+      print(payed);
+      String? setMethod;
       if (globalRemoteConfig.conversionKiosko!) {
-        Navigator.popUntil(context, (route) => route.isFirst);
-      } else {
-        print(paymentBody.remaining);
-        print(paymentBody.amountPaied);
-        print(payed);
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            settings: const RouteSettings(name: 'PAGO-DIRECTO'),
-            builder: (BuildContext context) => AddPaymentPage(
-              remaining: double.parse(
-                  (Decimal.parse(paymentBody.remaining.toString()) -
-                          Decimal.parse(payed.toString()))
-                      .toString()),
-              subTotal: paymentBody.subTotal,
-              discountPercentage: paymentBody.discountPercentage,
-              discount: paymentBody.discount,
-              tax: paymentBody.tax,
-              percentageTax: paymentBody.percentageTax,
-              client: paymentBody.client,
-              invoiceDocumentID: paymentBody.invoiceDocumentID,
-              invoiceNumber: paymentBody.invoiceNumber,
-              payments: paymentBody.payments,
-              amountPayed: (paymentBody.amountPaied ?? 0) + payed,
-              invoiceTotal: transactionArgs!.invoice!.totalOfTheOrder,
-              // updatePayed: updatePayed,
-            ),
-          ),
-        );
+        setMethod = 'Tarjeta de Debito';
       }
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          settings: const RouteSettings(name: 'PAGO-DIRECTO'),
+          builder: (BuildContext context) => AddPaymentPage(
+            remaining: double.parse(
+                (Decimal.parse(paymentBody.remaining.toString()) -
+                        Decimal.parse(payed.toString()))
+                    .toString()),
+            subTotal: paymentBody.subTotal,
+            discountPercentage: paymentBody.discountPercentage,
+            discount: paymentBody.discount,
+            tax: paymentBody.tax,
+            percentageTax: paymentBody.percentageTax,
+            client: paymentBody.client,
+            invoiceDocumentID: paymentBody.invoiceDocumentID,
+            invoiceNumber: paymentBody.invoiceNumber,
+            payments: paymentBody.payments,
+            amountPayed: (paymentBody.amountPaied ?? 0) + payed,
+            invoiceTotal: transactionArgs!.invoice!.totalOfTheOrder,
+            isKiosko: globalRemoteConfig.conversionKiosko!,
+            paymentType: setMethod,
+            // updatePayed: updatePayed,
+          ),
+        ),
+      );
     }
   }
 

@@ -435,6 +435,11 @@ class _ProductsBodyState extends State<ProductsBody> {
                             productPrice: productPrice,
                             coinDecimals: coinDecimals,
                             coinExchangeRatio: coinExchangeRatio);
+
+                        if (productStock == 0 || priceProduct == 0.0) {
+                          // Return an empty Container if either condition is true
+                          return Container();
+                        }
                         return Container(
                           margin: const EdgeInsets.only(bottom: 10.0),
                           height: 120,

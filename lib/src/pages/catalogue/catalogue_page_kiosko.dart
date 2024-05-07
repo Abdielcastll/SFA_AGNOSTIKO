@@ -13,6 +13,7 @@ import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/components/selected_client_kiosko.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/components/selected_products_kiosko.dart';
+import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
@@ -101,6 +102,9 @@ class _CatalogueBodyState extends State<CatalogueBody> {
     final currentCoin = context.watch<CurrencyProvider>().currentCurrency;
     List<String> currentCoinSplit = currentCoin!.split(' ');
     String currentCoinSelectedCode = currentCoinSplit.last;
+    final counterLimitProvider =
+        Provider.of<CounterLimitFirestore>(context, listen: false);
+    counterLimitProvider.setProductsLimit(0, 0);
 
     return MultiProvider(
       providers: [

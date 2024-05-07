@@ -106,19 +106,18 @@ class SfaAgnostiko extends StatelessWidget {
               //     Provider.of<CounterLimitFirestore>(context)
               //         .getScrollProductLimit;
               return StreamProvider<List<Products>?>.value(
-                value:
-                    productsLimit == 0 || globalRemoteConfig.conversionKiosko!
-                        ? productsCollection
-                            // .where('marca', isEqualTo: aceites)
-                            .orderBy('codigo')
-                            .snapshots()
-                            .map(productsListFromSnapshot)
-                        : productsCollection
-                            // .where('marca', isEqualTo: aceites)
-                            .orderBy('codigo')
-                            .limit(productsLimit)
-                            .snapshots()
-                            .map(productsListFromSnapshot),
+                value: productsLimit == 0
+                    ? productsCollection
+                        // .where('marca', isEqualTo: aceites)
+                        .orderBy('codigo')
+                        .snapshots()
+                        .map(productsListFromSnapshot)
+                    : productsCollection
+                        // .where('marca', isEqualTo: aceites)
+                        .orderBy('codigo')
+                        .limit(productsLimit)
+                        .snapshots()
+                        .map(productsListFromSnapshot),
                 initialData: const [],
                 catchError: (context, error) {
                   print(error);

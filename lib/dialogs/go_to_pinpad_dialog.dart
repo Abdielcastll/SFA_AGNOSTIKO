@@ -13,7 +13,7 @@ void showGoToPinpadDialog(BuildContext context, String message,
   if (Platform.isLinux) {
     enableAnimation = false;
   }
-  Timer? timer = Timer(Duration(seconds: 40), () {
+  Timer? timer = Timer(Duration(seconds: 20), () {
     Navigator.of(context).pop();
   });
   showDialog(
