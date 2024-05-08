@@ -17,7 +17,7 @@ void showGoToPinpadDialog(BuildContext context, String message,
     Navigator.of(context).pop();
   });
   showDialog(
-    barrierColor: Color.fromARGB(197, 255, 255, 255),
+    barrierColor: Color.fromARGB(203, 212, 212, 212),
     context: context,
     barrierDismissible: false,
     builder: (BuildContext context) {
