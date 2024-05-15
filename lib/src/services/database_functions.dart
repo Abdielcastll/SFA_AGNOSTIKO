@@ -10,6 +10,7 @@ import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/models/transaction_args.dart';
+import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
@@ -377,8 +378,11 @@ Future createInvoice(
       return await configRef
           .doc('contador_pedidos')
           .update({'numero': correlativeNumber + 1});
-    }).whenComplete(() =>
-            Fluttertoast.showToast(msg: 'Factura ${correlativeNumber + 1}'));
+    }).whenComplete(() {
+      if (!globalRemoteConfig.conversionKiosko!) {
+        Fluttertoast.showToast(msg: 'Factura ${correlativeNumber + 1}');
+      }
+    });
   }).whenComplete(
     () => print('//////////////// FACTURA CREADA ////////////////'),
   );
@@ -1009,8 +1013,11 @@ Future<int> completePaymentProcess(
     return await configRef
         .doc('contador_pedidos')
         .update({'numero': correlativeNumber + 1});
-  }).whenComplete(() =>
-          Fluttertoast.showToast(msg: 'Factura ${correlativeNumber + 1}'));
+  }).whenComplete(() {
+    if (!globalRemoteConfig.conversionKiosko!) {
+      Fluttertoast.showToast(msg: 'Factura ${correlativeNumber + 1}');
+    }
+  });
   // await test().whenComplete(() {
   //   print('2: $randomID');
   // });
@@ -1192,11 +1199,13 @@ checkIfInvoiceIsCompleted(
     print('total: ${total.toStringAsFixed(2)}');
     if (total <= 0.00) {
       print('Factura pagada completamente');
-      Fluttertoast.showToast(
-        msg: 'Factura pagada completamente',
-        backgroundColor: myTheme.colorScheme.onPrimaryContainer,
-        textColor: Colors.white,
-      );
+      if (!globalRemoteConfig.conversionKiosko!) {
+        Fluttertoast.showToast(
+          msg: 'Factura pagada completamente',
+          backgroundColor: myTheme.colorScheme.onPrimaryContainer,
+          textColor: Colors.white,
+        );
+      }
       clientesRef
           .doc(client.clientDocumentId)
           .collection('facturas')

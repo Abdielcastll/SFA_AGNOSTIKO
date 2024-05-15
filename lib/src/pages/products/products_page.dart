@@ -5,6 +5,7 @@ import 'package:decimal/decimal.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
@@ -16,6 +17,7 @@ import 'package:pwa_sales2go_flutter/src/pages/products/product_details/product_
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
+import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
@@ -278,20 +280,32 @@ class _ProductsBodyState extends State<ProductsBody> {
 
                         objectBox
                             .insertManyShoppingCartProducts(selectedProducts);
-                        ScaffoldMessenger.of(context)
-                          ..removeCurrentSnackBar()
-                          ..showSnackBar(
-                            SnackBar(
-                              backgroundColor: myTheme.colorScheme.primary,
-                              duration: const Duration(seconds: 1),
-                              content: const Text(
-                                "Productos añadidos exitosamente",
-                                style: TextStyle(
-                                  fontFamily: 'Poppins-regular',
+                        if (globalRemoteConfig.conversionKiosko! == false) {
+                          ScaffoldMessenger.of(context)
+                            ..removeCurrentSnackBar()
+                            ..showSnackBar(
+                              SnackBar(
+                                backgroundColor: myTheme.colorScheme.primary,
+                                duration: const Duration(seconds: 1),
+                                content: const Text(
+                                  "Productos añadidos exitosamente",
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins-regular',
+                                  ),
                                 ),
                               ),
-                            ),
+                            );
+                        }
+                        if (globalRemoteConfig.conversionKiosko == true) {
+                          Navigator.pop(context);
+                          Fluttertoast.showToast(
+                            gravity: ToastGravity.TOP,
+                            msg: 'Se ha agregado exitosamente al carrito',
+                            fontSize: 20,
+                            backgroundColor:
+                                const Color.fromARGB(255, 149, 231, 184),
                           );
+                        }
                       },
                       child: const Icon(
                         Icons.add_shopping_cart_rounded,
@@ -394,6 +408,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                   selected: false,
                                 );
                                 setState(() {
+                                  print("adimg products");
                                   filteredProducts.add(product);
                                 });
                               }

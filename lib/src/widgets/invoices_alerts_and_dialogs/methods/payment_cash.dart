@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
+import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
@@ -165,11 +166,13 @@ paymentCash(
                             print('Cantidad permitida');
                             print('REGISTRANDO PAGO EN EFECTIVO');
                             print('FACTURA: $invoiceDocumentID');
-                            Fluttertoast.showToast(
-                              msg: 'Registrando pago en efectivo',
-                              backgroundColor: myTheme.colorScheme.primary,
-                              textColor: Colors.white,
-                            );
+                            if (!globalRemoteConfig.conversionKiosko!) {
+                              Fluttertoast.showToast(
+                                msg: 'Registrando pago en efectivo',
+                                backgroundColor: myTheme.colorScheme.primary,
+                                textColor: Colors.white,
+                              );
+                            }
                             print('+++++++++++++++++++++++++++++++++');
                             print('DATOS A ENVIAR');
                             print('coinExchangeRatio: $coinExchangeRatio');

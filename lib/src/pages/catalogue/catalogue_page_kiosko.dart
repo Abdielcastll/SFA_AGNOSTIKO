@@ -5,14 +5,22 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/promotions_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/components/selected_client_kiosko.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/components/selected_products_kiosko.dart';
+import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
-import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_kiosko.dart';
 
 class CataloguePageKiosko extends StatefulWidget {
   const CataloguePageKiosko({Key? key}) : super(key: key);
@@ -29,8 +37,8 @@ class _CataloguePageKioskoState extends State<CataloguePageKiosko> {
     print('zoneDocument: $userZoneDocument');
 
     return Scaffold(
-      appBar: AppBarNavigation(
-        message: 'Agnostiko',
+      appBar: AppBarKiosko(
+        message: 'Orden',
         userZoneDocument: userZoneDocument,
       ),
       backgroundColor: myTheme.colorScheme.surface,
@@ -61,7 +69,6 @@ class _CatalogueBodyState extends State<CatalogueBody> {
     final orderActive = context.read<OrderProvider>();
     final userZoneDocument = context.read<CurrentUserInfo>().zoneDocument;
 
-    print('SELECTING DEFAULT CLIENT');
     Clients? defaultClient = genericClients;
     await clientsCollection
         .where('zona', isEqualTo: userZoneDocument)
@@ -73,17 +80,14 @@ class _CatalogueBodyState extends State<CatalogueBody> {
             .get('nombre')
             .toString()
             .contains('000A Cliente Default')) {
-          print('SENDING DATA BASE DEFAULT CLIENT');
           defaultClient = genericClients;
         } else {
-          print('SENDING ERROR DEFAULT CLIENT');
           defaultClient = genericClients;
         }
       }).toList();
     }).catchError((e) async {
       print('ERROR ON GETTING CLIENT DEFAULT ON APPBAR NAVIGATION');
       print(e);
-      print('SENDING ERROR DEFAULT CLIENT');
       return <Null>[];
     });
 
@@ -98,9 +102,68 @@ class _CatalogueBodyState extends State<CatalogueBody> {
     final currentCoin = context.watch<CurrencyProvider>().currentCurrency;
     List<String> currentCoinSplit = currentCoin!.split(' ');
     String currentCoinSelectedCode = currentCoinSplit.last;
+    final counterLimitProvider =
+        Provider.of<CounterLimitFirestore>(context, listen: false);
+    counterLimitProvider.setProductsLimit(0, 0);
 
     return MultiProvider(
       providers: [
+        StreamProvider<List<ProductsWithPromotions>?>.value(
+          value: DatabaseServiceStreams().productsWithPromotions,
+          initialData: const [],
+          catchError: (context, error) {
+            return;
+          },
+        ),
+        StreamProvider<List<Promotions>?>.value(
+          value: DatabaseServiceStreams().promotions,
+          initialData: const [],
+          catchError: (context, error) {
+            print('ERROR ON GETTING PROMOTIONS');
+            return;
+          },
+        ),
+        StreamProvider<List<ProductsByDate>?>.value(
+          value: DatabaseServiceStreams().productsByDate,
+          initialData: const [],
+          catchError: (context, error) {
+            print('ERROR PRODUCTS BY DATE PROVIDER');
+            print(error);
+            return;
+          },
+        ),
+        StreamProvider<CategorieSummary?>.value(
+          value: DatabaseServiceStreams().categorieSummary,
+          initialData: null,
+          catchError: (context, error) {
+            return;
+          },
+        ),
+        StreamProvider<LineSummary?>.value(
+          value: DatabaseServiceStreams().lineSummary,
+          initialData: null,
+          catchError: (context, error) {
+            return;
+          },
+        ),
+        StreamProvider<StockModel?>.value(
+          value: DatabaseServiceStreams().stockValues,
+          initialData: null,
+          catchError: (context, error) {
+            return;
+          },
+        ),
+        StreamProvider<Prices?>.value(
+          value: listaDePreciosRef
+              .doc(currentClientForTheOrder?.prices.toString())
+              .snapshots()
+              .map(pricesfromSnapshot),
+          initialData: null,
+          catchError: (context, error) {
+            print('StreamProvider<Prices?> $error');
+            return;
+          },
+        ),
         StreamProvider<Coin?>.value(
           initialData: Coin(),
           catchError: (context, error) {
@@ -115,77 +178,15 @@ class _CatalogueBodyState extends State<CatalogueBody> {
               .map(coinFromSnapshot),
         ),
       ],
-      child: Container(
-        height: MediaQuery.of(context).size.height - 60,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: AssetImage('assets/images/bimbo_background.jpg'),
-          ),
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SelectedClientKiosko(),
-              SelectedProductsKiosko(client: currentClientForTheOrder)
-            ],
-          ),
-        ),
-      ),
-    );
-
-    /* return Container(
-      height: MediaQuery.of(context).size.height - 60,
-      decoration: BoxDecoration(
-          image: DecorationImage(
-              fit: BoxFit.cover,
-              image: AssetImage('assets/images/bimbo_background.jpg'))),
-      child: Center(
-        child: ListView(
-          shrinkWrap: true,
-          physics: const BouncingScrollPhysics(),
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        child: Column(
           children: [
-            Center(
-              child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 12),
-                  width: 300,
-                  child: Image.asset('assets/images/bimboPay.png')),
-            ),
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12.0),
-                child: ElevatedButton(
-                  onPressed: createOrder,
-                  style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.all(12),
-                      backgroundColor: Colors.white60,
-                      shape: CircleBorder()),
-                  child: Padding(
-                    padding: const EdgeInsets.all(30.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(
-                          MdiIcons.cartOutline,
-                          size: 120,
-                          color: myTheme.colorScheme.onPrimaryContainer,
-                        ),
-                        Text(
-                          'Llenar Carrito',
-                          style: TextStyle(
-                              fontSize: 24,
-                              color: myTheme.colorScheme.onPrimaryContainer,
-                              fontFamily: 'Poppins-bold'),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            )
+            SelectedClientKiosko(),
+            SelectedProductsKiosko(client: currentClientForTheOrder)
           ],
         ),
       ),
-    ); */
+    );
   }
 }

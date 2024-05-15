@@ -29,6 +29,7 @@ List<String> itemsBankInter = [
 ];
 
 identifyPaymentMethodRetail({
+  bool? isKiosko,
   String? coinName,
   int? coinDecimals,
   double? coinExchangeRatio,
@@ -75,6 +76,8 @@ identifyPaymentMethodRetail({
       paidAmount = double.parse(paidAmount.toString().replaceAll('\$', ''));
     }
     return paymentCard(
+      context,
+      isKiosko,
       paidAmount,
       client,
       invoiceDocumentID,
@@ -123,6 +126,7 @@ identifyPaymentMethodRetail({
   } else if (selectedValueA == 'Efectivo' ||
       selectedValueA == 'Nota de credito') {
     return paymentCashRetail(
+        isKiosko,
         paidAmount,
         client,
         invoiceDocumentID,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:agnostiko/agnostiko.dart';
+import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 
 import 'confirm_dialog.dart';
 
@@ -21,6 +22,10 @@ Future<bool> Function() cancelTransactionDialogFn(BuildContext context) {
 
         // Navigator.popUntil(context, (route) => route.isFirst == true);
         Navigator.pop(context, true);
+        if (globalRemoteConfig.conversionKiosko!) {
+          Navigator.pop(context, true);
+          Navigator.pop(context, true);
+        }
       },
       onCancel: () {
         Navigator.pop(context, false);
