@@ -644,9 +644,8 @@ class _ProductsBodyState extends State<ProductsBody> {
                                           future: storage
                                               .ref()
                                               .child('imagenes')
-                                              .child('catalogos')
-                                              .child(
-                                                  product.catalogue.toString())
+                                              .child('productos')
+                                              .child(product.code!)
                                               .child('1')
                                               .getDownloadURL()
                                               .catchError((e) {

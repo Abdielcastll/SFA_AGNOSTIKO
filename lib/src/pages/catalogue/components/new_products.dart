@@ -80,8 +80,8 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                     future: storage
                         .ref()
                         .child('imagenes')
-                        .child('catalogos')
-                        .child(product.catalogue)
+                        .child('productos')
+                        .child(product.code)
                         .child('1')
                         .getDownloadURL()
                         .catchError((e) {
@@ -91,8 +91,6 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         final url = snapshot.data?.toString();
-                        // print('PRINTING URL IN NEW PRODUCTWS');
-                        // print(product.catalogue);
                         return GestureDetector(
                           onTap: () {
                             Navigator.push(

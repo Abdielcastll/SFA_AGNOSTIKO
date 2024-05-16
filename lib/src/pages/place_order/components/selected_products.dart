@@ -380,9 +380,8 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                   future: storage
                                                       .ref()
                                                       .child('imagenes')
-                                                      .child('catalogos')
-                                                      .child(product.urlPicture
-                                                          .toString())
+                                                      .child('productos')
+                                                      .child(product.code!)
                                                       .child('1')
                                                       .getDownloadURL()
                                                       .catchError((e) {
