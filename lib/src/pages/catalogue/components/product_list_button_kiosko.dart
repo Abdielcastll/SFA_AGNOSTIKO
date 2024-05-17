@@ -62,13 +62,7 @@ class _ListOfProductsButtonKioskoState
                   final counterLimitProvider =
                       Provider.of<CounterLimitFirestore>(context,
                           listen: false);
-                  if (products.length > 100) {
-                    counterLimitProvider.setProductsLimit(10, 10);
-                  } else {
-                    counterLimitProvider.setProductsLimit(
-                        counterLimitProvider.getProductsLimit,
-                        counterLimitProvider.getScrollProductLimit);
-                  }
+                  counterLimitProvider.setProductsLimit(0, 0);
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (BuildContext context) => ProductsPageKiosko(
