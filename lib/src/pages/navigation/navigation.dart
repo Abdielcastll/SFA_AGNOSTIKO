@@ -23,7 +23,7 @@ class NavigationPages extends StatelessWidget {
       if (globalRemoteConfig.visualizacionCatalogo == true)
         const CataloguePage(),
       const DiaryTabs(),
-      const ClientsPage(),
+      if (globalRemoteConfig.clientesEnabled == true) const ClientsPage(),
       const ProfilePage(),
     ];
 
@@ -103,21 +103,22 @@ class NavigationPages extends StatelessWidget {
                 ),
                 label: AppLocalizations.of(context)!.diary,
               ),
-              NavigationDestination(
-                icon: Icon(
-                  Icons.store_outlined,
-                  // color: myTheme.colorScheme.background,
-                  size: 24,
-                  color: Color.fromARGB(255, 196, 196, 196),
+              if (globalRemoteConfig.clientesEnabled == true)
+                NavigationDestination(
+                  icon: Icon(
+                    Icons.store_outlined,
+                    // color: myTheme.colorScheme.background,
+                    size: 24,
+                    color: Color.fromARGB(255, 196, 196, 196),
+                  ),
+                  selectedIcon: Icon(
+                    Icons.store,
+                    // color: myTheme.colorScheme.background,
+                    size: 24,
+                    color: Color.fromARGB(255, 196, 196, 196),
+                  ),
+                  label: AppLocalizations.of(context)!.clients,
                 ),
-                selectedIcon: Icon(
-                  Icons.store,
-                  // color: myTheme.colorScheme.background,
-                  size: 24,
-                  color: Color.fromARGB(255, 196, 196, 196),
-                ),
-                label: AppLocalizations.of(context)!.clients,
-              ),
               NavigationDestination(
                 icon: Icon(
                   Icons.person_outline,

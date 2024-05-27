@@ -11,6 +11,7 @@ import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_de
 import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
+import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -179,60 +180,64 @@ void modalBottomSheetForOrders(
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                ElevatedButton.icon(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            ClientDetails(
-                                          specialContribuyer:
-                                              specialContributor,
-                                          masterDiscount: currentDiscountMaster,
-                                          fiscalAddress: currentClientAddress,
-                                          email: currentClientEmail,
-                                          listOfPrices: currentClientPrices,
-                                          name: currentClientName,
-                                          tlf1: currentClientPhone,
-                                          tlf2: currentClientPhone,
-                                          zone: currentClientZones,
-                                          nameId: currentClientId,
-                                          typeId: currentClientIdType,
-                                          clientDocumentReferenceID:
-                                              clientReferenceId,
-                                          dispatchAddress:
-                                              currentClientDispatchAdress,
+                                if (globalRemoteConfig.clientesEnabled == true)
+                                  ElevatedButton.icon(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              ClientDetails(
+                                            specialContribuyer:
+                                                specialContributor,
+                                            masterDiscount:
+                                                currentDiscountMaster,
+                                            fiscalAddress: currentClientAddress,
+                                            email: currentClientEmail,
+                                            listOfPrices: currentClientPrices,
+                                            name: currentClientName,
+                                            tlf1: currentClientPhone,
+                                            tlf2: currentClientPhone,
+                                            zone: currentClientZones,
+                                            nameId: currentClientId,
+                                            typeId: currentClientIdType,
+                                            clientDocumentReferenceID:
+                                                clientReferenceId,
+                                            dispatchAddress:
+                                                currentClientDispatchAdress,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    icon: Icon(
+                                      Icons.person,
+                                      color: Colors.white,
+                                    ),
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                        myTheme.colorScheme.primary,
+                                      ),
+                                      shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(18.0),
                                         ),
                                       ),
-                                    );
-                                  },
-                                  icon: Icon(
-                                    Icons.person,
-                                    color: Colors.white,
-                                  ),
-                                  style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                      myTheme.colorScheme.primary,
                                     ),
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(18.0),
+                                    label: Text(
+                                      AppLocalizations.of(context)!.seeClient,
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins-regular',
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ),
-                                  label: Text(
-                                    AppLocalizations.of(context)!.seeClient,
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins-regular',
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 1),
+                                if (globalRemoteConfig.clientesEnabled == true)
+                                  const SizedBox(width: 1),
                                 ElevatedButton.icon(
                                   onPressed: () {
                                     showDialog(
