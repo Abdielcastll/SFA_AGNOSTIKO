@@ -17,6 +17,7 @@ import 'package:pwa_sales2go_flutter/src/pages/place_order/completed_order.dart'
 import 'package:pwa_sales2go_flutter/src/pages/place_order/components/selected_client.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
+import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -276,10 +277,14 @@ class _CheckoutBodyState extends State<CheckoutBody> {
       physics: const BouncingScrollPhysics(),
       child: Column(
         children: [
-          SelectedClient(
-            client: widget.client,
-            isEditable: false,
-          ),
+          globalRemoteConfig.clientesEnabled == true
+              ? SelectedClient(
+                  client: widget.client,
+                  isEditable: false,
+                )
+              : SizedBox(
+                  height: 30,
+                ),
           Container(
             margin: const EdgeInsets.fromLTRB(15, 10, 15, 0),
             width: MediaQuery.of(context).size.width,

@@ -4,6 +4,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
+import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -296,67 +297,69 @@ void modalBottomSheetForOnProcess({
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Container(
-                          width: 150,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                Colors.white,
-                              ),
-                              overlayColor: MaterialStateProperty.resolveWith(
-                                (states) {
-                                  return states.contains(MaterialState.pressed)
-                                      ? myTheme.colorScheme.primary
-                                      : null;
-                                },
-                              ),
-                              splashFactory: NoSplash.splashFactory,
-                              elevation: MaterialStateProperty.all(0),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(100),
-                                  side: BorderSide(
-                                    color: myTheme.colorScheme.primary,
+                        if (globalRemoteConfig.clientesEnabled == true)
+                          Container(
+                            width: 150,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                  Colors.white,
+                                ),
+                                overlayColor: MaterialStateProperty.resolveWith(
+                                  (states) {
+                                    return states
+                                            .contains(MaterialState.pressed)
+                                        ? myTheme.colorScheme.primary
+                                        : null;
+                                  },
+                                ),
+                                splashFactory: NoSplash.splashFactory,
+                                elevation: MaterialStateProperty.all(0),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100),
+                                    side: BorderSide(
+                                      color: myTheme.colorScheme.primary,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            child: Text(
-                              AppLocalizations.of(context)!.seeClient,
-                              style: TextStyle(
-                                fontFamily: 'Poppins-medium',
-                                color: myTheme.colorScheme.primary,
-                                fontSize: 11,
-                              ),
-                            ),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      ClientDetails(
-                                    specialContribuyer: specialContributor,
-                                    masterDiscount: currentDiscountMaster,
-                                    fiscalAddress: currentClientAddress,
-                                    email: currentClientEmail,
-                                    listOfPrices: currentClientPrices,
-                                    name: currentClientName,
-                                    tlf1: currentClientPhone,
-                                    tlf2: currentClientPhone,
-                                    zone: currentClientZones,
-                                    nameId: currentClientId,
-                                    typeId: currentClientIdType,
-                                    clientDocumentReferenceID:
-                                        clientReferenceId,
-                                    dispatchAddress:
-                                        currentClientDispatchAdress,
-                                  ),
+                              child: Text(
+                                AppLocalizations.of(context)!.seeClient,
+                                style: TextStyle(
+                                  fontFamily: 'Poppins-medium',
+                                  color: myTheme.colorScheme.primary,
+                                  fontSize: 11,
                                 ),
-                              );
-                            },
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        ClientDetails(
+                                      specialContribuyer: specialContributor,
+                                      masterDiscount: currentDiscountMaster,
+                                      fiscalAddress: currentClientAddress,
+                                      email: currentClientEmail,
+                                      listOfPrices: currentClientPrices,
+                                      name: currentClientName,
+                                      tlf1: currentClientPhone,
+                                      tlf2: currentClientPhone,
+                                      zone: currentClientZones,
+                                      nameId: currentClientId,
+                                      typeId: currentClientIdType,
+                                      clientDocumentReferenceID:
+                                          clientReferenceId,
+                                      dispatchAddress:
+                                          currentClientDispatchAdress,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
                           ),
-                        ),
                         Container(
                           width: 150,
                           child: ElevatedButton(

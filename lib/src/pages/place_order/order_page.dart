@@ -7,6 +7,7 @@ import 'package:pwa_sales2go_flutter/src/pages/place_order/components/selected_c
 import 'package:pwa_sales2go_flutter/src/pages/place_order/components/selected_products.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
+import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_orderd.dart';
 
@@ -70,8 +71,13 @@ class OrderPage extends StatelessWidget {
                   // color: Colors.red,
                   child: Column(
                     children: [
-                      SelectedClient(
-                          client: currentClientForTheOrder, isEditable: true),
+                      globalRemoteConfig.clientesEnabled == true
+                          ? SelectedClient(
+                              client: currentClientForTheOrder,
+                              isEditable: true)
+                          : const SizedBox(
+                              height: 30,
+                            ),
                       SelectedProducts(client: currentClientForTheOrder),
                     ],
                   ),
