@@ -18,6 +18,9 @@ import 'iso8583.dart';
 final pharosUsername = "NECS01Oeyx";
 final pharosPassword = dotenv.env['pharosPassword'] ?? '';
 
+//  PROD
+// const prodEnvURL = 'https://api.pharospayments.com/payments/v1/charge';
+
 Future<Uint8List> getToken(String serialNumber) async {
   final brand = (await getPlatformInfo()).deviceBrand;
   const appId = "com.agnostiko.field_sales";

@@ -9,6 +9,7 @@ import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/invoicePrintLayout.dart';
+import 'package:pwa_sales2go_flutter/src/pages/place_order/widgets/qr_widget.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
@@ -273,47 +274,79 @@ class _CompletedPayBody extends State<CompletedPayBody> {
                 ],
               ),
               const SizedBox(width: 20),
-              Container(
-                margin: const EdgeInsets.only(top: 17),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            'MONTO PAGADO',
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'MONTO PAGADO',
+                          style: TextStyle(
+                            color: Colors.purple.shade600,
+                            fontFamily: 'Poppins-regular',
+                            fontSize: 16,
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.center,
+                          child: Text(
+                            '$coinSymbol ${priceFormat(widget.total).toStringAsFixed(2)}',
+                            textAlign: TextAlign.center,
                             style: TextStyle(
-                              color: Colors.purple.shade600,
+                              color: myTheme.colorScheme.onPrimaryContainer,
                               fontFamily: 'Poppins-regular',
-                              fontSize: 16,
+                              fontSize: 14,
                             ),
                           ),
-                          Container(
-                            alignment: Alignment.center,
-                            child: Text(
-                              '$coinSymbol ${priceFormat(widget.total).toStringAsFixed(2)}',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: myTheme.colorScheme.onPrimaryContainer,
-                                fontFamily: 'Poppins-regular',
-                                fontSize: 14,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'No. de ticket',
+                          style: TextStyle(
+                            color: Colors.purple.shade600,
+                            fontFamily: 'Poppins-regular',
+                            fontSize: 16,
+                          ),
+                        ),
+                        Text(
+                          //TODO hacer dinamico
+                          "13245675123",
+                          style: TextStyle(
+                            color: Colors.grey.shade500,
+                            fontFamily: 'Poppins-regular',
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
         ),
+        Text(
+          'Descarga tu ticket',
+          style: TextStyle(
+            color: Colors.purple.shade600,
+            fontFamily: 'Poppins-regular',
+            fontSize: 16,
+          ),
+        ),
+        QrCodeWidget(futureUrl: fetchUrl()),
         const SizedBox(height: 20),
         if (isKiosko == false)
           Container(
@@ -419,11 +452,17 @@ class _CompletedPayBody extends State<CompletedPayBody> {
               ],
             ),
           ),
-        Image.asset(
-          'assets/images/receipt.png',
-          fit: BoxFit.cover,
-        ),
+        // Image.asset(
+        //   'assets/images/receipt.png',
+        //   fit: BoxFit.cover,
+        // ),
       ],
     );
+  }
+
+  Future<String> fetchUrl() async {
+    // TODO cambiar por real
+    await Future.delayed(Duration(seconds: 2));
+    return 'https://www.example.com';
   }
 }
