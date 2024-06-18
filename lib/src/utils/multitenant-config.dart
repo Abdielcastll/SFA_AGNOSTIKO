@@ -152,6 +152,7 @@ class _MultitenantConfig {
       ),
     );
 
+    //TODO, verificar que esten correctos todos los campos
     final tenantDoc = fieldSalesConfig!['cliente_id'];
     var tenantInfo;
     tenantInfo = await FirebaseFirestore.instanceFor(app: baseApp!)

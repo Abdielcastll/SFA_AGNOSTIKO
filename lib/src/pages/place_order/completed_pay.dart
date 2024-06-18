@@ -119,7 +119,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
   late List<double> coinsExchangeRates = widget.coinsExchangeRates;
   late double totalPayed = widget.addPaymentBody.payments.fold<double>(
       0.0, (previousValue, element) => previousValue + element.amount);
-  bool isKiosko = globalRemoteConfig.conversionKiosko!;
+  bool isKiosko = false; //globalRemoteConfig.conversionKiosko!;
   bool ticketPrinted = false;
 
   onGoBack() {
