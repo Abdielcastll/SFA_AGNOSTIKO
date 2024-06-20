@@ -526,7 +526,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
 
     // Step 5: Construct the URL using the fetched values
     String url =
-        'https://prueba83-fieldsales.web.app/ticketDownload/$email/$idClient/$idTicket';
+        'https://prueba83-fieldsales.web.app/#/ticketDownload/$email/$idClient/$idTicket';
     print('Generated URL: $url');
 
     return url;
