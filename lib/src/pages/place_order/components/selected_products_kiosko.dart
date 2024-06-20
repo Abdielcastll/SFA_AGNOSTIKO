@@ -69,76 +69,35 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
         return value['precios'];
       });
 
-      await productosRef.doc(productScanResult).get().then((doc) {
-        if (!doc.exists) {
-          Fluttertoast.showToast(
-              gravity: ToastGravity.TOP,
-              msg: 'Producto no encontrado $scanResult',
-              fontSize: 20,
-              backgroundColor: Colors.red.shade700);
-        }
-        const stock = 999;
-        const productQuantity = 1;
-        final code = doc.data().toString().contains('codigo')
-            ? doc.get('codigo')
-            : 'NaN';
-        final pricesList = clientPriceList;
-        final name = doc.data().toString().contains('nombre')
-            ? doc.get('nombre')
-            : 'NaN';
-        final catalogue = doc.data().toString().contains('catalogo')
-            ? doc.get('catalogo').id
-            : 'NaN';
-        final productPrice = priceProducts[doc.get('codigo')] ?? '0';
-        final productTotalAmount = productPrice * productQuantity;
-
-        if (productsInCart!.isEmpty) {
-          final result = ShoppingCartProduct(
-            availableStock: stock,
-            productQuantity: productQuantity,
-            code: code,
-            listOfPricesId: pricesList,
-            name: name,
-            productId: code,
-            unitPrice: productPrice.toString(),
-            totalAmount: productTotalAmount.toString(),
-            urlPicture: catalogue.toString(),
-          );
-          scannedProducts.add(result);
-          objectBox.insertShoppingCartProduct(result);
-          Fluttertoast.showToast(
-            gravity: ToastGravity.TOP,
-            msg: 'Se ha agregado exitosamente al carrito',
-            fontSize: 20,
-            backgroundColor: const Color.fromARGB(255, 149, 231, 184),
-          );
-        } else {
-          bool isProductAlreadyInCart = false;
-          productsInCart.forEach((element) {
-            if (element.code == code) {
-              isProductAlreadyInCart = true;
-              final result = ShoppingCartProduct(
-                id: element.id,
-                availableStock: element.availableStock,
-                productQuantity: element.productQuantity! + 1,
-                code: element.code,
-                listOfPricesId: element.listOfPricesId,
-                name: element.name,
-                productId: code,
-                unitPrice: element.unitPrice.toString(),
-                totalAmount: element.totalAmount.toString(),
-                urlPicture: element.urlPicture.toString(),
-              );
-              objectBox.insertShoppingCartProduct(result);
-              Fluttertoast.showToast(
+      await productosRef
+          .where('codigoBarra', isEqualTo: productScanResult)
+          .get()
+          .then(
+        (docs) {
+          var doc = docs.docs.first;
+          if (!doc.exists) {
+            Fluttertoast.showToast(
                 gravity: ToastGravity.TOP,
-                msg: 'Se ha agregado exitosamente al carrito',
+                msg: 'Producto no encontrado $scanResult',
                 fontSize: 20,
-                backgroundColor: const Color.fromARGB(255, 149, 231, 184),
-              );
-            }
-          });
-          if (isProductAlreadyInCart == false) {
+                backgroundColor: Colors.red.shade700);
+          }
+          const stock = 999;
+          const productQuantity = 1;
+          final code = doc.data().toString().contains('codigo')
+              ? doc.get('codigo')
+              : 'NaN';
+          final pricesList = clientPriceList;
+          final name = doc.data().toString().contains('nombre')
+              ? doc.get('nombre')
+              : 'NaN';
+          final catalogue = doc.data().toString().contains('catalogo')
+              ? doc.get('catalogo').id
+              : 'NaN';
+          final productPrice = priceProducts[doc.get('codigo')] ?? '0';
+          final productTotalAmount = productPrice * productQuantity;
+
+          if (productsInCart!.isEmpty) {
             final result = ShoppingCartProduct(
               availableStock: stock,
               productQuantity: productQuantity,
@@ -150,6 +109,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
               totalAmount: productTotalAmount.toString(),
               urlPicture: catalogue.toString(),
             );
+            scannedProducts.add(result);
             objectBox.insertShoppingCartProduct(result);
             Fluttertoast.showToast(
               gravity: ToastGravity.TOP,
@@ -157,9 +117,55 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
               fontSize: 20,
               backgroundColor: const Color.fromARGB(255, 149, 231, 184),
             );
+          } else {
+            bool isProductAlreadyInCart = false;
+            productsInCart.forEach((element) {
+              if (element.code == code) {
+                isProductAlreadyInCart = true;
+                final result = ShoppingCartProduct(
+                  id: element.id,
+                  availableStock: element.availableStock,
+                  productQuantity: element.productQuantity! + 1,
+                  code: element.code,
+                  listOfPricesId: element.listOfPricesId,
+                  name: element.name,
+                  productId: code,
+                  unitPrice: element.unitPrice.toString(),
+                  totalAmount: element.totalAmount.toString(),
+                  urlPicture: element.urlPicture.toString(),
+                );
+                objectBox.insertShoppingCartProduct(result);
+                Fluttertoast.showToast(
+                  gravity: ToastGravity.TOP,
+                  msg: 'Se ha agregado exitosamente al carrito',
+                  fontSize: 20,
+                  backgroundColor: const Color.fromARGB(255, 149, 231, 184),
+                );
+              }
+            });
+            if (isProductAlreadyInCart == false) {
+              final result = ShoppingCartProduct(
+                availableStock: stock,
+                productQuantity: productQuantity,
+                code: code,
+                listOfPricesId: pricesList,
+                name: name,
+                productId: code,
+                unitPrice: productPrice.toString(),
+                totalAmount: productTotalAmount.toString(),
+                urlPicture: catalogue.toString(),
+              );
+              objectBox.insertShoppingCartProduct(result);
+              Fluttertoast.showToast(
+                gravity: ToastGravity.TOP,
+                msg: 'Se ha agregado exitosamente al carrito',
+                fontSize: 20,
+                backgroundColor: const Color.fromARGB(255, 149, 231, 184),
+              );
+            }
           }
-        }
-      });
+        },
+      );
     } catch (e) {
       Fluttertoast.showToast(
           gravity: ToastGravity.TOP,

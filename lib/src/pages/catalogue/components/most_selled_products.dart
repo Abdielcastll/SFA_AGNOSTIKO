@@ -54,6 +54,8 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
               String categorie = elCategorie.replaceAll(RegExp('"'), '');
               String elCode = el['codigo'];
               String code = elCode.replaceAll(RegExp('"'), '');
+              String elBarCode = el['codigoBarra'];
+              String barCode = elBarCode.replaceAll(RegExp('"'), '');
               String elDesign = el['diseno'];
               String design = elDesign.replaceAll(RegExp('"'), '');
               String elBrand = el['marca'];
@@ -72,6 +74,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                 catalogue: firebase.doc(catalogue).id,
                 categorie: firebase.doc(categorie).id,
                 code: code,
+                barCode: barCode,
                 design: firebase.doc(design).id,
                 line: firebase.doc(line).id,
                 brand: firebase.doc(brand).id,

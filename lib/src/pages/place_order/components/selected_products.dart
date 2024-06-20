@@ -90,7 +90,11 @@ class _SelectedProductsState extends State<SelectedProducts> {
       });
       print(priceProducts);
 
-      await productosRef.doc(productScanResult).get().then((doc) {
+      await productosRef
+          .where('codigoBarra', isEqualTo: productScanResult)
+          .get()
+          .then((docs) {
+        var doc = docs.docs.first;
         if (!doc.exists) {
           Fluttertoast.showToast(
               msg: 'Producto no encontrado $scanResult',

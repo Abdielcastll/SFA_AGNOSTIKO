@@ -390,6 +390,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                   catalogue: element.data()['catalogo'].id,
                                   categorie: element.data()['categoria'].id,
                                   code: element.data()['codigo'],
+                                  barCode: element.data()['codigoBarra'],
                                   design: element.data()['diseno'].id,
                                   line: element.data()['linea'].id,
                                   brand: element.data()['marca'].id,
@@ -1589,6 +1590,9 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                                       code: element
                                                                               .data()[
                                                                           'codigo'],
+                                                                      barCode: element
+                                                                              .data()[
+                                                                          'codigoBarra'],
                                                                       design: element
                                                                           .data()[
                                                                               'diseno']
@@ -1708,6 +1712,9 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                                       code: element
                                                                               .data()[
                                                                           'codigo'],
+                                                                      barCode: element
+                                                                              .data()[
+                                                                          'codigoBarra'],
                                                                       design: element
                                                                           .data()[
                                                                               'diseno']
@@ -1831,6 +1838,9 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                                       code: element
                                                                               .data()[
                                                                           'codigo'],
+                                                                      barCode: element
+                                                                              .data()[
+                                                                          'codigoBarra'],
                                                                       design: element
                                                                           .data()[
                                                                               'diseno']
@@ -1958,6 +1968,9 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                                       code: element
                                                                               .data()[
                                                                           'codigo'],
+                                                                      barCode: element
+                                                                              .data()[
+                                                                          'codigoBarra'],
                                                                       design: element
                                                                           .data()[
                                                                               'diseno']
@@ -2089,6 +2102,9 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                                       code: element
                                                                               .data()[
                                                                           'codigo'],
+                                                                      barCode: element
+                                                                              .data()[
+                                                                          'codigoBarra'],
                                                                       design: element
                                                                           .data()[
                                                                               'diseno']
@@ -2491,6 +2507,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                     catalogue: 'test',
                                                     categorie: 'test',
                                                     code: 'test',
+                                                    barCode: 'test',
                                                     design: 'test',
                                                     line: 'test',
                                                     brand: 'test',
@@ -2526,6 +2543,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                     catalogue: 'test',
                                                     categorie: 'test',
                                                     code: 'test',
+                                                    barCode: 'test',
                                                     design: 'test',
                                                     line: 'test',
                                                     brand: 'test',
@@ -2932,6 +2950,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                     catalogue: 'test',
                                                     categorie: 'test',
                                                     code: 'test',
+                                                    barCode: 'test',
                                                     design: 'test',
                                                     line: 'test',
                                                     brand: 'test',
@@ -2967,6 +2986,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                     catalogue: 'test',
                                                     categorie: 'test',
                                                     code: 'test',
+                                                    barCode: 'test',
                                                     design: 'test',
                                                     line: 'test',
                                                     brand: 'test',

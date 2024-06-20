@@ -94,6 +94,7 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                           catalogue: element.data()['catalogo'].id ?? '',
                           categorie: element.data()['categoria'].id ?? '',
                           code: element.data()['codigo'] ?? '',
+                          barCode: element.data()['codigoBarra'] ?? '',
                           design: element.data()['diseno'].id ?? '',
                           line: element.data()['linea'].id ?? '',
                           brand: element.data()['marca'].id ?? '',

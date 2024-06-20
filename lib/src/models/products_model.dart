@@ -13,6 +13,7 @@ class Products {
   final subCategorie;
   final size;
   final promotion;
+  final barCode;
   bool selected;
 
   Products({
@@ -27,6 +28,7 @@ class Products {
     required this.name,
     required this.subCategorie,
     required this.size,
+    required this.barCode,
     this.promotion,
     required this.selected,
   });
@@ -45,6 +47,7 @@ class ProductsWithPromotions {
   final subCategorie;
   final size;
   final promotion;
+  final barCode;
   bool selected;
 
   ProductsWithPromotions({
@@ -59,6 +62,7 @@ class ProductsWithPromotions {
     required this.name,
     required this.subCategorie,
     required this.size,
+    required this.barCode,
     this.promotion,
     required this.selected,
   });
@@ -77,6 +81,7 @@ class ProductsByDate {
   final subCategorie;
   final size;
   final promotion;
+  final barCode;
   bool selected;
 
   ProductsByDate({
@@ -91,6 +96,7 @@ class ProductsByDate {
     required this.name,
     required this.subCategorie,
     required this.size,
+    required this.barCode,
     this.promotion,
     required this.selected,
   });
@@ -110,6 +116,9 @@ List<Products> productsListFromSnapshot(QuerySnapshot snapshot) {
           ? doc.get('categoria').id
           : '',
       code: doc.data().toString().contains('codigo') ? doc.get('codigo') : '',
+      barCode: doc.data().toString().contains('codigoBarra')
+          ? doc.get('codigoBarra')
+          : '',
       design:
           doc.data().toString().contains('diseno') ? doc.get('diseno').id : '',
       line: doc.data().toString().contains('linea') ? doc.get('linea').id : '',
@@ -160,6 +169,9 @@ List<ProductsWithPromotions> productsWithPromotionListFromSnapshot(
           ? doc.get('categoria').id
           : '',
       code: doc.data().toString().contains('codigo') ? doc.get('codigo') : '',
+      barCode: doc.data().toString().contains('codigoBarra')
+          ? doc.get('codigoBarra')
+          : '',
       design:
           doc.data().toString().contains('diseno') ? doc.get('diseno').id : '',
       line: doc.data().toString().contains('linea') ? doc.get('linea').id : '',
@@ -194,6 +206,9 @@ List<ProductsByDate> productsByDateListFromSnapshot(QuerySnapshot snapshot) {
           ? doc.get('categoria').id
           : '',
       code: doc.data().toString().contains('codigo') ? doc.get('codigo') : '',
+      barCode: doc.data().toString().contains('codigoBarra')
+          ? doc.get('codigoBarra')
+          : '',
       design:
           doc.data().toString().contains('diseno') ? doc.get('diseno').id : '',
       line: doc.data().toString().contains('linea') ? doc.get('linea').id : '',

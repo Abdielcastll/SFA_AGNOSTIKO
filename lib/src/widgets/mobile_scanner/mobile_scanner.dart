@@ -36,7 +36,11 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
       });
       print(priceProducts);
 
-      await productosRef.doc(productScanResult).get().then((doc) {
+      await productosRef
+          .where('codigoBarra', isEqualTo: productScanResult)
+          .get()
+          .then((docs) {
+        var doc = docs.docs.first;
         const stock = 999;
         const productQuantity = 1;
         final code = doc.data().toString().contains('codigo')
