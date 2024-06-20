@@ -473,16 +473,10 @@ class _CompletedPayBody extends State<CompletedPayBody> {
 
   Future<String> fetchUrl(
       Client client, AddPaymentBodyAtt addPaymentBody, UserModel user) async {
-    print("fetch url");
-
     String idClient = client.clientDocumentId!;
-    print("id client: $idClient");
     String idOrder = addPaymentBody.invoiceDocumentID;
-    print("id order: $idOrder");
-
     // Get the current user's email
     String email = user.email!;
-    print('Email: $email');
 
     // Firestore instance
     FirebaseFirestore firestore =
@@ -500,11 +494,8 @@ class _CompletedPayBody extends State<CompletedPayBody> {
       throw Exception('Pedido document not found');
     }
 
-    print('Pedido Document: ${pedidoDoc.data()}');
-
     // Step 2: Extract nroCorrelativo from the fetched document
     int nroCorrelativo = pedidoDoc.get('nroCorrelativo');
-    print('nroCorrelativo: $nroCorrelativo');
 
     // Step 3: Use nroCorrelativo to find the corresponding document in "clients/{idClient}/facturas"
     QuerySnapshot facturasQuery = await firestore
@@ -518,11 +509,8 @@ class _CompletedPayBody extends State<CompletedPayBody> {
       throw Exception('Factura document not found');
     }
 
-    print('Factura Document: ${facturasQuery.docs.first.data()}');
-
     // Step 4: Extract the required id from the document found
     String idTicket = facturasQuery.docs.first.id;
-    print('idTicket: $idTicket');
 
     // Step 5: Construct the URL using the fetched values
     String url =
