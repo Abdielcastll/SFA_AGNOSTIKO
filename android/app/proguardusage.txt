@@ -37270,10 +37270,8 @@ io.flutter.embedding.android.AndroidTouchProcessor:
     static final int BYTES_PER_FIELD
     static final int DEFAULT_HORIZONTAL_SCROLL_FACTOR
     static final int DEFAULT_VERTICAL_SCROLL_FACTOR
-    private static final int IMPLICIT_VIEW_ID
     private static final int POINTER_DATA_FIELD_COUNT
     private static final int POINTER_DATA_FLAG_BATCHED
-    private static final java.lang.String TAG
 io.flutter.embedding.android.FlutterActivity$CachedEngineIntentBuilder
 io.flutter.embedding.android.FlutterActivity$NewEngineInGroupIntentBuilder
 io.flutter.embedding.android.FlutterActivity$NewEngineIntentBuilder
@@ -37336,8 +37334,6 @@ io.flutter.embedding.android.FlutterView:
     public void removeFlutterEngineAttachmentListener(io.flutter.embedding.android.FlutterView$FlutterEngineAttachmentListener)
 io.flutter.embedding.android.KeyChannelResponder:
     private static final java.lang.String TAG
-io.flutter.embedding.android.KeyData$DeviceType:
-    static io.flutter.embedding.android.KeyData$DeviceType fromLong(long)
 io.flutter.embedding.android.KeyData$Type:
     static io.flutter.embedding.android.KeyData$Type fromLong(long)
 io.flutter.embedding.android.KeyData:
@@ -37359,8 +37355,6 @@ io.flutter.embedding.android.KeyboardMap:
     public static final long kUnicodePlane
     public static final long kValueMask
     public void <init>()
-io.flutter.embedding.android.MotionEventTracker:
-    private static final java.lang.String TAG
 io.flutter.embedding.engine.FlutterEngine:
     private static final java.lang.String TAG
     public void <init>(android.content.Context,io.flutter.embedding.engine.loader.FlutterLoader,io.flutter.embedding.engine.FlutterJNI)
@@ -37521,7 +37515,6 @@ io.flutter.embedding.engine.loader.FlutterLoader:
     private static final java.lang.String ENABLE_VULKAN_VALIDATION_META_DATA_KEY
     static final java.lang.String FLUTTER_ASSETS_DIR_KEY
     private static final java.lang.String IMPELLER_BACKEND_META_DATA_KEY
-    private static final java.lang.String IMPELLER_OPENGL_GPU_TRACING_DATA_KEY
     static final java.lang.String ISOLATE_SNAPSHOT_DATA_KEY
     private static final java.lang.String LEAK_VM_META_DATA_KEY
     private static final java.lang.String OLD_GEN_HEAP_SIZE_META_DATA_KEY
@@ -37621,7 +37614,6 @@ io.flutter.embedding.engine.renderer.FlutterRenderer:
     public void setAccessibilityFeatures(int)
 io.flutter.embedding.engine.systemchannels.AccessibilityChannel:
     private static final java.lang.String TAG
-    public void <init>(io.flutter.plugin.common.BasicMessageChannel,io.flutter.embedding.engine.FlutterJNI)
 io.flutter.embedding.engine.systemchannels.DeferredComponentChannel:
     private static final java.lang.String TAG
     public void completeInstallError(java.lang.String,java.lang.String)
@@ -37649,11 +37641,6 @@ io.flutter.embedding.engine.systemchannels.PlatformViewsChannel$PlatformViewCrea
 io.flutter.embedding.engine.systemchannels.PlatformViewsChannel$PlatformViewsHandler:
     public static final long NON_TEXTURE_FALLBACK
 io.flutter.embedding.engine.systemchannels.PlatformViewsChannel:
-    private static final java.lang.String TAG
-io.flutter.embedding.engine.systemchannels.ProcessTextChannel:
-    private static final java.lang.String CHANNEL_NAME
-    private static final java.lang.String METHOD_PROCESS_TEXT_ACTION
-    private static final java.lang.String METHOD_QUERY_TEXT_ACTIONS
     private static final java.lang.String TAG
 io.flutter.embedding.engine.systemchannels.RestorationChannel:
     private static final java.lang.String TAG
@@ -37795,18 +37782,12 @@ io.flutter.plugin.platform.PlatformViewsController:
     public android.util.SparseArray getOverlayLayerViews()
 io.flutter.plugin.platform.SingleViewPresentation$WindowManagerHandler:
     private static final java.lang.String TAG
-io.flutter.plugin.platform.SurfaceProducerPlatformViewRenderTarget:
-    private static final java.lang.String TAG
-    public boolean isReleased()
 io.flutter.plugin.platform.SurfaceTexturePlatformViewRenderTarget:
     private static final java.lang.String TAG
     public boolean isReleased()
 io.flutter.plugin.platform.VirtualDisplayController:
     void onFlutterViewAttached(android.view.View)
     void onFlutterViewDetached()
-io.flutter.plugin.text.ProcessTextPlugin:
-    private static final java.lang.String TAG
-    public void destroy()
 io.flutter.plugins.firebase.auth.BuildConfig
 io.flutter.plugins.firebase.auth.Constants
 io.flutter.plugins.firebase.auth.FlutterFirebaseAuthPlugin:
@@ -38321,6 +38302,8 @@ io.flutter.util.Preconditions:
     private void <init>()
     public static java.lang.Object checkNotNull(java.lang.Object)
     public static void checkState(boolean)
+io.flutter.util.TraceSection:
+    public void <init>()
 io.flutter.util.ViewUtils:
     public void <init>()
 io.flutter.view.AccessibilityBridge$SemanticsNode:
@@ -47340,6 +47323,9 @@ kotlinx.coroutines.internal.AtomicKt:
 kotlinx.coroutines.internal.AtomicOp:
     public final java.lang.Object getConsensus()
     public final boolean isDecided()
+kotlinx.coroutines.internal.ClassValueCtorCache$cache$1:
+    public synthetic bridge java.lang.Object computeValue(java.lang.Class)
+    protected kotlin.jvm.functions.Function1 computeValue(java.lang.Class)
 kotlinx.coroutines.internal.ConcurrentKt:
     public static synthetic void ReentrantLock$annotations()
     public static final java.util.Set identitySet(int)
@@ -49441,6 +49427,7 @@ io.flutter.plugins.firebase.messaging.FlutterFirebaseMessagingBackgroundService:
 io.flutter.plugins.firebase.messaging.PluginRegistrantException
 io.flutter.plugins.firebase.storage.FlutterFirebaseStoragePlugin:
     public static final synthetic boolean $assertionsDisabled
+io.flutter.view.TextureRegistry$SurfaceTextureEntry$-CC
 io.flutter.view.VsyncWaiter:
     public static io.flutter.view.VsyncWaiter getInstance(float,io.flutter.embedding.engine.FlutterJNI)
 io.grpc.Attributes$Builder:

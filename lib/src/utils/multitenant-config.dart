@@ -68,22 +68,20 @@ class _MultitenantConfig {
 
   Future<bool> initialize() async {
     try {
-      print("init");
-      if (!await validateLocalFile()) {
-        final config = await getAppConfig();
-        await saveConfigFile(config);
-      }
-      fieldSalesConfig = await readLocalFile();
+      print("init multitenant");
+      // if (!await validateLocalFile()) {
+      //   final config = await getAppConfig();
+      //   await saveConfigFile(config);
+      // }
+      //fieldSalesConfig = await readLocalFile();
 
       final tenantInfo = await getTenantFirebaseDatabase();
 
-      Firebase.app().delete();
       tenantApp = await Firebase.initializeApp(
         name: 'tenant-app',
         options: tenantInfo,
       );
       baseApp = await Firebase.initializeApp(
-        name: 'base-app',
         options: const FirebaseOptions(
           apiKey: "AIzaSyCoOXpe8Y3eI7yo85ExuFKHJ9q8OvuDG_g",
           authDomain: "multitenant-example-1.firebaseapp.com",
@@ -152,26 +150,30 @@ class _MultitenantConfig {
       ),
     );
 
-    //TODO, verificar que esten correctos todos los campos
-    final tenantDoc = fieldSalesConfig!['cliente_id'];
-    var tenantInfo;
-    tenantInfo = await FirebaseFirestore.instanceFor(app: baseApp!)
+    //TODO ver como hacer el mail dinamico sin que se truene
+    var tenantInfo = await FirebaseFirestore.instanceFor(app: baseApp!)
         .collection('clientes')
-        .doc(tenantDoc)
+        .where('usuarios', arrayContains: 'vendedorretail1@example.com')
         .get();
 
-    if (!tenantInfo.exists) {
+    if (tenantInfo.docs.isEmpty) {
       throw Exception('Tenant no registrado en Firebase');
     }
 
-    final mapAppConfig = tenantInfo.get('webAppConfig') as Map<String, dynamic>;
+    // Assuming only one document should match the query
+    final tenantDoc = tenantInfo.docs.first;
+    final mapAppConfig = tenantDoc.get('webAppConfig') as Map<String, dynamic>;
+
+    print(mapAppConfig);
+
     return FirebaseOptions(
-        apiKey: mapAppConfig['apiKey']!,
-        authDomain: mapAppConfig['authDomain']!,
-        projectId: mapAppConfig['projectId']!,
-        storageBucket: mapAppConfig['storageBucket']!,
-        messagingSenderId: mapAppConfig['messagingSenderId']!,
-        appId: mapAppConfig['appId']!);
+      apiKey: mapAppConfig['apiKey']!,
+      authDomain: mapAppConfig['authDomain']!,
+      projectId: mapAppConfig['projectId']!,
+      storageBucket: mapAppConfig['storageBucket']!,
+      messagingSenderId: mapAppConfig['messagingSenderId']!,
+      appId: mapAppConfig['appId']!,
+    );
   }
 
   Future<Map<String, dynamic>> getAppConfig() async {

@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
@@ -7,14 +9,17 @@ import 'package:pwa_sales2go_flutter/dialogs/confirm_dialog.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/invoicePrintLayout.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/widgets/qr_widget.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
+import 'package:pwa_sales2go_flutter/src/services/auth.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:pwa_sales2go_flutter/src/utils/multitenant-config.dart';
 
 class CompletedPayPage extends StatelessWidget {
   const CompletedPayPage({
@@ -185,6 +190,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
     final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
     final currentCoin =
         Provider.of<CurrencyProvider>(context).currentCurrency ?? 'MXN';
+    final userUID = Provider.of<UserModel?>(context);
 
     priceFormat(productPrice) {
       double correctAmount = double.parse(productPrice.toStringAsFixed(4));
@@ -346,7 +352,12 @@ class _CompletedPayBody extends State<CompletedPayBody> {
             fontSize: 16,
           ),
         ),
-        QrCodeWidget(futureUrl: fetchUrl()),
+        QrCodeWidget(
+            futureUrl: fetchUrl(
+          widget.client,
+          widget.addPaymentBody,
+          userUID!,
+        )),
         const SizedBox(height: 20),
         if (isKiosko == false)
           Container(
@@ -460,9 +471,64 @@ class _CompletedPayBody extends State<CompletedPayBody> {
     );
   }
 
-  Future<String> fetchUrl() async {
-    // TODO cambiar por real
-    await Future.delayed(Duration(seconds: 2));
-    return 'https://www.example.com';
+  Future<String> fetchUrl(
+      Client client, AddPaymentBodyAtt addPaymentBody, UserModel user) async {
+    print("fetch url");
+
+    String idClient = client.clientDocumentId!;
+    print("id client: $idClient");
+    String idOrder = addPaymentBody.invoiceDocumentID;
+    print("id order: $idOrder");
+
+    // Get the current user's email
+    String email = user.email!;
+    print('Email: $email');
+
+    // Firestore instance
+    FirebaseFirestore firestore =
+        FirebaseFirestore.instanceFor(app: multitenantConfig.tenantApp!);
+
+    // Step 1: Fetch the document from "clients/{idClient}/pedidos" subcollection using idOrder
+    DocumentSnapshot pedidoDoc = await firestore
+        .collection('clientes')
+        .doc(idClient)
+        .collection('pedidos')
+        .doc(idOrder)
+        .get();
+
+    if (!pedidoDoc.exists) {
+      throw Exception('Pedido document not found');
+    }
+
+    print('Pedido Document: ${pedidoDoc.data()}');
+
+    // Step 2: Extract nroCorrelativo from the fetched document
+    int nroCorrelativo = pedidoDoc.get('nroCorrelativo');
+    print('nroCorrelativo: $nroCorrelativo');
+
+    // Step 3: Use nroCorrelativo to find the corresponding document in "clients/{idClient}/facturas"
+    QuerySnapshot facturasQuery = await firestore
+        .collection('clientes')
+        .doc(idClient)
+        .collection('facturas')
+        .where('nroCorrelativo', isEqualTo: nroCorrelativo)
+        .get();
+
+    if (facturasQuery.docs.isEmpty) {
+      throw Exception('Factura document not found');
+    }
+
+    print('Factura Document: ${facturasQuery.docs.first.data()}');
+
+    // Step 4: Extract the required id from the document found
+    String idTicket = facturasQuery.docs.first.id;
+    print('idTicket: $idTicket');
+
+    // Step 5: Construct the URL using the fetched values
+    String url =
+        'https://prueba83-fieldsales.web.app/ticketDownload/$email/$idClient/$idTicket';
+    print('Generated URL: $url');
+
+    return url;
   }
 }

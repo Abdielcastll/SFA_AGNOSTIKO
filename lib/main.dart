@@ -60,7 +60,7 @@ class SfaAgnostiko extends StatelessWidget {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     return FutureBuilder<bool>(
       future: multitenantConfig
-          .initializePhone(), //TODO cambiar por initialize normal para probar multitenant
+          .initialize(), //TODO checar auth antes que hacer esto
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return MaterialApp(
