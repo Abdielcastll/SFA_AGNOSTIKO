@@ -383,7 +383,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                             SizedBox(
                               width: 150,
                               child: TextFieldForCard(
-                                message: "Codigo de producto",
+                                message: "SKU de producto",
                               ),
                             ),
                           ],

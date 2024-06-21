@@ -1,4 +1,4 @@
-{   
+{
     "language": "Español",
     "@language": {
         "description": "El idioma actual"
@@ -28,7 +28,7 @@
         "description": "Titulo para el catálogo"
     },
     "mostSelled": "Más vendido",
-    "@mostSelled":{
+    "@mostSelled": {
         "description": "Titulo para los mas vendidos"
     },
     "stock": "Stock",
@@ -36,7 +36,7 @@
         "description": "Stock de productos"
     },
     "price": "Precio",
-    "@price":{
+    "@price": {
         "description": "Precio del producto"
     },
     "colors": "Colores",
@@ -47,16 +47,13 @@
     "@seeIsList": {
         "description": "Titulo para el boton de ver en lista"
     },
-
-
-
     "products": "Productos",
     "@products": {
         "description": "Titulo para lista de productos"
     },
-    "productCode": "Codigo",
-    "@productCode":{
-        "description": "Codigo del producto"
+    "productCode": "SKU",
+    "@productCode": {
+        "description": "SKU  del producto"
     },
     "productBrand": "Marca",
     "@productBrand": {
@@ -67,7 +64,7 @@
         "description": "Categoria del producto"
     },
     "productSubCategorie": "Sub-Categoria",
-    "@productSubCategorie":{
+    "@productSubCategorie": {
         "description": "Sub categoria del producto"
     },
     "productLine": "Linea",
@@ -102,9 +99,6 @@
     "@descendingFilter": {
         "description": "Boton de filtrado de busqueda en modo descendente"
     },
-
-
-
     "clients": "Clientes",
     "@clients": {
         "description": "Titulo para lista de clientes"
@@ -145,9 +139,6 @@
     "@masterDiscount": {
         "description": "Descuento maestro de los cleintes"
     },
-    
-
-
     "accountBalance": "Estado de Cuenta",
     "@accountBalance": {
         "description": "Titulo del estado de cuenta del cliente"
@@ -176,15 +167,12 @@
     "@invoices": {
         "description": "Check de las facturas de credito del balance"
     },
-
-
-
     "profile": "Perfil",
-    "@profile":{
+    "@profile": {
         "description": "Titulo para el perfil"
     },
     "usersAndTeams": "Usuarios y Equipos",
-    "@usersAndTeams":{
+    "@usersAndTeams": {
         "description": "Titulo para la list tile de usuarios y equipos"
     },
     "account": "Cuenta",
@@ -212,7 +200,7 @@
         "description": "Descripcion de list tile"
     },
     "usersAndTeamsDesc": "Administra tus equipos y sus integrantes",
-    "@usersAndTeamsDesc":{
+    "@usersAndTeamsDesc": {
         "description": "Descripcion de list tile"
     },
     "accountDesc": "Correo, contraseña y ajustes de perfil",
@@ -231,9 +219,6 @@
     "@helpDesc": {
         "description": "Descripcion de list tile"
     },
-
-
-
     "diary": "Agenda",
     "@diary": {
         "description": "Titulo de Agenda"
@@ -306,9 +291,6 @@
     "@modifiedVisitError": {
         "description": "Anuncio de error de visita moficada"
     },
-    
-
-
     "newOrder": "Nuevo Pedido",
     "@newOrder": {
         "description": "titulo de nuevo pedido"
@@ -323,7 +305,7 @@
     },
     "order": "Pedido",
     "@order": {
-        "description": "Titulo de nuevo pedido"   
+        "description": "Titulo de nuevo pedido"
     },
     "orderEmtpy": "Tu pedido esta vacio",
     "@orderEmtpy": {
@@ -340,7 +322,7 @@
     "addProducts": "Agregar productos",
     "@addProducts": {
         "description": "Boton de agregar productos"
-    }, 
+    },
     "orderContinue": "Continuar",
     "@orderContinue": {
         "description": "Boton de continuar compra"
@@ -365,9 +347,6 @@
     "@orderNumber": {
         "description": "Numero de orden del pedido"
     },
-
-
-
     "noClientsAvaliable": "No hay clientes disponibles",
     "@noClientsAvailable": {
         "description": "Anuncio de clientes no disponibles"
@@ -388,9 +367,6 @@
     "seller": "Vendedor",
     "visitCreated": "Visita Creada",
     "createVisitError": "Le falta permisos o hubo un error al crear la visita",
-
-
-
     "payable": "A pagar",
     "subtotal": "Subtotal",
     "totalToPay": "Total a pagar",
@@ -408,61 +384,44 @@
     "upToPay": "Resto a Pagar",
     "balanceConfirmed": "Saldo confirmado",
     "balanceLeft": "Por Conciliar",
-
-
-
     "paymentMethod": "Metodo de Pago",
     "amount": "Monto",
-
-
-
     "bank": "Banco",
     "accountNumber": "Nro de Cuenta",
     "accountHolder": "Titular de la cuenta",
     "currency": "Moneda",
     "selectFile": "Selecione un archivo",
     "gallery": "Galeria",
-
-
-
     "transactionID": "Id de la transaccion",
     "voucherNumber": "Nro de Voucher",
     "referenceNumber": "Nro de Referencia",
-
-
-  "emvTransactionInfo": "Info de Transacción",
-  "transaction": "Transacción",
-  "approved": "Aprobada",
-  "declined": "Rechazada",
-  "failed": "Fallida",
-  "offline": "Offline",
-  "online": "Online",
-  "transactionType": "Tipo de Transacción",
-  "cashbackAmount": "Monto de Cashback",
-  "appliedCVM": "CVM Aplicado",
-  "plaintextPINOffline": "PIN Offline En Claro",
-  "encipheredPINOffline": "PIN Offline Cifrado",
-  "encipheredPINOnline": "PIN Online Cifrado",
-  "plaintextPINOfflineAndSignature": "PIN Offline En Claro y Firma",
-  "encipheredPINOfflineAndSignature": "PIN Offline Cifrado y Firma",
-  "signature": "Firma",
-  "noCVM": "Sin CVM",
-  "unknown": "Desconocido",
-  "encryptionTest": "Test de encriptado:",
-  "encryptionClearOption": "En claro (sin KEK)",
-  "encryptionCipherOption": "Cifrado (con KEK)",
-  "loadKEK": "Cargar KEK",
-  "loading": "Cargando...",
-  "processing": "Procesando...",
-  "pleaseWait": "Por favor espere...",
-  "tap": "Acerque",
-  "insert": "Inserte",
-  "swipe": "Deslice",
-  "close": "Cerrar"
-
-
-
-    
+    "emvTransactionInfo": "Info de Transacción",
+    "transaction": "Transacción",
+    "approved": "Aprobada",
+    "declined": "Rechazada",
+    "failed": "Fallida",
+    "offline": "Offline",
+    "online": "Online",
+    "transactionType": "Tipo de Transacción",
+    "cashbackAmount": "Monto de Cashback",
+    "appliedCVM": "CVM Aplicado",
+    "plaintextPINOffline": "PIN Offline En Claro",
+    "encipheredPINOffline": "PIN Offline Cifrado",
+    "encipheredPINOnline": "PIN Online Cifrado",
+    "plaintextPINOfflineAndSignature": "PIN Offline En Claro y Firma",
+    "encipheredPINOfflineAndSignature": "PIN Offline Cifrado y Firma",
+    "signature": "Firma",
+    "noCVM": "Sin CVM",
+    "unknown": "Desconocido",
+    "encryptionTest": "Test de encriptado:",
+    "encryptionClearOption": "En claro (sin KEK)",
+    "encryptionCipherOption": "Cifrado (con KEK)",
+    "loadKEK": "Cargar KEK",
+    "loading": "Cargando...",
+    "processing": "Procesando...",
+    "pleaseWait": "Por favor espere...",
+    "tap": "Acerque",
+    "insert": "Inserte",
+    "swipe": "Deslice",
+    "close": "Cerrar"
 }
-
-
