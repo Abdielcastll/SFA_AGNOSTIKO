@@ -285,8 +285,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                               child: Text(
                                                 'No hay productos seleccionados',
                                                 style: TextStyle(
-                                                  fontFamily:
-                                                      'IBMPlexSans-Medium',
+                                                  fontFamily: 'Poppins-Medium',
                                                   fontSize: 20,
                                                   color: Color.fromARGB(
                                                       255, 90, 93, 119),
@@ -309,7 +308,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                   'Acerca el código de barras al escáner.',
                                                   style: TextStyle(
                                                     fontFamily:
-                                                        'IBMPlexSans-Medium',
+                                                        'Poppins-Medium',
                                                     fontSize: 28,
                                                     color: Color.fromARGB(
                                                         255, 90, 93, 119),
@@ -564,7 +563,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                                   0.4,
                                                               fontSize: 14,
                                                               fontFamily:
-                                                                  'IBMPlexSans-Regular',
+                                                                  'Poppins-Regular',
                                                             ),
                                                           ),
                                                         ),
@@ -699,7 +698,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                                         fontSize:
                                                                             16,
                                                                         fontFamily:
-                                                                            'IBMPlexSans-Regular',
+                                                                            'Poppins-Regular',
                                                                       ),
                                                                     ),
                                                                   ),
@@ -795,7 +794,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                                     0.4,
                                                                 fontSize: 14,
                                                                 fontFamily:
-                                                                    'IBMPlexSans-Regular',
+                                                                    'Poppins-Regular',
                                                               ),
                                                             ),
                                                           ),
@@ -820,7 +819,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                                     0.4,
                                                                 fontSize: 14,
                                                                 fontFamily:
-                                                                    'IBMPlexSans-Regular',
+                                                                    'Poppins-Regular',
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
@@ -867,7 +866,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                             //     .orderSubTotal,
                                             'Subtotal',
                                             style: TextStyle(
-                                              fontFamily: 'IBMPlexSans-Regular',
+                                              fontFamily: 'Poppins-Regular',
                                               fontSize: 14,
                                               color: products.isEmpty
                                                   ? Color.fromARGB(
@@ -879,7 +878,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                           Text(
                                             '$coinSymbol $subTotalFormatted',
                                             style: TextStyle(
-                                              fontFamily: 'IBMPlexSans-Regular',
+                                              fontFamily: 'Poppins-Regular',
                                               fontSize: 14,
                                               color: products.isEmpty
                                                   ? Color.fromARGB(
@@ -904,7 +903,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                             //     .orderSubTotal,
                                             'IVA (16%)',
                                             style: TextStyle(
-                                              fontFamily: 'IBMPlexSans-Regular',
+                                              fontFamily: 'Poppins-Regular',
                                               fontSize: 14,
                                               color: products.isEmpty
                                                   ? Color.fromARGB(
@@ -916,7 +915,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                           Text(
                                             '$coinSymbol $ivaFormatted',
                                             style: TextStyle(
-                                              fontFamily: 'IBMPlexSans-Regular',
+                                              fontFamily: 'Poppins-Regular',
                                               fontSize: 14,
                                               color: products.isEmpty
                                                   ? Color.fromARGB(
@@ -941,7 +940,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                             //     .orderSubTotal,
                                             'Total a pagar',
                                             style: TextStyle(
-                                              fontFamily: 'IBMPlexSans-Regular',
+                                              fontFamily: 'Poppins-Regular',
                                               fontSize: 14,
                                               color: products.isEmpty
                                                   ? Color.fromARGB(
@@ -953,7 +952,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                           Text(
                                             '$coinSymbol $totalFormatted',
                                             style: TextStyle(
-                                              fontFamily: 'IBMPlexSans-Regular',
+                                              fontFamily: 'Poppins-Regular',
                                               fontSize: 14,
                                               color: products.isEmpty
                                                   ? Color.fromARGB(
@@ -1029,8 +1028,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                 'Pagar',
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
-                                                  fontFamily:
-                                                      'IBMPlexSans-Medium',
+                                                  fontFamily: 'Poppins-Medium',
                                                   fontSize: 14,
                                                   color: products.isEmpty
                                                       ? Colors.grey.shade700
