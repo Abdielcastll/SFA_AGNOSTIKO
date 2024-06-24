@@ -12,9 +12,9 @@ class SelectedClientKiosko extends StatelessWidget {
         Center(
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-            width: 400,
+            height: 120,
             child: Image.asset(
-              'assets/images/placeholder_company.png',
+              'assets/images/chedraui.jpg',
               fit: BoxFit.fitWidth,
             ),
           ),
