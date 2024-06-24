@@ -22,7 +22,7 @@ class _WrapperState extends State<Wrapper> {
   Widget build(BuildContext context) {
     final user = Provider.of<UserModel?>(context);
     final orderActive = Provider.of<OrderProvider>(context);
-
+    //TODO si existe user iniciar tennantApp aqui
     if (user == null) {
       return LoginPage();
     } else {
@@ -31,28 +31,29 @@ class _WrapperState extends State<Wrapper> {
       }
 
       return StreamProvider<CurrentUserInfo?>.value(
-          value: usersCollection
-              .doc(user.uid)
-              .snapshots()
-              .map(AuthService().userDataFromsnapshot),
-          initialData: CurrentUserInfo(
-            name: '',
-            dni: '',
-            zone: '',
-            zoneDocument: '',
-            email: '',
-            role: '',
-            uid: '',
-          ),
-          catchError: (context, error) {
-            print(error);
-            return;
-          },
-          // builder: (context, child) {
+        value: usersCollection
+            .doc(user.uid)
+            .snapshots()
+            .map(AuthService().userDataFromsnapshot),
+        initialData: CurrentUserInfo(
+          name: '',
+          dni: '',
+          zone: '',
+          zoneDocument: '',
+          email: '',
+          role: '',
+          uid: '',
+        ),
+        catchError: (context, error) {
+          print(error);
+          return;
+        },
+        // builder: (context, child) {
 
-          //   return NavigationPages();
-          // });
-          child: NavigationPages());
+        //   return NavigationPages();
+        // });
+        child: NavigationPages(),
+      );
     }
   }
 }

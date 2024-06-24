@@ -2,6 +2,7 @@
 
 import 'package:agnostiko/device/src/device.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,9 +16,11 @@ import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/product_list_button_kiosko.dart';
+import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/components/payment_method_dialog_kiosko.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:pwa_sales2go_flutter/src/utils/custom_cache_manager.dart';
 import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 
 class SelectedProductsKiosko extends StatefulWidget {
@@ -271,7 +274,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                   ? SizedBox(
                                       height:
                                           MediaQuery.of(context).size.height *
-                                              0.45,
+                                              0.40,
                                       width: MediaQuery.of(context).size.width,
                                       child: Center(
                                         child: Column(
@@ -282,7 +285,8 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                               child: Text(
                                                 'No hay productos seleccionados',
                                                 style: TextStyle(
-                                                  fontFamily: 'Poppins-medium',
+                                                  fontFamily:
+                                                      'IBMPlexSans-Medium',
                                                   fontSize: 20,
                                                   color: Color.fromARGB(
                                                       255, 90, 93, 119),
@@ -305,7 +309,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                   'Acerca el código de barras al escáner.',
                                                   style: TextStyle(
                                                     fontFamily:
-                                                        'Poppins-medium',
+                                                        'IBMPlexSans-Medium',
                                                     fontSize: 28,
                                                     color: Color.fromARGB(
                                                         255, 90, 93, 119),
@@ -315,15 +319,15 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                               ),
                                             ),
                                             SizedBox(
-                                              height: 40,
+                                              height: 16,
                                             ),
                                             Container(
                                               height: MediaQuery.of(context)
                                                       .size
                                                       .height *
-                                                  0.23,
+                                                  0.20,
                                               constraints: BoxConstraints(
-                                                maxHeight: 325,
+                                                maxHeight: 300,
                                               ),
                                               child: Image.asset(
                                                 'assets/images/acerca_codigo.gif',
@@ -337,7 +341,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                   : SizedBox(
                                       height:
                                           MediaQuery.of(context).size.height *
-                                              0.45,
+                                              0.40,
                                       width: MediaQuery.of(context).size.width,
                                       child: ListView.builder(
                                         shrinkWrap: true,
@@ -454,6 +458,9 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                           ),
                                                           child:
                                                               CachedNetworkImage(
+                                                            cacheManager:
+                                                                CustomCacheManager
+                                                                    .instance,
                                                             fit: BoxFit.cover,
                                                             imageUrl: url,
                                                             placeholder:
@@ -557,7 +564,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                                   0.4,
                                                               fontSize: 14,
                                                               fontFamily:
-                                                                  'Poppins-regular',
+                                                                  'IBMPlexSans-Regular',
                                                             ),
                                                           ),
                                                         ),
@@ -692,7 +699,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                                         fontSize:
                                                                             16,
                                                                         fontFamily:
-                                                                            'Poppins-regular',
+                                                                            'IBMPlexSans-Regular',
                                                                       ),
                                                                     ),
                                                                   ),
@@ -788,12 +795,12 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                                     0.4,
                                                                 fontSize: 14,
                                                                 fontFamily:
-                                                                    'Poppins-regular',
+                                                                    'IBMPlexSans-Regular',
                                                               ),
                                                             ),
                                                           ),
                                                           Container(
-                                                            width: 60,
+                                                            width: 80,
                                                             alignment: Alignment
                                                                 .centerRight,
                                                             margin:
@@ -813,7 +820,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                                     0.4,
                                                                 fontSize: 14,
                                                                 fontFamily:
-                                                                    'Poppins-regular',
+                                                                    'IBMPlexSans-Regular',
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
@@ -831,11 +838,9 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                         },
                                       ),
                                     ),
-                              Spacer(),
+                              SizedBox(height: 40),
                               ListOfProductsButtonKiosko(),
-                              SizedBox(height: 20),
                               Container(
-                                constraints: BoxConstraints(maxHeight: 200),
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   boxShadow: [
@@ -862,25 +867,25 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                             //     .orderSubTotal,
                                             'Subtotal',
                                             style: TextStyle(
-                                              fontFamily: 'Poppins-regular',
+                                              fontFamily: 'IBMPlexSans-Regular',
                                               fontSize: 14,
                                               color: products.isEmpty
                                                   ? Color.fromARGB(
-                                                      255, 168, 169, 193)
+                                                      255, 193, 168, 168)
                                                   : Color.fromARGB(
-                                                      255, 67, 83, 194),
+                                                      255, 57, 57, 57),
                                             ),
                                           ),
                                           Text(
                                             '$coinSymbol $subTotalFormatted',
                                             style: TextStyle(
-                                              fontFamily: 'Poppins-regular',
+                                              fontFamily: 'IBMPlexSans-Regular',
                                               fontSize: 14,
                                               color: products.isEmpty
                                                   ? Color.fromARGB(
-                                                      255, 168, 169, 193)
+                                                      255, 193, 168, 168)
                                                   : Color.fromARGB(
-                                                      255, 67, 83, 194),
+                                                      255, 57, 57, 57),
                                             ),
                                           ),
                                         ],
@@ -899,25 +904,25 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                             //     .orderSubTotal,
                                             'IVA (16%)',
                                             style: TextStyle(
-                                              fontFamily: 'Poppins-regular',
+                                              fontFamily: 'IBMPlexSans-Regular',
                                               fontSize: 14,
                                               color: products.isEmpty
                                                   ? Color.fromARGB(
-                                                      255, 168, 169, 193)
+                                                      255, 193, 168, 168)
                                                   : Color.fromARGB(
-                                                      255, 67, 83, 194),
+                                                      255, 57, 57, 57),
                                             ),
                                           ),
                                           Text(
                                             '$coinSymbol $ivaFormatted',
                                             style: TextStyle(
-                                              fontFamily: 'Poppins-regular',
+                                              fontFamily: 'IBMPlexSans-Regular',
                                               fontSize: 14,
                                               color: products.isEmpty
                                                   ? Color.fromARGB(
-                                                      255, 168, 169, 193)
+                                                      255, 193, 168, 168)
                                                   : Color.fromARGB(
-                                                      255, 67, 83, 194),
+                                                      255, 57, 57, 57),
                                             ),
                                           ),
                                         ],
@@ -936,25 +941,25 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                             //     .orderSubTotal,
                                             'Total a pagar',
                                             style: TextStyle(
-                                              fontFamily: 'Poppins-regular',
+                                              fontFamily: 'IBMPlexSans-Regular',
                                               fontSize: 14,
                                               color: products.isEmpty
                                                   ? Color.fromARGB(
-                                                      255, 168, 169, 193)
+                                                      255, 193, 168, 168)
                                                   : Color.fromARGB(
-                                                      255, 67, 83, 194),
+                                                      255, 57, 57, 57),
                                             ),
                                           ),
                                           Text(
                                             '$coinSymbol $totalFormatted',
                                             style: TextStyle(
-                                              fontFamily: 'Poppins-regular',
+                                              fontFamily: 'IBMPlexSans-Regular',
                                               fontSize: 14,
                                               color: products.isEmpty
                                                   ? Color.fromARGB(
-                                                      255, 168, 169, 193)
+                                                      255, 193, 168, 168)
                                                   : Color.fromARGB(
-                                                      255, 67, 83, 194),
+                                                      255, 57, 57, 57),
                                             ),
                                           ),
                                         ],
@@ -978,15 +983,14 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                               (Set<MaterialState> states) {
                                                 if (states.contains(
                                                     MaterialState.pressed)) {
-                                                  return myTheme
-                                                      .colorScheme.primary
-                                                      .withOpacity(0.8);
+                                                  return Color.fromARGB(
+                                                      145, 57, 57, 57);
                                                 } else if (states.contains(
                                                     MaterialState.disabled)) {
                                                   return Colors.grey.shade500;
                                                 } else {
-                                                  return myTheme
-                                                      .colorScheme.primary;
+                                                  return Color.fromARGB(
+                                                      255, 57, 57, 57);
                                                 }
                                               },
                                             ),
@@ -1006,9 +1010,10 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                           onPressed: products.isEmpty
                                               ? null
                                               : () {
-                                                  showSelectPaymentMethodDialog(
+                                                  processSelection(
                                                     userUid,
                                                     products,
+                                                    'Tarjeta de Debito',
                                                     ivaConverted.toDouble(),
                                                     subTotalConverted
                                                         .toDouble(),
@@ -1021,10 +1026,11 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                             children: [
                                               SizedBox(),
                                               Text(
-                                                'Continuar',
+                                                'Pagar',
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
-                                                  fontFamily: 'Poppins-medium',
+                                                  fontFamily:
+                                                      'IBMPlexSans-Medium',
                                                   fontSize: 14,
                                                   color: products.isEmpty
                                                       ? Colors.grey.shade700
@@ -1056,6 +1062,89 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
               ),
             ],
           );
+  }
+
+  processSelection(
+    userUid,
+    products,
+    paymentMethod,
+    ivaConverted,
+    subTotalConverted,
+    totalConverted,
+  ) async {
+    setState(() {
+      loading = true;
+    });
+    final firebaseID = FirebaseFirestore.instance
+        .collection('clientes')
+        .doc(widget.client!.clientDocumentId)
+        .collection('pedidos')
+        .doc()
+        .id;
+
+    final invoiceNumber = await completePaymentProcess(
+      widget.client,
+      userUid,
+      '',
+      0,
+      products,
+      'Factura',
+      'Fiscal',
+      DateTime.now(),
+      ivaConverted,
+      0,
+      subTotalConverted,
+      totalConverted,
+      0,
+      firebaseID,
+    );
+
+    Client currentClient = Client(
+      active: widget.client!.active,
+      specialContributor: widget.client!.specialContributor,
+      madeBy: widget.client!.madeBy,
+      masterDiscount: widget.client!.masterDiscount,
+      fiscalAdress: widget.client!.fiscalAdress,
+      dispatchAdress: widget.client!.dispatchAdress,
+      email: widget.client!.email,
+      prices: widget.client!.prices,
+      modified: widget.client!.modified,
+      name: widget.client!.name,
+      id: widget.client!.id,
+      prospect: widget.client!.prospect,
+      phone1: widget.client!.phone1,
+      phone2: widget.client!.phone2,
+      idType: widget.client!.idType,
+      zone: widget.client!.zone,
+      clientDocumentId: widget.client!.clientDocumentId,
+    );
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        settings: const RouteSettings(
+          name: 'PAGO-DIRECTO',
+        ),
+        builder: (BuildContext context) => AddPaymentPage(
+          invoiceTotal: totalConverted,
+          remaining: totalConverted,
+          subTotal: subTotalConverted,
+          discountPercentage: 0,
+          discount: 0,
+          tax: ivaConverted,
+          percentageTax: 16,
+          client: currentClient,
+          invoiceDocumentID: firebaseID,
+          invoiceNumber: invoiceNumber,
+          payments: const [],
+          isKiosko: true,
+          paymentType: paymentMethod,
+        ),
+      ),
+    );
+    setState(() {
+      loading = false;
+    });
   }
 
   showSelectPaymentMethodDialog(

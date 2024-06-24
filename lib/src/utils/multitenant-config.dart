@@ -150,7 +150,7 @@ class _MultitenantConfig {
       ),
     );
 
-    //TODO ver como hacer el mail dinamico sin que se truene
+    //TODO hacer lo de abajo de aqui en una funcion separada llamada desde el wrapper
     var tenantInfo = await FirebaseFirestore.instanceFor(app: baseApp!)
         .collection('clientes')
         .where('usuarios', arrayContains: 'vendedorretail1@example.com')
