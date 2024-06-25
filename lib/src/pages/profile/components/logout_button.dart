@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
+import 'package:pwa_sales2go_flutter/src/global/global.dart';
+import 'package:pwa_sales2go_flutter/src/pages/auth/login/email_page.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/auth.dart';
@@ -30,7 +32,7 @@ class _LogoutButtonState extends State<LogoutButton> {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
           child: ElevatedButton.icon(
-            onPressed: () {
+            onPressed: () async {
               final j =
                   Provider.of<CounterLimitFirestore>(context, listen: false);
               j.setNewScreen(0);
@@ -39,6 +41,13 @@ class _LogoutButtonState extends State<LogoutButton> {
               objectBox.delelteAllShoppingCart();
               orderActive.setOrder(false);
               _auth.signOut();
+              await sharedPreferences!.setString('tenantEmail', '');
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => EmailPage(),
+                ),
+              );
             },
             icon: const Icon(
               MaterialCommunityIcons.logout,

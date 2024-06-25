@@ -6,6 +6,7 @@ import 'package:pwa_sales2go_flutter/l10n/l10n.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/amount_input/amount_input.dart';
+import 'package:pwa_sales2go_flutter/src/pages/auth/login/email_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/auth/wrapper/wrapper.dart';
 import 'package:pwa_sales2go_flutter/src/pages/card_input/card_input.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/catalogue_page.dart';
@@ -26,7 +27,6 @@ import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/locale_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
-import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/auth.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/utils/determinePosition.dart';
@@ -50,7 +50,13 @@ Future<void> main() async {
 
   sharedPreferences = await SharedPreferences.getInstance();
   determinePosition();
-  runApp(const SfaAgnostiko());
+  String? mail = sharedPreferences!.getString("tenantEmail");
+  print("tennantMail: $mail ");
+  if (mail == null || mail == '') {
+    runApp(const EmailPage());
+  } else {
+    runApp(const SfaAgnostiko());
+  }
 }
 
 class SfaAgnostiko extends StatelessWidget {
@@ -59,8 +65,7 @@ class SfaAgnostiko extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     return FutureBuilder<bool>(
-      future:
-          multitenantConfig.initialize(), //TODO aqui solo inicializar baseApp
+      future: multitenantConfig.initialize(context),
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return MaterialApp(
@@ -77,7 +82,6 @@ class SfaAgnostiko extends StatelessWidget {
             home: const SplashScreenView(redirect: false),
           );
         }
-
         return StreamProvider<UserModel?>.value(
           value: AuthService().user,
           initialData: null,

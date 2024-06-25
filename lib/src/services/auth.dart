@@ -57,67 +57,6 @@ class AuthService {
       if (record.exists) {
         try {
           if (record.data()!['activo'] == true) {
-            // CurrentUserInfo newUser = CurrentUserInfo(
-            //   name: record.data()?['nombre'],
-            //   email: record.data()?['email'],
-            //   dni: record.data()?['nro_cedula'],
-            //   role: record.data()?['rol'].id,
-            //   zone: record.data().toString().contains('zona')
-            //       ? record.data()!['zona'].id
-            //       : 'NaN',
-            //   zoneDocument: record.data().toString().contains('zona')
-            //       ? record.data()!['zona']
-            //       : 'NaN',
-            //   uid: user.uid,
-            // );
-            // print(record.data()?['nombre']);
-            // print(record.data()?['email']);
-            // print(record.data()?['nro_cedula']);
-            // print(record.data()?['rol'].id);
-            // print(
-            //   record.data().toString().contains('zona')
-            //       ? record.data()!['zona'].id
-            //       : 'NaN',
-            // );
-            // print(record.data().toString().contains('zona')
-            //     ? record.data()!['zona']
-            //     : 'NaN');
-            // print(user.uid);
-            // currentUserActive.setCurrentUserInfo(newUser, true);
-////////////////////////////
-            // await sharedPreferences!.setString('uid', user.uid);
-            // await sharedPreferences!
-            //     .setString('email', user.email ?? 'No hay email');
-            // await sharedPreferences!
-            //     .setString('nombre', record.data()!['nombre']);
-            // await sharedPreferences!
-            //     .setInt('nro_cedula', record.data()!['nro_cedula']);
-            // List<String> indice = record.data()!['indice'].cast<String>();
-            // await sharedPreferences!.setStringList('indice', indice);
-            // await sharedPreferences!.setString('currentCoin', 'USD');
-            // if (record.data()!['rol'].id == 'S7iQ6hOGikhwrFUHmQtV') {
-            //   await sharedPreferences!.setString('cargo', 'Administrador');
-            // } else {
-            //   if (record.data()!['esGerente'] == false) {
-            //     if (record.data()!['esVendedor'] == false) {
-            //       await sharedPreferences!.setString('cargo', 'Cobrador');
-            //     } else {
-            //       await sharedPreferences!.setString('cargo', 'Vendedor');
-            //     }
-            //   } else {
-            //     await sharedPreferences!.setString('cargo', 'Gerente');
-            //   }
-            // }
-            // print('/////////////////////////////////////////////////');
-            // print('Saving Data on shared preferences');
-            // print(sharedPreferences!.getString('uid'));
-            // print(sharedPreferences!.getString('email'));
-            // print(sharedPreferences!.getString('nombre'));
-            // print(sharedPreferences!.getInt('nro_cedula'));
-            // print(sharedPreferences!.getStringList('indice'));
-            // print(sharedPreferences!.getString('cargo'));
-            // print('/////////////////////////////////////////////////');
-
             if (record.data()!['esVendedor'] ||
                 record.data()!['rol'].id == 'S7iQ6hOGikhwrFUHmQtV') {
               return _userFromFirebaseUser(user);
@@ -159,22 +98,6 @@ class AuthService {
   Future signOut() async {
     try {
       print('signed out pressed');
-      // await sharedPreferences!.setString('uid', '');
-      // await sharedPreferences!.setString('email', '');
-      // await sharedPreferences!.setString('nombre', '');
-      // await sharedPreferences!.setInt('nro_cedula', 0);
-      // await sharedPreferences!.setStringList('indice', []);
-      // await sharedPreferences!.setString('cargo', '');
-      // await sharedPreferences!.setString('cargo', '');
-      // print('/////////////////////////////////////////////////');
-      // print('Saving Data on shared preferences');
-      // print(sharedPreferences!.getString('uid'));
-      // print(sharedPreferences!.getString('email'));
-      // print(sharedPreferences!.getString('nombre'));
-      // print(sharedPreferences!.getInt('nro_cedula'));
-      // print(sharedPreferences!.getStringList('indice'));
-      // print(sharedPreferences!.getString('cargo'));
-      // print('/////////////////////////////////////////////////');
 
       return await _auth.signOut();
     } catch (e) {

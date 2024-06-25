@@ -4,83 +4,65 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
-import 'package:pwa_sales2go_flutter/src/pages/auth/login/email_page.dart';
-import 'package:pwa_sales2go_flutter/src/services/auth.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/loading/loading_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class EmailPage extends StatefulWidget {
+  const EmailPage({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<EmailPage> createState() => _EmailPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  // final AuthService _auth = AuthService();
+class _EmailPageState extends State<EmailPage> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool loading = false;
   final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    setState(() {
-      emailController.text = sharedPreferences!.getString("tenantEmail")!;
-    });
-    if (emailController.text == '') {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (BuildContext context) => EmailPage(),
-        ),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    return loading
-        ? LoadingWidget(
-            message: 'Verificando Credenciales',
-          )
-        : Scaffold(
-            body: SingleChildScrollView(
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: myTheme.colorScheme.primary,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    SizedBox(
-                      height: 80,
-                    ),
-                    Header(),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Color(0xFFFFFBFF),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(32),
-                          topRight: Radius.circular(32),
+    return MaterialApp(
+      home: loading
+          ? LoadingWidget(
+              message: 'Verificando Credenciales',
+            )
+          : Scaffold(
+              body: SingleChildScrollView(
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: myTheme.colorScheme.primary,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      SizedBox(
+                        height: 80,
+                      ),
+                      Header(),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Color(0xFFFFFBFF),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(32),
+                            topRight: Radius.circular(32),
+                          ),
+                        ),
+                        child: InputWrapper(
+                          emailController: emailController,
+                          formKey: formKey,
+                          loading: loading,
                         ),
                       ),
-                      child: InputWrapper(
-                        emailController: emailController,
-                        passwordController: passwordController,
-                        formKey: formKey,
-                        loading: loading,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          );
+    );
   }
 }
 
@@ -88,12 +70,10 @@ class InputWrapper extends StatefulWidget {
   const InputWrapper({
     super.key,
     required this.emailController,
-    required this.passwordController,
     required this.formKey,
     required this.loading,
   });
   final TextEditingController? emailController;
-  final TextEditingController? passwordController;
   final GlobalKey<FormState> formKey;
   final bool loading;
 
@@ -116,23 +96,7 @@ class _InputWrapperState extends State<InputWrapper> {
               ),
               child: InputField(
                 emailController: widget.emailController,
-                passwordController: widget.passwordController,
                 formKey: widget.formKey,
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              alignment: Alignment.centerRight,
-              child: Text(
-                "Recuperar contraseña",
-                style: TextStyle(
-                  color: Color(0xFF7D5070),
-                  fontFamily: 'Poppins-regular',
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
               ),
             ),
             SizedBox(
@@ -141,13 +105,6 @@ class _InputWrapperState extends State<InputWrapper> {
             Button(
               emailController: widget.emailController,
               formKey: widget.formKey,
-              loading: widget.loading,
-              passwordController: widget.passwordController,
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            Button2(
               loading: widget.loading,
             ),
             SizedBox(
@@ -234,103 +191,23 @@ class _HeaderState extends State<Header> {
   }
 }
 
-class Button2 extends StatefulWidget {
-  Button2({
-    super.key,
-    required this.loading,
-  });
-
-  final bool loading;
-
-  @override
-  State<Button2> createState() => _ButtonState2();
-}
-
-class _ButtonState2 extends State<Button2> {
-  final AuthService _auth = AuthService();
-  late bool loading;
-  @override
-  initState() {
-    super.initState();
-    loading = widget.loading;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return loading
-        ? Center(
-            child: Column(
-            children: [
-              CircularProgressIndicator(),
-              SizedBox(height: 20),
-              Text(
-                'Verificando credenciales...',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontFamily: 'Poppins-regular',
-                  color: myTheme.colorScheme.onPrimaryContainer,
-                ),
-              ),
-            ],
-          ))
-        : Container(
-            width: 328,
-            height: 45,
-            decoration: BoxDecoration(
-              color: Colors.transparent,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: ElevatedButton(
-              onPressed: () async {
-                await sharedPreferences!.setString('tenantEmail', '');
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => EmailPage(),
-                  ),
-                );
-              },
-              style: ButtonStyle(
-                alignment: Alignment.center,
-                backgroundColor: MaterialStateProperty.all<Color>(
-                  myTheme.colorScheme.secondary,
-                ),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    side: BorderSide(color: myTheme.colorScheme.primary),
-                  ),
-                ),
-              ),
-              child: Text(
-                'Cambiar Tennant',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          );
-  }
-}
-
 class Button extends StatefulWidget {
   Button({
     super.key,
     required this.formKey,
     required this.loading,
     required this.emailController,
-    required this.passwordController,
   });
 
   final formKey;
   final bool loading;
   final emailController;
-  final passwordController;
 
   @override
   State<Button> createState() => _ButtonState();
 }
 
 class _ButtonState extends State<Button> {
-  final AuthService _auth = AuthService();
   late bool loading;
   @override
   initState() {
@@ -369,19 +246,22 @@ class _ButtonState extends State<Button> {
                   setState(() {
                     loading = true;
                   });
-                  final user = await _auth.signInWithEmailAndPassword(
-                    widget.emailController.text.toString(),
-                    widget.passwordController.text.toString(),
-                  );
                   sharedPreferences!.setString(
                     "tenantEmail",
                     widget.emailController.text.toString(),
                   );
-                  if (user == null) {
-                    setState(() {
-                      loading = false;
-                    });
-                  }
+                  Navigator.pop(
+                    context,
+                  );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => SfaAgnostiko(),
+                    ),
+                  );
+                  setState(() {
+                    loading = false;
+                  });
                 }
               },
               style: ButtonStyle(
@@ -409,11 +289,9 @@ class InputField extends StatefulWidget {
   const InputField({
     super.key,
     required this.emailController,
-    required this.passwordController,
     required this.formKey,
   });
   final TextEditingController? emailController;
-  final TextEditingController? passwordController;
   final GlobalKey<FormState> formKey;
 
   @override
@@ -486,64 +364,6 @@ class _InputFieldState extends State<InputField> {
                 ),
                 focusColor: Theme.of(context).primaryColor,
                 hintText: "Correo",
-                hintStyle: TextStyle(
-                  color: Color(0xFF5A5D77),
-                  fontFamily: 'Poppins-regular',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  letterSpacing: 0.25,
-                ),
-                filled: true,
-                fillColor: Colors.white,
-                border: InputBorder.none,
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 16,
-          ),
-          Container(
-            height: 56,
-            width: 328,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: TextFormField(
-              controller: widget.passwordController,
-              onChanged: (value) {
-                print("passwordController: ${widget.passwordController?.text}");
-              },
-              maxLines: 1,
-              keyboardType: TextInputType.emailAddress,
-              cursorColor: myTheme.colorScheme.primary,
-              textInputAction: TextInputAction.next,
-              obscureText: true,
-              style: TextStyle(
-                fontFamily: 'Poppins-regular',
-                color: myTheme.colorScheme.primary,
-              ),
-              inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.allow(
-                  // RegExp(r'[0-9]+[.]{0,1}[0-9]*'),
-                  RegExp(r"^[a-zA-Z0-9@.!#$%&'*+-/=?^_`{|}~\u00f1]*"),
-                ),
-              ],
-              validator: (password) => password != null && password.length < 6
-                  ? 'Contraseña inválida'
-                  : null,
-              decoration: InputDecoration(
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(
-                    color: Colors.transparent,
-                  ),
-                ),
-                enabledBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.transparent),
-                  borderRadius: BorderRadius.all(Radius.circular(8)),
-                ),
-                focusColor: Theme.of(context).primaryColor,
-                hintText: "Contraseña",
                 hintStyle: TextStyle(
                   color: Color(0xFF5A5D77),
                   fontFamily: 'Poppins-regular',

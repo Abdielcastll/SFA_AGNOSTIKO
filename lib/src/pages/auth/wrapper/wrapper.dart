@@ -22,7 +22,6 @@ class _WrapperState extends State<Wrapper> {
   Widget build(BuildContext context) {
     final user = Provider.of<UserModel?>(context);
     final orderActive = Provider.of<OrderProvider>(context);
-    //TODO si existe user iniciar tennantApp aqui
     if (user == null) {
       return LoginPage();
     } else {

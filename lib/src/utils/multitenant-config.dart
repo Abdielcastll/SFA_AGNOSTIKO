@@ -4,7 +4,10 @@ import 'dart:io';
 import 'package:agnostiko/agnostiko.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/firebase_options.dart';
+import 'package:pwa_sales2go_flutter/src/global/global.dart';
+import 'package:pwa_sales2go_flutter/src/pages/auth/login/email_page.dart';
 import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 //import 'package:tms_agent_communication/tms_agent_communication.dart';
 import 'package:collection/collection.dart';
@@ -66,21 +69,20 @@ class _MultitenantConfig {
     }
   }
 
-  Future<bool> initialize() async {
+  Future<bool> initialize(BuildContext context) async {
     try {
       print("init multitenant");
-      // if (!await validateLocalFile()) {
-      //   final config = await getAppConfig();
-      //   await saveConfigFile(config);
-      // }
-      //fieldSalesConfig = await readLocalFile();
-
-      final tenantInfo = await getTenantFirebaseDatabase();
-
-      tenantApp = await Firebase.initializeApp(
-        name: 'tenant-app',
-        options: tenantInfo,
+      await Firebase.initializeApp(
+        options: const FirebaseOptions(
+          apiKey: "AIzaSyCoOXpe8Y3eI7yo85ExuFKHJ9q8OvuDG_g",
+          authDomain: "multitenant-example-1.firebaseapp.com",
+          projectId: "multitenant-example-1",
+          storageBucket: "multitenant-example-1.appspot.com",
+          messagingSenderId: "473200255429",
+          appId: "1:473200255429:web:08f7d3d72d91394d68abac",
+        ),
       );
+
       baseApp = await Firebase.initializeApp(
         options: const FirebaseOptions(
           apiKey: "AIzaSyCoOXpe8Y3eI7yo85ExuFKHJ9q8OvuDG_g",
@@ -91,16 +93,10 @@ class _MultitenantConfig {
           appId: "1:473200255429:web:08f7d3d72d91394d68abac",
         ),
       );
-      print('options change try');
-      try {
-        await Firebase.initializeApp(
-          options: tenantInfo,
-        );
-      } catch (e) {
-        print('tried: ' + e.toString());
-      }
-      RemoteConfigProvider provider = RemoteConfigProvider();
-      provider.getRemoteConfig();
+
+      String? tenantEmail = sharedPreferences!.getString("tenantEmail");
+      await initMultitenantWithEmail(tenantEmail!);
+
       return true;
     } catch (e) {
       throw Exception(
@@ -127,53 +123,44 @@ class _MultitenantConfig {
     }
   }
 
-  Future<FirebaseOptions> getTenantFirebaseDatabase() async {
-    await Firebase.initializeApp(
-      options: const FirebaseOptions(
-        apiKey: "AIzaSyCoOXpe8Y3eI7yo85ExuFKHJ9q8OvuDG_g",
-        authDomain: "multitenant-example-1.firebaseapp.com",
-        projectId: "multitenant-example-1",
-        storageBucket: "multitenant-example-1.appspot.com",
-        messagingSenderId: "473200255429",
-        appId: "1:473200255429:web:08f7d3d72d91394d68abac",
-      ),
-    );
-    baseApp = await Firebase.initializeApp(
-      name: 'base-app',
-      options: const FirebaseOptions(
-        apiKey: "AIzaSyCoOXpe8Y3eI7yo85ExuFKHJ9q8OvuDG_g",
-        authDomain: "multitenant-example-1.firebaseapp.com",
-        projectId: "multitenant-example-1",
-        storageBucket: "multitenant-example-1.appspot.com",
-        messagingSenderId: "473200255429",
-        appId: "1:473200255429:web:08f7d3d72d91394d68abac",
-      ),
-    );
+  Future<bool> initMultitenantWithEmail(String email) async {
+    try {
+      var tenantInfo = await FirebaseFirestore.instanceFor(app: baseApp!)
+          .collection('clientes')
+          .where('usuarios', arrayContains: email)
+          .get();
 
-    //TODO hacer lo de abajo de aqui en una funcion separada llamada desde el wrapper
-    var tenantInfo = await FirebaseFirestore.instanceFor(app: baseApp!)
-        .collection('clientes')
-        .where('usuarios', arrayContains: 'vendedorretail1@example.com')
-        .get();
+      if (tenantInfo.docs.isEmpty) {
+        throw Exception('Tenant no registrado en Firebase');
+      }
 
-    if (tenantInfo.docs.isEmpty) {
-      throw Exception('Tenant no registrado en Firebase');
+      // Assuming only one document should match the query
+      final tenantDoc = tenantInfo.docs.first;
+      final mapAppConfig =
+          tenantDoc.get('webAppConfig') as Map<String, dynamic>;
+
+      print(mapAppConfig);
+
+      FirebaseOptions tennantInfo = FirebaseOptions(
+        apiKey: mapAppConfig['apiKey']!,
+        authDomain: mapAppConfig['authDomain']!,
+        projectId: mapAppConfig['projectId']!,
+        storageBucket: mapAppConfig['storageBucket']!,
+        messagingSenderId: mapAppConfig['messagingSenderId']!,
+        appId: mapAppConfig['appId']!,
+      );
+
+      tenantApp = await Firebase.initializeApp(
+        name: 'tenant-app',
+        options: tennantInfo,
+      );
+
+      RemoteConfigProvider provider = RemoteConfigProvider();
+      provider.getRemoteConfig();
+      return true;
+    } catch (e) {
+      throw (e);
     }
-
-    // Assuming only one document should match the query
-    final tenantDoc = tenantInfo.docs.first;
-    final mapAppConfig = tenantDoc.get('webAppConfig') as Map<String, dynamic>;
-
-    print(mapAppConfig);
-
-    return FirebaseOptions(
-      apiKey: mapAppConfig['apiKey']!,
-      authDomain: mapAppConfig['authDomain']!,
-      projectId: mapAppConfig['projectId']!,
-      storageBucket: mapAppConfig['storageBucket']!,
-      messagingSenderId: mapAppConfig['messagingSenderId']!,
-      appId: mapAppConfig['appId']!,
-    );
   }
 
   Future<Map<String, dynamic>> getAppConfig() async {
