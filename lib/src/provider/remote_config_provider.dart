@@ -34,6 +34,7 @@ class RemoteConfig {
   bool? notificaciones;
   bool? conversionKiosko;
   bool? clientesEnabled;
+  bool? onlyFullPaymentWithCard;
 
   RemoteConfig({
     this.aplicacionDescuentoMaestro,
@@ -62,6 +63,7 @@ class RemoteConfig {
     this.zonasDeVenta,
     this.conversionKiosko,
     this.clientesEnabled,
+    this.onlyFullPaymentWithCard,
   });
 
   Map<String, dynamic> toMap() {
@@ -92,6 +94,7 @@ class RemoteConfig {
       'zonasDeVenta': zonasDeVenta,
       'conversionKiosko': conversionKiosko,
       'clientesEnabled': clientesEnabled,
+      'onlyFullPaymentWithCard': onlyFullPaymentWithCard,
     };
   }
 }
@@ -151,6 +154,8 @@ class RemoteConfigProvider {
       zonasDeVenta: allConfigs['zonasDeVenta']?.asBool() ?? true,
       conversionKiosko: allConfigs['conversionKiosko']?.asBool() ?? true,
       clientesEnabled: allConfigs['clientesEnabled']?.asBool() ?? true,
+      onlyFullPaymentWithCard:
+          allConfigs['onlyFullPaymentWithCard']?.asBool() ?? false,
     );
     globalRemoteConfig = remoteConfigModel;
     //printProperties(globalRemoteConfig);

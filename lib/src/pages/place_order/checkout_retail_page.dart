@@ -1020,11 +1020,19 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                                 widget.client!.clientDocumentId,
                                           );
 
+                                          bool onlyCard = false;
+                                          String? paymentMethod;
+                                          if (globalRemoteConfig
+                                              .onlyFullPaymentWithCard!) {
+                                            onlyCard = true;
+                                            paymentMethod = 'Tarjeta de Debito';
+                                          }
                                           Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(
                                               settings: RouteSettings(
-                                                  name: 'PAGO-DIRECTO'),
+                                                name: 'PAGO-DIRECTO',
+                                              ),
                                               builder: (BuildContext context) =>
                                                   AddPaymentPage(
                                                 invoiceTotal: total,
@@ -1042,6 +1050,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                                 invoiceDocumentID: firebaseID,
                                                 invoiceNumber: invoiceNumber,
                                                 payments: [],
+                                                isKiosko: onlyCard,
+                                                paymentType: paymentMethod,
                                                 // updatePayed: updatePayed,
                                               ),
                                             ),
