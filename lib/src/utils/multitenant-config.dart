@@ -69,7 +69,7 @@ class _MultitenantConfig {
     }
   }
 
-  Future<bool> initialize(BuildContext context) async {
+  Future<bool> initialize() async {
     try {
       print("init multitenant");
       await Firebase.initializeApp(
@@ -120,6 +120,29 @@ class _MultitenantConfig {
     } catch (e) {
       throw Exception(
           'No se pudo inicializar la configuracion Multitenant: $e');
+    }
+  }
+
+  Future<bool> checkExistence(String email) async {
+    baseApp = await Firebase.initializeApp(
+      options: const FirebaseOptions(
+        apiKey: "AIzaSyCoOXpe8Y3eI7yo85ExuFKHJ9q8OvuDG_g",
+        authDomain: "multitenant-example-1.firebaseapp.com",
+        projectId: "multitenant-example-1",
+        storageBucket: "multitenant-example-1.appspot.com",
+        messagingSenderId: "473200255429",
+        appId: "1:473200255429:web:08f7d3d72d91394d68abac",
+      ),
+    );
+    var tenantInfo = await FirebaseFirestore.instanceFor(app: baseApp!)
+        .collection('clientes')
+        .where('usuarios', arrayContains: email)
+        .get();
+
+    if (tenantInfo.docs.isEmpty) {
+      return false;
+    } else {
+      return true;
     }
   }
 

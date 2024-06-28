@@ -1144,26 +1144,4 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
       loading = false;
     });
   }
-
-  showSelectPaymentMethodDialog(
-    userUid,
-    products,
-    ivaConverted,
-    subTotalConverted,
-    totalConverted,
-  ) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return PaymentMethodDialog(
-          userUid: userUid,
-          products: products,
-          ivaConverted: ivaConverted,
-          subTotalConverted: subTotalConverted,
-          totalConverted: totalConverted,
-          client: widget.client,
-        );
-      },
-    );
-  }
 }

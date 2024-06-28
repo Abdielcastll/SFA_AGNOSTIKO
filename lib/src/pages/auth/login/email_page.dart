@@ -9,6 +9,7 @@ import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/loading/loading_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:pwa_sales2go_flutter/src/utils/multitenant-config.dart';
 
 class EmailPage extends StatefulWidget {
   const EmailPage({Key? key}) : super(key: key);
@@ -209,6 +210,7 @@ class Button extends StatefulWidget {
 
 class _ButtonState extends State<Button> {
   late bool loading;
+  String errorMessage = '';
   @override
   initState() {
     super.initState();
@@ -220,67 +222,94 @@ class _ButtonState extends State<Button> {
     return loading
         ? Center(
             child: Column(
-            children: [
-              CircularProgressIndicator(),
-              SizedBox(height: 20),
-              Text(
-                'Verificando credenciales...',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontFamily: 'Poppins-regular',
-                  color: myTheme.colorScheme.onPrimaryContainer,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(height: 20),
+                Text(
+                  'Verificando credenciales...',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'Poppins-regular',
+                    color: myTheme.colorScheme.onPrimaryContainer,
+                  ),
                 ),
-              ),
-            ],
-          ))
-        : Container(
-            width: 328,
-            height: 45,
-            decoration: BoxDecoration(
-              color: Colors.transparent,
-              borderRadius: BorderRadius.circular(16),
+              ],
             ),
-            child: ElevatedButton(
-              onPressed: () async {
-                if (widget.formKey.currentState!.validate()) {
-                  setState(() {
-                    loading = true;
-                  });
-                  sharedPreferences!.setString(
-                    "tenantEmail",
-                    widget.emailController.text.toString(),
-                  );
-                  Navigator.pop(
-                    context,
-                  );
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => SfaAgnostiko(),
-                    ),
-                  );
-                  setState(() {
-                    loading = false;
-                  });
-                }
-              },
-              style: ButtonStyle(
-                alignment: Alignment.center,
-                backgroundColor: MaterialStateProperty.all<Color>(
-                  myTheme.colorScheme.primary,
+          )
+        : Column(
+            children: [
+              Container(
+                width: 328,
+                height: 45,
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(16),
                 ),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    side: BorderSide(color: myTheme.colorScheme.primary),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    if (widget.formKey.currentState!.validate()) {
+                      setState(() {
+                        loading = true;
+                      });
+                      bool registeredEmail =
+                          await multitenantConfig.checkExistence(
+                              widget.emailController.text.toString());
+                      if (registeredEmail) {
+                        sharedPreferences!.setString(
+                          "tenantEmail",
+                          widget.emailController.text.toString(),
+                        );
+                        Navigator.pop(
+                          context,
+                        );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => SfaAgnostiko(),
+                          ),
+                        );
+                        setState(() {
+                          loading = false;
+                        });
+                      } else {
+                        setState(() {
+                          errorMessage =
+                              "No registrado en tennant, ingresa otro correo.";
+                          loading = false;
+                        });
+                      }
+                    }
+                  },
+                  style: ButtonStyle(
+                    alignment: Alignment.center,
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                      myTheme.colorScheme.primary,
+                    ),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        side: BorderSide(color: myTheme.colorScheme.primary),
+                      ),
+                    ),
+                  ),
+                  child: Text(
+                    'Ingresar',
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
               ),
-              child: Text(
-                'Ingresar',
-                style: TextStyle(color: Colors.white),
+              Container(
+                width: 600,
+                padding: EdgeInsets.only(top: 15),
+                child: Text(
+                  errorMessage,
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontFamily: 'Poppins-regular',
+                  ),
+                ),
               ),
-            ),
+            ],
           );
   }
 }
