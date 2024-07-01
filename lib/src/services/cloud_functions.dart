@@ -1,17 +1,17 @@
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:pwa_sales2go_flutter/src/utils/multitenant-config.dart';
 
 Future<List> getDataFromBQ(String query) async {
   HttpsCallable function =
-      FirebaseFunctions.instance.httpsCallable('getDataFromBQ');
+      FirebaseFunctions.instanceFor(app: multitenantConfig.tenantApp!)
+          .httpsCallable('getDataFromBQ');
 
   final result = await function({
     "query": query,
   });
-
-  // print('getDataFromBQ');
-  // print(result.data);
-
   return result.data as List;
+
+  // print(result.data);
 }
 
 const queryProductosMasVendidos =
@@ -26,7 +26,8 @@ LIMIT 10''';
 
 Future sendNotification(String subjectId, String title, String body) async {
   HttpsCallable function =
-      FirebaseFunctions.instance.httpsCallable('sendNotification');
+      FirebaseFunctions.instanceFor(app: multitenantConfig.tenantApp!)
+          .httpsCallable('sendNotification');
 
   function({'recieverId': subjectId, 'title': title, 'body': body});
 }

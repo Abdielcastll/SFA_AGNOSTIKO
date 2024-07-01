@@ -46,6 +46,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
           // print(data);
           data.forEach(
             (el) {
+              print(el);
               String elQuality = el['calidad'];
               String quality = elQuality.replaceAll(RegExp('"'), '');
               String elCatalogue = el['catalogo'];
@@ -54,7 +55,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
               String categorie = elCategorie.replaceAll(RegExp('"'), '');
               String elCode = el['codigo'];
               String code = elCode.replaceAll(RegExp('"'), '');
-              String elBarCode = el['codigoBarra'];
+              String elBarCode = '0'; // no existe en la peticion que llega
               String barCode = elBarCode.replaceAll(RegExp('"'), '');
               String elDesign = el['diseno'];
               String design = elDesign.replaceAll(RegExp('"'), '');
