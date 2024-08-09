@@ -22,7 +22,8 @@ Future<bool> Function() cancelTransactionDialogFn(BuildContext context) {
 
         // Navigator.popUntil(context, (route) => route.isFirst == true);
         Navigator.pop(context, true);
-        if (globalRemoteConfig.conversionKiosko!) {
+        if (globalRemoteConfig.conversionKiosko! ||
+            globalRemoteConfig.clientesEnabled! == false) {
           Navigator.pop(context, true);
           Navigator.pop(context, true);
         }
