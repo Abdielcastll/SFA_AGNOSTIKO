@@ -47,7 +47,12 @@ class _AmountInputViewState extends State<AmountInputView> {
     }
 
     return WillPopScope(
-      onWillPop: cancelTransactionDialogFn(context),
+      onWillPop: cancelTransactionDialogFn(
+        context,
+        null,
+        null,
+        false,
+      ),
       child: RawKeyboardListener(
         focusNode: FocusNode(),
         onKey: rawKeypadHandler(
@@ -55,7 +60,12 @@ class _AmountInputViewState extends State<AmountInputView> {
           onDigit: _addDigit,
           onEnter: _acceptAmount,
           onBackspace: _removeDigit,
-          onEscape: cancelTransactionDialogFn(context),
+          onEscape: cancelTransactionDialogFn(
+            context,
+            null,
+            null,
+            false,
+          ),
         ),
         child: Scaffold(
           appBar: AppBar(

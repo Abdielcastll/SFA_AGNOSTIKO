@@ -32,7 +32,12 @@ class _PanInputViewState extends State<PanInputView> {
         ModalRoute.of(context)?.settings.arguments as TransactionArgs;
 
     return WillPopScope(
-      onWillPop: cancelTransactionDialogFn(context),
+      onWillPop: cancelTransactionDialogFn(
+        context,
+        null,
+        null,
+        false,
+      ),
       child: RawKeyboardListener(
         focusNode: FocusNode(),
         onKey: rawKeypadHandler(
@@ -40,7 +45,12 @@ class _PanInputViewState extends State<PanInputView> {
           onDigit: _addDigit,
           onEnter: _acceptPan,
           onBackspace: _removeDigit,
-          onEscape: cancelTransactionDialogFn(context),
+          onEscape: cancelTransactionDialogFn(
+            context,
+            null,
+            null,
+            false,
+          ),
         ),
         child: Scaffold(
           appBar: AppBar(

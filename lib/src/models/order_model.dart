@@ -23,6 +23,7 @@ class Orders {
   final lastModification;
   final sellerDocumentRef;
   final orderDocumentRef;
+  final canceledOrder;
 
   Orders({
     this.productsQuantity,
@@ -47,6 +48,7 @@ class Orders {
     this.lastModification,
     this.sellerDocumentRef,
     this.orderDocumentRef,
+    this.canceledOrder,
   });
 }
 
@@ -73,6 +75,7 @@ class ClientOrder {
   final lastModification;
   final sellerDocumentRef;
   final orderDocumentRef;
+  final canceledOrder;
 
   ClientOrder({
     this.productsQuantity,
@@ -97,6 +100,7 @@ class ClientOrder {
     this.lastModification,
     this.sellerDocumentRef,
     this.orderDocumentRef,
+    this.canceledOrder,
   });
 }
 
@@ -165,6 +169,9 @@ List<Orders> ordersFromSnapshot(QuerySnapshot snapshot) {
           ? doc.get('vendedor').id
           : 'NaN',
       orderDocumentRef: doc.reference.id,
+      canceledOrder: doc.data().toString().contains('pedidoCancelado')
+          ? doc.get('pedidoCancelado')
+          : false,
     );
   }).toList();
 }
@@ -233,5 +240,8 @@ ClientOrder orderFromdocument(doc) {
         ? doc.get('vendedor').id
         : 'NaN',
     orderDocumentRef: doc.reference.id,
+    canceledOrder: doc.data().toString().contains('pedidoCancelado')
+        ? doc.get('pedidoCancelado')
+        : false,
   );
 }

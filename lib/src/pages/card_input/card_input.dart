@@ -37,6 +37,7 @@ class CardInputView extends StatefulWidget {
 
 class _CardInputViewState extends State<CardInputView> {
   TransactionArgs? transactionArgs;
+  AddPaymentBodyAtt? paymentBody;
 
   bool _isFallback = false;
 
@@ -65,6 +66,9 @@ class _CardInputViewState extends State<CardInputView> {
     transactionArgs ??= (ModalRoute.of(context)?.settings.arguments! as List)[0]
         as TransactionArgs;
 
+    paymentBody ??= (ModalRoute.of(context)?.settings.arguments! as List)[2]
+        as AddPaymentBodyAtt;
+
     if (_detectionStarted == false) {
       _detectionStarted = true;
       _supportedCardTypes = transactionArgs?.supportedCardTypes ?? [];
@@ -85,13 +89,23 @@ class _CardInputViewState extends State<CardInputView> {
     }
 
     return WillPopScope(
-      onWillPop: cancelTransactionDialogFn(context),
+      onWillPop: cancelTransactionDialogFn(
+        context,
+        paymentBody!.client,
+        paymentBody!.invoiceNumber,
+        true,
+      ),
       child: RawKeyboardListener(
         focusNode: FocusNode(),
         autofocus: true,
         onKey: rawKeypadHandler(
           context,
-          onEscape: cancelTransactionDialogFn(context),
+          onEscape: cancelTransactionDialogFn(
+            context,
+            paymentBody!.client,
+            paymentBody!.invoiceNumber,
+            true,
+          ),
         ),
         child: Scaffold(
           appBar: AppBar(
@@ -300,7 +314,7 @@ class _CardInputViewState extends State<CardInputView> {
     Navigator.pushNamed(
       context,
       PinInputView.route,
-      arguments: transactionArgs,
+      arguments: [transactionArgs, paymentBody],
     );
   }
 

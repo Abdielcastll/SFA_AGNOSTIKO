@@ -812,8 +812,57 @@ Future registerTransferInterPayment({
   }
 }
 
-// Pago directo desde el checkout
+Future<void> cancelPaymentProcess(Client client, int nroCorrelativo) async {
+  Map<String, int> productStockUpdates = {};
 
+  await clientesRef
+      .doc(client.clientDocumentId)
+      .collection('pedidos')
+      .where('nroCorrelativo', isEqualTo: nroCorrelativo)
+      .get()
+      .then((querySnapshot) {
+    for (var doc in querySnapshot.docs) {
+      doc.reference.update({'pedidoCancelado': true, 'facturado': true});
+
+      List<dynamic> productos = doc.data()['productos'];
+      for (var producto in productos) {
+        String id = producto['id'];
+        int cantidad = producto['cantidad'];
+        productStockUpdates[id] = cantidad;
+      }
+    }
+  });
+
+  await FirebaseFirestore.instance
+      .collection('faturas')
+      .where('nroCorrelativo', isEqualTo: nroCorrelativo)
+      .get()
+      .then((querySnapshot) {
+    for (var doc in querySnapshot.docs) {
+      doc.reference.delete();
+    }
+  });
+
+  final DocumentReference stockPath = stockRef.doc('productos');
+  Map<String, dynamic> currentStock = {};
+  await stockPath.get().then(
+    (doc) {
+      currentStock = doc.data().toString().contains('valores')
+          ? doc.get('valores')
+          : {'0': 0};
+    },
+  );
+
+  print('Modifying stock');
+  productStockUpdates.forEach((key, value) async {
+    int newValue = (currentStock[key] ?? 0) + value;
+    await stockPath.update({
+      'valores.$key': newValue,
+    });
+  });
+}
+
+// Pago directo desde el checkout
 Future<int> completePaymentProcess(
   Clients? client,
   String? userUid,
@@ -987,6 +1036,7 @@ Future<int> completePaymentProcess(
       .collection('pedidos')
       .doc(randomID)
       .update({'facturado': true, 'nroCorrelativo': correlativeNumber + 1});
+
   await clientesRef
       .doc(client.clientDocumentId)
       .collection('facturas')

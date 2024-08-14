@@ -60,8 +60,9 @@ class _CompletedOrdersState extends State<CompletedOrders> {
                       final orderClientRefID = order.clientDocumentRef;
                       final orderRefID = order.orderDocumentRef;
                       final orderIsFailed = order.isInvoiceFailed;
-                      final orderStatus =
-                          AppLocalizations.of(context)!.completed;
+                      final orderStatus = order.canceledOrder
+                          ? "Cancelada"
+                          : AppLocalizations.of(context)!.completed;
                       final orderProducts = order.products;
                       final orderSubTotal = order.subTotal;
                       final orderDiscountMaster = order.masterDiscount;

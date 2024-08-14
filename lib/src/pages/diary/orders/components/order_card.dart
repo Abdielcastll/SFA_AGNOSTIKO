@@ -144,6 +144,8 @@ class _OrderCardBodyState extends State<OrderCardBody> {
               AppLocalizations.of(context)!.completed &&
           widget.widget.isInvoicesFailed == false) {
         return Colors.green.shade600;
+      } else if (widget.widget.status == "Cancelada") {
+        return Colors.red;
       }
     }
 
@@ -316,7 +318,6 @@ class _OrderCardBodyState extends State<OrderCardBody> {
                             style: TextStyle(
                               fontSize: 10,
                               fontFamily: 'Poppins-medium',
-                              color: identifyStatusColor(),
                             ),
                           ),
                         ),

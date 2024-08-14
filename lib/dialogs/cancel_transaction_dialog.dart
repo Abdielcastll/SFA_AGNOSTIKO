@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:agnostiko/agnostiko.dart';
+import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 
 import 'confirm_dialog.dart';
 
@@ -9,7 +11,12 @@ import 'confirm_dialog.dart';
 ///
 /// Si se acepta, este Dialog cancela cualquier proceso de detección de tarjetas
 /// o transacción que se esté llevando a cabo.
-Future<bool> Function() cancelTransactionDialogFn(BuildContext context) {
+Future<bool> Function() cancelTransactionDialogFn(
+  BuildContext context,
+  Client? currentClient,
+  int? nroCorrelativo,
+  bool cancelPedido,
+) {
   showDialogFn() async {
     final value = await showConfirmDialog(
       context,
@@ -20,6 +27,9 @@ Future<bool> Function() cancelTransactionDialogFn(BuildContext context) {
         await closeCardReader();
         await cancelEmvTransaction();
 
+        if (cancelPedido && globalRemoteConfig.onlyFullPaymentWithCard!) {
+          await cancelPaymentProcess(currentClient!, nroCorrelativo!);
+        }
         // Navigator.popUntil(context, (route) => route.isFirst == true);
         Navigator.pop(context, true);
         if (globalRemoteConfig.conversionKiosko! ||

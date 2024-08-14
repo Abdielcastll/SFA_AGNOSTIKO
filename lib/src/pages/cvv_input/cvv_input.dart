@@ -29,7 +29,12 @@ class _CvvInputViewState extends State<CvvInputView> {
         ModalRoute.of(context)?.settings.arguments as TransactionArgs;
 
     return WillPopScope(
-      onWillPop: cancelTransactionDialogFn(context),
+      onWillPop: cancelTransactionDialogFn(
+        context,
+        null,
+        null,
+        false,
+      ),
       child: RawKeyboardListener(
           focusNode: FocusNode(),
           onKey: rawKeypadHandler(
@@ -37,7 +42,12 @@ class _CvvInputViewState extends State<CvvInputView> {
             onDigit: _addDigit,
             onEnter: _acceptCvv,
             onBackspace: _removeDigit,
-            onEscape: cancelTransactionDialogFn(context),
+            onEscape: cancelTransactionDialogFn(
+              context,
+              null,
+              null,
+              false,
+            ),
           ),
           child: Scaffold(
             appBar: AppBar(

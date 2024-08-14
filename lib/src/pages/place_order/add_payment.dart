@@ -1420,18 +1420,19 @@ class AddPaymentBodyAtt {
   List<PayMethod> payments = [];
   double? amountPaied;
 
-  AddPaymentBodyAtt(
-      {required this.remaining,
-      required this.subTotal,
-      required this.discount,
-      required this.discountPercentage,
-      required this.tax,
-      required this.percentageTax,
-      required this.client,
-      required this.invoiceDocumentID,
-      required this.invoiceNumber,
-      required this.currencyExchange,
-      required this.currency});
+  AddPaymentBodyAtt({
+    required this.remaining,
+    required this.subTotal,
+    required this.discount,
+    required this.discountPercentage,
+    required this.tax,
+    required this.percentageTax,
+    required this.client,
+    required this.invoiceDocumentID,
+    required this.invoiceNumber,
+    required this.currencyExchange,
+    required this.currency,
+  });
 }
 
 class PayMethod {

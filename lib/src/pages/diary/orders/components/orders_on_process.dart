@@ -27,7 +27,8 @@ class _OrdersOnProcessState extends State<OrdersOnProcess> {
   Widget build(BuildContext context) {
     final orders = Provider.of<List<Orders>?>(context) ?? [];
     final ordersOnProcess = orders
-        .where((element) => element.isInvoiced == false)
+        .where((element) =>
+            (element.isInvoiced == false && element.canceledOrder == false))
         .toList()
         .reversed
         .toList();

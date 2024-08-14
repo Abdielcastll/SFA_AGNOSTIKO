@@ -29,7 +29,12 @@ class _ExpDateInputViewState extends State<ExpDateInputView> {
         ModalRoute.of(context)?.settings.arguments as TransactionArgs;
 
     return WillPopScope(
-      onWillPop: cancelTransactionDialogFn(context),
+      onWillPop: cancelTransactionDialogFn(
+        context,
+        null,
+        null,
+        false,
+      ),
       child: RawKeyboardListener(
         focusNode: FocusNode(),
         onKey: rawKeypadHandler(
@@ -37,7 +42,12 @@ class _ExpDateInputViewState extends State<ExpDateInputView> {
           onDigit: _addDigit,
           onEnter: _acceptExpDate,
           onBackspace: _removeDigit,
-          onEscape: cancelTransactionDialogFn(context),
+          onEscape: cancelTransactionDialogFn(
+            context,
+            null,
+            null,
+            false,
+          ),
         ),
         child: Scaffold(
           appBar: AppBar(

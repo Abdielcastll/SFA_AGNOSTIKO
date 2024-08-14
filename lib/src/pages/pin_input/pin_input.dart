@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:agnostiko/agnostiko.dart';
+import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 import '../../../dialogs/cancel_transaction_dialog.dart';
@@ -59,6 +60,8 @@ class _PinInputViewState extends State<PinInputView> {
   String? _pinError;
 
   TransactionArgs? transactionArgs;
+  AddPaymentBodyAtt? paymentBody;
+
   int? remainingPinTries;
 
   @override
@@ -79,8 +82,11 @@ class _PinInputViewState extends State<PinInputView> {
   @override
   Widget build(BuildContext context) {
     if (transactionArgs == null) {
-      transactionArgs =
-          ModalRoute.of(context)?.settings.arguments as TransactionArgs;
+      transactionArgs ??= (ModalRoute.of(context)?.settings.arguments!
+          as List)[0] as TransactionArgs;
+
+      paymentBody ??= (ModalRoute.of(context)?.settings.arguments! as List)[1]
+          as AddPaymentBodyAtt;
 
       remainingPinTries = transactionArgs?.remainingPinTries;
     }
@@ -93,7 +99,12 @@ class _PinInputViewState extends State<PinInputView> {
     }
 
     return WillPopScope(
-      onWillPop: cancelTransactionDialogFn(context),
+      onWillPop: cancelTransactionDialogFn(
+        context,
+        paymentBody!.client,
+        paymentBody!.invoiceNumber,
+        false,
+      ),
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: myTheme.colorScheme.primary,
