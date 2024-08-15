@@ -833,8 +833,9 @@ Future<void> cancelPaymentProcess(Client client, int nroCorrelativo) async {
     }
   });
 
-  await FirebaseFirestore.instance
-      .collection('faturas')
+  await clientesRef
+      .doc(client.clientDocumentId)
+      .collection('facturas')
       .where('nroCorrelativo', isEqualTo: nroCorrelativo)
       .get()
       .then((querySnapshot) {
