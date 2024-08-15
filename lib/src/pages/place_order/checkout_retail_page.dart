@@ -276,6 +276,9 @@ class _CheckoutBodyState extends State<CheckoutBody> {
       );
     }
 
+    bool mostrarDescuentos = globalRemoteConfig
+        .configDescuentoMaestro!; //TODO exclusivo prosa, preguntar si va a remote
+
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       child: Column(
@@ -302,7 +305,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         AppLocalizations.of(context)!.subtotal,
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
-                          fontFamily: 'Poppins-regular',
+                          fontFamily: 'Poppins-Regular',
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
@@ -315,7 +318,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         '$coinSymbol $subTotalFormatted',
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
-                          fontFamily: 'Poppins-regular',
+                          fontFamily: 'Poppins-Regular',
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
@@ -323,391 +326,404 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                     ),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        '${AppLocalizations.of(context)!.masterDiscount} ($clientMasterDiscount%)',
-                        style: TextStyle(
-                          color: myTheme.colorScheme.primary,
-                          fontFamily: 'Poppins-regular',
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(right: 10),
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        '- $coinSymbol $subTotalWithMasterDiscountFormatted',
-                        style: TextStyle(
-                          color: myTheme.colorScheme.primary,
-                          fontFamily: 'Poppins-regular',
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      // margin: const EdgeInsets.only(bottom: 5),
-                      alignment: Alignment.centerLeft,
-                      child: Row(
-                        children: [
-                          Text(
-                            'Descuento aplicado ($discountByInput%)',
-                            style: TextStyle(
-                              color: myTheme.colorScheme.primary,
-                              fontFamily: 'Poppins-regular',
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                            ),
+                if (mostrarDescuentos)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '${AppLocalizations.of(context)!.masterDiscount} ($clientMasterDiscount%)',
+                          style: TextStyle(
+                            color: myTheme.colorScheme.primary,
+                            fontFamily: 'Poppins-Regular',
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
                           ),
-                          Container(
-                            height: 40,
-                            width: 40,
-                            child: IconButton(
-                              onPressed: () async {
-                                print('Menu de aplicar descuentos');
-                                List<String> discountsStrings = ['0'];
-                                List discounts = defaultDiscounts;
-                                for (var discount in discounts) {
-                                  String discountString =
-                                      (discount.discount * 100)
-                                          .round()
-                                          .toString();
-                                  discountsStrings.add(discountString);
-                                }
-                                print('Descuentos: $discountsStrings');
-                                // List<String> items3 = ['0', '5', '10', '15'];
-                                await showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      StatefulBuilder(
-                                    builder: (context, StateSetter setState) =>
-                                        AlertDialog(
-                                      actionsOverflowButtonSpacing: 1,
-                                      actionsPadding: EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                        vertical: 10,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      title: Center(
-                                        child: Text(
-                                          'Aplicar descuento',
-                                          style: TextStyle(
-                                            color: myTheme.colorScheme.primary,
-                                            fontFamily: 'Poppins-regular',
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(right: 10),
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '- $coinSymbol $subTotalWithMasterDiscountFormatted',
+                          style: TextStyle(
+                            color: myTheme.colorScheme.primary,
+                            fontFamily: 'Poppins-Regular',
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                if (mostrarDescuentos)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        // margin: const EdgeInsets.only(bottom: 5),
+                        alignment: Alignment.centerLeft,
+                        child: Row(
+                          children: [
+                            Text(
+                              'Descuento aplicado ($discountByInput%)',
+                              style: TextStyle(
+                                color: myTheme.colorScheme.primary,
+                                fontFamily: 'Poppins-Regular',
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Container(
+                              height: 40,
+                              width: 40,
+                              child: IconButton(
+                                onPressed: () async {
+                                  print('Menu de aplicar descuentos');
+                                  List<String> discountsStrings = ['0'];
+                                  List discounts = defaultDiscounts;
+                                  for (var discount in discounts) {
+                                    String discountString =
+                                        (discount.discount * 100)
+                                            .round()
+                                            .toString();
+                                    discountsStrings.add(discountString);
+                                  }
+                                  print('Descuentos: $discountsStrings');
+                                  // List<String> items3 = ['0', '5', '10', '15'];
+                                  await showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        StatefulBuilder(
+                                      builder:
+                                          (context, StateSetter setState) =>
+                                              AlertDialog(
+                                        actionsOverflowButtonSpacing: 1,
+                                        actionsPadding: EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                          vertical: 10,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        title: Center(
+                                          child: Text(
+                                            'Aplicar descuento',
+                                            style: TextStyle(
+                                              color:
+                                                  myTheme.colorScheme.primary,
+                                              fontFamily: 'Poppins-Regular',
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      content: Container(
-                                        child: SingleChildScrollView(
-                                          child: Column(
-                                            children: [
-                                              Center(
-                                                child:
-                                                    DropdownButtonHideUnderline(
-                                                  child: DropdownButton2(
-                                                    isExpanded: true,
-                                                    hint: Row(
-                                                      children: [
-                                                        Icon(
-                                                          Icons.list,
+                                        content: Container(
+                                          child: SingleChildScrollView(
+                                            child: Column(
+                                              children: [
+                                                Center(
+                                                  child:
+                                                      DropdownButtonHideUnderline(
+                                                    child: DropdownButton2(
+                                                      isExpanded: true,
+                                                      hint: Row(
+                                                        children: [
+                                                          Icon(
+                                                            Icons.list,
+                                                            size: 16,
+                                                            color: myTheme
+                                                                .colorScheme
+                                                                .primary,
+                                                          ),
+                                                          SizedBox(
+                                                            width: 4,
+                                                          ),
+                                                          Expanded(
+                                                            child: Text(
+                                                              'Seleccionar descuento',
+                                                              style: TextStyle(
+                                                                fontSize: 14,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color: myTheme
+                                                                    .colorScheme
+                                                                    .primary,
+                                                              ),
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      items: discountsStrings
+                                                          .map(
+                                                            (item) =>
+                                                                DropdownMenuItem<
+                                                                    String>(
+                                                              value: item,
+                                                              child: Center(
+                                                                child: Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    Text(
+                                                                      item,
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontSize:
+                                                                            14,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                        color: myTheme
+                                                                            .colorScheme
+                                                                            .primary,
+                                                                        fontFamily:
+                                                                            'Poppins-Regular',
+                                                                      ),
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                    ),
+                                                                    Icon(
+                                                                      MaterialCommunityIcons
+                                                                          .percent,
+                                                                      size: 14,
+                                                                      color: myTheme
+                                                                          .colorScheme
+                                                                          .primary,
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          )
+                                                          .toList(),
+                                                      value: selectedDiscount,
+                                                      onChanged: (value) {
+                                                        setState(() {
+                                                          selectedDiscount =
+                                                              value as String;
+                                                        });
+                                                      },
+                                                      iconStyleData:
+                                                          IconStyleData(
+                                                        icon: Icon(
+                                                          Icons.arrow_drop_down,
                                                           size: 16,
                                                           color: myTheme
                                                               .colorScheme
                                                               .primary,
                                                         ),
-                                                        SizedBox(
-                                                          width: 4,
-                                                        ),
-                                                        Expanded(
-                                                          child: Text(
-                                                            'Seleccionar descuento',
-                                                            style: TextStyle(
-                                                              fontSize: 14,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              color: myTheme
-                                                                  .colorScheme
-                                                                  .primary,
-                                                            ),
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
+                                                        iconSize: 14,
+                                                        iconEnabledColor:
+                                                            myTheme.colorScheme
+                                                                .primary,
+                                                        iconDisabledColor:
+                                                            Colors.grey,
+                                                      ),
+                                                      buttonStyleData:
+                                                          ButtonStyleData(
+                                                        height: 50,
+                                                        width: 160,
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                left: 14,
+                                                                right: 14),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(14),
+                                                          border: Border.all(
+                                                            color: myTheme
+                                                                .colorScheme
+                                                                .primary,
                                                           ),
+                                                          color: Colors.white,
                                                         ),
-                                                      ],
+                                                        elevation: 0,
+                                                      ),
+                                                      menuItemStyleData:
+                                                          MenuItemStyleData(
+                                                        height: 40,
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                left: 14,
+                                                                right: 14),
+                                                      ),
+                                                      dropdownStyleData:
+                                                          DropdownStyleData(
+                                                        width: 160,
+                                                        padding: null,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          border: Border.all(
+                                                            color: myTheme
+                                                                .colorScheme
+                                                                .primary,
+                                                          ),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(14),
+                                                          color: Colors.white,
+                                                        ),
+                                                        elevation: 0,
+                                                        scrollbarTheme:
+                                                            ScrollbarThemeData(
+                                                          radius: const Radius
+                                                              .circular(40),
+                                                          thickness:
+                                                              MaterialStateProperty
+                                                                  .all<double>(
+                                                                      6),
+                                                          thumbVisibility:
+                                                              MaterialStateProperty
+                                                                  .all<bool>(
+                                                                      true),
+                                                        ),
+                                                        maxHeight: 200,
+                                                        offset:
+                                                            const Offset(0, 0),
+                                                      ),
                                                     ),
-                                                    items: discountsStrings
-                                                        .map(
-                                                          (item) =>
-                                                              DropdownMenuItem<
-                                                                  String>(
-                                                            value: item,
-                                                            child: Center(
-                                                              child: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  Text(
-                                                                    item,
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontSize:
-                                                                          14,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      color: myTheme
-                                                                          .colorScheme
-                                                                          .primary,
-                                                                      fontFamily:
-                                                                          'Poppins-regular',
-                                                                    ),
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                  ),
-                                                                  Icon(
-                                                                    MaterialCommunityIcons
-                                                                        .percent,
-                                                                    size: 14,
-                                                                    color: myTheme
-                                                                        .colorScheme
-                                                                        .primary,
-                                                                  )
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        )
-                                                        .toList(),
-                                                    value: selectedDiscount,
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        selectedDiscount =
-                                                            value as String;
-                                                      });
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        actions: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              ElevatedButton.icon(
+                                                onPressed: () {
+                                                  // Cancelar
+                                                  Navigator.pop(context);
+                                                },
+                                                style: ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                    myTheme.colorScheme.primary,
+                                                  ),
+                                                  shape:
+                                                      MaterialStateProperty.all<
+                                                          RoundedRectangleBorder>(
+                                                    RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              18.0),
+                                                    ),
+                                                  ),
+                                                ),
+                                                icon: Icon(
+                                                  MaterialCommunityIcons
+                                                      .backspace,
+                                                  size: 16,
+                                                ),
+                                                label: Text(
+                                                  'Cancelar',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontFamily:
+                                                        'Poppins-Regular',
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              ElevatedButton.icon(
+                                                onPressed: () {
+                                                  // Aplicar cambios de descuentos
+                                                  setState(
+                                                    () {
+                                                      discountByInput =
+                                                          int.parse(
+                                                              selectedDiscount
+                                                                  .toString());
                                                     },
-                                                    iconStyleData:
-                                                        IconStyleData(
-                                                      icon: Icon(
-                                                        Icons.arrow_drop_down,
-                                                        size: 16,
-                                                        color: myTheme
-                                                            .colorScheme
-                                                            .primary,
-                                                      ),
-                                                      iconSize: 14,
-                                                      iconEnabledColor: myTheme
-                                                          .colorScheme.primary,
-                                                      iconDisabledColor:
-                                                          Colors.grey,
+                                                  );
+                                                  print(
+                                                      'discountByInput: $discountByInput');
+                                                  Navigator.pop(context);
+                                                },
+                                                style: ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                    myTheme.colorScheme
+                                                        .onPrimaryContainer,
+                                                  ),
+                                                  shape:
+                                                      MaterialStateProperty.all<
+                                                          RoundedRectangleBorder>(
+                                                    RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              18.0),
                                                     ),
-                                                    buttonStyleData:
-                                                        ButtonStyleData(
-                                                      height: 50,
-                                                      width: 160,
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              left: 14,
-                                                              right: 14),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(14),
-                                                        border: Border.all(
-                                                          color: myTheme
-                                                              .colorScheme
-                                                              .primary,
-                                                        ),
-                                                        color: Colors.white,
-                                                      ),
-                                                      elevation: 0,
-                                                    ),
-                                                    menuItemStyleData:
-                                                        MenuItemStyleData(
-                                                      height: 40,
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              left: 14,
-                                                              right: 14),
-                                                    ),
-                                                    dropdownStyleData:
-                                                        DropdownStyleData(
-                                                      width: 160,
-                                                      padding: null,
-                                                      decoration: BoxDecoration(
-                                                        border: Border.all(
-                                                          color: myTheme
-                                                              .colorScheme
-                                                              .primary,
-                                                        ),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(14),
-                                                        color: Colors.white,
-                                                      ),
-                                                      elevation: 0,
-                                                      scrollbarTheme:
-                                                          ScrollbarThemeData(
-                                                        radius: const Radius
-                                                            .circular(40),
-                                                        thickness:
-                                                            MaterialStateProperty
-                                                                .all<double>(6),
-                                                        thumbVisibility:
-                                                            MaterialStateProperty
-                                                                .all<bool>(
-                                                                    true),
-                                                      ),
-                                                      maxHeight: 200,
-                                                      offset:
-                                                          const Offset(0, 0),
-                                                    ),
+                                                  ),
+                                                ),
+                                                icon: Icon(
+                                                  MaterialCommunityIcons
+                                                      .label_percent,
+                                                  size: 20,
+                                                ),
+                                                label: Text(
+                                                  'Aceptar',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontFamily:
+                                                        'Poppins-Regular',
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
                                               ),
                                             ],
-                                          ),
-                                        ),
+                                          )
+                                        ],
                                       ),
-                                      actions: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            ElevatedButton.icon(
-                                              onPressed: () {
-                                                // Cancelar
-                                                Navigator.pop(context);
-                                              },
-                                              style: ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStateProperty.all(
-                                                  myTheme.colorScheme.primary,
-                                                ),
-                                                shape:
-                                                    MaterialStateProperty.all<
-                                                        RoundedRectangleBorder>(
-                                                  RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            18.0),
-                                                  ),
-                                                ),
-                                              ),
-                                              icon: Icon(
-                                                MaterialCommunityIcons
-                                                    .backspace,
-                                                size: 16,
-                                              ),
-                                              label: Text(
-                                                'Cancelar',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontFamily: 'Poppins-regular',
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
-                                            ElevatedButton.icon(
-                                              onPressed: () {
-                                                // Aplicar cambios de descuentos
-                                                setState(
-                                                  () {
-                                                    discountByInput = int.parse(
-                                                        selectedDiscount
-                                                            .toString());
-                                                  },
-                                                );
-                                                print(
-                                                    'discountByInput: $discountByInput');
-                                                Navigator.pop(context);
-                                              },
-                                              style: ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStateProperty.all(
-                                                  myTheme.colorScheme
-                                                      .onPrimaryContainer,
-                                                ),
-                                                shape:
-                                                    MaterialStateProperty.all<
-                                                        RoundedRectangleBorder>(
-                                                  RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            18.0),
-                                                  ),
-                                                ),
-                                              ),
-                                              icon: Icon(
-                                                MaterialCommunityIcons
-                                                    .label_percent,
-                                                size: 20,
-                                              ),
-                                              label: Text(
-                                                'Aceptar',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontFamily: 'Poppins-regular',
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        )
-                                      ],
                                     ),
-                                  ),
-                                );
+                                  );
 
-                                setState(() {});
-                              },
-                              splashRadius: 10,
-                              splashColor: myTheme.colorScheme.primary,
-                              icon: Icon(
-                                MaterialIcons.add,
-                                size: 16,
-                                color: myTheme.colorScheme.primary,
+                                  setState(() {});
+                                },
+                                splashRadius: 10,
+                                splashColor: myTheme.colorScheme.primary,
+                                icon: Icon(
+                                  MaterialIcons.add,
+                                  size: 16,
+                                  color: myTheme.colorScheme.primary,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(right: 10),
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        '- $coinSymbol $discountAppliedFormatted',
-                        style: TextStyle(
-                          color: myTheme.colorScheme.primary,
-                          fontFamily: 'Poppins-regular',
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
+                          ],
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                      Container(
+                        margin: const EdgeInsets.only(right: 10),
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          '- $coinSymbol $discountAppliedFormatted',
+                          style: TextStyle(
+                            color: myTheme.colorScheme.primary,
+                            fontFamily: 'Poppins-Regular',
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -718,7 +734,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         '${AppLocalizations.of(context)!.tax} (16%)',
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
-                          fontFamily: 'Poppins-regular',
+                          fontFamily: 'Poppins-Regular',
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
@@ -731,7 +747,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         '+ $coinSymbol $taxFormatted',
                         style: TextStyle(
                           color: myTheme.colorScheme.primary,
-                          fontFamily: 'Poppins-regular',
+                          fontFamily: 'Poppins-Regular',
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
@@ -748,7 +764,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         AppLocalizations.of(context)!.orderTotal,
                         style: TextStyle(
                           color: myTheme.colorScheme.onPrimaryContainer,
-                          fontFamily: 'Poppins-regular',
+                          fontFamily: 'Poppins-Regular',
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
@@ -761,7 +777,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         '$coinSymbol $totalPriceOfTheOrderFormatted',
                         style: TextStyle(
                           color: myTheme.colorScheme.onPrimaryContainer,
-                          fontFamily: 'Poppins-regular',
+                          fontFamily: 'Poppins-Regular',
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
@@ -863,7 +879,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                             child: Text(
                               'Confirmación',
                               style: TextStyle(
-                                fontFamily: 'Poppins-regular',
+                                fontFamily: 'Poppins-Regular',
                               ),
                             ),
                           ),
@@ -877,7 +893,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                     '¿Pasar a procesar pago?',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      fontFamily: 'Poppins-regular',
+                                      fontFamily: 'Poppins-Regular',
                                     ),
                                   ),
                                 ),
@@ -924,7 +940,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                           'Cancelar',
                                           style: TextStyle(
                                             color: Colors.white,
-                                            fontFamily: 'Poppins-regular',
+                                            fontFamily: 'Poppins-Regular',
                                             fontSize: 12,
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -1089,7 +1105,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                           'Continuar',
                                           style: TextStyle(
                                             color: Colors.grey.shade300,
-                                            fontFamily: 'Poppins-regular',
+                                            fontFamily: 'Poppins-Regular',
                                             fontSize: 12,
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -1124,7 +1140,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                     Text(
                       'PROCESAR PAGO ',
                       style: TextStyle(
-                        fontFamily: 'Poppins-regular',
+                        fontFamily: 'Poppins-Regular',
                         fontSize: 14,
                         color: Colors.grey.shade300,
                       ),
@@ -1142,220 +1158,221 @@ class _CheckoutBodyState extends State<CheckoutBody> {
               ),
             ),
           ),
-          Container(
-            margin: const EdgeInsets.fromLTRB(20, 0, 20, 30),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            width: MediaQuery.of(context).size.width,
-            height: 50,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: ElevatedButton(
-                onPressed: () async {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        surfaceTintColor: Color.fromARGB(255, 222, 222, 222),
-                        actionsOverflowButtonSpacing: 1,
-                        actionsPadding: EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 10,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(16.0),
+          if (globalRemoteConfig.guardarOrdenPedido == true)
+            Container(
+              margin: const EdgeInsets.fromLTRB(20, 0, 20, 30),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              width: MediaQuery.of(context).size.width,
+              height: 50,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          surfaceTintColor: Color.fromARGB(255, 222, 222, 222),
+                          actionsOverflowButtonSpacing: 1,
+                          actionsPadding: EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 10,
                           ),
-                        ),
-                        title: Center(
-                          child: Text(
-                            'Confirmación',
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(16.0),
+                            ),
                           ),
-                        ),
-                        content: SingleChildScrollView(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Center(
-                                child: Text(
-                                  '¿Seguro que quiere guardar el pedido y pagar de forma manual?',
-                                  textAlign: TextAlign.center,
+                          title: Center(
+                            child: Text(
+                              'Confirmación',
+                            ),
+                          ),
+                          content: SingleChildScrollView(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Center(
+                                  child: Text(
+                                    '¿Seguro que quiere guardar el pedido y pagar de forma manual?',
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        actions: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              ElevatedButton.icon(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                    myTheme.colorScheme.primary,
-                                  ),
-                                  foregroundColor: MaterialStateProperty.all(
-                                    Colors.white,
-                                  ),
-                                  shape: MaterialStateProperty.all(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                        16,
+                          actions: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                ElevatedButton.icon(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                      myTheme.colorScheme.primary,
+                                    ),
+                                    foregroundColor: MaterialStateProperty.all(
+                                      Colors.white,
+                                    ),
+                                    shape: MaterialStateProperty.all(
+                                      RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                          16,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                icon: Icon(
-                                  MaterialCommunityIcons.backspace,
-                                  size: 16,
-                                  color: Colors.white,
-                                ),
-                                label: Text(
-                                  'Cancelar',
-                                  style: TextStyle(
+                                  icon: Icon(
+                                    MaterialCommunityIcons.backspace,
+                                    size: 16,
                                     color: Colors.white,
-                                    fontFamily: 'Poppins-regular',
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  label: Text(
+                                    'Cancelar',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'Poppins-Regular',
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              ElevatedButton.icon(
-                                onPressed: () async {
-                                  print('GUARDAR PEDIDO');
-                                  final orderActive =
-                                      Provider.of<OrderProvider>(context,
-                                          listen: false);
-                                  final double subTotalToDouble =
-                                      widget.subTotal;
-                                  final double masterDiscount =
-                                      subTotalWithMasterDiscountRounded
-                                          .toDouble();
-                                  final double appliedDiscount =
-                                      discountAppliedRounded.toDouble();
-                                  final double taxes = taxRounded.toDouble();
-                                  final double total =
-                                      totalPriceOfTheOrder.toDouble();
+                                ElevatedButton.icon(
+                                  onPressed: () async {
+                                    print('GUARDAR PEDIDO');
+                                    final orderActive =
+                                        Provider.of<OrderProvider>(context,
+                                            listen: false);
+                                    final double subTotalToDouble =
+                                        widget.subTotal;
+                                    final double masterDiscount =
+                                        subTotalWithMasterDiscountRounded
+                                            .toDouble();
+                                    final double appliedDiscount =
+                                        discountAppliedRounded.toDouble();
+                                    final double taxes = taxRounded.toDouble();
+                                    final double total =
+                                        totalPriceOfTheOrder.toDouble();
 
-                                  print('subTotalToDouble:$subTotalToDouble');
-                                  print('masterDiscount:$masterDiscount');
-                                  print('appliedDiscount:$appliedDiscount');
-                                  print('taxes:$taxes');
-                                  print('total:$total');
+                                    print('subTotalToDouble:$subTotalToDouble');
+                                    print('masterDiscount:$masterDiscount');
+                                    print('appliedDiscount:$appliedDiscount');
+                                    print('taxes:$taxes');
+                                    print('total:$total');
 
-                                  if (selectedValue2 != null) {
-                                    try {
-                                      await createOrder(
-                                        widget.client,
-                                        userUid,
-                                        commentary,
-                                        masterDiscount,
-                                        widget.cart,
-                                        selectedValue2,
-                                        selectedValue,
-                                        today,
-                                        taxes,
-                                        numberOrder,
-                                        subTotalToDouble,
-                                        total,
-                                        discountByInput,
-                                        true,
-                                      );
-                                    } catch (e) {
-                                      print('ERROR AL GUARDAR PEDIDO');
-                                      print(e);
+                                    if (selectedValue2 != null) {
+                                      try {
+                                        await createOrder(
+                                          widget.client,
+                                          userUid,
+                                          commentary,
+                                          masterDiscount,
+                                          widget.cart,
+                                          selectedValue2,
+                                          selectedValue,
+                                          today,
+                                          taxes,
+                                          numberOrder,
+                                          subTotalToDouble,
+                                          total,
+                                          discountByInput,
+                                          true,
+                                        );
+                                      } catch (e) {
+                                        print('ERROR AL GUARDAR PEDIDO');
+                                        print(e);
+                                      }
+                                      orderActive.setOrder(false);
+                                      objectBox.delelteAllShoppingCart();
+                                      completeOrder();
+                                    } else {
+                                      Fluttertoast.showToast(
+                                          msg:
+                                              'Seleccione un tipo de Negociacion por favor');
                                     }
-                                    orderActive.setOrder(false);
-                                    objectBox.delelteAllShoppingCart();
-                                    completeOrder();
-                                  } else {
-                                    Fluttertoast.showToast(
-                                        msg:
-                                            'Seleccione un tipo de Negociacion por favor');
-                                  }
-                                },
-                                style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                    myTheme.colorScheme.primary,
-                                  ),
-                                  foregroundColor: MaterialStateProperty.all(
-                                    Colors.white,
-                                  ),
-                                  shape: MaterialStateProperty.all(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                        16,
+                                  },
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                      myTheme.colorScheme.primary,
+                                    ),
+                                    foregroundColor: MaterialStateProperty.all(
+                                      Colors.white,
+                                    ),
+                                    shape: MaterialStateProperty.all(
+                                      RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                          16,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                icon: Icon(
-                                  MaterialCommunityIcons.content_save,
-                                  size: 16,
-                                  color: Colors.white,
-                                ),
-                                label: Text(
-                                  'Continuar',
-                                  style: TextStyle(
+                                  icon: Icon(
+                                    MaterialCommunityIcons.content_save,
+                                    size: 16,
                                     color: Colors.white,
-                                    fontFamily: 'Poppins-regular',
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  label: Text(
+                                    'Continuar',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'Poppins-Regular',
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          )
-                        ],
-                      );
-                    },
-                  );
-                },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                    myTheme.colorScheme.onPrimaryContainer,
-                  ),
-                  foregroundColor: MaterialStateProperty.all(
-                    Colors.white,
-                  ),
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        16,
+                              ],
+                            )
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                      myTheme.colorScheme.onPrimaryContainer,
+                    ),
+                    foregroundColor: MaterialStateProperty.all(
+                      Colors.white,
+                    ),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                          16,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'GUARDAR PEDIDO',
-                      style: TextStyle(
-                        fontFamily: 'Poppins-regular',
-                        fontSize: 14,
-                        color: Colors.grey.shade300,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'GUARDAR PEDIDO',
+                        style: TextStyle(
+                          fontFamily: 'Poppins-Regular',
+                          fontSize: 14,
+                          color: Colors.grey.shade300,
+                        ),
                       ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
-                      child: Icon(
-                        MaterialIcons.save_alt,
-                        // SimpleLineIcons.arrow_right,
-                        size: 14,
-                        color: Colors.grey.shade300,
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+                        child: Icon(
+                          MaterialIcons.save_alt,
+                          // SimpleLineIcons.arrow_right,
+                          size: 14,
+                          color: Colors.grey.shade300,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
         ],
       ),
     );
