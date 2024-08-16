@@ -119,7 +119,9 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
   }
 
   void _initializeVideoPlayer(String url) {
-    _videoController = VideoPlayerController.network(url)
+    print('init video player');
+
+    _videoController = VideoPlayerController.networkUrl(Uri.parse(url))
       ..initialize().then((_) {
         setState(() {});
         if (showVideo) {
@@ -129,9 +131,11 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
   }
 
   void _startInactivityTimer() {
+    print('start timer');
     _inactivityTimer?.cancel();
     _inactivityTimer = Timer(const Duration(minutes: 2), () {
       setState(() {
+        print('show video');
         showVideo = true;
         _videoController?.play();
       });
@@ -139,6 +143,8 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
   }
 
   void _cancelInactivityTimer() {
+    print('cancel timer');
+
     if (_inactivityTimer?.isActive ?? false) {
       _inactivityTimer!.cancel();
     }
@@ -149,6 +155,8 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
   }
 
   void _resetInactivityTimer() {
+    print('reset timer');
+
     _startInactivityTimer();
     setState(() {
       showVideo = false;
@@ -167,9 +175,12 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
           NavigationPages(),
           if (_videoController != null &&
               _videoController!.value.isInitialized &&
-              showVideo)
-            SizedBox(
+              showVideo &&
+              globalRemoteConfig.promoVideoDisponible!)
+            Container(
+              color: Colors.black,
               width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
               child: AspectRatio(
                 aspectRatio: _videoController!.value.aspectRatio,
                 child: VideoPlayer(_videoController!),

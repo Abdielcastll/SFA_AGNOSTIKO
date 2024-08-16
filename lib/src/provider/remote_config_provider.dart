@@ -36,6 +36,7 @@ class RemoteConfig {
   bool? clientesEnabled;
   bool? onlyFullPaymentWithCard;
   int? promoVideoNumber;
+  bool? promoVideoDisponible;
 
   RemoteConfig({
     this.aplicacionDescuentoMaestro,
@@ -66,6 +67,7 @@ class RemoteConfig {
     this.clientesEnabled,
     this.onlyFullPaymentWithCard,
     this.promoVideoNumber,
+    this.promoVideoDisponible,
   });
 
   Map<String, dynamic> toMap() {
@@ -98,6 +100,7 @@ class RemoteConfig {
       'clientesEnabled': clientesEnabled,
       'onlyFullPaymentWithCard': onlyFullPaymentWithCard,
       'promoVideoNumber': promoVideoNumber,
+      'promoVideoDisponible': promoVideoDisponible,
     };
   }
 }
@@ -160,6 +163,8 @@ class RemoteConfigProvider {
       onlyFullPaymentWithCard:
           allConfigs['onlyFullPaymentWithCard']?.asBool() ?? false,
       promoVideoNumber: allConfigs['promoVideoNumber']?.asInt() ?? 1,
+      promoVideoDisponible:
+          allConfigs['promoVideoDisponible']?.asBool() ?? false,
     );
     globalRemoteConfig = remoteConfigModel;
     //printProperties(globalRemoteConfig);
