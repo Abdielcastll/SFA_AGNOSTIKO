@@ -276,8 +276,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
       );
     }
 
-    bool mostrarDescuentos = globalRemoteConfig
-        .configDescuentoMaestro!; //TODO exclusivo prosa, preguntar si va a remote
+    bool mostrarDescuentos = globalRemoteConfig.configDescuentoMaestro!;
 
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),

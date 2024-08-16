@@ -124,7 +124,7 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
     _videoController = VideoPlayerController.networkUrl(Uri.parse(url))
       ..initialize().then((_) {
         setState(() {});
-        if (showVideo) {
+        if (showVideo && globalRemoteConfig.promoVideoDisponible!) {
           _videoController!.play();
         }
       });
@@ -135,9 +135,11 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
     _inactivityTimer?.cancel();
     _inactivityTimer = Timer(const Duration(minutes: 2), () {
       setState(() {
-        print('show video');
-        showVideo = true;
-        _videoController?.play();
+        if (globalRemoteConfig.promoVideoDisponible!) {
+          print('show video');
+          showVideo = true;
+          _videoController?.play();
+        }
       });
     });
   }
