@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:agnostiko/agnostiko.dart';
 import 'package:intl/intl.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
+import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 /* import '../../config/app_config.dart'; */
@@ -208,6 +210,10 @@ class _CardInputViewState extends State<CardInputView> {
       ));
       print("Error: $e");
       print(stackTrace);
+      if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+        await cancelPaymentProcess(
+            paymentBody!.client, paymentBody!.invoiceNumber);
+      }
       Navigator.popUntil(context, (route) => route.isFirst == true);
     }
     print("****************CARD READER CLOSED*****************");
@@ -271,6 +277,10 @@ class _CardInputViewState extends State<CardInputView> {
 
     if (!mounted) return;
     // si llegamos aquí es porque se canceló la transacción en esta pantalla
+    if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+      await cancelPaymentProcess(
+          paymentBody!.client, paymentBody!.invoiceNumber);
+    }
     Navigator.popUntil(context, (route) => route.isFirst == true);
   }
 
@@ -337,6 +347,10 @@ class _CardInputViewState extends State<CardInputView> {
     }
     // si llegamos aquí, hubo cancelación, timeout o error
     await cancelEmvTransaction();
+    if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+      await cancelPaymentProcess(
+          paymentBody!.client, paymentBody!.invoiceNumber);
+    }
     print("****************PIN ENTRY CLOSED*****************");
   }
 
@@ -423,6 +437,12 @@ class _CardInputViewState extends State<CardInputView> {
           showInfoDialog(context, "$exception. $infoDialogText",
               onClose: () async {
             await cancelEmvTransaction();
+            if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+              await cancelPaymentProcess(
+                paymentBody!.client,
+                paymentBody!.invoiceNumber,
+              );
+            }
             Navigator.popUntil(context, (route) => route.isFirst == true);
           });
         } else {
