@@ -81,9 +81,8 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
   void initState() {
     super.initState();
     Timer(const Duration(minutes: 1), () {
-      setState(() {
-        _fetchVideoLink();
-      });
+      _startInactivityTimer();
+      _fetchVideoLink();
     });
   }
 
@@ -134,13 +133,15 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
     print('start timer');
     _inactivityTimer?.cancel();
     _inactivityTimer = Timer(const Duration(minutes: 2), () {
-      setState(() {
-        if (globalRemoteConfig.promoVideoDisponible!) {
+      final orderActive = Provider.of<OrderProvider>(context, listen: false);
+      if (orderActive.orderActive! == false &&
+          globalRemoteConfig.promoVideoDisponible!) {
+        setState(() {
           print('show video');
           showVideo = true;
           _videoController?.play();
-        }
-      });
+        });
+      }
     });
   }
 
@@ -168,6 +169,8 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
 
   @override
   Widget build(BuildContext context) {
+    final orderActive = Provider.of<OrderProvider>(context);
+
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: _resetInactivityTimer,
@@ -178,7 +181,8 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
           if (_videoController != null &&
               _videoController!.value.isInitialized &&
               showVideo &&
-              globalRemoteConfig.promoVideoDisponible!)
+              globalRemoteConfig.promoVideoDisponible! &&
+              orderActive.orderActive! == false)
             Container(
               color: Colors.black,
               width: MediaQuery.of(context).size.width,
