@@ -380,8 +380,23 @@ class _ButtonState extends State<Button> {
                     widget.emailController.text.toString(),
                   );
                   if (userLogged) {
+                    print("restartApp");
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Configuración inicial'),
+                          content: Text(
+                              'Se va a reiniciar la app para terminar de configurar tu usuario.'),
+                        );
+                      },
+                    );
+                    await Future.delayed(Duration(seconds: 5));
                     Restart.restartApp();
                   } else {
+                    print("error logging");
+
                     setState(() {
                       loading = false;
                     });
