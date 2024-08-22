@@ -259,10 +259,7 @@ class _ButtonState extends State<Button> {
                           "tenantEmail",
                           widget.emailController.text.toString(),
                         );
-                        Navigator.pop(
-                          context,
-                        );
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             builder: (BuildContext context) => SfaAgnostiko(),

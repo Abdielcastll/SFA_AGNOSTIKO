@@ -2,6 +2,7 @@
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
@@ -9,6 +10,7 @@ import 'package:pwa_sales2go_flutter/src/pages/auth/login/email_page.dart';
 import 'package:pwa_sales2go_flutter/src/services/auth.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/loading/loading_widget.dart';
+import 'package:restart_app/restart_app.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class LoginPage extends StatefulWidget {
@@ -369,7 +371,7 @@ class _ButtonState extends State<Button> {
                   setState(() {
                     loading = true;
                   });
-                  final user = await _auth.signInWithEmailAndPassword(
+                  bool userLogged = await _auth.signInWithEmailAndPassword(
                     widget.emailController.text.toString(),
                     widget.passwordController.text.toString(),
                   );
@@ -377,7 +379,9 @@ class _ButtonState extends State<Button> {
                     "tenantEmail",
                     widget.emailController.text.toString(),
                   );
-                  if (user == null) {
+                  if (userLogged) {
+                    Restart.restartApp();
+                  } else {
                     setState(() {
                       loading = false;
                     });

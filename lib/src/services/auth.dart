@@ -26,7 +26,7 @@ class AuthService {
 
   // sign in with email and password
 
-  Future signInWithEmailAndPassword(String email, String password) async {
+  Future<bool> signInWithEmailAndPassword(String email, String password) async {
     try {
       UserCredential result = await _auth.signInWithEmailAndPassword(
         email: email.trim().toLowerCase(),
@@ -35,6 +35,9 @@ class AuthService {
       User? user = result.user;
       if (user != null) {
         checkIfUserRecordExist(user);
+        return true;
+      } else {
+        return false;
       }
     } catch (e) {
       Fluttertoast.showToast(
@@ -42,7 +45,7 @@ class AuthService {
         backgroundColor: myTheme.colorScheme.secondary,
         textColor: Colors.white,
       );
-      return null;
+      return false;
     }
   }
 
