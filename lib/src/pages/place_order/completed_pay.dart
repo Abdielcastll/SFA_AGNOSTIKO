@@ -48,6 +48,7 @@ class CompletedPayPage extends StatelessWidget {
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     List<String> currentCoinSplit = currentCoin!.split(' ');
     String currentCoinSelectedCode = currentCoinSplit.last;
+
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: PreferredSize(
@@ -327,14 +328,47 @@ class _CompletedPayBody extends State<CompletedPayBody> {
                             fontSize: 16,
                           ),
                         ),
-                        Text(
-                          //TODO hacer dinamico
-                          "13245675123",
-                          style: TextStyle(
-                            color: Colors.grey.shade500,
-                            fontFamily: 'Poppins-regular',
-                            fontSize: 12,
-                          ),
+                        FutureBuilder<String>(
+                          future: fetchTicketNumber(
+                            widget.client,
+                            widget.addPaymentBody,
+                            userUID!,
+                          ), // Your async function
+                          builder: (BuildContext context,
+                              AsyncSnapshot<String> snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const CircularProgressIndicator(); // Show a loading indicator while waiting
+                            } else if (snapshot.hasError) {
+                              return Text(
+                                'Error: ${snapshot.error}', // Show an error message if there's an error
+                                style: const TextStyle(
+                                  color: Colors.red,
+                                  fontFamily: 'Poppins-regular',
+                                  fontSize: 12,
+                                ),
+                              );
+                            } else if (snapshot.hasData) {
+                              return Text(
+                                snapshot
+                                    .data!, // Display the nroCorrelativo value when data is available
+                                style: TextStyle(
+                                  color: Colors.grey.shade500,
+                                  fontFamily: 'Poppins-regular',
+                                  fontSize: 12,
+                                ),
+                              );
+                            } else {
+                              return Text(
+                                'No data available', // Handle the case where no data is returned
+                                style: TextStyle(
+                                  color: Colors.grey.shade500,
+                                  fontFamily: 'Poppins-regular',
+                                  fontSize: 12,
+                                ),
+                              );
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -518,5 +552,29 @@ class _CompletedPayBody extends State<CompletedPayBody> {
     print('Generated URL: $url');
 
     return url;
+  }
+
+  Future<String> fetchTicketNumber(
+      Client client, AddPaymentBodyAtt addPaymentBody, UserModel user) async {
+    String idClient = client.clientDocumentId!;
+    String idOrder = addPaymentBody.invoiceDocumentID;
+
+    FirebaseFirestore firestore =
+        FirebaseFirestore.instanceFor(app: multitenantConfig.tenantApp!);
+
+    DocumentSnapshot pedidoDoc = await firestore
+        .collection('clientes')
+        .doc(idClient)
+        .collection('pedidos')
+        .doc(idOrder)
+        .get();
+
+    if (!pedidoDoc.exists) {
+      throw Exception('Pedido document not found');
+    }
+
+    int nroCorrelativo = pedidoDoc.get('nroCorrelativo');
+
+    return nroCorrelativo.toString();
   }
 }
