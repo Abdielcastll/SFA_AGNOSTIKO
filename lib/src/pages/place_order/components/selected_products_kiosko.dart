@@ -18,6 +18,7 @@ import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/product_list_button_kiosko.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/components/payment_method_dialog_kiosko.dart';
+import 'package:pwa_sales2go_flutter/src/services/connection_service.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/utils/custom_cache_manager.dart';
@@ -1008,16 +1009,21 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                           ),
                                           onPressed: products.isEmpty
                                               ? null
-                                              : () {
-                                                  processSelection(
-                                                    userUid,
-                                                    products,
-                                                    'Tarjeta de Debito',
-                                                    ivaConverted.toDouble(),
-                                                    subTotalConverted
-                                                        .toDouble(),
-                                                    totalConverted.toDouble(),
-                                                  );
+                                              : () async {
+                                                  bool internet =
+                                                      await checkInternetConnection(
+                                                          context);
+                                                  if (internet) {
+                                                    processSelection(
+                                                      userUid,
+                                                      products,
+                                                      'Tarjeta de Debito',
+                                                      ivaConverted.toDouble(),
+                                                      subTotalConverted
+                                                          .toDouble(),
+                                                      totalConverted.toDouble(),
+                                                    );
+                                                  }
                                                 },
                                           child: Row(
                                             mainAxisAlignment:

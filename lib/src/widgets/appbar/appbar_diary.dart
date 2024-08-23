@@ -10,6 +10,7 @@ import 'package:pwa_sales2go_flutter/src/pages/place_order/place_oder_page.dart'
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/auth.dart';
+import 'package:pwa_sales2go_flutter/src/services/connection_service.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -77,7 +78,9 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
                         color: Color.fromARGB(255, 196, 196, 196),
                       ),
                       onPressed: () async {
-                        if (globalRemoteConfig.clientesEnabled == true) {
+                        bool internet = await checkInternetConnection(context);
+                        if (globalRemoteConfig.clientesEnabled == true &&
+                            internet) {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
@@ -271,7 +274,7 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
                               );
                             },
                           );
-                        } else {
+                        } else if (internet) {
                           print('SELECTING DEFAULT CLIENT');
                           Clients? defaultClient = genericClients;
                           await clientsCollection
@@ -350,14 +353,18 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
                 : Container(
                     margin: EdgeInsets.fromLTRB(0, 10, 0, 8),
                     child: ElevatedButton.icon(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            settings: const RouteSettings(name: "ORDER"),
-                            builder: (context) => const OrderPage(),
-                          ),
-                        );
+                      onPressed: () async {
+                        bool internet = await checkInternetConnection(context);
+                        if (globalRemoteConfig.clientesEnabled == true &&
+                            internet) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              settings: const RouteSettings(name: "ORDER"),
+                              builder: (context) => const OrderPage(),
+                            ),
+                          );
+                        }
                       },
                       icon: const Icon(
                         Icons.shopping_cart_rounded,

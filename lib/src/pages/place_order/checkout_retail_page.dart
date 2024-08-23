@@ -20,6 +20,7 @@ import 'package:pwa_sales2go_flutter/src/pages/place_order/components/selected_c
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
+import 'package:pwa_sales2go_flutter/src/services/connection_service.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -953,124 +954,132 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                       )
                                     : ElevatedButton.icon(
                                         onPressed: () async {
-                                          print(
-                                              'Iniciar proceso de pago directo');
+                                          bool internet =
+                                              await checkInternetConnection(
+                                                  context);
+                                          if (internet) {
+                                            print(
+                                                'Iniciar proceso de pago directo');
 
-                                          setState(() {
-                                            loading = true;
-                                          });
+                                            setState(() {
+                                              loading = true;
+                                            });
 
-                                          final firebaseID = FirebaseFirestore
-                                              .instance
-                                              .collection('clientes')
-                                              .doc(widget
-                                                  .client!.clientDocumentId)
-                                              .collection('pedidos')
-                                              .doc()
-                                              .id;
+                                            final firebaseID = FirebaseFirestore
+                                                .instance
+                                                .collection('clientes')
+                                                .doc(widget
+                                                    .client!.clientDocumentId)
+                                                .collection('pedidos')
+                                                .doc()
+                                                .id;
 
-                                          print(firebaseID);
+                                            print(firebaseID);
 
-                                          final double subTotalToDouble =
-                                              widget.subTotal;
-                                          final double masterDiscount =
-                                              subTotalWithMasterDiscountRounded
-                                                  .toDouble();
-                                          final double appliedDiscount =
-                                              discountAppliedRounded.toDouble();
-                                          final double taxes =
-                                              taxRounded.toDouble();
-                                          final double total =
-                                              totalPriceOfTheOrder.toDouble();
+                                            final double subTotalToDouble =
+                                                widget.subTotal;
+                                            final double masterDiscount =
+                                                subTotalWithMasterDiscountRounded
+                                                    .toDouble();
+                                            final double appliedDiscount =
+                                                discountAppliedRounded
+                                                    .toDouble();
+                                            final double taxes =
+                                                taxRounded.toDouble();
+                                            final double total =
+                                                totalPriceOfTheOrder.toDouble();
 
-                                          print(
-                                              'subTotalToDouble:$subTotalToDouble');
-                                          print(
-                                              'masterDiscount:$masterDiscount');
-                                          print(
-                                              'appliedDiscount:$appliedDiscount');
-                                          print('taxes:$taxes');
-                                          print('total:$total');
+                                            print(
+                                                'subTotalToDouble:$subTotalToDouble');
+                                            print(
+                                                'masterDiscount:$masterDiscount');
+                                            print(
+                                                'appliedDiscount:$appliedDiscount');
+                                            print('taxes:$taxes');
+                                            print('total:$total');
 
-                                          final invoiceNumber =
-                                              await completePaymentProcess(
-                                            widget.client,
-                                            userUid,
-                                            commentary,
-                                            masterDiscount,
-                                            widget.cart,
-                                            selectedValue2,
-                                            selectedValue,
-                                            today,
-                                            taxes,
-                                            numberOrder,
-                                            subTotalToDouble,
-                                            total,
-                                            discountByInput,
-                                            firebaseID,
-                                          );
+                                            final invoiceNumber =
+                                                await completePaymentProcess(
+                                              widget.client,
+                                              userUid,
+                                              commentary,
+                                              masterDiscount,
+                                              widget.cart,
+                                              selectedValue2,
+                                              selectedValue,
+                                              today,
+                                              taxes,
+                                              numberOrder,
+                                              subTotalToDouble,
+                                              total,
+                                              discountByInput,
+                                              firebaseID,
+                                            );
 
-                                          Client currentClient = Client(
-                                            active: widget.client!.active,
-                                            specialContributor: widget
-                                                .client!.specialContributor,
-                                            madeBy: widget.client!.madeBy,
-                                            masterDiscount:
-                                                widget.client!.masterDiscount,
-                                            fiscalAdress:
-                                                widget.client!.fiscalAdress,
-                                            dispatchAdress:
-                                                widget.client!.dispatchAdress,
-                                            email: widget.client!.email,
-                                            prices: widget.client!.prices,
-                                            modified: widget.client!.modified,
-                                            name: widget.client!.name,
-                                            id: widget.client!.id,
-                                            prospect: widget.client!.prospect,
-                                            phone1: widget.client!.phone1,
-                                            phone2: widget.client!.phone2,
-                                            idType: widget.client!.idType,
-                                            zone: widget.client!.zone,
-                                            clientDocumentId:
-                                                widget.client!.clientDocumentId,
-                                          );
+                                            Client currentClient = Client(
+                                              active: widget.client!.active,
+                                              specialContributor: widget
+                                                  .client!.specialContributor,
+                                              madeBy: widget.client!.madeBy,
+                                              masterDiscount:
+                                                  widget.client!.masterDiscount,
+                                              fiscalAdress:
+                                                  widget.client!.fiscalAdress,
+                                              dispatchAdress:
+                                                  widget.client!.dispatchAdress,
+                                              email: widget.client!.email,
+                                              prices: widget.client!.prices,
+                                              modified: widget.client!.modified,
+                                              name: widget.client!.name,
+                                              id: widget.client!.id,
+                                              prospect: widget.client!.prospect,
+                                              phone1: widget.client!.phone1,
+                                              phone2: widget.client!.phone2,
+                                              idType: widget.client!.idType,
+                                              zone: widget.client!.zone,
+                                              clientDocumentId: widget
+                                                  .client!.clientDocumentId,
+                                            );
 
-                                          bool onlyCard = false;
-                                          String? paymentMethod;
-                                          if (globalRemoteConfig
-                                              .onlyFullPaymentWithCard!) {
-                                            onlyCard = true;
-                                            paymentMethod = 'Tarjeta de Debito';
+                                            bool onlyCard = false;
+                                            String? paymentMethod;
+                                            if (globalRemoteConfig
+                                                .onlyFullPaymentWithCard!) {
+                                              onlyCard = true;
+                                              paymentMethod =
+                                                  'Tarjeta de Debito';
+                                            }
+                                            Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                settings: RouteSettings(
+                                                  name: 'PAGO-DIRECTO',
+                                                ),
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        AddPaymentPage(
+                                                  invoiceTotal: total,
+                                                  remaining: total,
+                                                  subTotal: widget.subTotal,
+                                                  discountPercentage:
+                                                      discountByInput,
+                                                  // discountPercentage:
+                                                  //     widget.client?.masterDiscount,
+                                                  discount: masterDiscount,
+
+                                                  tax: taxes,
+                                                  percentageTax: 16,
+                                                  client: currentClient,
+                                                  invoiceDocumentID: firebaseID,
+                                                  invoiceNumber: invoiceNumber,
+                                                  payments: [],
+                                                  isKiosko: onlyCard,
+                                                  paymentType: paymentMethod,
+                                                  // updatePayed: updatePayed,
+                                                ),
+                                              ),
+                                            );
                                           }
-                                          Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                              settings: RouteSettings(
-                                                name: 'PAGO-DIRECTO',
-                                              ),
-                                              builder: (BuildContext context) =>
-                                                  AddPaymentPage(
-                                                invoiceTotal: total,
-                                                remaining: total,
-                                                subTotal: widget.subTotal,
-                                                discountPercentage:
-                                                    discountByInput,
-                                                // discountPercentage:
-                                                //     widget.client?.masterDiscount,
-                                                discount: masterDiscount,
-
-                                                tax: taxes,
-                                                percentageTax: 16,
-                                                client: currentClient,
-                                                invoiceDocumentID: firebaseID,
-                                                invoiceNumber: invoiceNumber,
-                                                payments: [],
-                                                isKiosko: onlyCard,
-                                                paymentType: paymentMethod,
-                                                // updatePayed: updatePayed,
-                                              ),
-                                            ),
-                                          );
 
                                           // setState(() {
                                           //   loading = false;

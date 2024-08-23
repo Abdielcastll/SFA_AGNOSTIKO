@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 import 'package:agnostiko/device/src/device.dart';
 import 'package:agnostiko/scanner/src/scanner.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -20,6 +20,7 @@ import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/checkout_retail_page.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
+import 'package:pwa_sales2go_flutter/src/services/connection_service.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/checkout_page.dart';
@@ -1027,40 +1028,45 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                           ),
                                           onPressed: products.isEmpty
                                               ? null
-                                              : () {
-                                                  userRole?.isRetail == false
-                                                      ? Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                CheckoutPage(
-                                                              client:
-                                                                  widget.client,
-                                                              cart: products,
-                                                              subTotal:
-                                                                  double.parse(
-                                                                subTotal
-                                                                    .toString(),
+                                              : () async {
+                                                  bool internet =
+                                                      await checkInternetConnection(
+                                                          context);
+                                                  if (internet) {
+                                                    userRole?.isRetail == false
+                                                        ? Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  CheckoutPage(
+                                                                client: widget
+                                                                    .client,
+                                                                cart: products,
+                                                                subTotal: double
+                                                                    .parse(
+                                                                  subTotal
+                                                                      .toString(),
+                                                                ),
                                                               ),
                                                             ),
-                                                          ),
-                                                        )
-                                                      : Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                CheckoutRetailPage(
-                                                              client:
-                                                                  widget.client,
-                                                              cart: products,
-                                                              subTotal:
-                                                                  double.parse(
-                                                                subTotal
-                                                                    .toString(),
+                                                          )
+                                                        : Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  CheckoutRetailPage(
+                                                                client: widget
+                                                                    .client,
+                                                                cart: products,
+                                                                subTotal: double
+                                                                    .parse(
+                                                                  subTotal
+                                                                      .toString(),
+                                                                ),
                                                               ),
                                                             ),
-                                                          ),
-                                                        );
+                                                          );
+                                                  }
                                                 },
                                           child: Row(
                                             mainAxisAlignment:
