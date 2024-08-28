@@ -56,29 +56,32 @@ class _PromoVideoPlayerState extends State<PromoVideoPlayer> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () {
-          Navigator.of(context).pop();
-        },
-        child: _videoController != null && _videoController!.value.isInitialized
-            ? Container(
-                color: Colors.black,
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                child: AspectRatio(
-                  aspectRatio: _videoController!.value.aspectRatio,
-                  child: VideoPlayer(_videoController!),
+      onTap: () {
+        Navigator.of(context).pop();
+      },
+      child: _videoController != null && _videoController!.value.isInitialized
+          ? Container(
+              color: Colors.black,
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: AspectRatio(
+                aspectRatio: _videoController!.value.aspectRatio,
+                child: VideoPlayer(_videoController!),
+              ),
+            )
+          : Container(
+              color: Colors.black,
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: Center(
+                child: Text(
+                  globalRemoteConfig.promoVideoDisponible!
+                      ? "Cargando..."
+                      : "Video no disponible",
+                  style: TextStyle(color: Colors.white),
                 ),
-              )
-            : Container(
-                color: Colors.black,
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                child: const Center(
-                  child: Text(
-                    "Video no disponible",
-                  ),
-                ),
-              ) // Show nothing if the video is not initialized
-        );
+              ),
+            ),
+    );
   }
 }

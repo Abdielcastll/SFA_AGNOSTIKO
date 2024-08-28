@@ -149,9 +149,9 @@ class _CatalogueBodyState extends State<CatalogueBody> {
 
   @override
   Widget build(BuildContext context) {
-    final listOfPrices = Provider.of<Prices?>(context)?.prices ?? {};
+    final promotions = Provider.of<List<Promotions>?>(context) ?? [];
 
-    return listOfPrices.isEmpty
+    return promotions.isEmpty
         ? const Center(
             child: CircularProgressIndicator(),
           )
