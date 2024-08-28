@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +10,7 @@ import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/amount_input/amount_input.dart';
 import 'package:pwa_sales2go_flutter/src/pages/auth/login/email_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/auth/wrapper/promo_video_player.dart';
 import 'package:pwa_sales2go_flutter/src/pages/auth/wrapper/wrapper.dart';
 import 'package:pwa_sales2go_flutter/src/pages/card_input/card_input.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/catalogue_page.dart';
@@ -42,7 +46,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 late ObjectBox objectBox;
 
-Future<void> main() async {
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   objectBox = await ObjectBox.init();
 
@@ -61,6 +67,7 @@ Future<void> main() async {
 
 class SfaAgnostiko extends StatelessWidget {
   const SfaAgnostiko({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
@@ -104,21 +111,16 @@ class SfaAgnostiko extends StatelessWidget {
               ),
             ],
             builder: (context, child) {
-              final localeProvider = Provider.of<LocaleProvider>(context);
               final productsLimit =
                   Provider.of<CounterLimitFirestore>(context).getProductsLimit;
-              // final productsScrollLimit =
-              //     Provider.of<CounterLimitFirestore>(context)
-              //         .getScrollProductLimit;
+
               return StreamProvider<List<Products>?>.value(
                 value: productsLimit == 0
                     ? productsCollection
-                        // .where('marca', isEqualTo: aceites)
                         .orderBy('codigo')
                         .snapshots()
                         .map(productsListFromSnapshot)
                     : productsCollection
-                        // .where('marca', isEqualTo: aceites)
                         .orderBy('codigo')
                         .limit(productsLimit)
                         .snapshots()
@@ -129,59 +131,120 @@ class SfaAgnostiko extends StatelessWidget {
                   print('PROVIDER PRODUCT ERROR');
                   return;
                 },
-                child: MaterialApp(
-                  debugShowCheckedModeBanner: false,
-                  locale: localeProvider.locale,
-                  supportedLocales: L10n.all,
-                  localizationsDelegates: const [
-                    AppLocalizations.delegate,
-                    GlobalMaterialLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                    GlobalCupertinoLocalizations.delegate,
-                  ],
-                  title: 'Field Sales',
-                  theme: myTheme,
-                  initialRoute:
-                      //'wrapper' for mobile to avoid checking terminal
-                      // token, SplashScreenView.route to activate
-                      // in terminals
-                      //'wrapper',
-                      SplashScreenView.route,
-                  routes: {
-                    SplashScreenView.route: (BuildContext context) =>
-                        const SplashScreenView(),
-                    PinInputView.route: (context) => PinInputView(),
-                    PanInputView.route: (context) => const PanInputView(),
-                    ExpDateInputView.route: (context) => ExpDateInputView(),
-                    EmvTransactionInfoView.route: (context) =>
-                        const EmvTransactionInfoView(),
-                    CvvInputView.route: (context) => const CvvInputView(),
-                    CardInputView.route: (context) => CardInputView(),
-                    AmountInputView.route: (context) => AmountInputView(),
-                    'wrapper': (BuildContext context) => const Wrapper(),
-                    'login': (BuildContext context) => const LoginPage(),
-                    'navigation': (BuildContext context) =>
-                        const NavigationPages(),
-                    'notifications': (BuildContext context) =>
-                        const NotificationsPage(),
-                    'place_order': (BuildContext context) =>
-                        const PlaceOrderPage(),
-                    'catalogue': (BuildContext context) =>
-                        const CataloguePage(),
-                    // 'products': (BuildContext context) =>
-                    //     const ProductsPage(pricesName: 'GENER-03'),
-                    'clients': (BuildContext context) => const ClientsPage(),
-                    'profile': (BuildContext context) => const ProfilePage(),
-                    DiaryTabs.route: (BuildContext context) =>
-                        const DiaryTabs(),
-                    'order': (BuildContext context) => const OrderPage(),
-                  },
-                ),
+                child: const LifecycleWatcher(),
               );
             },
           ),
         );
       },
+    );
+  }
+}
+
+class LifecycleWatcher extends StatefulWidget {
+  const LifecycleWatcher({super.key});
+
+  @override
+  State<LifecycleWatcher> createState() => _LifecycleWatcherState();
+}
+
+class _LifecycleWatcherState extends State<LifecycleWatcher>
+    with WidgetsBindingObserver {
+  Timer? _inactivityTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    Timer(const Duration(minutes: 1), () {
+      _startInactivityTimer();
+    });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _inactivityTimer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _startInactivityTimer();
+    } else if (state == AppLifecycleState.paused) {
+      _cancelInactivityTimer();
+    }
+  }
+
+  void _startInactivityTimer() {
+    print("start timer");
+    _inactivityTimer?.cancel();
+    _inactivityTimer = Timer(const Duration(minutes: 1), () {
+      print('timer complete');
+      print('show video');
+      navigatorKey.currentState?.pushNamed('promo');
+    });
+  }
+
+  void _cancelInactivityTimer() {
+    print('cancel timer');
+    if (_inactivityTimer?.isActive ?? false) {
+      _inactivityTimer!.cancel();
+    }
+  }
+
+  void _resetInactivityTimer() {
+    print('reset timer');
+    _startInactivityTimer();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final localeProvider = Provider.of<LocaleProvider>(context);
+
+    return GestureDetector(
+      onTap: () {
+        _resetInactivityTimer();
+      },
+      child: MaterialApp(
+        navigatorKey: navigatorKey,
+        debugShowCheckedModeBanner: false,
+        locale: localeProvider.locale,
+        supportedLocales: L10n.all,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        title: 'Field Sales',
+        theme: myTheme,
+        initialRoute: SplashScreenView.route,
+        routes: {
+          SplashScreenView.route: (BuildContext context) =>
+              const SplashScreenView(),
+          PinInputView.route: (context) => PinInputView(),
+          PanInputView.route: (context) => const PanInputView(),
+          ExpDateInputView.route: (context) => ExpDateInputView(),
+          EmvTransactionInfoView.route: (context) =>
+              const EmvTransactionInfoView(),
+          CvvInputView.route: (context) => const CvvInputView(),
+          CardInputView.route: (context) => CardInputView(),
+          AmountInputView.route: (context) => AmountInputView(),
+          'wrapper': (BuildContext context) => const Wrapper(),
+          'login': (BuildContext context) => const LoginPage(),
+          'navigation': (BuildContext context) => const NavigationPages(),
+          'notifications': (BuildContext context) => const NotificationsPage(),
+          'place_order': (BuildContext context) => const PlaceOrderPage(),
+          'catalogue': (BuildContext context) => const CataloguePage(),
+          'clients': (BuildContext context) => const ClientsPage(),
+          'profile': (BuildContext context) => const ProfilePage(),
+          DiaryTabs.route: (BuildContext context) => const DiaryTabs(),
+          'order': (BuildContext context) => const OrderPage(),
+          'promo': (BuildContext context) => const PromoVideoPlayer(),
+        },
+      ),
     );
   }
 }
