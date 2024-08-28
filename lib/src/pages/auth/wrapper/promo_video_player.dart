@@ -41,9 +41,19 @@ class _PromoVideoPlayerState extends State<PromoVideoPlayer> {
     _videoController = VideoPlayerController.networkUrl(Uri.parse(url))
       ..initialize().then((_) {
         setState(() {});
+
         if (globalRemoteConfig.promoVideoDisponible!) {
           _videoController!.play();
         }
+
+        // Add listener to restart the video when it finishes
+        _videoController!.addListener(() {
+          if (_videoController!.value.position >=
+              _videoController!.value.duration) {
+            _videoController!.seekTo(Duration.zero);
+            _videoController!.play();
+          }
+        });
       });
   }
 
