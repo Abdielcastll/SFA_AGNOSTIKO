@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, avoid_print
+// ignore_for_file: prefer_const_constructors, avoid_print, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -103,171 +103,165 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
                                         ),
                                       ),
                                     ),
-                                    content: Container(
-                                      // color: Colors.grey,
-                                      // height: 30,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        // crossAxisAlignment:
-                                        //     CrossAxisAlignment.start,
-                                        children: [
-                                          TextButton(
-                                            style: ButtonStyle(
-                                              overlayColor: MaterialStateColor
-                                                  .resolveWith((states) =>
-                                                      Colors.transparent),
+                                    content: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      // crossAxisAlignment:
+                                      //     CrossAxisAlignment.start,
+                                      children: [
+                                        TextButton(
+                                          style: ButtonStyle(
+                                            overlayColor:
+                                                MaterialStateColor.resolveWith(
+                                                    (states) =>
+                                                        Colors.transparent),
+                                          ),
+                                          onPressed: () {
+                                            // Escoger lista de clientes
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        PlaceOrderPage(
+                                                  userZoneDocument:
+                                                      userZoneDocument,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          child: Container(
+                                            margin: const EdgeInsets.fromLTRB(
+                                                0, 5, 0, 0),
+                                            child: Text(
+                                              'Si',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontFamily: 'Poppins-regular',
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                decoration:
+                                                    TextDecoration.underline,
+                                              ),
                                             ),
-                                            onPressed: () {
-                                              // Escoger lista de clientes
+                                          ),
+                                        ),
+                                        TextButton(
+                                          style: ButtonStyle(
+                                            overlayColor:
+                                                MaterialStateColor.resolveWith(
+                                              (states) => Colors.transparent,
+                                            ),
+                                          ),
+                                          onPressed: () async {
+                                            // Escoger lista de clientes
+                                            // var client =
+                                            print('SELECTING DEFAULT CLIENT');
+                                            Clients? defaultClient =
+                                                genericClients;
+                                            await clientsCollection
+                                                .where('zona',
+                                                    isEqualTo: userZoneDocument)
+                                                .where('numeroId', isEqualTo: 0)
+                                                .get()
+                                                .then(
+                                              (value) {
+                                                return value.docs.map(
+                                                  (snapshot) {
+                                                    if (snapshot
+                                                        .get('nombre')
+                                                        .toString()
+                                                        .contains(
+                                                            '000A Cliente Default')) {
+                                                      print(
+                                                          'SENDING DATA BASE DEFAULT CLIENT');
+                                                      defaultClient =
+                                                          genericClients;
+                                                    } else {
+                                                      print(
+                                                          'SENDING ERROR DEFAULT CLIENT');
+                                                      defaultClient =
+                                                          genericClients;
+                                                    }
+                                                  },
+                                                ).toList();
+                                              },
+                                            ).catchError(
+                                              (e) {
+                                                print(
+                                                    'ERROR ON GETTING CLIENT DEFAULT ON APPBAR NAVIGATION');
+                                                print(e);
+                                                print(
+                                                    'SENDING ERROR DEFAULT CLIENT');
+                                                return <Null>[];
+                                              },
+                                            );
+
+                                            print(
+                                                'defaultClient?.zone: ${defaultClient?.zone}');
+                                            orderActive.setOrder(
+                                                true, defaultClient);
+                                            Navigator.pop(context);
+                                            if (defaultClient == null) {
+                                              print(
+                                                  'ERROR ON GETTING DEFAULT CLIENT');
+                                            } else {
+                                              // ignore: use_build_context_synchronously
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
-                                                  builder:
-                                                      (BuildContext context) =>
-                                                          PlaceOrderPage(
-                                                    userZoneDocument:
-                                                        userZoneDocument,
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                            child: Container(
-                                              margin: const EdgeInsets.fromLTRB(
-                                                  0, 5, 0, 0),
-                                              child: Text(
-                                                'Si',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontFamily: 'Poppins-regular',
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold,
-                                                  decoration:
-                                                      TextDecoration.underline,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          TextButton(
-                                            style: ButtonStyle(
-                                              overlayColor: MaterialStateColor
-                                                  .resolveWith(
-                                                (states) => Colors.transparent,
-                                              ),
-                                            ),
-                                            onPressed: () async {
-                                              // Escoger lista de clientes
-                                              // var client =
-                                              print('SELECTING DEFAULT CLIENT');
-                                              Clients? defaultClient =
-                                                  genericClients;
-                                              await clientsCollection
-                                                  .where('zona',
-                                                      isEqualTo:
-                                                          userZoneDocument)
-                                                  .where('numeroId',
-                                                      isEqualTo: 0)
-                                                  .get()
-                                                  .then(
-                                                (value) {
-                                                  return value.docs.map(
-                                                    (snapshot) {
-                                                      if (snapshot
-                                                          .get('nombre')
-                                                          .toString()
-                                                          .contains(
-                                                              '000A Cliente Default')) {
-                                                        print(
-                                                            'SENDING DATA BASE DEFAULT CLIENT');
-                                                        defaultClient =
-                                                            genericClients;
-                                                      } else {
-                                                        print(
-                                                            'SENDING ERROR DEFAULT CLIENT');
-                                                        defaultClient =
-                                                            genericClients;
-                                                      }
-                                                    },
-                                                  ).toList();
-                                                },
-                                              ).catchError(
-                                                (e) {
-                                                  print(
-                                                      'ERROR ON GETTING CLIENT DEFAULT ON APPBAR NAVIGATION');
-                                                  print(e);
-                                                  print(
-                                                      'SENDING ERROR DEFAULT CLIENT');
-                                                  return <Null>[];
-                                                },
-                                              );
-
-                                              print(
-                                                  'defaultClient?.zone: ${defaultClient?.zone}');
-                                              orderActive.setOrder(
-                                                  true, defaultClient);
-                                              Navigator.pop(context);
-                                              if (defaultClient == null) {
-                                                print(
-                                                    'ERROR ON GETTING DEFAULT CLIENT');
-                                              } else {
-                                                // ignore: use_build_context_synchronously
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    settings:
-                                                        const RouteSettings(
-                                                            name: "ORDER"),
-                                                    builder: (context) =>
-                                                        StreamProvider<
-                                                            CurrentUserInfo?>.value(
-                                                      value: usersCollection
-                                                          .doc(user.uid)
-                                                          .snapshots()
-                                                          .map(AuthService()
-                                                              .userDataFromsnapshot),
-                                                      initialData:
-                                                          CurrentUserInfo(
-                                                        name: '',
-                                                        dni: '',
-                                                        zone: '',
-                                                        zoneDocument: '',
-                                                        email: '',
-                                                        role: '',
-                                                        uid: '',
-                                                      ),
-                                                      catchError:
-                                                          (context, error) {
-                                                        print(error);
-                                                        return;
-                                                      },
-                                                      // builder: (context, child) {
-
-                                                      //   return NavigationPages();
-                                                      // });
-                                                      child: const OrderPage(),
+                                                  settings: const RouteSettings(
+                                                      name: "ORDER"),
+                                                  builder: (context) =>
+                                                      StreamProvider<
+                                                          CurrentUserInfo?>.value(
+                                                    value: usersCollection
+                                                        .doc(user.uid)
+                                                        .snapshots()
+                                                        .map(AuthService()
+                                                            .userDataFromsnapshot),
+                                                    initialData:
+                                                        CurrentUserInfo(
+                                                      name: '',
+                                                      dni: '',
+                                                      zone: '',
+                                                      zoneDocument: '',
+                                                      email: '',
+                                                      role: '',
+                                                      uid: '',
                                                     ),
+                                                    catchError:
+                                                        (context, error) {
+                                                      print(error);
+                                                      return;
+                                                    },
+                                                    // builder: (context, child) {
+
+                                                    //   return NavigationPages();
+                                                    // });
+                                                    child: const OrderPage(),
                                                   ),
-                                                );
-                                              }
-                                            },
-                                            child: Container(
-                                              margin: const EdgeInsets.fromLTRB(
-                                                  0, 5, 0, 0),
-                                              child: Text(
-                                                'No',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontFamily: 'Poppins-regular',
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold,
-                                                  decoration:
-                                                      TextDecoration.underline,
                                                 ),
+                                              );
+                                            }
+                                          },
+                                          child: Container(
+                                            margin: const EdgeInsets.fromLTRB(
+                                                0, 5, 0, 0),
+                                            child: Text(
+                                              'No',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontFamily: 'Poppins-regular',
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                decoration:
+                                                    TextDecoration.underline,
                                               ),
                                             ),
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -355,8 +349,7 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
                     child: ElevatedButton.icon(
                       onPressed: () async {
                         bool internet = await checkInternetConnection(context);
-                        if (globalRemoteConfig.clientesEnabled == true &&
-                            internet) {
+                        if (internet) {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
