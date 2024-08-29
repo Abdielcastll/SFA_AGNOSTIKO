@@ -285,12 +285,21 @@ class _ButtonState2 extends State<Button2> {
             child: ElevatedButton(
               onPressed: () async {
                 await sharedPreferences!.setString('tenantEmail', '');
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => EmailPage(),
-                  ),
+                print("restartApp");
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Cambio de Tennant'),
+                      content: Text(
+                        'Se va a reiniciar la app para poder cambiar de tennant correctamente',
+                      ),
+                    );
+                  },
                 );
+                await Future.delayed(Duration(seconds: 8));
+                Restart.restartApp();
               },
               style: ButtonStyle(
                 alignment: Alignment.center,
