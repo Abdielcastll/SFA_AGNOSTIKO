@@ -25,6 +25,24 @@ class PromotionsWidget extends StatefulWidget {
 }
 
 class _PromotionsWidgetState extends State<PromotionsWidget> {
+  bool loading = true;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      wait();
+    });
+  }
+
+  wait() async {
+    await Future.delayed(Duration(seconds: 4));
+    setState(() {
+      loading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final productsWithPromotions =
@@ -82,49 +100,57 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
             ),
           ),
           activePromotions.isEmpty
-              ? Container(
-                  margin: const EdgeInsets.fromLTRB(0, 12, 0, 0),
-                  height: 175,
-                  width: double.infinity,
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                        height: 140,
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: Image.asset(
-                            'assets/images/nopromotions.jpg',
-                            fit: BoxFit.cover,
+              ? loading
+                  ? Container(
+                      padding: const EdgeInsets.all(20),
+                      height: 60,
+                      width: 60,
+                      child: CircularProgressIndicator(),
+                    )
+                  : Container(
+                      margin: const EdgeInsets.fromLTRB(0, 12, 0, 0),
+                      height: 175,
+                      width: double.infinity,
+                      child: Column(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            height: 140,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              child: Image.asset(
+                                'assets/images/nopromotions.jpg',
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      // const SizedBox(height: 20),
-                      Container(
-                        margin: const EdgeInsets.only(top: 15),
-                        width: 280,
-                        height: 20,
-                        alignment: Alignment.center,
-                        child: Text(
-                          AppLocalizations.of(context)!.promotionsUnavaliable,
-                          maxLines: 1,
-                          textAlign: TextAlign.start,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontFamily: 'Poppins-regular',
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: myTheme.colorScheme.primary,
+                          // const SizedBox(height: 20),
+                          Container(
+                            margin: const EdgeInsets.only(top: 15),
+                            width: 280,
+                            height: 20,
+                            alignment: Alignment.center,
+                            child: Text(
+                              AppLocalizations.of(context)!
+                                  .promotionsUnavaliable,
+                              maxLines: 1,
+                              textAlign: TextAlign.start,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontFamily: 'Poppins-regular',
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: myTheme.colorScheme.primary,
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
-                )
+                    )
               : Container(
                   margin: const EdgeInsets.fromLTRB(0, 12, 0, 0),
                   // height: 180,

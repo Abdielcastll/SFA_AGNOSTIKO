@@ -31,6 +31,7 @@ import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/locale_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
+import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/auth.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/utils/determinePosition.dart';
@@ -183,7 +184,9 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
     _inactivityTimer = Timer(const Duration(minutes: 1), () {
       print('timer complete');
       print('show video');
-      navigatorKey.currentState?.pushNamed('promo');
+      if (globalRemoteConfig.promoVideoDisponible!) {
+        navigatorKey.currentState?.pushNamed('promo');
+      }
     });
   }
 
