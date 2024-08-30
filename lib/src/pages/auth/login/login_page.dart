@@ -286,6 +286,7 @@ class _ButtonState2 extends State<Button2> {
               onPressed: () async {
                 await sharedPreferences!.setString('tenantEmail', '');
                 print("restartApp");
+                // ignore: use_build_context_synchronously
                 showDialog(
                   context: context,
                   barrierDismissible: false,
