@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
+import 'package:pwa_sales2go_flutter/src/pages/clients/add_new_client/add_new_client_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/components/place_order/select_client.dart';
+import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -16,11 +18,37 @@ class PlaceOrderPage extends StatelessWidget {
     print('userZoneDocument: $userZoneDocument');
 
     return Scaffold(
+      floatingActionButton: globalRemoteConfig.addClientOnOpenCartDialog!
+          ? Wrap(
+              children: [
+                FloatingActionButton(
+                  heroTag: 1,
+                  elevation: 10,
+                  backgroundColor: myTheme.colorScheme.primary,
+                  onPressed: () {
+                    // Redireccionar a crear cliente
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            AddClientPage(userZoneDocument: userZoneDocument),
+                      ),
+                    );
+                  },
+                  child: const Icon(
+                    Icons.person_add_alt_sharp,
+                    color: Colors.white,
+                  ),
+                ),
+                // ),
+              ],
+            )
+          : null,
       appBar: AppBar(
         title: Text(
           AppLocalizations.of(context)!.newOrder,
           style: const TextStyle(
-            fontFamily: 'Poppins-regular',
+            fontFamily: 'IBMPlexSans-Regular',
             fontSize: 21,
             fontWeight: FontWeight.w300,
             color: Colors.white,
