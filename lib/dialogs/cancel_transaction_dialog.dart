@@ -36,6 +36,9 @@ Future<bool> Function() cancelTransactionDialogFn(
             globalRemoteConfig.clientesEnabled! == false) {
           Navigator.pop(context, true);
           Navigator.pop(context, true);
+        } else if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+          Navigator.pop(context, true);
+          Navigator.pop(context, true);
         }
       },
       onCancel: () {
