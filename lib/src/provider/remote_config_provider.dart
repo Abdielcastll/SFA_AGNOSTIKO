@@ -38,6 +38,7 @@ class RemoteConfig {
   int? promoVideoNumber;
   bool? promoVideoDisponible;
   bool? addClientOnOpenCartDialog;
+  bool? isClienteSimple;
 
   RemoteConfig({
     this.aplicacionDescuentoMaestro,
@@ -70,6 +71,7 @@ class RemoteConfig {
     this.promoVideoNumber,
     this.promoVideoDisponible,
     this.addClientOnOpenCartDialog,
+    this.isClienteSimple,
   });
 
   Map<String, dynamic> toMap() {
@@ -104,6 +106,7 @@ class RemoteConfig {
       'promoVideoNumber': promoVideoNumber,
       'promoVideoDisponible': promoVideoDisponible,
       'addClientOnOpenCartDialog': addClientOnOpenCartDialog,
+      'isClienteSimple': isClienteSimple
     };
   }
 }
@@ -170,6 +173,7 @@ class RemoteConfigProvider {
           allConfigs['promoVideoDisponible']?.asBool() ?? false,
       addClientOnOpenCartDialog:
           allConfigs['addClientOnOpenCartDialog']?.asBool() ?? false,
+      isClienteSimple: allConfigs['isClienteSimple']?.asBool() ?? false,
     );
     globalRemoteConfig = remoteConfigModel;
     //printProperties(globalRemoteConfig);

@@ -10,6 +10,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
+import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -80,6 +81,8 @@ class AddClientPageBody extends StatefulWidget {
 }
 
 class _AddClientPageBodyState extends State<AddClientPageBody> {
+  bool isSimple = globalRemoteConfig.isClienteSimple!;
+
   TextEditingController? newClientName = TextEditingController();
   TextEditingController? newClientId = TextEditingController();
   TextEditingController? newclientPhone = TextEditingController();
@@ -116,6 +119,15 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
   // }
 
   File? imageFile;
+  @override
+  void initState() {
+    super.initState();
+    if (isSimple) {
+      setState(() {
+        selectedPriceList = 'TPGBASE';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -344,7 +356,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                           margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
                           child: TextFieldForNewClient(
                             controller: newClientName,
-                            hintMessage: 'John Doe',
+                            hintMessage: isSimple ? '' : 'John Doe',
                             textInputType: TextInputType.name,
                             maxLines: 1,
                             readOnly: false,
@@ -445,39 +457,43 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                             ],
                           ),
                         ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(20, 10, 0, 0),
-                          child: Row(
-                            // mainAxisAlignment: MainAxisAlignment.center,
-                            // ignore: prefer_const_literals_to_create_immutables
-                            children: [
-                              TextMessageForTextField(
-                                  message: 'Contribuidor especial'),
-                              Container(
-                                width: 50,
-                                height: 50,
-                                child: Checkbox(
-                                  shape: CircleBorder(),
-                                  checkColor: Colors.white,
-                                  activeColor: myTheme.colorScheme.primary,
-                                  value: isSpecialContributor,
-                                  side: MaterialStateBorderSide.resolveWith(
-                                    (states) => BorderSide(
-                                      // width: 2.0,
-                                      color: myTheme
-                                          .colorScheme.onPrimaryContainer,
+                        isSimple
+                            ? Container()
+                            : Container(
+                                margin: EdgeInsets.fromLTRB(20, 10, 0, 0),
+                                child: Row(
+                                  // mainAxisAlignment: MainAxisAlignment.center,
+                                  // ignore: prefer_const_literals_to_create_immutables
+                                  children: [
+                                    TextMessageForTextField(
+                                        message: 'Contribuidor especial'),
+                                    Container(
+                                      width: 50,
+                                      height: 50,
+                                      child: Checkbox(
+                                        shape: CircleBorder(),
+                                        checkColor: Colors.white,
+                                        activeColor:
+                                            myTheme.colorScheme.primary,
+                                        value: isSpecialContributor,
+                                        side:
+                                            MaterialStateBorderSide.resolveWith(
+                                          (states) => BorderSide(
+                                            // width: 2.0,
+                                            color: myTheme
+                                                .colorScheme.onPrimaryContainer,
+                                          ),
+                                        ),
+                                        onChanged: (bool? value) {
+                                          setState(() {
+                                            isSpecialContributor = value!;
+                                          });
+                                        },
+                                      ),
                                     ),
-                                  ),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      isSpecialContributor = value!;
-                                    });
-                                  },
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
                         Container(
                           margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
                           child: Row(
@@ -485,7 +501,8 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                             // ignore: prefer_const_literals_to_create_immutables
                             children: [
                               TextMessageForTextField(
-                                  message: 'Telefono / Correo Electronico'),
+                                message: 'Telefono / Correo Electronico',
+                              ),
                               SizedBox(width: 5),
                               PointTextWidget(),
                             ],
@@ -499,7 +516,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                               margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
                               child: TextFieldForNewClient(
                                 controller: newclientPhone,
-                                hintMessage: '000 0000',
+                                hintMessage: isSimple ? '' : '000 0000',
                                 textInputType: TextInputType.phone,
                                 maxLines: 1,
                                 readOnly: false,
@@ -510,7 +527,8 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                               margin: EdgeInsets.fromLTRB(5, 0, 20, 0),
                               child: TextFieldForNewClient(
                                 controller: newClientEmail,
-                                hintMessage: 'example@gmail.com',
+                                hintMessage:
+                                    isSimple ? '' : 'example@gmail.com',
                                 textInputType: TextInputType.emailAddress,
                                 maxLines: 1,
                                 readOnly: false,
@@ -518,344 +536,383 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                             ),
                           ],
                         ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
-                          child: Row(
-                            // mainAxisAlignment: MainAxisAlignment.center,
-                            // ignore: prefer_const_literals_to_create_immutables
-                            children: [
-                              TextMessageForTextField(
-                                  message: 'Dirección Fiscal'),
-                              SizedBox(width: 5),
-                              PointTextWidget(),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                          child: TextFieldForNewClient(
-                            controller: newClientAddress1,
-                            hintMessage: '',
-                            textInputType: TextInputType.streetAddress,
-                            maxLines: 4,
-                            readOnly: false,
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
-                          child: Row(
-                            // mainAxisAlignment: MainAxisAlignment.center,
-                            // ignore: prefer_const_literals_to_create_immutables
-                            children: [
-                              TextMessageForTextField(
-                                  message: 'Dirección de Despacho'),
-                              SizedBox(width: 5),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                          child: TextFieldForNewClient(
-                            controller: newClientAddress2,
-                            hintMessage: '',
-                            textInputType: TextInputType.streetAddress,
-                            maxLines: 4,
-                            readOnly: false,
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
-                          child: Row(
-                            // mainAxisAlignment: MainAxisAlignment.center,
-                            // ignore: prefer_const_literals_to_create_immutables
-                            children: [
-                              TextMessageForTextField(
-                                  message: 'Zona de Ventas'),
-                              SizedBox(width: 5),
-                              PointTextWidget(),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                          child: TextFieldForNewClient(
-                            controller: null,
-                            hintMessage: newClientSalesZone,
-                            textInputType: TextInputType.name,
-                            maxLines: 1,
-                            readOnly: true,
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
-                          child: Row(
-                            // mainAxisAlignment: MainAxisAlignment.center,
-                            // ignore: prefer_const_literals_to_create_immutables
-                            children: [
-                              TextMessageForTextField(
-                                  message: 'Lista de precios'),
-                              SizedBox(width: 5),
-                              PointTextWidget(),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton2(
-                              hint: Text(
-                                selectedPriceList ?? '',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.grey.shade500,
-                                  fontFamily: 'Poppins-regular',
+                        isSimple
+                            ? Container()
+                            : Container(
+                                margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
+                                child: Row(
+                                  // mainAxisAlignment: MainAxisAlignment.center,
+                                  // ignore: prefer_const_literals_to_create_immutables
+                                  children: [
+                                    TextMessageForTextField(
+                                      message: 'Dirección Fiscal',
+                                    ),
+                                    SizedBox(width: 5),
+                                    PointTextWidget(),
+                                  ],
                                 ),
                               ),
-                              items: pricesSummaryValues
-                                  .map((item) => DropdownMenuItem<String>(
-                                        value: item,
-                                        child: Text(
-                                          item,
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            fontFamily: 'Poppins-regular',
-                                            color: Colors.grey.shade500,
-                                          ),
+                        isSimple
+                            ? Container()
+                            : Container(
+                                margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                                child: TextFieldForNewClient(
+                                  controller: newClientAddress1,
+                                  hintMessage: '',
+                                  textInputType: TextInputType.streetAddress,
+                                  maxLines: 4,
+                                  readOnly: false,
+                                ),
+                              ),
+                        isSimple
+                            ? Container()
+                            : Container(
+                                margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
+                                child: Row(
+                                  // mainAxisAlignment: MainAxisAlignment.center,
+                                  // ignore: prefer_const_literals_to_create_immutables
+                                  children: [
+                                    TextMessageForTextField(
+                                        message: 'Dirección de Despacho'),
+                                    SizedBox(width: 5),
+                                  ],
+                                ),
+                              ),
+                        isSimple
+                            ? Container()
+                            : Container(
+                                margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                                child: TextFieldForNewClient(
+                                  controller: newClientAddress2,
+                                  hintMessage: '',
+                                  textInputType: TextInputType.streetAddress,
+                                  maxLines: 4,
+                                  readOnly: false,
+                                ),
+                              ),
+                        isSimple
+                            ? Container()
+                            : Container(
+                                margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
+                                child: Row(
+                                  // mainAxisAlignment: MainAxisAlignment.center,
+                                  // ignore: prefer_const_literals_to_create_immutables
+                                  children: [
+                                    TextMessageForTextField(
+                                        message: 'Zona de Ventas'),
+                                    SizedBox(width: 5),
+                                    PointTextWidget(),
+                                  ],
+                                ),
+                              ),
+                        isSimple
+                            ? Container()
+                            : Container(
+                                margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                                child: TextFieldForNewClient(
+                                  controller: null,
+                                  hintMessage: newClientSalesZone,
+                                  textInputType: TextInputType.name,
+                                  maxLines: 1,
+                                  readOnly: true,
+                                ),
+                              ),
+                        isSimple
+                            ? Container()
+                            : Container(
+                                margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
+                                child: Row(
+                                  // mainAxisAlignment: MainAxisAlignment.center,
+                                  // ignore: prefer_const_literals_to_create_immutables
+                                  children: [
+                                    TextMessageForTextField(
+                                        message: 'Lista de precios'),
+                                    SizedBox(width: 5),
+                                    PointTextWidget(),
+                                  ],
+                                ),
+                              ),
+                        isSimple
+                            ? Container()
+                            : Container(
+                                margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton2(
+                                    hint: Text(
+                                      selectedPriceList ?? '',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.grey.shade500,
+                                        fontFamily: 'Poppins-regular',
+                                      ),
+                                    ),
+                                    items: pricesSummaryValues
+                                        .map((item) => DropdownMenuItem<String>(
+                                              value: item,
+                                              child: Text(
+                                                item,
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontFamily: 'Poppins-regular',
+                                                  color: Colors.grey.shade500,
+                                                ),
+                                              ),
+                                            ))
+                                        .toList(),
+                                    value: selectedPriceList,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedPriceList = value as String;
+                                      });
+                                      print(selectedPriceList);
+                                    },
+                                    menuItemStyleData: MenuItemStyleData(
+                                      height: 40,
+                                    ),
+                                    alignment: Alignment.center,
+                                    buttonStyleData: ButtonStyleData(
+                                      height: 45,
+                                      width: MediaQuery.of(context).size.width,
+                                      elevation: 0,
+                                      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: myTheme.colorScheme.primary,
                                         ),
-                                      ))
-                                  .toList(),
-                              value: selectedPriceList,
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedPriceList = value as String;
-                                });
-                                print(selectedPriceList);
-                              },
-                              menuItemStyleData: MenuItemStyleData(
-                                height: 40,
-                              ),
-                              alignment: Alignment.center,
-                              buttonStyleData: ButtonStyleData(
-                                height: 45,
-                                width: MediaQuery.of(context).size.width,
-                                elevation: 0,
-                                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: myTheme.colorScheme.primary,
+                                        borderRadius: BorderRadius.circular(5),
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    dropdownStyleData: DropdownStyleData(
+                                      elevation: 1,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: myTheme.colorScheme.primary,
+                                        ),
+                                        borderRadius: BorderRadius.circular(5),
+                                        color: Colors.white,
+                                      ),
+                                    ),
                                   ),
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: Colors.white,
                                 ),
                               ),
-                              dropdownStyleData: DropdownStyleData(
-                                elevation: 1,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: myTheme.colorScheme.primary,
-                                  ),
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: Colors.white,
+                        isSimple
+                            ? Container()
+                            : Container(
+                                margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
+                                child: Row(
+                                  // mainAxisAlignment: MainAxisAlignment.center,
+                                  // ignore: prefer_const_literals_to_create_immutables
+                                  children: [
+                                    TextMessageForTextField(
+                                        message: 'Descuento maestro (%)'),
+                                    SizedBox(width: 5),
+                                    PointTextWidget(),
+                                  ],
                                 ),
                               ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
-                          child: Row(
-                            // mainAxisAlignment: MainAxisAlignment.center,
-                            // ignore: prefer_const_literals_to_create_immutables
-                            children: [
-                              TextMessageForTextField(
-                                  message: 'Descuento maestro (%)'),
-                              SizedBox(width: 5),
-                              PointTextWidget(),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                          child: TextFieldForNewClient(
-                            controller: newClientMasterDiscount,
-                            hintMessage: '',
-                            textInputType: TextInputType.phone,
-                            maxLines: 1,
-                            readOnly: false,
-                          ),
-                        ),
+                        isSimple
+                            ? Container()
+                            : Container(
+                                margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                                child: TextFieldForNewClient(
+                                  controller: newClientMasterDiscount,
+                                  hintMessage: '',
+                                  textInputType: TextInputType.phone,
+                                  maxLines: 1,
+                                  readOnly: false,
+                                ),
+                              ),
                         // LOCALIZACION, COMENTADO POR PROBLEMAS DE USO SIN GOOGLE
                         // PLAY SERVICES
-                        Container(
-                          margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
-                          child: Row(
-                            // mainAxisAlignment: MainAxisAlignment.center,
-                            // ignore: prefer_const_literals_to_create_immutables
-                            children: [
-                              TextMessageForTextField(
-                                  message: 'Geolocalización'),
-                              SizedBox(width: 5),
-                            ],
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            Container(
-                              width: 120,
-                              margin: EdgeInsets.fromLTRB(20, 0, 10, 0),
-                              child: TextFieldForNewClient(
-                                controller: null,
-                                hintMessage: latitude,
-                                textInputType: TextInputType.name,
-                                maxLines: 1,
-                                readOnly: true,
-                              ),
-                            ),
-                            Container(
-                              width: 120,
-                              margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                              child: TextFieldForNewClient(
-                                controller: null,
-                                hintMessage: longitude,
-                                textInputType: TextInputType.name,
-                                maxLines: 1,
-                                readOnly: true,
-                              ),
-                            ),
-                            Container(
-                              width: 50,
-                              child: IconButton(
-                                icon: Icon(
-                                  Icons.place_sharp,
-                                  color: myTheme.colorScheme.primary,
+                        isSimple
+                            ? Container()
+                            : Container(
+                                margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
+                                child: Row(
+                                  // mainAxisAlignment: MainAxisAlignment.center,
+                                  // ignore: prefer_const_literals_to_create_immutables
+                                  children: [
+                                    TextMessageForTextField(
+                                        message: 'Geolocalización'),
+                                    SizedBox(width: 5),
+                                  ],
                                 ),
-                                onPressed: () async {
-                                  // Obtener Localización (latitud y longitud);
-                                  determinePosition().then((value) {
-                                    latitude =
-                                        '${value?.latitude.toStringAsFixed(4)}';
-                                    longitude =
-                                        '${value?.longitude.toStringAsFixed(4)}';
-                                    print(latitude);
-                                    print(longitude);
-                                    print('GEOLOCATOR');
-                                    setState(() {});
+                              ),
+                        isSimple
+                            ? Container()
+                            : Row(
+                                children: [
+                                  Container(
+                                    width: 120,
+                                    margin: EdgeInsets.fromLTRB(20, 0, 10, 0),
+                                    child: TextFieldForNewClient(
+                                      controller: null,
+                                      hintMessage: latitude,
+                                      textInputType: TextInputType.name,
+                                      maxLines: 1,
+                                      readOnly: true,
+                                    ),
+                                  ),
+                                  Container(
+                                    width: 120,
+                                    margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                    child: TextFieldForNewClient(
+                                      controller: null,
+                                      hintMessage: longitude,
+                                      textInputType: TextInputType.name,
+                                      maxLines: 1,
+                                      readOnly: true,
+                                    ),
+                                  ),
+                                  Container(
+                                    width: 50,
+                                    child: IconButton(
+                                      icon: Icon(
+                                        Icons.place_sharp,
+                                        color: myTheme.colorScheme.primary,
+                                      ),
+                                      onPressed: () async {
+                                        // Obtener Localización (latitud y longitud);
+                                        determinePosition().then((value) {
+                                          latitude =
+                                              '${value?.latitude.toStringAsFixed(4)}';
+                                          longitude =
+                                              '${value?.longitude.toStringAsFixed(4)}';
+                                          print(latitude);
+                                          print(longitude);
+                                          print('GEOLOCATOR');
+                                          setState(() {});
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                        isSimple ? Container() : SizedBox(height: 10),
+                        SizedBox(height: 10),
+                        isSimple
+                            ? Container()
+                            : InkWell(
+                                onTap: () async {
+                                  requestFileBottomSheet(context, (image) {
+                                    setState(() {
+                                      imageFile = image;
+                                    });
                                   });
                                 },
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        InkWell(
-                          onTap: () async {
-                            requestFileBottomSheet(context, (image) {
-                              setState(() {
-                                imageFile = image;
-                              });
-                            });
-                          },
-                          child: Container(
-                            margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                            child: Row(
-                              // ignore: prefer_const_literals_to_create_immutables
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.camera,
-                                  color: myTheme.colorScheme.onPrimaryContainer,
-                                ),
-                                SizedBox(width: 10),
-                                Text(
-                                  // AppLocalizations.of(context)!.gallery,
-                                  'Subir Imagen',
-                                  style: TextStyle(
-                                    color: myTheme.colorScheme.primary,
-                                    fontFamily: 'Poppins-regular',
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        imageFile == null
-                            ? Container()
-                            : GestureDetector(
-                                onTap: () {
-                                  ScaffoldMessenger.of(context)
-                                    ..removeCurrentSnackBar()
-                                    ..showSnackBar(
-                                      SnackBar(
-                                        backgroundColor: myTheme
-                                            .colorScheme.onPrimaryContainer,
-                                        duration: const Duration(seconds: 1),
-                                        content: Text(
-                                          "Toque la imagen dos veces para removerla ",
-                                          style: const TextStyle(
-                                            fontFamily: 'Poppins-regular',
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                },
-                                onDoubleTap: () {
-                                  setState(() => imageFile = null);
-                                  ScaffoldMessenger.of(context)
-                                    ..removeCurrentSnackBar()
-                                    ..showSnackBar(
-                                      SnackBar(
-                                        backgroundColor: Colors.green,
-                                        duration: const Duration(seconds: 1),
-                                        content: Text(
-                                          "Imagen removida",
-                                          style: const TextStyle(
-                                            fontFamily: 'Poppins-regular',
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                },
                                 child: Container(
-                                  margin: EdgeInsets.fromLTRB(20, 5, 20, 0),
-                                  // height: 300,
-                                  // width: 300,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: myTheme.colorScheme.primary,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10),
+                                  margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                  child: Row(
+                                    // ignore: prefer_const_literals_to_create_immutables
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.camera,
+                                        color: myTheme
+                                            .colorScheme.onPrimaryContainer,
+                                      ),
+                                      SizedBox(width: 10),
+                                      Text(
+                                        // AppLocalizations.of(context)!.gallery,
+                                        'Subir Imagen',
+                                        style: TextStyle(
+                                          color: myTheme.colorScheme.primary,
+                                          fontFamily: 'Poppins-regular',
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(9),
-                                    child: Image.file(
-                                      imageFile!,
-                                      fit: BoxFit.contain,
+                                ),
+                              ),
+                        isSimple
+                            ? Container()
+                            : imageFile == null
+                                ? Container()
+                                : GestureDetector(
+                                    onTap: () {
+                                      ScaffoldMessenger.of(context)
+                                        ..removeCurrentSnackBar()
+                                        ..showSnackBar(
+                                          SnackBar(
+                                            backgroundColor: myTheme
+                                                .colorScheme.onPrimaryContainer,
+                                            duration:
+                                                const Duration(seconds: 1),
+                                            content: Text(
+                                              "Toque la imagen dos veces para removerla ",
+                                              style: const TextStyle(
+                                                fontFamily: 'Poppins-regular',
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                    },
+                                    onDoubleTap: () {
+                                      setState(() => imageFile = null);
+                                      ScaffoldMessenger.of(context)
+                                        ..removeCurrentSnackBar()
+                                        ..showSnackBar(
+                                          SnackBar(
+                                            backgroundColor: Colors.green,
+                                            duration:
+                                                const Duration(seconds: 1),
+                                            content: Text(
+                                              "Imagen removida",
+                                              style: const TextStyle(
+                                                fontFamily: 'Poppins-regular',
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                    },
+                                    child: Container(
+                                      margin: EdgeInsets.fromLTRB(20, 5, 20, 0),
                                       // height: 300,
                                       // width: 300,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: myTheme.colorScheme.primary,
+                                        ),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(9),
+                                        child: Image.file(
+                                          imageFile!,
+                                          fit: BoxFit.contain,
+                                          // height: 300,
+                                          // width: 300,
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
                         SizedBox(height: 10),
                         ElevatedButton.icon(
                           onPressed: () async {
                             // Registrar nuevo Cliente
-                            if (newClientName!.text.toString().isEmpty ||
-                                newClientId!.text.toString().isEmpty ||
-                                !RegExp(r'^[0-9_.]+$')
-                                    .hasMatch(newClientId!.text.toString()) ||
-                                newclientPhone!.text.toString().isEmpty ||
-                                newClientEmail!.text.toString().isEmpty ||
-                                newClientAddress1!.text.toString().isEmpty ||
-                                newClientMasterDiscount!.text
-                                    .toString()
-                                    .isEmpty ||
-                                !RegExp(r'^[0-9_.]+$').hasMatch(
-                                  newClientMasterDiscount!.text.toString(),
-                                )) {
+                            if (isSimple
+                                ? (newClientName!.text.toString().isEmpty ||
+                                    newClientId!.text.toString().isEmpty ||
+                                    !RegExp(r'^[0-9_.]+$').hasMatch(
+                                        newClientId!.text.toString()) ||
+                                    newclientPhone!.text.toString().isEmpty ||
+                                    newClientEmail!.text.toString().isEmpty)
+                                : (newClientName!.text.toString().isEmpty ||
+                                    newClientId!.text.toString().isEmpty ||
+                                    !RegExp(r'^[0-9_.]+$').hasMatch(
+                                        newClientId!.text.toString()) ||
+                                    newclientPhone!.text.toString().isEmpty ||
+                                    newClientEmail!.text.toString().isEmpty ||
+                                    newClientAddress1!.text
+                                        .toString()
+                                        .isEmpty ||
+                                    newClientMasterDiscount!.text
+                                        .toString()
+                                        .isEmpty ||
+                                    !RegExp(r'^[0-9_.]+$').hasMatch(
+                                      newClientMasterDiscount!.text.toString(),
+                                    ))) {
                               print(imageFile);
                               ScaffoldMessenger.of(context)
                                 ..removeCurrentSnackBar()
@@ -986,27 +1043,32 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                                   ..toString();
                                             final String
                                                 newClientAddress1ForFirebase =
-                                                newClientAddress1!.text
-                                                    .trim()
-                                                    .toString();
+                                                isSimple
+                                                    ? ''
+                                                    : newClientAddress1!.text
+                                                        .trim()
+                                                        .toString();
                                             final String
                                                 newClientAddress2ForFirebase =
-                                                newClientAddress2!.text
-                                                    .trim()
-                                                    .toString();
+                                                isSimple
+                                                    ? ''
+                                                    : newClientAddress2!.text
+                                                        .trim()
+                                                        .toString();
                                             final int
                                                 newClientMasterDiscountForFirebase =
-                                                int.parse(
-                                                    newClientMasterDiscount
-                                                            ?.text
-                                                            .trim()
-                                                            .toString() ??
-                                                        '0');
+                                                isSimple
+                                                    ? 0
+                                                    : int.parse(
+                                                        newClientMasterDiscount
+                                                                ?.text
+                                                                .trim()
+                                                                .toString() ??
+                                                            '0');
                                             final userUid =
                                                 Provider.of<UserModel?>(context,
                                                         listen: false)!
                                                     .uid;
-                                            print(imageFile);
                                             ScaffoldMessenger.of(context)
                                               ..removeCurrentSnackBar()
                                               ..showSnackBar(
@@ -1026,8 +1088,9 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                               );
 
                                             await registerClient(
-                                              isSpecialContributor:
-                                                  isSpecialContributor,
+                                              isSpecialContributor: isSimple
+                                                  ? false
+                                                  : isSpecialContributor,
                                               newClientAddress1:
                                                   newClientAddress1ForFirebase,
                                               newClientAddress2:
@@ -1048,9 +1111,12 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                               uid: userUid!,
                                               selectedPricesList:
                                                   selectedPriceList!,
-                                              image: imageFile,
-                                              latitude: latitude,
-                                              longitude: longitude,
+                                              image:
+                                                  isSimple ? null : imageFile,
+                                              latitude:
+                                                  isSimple ? '' : latitude,
+                                              longitude:
+                                                  isSimple ? '' : longitude,
                                               userZoneDocument:
                                                   widget.userZoneDocument,
                                             ).whenComplete(() {
