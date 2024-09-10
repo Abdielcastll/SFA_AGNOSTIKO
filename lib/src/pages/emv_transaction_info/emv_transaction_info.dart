@@ -1,8 +1,12 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'package:http/http.dart' as http;
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:decimal/decimal.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:agnostiko/agnostiko.dart';
@@ -19,6 +23,7 @@ import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/utils/keypad.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
+import 'package:pwa_sales2go_flutter/src/utils/multitenant-config.dart';
 import 'package:pwa_sales2go_flutter/src/utils/notifications.dart';
 
 import '../../models/transaction_args.dart';
@@ -43,8 +48,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   InfoTags? infoTags;
   Map<int, Uint8List?>? firstGenerateTags;
   Map<int, Uint8List?>? secondGenerateTags;
-
+  String razonsocial = '';
   EmvTransactionResult? transactionResult;
+  String urlLogoTicket = '';
 
   getEmvTags() async {
     final emvModule = EmvModule.instance;
@@ -75,9 +81,62 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     );
   }
 
+  Future<String?> getDownloadUrl(String filePath) async {
+    try {
+      // Reference the file in Firebase Storage using the provided file path
+      String downloadUrl =
+          await FirebaseStorage.instanceFor(app: multitenantConfig.tenantApp!)
+              .ref(filePath)
+              .getDownloadURL();
+
+      return downloadUrl;
+    } catch (e) {
+      print('Error fetching download URL: $e');
+      return null;
+    }
+  }
+
+  void fetchDownloadLink() async {
+    String? filePath = globalRemoteConfig.refLogoTicket!;
+    String? downloadUrl = await getDownloadUrl(filePath);
+
+    if (downloadUrl != null) {
+      setState(() {
+        urlLogoTicket = downloadUrl;
+      });
+      print('Download URL: $downloadUrl');
+    } else {
+      print('Failed to retrieve download URL');
+    }
+  }
+
+  Future getEmpresaNombre() async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> docSnapshot =
+          await FirebaseFirestore.instanceFor(app: multitenantConfig.tenantApp!)
+              .collection('tenant')
+              .doc('empresa')
+              .get();
+
+      // Check if the document exists and contains the field
+      if (docSnapshot.exists && docSnapshot.data() != null) {
+        // Extract the 'nombre' field value
+        setState(() {
+          razonsocial = docSnapshot.data()!['nombre'] ?? '';
+        });
+      } else {
+        print('Document does not exist or has no data');
+      }
+    } catch (e) {
+      print('Error fetching nombre: $e');
+    }
+  }
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      getEmpresaNombre();
+      fetchDownloadLink();
       if (globalRemoteConfig.conversionKiosko == true) {
         if (transactionResult == EmvTransactionResult.Approved) {
           onAccept();
@@ -633,18 +692,44 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     return null;
   }
 
+  Future<ui.Image?> networkImageToUiImage(String imageUrl) async {
+    try {
+      // Fetch the image data from the network
+      final http.Response response = await http.get(Uri.parse(imageUrl));
+
+      if (response.statusCode == 200) {
+        // Convert the raw bytes into a ui.Image
+        Uint8List imageData = response.bodyBytes;
+        final Completer<ui.Image> completer = Completer();
+
+        ui.decodeImageFromList(imageData, (ui.Image img) {
+          completer.complete(img);
+        });
+
+        return completer.future;
+      } else {
+        print('Failed to load image. Status code: ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      print('Error loading image: $e');
+      return null;
+    }
+  }
+
   Future<void> printTicket() async {
     final emv = EmvModule.instance;
 
     List<PrinterObject> listOfTextLine = [];
     final terminalParameters = await loadTerminalParameters();
 
-    const assetsLogo = AssetImage("assets/images/agn_blue.png");
+    //NetworkImage assetsLogo = NetworkImage(urlLogoTicket);
+    //AssetImage("assets/images/agn_blue.png");
 
-    ui.Image logo = await assetsLogo.toUiImage();
+    ui.Image? logo = await networkImageToUiImage(urlLogoTicket);
 
     final byteDataLogo =
-        await logo.toByteData(format: ui.ImageByteFormat.rawRgba);
+        await logo!.toByteData(format: ui.ImageByteFormat.rawRgba);
     final rgbaLogo =
         byteDataLogo?.buffer.asUint8List() ?? Uint8List.fromList([]);
 
@@ -660,7 +745,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
 
     listOfTextLine.add(imgLogo);
 
-    listOfTextLine.add(PrinterText("Agnostiko SFA".toUpperCase(),
+    listOfTextLine.add(PrinterText(razonsocial.toUpperCase(),
         format: TextFormat(fontSize: 16, fontFamily: specialFont),
         alignment: TextAlignment.Center));
 
