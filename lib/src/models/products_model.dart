@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Products {
   final quality;
-  final catalogue;
+  final String? catalogue;
   final categorie;
   final code;
   final design;
@@ -18,7 +18,7 @@ class Products {
 
   Products({
     required this.quality,
-    required this.catalogue,
+    this.catalogue,
     required this.categorie,
     required this.code,
     required this.design,

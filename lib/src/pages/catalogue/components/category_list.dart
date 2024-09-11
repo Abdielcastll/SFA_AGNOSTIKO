@@ -91,7 +91,7 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                       for (var element in element.docs) {
                         Products product = Products(
                           quality: element.data()['calidad'].id ?? '',
-                          catalogue: element.data()['catalogo'].id ?? '',
+                          //catalogue: element.data()['catalogo'].id ?? '',
                           categorie: element.data()['categoria'].id ?? '',
                           code: element.data()['codigo'] ?? '',
                           barCode: element.data()['codigoBarra'] ?? '',
