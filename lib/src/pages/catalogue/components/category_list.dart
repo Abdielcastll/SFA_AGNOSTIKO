@@ -145,67 +145,67 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(8),
                           child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8)),
-                              height: 240,
-                              width: 120,
-                              child: FutureBuilder<String?>(
-                                future: storage
-                                    .ref()
-                                    .child('imagenes')
-                                    .child('catalogos')
-                                    .child(categoriesCollection.doc(key).id)
-                                    .child('1')
-                                    .getDownloadURL()
-                                    .catchError((e) {
-                                  // Handle error for image fetching
-                                  return 'assets/images/nocategorie.jpg';
-                                }),
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    final url = snapshot.data?.toString();
-                                    return CachedNetworkImage(
-                                      fit: BoxFit.cover,
-                                      imageUrl: url!,
-                                      placeholder: (context, url) => Container(
-                                        width: 300,
-                                        child: const Center(
-                                          child: CircularProgressIndicator(),
-                                        ),
-                                      ),
-                                      errorWidget: (context, url, error) =>
-                                          Image.asset(
-                                        'assets/images/nocategorie.jpg',
-                                        fit: BoxFit.cover,
-                                      ),
-                                    );
-                                  } else if (snapshot.hasError) {
-                                    return CachedNetworkImage(
-                                      fit: BoxFit.cover,
-                                      imageUrl:
-                                          'https://i.imgur.com/H9rVf4m.jpg',
-                                      placeholder: (context, url) => Container(
-                                        width: 300,
-                                        child: const Center(
-                                          child: CircularProgressIndicator(),
-                                        ),
-                                      ),
-                                      errorWidget: (context, url, error) =>
-                                          Image.asset(
-                                        'assets/images/nocategorie.jpg',
-                                        fit: BoxFit.cover,
-                                      ),
-                                    );
-                                  } else {
-                                    return const SizedBox(
-                                      width: 140,
-                                      child: Center(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8)),
+                            height: 240,
+                            width: 120,
+                            child: FutureBuilder<String?>(
+                              future: storage
+                                  .ref()
+                                  .child('imagenes')
+                                  .child('catalogos')
+                                  .child(categoriesCollection.doc(key).id)
+                                  .child('1')
+                                  .getDownloadURL()
+                                  .catchError((e) {
+                                // Handle error for image fetching
+                                return 'assets/images/nocategorie.jpg';
+                              }),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  final url = snapshot.data?.toString();
+                                  return CachedNetworkImage(
+                                    fit: BoxFit.cover,
+                                    imageUrl: url!,
+                                    placeholder: (context, url) => Container(
+                                      width: 300,
+                                      child: const Center(
                                         child: CircularProgressIndicator(),
                                       ),
-                                    );
-                                  }
-                                },
-                              )),
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        Image.asset(
+                                      'assets/images/nocategorie.jpg',
+                                      fit: BoxFit.cover,
+                                    ),
+                                  );
+                                } else if (snapshot.hasError) {
+                                  return CachedNetworkImage(
+                                    fit: BoxFit.cover,
+                                    imageUrl: 'https://i.imgur.com/H9rVf4m.jpg',
+                                    placeholder: (context, url) => Container(
+                                      width: 300,
+                                      child: const Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        Image.asset(
+                                      'assets/images/nocategorie.jpg',
+                                      fit: BoxFit.cover,
+                                    ),
+                                  );
+                                } else {
+                                  return const SizedBox(
+                                    width: 140,
+                                    child: Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                          ),
                         ),
                         Align(
                           alignment: Alignment.bottomCenter,
