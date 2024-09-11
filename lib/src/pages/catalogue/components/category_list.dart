@@ -145,125 +145,67 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(8),
                           child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8)),
-                            height: 240,
-                            width: 120,
-                            child: FutureBuilder(
-                              future: productsCollection
-                                  .where('categoria',
-                                      isEqualTo: categoriesCollection.doc(key))
-                                  .orderBy('modificado', descending: true)
-                                  .limit(1)
-                                  .snapshots()
-                                  .first
-                                  .then(
-                                (value) {
-                                  var cataloguePath = value.docs;
-                                  // print(
-                                  //     'PRINTING CATALOGUE PATHs IDs IN CATEGORY LIST');
-                                  for (var path in cataloguePath) {
-                                    // print(path.id);
-                                    // print(path.get('nombre'));
-                                    var catalogueId = path
-                                            .data()
-                                            .toString()
-                                            .contains('catalogo')
-                                        ? path.get('catalogo').id
-                                        : 'NO CATALOGUE ID FOUND';
-                                    // print(catalogueId);
-
-                                    // print('TEST TO GET IMAGE');
-
-                                    return catalogueId;
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8)),
+                              height: 240,
+                              width: 120,
+                              child: FutureBuilder<String?>(
+                                future: storage
+                                    .ref()
+                                    .child('imagenes')
+                                    .child('catalogos')
+                                    .child(categoriesCollection.doc(key).id)
+                                    .child('1')
+                                    .getDownloadURL()
+                                    .catchError((e) {
+                                  // Handle error for image fetching
+                                  return 'assets/images/nocategorie.jpg';
+                                }),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    final url = snapshot.data?.toString();
+                                    return CachedNetworkImage(
+                                      fit: BoxFit.cover,
+                                      imageUrl: url!,
+                                      placeholder: (context, url) => Container(
+                                        width: 300,
+                                        child: const Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                      ),
+                                      errorWidget: (context, url, error) =>
+                                          Image.asset(
+                                        'assets/images/nocategorie.jpg',
+                                        fit: BoxFit.cover,
+                                      ),
+                                    );
+                                  } else if (snapshot.hasError) {
+                                    return CachedNetworkImage(
+                                      fit: BoxFit.cover,
+                                      imageUrl:
+                                          'https://i.imgur.com/H9rVf4m.jpg',
+                                      placeholder: (context, url) => Container(
+                                        width: 300,
+                                        child: const Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                      ),
+                                      errorWidget: (context, url, error) =>
+                                          Image.asset(
+                                        'assets/images/nocategorie.jpg',
+                                        fit: BoxFit.cover,
+                                      ),
+                                    );
+                                  } else {
+                                    return const SizedBox(
+                                      width: 140,
+                                      child: Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    );
                                   }
                                 },
-                              ).catchError((e) {
-                                // print(
-                                //     'ERROR ON GETTING IMAGE PATH FROM FIREBASE COLLECTION IN CATEGORY LIST');
-                                // print(e);
-                              }),
-                              builder: (context, snapshot) {
-                                final catalogueID = snapshot.data?.toString();
-                                if (snapshot.hasData) {
-                                  return FutureBuilder<String?>(
-                                    future: storage
-                                        .ref()
-                                        .child('imagenes')
-                                        .child('catalogos')
-                                        .child(catalogueID!)
-                                        .child('1')
-                                        .getDownloadURL()
-                                        .catchError((e) {
-                                      // print(
-                                      //     'ERROR ON GETTING IMAGE FROM FIREBASE STORAGE IN CATEGORY LIST');
-                                      // print(e);
-                                      return 'assets/images/nocategorie.jpg';
-                                    }),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.hasData) {
-                                        final url = snapshot.data?.toString();
-                                        // print('URL FOR CATEGORIE');
-                                        // print(url);
-                                        return CachedNetworkImage(
-                                          fit: BoxFit.cover,
-                                          imageUrl:
-                                              // 'assets/images/nocategorie.jpg',
-                                              url!,
-                                          placeholder: (context, url) =>
-                                              Container(
-                                            width: 300,
-                                            child: const Center(
-                                              child:
-                                                  CircularProgressIndicator(),
-                                            ),
-                                          ),
-                                          errorWidget: (context, url, error) =>
-                                              Image.asset(
-                                            'assets/images/nocategorie.jpg',
-                                            fit: BoxFit.cover,
-                                          ),
-                                        );
-                                      } else if (snapshot.hasError) {
-                                        return CachedNetworkImage(
-                                          fit: BoxFit.cover,
-                                          imageUrl:
-                                              'https://i.imgur.com/H9rVf4m.jpg',
-                                          placeholder: (context, url) =>
-                                              Container(
-                                            width: 300,
-                                            child: const Center(
-                                              child:
-                                                  CircularProgressIndicator(),
-                                            ),
-                                          ),
-                                          errorWidget: (context, url, error) =>
-                                              Image.asset(
-                                            'assets/images/nocategorie.jpg',
-                                            fit: BoxFit.cover,
-                                          ),
-                                        );
-                                      } else {
-                                        return const SizedBox(
-                                          width: 140,
-                                          child: Center(
-                                            child: CircularProgressIndicator(),
-                                          ),
-                                        );
-                                      }
-                                    },
-                                  );
-                                } else {
-                                  return const SizedBox(
-                                    width: 140,
-                                    child: Center(
-                                      child: CircularProgressIndicator(),
-                                    ),
-                                  );
-                                }
-                              },
-                            ),
-                          ),
+                              )),
                         ),
                         Align(
                           alignment: Alignment.bottomCenter,
