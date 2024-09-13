@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -12,6 +13,8 @@ class AddressInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return SingleChildScrollView(
       child: Container(
         width: MediaQuery.of(context).size.width,
@@ -28,7 +31,7 @@ class AddressInfo extends StatelessWidget {
               child: Text(
                 AppLocalizations.of(context)!.clientFiscalAddress,
                 style: TextStyle(
-                  color: myTheme.colorScheme.primary,
+                  color: themeProvider.myTheme.colorScheme.primary,
                   fontFamily: 'Poppins-medium',
                   fontWeight: FontWeight.bold,
                   fontSize: 11,

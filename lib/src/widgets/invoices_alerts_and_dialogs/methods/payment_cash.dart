@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
@@ -27,8 +28,9 @@ paymentCash(
     int? paymentsValidPayQuantity) {
   File? imageFile;
 
-  return StatefulBuilder(
-    builder: (BuildContext context, setState) => Column(
+  return StatefulBuilder(builder: (BuildContext context, setState) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -37,7 +39,7 @@ paymentCash(
           'Subir comprobante',
           style: TextStyle(
             fontFamily: 'Poppins-medium',
-            color: myTheme.colorScheme.primary,
+            color: themeProvider.myTheme.colorScheme.primary,
             fontSize: 14,
           ),
         ),
@@ -58,7 +60,7 @@ paymentCash(
                 Colors.white,
               ),
               foregroundColor: MaterialStateProperty.all(
-                myTheme.colorScheme.primary,
+                themeProvider.myTheme.colorScheme.primary,
               ),
               shape: MaterialStateProperty.all(
                 RoundedRectangleBorder(
@@ -71,7 +73,7 @@ paymentCash(
             child: Text(
               'Seleccionar archivo',
               style: TextStyle(
-                color: myTheme.colorScheme.onPrimaryContainer,
+                color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
                 fontFamily: 'Poppins-medium',
                 fontSize: 11,
               ),
@@ -85,7 +87,7 @@ paymentCash(
                 onTap: () {
                   Fluttertoast.showToast(
                     msg: 'Presione 2 veces para eliminar imagen seleccionada',
-                    backgroundColor: myTheme.colorScheme.primary,
+                    backgroundColor: themeProvider.myTheme.colorScheme.primary,
                     textColor: Colors.white,
                   );
                 },
@@ -102,7 +104,7 @@ paymentCash(
                 child: Container(
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: myTheme.colorScheme.primary,
+                      color: themeProvider.myTheme.colorScheme.primary,
                     ),
                     borderRadius: BorderRadius.circular(8),
                   ),
@@ -130,7 +132,7 @@ paymentCash(
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
-                    // myTheme.colorScheme.primary,
+                    // themeProvider.myTheme.colorScheme.primary,
                     Colors.white,
                   ),
                   elevation: MaterialStateProperty.all(0),
@@ -139,7 +141,7 @@ paymentCash(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                       side: BorderSide(
-                        color: myTheme.colorScheme.primary,
+                        color: themeProvider.myTheme.colorScheme.primary,
                       ),
                     ),
                   ),
@@ -147,7 +149,7 @@ paymentCash(
                 child: Text(
                   'Cancelar',
                   style: TextStyle(
-                    color: myTheme.colorScheme.primary,
+                    color: themeProvider.myTheme.colorScheme.primary,
                     fontFamily: 'Poppins-medium',
                     fontSize: 12,
                   ),
@@ -169,7 +171,8 @@ paymentCash(
                             if (!globalRemoteConfig.conversionKiosko!) {
                               Fluttertoast.showToast(
                                 msg: 'Registrando pago en efectivo',
-                                backgroundColor: myTheme.colorScheme.primary,
+                                backgroundColor:
+                                    themeProvider.myTheme.colorScheme.primary,
                                 textColor: Colors.white,
                               );
                             }
@@ -230,7 +233,8 @@ paymentCash(
                           },
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(
-                              myTheme.colorScheme.onPrimaryContainer,
+                              themeProvider
+                                  .myTheme.colorScheme.onPrimaryContainer,
                             ),
                             shape: MaterialStateProperty.all<
                                 RoundedRectangleBorder>(
@@ -252,6 +256,6 @@ paymentCash(
           ),
         )
       ],
-    ),
-  );
+    );
+  });
 }

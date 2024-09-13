@@ -28,6 +28,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
   @override
   Widget build(BuildContext context) {
     // final productsBySales = Provider.of<List<ProductsByDate>?>(context) ?? [];
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     final linesSummary = Provider.of<LineSummary?>(context)?.summary ?? {};
     final stockValues = Provider.of<StockModel?>(context)?.stock ?? {};
@@ -99,7 +100,8 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                       padding: const EdgeInsets.only(left: 16.0),
                       child: Icon(
                         MaterialCommunityIcons.chart_timeline_variant_shimmer,
-                        color: myTheme.colorScheme.onPrimaryContainer,
+                        color: themeProvider
+                            .myTheme.colorScheme.onPrimaryContainer,
                         size: 19,
                       ),
                     ),
@@ -108,7 +110,8 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                       AppLocalizations.of(context)!.mostSelled,
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
-                        color: myTheme.colorScheme.onPrimaryContainer,
+                        color: themeProvider
+                            .myTheme.colorScheme.onPrimaryContainer,
                         letterSpacing: 0.15,
                         fontSize: 16,
                         fontFamily: 'Poppins-medium',
@@ -220,7 +223,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
-                                            color: myTheme
+                                            color: themeProvider.myTheme
                                                 .colorScheme.onPrimaryContainer,
                                             fontFamily: 'Poppins-regular',
                                             fontSize: 12,
@@ -304,7 +307,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
-                                            color: myTheme
+                                            color: themeProvider.myTheme
                                                 .colorScheme.onPrimaryContainer,
                                             fontFamily: 'Poppins-regular',
                                             fontSize: 11,
@@ -348,8 +351,8 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                     ..removeCurrentSnackBar()
                                     ..showSnackBar(
                                       SnackBar(
-                                        backgroundColor:
-                                            myTheme.colorScheme.primary,
+                                        backgroundColor: themeProvider
+                                            .myTheme.colorScheme.primary,
                                         duration: const Duration(seconds: 1),
                                         content: const Text(
                                           "No hay stock disponible de este producto",
@@ -409,7 +412,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
-                                            color: myTheme
+                                            color: themeProvider.myTheme
                                                 .colorScheme.onPrimaryContainer,
                                             fontFamily: 'Poppins-regular',
                                             fontSize: 12,
@@ -493,7 +496,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
-                                            color: myTheme
+                                            color: themeProvider.myTheme
                                                 .colorScheme.onPrimaryContainer,
                                             fontFamily: 'Poppins-regular',
                                             fontSize: 11,

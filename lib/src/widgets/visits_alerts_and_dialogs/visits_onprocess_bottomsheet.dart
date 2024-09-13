@@ -3,6 +3,7 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
 import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
@@ -38,12 +39,13 @@ void modalBottomSheetForOnProcess({
 
   String? selectedValue;
   String? commentaryValue;
+  final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
   showModalBottomSheet(
     isScrollControlled: true,
     elevation: 0,
     backgroundColor: Colors.white,
-    barrierColor: myTheme.colorScheme.secondary.withOpacity(0.5),
+    barrierColor: themeProvider.myTheme.colorScheme.secondary.withOpacity(0.5),
     context: context,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(
@@ -107,7 +109,8 @@ void modalBottomSheetForOnProcess({
                         'Persona de contacto',
                         style: TextStyle(
                           fontSize: 16,
-                          color: myTheme.colorScheme.onPrimaryContainer,
+                          color: themeProvider
+                              .myTheme.colorScheme.onPrimaryContainer,
                           fontFamily: 'Poppins-medium',
                           letterSpacing: 0.15,
                         ),
@@ -141,7 +144,8 @@ void modalBottomSheetForOnProcess({
                         'Comentario',
                         style: TextStyle(
                           fontSize: 16,
-                          color: myTheme.colorScheme.onPrimaryContainer,
+                          color: themeProvider
+                              .myTheme.colorScheme.onPrimaryContainer,
                           fontFamily: 'Poppins-medium',
                           letterSpacing: 0.15,
                         ),
@@ -152,7 +156,7 @@ void modalBottomSheetForOnProcess({
                       child: TextField(
                         style: TextStyle(
                           fontSize: 14,
-                          color: myTheme.colorScheme.primary,
+                          color: themeProvider.myTheme.colorScheme.primary,
                         ),
                         keyboardType: TextInputType.text,
                         maxLines: 2,
@@ -199,7 +203,8 @@ void modalBottomSheetForOnProcess({
                         'Estado de la visita',
                         style: TextStyle(
                           fontSize: 16,
-                          color: myTheme.colorScheme.onPrimaryContainer,
+                          color: themeProvider
+                              .myTheme.colorScheme.onPrimaryContainer,
                           fontFamily: 'Poppins-medium',
                           letterSpacing: 0.15,
                         ),
@@ -236,7 +241,8 @@ void modalBottomSheetForOnProcess({
                                       style: TextStyle(
                                         fontSize: 12,
                                         fontFamily: 'Poppins-regular',
-                                        color: myTheme.colorScheme.primary
+                                        color: themeProvider
+                                            .myTheme.colorScheme.primary
                                             .withOpacity(0.8),
                                       ),
                                       overflow: TextOverflow.ellipsis,
@@ -309,7 +315,8 @@ void modalBottomSheetForOnProcess({
                                   (states) {
                                     return states
                                             .contains(MaterialState.pressed)
-                                        ? myTheme.colorScheme.primary
+                                        ? themeProvider
+                                            .myTheme.colorScheme.primary
                                         : null;
                                   },
                                 ),
@@ -320,7 +327,8 @@ void modalBottomSheetForOnProcess({
                                   RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(100),
                                     side: BorderSide(
-                                      color: myTheme.colorScheme.primary,
+                                      color: themeProvider
+                                          .myTheme.colorScheme.primary,
                                     ),
                                   ),
                                 ),
@@ -329,7 +337,8 @@ void modalBottomSheetForOnProcess({
                                 AppLocalizations.of(context)!.seeClient,
                                 style: TextStyle(
                                   fontFamily: 'Poppins-medium',
-                                  color: myTheme.colorScheme.primary,
+                                  color:
+                                      themeProvider.myTheme.colorScheme.primary,
                                   fontSize: 11,
                                 ),
                               ),
@@ -370,7 +379,8 @@ void modalBottomSheetForOnProcess({
                               overlayColor: MaterialStateProperty.resolveWith(
                                 (states) {
                                   return states.contains(MaterialState.pressed)
-                                      ? myTheme.colorScheme.primary
+                                      ? themeProvider
+                                          .myTheme.colorScheme.primary
                                       : null;
                                 },
                               ),
@@ -381,7 +391,8 @@ void modalBottomSheetForOnProcess({
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(100),
                                   side: BorderSide(
-                                    color: myTheme.colorScheme.primary,
+                                    color: themeProvider
+                                        .myTheme.colorScheme.primary,
                                   ),
                                 ),
                               ),
@@ -390,7 +401,8 @@ void modalBottomSheetForOnProcess({
                               AppLocalizations.of(context)!.saveChanges,
                               style: TextStyle(
                                 fontFamily: 'Poppins-medium',
-                                color: myTheme.colorScheme.primary,
+                                color:
+                                    themeProvider.myTheme.colorScheme.primary,
                                 fontSize: 11,
                               ),
                             ),
@@ -439,7 +451,8 @@ void modalBottomSheetForOnProcess({
                                           .visitDeleteConfirmation,
                                       style: TextStyle(
                                         fontFamily: 'Poppins-regular',
-                                        color: myTheme.colorScheme.secondary,
+                                        color: themeProvider
+                                            .myTheme.colorScheme.secondary,
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -457,8 +470,8 @@ void modalBottomSheetForOnProcess({
                                                 .goBack,
                                             style: TextStyle(
                                               fontFamily: 'Poppins-regular',
-                                              color:
-                                                  myTheme.colorScheme.primary,
+                                              color: themeProvider
+                                                  .myTheme.colorScheme.primary,
                                               fontSize: 12,
                                               fontWeight: FontWeight.bold,
                                             ),
@@ -470,8 +483,8 @@ void modalBottomSheetForOnProcess({
                                           decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(16),
-                                              color:
-                                                  myTheme.colorScheme.primary),
+                                              color: themeProvider
+                                                  .myTheme.colorScheme.primary),
                                           child: TextButton(
                                             onPressed: () async {
                                               // Eliminar Visita en proceso de DB
@@ -483,8 +496,8 @@ void modalBottomSheetForOnProcess({
                                               Navigator.pop(context);
                                             },
                                             style: TextButton.styleFrom(
-                                              foregroundColor:
-                                                  myTheme.colorScheme.primary,
+                                              foregroundColor: themeProvider
+                                                  .myTheme.colorScheme.primary,
                                             ),
                                             child: Text(
                                               AppLocalizations.of(context)!
@@ -536,6 +549,8 @@ class TextBoxWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return Container(
       alignment: Alignment.centerLeft,
       margin: const EdgeInsets.fromLTRB(10, 15, 0, 10),
@@ -544,7 +559,7 @@ class TextBoxWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         color: Colors.white,
         border: Border.all(
-          color: myTheme.colorScheme.primary.withOpacity(0.5),
+          color: themeProvider.myTheme.colorScheme.primary.withOpacity(0.5),
         ),
       ),
       child: Text(
@@ -552,7 +567,7 @@ class TextBoxWidget extends StatelessWidget {
         style: TextStyle(
           fontFamily: 'Poppins-regular',
           fontSize: 14,
-          color: myTheme.colorScheme.primary.withOpacity(0.5),
+          color: themeProvider.myTheme.colorScheme.primary.withOpacity(0.5),
         ),
       ),
     );

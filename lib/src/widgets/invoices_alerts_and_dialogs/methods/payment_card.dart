@@ -3,6 +3,7 @@
 import 'package:agnostiko/agnostiko.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/dialogs/go_to_pinpad_dialog.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/card_input/card_input.dart';
@@ -140,6 +141,8 @@ paymentCard(
 
     return Container();
   }
+  final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
   return StatefulBuilder(
     builder: (context, setState) => Column(
       children: [
@@ -165,7 +168,7 @@ paymentCard(
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
-                        myTheme.colorScheme.primary,
+                        themeProvider.myTheme.colorScheme.primary,
                       ),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
@@ -207,7 +210,7 @@ paymentCard(
                           },
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(
-                              myTheme.colorScheme.primary,
+                              themeProvider.myTheme.colorScheme.primary,
                             ),
                             shape: MaterialStateProperty.all<
                                 RoundedRectangleBorder>(

@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class AppBarKiosko extends StatelessWidget implements PreferredSizeWidget {
@@ -18,6 +19,8 @@ class AppBarKiosko extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return AppBar(
       foregroundColor: Colors.white,
       title: Text(
@@ -31,7 +34,7 @@ class AppBarKiosko extends StatelessWidget implements PreferredSizeWidget {
       ),
       elevation: 0,
       leadingWidth: 24.0,
-      backgroundColor: myTheme.colorScheme.primary,
+      backgroundColor: themeProvider.myTheme.colorScheme.primary,
     );
   }
 }

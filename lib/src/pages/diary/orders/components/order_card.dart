@@ -148,13 +148,14 @@ class _OrderCardBodyState extends State<OrderCardBody> {
         return Colors.red;
       }
     }
+  final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return currentClientName == ''
         ? Container(
             margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
             child: Center(
               child: SpinKitCircle(
-                color: myTheme.colorScheme.primary,
+                color: themeProvider.myTheme.colorScheme.primary,
                 size: 50,
               ),
             ),
@@ -303,7 +304,8 @@ class _OrderCardBodyState extends State<OrderCardBody> {
                             style: TextStyle(
                               fontSize: 10,
                               // color: Colors.grey.shade500,
-                              color: myTheme.colorScheme.secondary,
+                              color:
+                                  themeProvider.myTheme.colorScheme.secondary,
                               fontFamily: 'Poppins-regular',
                             ),
                           ),

@@ -21,11 +21,12 @@ class VisitsMap extends StatelessWidget {
   Widget build(BuildContext context) {
     final visits = context.watch<List<Visits>?>() ?? [];
     print('visits $visits');
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return Scaffold(
         appBar: AppBar(
           foregroundColor: Colors.white,
-          backgroundColor: myTheme.colorScheme.primary,
+          backgroundColor: themeProvider.myTheme.colorScheme.primary,
           title: const Text('Mapa de visitas'),
         ),
         body: VisitMapBody(
@@ -191,6 +192,8 @@ class _VisitMapBodyState extends State<VisitMapBody> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return MultiProvider(
       providers: [
         StreamProvider<ZoneSummary?>.value(
@@ -264,7 +267,8 @@ class _VisitMapBodyState extends State<VisitMapBody> {
                         Text('Centrar'),
                         Icon(
                           Icons.location_on_rounded,
-                          color: myTheme.colorScheme.onPrimaryContainer,
+                          color: themeProvider
+                              .myTheme.colorScheme.onPrimaryContainer,
                         ),
                       ],
                     ),
@@ -285,7 +289,8 @@ class _VisitMapBodyState extends State<VisitMapBody> {
                           Text('Siguiente Visita'),
                           Icon(
                             Icons.navigate_next_rounded,
-                            color: myTheme.colorScheme.onPrimaryContainer,
+                            color: themeProvider
+                                .myTheme.colorScheme.onPrimaryContainer,
                           ),
                         ],
                       ),

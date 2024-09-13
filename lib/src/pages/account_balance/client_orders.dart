@@ -31,6 +31,8 @@ class ClientOrders extends StatefulWidget {
 class _ClientOrdersState extends State<ClientOrders> {
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     final user = Provider.of<CurrentUserInfo?>(context);
     final userUID = Provider.of<UserModel?>(context);
 
@@ -93,7 +95,7 @@ class _ClientOrdersState extends State<ClientOrders> {
       ],
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: myTheme.colorScheme.surface,
+          backgroundColor: themeProvider.myTheme.colorScheme.surface,
           body: ClientOrdersBody(),
         ),
       ),
@@ -121,6 +123,8 @@ class _ClientOrdersBodyState extends State<ClientOrdersBody> {
     super.initState();
     // products = widget.listOfProducts;
     _controller.addListener(() {
+      final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
       final productsLimitProvider =
           Provider.of<CounterLimitFirestore>(context, listen: false);
       if (_controller.position.atEdge) {
@@ -145,7 +149,7 @@ class _ClientOrdersBodyState extends State<ClientOrdersBody> {
           print('Bottom balance page');
           Fluttertoast.showToast(
             msg: 'Solicitando +10 pedidos',
-            backgroundColor: myTheme.colorScheme.primary,
+            backgroundColor: themeProvider.myTheme.colorScheme.primary,
             textColor: Colors.white,
           );
         }
@@ -155,6 +159,8 @@ class _ClientOrdersBodyState extends State<ClientOrdersBody> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     final currentDay =
         Provider.of<CounterLimitFirestore>(context).currentDayOrder;
     final currentDateTime = currentDay.toDate();
@@ -181,7 +187,7 @@ class _ClientOrdersBodyState extends State<ClientOrdersBody> {
                     isDescending
                         ? MaterialCommunityIcons.sort_calendar_descending
                         : MaterialCommunityIcons.sort_calendar_ascending,
-                    color: myTheme.colorScheme.onPrimaryContainer,
+                    color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
                   ),
                   label: Container(
                     width: 88,
@@ -193,7 +199,8 @@ class _ClientOrdersBodyState extends State<ClientOrdersBody> {
                       // AppLocalizations.of(context)!.descendingFilter,
                       style: TextStyle(
                         fontFamily: 'Poppins-medium',
-                        color: myTheme.colorScheme.onPrimaryContainer,
+                        color: themeProvider
+                            .myTheme.colorScheme.onPrimaryContainer,
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
                       ),
@@ -238,14 +245,15 @@ class _ClientOrdersBodyState extends State<ClientOrdersBody> {
                                 ),
                               ),
                               colorScheme: ColorScheme.dark(
-                                primary: myTheme.colorScheme.primary,
+                                primary:
+                                    themeProvider.myTheme.colorScheme.primary,
                                 onPrimary: Colors.white,
                                 surface: Colors.white,
                                 onSurface: Color(0xFF1D1B20),
                               ),
                               textButtonTheme: TextButtonThemeData(
                                 style: TextButton.styleFrom(
-                                  foregroundColor: myTheme
+                                  foregroundColor: themeProvider.myTheme
                                       .colorScheme.primary, // button text color
                                 ),
                               ),
@@ -266,7 +274,8 @@ class _ClientOrdersBodyState extends State<ClientOrdersBody> {
                     },
                     icon: Icon(
                       MaterialIcons.event,
-                      color: myTheme.colorScheme.onPrimaryContainer,
+                      color:
+                          themeProvider.myTheme.colorScheme.onPrimaryContainer,
                     ),
                     label: Container(
                       width: 100,
@@ -288,7 +297,8 @@ class _ClientOrdersBodyState extends State<ClientOrdersBody> {
                             : 'Elige una fecha',
                         style: TextStyle(
                           fontFamily: 'Poppins-medium',
-                          color: myTheme.colorScheme.onPrimaryContainer,
+                          color: themeProvider
+                              .myTheme.colorScheme.onPrimaryContainer,
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                         ),

@@ -31,6 +31,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
     final pricesName = Provider.of<Prices?>(context)?.name ?? {};
     final products = Provider.of<List<Products>?>(context) ?? [];
     final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     print('pricesAAA ${prices}');
 
@@ -46,7 +47,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                   padding: EdgeInsets.only(bottom: 2),
                   child: Icon(
                     MaterialIcons.auto_awesome,
-                    color: myTheme.colorScheme.onPrimaryContainer,
+                    color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
                     size: 19,
                   ),
                 ),
@@ -57,7 +58,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                   AppLocalizations.of(context)!.newProducts,
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
-                    color: myTheme.colorScheme.onPrimaryContainer,
+                    color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
                     letterSpacing: 0.15,
                     fontSize: 16,
                     fontFamily: 'Poppins-medium',
@@ -166,8 +167,8 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                      color: myTheme
-                                          .colorScheme.onPrimaryContainer,
+                                      color: themeProvider.myTheme.colorScheme
+                                          .onPrimaryContainer,
                                       fontFamily: 'Poppins-regular',
                                       fontSize: 12,
                                       letterSpacing: 0.25,
@@ -196,7 +197,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                 //         height: 10,
                                 //         width: 10,
                                 //         decoration: BoxDecoration(
-                                //           color: myTheme
+                                //           color: themeProvider.myTheme
                                 //               .colorScheme.onPrimaryContainer,
                                 //           borderRadius:
                                 //               BorderRadius.circular(20),
@@ -285,8 +286,8 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                      color: myTheme
-                                          .colorScheme.onPrimaryContainer,
+                                      color: themeProvider.myTheme.colorScheme
+                                          .onPrimaryContainer,
                                       fontFamily: 'Poppins-regular',
                                       fontSize: 11,
                                       fontWeight: FontWeight.bold,
@@ -315,7 +316,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                 //         height: 10,
                                 //         width: 10,
                                 //         decoration: BoxDecoration(
-                                //           color: myTheme
+                                //           color: themeProvider.myTheme
                                 //               .colorScheme.onPrimaryContainer,
                                 //           borderRadius:
                                 //               BorderRadius.circular(20),

@@ -30,6 +30,8 @@ class ListTileOptions extends StatefulWidget {
 class _ListTileOptionsState extends State<ListTileOptions> {
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     final zoneSummary = Provider.of<ZoneSummary?>(context)!.summary ?? [];
     final userZone = Provider.of<CurrentUserInfo?>(context)?.zone ?? {};
 
@@ -66,7 +68,7 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                       'Zona de Ventas',
                       style: TextStyle(
                         fontFamily: 'Poppins-regular',
-                        color: myTheme.colorScheme.secondary,
+                        color: themeProvider.myTheme.colorScheme.secondary,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -81,7 +83,8 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                             identifyZone(),
                             style: TextStyle(
                               fontFamily: 'Poppins-regular',
-                              color: myTheme.colorScheme.secondary,
+                              color:
+                                  themeProvider.myTheme.colorScheme.secondary,
                               fontSize: 14,
                             ),
                           ),
@@ -91,7 +94,8 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                                 'Gerente: ',
                                 style: TextStyle(
                                   fontFamily: 'Poppins-regular',
-                                  color: myTheme.colorScheme.secondary,
+                                  color: themeProvider
+                                      .myTheme.colorScheme.secondary,
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -100,7 +104,8 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                                 'Ana Avila',
                                 style: TextStyle(
                                   fontFamily: 'Poppins-regular',
-                                  color: myTheme.colorScheme.secondary,
+                                  color: themeProvider
+                                      .myTheme.colorScheme.secondary,
                                   fontSize: 14,
                                 ),
                               ),
@@ -146,7 +151,7 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                       'Informacion de este usuario',
                       style: TextStyle(
                         fontFamily: 'Poppins-regular',
-                        color: myTheme.colorScheme.secondary,
+                        color: themeProvider.myTheme.colorScheme.secondary,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -161,7 +166,8 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                             'Nombre: ${widget.name} ',
                             style: TextStyle(
                               fontFamily: 'Poppins-regular',
-                              color: myTheme.colorScheme.secondary,
+                              color:
+                                  themeProvider.myTheme.colorScheme.secondary,
                               fontSize: 14,
                             ),
                           ),
@@ -169,7 +175,8 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                             'Email: ${widget.email}',
                             style: TextStyle(
                               fontFamily: 'Poppins-regular',
-                              color: myTheme.colorScheme.secondary,
+                              color:
+                                  themeProvider.myTheme.colorScheme.secondary,
                               fontSize: 14,
                             ),
                           ),
@@ -177,7 +184,8 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                             'Cargo: ${widget.charge}',
                             style: TextStyle(
                               fontFamily: 'Poppins-regular',
-                              color: myTheme.colorScheme.secondary,
+                              color:
+                                  themeProvider.myTheme.colorScheme.secondary,
                               fontSize: 14,
                             ),
                           ),
@@ -213,7 +221,7 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                       'Informacion de Soporte al usuario',
                       style: TextStyle(
                         fontFamily: 'Poppins-regular',
-                        color: myTheme.colorScheme.secondary,
+                        color: themeProvider.myTheme.colorScheme.secondary,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -228,7 +236,8 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                             'Si necesita ayuda con algun lado de la aplicacion, comunicarse al:',
                             style: TextStyle(
                               fontFamily: 'Poppins-regular',
-                              color: myTheme.colorScheme.secondary,
+                              color:
+                                  themeProvider.myTheme.colorScheme.secondary,
                               fontSize: 14,
                             ),
                           ),
@@ -236,7 +245,8 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                             '731XXX000 EXT 000 ',
                             style: TextStyle(
                               fontFamily: 'Poppins-regular',
-                              color: myTheme.colorScheme.secondary,
+                              color:
+                                  themeProvider.myTheme.colorScheme.secondary,
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),
@@ -245,7 +255,8 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                             'Email:',
                             style: TextStyle(
                               fontFamily: 'Poppins-regular',
-                              color: myTheme.colorScheme.secondary,
+                              color:
+                                  themeProvider.myTheme.colorScheme.secondary,
                               fontSize: 14,
                             ),
                           ),
@@ -253,7 +264,8 @@ class _ListTileOptionsState extends State<ListTileOptions> {
                             'examplesupport@email.com',
                             style: TextStyle(
                               fontFamily: 'Poppins-regular',
-                              color: myTheme.colorScheme.secondary,
+                              color:
+                                  themeProvider.myTheme.colorScheme.secondary,
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),
@@ -287,20 +299,22 @@ class ListTileProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return Container(
       margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
       child: ListTile(
         leading: Container(
           child: Icon(
             icon,
-            color: myTheme.colorScheme.secondary,
+            color: themeProvider.myTheme.colorScheme.secondary,
           ),
         ),
         title: Text(
           title,
           style: TextStyle(
             fontFamily: 'Poppins-regular',
-            color: myTheme.colorScheme.secondary,
+            color: themeProvider.myTheme.colorScheme.secondary,
             fontSize: 14,
             fontWeight: FontWeight.bold,
           ),

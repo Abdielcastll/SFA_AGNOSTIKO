@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/add_new_client/add_new_client_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
@@ -41,6 +42,8 @@ Future<dynamic> showDialogForRegisterPayment(
   required String invoiceDocumentID,
   required int invoiceNumber,
 }) {
+  final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
   List<String> nationalBanks = [];
   List<String> internationalBanks = [];
   List<String> banks = [];
@@ -114,7 +117,7 @@ Future<dynamic> showDialogForRegisterPayment(
               AppLocalizations.of(context)!.registerPayment,
               style: TextStyle(
                 fontFamily: 'Poppins-regular',
-                color: myTheme.colorScheme.onPrimaryContainer,
+                color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
                 fontSize: 22,
               ),
             ),
@@ -129,7 +132,7 @@ Future<dynamic> showDialogForRegisterPayment(
                         'Tipo de pago',
                         style: TextStyle(
                           fontFamily: 'Poppins-regular',
-                          color: myTheme.colorScheme.primary,
+                          color: themeProvider.myTheme.colorScheme.primary,
                           fontSize: 14,
                         ),
                       ),
@@ -148,7 +151,8 @@ Future<dynamic> showDialogForRegisterPayment(
                               selectedValueA ?? 'Seleccione tipo de pago',
                               style: TextStyle(
                                 fontSize: 12,
-                                color: myTheme.colorScheme.primary,
+                                color:
+                                    themeProvider.myTheme.colorScheme.primary,
                               ),
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -162,7 +166,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                   item,
                                   style: TextStyle(
                                     fontSize: 14,
-                                    color: myTheme.colorScheme.primary,
+                                    color: themeProvider
+                                        .myTheme.colorScheme.primary,
                                   ),
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -264,7 +269,7 @@ Future<dynamic> showDialogForRegisterPayment(
                         AppLocalizations.of(context)!.date,
                         style: TextStyle(
                           fontFamily: 'Poppins-regular',
-                          color: myTheme.colorScheme.primary,
+                          color: themeProvider.myTheme.colorScheme.primary,
                           fontSize: 14,
                         ),
                       ),
@@ -288,7 +293,7 @@ Future<dynamic> showDialogForRegisterPayment(
                           formattedDate,
                           style: TextStyle(
                             fontSize: 14,
-                            color: myTheme.colorScheme.primary,
+                            color: themeProvider.myTheme.colorScheme.primary,
                           ),
                         ),
                         Container(
@@ -320,14 +325,17 @@ Future<dynamic> showDialogForRegisterPayment(
                                         ),
                                       ),
                                       colorScheme: ColorScheme.dark(
-                                        primary: myTheme.colorScheme.primary,
+                                        primary: themeProvider
+                                            .myTheme.colorScheme.primary,
                                         onPrimary: Colors.white,
                                         surface: Colors.white,
                                         onSurface: const Color(0xFF1D1B20),
                                       ),
                                       textButtonTheme: TextButtonThemeData(
                                         style: TextButton.styleFrom(
-                                          foregroundColor: myTheme.colorScheme
+                                          foregroundColor: themeProvider
+                                              .myTheme
+                                              .colorScheme
                                               .primary, // button text color
                                         ),
                                       ),
@@ -358,8 +366,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                               .contains('tarjeta') ==
                                           true ||
                                       selectedValueA == null
-                                  ? myTheme.colorScheme.secondary
-                                  : myTheme.colorScheme.primary,
+                                  ? themeProvider.myTheme.colorScheme.secondary
+                                  : themeProvider.myTheme.colorScheme.primary,
                               size: 19,
                             ),
                           ),
@@ -377,7 +385,8 @@ Future<dynamic> showDialogForRegisterPayment(
                               // '${AppLocalizations.of(context)!.amount}',
                               style: TextStyle(
                                 fontFamily: 'Poppins-regular',
-                                color: myTheme.colorScheme.primary,
+                                color:
+                                    themeProvider.myTheme.colorScheme.primary,
                                 fontSize: 14,
                               ),
                             ),
@@ -456,7 +465,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontFamily: 'Poppins-regular',
-                                    color: myTheme.colorScheme.primary,
+                                    color: themeProvider
+                                        .myTheme.colorScheme.primary,
                                   ),
                                   inputFormatters: <TextInputFormatter>[
                                     DecimalTextInputFormatter(decimalRange: 2),
@@ -485,7 +495,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                           style: TextStyle(
                                             fontFamily: 'Poppins-regular',
                                             fontSize: 14,
-                                            color: myTheme.colorScheme.primary,
+                                            color: themeProvider
+                                                .myTheme.colorScheme.primary,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -504,7 +515,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                       height: 1.85,
                                       fontFamily: 'Poppins-regular',
                                       fontSize: 14,
-                                      color: myTheme.colorScheme.primary,
+                                      color: themeProvider
+                                          .myTheme.colorScheme.primary,
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
@@ -558,11 +570,13 @@ Future<dynamic> showDialogForRegisterPayment(
                                 style: TextStyle(
                                   fontFamily: 'Poppins-regular',
                                   color: moneyRecievedForRegisterMoney < 0.00001
-                                      ? myTheme.colorScheme.primary
+                                      ? themeProvider
+                                          .myTheme.colorScheme.primary
                                       : moneyRecievedForRegisterMoney <
                                               paidAmount!
                                           ? Colors.red
-                                          : myTheme.colorScheme.primary,
+                                          : themeProvider
+                                              .myTheme.colorScheme.primary,
                                   fontSize: 14,
                                 ),
                               ),
@@ -582,7 +596,7 @@ Future<dynamic> showDialogForRegisterPayment(
                               color: moneyRecievedForRegisterMoney < 0.00001
                                   ? const Color(0xFFDFE0FF)
                                   : moneyRecievedForRegisterMoney < paidAmount!
-                                      ? myTheme.colorScheme.error
+                                      ? themeProvider.myTheme.colorScheme.error
                                       : const Color(0xFFDFE0FF),
                               // color: Colors.transparent,
                             ),
@@ -642,10 +656,11 @@ Future<dynamic> showDialogForRegisterPayment(
                               fontSize: 14,
                               fontFamily: 'Poppins-regular',
                               color: moneyRecievedForRegisterMoney < 0.00001
-                                  ? myTheme.colorScheme.primary
+                                  ? themeProvider.myTheme.colorScheme.primary
                                   : moneyRecievedForRegisterMoney < paidAmount!
                                       ? Colors.red
-                                      : myTheme.colorScheme.primary,
+                                      : themeProvider
+                                          .myTheme.colorScheme.primary,
                             ),
                             inputFormatters: <TextInputFormatter>[
                               DecimalTextInputFormatter(decimalRange: 2),
@@ -674,11 +689,14 @@ Future<dynamic> showDialogForRegisterPayment(
                                       fontSize: 14,
                                       color: moneyRecievedForRegisterMoney <
                                               0.00001
-                                          ? myTheme.colorScheme.primary
+                                          ? themeProvider
+                                              .myTheme.colorScheme.primary
                                           : moneyRecievedForRegisterMoney <
                                                   paidAmount!
-                                              ? myTheme.colorScheme.error
-                                              : myTheme.colorScheme.primary,
+                                              ? themeProvider
+                                                  .myTheme.colorScheme.error
+                                              : themeProvider
+                                                  .myTheme.colorScheme.primary,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -696,11 +714,13 @@ Future<dynamic> showDialogForRegisterPayment(
                                 fontFamily: 'Poppins-regular',
                                 fontSize: 11,
                                 color: moneyRecievedForRegisterMoney < 0.00001
-                                    ? myTheme.colorScheme.primary
+                                    ? themeProvider.myTheme.colorScheme.primary
                                     : moneyRecievedForRegisterMoney <
                                             paidAmount!
-                                        ? myTheme.colorScheme.error
-                                        : myTheme.colorScheme.primary,
+                                        ? themeProvider
+                                            .myTheme.colorScheme.error
+                                        : themeProvider
+                                            .myTheme.colorScheme.primary,
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5),
@@ -740,7 +760,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontFamily: 'Poppins-regular',
-                                            color: myTheme.colorScheme.error,
+                                            color: themeProvider
+                                                .myTheme.colorScheme.error,
                                             fontSize: 10,
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -761,7 +782,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                 'Subtotal: ',
                                 style: TextStyle(
                                   fontFamily: 'Poppins-regular',
-                                  color: myTheme.colorScheme.primary,
+                                  color:
+                                      themeProvider.myTheme.colorScheme.primary,
                                   fontSize: 10,
                                 ),
                               ),
@@ -770,7 +792,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                 '$coinSymbol $subTotalformatted',
                                 style: TextStyle(
                                   fontFamily: 'Poppins-regular',
-                                  color: myTheme.colorScheme.primary,
+                                  color:
+                                      themeProvider.myTheme.colorScheme.primary,
                                   fontSize: 10,
                                 ),
                               ),
@@ -791,7 +814,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                 'Descuento Maestro ($discountPercentage%): ',
                                 style: TextStyle(
                                   fontFamily: 'Poppins-regular',
-                                  color: myTheme.colorScheme.primary,
+                                  color:
+                                      themeProvider.myTheme.colorScheme.primary,
                                   fontSize: 10,
                                 ),
                               ),
@@ -800,7 +824,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                 ' - $coinSymbol $discountMasterformatted',
                                 style: TextStyle(
                                   fontFamily: 'Poppins-regular',
-                                  color: myTheme.colorScheme.primary,
+                                  color:
+                                      themeProvider.myTheme.colorScheme.primary,
                                   fontSize: 10,
                                 ),
                               ),
@@ -821,7 +846,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                 'IVA (16%): ',
                                 style: TextStyle(
                                   fontFamily: 'Poppins-regular',
-                                  color: myTheme.colorScheme.primary,
+                                  color:
+                                      themeProvider.myTheme.colorScheme.primary,
                                   fontSize: 10,
                                 ),
                               ),
@@ -830,7 +856,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                 '$coinSymbol $taxformatted',
                                 style: TextStyle(
                                   fontFamily: 'Poppins-regular',
-                                  color: myTheme.colorScheme.primary,
+                                  color:
+                                      themeProvider.myTheme.colorScheme.primary,
                                   fontSize: 10,
                                 ),
                               ),
@@ -851,7 +878,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                 'Total: ',
                                 style: TextStyle(
                                   fontFamily: 'Poppins-regular',
-                                  color: myTheme.colorScheme.primary,
+                                  color:
+                                      themeProvider.myTheme.colorScheme.primary,
                                   fontSize: 10,
                                 ),
                               ),
@@ -860,7 +888,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                 '$coinSymbol $totalformatted',
                                 style: TextStyle(
                                   fontFamily: 'Poppins-regular',
-                                  color: myTheme.colorScheme.onPrimaryContainer,
+                                  color: themeProvider
+                                      .myTheme.colorScheme.onPrimaryContainer,
                                   fontSize: 10,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -882,7 +911,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                 'Monto pagado: ',
                                 style: TextStyle(
                                   fontFamily: 'Poppins-regular',
-                                  color: myTheme.colorScheme.primary,
+                                  color:
+                                      themeProvider.myTheme.colorScheme.primary,
                                   fontSize: 10,
                                 ),
                               ),
@@ -891,7 +921,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                 '$coinSymbol $payedUpformatted',
                                 style: TextStyle(
                                   fontFamily: 'Poppins-regular',
-                                  color: myTheme.colorScheme.onPrimaryContainer,
+                                  color: themeProvider
+                                      .myTheme.colorScheme.onPrimaryContainer,
                                   fontSize: 10,
                                 ),
                               ),
@@ -908,7 +939,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                 'Saldo: ',
                                 style: TextStyle(
                                   fontFamily: 'Poppins-regular',
-                                  color: myTheme.colorScheme.onPrimaryContainer,
+                                  color: themeProvider
+                                      .myTheme.colorScheme.onPrimaryContainer,
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -918,7 +950,8 @@ Future<dynamic> showDialogForRegisterPayment(
                                 '$coinSymbol $balanceformatted',
                                 style: TextStyle(
                                   fontFamily: 'Poppins-regular',
-                                  color: myTheme.colorScheme.onPrimaryContainer,
+                                  color: themeProvider
+                                      .myTheme.colorScheme.onPrimaryContainer,
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
                                 ),

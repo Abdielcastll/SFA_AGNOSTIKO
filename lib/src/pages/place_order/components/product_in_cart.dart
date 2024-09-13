@@ -87,7 +87,7 @@ class _ProductsInCartState extends State<ProductsInCart> {
       //                       showModalBottomSheet(
       //                         elevation: 0,
       //                         backgroundColor: Colors.grey.shade200,
-      //                         barrierColor: myTheme.colorScheme.secondary
+      //                         barrierColor: themeProvider.myTheme.colorScheme.secondary
       //                             .withOpacity(0.5),
       //                         isScrollControlled: true,
       //                         context: context,

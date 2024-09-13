@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class AppBarCheckout extends StatelessWidget implements PreferredSizeWidget {
@@ -13,6 +14,8 @@ class AppBarCheckout extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return AppBar(
       // shape: RoundedRectangleBorder(
       //   borderRadius: BorderRadius.vertical(
@@ -28,7 +31,7 @@ class AppBarCheckout extends StatelessWidget implements PreferredSizeWidget {
           color: Colors.white,
         ),
       ),
-      backgroundColor: myTheme.colorScheme.primary,
+      backgroundColor: themeProvider.myTheme.colorScheme.primary,
       foregroundColor: Colors.white,
       elevation: 0,
     );

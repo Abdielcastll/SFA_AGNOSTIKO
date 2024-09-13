@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/pages/account_balance/account_balance.dart';
 import 'package:pwa_sales2go_flutter/src/pages/account_balance/client_orders.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -15,6 +16,8 @@ class AccountTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -31,7 +34,7 @@ class AccountTabs extends StatelessWidget {
           ),
           // centerTitle: true,
           elevation: 0,
-          backgroundColor: myTheme.colorScheme.primary,
+          backgroundColor: themeProvider.myTheme.colorScheme.primary,
 
           bottom: const AccountTabBar(),
         ),

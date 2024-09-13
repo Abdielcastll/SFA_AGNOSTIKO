@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/utils/galleryCamera.dart';
 
@@ -8,18 +9,20 @@ requestFileBottomSheet(BuildContext context, Function(File) onFileSelected) {
   showModalBottomSheet(
     context: context,
     builder: (context) {
+      final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           ListTile(
             leading: Icon(
               Icons.camera_alt,
-              color: myTheme.colorScheme.onPrimaryContainer,
+              color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
             ),
             title: Text(
               'Camara',
               style: TextStyle(
-                color: myTheme.colorScheme.primary,
+                color: themeProvider.myTheme.colorScheme.primary,
                 fontFamily: 'Poppins-regular',
               ),
             ),
@@ -48,12 +51,12 @@ requestFileBottomSheet(BuildContext context, Function(File) onFileSelected) {
           ListTile(
             leading: Icon(
               Icons.photo_camera_back_rounded,
-              color: myTheme.colorScheme.onPrimaryContainer,
+              color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
             ),
             title: Text(
               'Galeria',
               style: TextStyle(
-                color: myTheme.colorScheme.primary,
+                color: themeProvider.myTheme.colorScheme.primary,
                 fontFamily: 'Poppins-regular',
               ),
             ),

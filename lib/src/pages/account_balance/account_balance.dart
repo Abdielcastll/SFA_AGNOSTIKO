@@ -122,6 +122,7 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
     );
 
     var balanceFormatted = formatDecimalPriceByRegion(price: balanceConverted);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return MultiProvider(
       providers: [
@@ -277,7 +278,7 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
                     style: TextStyle(
                       fontFamily: 'Poppins-medium',
                       fontSize: 12,
-                      color: myTheme.colorScheme.secondary,
+                      color: themeProvider.myTheme.colorScheme.secondary,
                     ),
                   ),
                   SizedBox(width: 10),
@@ -355,6 +356,8 @@ class _ShowInvoicesState extends State<ShowInvoices> {
     _controller.addListener(() {
       final productsLimitProvider =
           Provider.of<CounterLimitFirestore>(context, listen: false);
+      final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
       if (_controller.position.atEdge) {
         bool isTop = _controller.position.pixels == 0;
         if (isTop) {
@@ -379,7 +382,7 @@ class _ShowInvoicesState extends State<ShowInvoices> {
           print('Bottom balance page');
           Fluttertoast.showToast(
             msg: 'Solicitando +10 facturas',
-            backgroundColor: myTheme.colorScheme.primary,
+            backgroundColor: themeProvider.myTheme.colorScheme.primary,
             textColor: Colors.white,
           );
         }
@@ -389,6 +392,8 @@ class _ShowInvoicesState extends State<ShowInvoices> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 2;
     final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 1;
     final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
@@ -487,7 +492,8 @@ class _ShowInvoicesState extends State<ShowInvoices> {
                             style: TextStyle(
                               fontFamily: 'Poppins-regular',
                               fontSize: 12,
-                              color: myTheme.colorScheme.onPrimaryContainer,
+                              color: themeProvider
+                                  .myTheme.colorScheme.onPrimaryContainer,
                             ),
                           ),
                         ],
@@ -605,6 +611,8 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
           final noteNuled = note.paymentsData['anulado'] ?? 'NaN';
           final noteConciled = note.paymentsData['conciliado'] ?? 'NaN';
           final balanceNC = noteBalance + noteOriginalAmount;
+          final themeProvider =
+              Provider.of<ThemeProvider>(context, listen: true);
 
           return ListTile(
             onTap: () {
@@ -623,7 +631,8 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
                             'Nota de Credito #$noteNumber',
                             style: TextStyle(
                               fontFamily: 'Poppins-regular',
-                              color: myTheme.colorScheme.secondary,
+                              color:
+                                  themeProvider.myTheme.colorScheme.secondary,
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
@@ -651,7 +660,8 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
                                     borderRadius: BorderRadius.circular(16),
                                     color: Colors.white,
                                     border: Border.all(
-                                      color: myTheme.colorScheme.primary
+                                      color: themeProvider
+                                          .myTheme.colorScheme.primary
                                           .withOpacity(0.5),
                                     ),
                                   ),
@@ -662,7 +672,8 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
                                     style: TextStyle(
                                       fontFamily: 'Poppins-regular',
                                       fontSize: 14,
-                                      color: myTheme.colorScheme.primary
+                                      color: themeProvider
+                                          .myTheme.colorScheme.primary
                                           .withOpacity(0.5),
                                     ),
                                   ),
@@ -687,7 +698,8 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
                                     borderRadius: BorderRadius.circular(16),
                                     color: Colors.white,
                                     border: Border.all(
-                                      color: myTheme.colorScheme.primary
+                                      color: themeProvider
+                                          .myTheme.colorScheme.primary
                                           .withOpacity(0.5),
                                     ),
                                   ),
@@ -702,13 +714,15 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
                                         style: TextStyle(
                                           fontFamily: 'Poppins-regular',
                                           fontSize: 14,
-                                          color: myTheme.colorScheme.primary
+                                          color: themeProvider
+                                              .myTheme.colorScheme.primary
                                               .withOpacity(0.5),
                                         ),
                                       ),
                                       Icon(
                                         Icons.calendar_month,
-                                        color: myTheme.colorScheme.primary
+                                        color: themeProvider
+                                            .myTheme.colorScheme.primary
                                             .withOpacity(0.5),
                                         size: 20,
                                       ),
@@ -765,7 +779,8 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
                                       'Regresar',
                                       style: TextStyle(
                                         fontFamily: 'Poppins-regular',
-                                        color: myTheme.colorScheme.primary,
+                                        color: themeProvider
+                                            .myTheme.colorScheme.primary,
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
                                       ),

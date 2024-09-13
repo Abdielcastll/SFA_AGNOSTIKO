@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class FilterInvoices extends StatefulWidget {
@@ -16,6 +17,8 @@ class FilterInvoices extends StatefulWidget {
 class FilterInvoicesState extends State<FilterInvoices> {
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return Container(
       height: 50.0,
       width: double.infinity,
@@ -76,7 +79,8 @@ class FilterInvoicesState extends State<FilterInvoices> {
               // Pop up de filtros
             },
             splashRadius: 20,
-            splashColor: myTheme.colorScheme.secondary.withOpacity(0.2),
+            splashColor:
+                themeProvider.myTheme.colorScheme.secondary.withOpacity(0.2),
           ),
         ],
       ),

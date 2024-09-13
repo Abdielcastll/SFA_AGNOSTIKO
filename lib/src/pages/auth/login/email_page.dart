@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -25,6 +26,8 @@ class _EmailPageState extends State<EmailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return MaterialApp(
       home: loading
           ? LoadingWidget(
@@ -35,7 +38,7 @@ class _EmailPageState extends State<EmailPage> {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: myTheme.colorScheme.primary,
+                    color: themeProvider.myTheme.colorScheme.primary,
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -219,6 +222,8 @@ class _ButtonState extends State<Button> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return loading
         ? Center(
             child: Column(
@@ -230,7 +235,7 @@ class _ButtonState extends State<Button> {
                   style: TextStyle(
                     fontSize: 14,
                     fontFamily: 'Poppins-regular',
-                    color: myTheme.colorScheme.onPrimaryContainer,
+                    color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
                   ),
                 ),
               ],
@@ -280,12 +285,13 @@ class _ButtonState extends State<Button> {
                   style: ButtonStyle(
                     alignment: Alignment.center,
                     backgroundColor: MaterialStateProperty.all<Color>(
-                      myTheme.colorScheme.primary,
+                      themeProvider.myTheme.colorScheme.primary,
                     ),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
-                        side: BorderSide(color: myTheme.colorScheme.primary),
+                        side: BorderSide(
+                            color: themeProvider.myTheme.colorScheme.primary),
                       ),
                     ),
                   ),
@@ -327,6 +333,8 @@ class InputField extends StatefulWidget {
 class _InputFieldState extends State<InputField> {
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return Form(
       key: widget.formKey,
       child: Column(
@@ -341,7 +349,7 @@ class _InputFieldState extends State<InputField> {
                 fontFamily: 'Poppins-regular',
                 fontSize: 28,
                 fontWeight: FontWeight.w400,
-                color: myTheme.colorScheme.onPrimaryContainer,
+                color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
               ),
             ),
           ),
@@ -361,11 +369,11 @@ class _InputFieldState extends State<InputField> {
               },
               maxLines: 1,
               keyboardType: TextInputType.emailAddress,
-              cursorColor: myTheme.colorScheme.primary,
+              cursorColor: themeProvider.myTheme.colorScheme.primary,
               textInputAction: TextInputAction.next,
               style: TextStyle(
                 fontFamily: 'Poppins-regular',
-                color: myTheme.colorScheme.primary,
+                color: themeProvider.myTheme.colorScheme.primary,
               ),
               validator: (email) =>
                   email != null && !EmailValidator.validate(email)

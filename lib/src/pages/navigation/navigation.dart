@@ -19,6 +19,8 @@ class NavigationPages extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     final screens = [
       if (globalRemoteConfig.visualizacionCatalogo == true)
         const CataloguePage(),
@@ -50,7 +52,8 @@ class NavigationPages extends StatelessWidget {
         // screens[index],
         bottomNavigationBar: NavigationBarTheme(
           data: NavigationBarThemeData(
-            indicatorColor: myTheme.colorScheme.tertiary.withOpacity(0.2),
+            indicatorColor:
+                themeProvider.myTheme.colorScheme.tertiary.withOpacity(0.2),
             labelTextStyle: MaterialStateProperty.all(
               const TextStyle(
                 fontSize: 12,
@@ -64,7 +67,7 @@ class NavigationPages extends StatelessWidget {
           ),
           child: NavigationBar(
             height: 56.0,
-            backgroundColor: myTheme.colorScheme.primary,
+            backgroundColor: themeProvider.myTheme.colorScheme.primary,
             labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
             animationDuration: const Duration(seconds: 1),
             selectedIndex: counterLimitFirestore.currentScreen,
@@ -76,13 +79,13 @@ class NavigationPages extends StatelessWidget {
                 NavigationDestination(
                   icon: Icon(
                     Icons.sell_outlined,
-                    // color: myTheme.colorScheme.background,
+                    // color: themeProvider.myTheme.colorScheme.background,
                     size: 24,
                     color: Color.fromARGB(255, 196, 196, 196),
                   ),
                   selectedIcon: Icon(
                     Icons.sell,
-                    // color: myTheme.colorScheme.background,
+                    // color: themeProvider.myTheme.colorScheme.background,
                     size: 24,
                     color: Color.fromARGB(255, 196, 196, 196),
                   ),
@@ -91,13 +94,13 @@ class NavigationPages extends StatelessWidget {
               NavigationDestination(
                 icon: Icon(
                   Icons.calendar_today_outlined,
-                  // color: myTheme.colorScheme.background,
+                  // color: themeProvider.myTheme.colorScheme.background,
                   size: 24,
                   color: Color.fromARGB(255, 196, 196, 196),
                 ),
                 selectedIcon: Icon(
                   Icons.calendar_today,
-                  // color: myTheme.colorScheme.background,
+                  // color: themeProvider.myTheme.colorScheme.background,
                   size: 24,
                   color: Color.fromARGB(255, 196, 196, 196),
                 ),
@@ -107,13 +110,13 @@ class NavigationPages extends StatelessWidget {
                 NavigationDestination(
                   icon: Icon(
                     Icons.store_outlined,
-                    // color: myTheme.colorScheme.background,
+                    // color: themeProvider.myTheme.colorScheme.background,
                     size: 24,
                     color: Color.fromARGB(255, 196, 196, 196),
                   ),
                   selectedIcon: Icon(
                     Icons.store,
-                    // color: myTheme.colorScheme.background,
+                    // color: themeProvider.myTheme.colorScheme.background,
                     size: 24,
                     color: Color.fromARGB(255, 196, 196, 196),
                   ),
@@ -122,13 +125,13 @@ class NavigationPages extends StatelessWidget {
               NavigationDestination(
                 icon: Icon(
                   Icons.person_outline,
-                  // color: myTheme.colorScheme.background,
+                  // color: themeProvider.myTheme.colorScheme.background,
                   size: 24,
                   color: Color.fromARGB(255, 196, 196, 196),
                 ),
                 selectedIcon: Icon(
                   Icons.person_outline,
-                  // color: myTheme.colorScheme.background,
+                  // color: themeProvider.myTheme.colorScheme.background,
                   size: 24,
                   color: Color.fromARGB(255, 196, 196, 196),
                 ),

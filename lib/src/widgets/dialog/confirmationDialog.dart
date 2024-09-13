@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 confirmationDialog(BuildContext context) {
+  final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
   return showDialog(
     context: context,
     builder: (context) => AlertDialog(
@@ -12,7 +15,7 @@ confirmationDialog(BuildContext context) {
           Text(
             "Salir de este proceso hara que deba continuarlo desde el menu de facturas como registro manual",
             style: TextStyle(
-              color: myTheme.colorScheme.primary,
+              color: themeProvider.myTheme.colorScheme.primary,
               fontFamily: 'Poppins-regular',
               fontSize: 14,
               fontWeight: FontWeight.bold,
@@ -22,7 +25,7 @@ confirmationDialog(BuildContext context) {
             " ¿Esta seguro que quiere salir?",
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: myTheme.colorScheme.primary,
+              color: themeProvider.myTheme.colorScheme.primary,
               fontFamily: 'Poppins-regular',
               fontSize: 14,
             ),
@@ -44,7 +47,8 @@ confirmationDialog(BuildContext context) {
               ..removeCurrentSnackBar()
               ..showSnackBar(
                 SnackBar(
-                  backgroundColor: myTheme.colorScheme.onPrimaryContainer,
+                  backgroundColor:
+                      themeProvider.myTheme.colorScheme.onPrimaryContainer,
                   duration: const Duration(seconds: 3),
                   content: const Column(
                     children: [

@@ -92,10 +92,11 @@ class InvoiceDetailsBody extends StatelessWidget {
 
     var totalAmountFormatted =
         formatDecimalPriceByRegion(price: totalAmountConverted);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: myTheme.colorScheme.primary,
+        backgroundColor: themeProvider.myTheme.colorScheme.primary,
         foregroundColor: Colors.white,
         title: Text(
           'Ticket #${widget.number}',
@@ -129,7 +130,7 @@ class InvoiceDetailsBody extends StatelessWidget {
                 style: TextStyle(
                   fontFamily: 'Poppins-medium',
                   fontSize: 14,
-                  color: myTheme.colorScheme.onPrimaryContainer,
+                  color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
                 ),
               ),
               Text(
@@ -137,14 +138,14 @@ class InvoiceDetailsBody extends StatelessWidget {
                 style: TextStyle(
                   fontFamily: 'Poppins-medium',
                   fontSize: 14,
-                  color: myTheme.colorScheme.onPrimaryContainer,
+                  color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
                 ),
               ),
             ],
           ),
         ),
       ),
-      backgroundColor: myTheme.colorScheme.background,
+      backgroundColor: themeProvider.myTheme.colorScheme.background,
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

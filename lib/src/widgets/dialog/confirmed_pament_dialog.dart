@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 showDialogForConfirmedPayment(BuildContext context, String? coinSymbol,
     double paidAmount, Client client, DateTime date, String selectedValueA) {
+  final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
   return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -27,7 +30,8 @@ showDialogForConfirmedPayment(BuildContext context, String? coinSymbol,
                           style: TextStyle(
                             fontFamily: 'Poppins-regular',
                             fontSize: 18,
-                            color: myTheme.colorScheme.onPrimaryContainer,
+                            color: themeProvider
+                                .myTheme.colorScheme.onPrimaryContainer,
                             // color: Colors.green,
                             fontWeight: FontWeight.bold,
                           ),
@@ -36,15 +40,16 @@ showDialogForConfirmedPayment(BuildContext context, String? coinSymbol,
                           margin: const EdgeInsets.fromLTRB(0, 15, 0, 0),
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color:
-                                  myTheme.colorScheme.primary.withOpacity(0.6)),
+                              color: themeProvider.myTheme.colorScheme.primary
+                                  .withOpacity(0.6)),
                           width: 100,
                           height: 100,
                           child: Opacity(
                               opacity: 0.8,
                               child: Icon(
                                 Icons.check,
-                                color: myTheme.colorScheme.onPrimaryContainer,
+                                color: themeProvider
+                                    .myTheme.colorScheme.onPrimaryContainer,
                                 size: 50,
                               )),
                         ),
@@ -62,7 +67,8 @@ showDialogForConfirmedPayment(BuildContext context, String? coinSymbol,
                                   style: TextStyle(
                                     fontFamily: 'Poppins-regular',
                                     fontSize: 12,
-                                    color: myTheme.colorScheme.primary,
+                                    color: themeProvider
+                                        .myTheme.colorScheme.primary,
                                     // color: Colors.green,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -75,7 +81,8 @@ showDialogForConfirmedPayment(BuildContext context, String? coinSymbol,
                                   style: TextStyle(
                                     fontFamily: 'Poppins-regular',
                                     fontSize: 12,
-                                    color: myTheme.colorScheme.primary,
+                                    color: themeProvider
+                                        .myTheme.colorScheme.primary,
                                     // color: Colors.green,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -88,7 +95,8 @@ showDialogForConfirmedPayment(BuildContext context, String? coinSymbol,
                                   style: TextStyle(
                                     fontFamily: 'Poppins-regular',
                                     fontSize: 12,
-                                    color: myTheme.colorScheme.primary,
+                                    color: themeProvider
+                                        .myTheme.colorScheme.primary,
                                     // color: Colors.green,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -101,7 +109,8 @@ showDialogForConfirmedPayment(BuildContext context, String? coinSymbol,
                                   style: TextStyle(
                                     fontFamily: 'Poppins-regular',
                                     fontSize: 12,
-                                    color: myTheme.colorScheme.primary,
+                                    color: themeProvider
+                                        .myTheme.colorScheme.primary,
                                     // color: Colors.green,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -121,7 +130,7 @@ showDialogForConfirmedPayment(BuildContext context, String? coinSymbol,
                             },
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(
-                                myTheme.colorScheme.primary,
+                                themeProvider.myTheme.colorScheme.primary,
                               ),
                               shape: MaterialStateProperty.all<
                                   RoundedRectangleBorder>(

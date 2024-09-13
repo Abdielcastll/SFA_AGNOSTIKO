@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class DetailsCard extends StatelessWidget {
@@ -15,6 +16,8 @@ class DetailsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return Container(
       color: Colors.transparent,
       width: double.infinity,
@@ -76,7 +79,8 @@ class DetailsCard extends StatelessWidget {
                           // Añadir Producto
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: myTheme.colorScheme.secondary,
+                          backgroundColor:
+                              themeProvider.myTheme.colorScheme.secondary,
                         ),
                         icon: Icon(
                           Icons.add_shopping_cart_outlined,

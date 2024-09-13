@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/completed_pay.dart';
@@ -44,14 +45,16 @@ paymentDepositRetail(
     exchange: coinExchangeRatio,
   );
 
-  return StatefulBuilder(
-    builder: (context, setState) => Column(
+  return StatefulBuilder(builder: (context, setState) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
+    return Column(
       children: [
         Text(
           '${AppLocalizations.of(context)!.bank}*',
           style: TextStyle(
             fontFamily: 'Poppins-regular',
-            color: myTheme.colorScheme.primary,
+            color: themeProvider.myTheme.colorScheme.primary,
             fontSize: 14,
           ),
         ),
@@ -68,7 +71,8 @@ paymentDepositRetail(
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
-                        color: myTheme.colorScheme.primary.withOpacity(0.7),
+                        color: themeProvider.myTheme.colorScheme.primary
+                            .withOpacity(0.7),
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -83,7 +87,7 @@ paymentDepositRetail(
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
-                            color: myTheme.colorScheme.primary,
+                            color: themeProvider.myTheme.colorScheme.primary,
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -102,7 +106,8 @@ paymentDepositRetail(
                   Icons.arrow_forward_ios_outlined,
                 ),
                 iconSize: 11,
-                iconEnabledColor: myTheme.colorScheme.primary.withOpacity(0.5),
+                iconEnabledColor:
+                    themeProvider.myTheme.colorScheme.primary.withOpacity(0.5),
                 iconDisabledColor: Colors.grey,
               ),
               buttonStyleData: ButtonStyleData(
@@ -111,7 +116,8 @@ paymentDepositRetail(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                   border: Border.all(
-                    color: myTheme.colorScheme.primary.withOpacity(0.3),
+                    color: themeProvider.myTheme.colorScheme.primary
+                        .withOpacity(0.3),
                   ),
                   color: Colors.white,
                 ),
@@ -142,7 +148,7 @@ paymentDepositRetail(
           '${AppLocalizations.of(context)!.voucherNumber}*',
           style: TextStyle(
             fontFamily: 'Poppins-regular',
-            color: myTheme.colorScheme.primary,
+            color: themeProvider.myTheme.colorScheme.primary,
             fontSize: 14,
           ),
         ),
@@ -155,7 +161,7 @@ paymentDepositRetail(
             style: TextStyle(
               fontSize: 14,
               fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.primary,
+              color: themeProvider.myTheme.colorScheme.primary,
             ),
             keyboardType: TextInputType.phone,
             maxLines: 1,
@@ -181,7 +187,8 @@ paymentDepositRetail(
               fillColor: Colors.white,
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-                  color: myTheme.colorScheme.primary.withOpacity(0.3),
+                  color: themeProvider.myTheme.colorScheme.primary
+                      .withOpacity(0.3),
                 ),
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
@@ -189,7 +196,8 @@ paymentDepositRetail(
               hintStyle: TextStyle(
                 fontFamily: 'Poppins-regular',
                 fontSize: 14,
-                color: myTheme.colorScheme.primary.withOpacity(0.2),
+                color:
+                    themeProvider.myTheme.colorScheme.primary.withOpacity(0.2),
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
@@ -205,7 +213,7 @@ paymentDepositRetail(
           '${AppLocalizations.of(context)!.accountNumber}*',
           style: TextStyle(
             fontFamily: 'Poppins-regular',
-            color: myTheme.colorScheme.primary,
+            color: themeProvider.myTheme.colorScheme.primary,
             fontSize: 14,
           ),
         ),
@@ -218,7 +226,7 @@ paymentDepositRetail(
             style: TextStyle(
               fontSize: 14,
               fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.primary,
+              color: themeProvider.myTheme.colorScheme.primary,
             ),
             keyboardType: TextInputType.phone,
             maxLines: 1,
@@ -240,7 +248,8 @@ paymentDepositRetail(
               hintStyle: TextStyle(
                 fontFamily: 'Poppins-regular',
                 fontSize: 14,
-                color: myTheme.colorScheme.primary.withOpacity(0.2),
+                color:
+                    themeProvider.myTheme.colorScheme.primary.withOpacity(0.2),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
@@ -252,7 +261,8 @@ paymentDepositRetail(
               fillColor: Colors.white,
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-                  color: myTheme.colorScheme.primary.withOpacity(0.3),
+                  color: themeProvider.myTheme.colorScheme.primary
+                      .withOpacity(0.3),
                 ),
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
@@ -291,14 +301,14 @@ paymentDepositRetail(
                     padding: EdgeInsets.all(4.0),
                     child: Icon(
                       Icons.camera,
-                      color: myTheme.colorScheme.secondary,
+                      color: themeProvider.myTheme.colorScheme.secondary,
                     ),
                   ),
                   Text(
                     // AppLocalizations.of(context)!.gallery,
                     'Subir Imagen',
                     style: TextStyle(
-                      color: myTheme.colorScheme.primary,
+                      color: themeProvider.myTheme.colorScheme.primary,
                       fontFamily: 'Poppins-regular',
                     ),
                   ),
@@ -313,7 +323,7 @@ paymentDepositRetail(
                     // width: 300,
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: myTheme.colorScheme.primary,
+                        color: themeProvider.myTheme.colorScheme.primary,
                       ),
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -343,7 +353,7 @@ paymentDepositRetail(
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
-                        myTheme.colorScheme.primary,
+                        themeProvider.myTheme.colorScheme.primary,
                       ),
                       foregroundColor: MaterialStateProperty.all(
                         Colors.white,
@@ -386,7 +396,8 @@ paymentDepositRetail(
                                 print('Cantidad permitida');
                                 Fluttertoast.showToast(
                                   msg: 'Registrando Deposito',
-                                  backgroundColor: myTheme.colorScheme.primary,
+                                  backgroundColor:
+                                      themeProvider.myTheme.colorScheme.primary,
                                   textColor: Colors.white,
                                 );
 
@@ -465,7 +476,7 @@ paymentDepositRetail(
                           },
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(
-                              myTheme.colorScheme.primary,
+                              themeProvider.myTheme.colorScheme.primary,
                             ),
                             foregroundColor: MaterialStateProperty.all(
                               Colors.white,
@@ -499,6 +510,6 @@ paymentDepositRetail(
           ],
         )
       ],
-    ),
-  );
+    );
+  });
 }

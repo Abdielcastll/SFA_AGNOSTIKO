@@ -149,6 +149,8 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   }
 
   void kioskoDialog() {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -172,7 +174,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
               child: Text(
                 "Por favor intente de nuevo.",
                 style: TextStyle(
-                  color: myTheme.colorScheme.primary,
+                  color: themeProvider.myTheme.colorScheme.primary,
                 ),
               ),
             ),
@@ -197,7 +199,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                 onPressed: onCancel,
                 style: ButtonStyle(
                   foregroundColor: MaterialStateProperty.all(
-                    myTheme.colorScheme.primary,
+                    themeProvider.myTheme.colorScheme.primary,
                   ),
                 ),
                 child: const Text(
@@ -208,7 +210,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
               ElevatedButton(
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
-                    myTheme.colorScheme.primary,
+                    themeProvider.myTheme.colorScheme.primary,
                   ),
                   foregroundColor:
                       MaterialStateProperty.all(Colors.grey.shade400),
@@ -361,6 +363,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       transactionOnlineStr =
           transactionInfo?.onlineRequested == true ? onlineStr : offlineStr;
     }
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return WillPopScope(
       onWillPop: globalRemoteConfig.conversionKiosko!
@@ -368,7 +371,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
           : showModalNoTicketPrinted,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: myTheme.colorScheme.primary,
+          backgroundColor: themeProvider.myTheme.colorScheme.primary,
           foregroundColor: Colors.white,
           title: Text(AppLocalizations.of(context)!.emvTransactionInfo),
           automaticallyImplyLeading: false,
@@ -485,7 +488,8 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                       side: const BorderSide(
                         color: Colors.black12,
                       ),
-                      foregroundColor: myTheme.colorScheme.primary,
+                      foregroundColor:
+                          themeProvider.myTheme.colorScheme.primary,
                       backgroundColor: Colors.blue.shade800,
                     ),
                     child: Text(
@@ -518,7 +522,8 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                       side: const BorderSide(
                         color: Colors.black12,
                       ),
-                      foregroundColor: myTheme.colorScheme.primary,
+                      foregroundColor:
+                          themeProvider.myTheme.colorScheme.primary,
                       backgroundColor: Colors.blue.shade800),
                   child: Text(
                     'aceptar'.toUpperCase(),
@@ -538,6 +543,8 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   }
 
   onCancel() {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     Navigator.pop(context);
     printTicket();
     final orderActive = Provider.of<OrderProvider>(context, listen: false);
@@ -556,7 +563,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
               'Se ha cancelado su compra',
               style: TextStyle(
                 fontFamily: 'Poppins-regular',
-                color: myTheme.colorScheme.primary,
+                color: themeProvider.myTheme.colorScheme.primary,
               ),
             ),
           ),

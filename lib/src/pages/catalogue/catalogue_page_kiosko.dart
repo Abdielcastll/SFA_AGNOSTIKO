@@ -33,6 +33,7 @@ class _CataloguePageKioskoState extends State<CataloguePageKiosko> {
   @override
   Widget build(BuildContext context) {
     final userZoneDocument = context.watch<CurrentUserInfo>().zoneDocument;
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     print('zoneDocument: $userZoneDocument');
 
@@ -41,7 +42,7 @@ class _CataloguePageKioskoState extends State<CataloguePageKiosko> {
         message: 'Orden',
         userZoneDocument: userZoneDocument,
       ),
-      backgroundColor: myTheme.colorScheme.surface,
+      backgroundColor: themeProvider.myTheme.colorScheme.surface,
       body: CatalogueBody(),
     );
   }

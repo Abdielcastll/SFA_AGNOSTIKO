@@ -90,7 +90,7 @@ class ClientPicture extends StatelessWidget {
         //                     ..style = PaintingStyle.stroke
         //                     ..strokeWidth = 3
         //                     ..color =
-        //                         myTheme.colorScheme.primary.withOpacity(0.5),
+        //                         themeProvider.myTheme.colorScheme.primary.withOpacity(0.5),
         //                 ),
         //               ),
         //               // Solid text as fill.

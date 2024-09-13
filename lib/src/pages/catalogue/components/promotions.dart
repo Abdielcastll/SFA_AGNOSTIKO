@@ -63,13 +63,14 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
     final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
 
     int activeIndex = 0;
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return Container(
       // padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 10.0),
       margin: EdgeInsets.only(top: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: myTheme.colorScheme.background,
+        color: themeProvider.myTheme.colorScheme.background,
       ),
       child: Column(
         children: [
@@ -81,7 +82,7 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
                   padding: EdgeInsets.only(bottom: 2),
                   child: Icon(
                     Entypo.star_outlined,
-                    color: myTheme.colorScheme.onPrimaryContainer,
+                    color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
                     size: 19,
                   ),
                 ),
@@ -90,7 +91,7 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
                   AppLocalizations.of(context)!.promotions,
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
-                    color: myTheme.colorScheme.onPrimaryContainer,
+                    color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
                     letterSpacing: 0.15,
                     fontSize: 16,
                     fontFamily: 'Poppins-medium',
@@ -144,7 +145,8 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
                                 fontFamily: 'Poppins-regular',
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                color: myTheme.colorScheme.primary,
+                                color:
+                                    themeProvider.myTheme.colorScheme.primary,
                               ),
                             ),
                           ),
@@ -263,8 +265,8 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                         fontFamily: 'Poppins-regular',
-                                        color: myTheme
-                                            .colorScheme.onPrimaryContainer,
+                                        color: themeProvider.myTheme.colorScheme
+                                            .onPrimaryContainer,
                                         fontSize: 16,
                                         letterSpacing: 0.5,
                                       ),
@@ -328,8 +330,8 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
                                         fontFamily: 'Poppins-regular',
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
-                                        color: myTheme
-                                            .colorScheme.onPrimaryContainer,
+                                        color: themeProvider.myTheme.colorScheme
+                                            .onPrimaryContainer,
                                       ),
                                     ),
                                   ),

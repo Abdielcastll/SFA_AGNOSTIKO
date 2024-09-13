@@ -25,6 +25,7 @@ class _ClientsPageState extends State<ClientsPage> {
     final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
     final clientsLimit =
         Provider.of<CounterLimitFirestore>(context).getClientsLimit;
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return MultiProvider(
       providers: [
@@ -68,7 +69,7 @@ class _ClientsPageState extends State<ClientsPage> {
         ),
       ],
       child: Scaffold(
-        backgroundColor: myTheme.colorScheme.surface,
+        backgroundColor: themeProvider.myTheme.colorScheme.surface,
         appBar: AppBarNavigation(
           message: AppLocalizations.of(context)!.clients,
           userZoneDocument: userZoneDocument,
@@ -78,7 +79,7 @@ class _ClientsPageState extends State<ClientsPage> {
             FloatingActionButton(
               heroTag: 1,
               elevation: 10,
-              backgroundColor: myTheme.colorScheme.primary,
+              backgroundColor: themeProvider.myTheme.colorScheme.primary,
               onPressed: () {
                 // Redireccionar a crear cliente
                 Navigator.push(

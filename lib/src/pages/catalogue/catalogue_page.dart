@@ -40,6 +40,8 @@ class _CataloguePageState extends State<CataloguePage> {
     print('currentClientForTheOrder: ${currentClientForTheOrder?.prices}');
     print('userRole: $userRole');
     getDiscounts();
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return MultiProvider(
       providers: [
         // StreamProvider<List<Products>?>.value(
@@ -121,7 +123,7 @@ class _CataloguePageState extends State<CataloguePage> {
           message: 'Agnostiko',
           userZoneDocument: userZoneDocument,
         ),
-        backgroundColor: myTheme.colorScheme.surface,
+        backgroundColor: themeProvider.myTheme.colorScheme.surface,
         body: CatalogueBody(),
       ),
     );

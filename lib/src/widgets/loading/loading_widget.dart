@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class LoadingWidget extends StatelessWidget {
@@ -11,6 +12,8 @@ class LoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     print('DURATION ON LOADING WIDGET: $duration');
     return Scaffold(
       body: Column(
@@ -19,7 +22,7 @@ class LoadingWidget extends StatelessWidget {
           // Loading class
           Center(
             child: SpinKitCircle(
-              color: myTheme.colorScheme.primary,
+              color: themeProvider.myTheme.colorScheme.primary,
               size: 50,
             ),
           ),
@@ -29,7 +32,7 @@ class LoadingWidget extends StatelessWidget {
             style: TextStyle(
               fontSize: 14,
               fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.onPrimaryContainer,
+              color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
             ),
           ),
         ],

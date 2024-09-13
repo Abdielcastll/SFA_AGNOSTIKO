@@ -33,17 +33,19 @@ class CompletedOrderPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     List<String> currentCoinSplit = currentCoin!.split(' ');
     String currentCoinSelectedCode = currentCoinSplit.last;
     return Scaffold(
-      backgroundColor: myTheme.colorScheme.background,
+      backgroundColor: themeProvider.myTheme.colorScheme.background,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(20),
         child: AppBar(
           automaticallyImplyLeading: false,
           elevation: 0,
-          backgroundColor: myTheme.colorScheme.primary,
+          backgroundColor: themeProvider.myTheme.colorScheme.primary,
           foregroundColor: Colors.white,
         ),
       ),
@@ -113,6 +115,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
         productPrice: widget.total,
         coinDecimals: coinDecimals,
         coinExchangeRatio: coinExchangeRatio);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return Column(
       children: [
@@ -123,7 +126,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
             widget.completedMessage,
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: myTheme.colorScheme.primary,
+              color: themeProvider.myTheme.colorScheme.primary,
               fontFamily: 'Poppins-regular',
               fontSize: 25,
             ),
@@ -331,16 +334,17 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: CircleAvatar(
-                backgroundColor: myTheme.colorScheme.primary.withOpacity(0.1),
+                backgroundColor:
+                    themeProvider.myTheme.colorScheme.primary.withOpacity(0.1),
                 child: IconButton(
                   onPressed: () {
                     // Compartir
                   },
                   splashRadius: 15,
-                  splashColor: myTheme.colorScheme.primary,
+                  splashColor: themeProvider.myTheme.colorScheme.primary,
                   icon: Icon(
                     Icons.share,
-                    color: myTheme.colorScheme.primary,
+                    color: themeProvider.myTheme.colorScheme.primary,
                     size: 24,
                   ),
                 ),
@@ -363,7 +367,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
               },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(
-                  myTheme.colorScheme.primary,
+                  themeProvider.myTheme.colorScheme.primary,
                 ),
                 foregroundColor: MaterialStateProperty.all(
                   Colors.white,
@@ -395,7 +399,8 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
         Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: myTheme.colorScheme.primary, width: 2)),
+              border: Border.all(
+                  color: themeProvider.myTheme.colorScheme.primary, width: 2)),
           width: 340,
           height: 50,
           child: ClipRRect(
@@ -422,7 +427,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                     style: TextStyle(
                       fontFamily: 'Poppins-medium',
                       fontSize: 14,
-                      color: myTheme.colorScheme.primary,
+                      color: themeProvider.myTheme.colorScheme.primary,
                     ),
                   ),
                 ],

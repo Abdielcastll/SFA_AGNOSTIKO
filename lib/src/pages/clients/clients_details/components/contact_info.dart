@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -14,6 +15,8 @@ class ContactInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return SingleChildScrollView(
       child: Container(
         margin: const EdgeInsets.fromLTRB(8, 10, 8, 0),
@@ -33,7 +36,7 @@ class ContactInfo extends StatelessWidget {
                   Text(
                     AppLocalizations.of(context)!.clientContactInfo,
                     style: TextStyle(
-                      color: myTheme.colorScheme.primary,
+                      color: themeProvider.myTheme.colorScheme.primary,
                       fontFamily: 'Poppins-medium',
                       fontWeight: FontWeight.bold,
                       fontSize: 11,
@@ -46,11 +49,11 @@ class ContactInfo extends StatelessWidget {
                   //     child: IconButton(
                   //       onPressed: () {},
                   //       splashColor:
-                  //           myTheme.colorScheme.secondary.withOpacity(0.5),
+                  //           themeProvider.myTheme.colorScheme.secondary.withOpacity(0.5),
                   //       icon: Icon(
                   //         Feather.edit,
                   //         size: 20,
-                  //         color: myTheme.colorScheme.primary,
+                  //         color: themeProvider.myTheme.colorScheme.primary,
                   //       ),
                   //     ),
                   //   ),

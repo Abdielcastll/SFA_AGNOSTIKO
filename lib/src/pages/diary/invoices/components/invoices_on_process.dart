@@ -31,6 +31,7 @@ class _InvoicesOnProcessState extends State<InvoicesOnProcess> {
     final invoices = Provider.of<List<Invoices>?>(context) ?? [];
     final invoicesList =
         invoices.where((element) => element.isPaid == false).toList();
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return SingleChildScrollView(
       child: Column(
@@ -98,14 +99,16 @@ class _InvoicesOnProcessState extends State<InvoicesOnProcess> {
                             shape: BoxShape.circle,
                             color:
                                 // Colors.red.withOpacity(0.3)),
-                                myTheme.colorScheme.primary.withOpacity(0.3)),
+                                themeProvider.myTheme.colorScheme.primary
+                                    .withOpacity(0.3)),
                         width: 120,
                         height: 120,
                         child: Opacity(
                           opacity: 0.8,
                           child: Icon(
                             MaterialCommunityIcons.archive_check_outline,
-                            color: myTheme.colorScheme.onPrimaryContainer,
+                            color: themeProvider
+                                .myTheme.colorScheme.onPrimaryContainer,
                             size: 60,
                           ),
                         ),
@@ -121,7 +124,8 @@ class _InvoicesOnProcessState extends State<InvoicesOnProcess> {
                               style: TextStyle(
                                 fontFamily: 'Poppins-regular',
                                 fontSize: 16,
-                                color: myTheme.colorScheme.onPrimaryContainer,
+                                color: themeProvider
+                                    .myTheme.colorScheme.onPrimaryContainer,
                               ),
                             ),
                           ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class AppBarUsersAndTeams extends StatelessWidget
@@ -11,8 +12,10 @@ class AppBarUsersAndTeams extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return AppBar(
-      backgroundColor: myTheme.colorScheme.primary,
+      backgroundColor: themeProvider.myTheme.colorScheme.primary,
       foregroundColor: Colors.white,
       title: const Text(
         'Usuarios y Equipos',

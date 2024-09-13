@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/examples/usesrs_example.dart';
 import 'package:pwa_sales2go_flutter/src/pages/role_manager/role_manager.dart';
 import 'package:pwa_sales2go_flutter/src/pages/users_and_teams/users/new_user/new_user_page.dart';
@@ -14,6 +15,8 @@ class UsersPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return Scaffold(
       floatingActionButton: Wrap(
         direction: Axis.vertical,
@@ -27,7 +30,7 @@ class UsersPage extends StatelessWidget {
                 shape: BeveledRectangleBorder(
                   borderRadius: BorderRadius.circular(0),
                 ),
-                backgroundColor: myTheme.colorScheme.primary,
+                backgroundColor: themeProvider.myTheme.colorScheme.primary,
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -53,7 +56,7 @@ class UsersPage extends StatelessWidget {
                 shape: BeveledRectangleBorder(
                   borderRadius: BorderRadius.circular(0),
                 ),
-                backgroundColor: myTheme.colorScheme.secondary,
+                backgroundColor: themeProvider.myTheme.colorScheme.secondary,
                 onPressed: () {
                   Navigator.push(
                     context,

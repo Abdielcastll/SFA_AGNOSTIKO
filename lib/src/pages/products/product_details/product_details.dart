@@ -62,6 +62,8 @@ class ProductDetails extends StatefulWidget {
 class _ProductDetailsState extends State<ProductDetails> {
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     List<String> currentCoinSplit = currentCoin!.split(' ');
     String currentCoinSelectedCode = currentCoinSplit.last;
@@ -71,9 +73,9 @@ class _ProductDetailsState extends State<ProductDetails> {
         elevation: 0,
         toolbarHeight: 40,
         foregroundColor: Colors.white,
-        backgroundColor: myTheme.colorScheme.primary,
+        backgroundColor: themeProvider.myTheme.colorScheme.primary,
       ),
-      backgroundColor: myTheme.colorScheme.surface,
+      backgroundColor: themeProvider.myTheme.colorScheme.surface,
       body: MultiProvider(
         providers: [
           StreamProvider<Coin?>.value(
@@ -173,6 +175,7 @@ class ProductDetailsBody extends StatelessWidget {
 
     var formattedPrice = formatDecimalPriceByRegion(
         price: Decimal.parse(priceProduct.toString()));
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return coinName.toString().isEmpty
         ? Center(
@@ -222,7 +225,8 @@ class ProductDetailsBody extends StatelessWidget {
                               height: 70,
                               width: 70,
                               decoration: BoxDecoration(
-                                color: myTheme.colorScheme.onPrimaryContainer,
+                                color: themeProvider
+                                    .myTheme.colorScheme.onPrimaryContainer,
                                 borderRadius: BorderRadius.circular(8),
                                 gradient: LinearGradient(
                                   stops: const [.5, .5],
@@ -230,7 +234,8 @@ class ProductDetailsBody extends StatelessWidget {
                                   end: Alignment.topRight,
                                   colors: [
                                     Colors.transparent,
-                                    myTheme.colorScheme.onPrimaryContainer
+                                    themeProvider
+                                        .myTheme.colorScheme.onPrimaryContainer
                                         .withOpacity(0.8), // top Right part
                                   ],
                                 ),
@@ -239,7 +244,8 @@ class ProductDetailsBody extends StatelessWidget {
                                 margin: const EdgeInsets.fromLTRB(30, 0, 0, 20),
                                 child: Icon(
                                   CupertinoIcons.sparkles,
-                                  color: myTheme.colorScheme.background,
+                                  color: themeProvider
+                                      .myTheme.colorScheme.background,
                                   size: 30,
                                 ),
                               ),
@@ -250,7 +256,8 @@ class ProductDetailsBody extends StatelessWidget {
                               height: 68,
                               width: 68,
                               decoration: BoxDecoration(
-                                color: myTheme.colorScheme.onPrimaryContainer,
+                                color: themeProvider
+                                    .myTheme.colorScheme.onPrimaryContainer,
                                 borderRadius: BorderRadius.circular(8),
                                 gradient: LinearGradient(
                                   stops: const [.5, .5],
@@ -258,7 +265,8 @@ class ProductDetailsBody extends StatelessWidget {
                                   end: Alignment.topRight,
                                   colors: [
                                     Colors.transparent,
-                                    myTheme.colorScheme.onPrimaryContainer
+                                    themeProvider
+                                        .myTheme.colorScheme.onPrimaryContainer
                                         .withOpacity(0.8), // top Right part
                                   ],
                                 ),
@@ -267,7 +275,8 @@ class ProductDetailsBody extends StatelessWidget {
                                 margin: const EdgeInsets.fromLTRB(25, 0, 0, 25),
                                 child: Icon(
                                   Icons.grade_outlined,
-                                  color: myTheme.colorScheme.background,
+                                  color: themeProvider
+                                      .myTheme.colorScheme.background,
                                   size: 26,
                                 ),
                               ),
@@ -332,7 +341,7 @@ class ProductDetailsBody extends StatelessWidget {
                                         icon: Icon(
                                           MaterialCommunityIcons
                                               .view_list_outline,
-                                          color: myTheme
+                                          color: themeProvider.myTheme
                                               .colorScheme.onPrimaryContainer,
                                         ),
                                         style: ButtonStyle(
@@ -348,7 +357,8 @@ class ProductDetailsBody extends StatelessWidget {
                                           ),
                                           overlayColor:
                                               MaterialStateProperty.all<Color>(
-                                                  myTheme.colorScheme.primary
+                                                  themeProvider.myTheme
+                                                      .colorScheme.primary
                                                       .withOpacity(0.3)),
                                         ),
                                         label: Row(
@@ -359,7 +369,9 @@ class ProductDetailsBody extends StatelessWidget {
                                               AppLocalizations.of(context)!
                                                   .seeInList,
                                               style: TextStyle(
-                                                  color: myTheme.colorScheme
+                                                  color: themeProvider
+                                                      .myTheme
+                                                      .colorScheme
                                                       .onPrimaryContainer,
                                                   fontFamily: 'Poppins-regular',
                                                   fontSize: 13,
@@ -367,7 +379,9 @@ class ProductDetailsBody extends StatelessWidget {
                                             ),
                                             Icon(
                                               MaterialIcons.arrow_forward_ios,
-                                              color: myTheme.colorScheme
+                                              color: themeProvider
+                                                  .myTheme
+                                                  .colorScheme
                                                   .onPrimaryContainer,
                                               size: 10,
                                             ),
@@ -428,7 +442,7 @@ class ProductDetailsBody extends StatelessWidget {
                                           },
                                           icon: Icon(
                                             Icons.add_shopping_cart_rounded,
-                                            color: myTheme
+                                            color: themeProvider.myTheme
                                                 .colorScheme.onPrimaryContainer,
                                           ),
                                           style: ButtonStyle(
@@ -442,14 +456,16 @@ class ProductDetailsBody extends StatelessWidget {
                                                     //     .withOpacity(0.3),
                                                     Colors.white),
                                             overlayColor: MaterialStateProperty
-                                                .all<Color>(myTheme
-                                                    .colorScheme.primary
+                                                .all<Color>(themeProvider
+                                                    .myTheme.colorScheme.primary
                                                     .withOpacity(0.3)),
                                           ),
                                           label: Text(
                                             'Añadir',
                                             style: TextStyle(
-                                              color: myTheme.colorScheme
+                                              color: themeProvider
+                                                  .myTheme
+                                                  .colorScheme
                                                   .onPrimaryContainer,
                                               fontFamily: 'Poppins-regular',
                                               fontSize: 13,
@@ -547,7 +563,7 @@ class ProductDetailsBody extends StatelessWidget {
                         //       child: Text(
                         //         AppLocalizations.of(context)!.colors,
                         //         style: TextStyle(
-                        //           color: myTheme.colorScheme.onPrimaryContainer,
+                        //           color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
                         //           fontFamily: 'Poppins-regular',
                         //           fontSize: 16,
                         //           fontWeight: FontWeight.bold,
@@ -572,7 +588,7 @@ class ProductDetailsBody extends StatelessWidget {
                         //     //         height: 30,
                         //     //         width: 30,
                         //     //         decoration: BoxDecoration(
-                        //     //           color: myTheme
+                        //     //           color: themeProvider.myTheme
                         //     //               .colorScheme.onPrimaryContainer,
                         //     //           borderRadius: BorderRadius.circular(20),
                         //     //         ),

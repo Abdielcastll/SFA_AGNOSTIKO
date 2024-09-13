@@ -112,11 +112,12 @@ void modalBottomSheetForInvoices({
       coinExchangeRatio: coinExchangeRatio,
       productPrice: invoiceTotal);
   var totalformatted = formatDecimalPriceByRegion(price: totalConverted);
+  final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
   showModalBottomSheet(
     elevation: 0,
     backgroundColor: Colors.white,
-    barrierColor: myTheme.colorScheme.secondary.withOpacity(0.5),
+    barrierColor: themeProvider.myTheme.colorScheme.secondary.withOpacity(0.5),
     isScrollControlled: true,
     context: context,
     shape: RoundedRectangleBorder(
@@ -189,7 +190,8 @@ void modalBottomSheetForInvoices({
                         name,
                         style: TextStyle(
                           fontSize: 16,
-                          color: myTheme.colorScheme.onPrimaryContainer,
+                          color: themeProvider
+                              .myTheme.colorScheme.onPrimaryContainer,
                           fontFamily: 'Poppins-medium',
                           letterSpacing: 0.15,
                         ),
@@ -207,7 +209,8 @@ void modalBottomSheetForInvoices({
                             'Fecha: ',
                             style: TextStyle(
                               fontSize: 16,
-                              color: myTheme.colorScheme.onPrimaryContainer,
+                              color: themeProvider
+                                  .myTheme.colorScheme.onPrimaryContainer,
                               fontFamily: 'Poppins-medium',
                               letterSpacing: 0.15,
                             ),
@@ -216,7 +219,7 @@ void modalBottomSheetForInvoices({
                             '$invoiceDate',
                             style: TextStyle(
                               fontSize: 16,
-                              color: myTheme.colorScheme.primary,
+                              color: themeProvider.myTheme.colorScheme.primary,
                               fontFamily: 'Poppins-medium',
                               letterSpacing: 0.15,
                             ),
@@ -237,7 +240,8 @@ void modalBottomSheetForInvoices({
                             'Subtotal',
                             style: TextStyle(
                               fontSize: 16,
-                              color: myTheme.colorScheme.onPrimaryContainer,
+                              color: themeProvider
+                                  .myTheme.colorScheme.onPrimaryContainer,
                               fontFamily: 'Poppins-medium',
                               letterSpacing: 0.15,
                             ),
@@ -246,7 +250,7 @@ void modalBottomSheetForInvoices({
                             '$coinSymbol $subTotalformatted',
                             style: TextStyle(
                               fontSize: 16,
-                              color: myTheme.colorScheme.primary,
+                              color: themeProvider.myTheme.colorScheme.primary,
                               fontFamily: 'Poppins-medium',
                               letterSpacing: 0.15,
                             ),
@@ -261,7 +265,8 @@ void modalBottomSheetForInvoices({
                             'Descuento maestro ($masterDiscount%)',
                             style: TextStyle(
                               fontSize: 16,
-                              color: myTheme.colorScheme.onPrimaryContainer,
+                              color: themeProvider
+                                  .myTheme.colorScheme.onPrimaryContainer,
                               fontFamily: 'Poppins-medium',
                               letterSpacing: 0.15,
                             ),
@@ -270,7 +275,7 @@ void modalBottomSheetForInvoices({
                             '$coinSymbol $discountMasterformatted',
                             style: TextStyle(
                               fontSize: 16,
-                              color: myTheme.colorScheme.primary,
+                              color: themeProvider.myTheme.colorScheme.primary,
                               fontFamily: 'Poppins-medium',
                               letterSpacing: 0.15,
                             ),
@@ -285,7 +290,8 @@ void modalBottomSheetForInvoices({
                             'IVA (16%)',
                             style: TextStyle(
                               fontSize: 16,
-                              color: myTheme.colorScheme.onPrimaryContainer,
+                              color: themeProvider
+                                  .myTheme.colorScheme.onPrimaryContainer,
                               fontFamily: 'Poppins-medium',
                               letterSpacing: 0.15,
                             ),
@@ -294,7 +300,7 @@ void modalBottomSheetForInvoices({
                             '$coinSymbol $taxformatted',
                             style: TextStyle(
                               fontSize: 16,
-                              color: myTheme.colorScheme.primary,
+                              color: themeProvider.myTheme.colorScheme.primary,
                               fontFamily: 'Poppins-medium',
                               letterSpacing: 0.15,
                             ),
@@ -309,7 +315,8 @@ void modalBottomSheetForInvoices({
                             'Total',
                             style: TextStyle(
                               fontSize: 16,
-                              color: myTheme.colorScheme.onPrimaryContainer,
+                              color: themeProvider
+                                  .myTheme.colorScheme.onPrimaryContainer,
                               fontFamily: 'Poppins-medium',
                               letterSpacing: 0.15,
                             ),
@@ -318,7 +325,7 @@ void modalBottomSheetForInvoices({
                             '$coinSymbol $totalformatted',
                             style: TextStyle(
                               fontSize: 16,
-                              color: myTheme.colorScheme.primary,
+                              color: themeProvider.myTheme.colorScheme.primary,
                               fontFamily: 'Poppins-medium',
                               letterSpacing: 0.15,
                             ),
@@ -342,7 +349,8 @@ void modalBottomSheetForInvoices({
                                     (states) {
                                       return states
                                               .contains(MaterialState.pressed)
-                                          ? myTheme.colorScheme.primary
+                                          ? themeProvider
+                                              .myTheme.colorScheme.primary
                                           : null;
                                     },
                                   ),
@@ -353,7 +361,8 @@ void modalBottomSheetForInvoices({
                                     RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(100),
                                       side: BorderSide(
-                                        color: myTheme.colorScheme.primary,
+                                        color: themeProvider
+                                            .myTheme.colorScheme.primary,
                                       ),
                                     ),
                                   ),
@@ -362,7 +371,8 @@ void modalBottomSheetForInvoices({
                                   AppLocalizations.of(context)!.seeClient,
                                   style: TextStyle(
                                     fontFamily: 'Poppins-medium',
-                                    color: myTheme.colorScheme.primary,
+                                    color: themeProvider
+                                        .myTheme.colorScheme.primary,
                                     fontSize: 12,
                                   ),
                                 ),
@@ -405,7 +415,8 @@ void modalBottomSheetForInvoices({
                                   (states) {
                                     return states
                                             .contains(MaterialState.pressed)
-                                        ? myTheme.colorScheme.primary
+                                        ? themeProvider
+                                            .myTheme.colorScheme.primary
                                         : null;
                                   },
                                 ),
@@ -416,7 +427,8 @@ void modalBottomSheetForInvoices({
                                   RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(100),
                                     side: BorderSide(
-                                      color: myTheme.colorScheme.primary,
+                                      color: themeProvider
+                                          .myTheme.colorScheme.primary,
                                     ),
                                   ),
                                 ),
@@ -425,7 +437,8 @@ void modalBottomSheetForInvoices({
                                 AppLocalizations.of(context)!.seePayments,
                                 style: TextStyle(
                                   fontFamily: 'Poppins-medium',
-                                  color: myTheme.colorScheme.primary,
+                                  color:
+                                      themeProvider.myTheme.colorScheme.primary,
                                   fontSize: 12,
                                 ),
                               ),
@@ -471,7 +484,8 @@ void modalBottomSheetForInvoices({
                                     style: ButtonStyle(
                                       backgroundColor:
                                           MaterialStateProperty.all(
-                                        myTheme.colorScheme.primary,
+                                        themeProvider
+                                            .myTheme.colorScheme.primary,
                                       ),
                                       overlayColor:
                                           MaterialStateProperty.resolveWith(
@@ -490,7 +504,8 @@ void modalBottomSheetForInvoices({
                                           borderRadius:
                                               BorderRadius.circular(100),
                                           side: BorderSide(
-                                            color: myTheme.colorScheme.primary,
+                                            color: themeProvider
+                                                .myTheme.colorScheme.primary,
                                           ),
                                         ),
                                       ),
@@ -623,6 +638,7 @@ class SeePaymentsALertDialog extends StatelessWidget {
 
         print('sumOfPendingPaymenstConverted: $sumOfPendingPaymenstConverted');
         print('sumOfPendingPaymensFormatted: $sumOfPendingPaymensFormatted');
+        final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
         return AlertDialog(
           surfaceTintColor: Color.fromARGB(255, 222, 222, 222),
@@ -634,7 +650,7 @@ class SeePaymentsALertDialog extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.onPrimaryContainer,
+              color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
@@ -662,7 +678,8 @@ class SeePaymentsALertDialog extends StatelessWidget {
                                       shape: BoxShape.circle,
                                       color:
                                           // Colors.red.withOpacity(0.3)),
-                                          myTheme.colorScheme.primary
+                                          themeProvider
+                                              .myTheme.colorScheme.primary
                                               .withOpacity(0.3)),
                                   width: 110,
                                   height: 110,
@@ -670,8 +687,8 @@ class SeePaymentsALertDialog extends StatelessWidget {
                                     opacity: 0.8,
                                     child: Icon(
                                       MaterialCommunityIcons.archive_alert,
-                                      color: myTheme
-                                          .colorScheme.onPrimaryContainer,
+                                      color: themeProvider.myTheme.colorScheme
+                                          .onPrimaryContainer,
                                       size: 60,
                                     ),
                                   ),
@@ -681,8 +698,8 @@ class SeePaymentsALertDialog extends StatelessWidget {
                                   style: TextStyle(
                                     fontFamily: 'Poppins-regular',
                                     fontSize: 13,
-                                    color:
-                                        myTheme.colorScheme.onPrimaryContainer,
+                                    color: themeProvider
+                                        .myTheme.colorScheme.onPrimaryContainer,
                                   ),
                                 ),
                               ],
@@ -744,7 +761,8 @@ class SeePaymentsALertDialog extends StatelessWidget {
                                                 ? payment['conciliado'] == false
                                                     ? Colors.amber.shade600
                                                     : Colors.green.shade600
-                                                : myTheme.colorScheme.error,
+                                                : themeProvider
+                                                    .myTheme.colorScheme.error,
                                       ),
                                       title: Column(
                                         mainAxisAlignment:
@@ -765,7 +783,7 @@ class SeePaymentsALertDialog extends StatelessWidget {
                                                               .amber.shade600
                                                           : Colors
                                                               .green.shade600
-                                                      : myTheme
+                                                      : themeProvider.myTheme
                                                           .colorScheme.error,
                                               fontSize: 14,
                                               fontWeight: FontWeight.bold,
@@ -776,7 +794,7 @@ class SeePaymentsALertDialog extends StatelessWidget {
                                               paymentDate,
                                               style: TextStyle(
                                                 fontFamily: 'Poppins-regular',
-                                                color: myTheme
+                                                color: themeProvider.myTheme
                                                     .colorScheme.secondary,
                                                 fontSize: 10,
                                               ),
@@ -788,7 +806,8 @@ class SeePaymentsALertDialog extends StatelessWidget {
                                         '${payment['metodo']}',
                                         style: TextStyle(
                                           fontFamily: 'Poppins-regular',
-                                          color: myTheme.colorScheme.secondary,
+                                          color: themeProvider
+                                              .myTheme.colorScheme.secondary,
                                           fontSize: 12,
                                         ),
                                       ),
@@ -920,7 +939,7 @@ class SeePaymentsALertDialog extends StatelessWidget {
                         'Esta factura no tiene deuda',
                         style: TextStyle(
                           fontFamily: 'Poppins-regular',
-                          color: myTheme.colorScheme.error,
+                          color: themeProvider.myTheme.colorScheme.error,
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
@@ -991,7 +1010,7 @@ class SeePaymentsALertDialog extends StatelessWidget {
                       AppLocalizations.of(context)!.goBack,
                       style: TextStyle(
                         fontFamily: 'Poppins-regular',
-                        color: myTheme.colorScheme.primary,
+                        color: themeProvider.myTheme.colorScheme.primary,
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                       ),

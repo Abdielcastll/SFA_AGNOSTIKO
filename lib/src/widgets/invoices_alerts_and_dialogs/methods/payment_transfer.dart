@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -32,8 +33,10 @@ paymentTransfer(
   File? imageFile;
   String referenceId = '';
 
-  return StatefulBuilder(
-    builder: (context, setState) => Column(
+  return StatefulBuilder(builder: (context, setState) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
+    return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -41,7 +44,7 @@ paymentTransfer(
           '${AppLocalizations.of(context)!.bank}*',
           style: TextStyle(
             fontFamily: 'Poppins-regular',
-            color: myTheme.colorScheme.primary,
+            color: themeProvider.myTheme.colorScheme.primary,
             fontSize: 14,
           ),
         ),
@@ -57,7 +60,7 @@ paymentTransfer(
                           selectedBank ?? 'Seleccione una opción',
                           style: TextStyle(
                             fontSize: 14,
-                            color: myTheme.colorScheme.primary,
+                            color: themeProvider.myTheme.colorScheme.primary,
                             fontFamily: "Poppins-regular",
                           ),
                           overflow: TextOverflow.ellipsis,
@@ -72,7 +75,8 @@ paymentTransfer(
                               item,
                               style: TextStyle(
                                 fontSize: 14,
-                                color: myTheme.colorScheme.primary,
+                                color:
+                                    themeProvider.myTheme.colorScheme.primary,
                                 fontFamily: "Poppins-regular",
                               ),
                               overflow: TextOverflow.ellipsis,
@@ -92,8 +96,8 @@ paymentTransfer(
                       Icons.arrow_forward_ios_outlined,
                     ),
                     iconSize: 11,
-                    iconEnabledColor:
-                        myTheme.colorScheme.primary.withOpacity(0.5),
+                    iconEnabledColor: themeProvider.myTheme.colorScheme.primary
+                        .withOpacity(0.5),
                     iconDisabledColor: Colors.grey,
                   ),
                   buttonStyleData: ButtonStyleData(
@@ -102,7 +106,8 @@ paymentTransfer(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       border: Border.all(
-                        color: myTheme.colorScheme.primary.withOpacity(0.3),
+                        color: themeProvider.myTheme.colorScheme.primary
+                            .withOpacity(0.3),
                       ),
                       color: Colors.white,
                     ),
@@ -140,7 +145,7 @@ paymentTransfer(
                           selectedBank ?? 'Seleccione una opción',
                           style: TextStyle(
                             fontSize: 14,
-                            color: myTheme.colorScheme.primary,
+                            color: themeProvider.myTheme.colorScheme.primary,
                             fontFamily: "Poppins-regular",
                           ),
                           overflow: TextOverflow.ellipsis,
@@ -155,7 +160,8 @@ paymentTransfer(
                               item,
                               style: TextStyle(
                                 fontSize: 14,
-                                color: myTheme.colorScheme.primary,
+                                color:
+                                    themeProvider.myTheme.colorScheme.primary,
                                 fontFamily: "Poppins-regular",
                               ),
                               overflow: TextOverflow.ellipsis,
@@ -175,8 +181,8 @@ paymentTransfer(
                       Icons.arrow_forward_ios_outlined,
                     ),
                     iconSize: 11,
-                    iconEnabledColor:
-                        myTheme.colorScheme.primary.withOpacity(0.5),
+                    iconEnabledColor: themeProvider.myTheme.colorScheme.primary
+                        .withOpacity(0.5),
                     iconDisabledColor: Colors.grey,
                   ),
                   buttonStyleData: ButtonStyleData(
@@ -185,7 +191,8 @@ paymentTransfer(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       border: Border.all(
-                        color: myTheme.colorScheme.primary.withOpacity(0.3),
+                        color: themeProvider.myTheme.colorScheme.primary
+                            .withOpacity(0.3),
                       ),
                       color: Colors.white,
                     ),
@@ -218,7 +225,7 @@ paymentTransfer(
           '${AppLocalizations.of(context)!.referenceNumber}*',
           style: TextStyle(
             fontFamily: 'Poppins-regular',
-            color: myTheme.colorScheme.primary,
+            color: themeProvider.myTheme.colorScheme.primary,
             fontSize: 14,
           ),
         ),
@@ -231,7 +238,7 @@ paymentTransfer(
             style: TextStyle(
               fontSize: 14,
               fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.primary,
+              color: themeProvider.myTheme.colorScheme.primary,
             ),
             keyboardType: TextInputType.phone,
             maxLines: 1,
@@ -251,7 +258,8 @@ paymentTransfer(
               hintStyle: TextStyle(
                 fontFamily: 'Poppins-regular',
                 fontSize: 14,
-                color: myTheme.colorScheme.primary.withOpacity(0.2),
+                color:
+                    themeProvider.myTheme.colorScheme.primary.withOpacity(0.2),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
@@ -263,7 +271,8 @@ paymentTransfer(
               fillColor: Colors.white,
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-                  color: myTheme.colorScheme.primary.withOpacity(0.3),
+                  color: themeProvider.myTheme.colorScheme.primary
+                      .withOpacity(0.3),
                 ),
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
               ),
@@ -285,7 +294,7 @@ paymentTransfer(
               'Subir comprobante',
               style: TextStyle(
                 fontFamily: 'Poppins-medium',
-                color: myTheme.colorScheme.primary,
+                color: themeProvider.myTheme.colorScheme.primary,
                 fontSize: 14,
               ),
             ),
@@ -302,14 +311,14 @@ paymentTransfer(
                   });
                 },
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: myTheme.colorScheme.primary,
+                  foregroundColor: themeProvider.myTheme.colorScheme.primary,
                   backgroundColor: const Color(0xFFDFE0FF),
                   elevation: 0,
                 ),
                 child: Text(
                   'Seleccionar archivo',
                   style: TextStyle(
-                    color: myTheme.colorScheme.onPrimaryContainer,
+                    color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
                     fontFamily: 'Poppins-medium',
                     fontSize: 11,
                   ),
@@ -324,7 +333,8 @@ paymentTransfer(
                       Fluttertoast.showToast(
                         msg:
                             'Presione 2 veces para eliminar imagen seleccionada',
-                        backgroundColor: myTheme.colorScheme.primary,
+                        backgroundColor:
+                            themeProvider.myTheme.colorScheme.primary,
                         textColor: Colors.white,
                       );
                     },
@@ -341,7 +351,7 @@ paymentTransfer(
                     child: Container(
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: myTheme.colorScheme.primary,
+                          color: themeProvider.myTheme.colorScheme.primary,
                         ),
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -370,7 +380,7 @@ paymentTransfer(
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
-                        myTheme.colorScheme.primary,
+                        themeProvider.myTheme.colorScheme.primary,
                       ),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
@@ -409,8 +419,8 @@ paymentTransfer(
                                   print('Cantidad permitida');
                                   Fluttertoast.showToast(
                                     msg: 'Registrando $selectedValueA',
-                                    backgroundColor:
-                                        myTheme.colorScheme.primary,
+                                    backgroundColor: themeProvider
+                                        .myTheme.colorScheme.primary,
                                     textColor: Colors.white,
                                   );
                                   try {
@@ -466,8 +476,8 @@ paymentTransfer(
                                   print('Cantidad permitida');
                                   Fluttertoast.showToast(
                                     msg: 'Registrando $selectedValueA',
-                                    backgroundColor:
-                                        myTheme.colorScheme.primary,
+                                    backgroundColor: themeProvider
+                                        .myTheme.colorScheme.primary,
                                     textColor: Colors.white,
                                   );
                                   try {
@@ -527,7 +537,8 @@ paymentTransfer(
                           },
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(
-                              myTheme.colorScheme.onPrimaryContainer,
+                              themeProvider
+                                  .myTheme.colorScheme.onPrimaryContainer,
                             ),
                             shape: MaterialStateProperty.all<
                                 RoundedRectangleBorder>(
@@ -556,6 +567,6 @@ paymentTransfer(
           ],
         )
       ],
-    ),
-  );
+    );
+  });
 }

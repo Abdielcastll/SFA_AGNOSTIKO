@@ -21,12 +21,14 @@ class DiaryTabs extends StatefulWidget {
 class _DiaryTabsState extends State<DiaryTabs> {
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
 
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        backgroundColor: myTheme.colorScheme.background,
+        backgroundColor: themeProvider.myTheme.colorScheme.background,
         appBar: AppBarDiary(userZoneDocument: userZoneDocument),
         body: DiaryBody(),
       ),

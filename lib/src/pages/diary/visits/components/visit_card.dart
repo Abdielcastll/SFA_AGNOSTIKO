@@ -104,13 +104,14 @@ class _VIsitCardBodyState extends State<VIsitCardBody> {
         Provider.of<Client?>(context)?.masterDiscount ?? {};
     final zonesSummary = Provider.of<ZoneSummary?>(context)?.summary ?? '';
     final userUID = Provider.of<UserModel>(context).uid;
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return currentClientName == ''
         ? Container(
             margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
             child: Center(
               child: SpinKitCircle(
-                color: myTheme.colorScheme.primary,
+                color: themeProvider.myTheme.colorScheme.primary,
                 size: 50,
               ),
             ),
@@ -227,7 +228,8 @@ class _VIsitCardBodyState extends State<VIsitCardBody> {
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     fontSize: 10,
-                                    color: myTheme.colorScheme.secondary,
+                                    color: themeProvider
+                                        .myTheme.colorScheme.secondary,
                                     fontFamily: 'Poppins-regular',
                                   ),
                                 ),
@@ -240,7 +242,8 @@ class _VIsitCardBodyState extends State<VIsitCardBody> {
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     fontSize: 10,
-                                    color: myTheme.colorScheme.secondary,
+                                    color: themeProvider
+                                        .myTheme.colorScheme.secondary,
                                   ),
                                 ),
                               ],
@@ -265,7 +268,8 @@ class _VIsitCardBodyState extends State<VIsitCardBody> {
                               style: TextStyle(
                                 fontSize: 10,
                                 // fontWeight: FontWeight.w400,
-                                color: myTheme.colorScheme.secondary,
+                                color:
+                                    themeProvider.myTheme.colorScheme.secondary,
                                 fontFamily: 'Poppins-regular',
                               ),
                             ),

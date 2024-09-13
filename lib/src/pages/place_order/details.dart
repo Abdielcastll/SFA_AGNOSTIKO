@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class SettingsForm extends StatefulWidget {
@@ -28,6 +29,8 @@ class _SettingsFormState extends State<SettingsForm> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     //TODO: utilizar un streambuilder para sacar del carrito;
     return SingleChildScrollView(
       child: Form(
@@ -51,7 +54,7 @@ class _SettingsFormState extends State<SettingsForm> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: 'Poppins-regular',
-                color: myTheme.colorScheme.secondary,
+                color: themeProvider.myTheme.colorScheme.secondary,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),
@@ -67,7 +70,7 @@ class _SettingsFormState extends State<SettingsForm> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: 'Poppins-regular',
-                    color: myTheme.colorScheme.secondary,
+                    color: themeProvider.myTheme.colorScheme.secondary,
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
                   ),
@@ -84,7 +87,7 @@ class _SettingsFormState extends State<SettingsForm> {
                     maxLength: 2,
                     style: TextStyle(
                       fontFamily: 'Poppins-regular',
-                      color: myTheme.colorScheme.secondary,
+                      color: themeProvider.myTheme.colorScheme.secondary,
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),
@@ -105,7 +108,7 @@ class _SettingsFormState extends State<SettingsForm> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: 'Poppins-regular',
-                    color: myTheme.colorScheme.secondary,
+                    color: themeProvider.myTheme.colorScheme.secondary,
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
                   ),
@@ -142,7 +145,8 @@ class _SettingsFormState extends State<SettingsForm> {
                         Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: myTheme.colorScheme.secondary,
+                        backgroundColor:
+                            themeProvider.myTheme.colorScheme.secondary,
                       ),
                       icon: Icon(Feather.check_circle),
                       label: Text(

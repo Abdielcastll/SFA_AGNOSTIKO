@@ -28,6 +28,8 @@ class _ClientOrdersCompletedState extends State<ClientOrdersCompleted> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     final orders = Provider.of<List<Orders>?>(context) ?? [];
     final ordersCompleted = orders
         .where((element) => element.isInvoiced == true)
@@ -145,14 +147,16 @@ class _ClientOrdersCompletedState extends State<ClientOrdersCompleted> {
                           shape: BoxShape.circle,
                           color:
                               // Colors.red.withOpacity(0.3)),
-                              myTheme.colorScheme.primary.withOpacity(0.3)),
+                              themeProvider.myTheme.colorScheme.primary
+                                  .withOpacity(0.3)),
                       width: 120,
                       height: 120,
                       child: Opacity(
                         opacity: 0.8,
                         child: Icon(
                           MaterialCommunityIcons.calendar_remove_outline,
-                          color: myTheme.colorScheme.onPrimaryContainer,
+                          color: themeProvider
+                              .myTheme.colorScheme.onPrimaryContainer,
                           size: 60,
                         ),
                       ),
@@ -168,7 +172,8 @@ class _ClientOrdersCompletedState extends State<ClientOrdersCompleted> {
                             style: TextStyle(
                               fontFamily: 'Poppins-regular',
                               fontSize: 16,
-                              color: myTheme.colorScheme.onPrimaryContainer,
+                              color: themeProvider
+                                  .myTheme.colorScheme.onPrimaryContainer,
                             ),
                           ),
                         ),

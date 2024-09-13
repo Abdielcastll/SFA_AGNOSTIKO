@@ -2,6 +2,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class NewUserPage extends StatefulWidget {
@@ -14,6 +15,8 @@ class NewUserPage extends StatefulWidget {
 class _NewUserPageState extends State<NewUserPage> {
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -26,7 +29,7 @@ class _NewUserPageState extends State<NewUserPage> {
         ),
         elevation: 0,
         leadingWidth: 24.0,
-        backgroundColor: myTheme.colorScheme.primary,
+        backgroundColor: themeProvider.myTheme.colorScheme.primary,
         foregroundColor: Colors.white,
       ),
       backgroundColor: Colors.white,
@@ -64,6 +67,8 @@ class _NewUserBodyState extends State<NewUserBody> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -91,7 +96,8 @@ class _NewUserBodyState extends State<NewUserBody> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: myTheme.colorScheme.primary.withOpacity(0.2),
+                        color: themeProvider.myTheme.colorScheme.primary
+                            .withOpacity(0.2),
                         // color: Colors.transparent,
                       ),
                     ),
@@ -99,7 +105,7 @@ class _NewUserBodyState extends State<NewUserBody> {
                       style: TextStyle(
                         fontSize: 14,
                         fontFamily: 'Poppins-regular',
-                        color: myTheme.colorScheme.primary,
+                        color: themeProvider.myTheme.colorScheme.primary,
                       ),
                       keyboardType: TextInputType.name,
                       maxLines: 1,
@@ -116,7 +122,8 @@ class _NewUserBodyState extends State<NewUserBody> {
                         hintStyle: TextStyle(
                           fontFamily: 'Poppins-regular',
                           fontSize: 14,
-                          color: myTheme.colorScheme.primary.withOpacity(0.2),
+                          color: themeProvider.myTheme.colorScheme.primary
+                              .withOpacity(0.2),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
@@ -159,14 +166,15 @@ class _NewUserBodyState extends State<NewUserBody> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: myTheme.colorScheme.primary.withOpacity(0.2),
+                        color: themeProvider.myTheme.colorScheme.primary
+                            .withOpacity(0.2),
                       ),
                     ),
                     child: TextField(
                       style: TextStyle(
                         fontSize: 14,
                         fontFamily: 'Poppins-regular',
-                        color: myTheme.colorScheme.primary,
+                        color: themeProvider.myTheme.colorScheme.primary,
                       ),
                       keyboardType: TextInputType.number,
                       maxLines: 1,
@@ -180,7 +188,8 @@ class _NewUserBodyState extends State<NewUserBody> {
                         hintStyle: TextStyle(
                           fontFamily: 'Poppins-regular',
                           fontSize: 14,
-                          color: myTheme.colorScheme.primary.withOpacity(0.2),
+                          color: themeProvider.myTheme.colorScheme.primary
+                              .withOpacity(0.2),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
@@ -222,14 +231,15 @@ class _NewUserBodyState extends State<NewUserBody> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: myTheme.colorScheme.primary.withOpacity(0.2),
+                color:
+                    themeProvider.myTheme.colorScheme.primary.withOpacity(0.2),
               ),
             ),
             child: TextField(
               style: TextStyle(
                 fontSize: 14,
                 fontFamily: 'Poppins-regular',
-                color: myTheme.colorScheme.primary,
+                color: themeProvider.myTheme.colorScheme.primary,
               ),
               keyboardType: TextInputType.emailAddress,
               maxLines: 1,
@@ -245,7 +255,8 @@ class _NewUserBodyState extends State<NewUserBody> {
                 hintStyle: TextStyle(
                   fontFamily: 'Poppins-regular',
                   fontSize: 14,
-                  color: myTheme.colorScheme.primary.withOpacity(0.2),
+                  color: themeProvider.myTheme.colorScheme.primary
+                      .withOpacity(0.2),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(5),
@@ -288,14 +299,15 @@ class _NewUserBodyState extends State<NewUserBody> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: myTheme.colorScheme.primary.withOpacity(0.2),
+                        color: themeProvider.myTheme.colorScheme.primary
+                            .withOpacity(0.2),
                       ),
                     ),
                     child: TextField(
                       style: TextStyle(
                         fontSize: 14,
                         fontFamily: 'Poppins-regular',
-                        color: myTheme.colorScheme.primary,
+                        color: themeProvider.myTheme.colorScheme.primary,
                       ),
                       obscureText: true,
                       keyboardType: TextInputType.visiblePassword,
@@ -312,7 +324,8 @@ class _NewUserBodyState extends State<NewUserBody> {
                         hintStyle: TextStyle(
                           fontFamily: 'Poppins-regular',
                           fontSize: 14,
-                          color: myTheme.colorScheme.primary.withOpacity(0.2),
+                          color: themeProvider.myTheme.colorScheme.primary
+                              .withOpacity(0.2),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
@@ -355,14 +368,15 @@ class _NewUserBodyState extends State<NewUserBody> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: myTheme.colorScheme.primary.withOpacity(0.2),
+                        color: themeProvider.myTheme.colorScheme.primary
+                            .withOpacity(0.2),
                       ),
                     ),
                     child: TextField(
                       style: TextStyle(
                         fontSize: 14,
                         fontFamily: 'Poppins-regular',
-                        color: myTheme.colorScheme.primary,
+                        color: themeProvider.myTheme.colorScheme.primary,
                       ),
                       obscureText: true,
                       keyboardType: TextInputType.visiblePassword,
@@ -379,7 +393,8 @@ class _NewUserBodyState extends State<NewUserBody> {
                         hintStyle: TextStyle(
                           fontFamily: 'Poppins-regular',
                           fontSize: 14,
-                          color: myTheme.colorScheme.primary.withOpacity(0.2),
+                          color: themeProvider.myTheme.colorScheme.primary
+                              .withOpacity(0.2),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
@@ -425,7 +440,8 @@ class _NewUserBodyState extends State<NewUserBody> {
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
-                        color: myTheme.colorScheme.primary.withOpacity(0.3),
+                        color: themeProvider.myTheme.colorScheme.primary
+                            .withOpacity(0.3),
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -440,7 +456,7 @@ class _NewUserBodyState extends State<NewUserBody> {
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
-                            color: myTheme.colorScheme.primary,
+                            color: themeProvider.myTheme.colorScheme.primary,
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -457,7 +473,8 @@ class _NewUserBodyState extends State<NewUserBody> {
                   Icons.arrow_forward_ios_outlined,
                 ),
                 iconSize: 11,
-                iconEnabledColor: myTheme.colorScheme.primary.withOpacity(0.3),
+                iconEnabledColor:
+                    themeProvider.myTheme.colorScheme.primary.withOpacity(0.3),
                 iconDisabledColor: Colors.grey,
               ),
               buttonStyleData: ButtonStyleData(
@@ -467,7 +484,8 @@ class _NewUserBodyState extends State<NewUserBody> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                   border: Border.all(
-                    color: myTheme.colorScheme.primary.withOpacity(0.3),
+                    color: themeProvider.myTheme.colorScheme.primary
+                        .withOpacity(0.3),
                   ),
                   color: Colors.white,
                 ),
@@ -535,7 +553,7 @@ class _NewUserBodyState extends State<NewUserBody> {
               child: ElevatedButton(
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: myTheme.colorScheme.primary,
+                  backgroundColor: themeProvider.myTheme.colorScheme.primary,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

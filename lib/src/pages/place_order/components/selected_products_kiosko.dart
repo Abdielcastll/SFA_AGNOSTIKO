@@ -189,6 +189,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
     final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 1;
     final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
     final userUid = Provider.of<UserModel>(context).uid;
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return coinName == '' || deviceType == null
         ? Column(
@@ -399,7 +400,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                 .size
                                                 .width,
                                             decoration: BoxDecoration(
-                                              color: myTheme
+                                              color: themeProvider.myTheme
                                                   .colorScheme.background,
                                               borderRadius:
                                                   BorderRadius.circular(8),
@@ -587,7 +588,8 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                                 Icons
                                                                     .delete_outline_rounded,
                                                                 size: 22,
-                                                                color: myTheme
+                                                                color: themeProvider
+                                                                    .myTheme
                                                                     .colorScheme
                                                                     .error,
                                                               ),
@@ -635,7 +637,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                                             icon:
                                                                                 Icon(
                                                                               Icons.remove,
-                                                                              color: myTheme.colorScheme.onPrimaryContainer,
+                                                                              color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
                                                                             ),
                                                                             onPressed:
                                                                                 () {
@@ -727,7 +729,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                                             icon:
                                                                                 Icon(
                                                                               Icons.add,
-                                                                              color: myTheme.colorScheme.primary,
+                                                                              color: themeProvider.myTheme.colorScheme.primary,
                                                                             ),
                                                                             onPressed:
                                                                                 () {

@@ -8,6 +8,8 @@ class NotificationsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     final notifications =
         context.watch<not.NotificationService>().notifications;
 
@@ -30,7 +32,7 @@ class NotificationsPage extends StatelessWidget {
           ),
         ),
         foregroundColor: Colors.white,
-        backgroundColor: myTheme.colorScheme.primary,
+        backgroundColor: themeProvider.myTheme.colorScheme.primary,
         elevation: 0,
       ),
       backgroundColor: Colors.grey.shade200,

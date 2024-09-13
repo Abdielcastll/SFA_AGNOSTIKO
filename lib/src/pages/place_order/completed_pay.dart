@@ -48,6 +48,7 @@ class CompletedPayPage extends StatelessWidget {
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     List<String> currentCoinSplit = currentCoin!.split(' ');
     String currentCoinSelectedCode = currentCoinSplit.last;
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
@@ -56,7 +57,7 @@ class CompletedPayPage extends StatelessWidget {
         child: AppBar(
           automaticallyImplyLeading: false,
           elevation: 0,
-          backgroundColor: myTheme.colorScheme.primary,
+          backgroundColor: themeProvider.myTheme.colorScheme.primary,
           foregroundColor: Colors.white,
         ),
       ),
@@ -165,6 +166,8 @@ class _CompletedPayBody extends State<CompletedPayBody> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
         Future.delayed(Duration(seconds: 3), () {
           onGoBack();
         });
@@ -175,7 +178,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
               'Por favor retire su comprobante y ticket de compra.',
               style: TextStyle(
                 fontFamily: 'Poppins-regular',
-                color: myTheme.colorScheme.primary,
+                color: themeProvider.myTheme.colorScheme.primary,
               ),
             ),
           ),
@@ -200,6 +203,8 @@ class _CompletedPayBody extends State<CompletedPayBody> {
       return convertedAmount;
     }
 
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return Column(
       children: [
         Container(
@@ -209,7 +214,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
             '¡Pago Completado!',
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: myTheme.colorScheme.secondary,
+              color: themeProvider.myTheme.colorScheme.secondary,
               fontFamily: 'Poppins-regular',
               fontSize: 25,
             ),
@@ -305,7 +310,8 @@ class _CompletedPayBody extends State<CompletedPayBody> {
                             '$coinSymbol ${priceFormat(widget.total).toStringAsFixed(2)}',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              color: myTheme.colorScheme.onPrimaryContainer,
+                              color: themeProvider
+                                  .myTheme.colorScheme.onPrimaryContainer,
                               fontFamily: 'Poppins-regular',
                               fontSize: 14,
                             ),
@@ -416,7 +422,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
                   },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
-                      myTheme.colorScheme.primary,
+                      themeProvider.myTheme.colorScheme.primary,
                     ),
                     foregroundColor: MaterialStateProperty.all(
                       Colors.white,
@@ -460,7 +466,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
                   },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
-                      myTheme.colorScheme.primary,
+                      themeProvider.myTheme.colorScheme.primary,
                     ),
                     foregroundColor: MaterialStateProperty.all(
                       Colors.white,

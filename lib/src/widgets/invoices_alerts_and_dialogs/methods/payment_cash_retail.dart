@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/completed_pay.dart';
@@ -40,8 +41,9 @@ paymentCashRetail(
     exchange: coinExchangeRatio,
   );
 
-  return StatefulBuilder(
-    builder: (BuildContext context, setState) => Column(
+  return StatefulBuilder(builder: (BuildContext context, setState) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    return Column(
       children: [
         Column(
           children: [
@@ -70,14 +72,14 @@ paymentCashRetail(
                       padding: EdgeInsets.all(4.0),
                       child: Icon(
                         Icons.camera,
-                        color: myTheme.colorScheme.secondary,
+                        color: themeProvider.myTheme.colorScheme.secondary,
                       ),
                     ),
                     Text(
                       // AppLocalizations.of(context)!.gallery,
                       'Subir Imagen',
                       style: TextStyle(
-                        color: myTheme.colorScheme.primary,
+                        color: themeProvider.myTheme.colorScheme.primary,
                         fontFamily: 'Poppins-regular',
                       ),
                     ),
@@ -93,7 +95,7 @@ paymentCashRetail(
                       // width: 300,
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: myTheme.colorScheme.primary,
+                          color: themeProvider.myTheme.colorScheme.primary,
                         ),
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -124,7 +126,7 @@ paymentCashRetail(
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
-                        myTheme.colorScheme.primary,
+                        themeProvider.myTheme.colorScheme.primary,
                       ),
                       foregroundColor: MaterialStateProperty.all(
                         Colors.white,
@@ -165,8 +167,8 @@ paymentCashRetail(
                                 if (!globalRemoteConfig.conversionKiosko!) {
                                   Fluttertoast.showToast(
                                     msg: 'Registrando Pago en Efectivo',
-                                    backgroundColor:
-                                        myTheme.colorScheme.primary,
+                                    backgroundColor: themeProvider
+                                        .myTheme.colorScheme.primary,
                                     textColor: Colors.white,
                                   );
                                 }
@@ -237,7 +239,7 @@ paymentCashRetail(
                               },
                               style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(
-                                  myTheme.colorScheme.primary,
+                                  themeProvider.myTheme.colorScheme.primary,
                                 ),
                                 foregroundColor: MaterialStateProperty.all(
                                   Colors.white,
@@ -271,6 +273,6 @@ paymentCashRetail(
           ],
         )
       ],
-    ),
-  );
+    );
+  });
 }

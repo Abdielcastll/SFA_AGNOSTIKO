@@ -49,12 +49,14 @@ class _SelectClientState extends State<SelectClient> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     final orderActive = Provider.of<OrderProvider>(context);
     return Column(
       children: [
         Container(
           decoration: BoxDecoration(
-            color: myTheme.colorScheme.primary,
+            color: themeProvider.myTheme.colorScheme.primary,
             borderRadius: const BorderRadius.only(
               bottomLeft: Radius.circular(20),
               bottomRight: Radius.circular(20),
@@ -80,14 +82,14 @@ class _SelectClientState extends State<SelectClient> {
                     filled: true,
                     fillColor: Colors.white,
                     hintStyle: TextStyle(
-                      color: myTheme.colorScheme.primary,
+                      color: themeProvider.myTheme.colorScheme.primary,
                       fontFamily: 'Poppins-regular',
                     ),
                     hintText: AppLocalizations.of(context)!.searchClient,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
-                      borderSide:
-                          BorderSide(color: myTheme.colorScheme.primary),
+                      borderSide: BorderSide(
+                          color: themeProvider.myTheme.colorScheme.primary),
                     ),
                   ),
                   onChanged: _searchClient,
@@ -118,7 +120,7 @@ class _SelectClientState extends State<SelectClient> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                       side: BorderSide(
-                        color: myTheme.colorScheme.primary,
+                        color: themeProvider.myTheme.colorScheme.primary,
                       ),
                     ),
                     title: Text(

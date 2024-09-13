@@ -49,6 +49,8 @@ class ProductsPage extends StatefulWidget {
 class _ProductsPageState extends State<ProductsPage> {
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     List<String> currentCoinSplit = currentCoin!.split(' ');
     String currentCoinSelectedCode = currentCoinSplit.last;
@@ -57,7 +59,7 @@ class _ProductsPageState extends State<ProductsPage> {
         message: AppLocalizations.of(context)!.products,
         userZoneDocument: widget.userZoneDocument,
       ),
-      backgroundColor: myTheme.colorScheme.surface,
+      backgroundColor: themeProvider.myTheme.colorScheme.surface,
       body: MultiProvider(
         providers: [
           StreamProvider<QualitySummary?>.value(
@@ -175,6 +177,8 @@ class _ProductsBodyState extends State<ProductsBody> {
 
   @override
   void initState() {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     super.initState();
     // products = widget.listOfProducts;
     _controller.addListener(() {
@@ -201,7 +205,7 @@ class _ProductsBodyState extends State<ProductsBody> {
               ..removeCurrentSnackBar()
               ..showSnackBar(
                 SnackBar(
-                  backgroundColor: myTheme.colorScheme.primary,
+                  backgroundColor: themeProvider.myTheme.colorScheme.primary,
                   duration: const Duration(seconds: 1),
                   content: Text(
                     "Cargando $newValor productos adicionales",
@@ -254,13 +258,14 @@ class _ProductsBodyState extends State<ProductsBody> {
         Provider.of<CounterLimitFirestore>(context).getScrollProductLimit;
     // Produtos
     final products = Provider.of<List<Products>?>(context) ?? [];
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return coinName.toString().isEmpty
         ? Center(
             child: CircularProgressIndicator(),
           )
         : Scaffold(
-            backgroundColor: myTheme.colorScheme.surface,
+            backgroundColor: themeProvider.myTheme.colorScheme.surface,
             floatingActionButton: Wrap(
               direction: Axis.vertical,
               children: [
@@ -274,7 +279,8 @@ class _ProductsBodyState extends State<ProductsBody> {
                     margin: const EdgeInsets.all(10.0),
                     child: FloatingActionButton(
                       elevation: 2,
-                      backgroundColor: myTheme.colorScheme.primary,
+                      backgroundColor:
+                          themeProvider.myTheme.colorScheme.primary,
                       onPressed: () {
                         // Agregar productos al carrito
 
@@ -285,7 +291,8 @@ class _ProductsBodyState extends State<ProductsBody> {
                             ..removeCurrentSnackBar()
                             ..showSnackBar(
                               SnackBar(
-                                backgroundColor: myTheme.colorScheme.primary,
+                                backgroundColor:
+                                    themeProvider.myTheme.colorScheme.primary,
                                 duration: const Duration(seconds: 1),
                                 content: const Text(
                                   "Productos añadidos exitosamente",
@@ -355,14 +362,14 @@ class _ProductsBodyState extends State<ProductsBody> {
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(16),
                               borderSide: BorderSide(
-                                color: myTheme.colorScheme.primary
+                                color: themeProvider.myTheme.colorScheme.primary
                                     .withOpacity(0.5),
                               ),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(16),
                               borderSide: BorderSide(
-                                color: myTheme.colorScheme.primary
+                                color: themeProvider.myTheme.colorScheme.primary
                                     .withOpacity(0.5),
                               ),
                             ),
@@ -434,12 +441,14 @@ class _ProductsBodyState extends State<ProductsBody> {
                               ? Icon(
                                   MaterialCommunityIcons
                                       .sort_alphabetical_descending,
-                                  color: myTheme.colorScheme.onPrimaryContainer,
+                                  color: themeProvider
+                                      .myTheme.colorScheme.onPrimaryContainer,
                                 )
                               : Icon(
                                   MaterialCommunityIcons
                                       .sort_alphabetical_ascending,
-                                  color: myTheme.colorScheme.onPrimaryContainer,
+                                  color: themeProvider
+                                      .myTheme.colorScheme.onPrimaryContainer,
                                 ),
                         ),
                       ),
@@ -649,12 +658,14 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                             BorderRadius
                                                                 .circular(14),
                                                         border: Border.all(
-                                                          color: myTheme
+                                                          color: themeProvider
+                                                              .myTheme
                                                               .colorScheme
                                                               .primary
                                                               .withOpacity(0.5),
                                                         ),
-                                                        color: myTheme
+                                                        color: themeProvider
+                                                            .myTheme
                                                             .colorScheme
                                                             .background,
                                                       ),
@@ -671,12 +682,13 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                             BorderRadius
                                                                 .circular(14),
                                                         border: Border.all(
-                                                          color: myTheme
+                                                          color: themeProvider
+                                                              .myTheme
                                                               .colorScheme
                                                               .primary
                                                               .withOpacity(0.5),
                                                         ),
-                                                        // color: myTheme
+                                                        // color: themeProvider.myTheme
                                                         //     .colorScheme.primary
                                                         //     .withOpacity(0.5),
                                                       ),
@@ -702,8 +714,11 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                             .arrow_forward_ios_outlined,
                                                       ),
                                                       iconSize: 14,
-                                                      iconEnabledColor: myTheme
-                                                          .colorScheme.primary,
+                                                      iconEnabledColor:
+                                                          themeProvider
+                                                              .myTheme
+                                                              .colorScheme
+                                                              .primary,
                                                       iconDisabledColor:
                                                           Colors.grey,
                                                     ),
@@ -835,12 +850,14 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                             BorderRadius
                                                                 .circular(14),
                                                         border: Border.all(
-                                                          color: myTheme
+                                                          color: themeProvider
+                                                              .myTheme
                                                               .colorScheme
                                                               .primary
                                                               .withOpacity(0.5),
                                                         ),
-                                                        color: myTheme
+                                                        color: themeProvider
+                                                            .myTheme
                                                             .colorScheme
                                                             .background,
                                                       ),
@@ -857,12 +874,13 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                             BorderRadius
                                                                 .circular(14),
                                                         border: Border.all(
-                                                          color: myTheme
+                                                          color: themeProvider
+                                                              .myTheme
                                                               .colorScheme
                                                               .primary
                                                               .withOpacity(0.5),
                                                         ),
-                                                        // color: myTheme
+                                                        // color: themeProvider.myTheme
                                                         //     .colorScheme.primary
                                                         //     .withOpacity(0.5),
                                                       ),
@@ -888,8 +906,11 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                             .arrow_forward_ios_outlined,
                                                       ),
                                                       iconSize: 14,
-                                                      iconEnabledColor: myTheme
-                                                          .colorScheme.primary,
+                                                      iconEnabledColor:
+                                                          themeProvider
+                                                              .myTheme
+                                                              .colorScheme
+                                                              .primary,
                                                       iconDisabledColor:
                                                           Colors.grey,
                                                     ),
@@ -1041,12 +1062,14 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                             BorderRadius
                                                                 .circular(14),
                                                         border: Border.all(
-                                                          color: myTheme
+                                                          color: themeProvider
+                                                              .myTheme
                                                               .colorScheme
                                                               .primary
                                                               .withOpacity(0.5),
                                                         ),
-                                                        color: myTheme
+                                                        color: themeProvider
+                                                            .myTheme
                                                             .colorScheme
                                                             .background,
                                                       ),
@@ -1063,12 +1086,13 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                             BorderRadius
                                                                 .circular(14),
                                                         border: Border.all(
-                                                          color: myTheme
+                                                          color: themeProvider
+                                                              .myTheme
                                                               .colorScheme
                                                               .primary
                                                               .withOpacity(0.5),
                                                         ),
-                                                        // color: myTheme
+                                                        // color: themeProvider.myTheme
                                                         //     .colorScheme.primary
                                                         //     .withOpacity(0.5),
                                                       ),
@@ -1094,8 +1118,11 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                             .arrow_forward_ios_outlined,
                                                       ),
                                                       iconSize: 14,
-                                                      iconEnabledColor: myTheme
-                                                          .colorScheme.primary,
+                                                      iconEnabledColor:
+                                                          themeProvider
+                                                              .myTheme
+                                                              .colorScheme
+                                                              .primary,
                                                       iconDisabledColor:
                                                           Colors.grey,
                                                     ),
@@ -1241,12 +1268,14 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                             BorderRadius
                                                                 .circular(14),
                                                         border: Border.all(
-                                                          color: myTheme
+                                                          color: themeProvider
+                                                              .myTheme
                                                               .colorScheme
                                                               .primary
                                                               .withOpacity(0.5),
                                                         ),
-                                                        color: myTheme
+                                                        color: themeProvider
+                                                            .myTheme
                                                             .colorScheme
                                                             .background,
                                                       ),
@@ -1263,12 +1292,13 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                             BorderRadius
                                                                 .circular(14),
                                                         border: Border.all(
-                                                          color: myTheme
+                                                          color: themeProvider
+                                                              .myTheme
                                                               .colorScheme
                                                               .primary
                                                               .withOpacity(0.5),
                                                         ),
-                                                        // color: myTheme
+                                                        // color: themeProvider.myTheme
                                                         //     .colorScheme.primary
                                                         //     .withOpacity(0.5),
                                                       ),
@@ -1294,8 +1324,11 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                             .arrow_forward_ios_outlined,
                                                       ),
                                                       iconSize: 14,
-                                                      iconEnabledColor: myTheme
-                                                          .colorScheme.primary,
+                                                      iconEnabledColor:
+                                                          themeProvider
+                                                              .myTheme
+                                                              .colorScheme
+                                                              .primary,
                                                       iconDisabledColor:
                                                           Colors.grey,
                                                     ),
@@ -1352,12 +1385,14 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                             BorderRadius
                                                                 .circular(14),
                                                         border: Border.all(
-                                                          color: myTheme
+                                                          color: themeProvider
+                                                              .myTheme
                                                               .colorScheme
                                                               .primary
                                                               .withOpacity(0.5),
                                                         ),
-                                                        color: myTheme
+                                                        color: themeProvider
+                                                            .myTheme
                                                             .colorScheme
                                                             .background,
                                                       ),
@@ -1374,12 +1409,13 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                             BorderRadius
                                                                 .circular(14),
                                                         border: Border.all(
-                                                          color: myTheme
+                                                          color: themeProvider
+                                                              .myTheme
                                                               .colorScheme
                                                               .primary
                                                               .withOpacity(0.5),
                                                         ),
-                                                        // color: myTheme
+                                                        // color: themeProvider.myTheme
                                                         //     .colorScheme.primary
                                                         //     .withOpacity(0.5),
                                                       ),
@@ -1405,8 +1441,11 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                             .arrow_forward_ios_outlined,
                                                       ),
                                                       iconSize: 14,
-                                                      iconEnabledColor: myTheme
-                                                          .colorScheme.primary,
+                                                      iconEnabledColor:
+                                                          themeProvider
+                                                              .myTheme
+                                                              .colorScheme
+                                                              .primary,
                                                       iconDisabledColor:
                                                           Colors.grey,
                                                     ),
@@ -1428,7 +1467,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                     backgroundColor:
                                                         MaterialStateProperty
                                                             .all(
-                                                      myTheme
+                                                      themeProvider.myTheme
                                                           .colorScheme.primary,
                                                     ),
                                                     shape: MaterialStateProperty
@@ -1651,7 +1690,8 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                                     ..removeCurrentSnackBar()
                                                                     ..showSnackBar(
                                                                       SnackBar(
-                                                                        backgroundColor: myTheme
+                                                                        backgroundColor: themeProvider
+                                                                            .myTheme
                                                                             .colorScheme
                                                                             .primary,
                                                                         duration:
@@ -1773,7 +1813,8 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                                     ..removeCurrentSnackBar()
                                                                     ..showSnackBar(
                                                                       SnackBar(
-                                                                        backgroundColor: myTheme
+                                                                        backgroundColor: themeProvider
+                                                                            .myTheme
                                                                             .colorScheme
                                                                             .primary,
                                                                         duration:
@@ -1899,7 +1940,8 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                                     ..removeCurrentSnackBar()
                                                                     ..showSnackBar(
                                                                       SnackBar(
-                                                                        backgroundColor: myTheme
+                                                                        backgroundColor: themeProvider
+                                                                            .myTheme
                                                                             .colorScheme
                                                                             .primary,
                                                                         duration:
@@ -2029,7 +2071,8 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                                     ..removeCurrentSnackBar()
                                                                     ..showSnackBar(
                                                                       SnackBar(
-                                                                        backgroundColor: myTheme
+                                                                        backgroundColor: themeProvider
+                                                                            .myTheme
                                                                             .colorScheme
                                                                             .primary,
                                                                         duration:
@@ -2163,7 +2206,8 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                                     ..removeCurrentSnackBar()
                                                                     ..showSnackBar(
                                                                       SnackBar(
-                                                                        backgroundColor: myTheme
+                                                                        backgroundColor: themeProvider
+                                                                            .myTheme
                                                                             .colorScheme
                                                                             .primary,
                                                                         duration:
@@ -2186,7 +2230,9 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                     backgroundColor:
                                                         MaterialStateProperty
                                                             .all(
-                                                      myTheme.colorScheme
+                                                      themeProvider
+                                                          .myTheme
+                                                          .colorScheme
                                                           .onPrimaryContainer,
                                                     ),
                                                     shape: MaterialStateProperty
@@ -2228,7 +2274,8 @@ class _ProductsBodyState extends State<ProductsBody> {
                             setState(() {});
                           },
                           icon: Icon(Icons.filter_alt_rounded,
-                              color: myTheme.colorScheme.onPrimaryContainer),
+                              color: themeProvider
+                                  .myTheme.colorScheme.onPrimaryContainer),
                           splashRadius: 5,
                         ),
                       ),
@@ -2258,8 +2305,8 @@ class _ProductsBodyState extends State<ProductsBody> {
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontFamily: 'Poppins-regular',
-                                        color: myTheme
-                                            .colorScheme.onPrimaryContainer,
+                                        color: themeProvider.myTheme.colorScheme
+                                            .onPrimaryContainer,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -2273,7 +2320,9 @@ class _ProductsBodyState extends State<ProductsBody> {
                                               style: TextStyle(
                                                 fontSize: 14,
                                                 fontFamily: 'Poppins-regular',
-                                                color: myTheme.colorScheme
+                                                color: themeProvider
+                                                    .myTheme
+                                                    .colorScheme
                                                     .onPrimaryContainer,
                                                 fontWeight: FontWeight.bold,
                                               ),
@@ -2343,8 +2392,8 @@ class _ProductsBodyState extends State<ProductsBody> {
                                           ..removeCurrentSnackBar()
                                           ..showSnackBar(
                                             SnackBar(
-                                              backgroundColor:
-                                                  myTheme.colorScheme.primary,
+                                              backgroundColor: themeProvider
+                                                  .myTheme.colorScheme.primary,
                                               duration:
                                                   const Duration(seconds: 1),
                                               content: const Text(
@@ -2361,8 +2410,8 @@ class _ProductsBodyState extends State<ProductsBody> {
                                       });
                                     },
                                     icon: Icon(Icons.filter_alt_off_rounded,
-                                        color: myTheme
-                                            .colorScheme.onPrimaryContainer),
+                                        color: themeProvider.myTheme.colorScheme
+                                            .onPrimaryContainer),
                                     splashRadius: 5,
                                   ),
                                 ),
@@ -2445,8 +2494,8 @@ class _ProductsBodyState extends State<ProductsBody> {
                                           ..removeCurrentSnackBar()
                                           ..showSnackBar(
                                             SnackBar(
-                                              backgroundColor:
-                                                  myTheme.colorScheme.primary,
+                                              backgroundColor: themeProvider
+                                                  .myTheme.colorScheme.primary,
                                               duration:
                                                   const Duration(seconds: 1),
                                               content: const Text(
@@ -2609,8 +2658,10 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                               color: Colors
                                                                   .transparent)),
                                                   shape: const CircleBorder(),
-                                                  activeColor: myTheme
-                                                      .colorScheme.primary,
+                                                  activeColor: themeProvider
+                                                      .myTheme
+                                                      .colorScheme
+                                                      .primary,
                                                   value: product.selected,
                                                   onChanged: (value) {
                                                     if (product.selected ==
@@ -2652,7 +2703,8 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                           ..showSnackBar(
                                                             SnackBar(
                                                               backgroundColor:
-                                                                  myTheme
+                                                                  themeProvider
+                                                                      .myTheme
                                                                       .colorScheme
                                                                       .primary,
                                                               duration:
@@ -2893,8 +2945,8 @@ class _ProductsBodyState extends State<ProductsBody> {
                                           ..removeCurrentSnackBar()
                                           ..showSnackBar(
                                             SnackBar(
-                                              backgroundColor:
-                                                  myTheme.colorScheme.primary,
+                                              backgroundColor: themeProvider
+                                                  .myTheme.colorScheme.primary,
                                               duration:
                                                   const Duration(seconds: 1),
                                               content: const Text(
@@ -3052,8 +3104,10 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                               color: Colors
                                                                   .transparent)),
                                                   shape: const CircleBorder(),
-                                                  activeColor: myTheme
-                                                      .colorScheme.primary,
+                                                  activeColor: themeProvider
+                                                      .myTheme
+                                                      .colorScheme
+                                                      .primary,
                                                   value: product.selected,
                                                   onChanged: (value) {
                                                     if (product.selected ==

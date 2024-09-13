@@ -1,6 +1,7 @@
 import 'package:agnostiko/agnostiko.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 /* import '../../../../../config/app_config.dart'; */
@@ -45,6 +46,7 @@ class _AmountInputViewState extends State<AmountInputView> {
     } else {
       appBarText = "sale";
     }
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return WillPopScope(
       onWillPop: cancelTransactionDialogFn(
@@ -69,7 +71,7 @@ class _AmountInputViewState extends State<AmountInputView> {
         ),
         child: Scaffold(
           appBar: AppBar(
-            backgroundColor: myTheme.colorScheme.primary,
+            backgroundColor: themeProvider.myTheme.colorScheme.primary,
             foregroundColor: Colors.white,
             title: Text(appBarText),
           ),

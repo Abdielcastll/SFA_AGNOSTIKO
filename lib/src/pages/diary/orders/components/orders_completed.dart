@@ -33,6 +33,7 @@ class _CompletedOrdersState extends State<CompletedOrders> {
         .toList()
         .reversed
         .toList();
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -101,14 +102,16 @@ class _CompletedOrdersState extends State<CompletedOrders> {
                           shape: BoxShape.circle,
                           color:
                               // Colors.red.withOpacity(0.3)),
-                              myTheme.colorScheme.primary.withOpacity(0.3)),
+                              themeProvider.myTheme.colorScheme.primary
+                                  .withOpacity(0.3)),
                       width: 120,
                       height: 120,
                       child: Opacity(
                         opacity: 0.8,
                         child: Icon(
                           MaterialCommunityIcons.calendar_remove_outline,
-                          color: myTheme.colorScheme.onPrimaryContainer,
+                          color: themeProvider
+                              .myTheme.colorScheme.onPrimaryContainer,
                           size: 60,
                         ),
                       ),
@@ -124,7 +127,8 @@ class _CompletedOrdersState extends State<CompletedOrders> {
                             style: TextStyle(
                               fontFamily: 'Poppins-regular',
                               fontSize: 16,
-                              color: myTheme.colorScheme.onPrimaryContainer,
+                              color: themeProvider
+                                  .myTheme.colorScheme.onPrimaryContainer,
                             ),
                           ),
                         ),

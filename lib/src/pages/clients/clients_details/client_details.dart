@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/components/address_info.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/components/button_options.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/components/client_picture.dart';
@@ -49,13 +50,14 @@ class _ClientDetailsState extends State<ClientDetails> {
   @override
   Widget build(BuildContext context) {
     // print('userRole IN CLIENT DETAILS: $userRole');
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return Scaffold(
-      backgroundColor: myTheme.colorScheme.background,
+      backgroundColor: themeProvider.myTheme.colorScheme.background,
       appBar: AppBar(
         toolbarHeight: 40,
         elevation: 0,
-        backgroundColor: myTheme.colorScheme.primary,
+        backgroundColor: themeProvider.myTheme.colorScheme.primary,
         foregroundColor: Colors.white,
       ),
       body: ClientDetailsBody(

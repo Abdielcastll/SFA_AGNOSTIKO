@@ -47,6 +47,7 @@ class _OrdersPageState extends State<OrdersPage> {
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     List<String> currentCoinSplit = currentCoin!.split(' ');
     String currentCoinSelectedCode = currentCoinSplit.last;
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return MultiProvider(
       providers: [
@@ -109,7 +110,7 @@ class _OrdersPageState extends State<OrdersPage> {
       ],
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: myTheme.colorScheme.background,
+          backgroundColor: themeProvider.myTheme.colorScheme.background,
           body: OrdersBody(),
         ),
       ),
@@ -135,6 +136,8 @@ class _OrdersBodyState extends State<OrdersBody> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     final currentDay =
         Provider.of<CounterLimitFirestore>(context).currentDayOrder;
     final currentDateTime = currentDay.toDate();
@@ -160,7 +163,7 @@ class _OrdersBodyState extends State<OrdersBody> {
                     isDescending
                         ? MaterialCommunityIcons.sort_calendar_descending
                         : MaterialCommunityIcons.sort_calendar_ascending,
-                    color: myTheme.colorScheme.onPrimaryContainer,
+                    color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
                   ),
                   label: Container(
                     width: 88,
@@ -172,7 +175,8 @@ class _OrdersBodyState extends State<OrdersBody> {
                       // AppLocalizations.of(context)!.descendingFilter,
                       style: TextStyle(
                         fontFamily: 'Poppins-medium',
-                        color: myTheme.colorScheme.onPrimaryContainer,
+                        color: themeProvider
+                            .myTheme.colorScheme.onPrimaryContainer,
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
                       ),
@@ -217,14 +221,15 @@ class _OrdersBodyState extends State<OrdersBody> {
                                 ),
                               ),
                               colorScheme: ColorScheme.dark(
-                                primary: myTheme.colorScheme.primary,
+                                primary:
+                                    themeProvider.myTheme.colorScheme.primary,
                                 onPrimary: Colors.white,
                                 surface: Colors.white,
                                 onSurface: Color(0xFF1D1B20),
                               ),
                               textButtonTheme: TextButtonThemeData(
                                 style: TextButton.styleFrom(
-                                  foregroundColor: myTheme
+                                  foregroundColor: themeProvider.myTheme
                                       .colorScheme.primary, // button text color
                                 ),
                               ),
@@ -245,7 +250,8 @@ class _OrdersBodyState extends State<OrdersBody> {
                     },
                     icon: Icon(
                       MaterialIcons.event,
-                      color: myTheme.colorScheme.onPrimaryContainer,
+                      color:
+                          themeProvider.myTheme.colorScheme.onPrimaryContainer,
                     ),
                     label: Container(
                       width: 100,
@@ -267,7 +273,8 @@ class _OrdersBodyState extends State<OrdersBody> {
                             : 'Elige una fecha',
                         style: TextStyle(
                           fontFamily: 'Poppins-medium',
-                          color: myTheme.colorScheme.onPrimaryContainer,
+                          color: themeProvider
+                              .myTheme.colorScheme.onPrimaryContainer,
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                         ),
@@ -359,7 +366,7 @@ class _OrdersBodyState extends State<OrdersBody> {
           //               fontSize: 14,
           //               // fontWeight: FontWeight.bold,
           //               fontFamily: 'Poppins-regular',
-          //               color: myTheme.colorScheme.primary,
+          //               color: themeProvider.myTheme.colorScheme.primary,
           //             ),
           //           ),
           //         ),
@@ -367,8 +374,8 @@ class _OrdersBodyState extends State<OrdersBody> {
           //           checkColor: Colors.white,
           //           shape: CircleBorder(),
           //           fillColor:
-          //               MaterialStateProperty.all(myTheme.colorScheme.primary),
-          //           activeColor: myTheme.colorScheme.primary,
+          //               MaterialStateProperty.all(themeProvider.myTheme.colorScheme.primary),
+          //           activeColor: themeProvider.myTheme.colorScheme.primary,
           //           value: seeCompleted,
           //           onChanged: (value) {
           //             setState(() {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class UserInfo extends StatefulWidget {
@@ -18,6 +19,8 @@ class UserInfo extends StatefulWidget {
 class _UserInfoState extends State<UserInfo> {
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return Container(
       alignment: Alignment.center,
       child: Container(
@@ -30,14 +33,14 @@ class _UserInfoState extends State<UserInfo> {
             child: Icon(
               Icons.person,
               size: 40,
-              color: myTheme.colorScheme.primary,
+              color: themeProvider.myTheme.colorScheme.primary,
             ),
           ),
           title: Text(
             '${widget.userName}',
             style: TextStyle(
               fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.primary,
+              color: themeProvider.myTheme.colorScheme.primary,
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),

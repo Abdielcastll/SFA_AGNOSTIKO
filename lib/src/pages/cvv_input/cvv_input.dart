@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 import '../../../dialogs/cancel_transaction_dialog.dart';
@@ -25,6 +26,8 @@ class _CvvInputViewState extends State<CvvInputView> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     transactionArgs =
         ModalRoute.of(context)?.settings.arguments as TransactionArgs;
 
@@ -51,7 +54,7 @@ class _CvvInputViewState extends State<CvvInputView> {
           ),
           child: Scaffold(
             appBar: AppBar(
-              backgroundColor: myTheme.colorScheme.primary,
+              backgroundColor: themeProvider.myTheme.colorScheme.primary,
               foregroundColor: Colors.white,
               title: Text("sale"),
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -33,6 +34,8 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return SingleChildScrollView(
       child: Container(
         margin: const EdgeInsets.fromLTRB(8, 10, 8, 20),
@@ -51,7 +54,7 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
                   child: Text(
                     AppLocalizations.of(context)!.listOfPrices,
                     style: TextStyle(
-                      color: myTheme.colorScheme.primary,
+                      color: themeProvider.myTheme.colorScheme.primary,
                       fontFamily: 'Poppins-medium',
                       fontWeight: FontWeight.bold,
                       fontSize: 11,
@@ -67,7 +70,8 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
                         color: Colors.transparent,
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
-                          color: myTheme.colorScheme.primary.withOpacity(0.7),
+                          color: themeProvider.myTheme.colorScheme.primary
+                              .withOpacity(0.7),
                         )),
                     child: Text(
                       widget.listOfPrices,
@@ -76,7 +80,8 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
                       style: TextStyle(
                         fontFamily: 'Poppins-medium',
                         fontSize: 14,
-                        color: myTheme.colorScheme.primary.withOpacity(0.7),
+                        color: themeProvider.myTheme.colorScheme.primary
+                            .withOpacity(0.7),
                       ),
                     )),
                 // Container(
@@ -93,7 +98,7 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
                 //               style: TextStyle(
                 //                 fontSize: 12,
                 //                 fontWeight: FontWeight.bold,
-                //                 color: myTheme.colorScheme.primary
+                //                 color: themeProvider.myTheme.colorScheme.primary
                 //                     .withOpacity(0.7),
                 //               ),
                 //               overflow: TextOverflow.ellipsis,
@@ -109,7 +114,7 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
                 //                   style: TextStyle(
                 //                     fontSize: 14,
                 //                     fontWeight: FontWeight.bold,
-                //                     color: myTheme.colorScheme.primary,
+                //                     color: themeProvider.myTheme.colorScheme.primary,
                 //                   ),
                 //                   overflow: TextOverflow.ellipsis,
                 //                 ),
@@ -126,7 +131,7 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
                 //       ),
                 //       iconSize: 11,
                 //       iconEnabledColor:
-                //           myTheme.colorScheme.primary.withOpacity(0.5),
+                //           themeProvider.myTheme.colorScheme.primary.withOpacity(0.5),
                 //       iconDisabledColor: Colors.grey,
                 //       buttonHeight: 50,
                 //       buttonWidth: 150,
@@ -134,7 +139,7 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
                 //       buttonDecoration: BoxDecoration(
                 //         borderRadius: BorderRadius.circular(5),
                 //         border: Border.all(
-                //           color: myTheme.colorScheme.primary.withOpacity(0.3),
+                //           color: themeProvider.myTheme.colorScheme.primary.withOpacity(0.3),
                 //         ),
                 //         color: Colors.white,
                 //       ),
@@ -168,7 +173,7 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
                     child: Text(
                       AppLocalizations.of(context)!.masterDiscount,
                       style: TextStyle(
-                        color: myTheme.colorScheme.primary,
+                        color: themeProvider.myTheme.colorScheme.primary,
                         fontFamily: 'Poppins-medium',
                         fontWeight: FontWeight.bold,
                         fontSize: 11,
@@ -184,7 +189,8 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
                           color: Colors.transparent,
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
-                            color: myTheme.colorScheme.primary.withOpacity(0.7),
+                            color: themeProvider.myTheme.colorScheme.primary
+                                .withOpacity(0.7),
                           )),
                       child: Text(
                         '${widget.masterDiscount}%',
@@ -193,7 +199,8 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
                         style: TextStyle(
                           fontFamily: 'Poppins-medium',
                           fontSize: 14,
-                          color: myTheme.colorScheme.primary.withOpacity(0.7),
+                          color: themeProvider.myTheme.colorScheme.primary
+                              .withOpacity(0.7),
                         ),
                       )),
                   // Container(
@@ -203,7 +210,7 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
                   //   decoration: BoxDecoration(
                   //     borderRadius: BorderRadius.circular(10),
                   //     border: Border.all(
-                  //       color: myTheme.colorScheme.primary.withOpacity(0.3),
+                  //       color: themeProvider.myTheme.colorScheme.primary.withOpacity(0.3),
                   //       // color: Colors.transparent,
                   //     ),
                   //   ),
@@ -211,7 +218,7 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
                   //     style: TextStyle(
                   //       fontSize: 14,
                   //       fontFamily: 'Poppins-regular',
-                  //       color: myTheme.colorScheme.primary,
+                  //       color: themeProvider.myTheme.colorScheme.primary,
                   //     ),
                   //     keyboardType: TextInputType.number,
                   //     maxLines: 1,
@@ -226,7 +233,7 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
                   //       hintStyle: TextStyle(
                   //         fontFamily: 'Poppins-regular',
                   //         fontSize: 14,
-                  //         color: myTheme.colorScheme.primary,
+                  //         color: themeProvider.myTheme.colorScheme.primary,
                   //       ),
                   //       enabledBorder: OutlineInputBorder(
                   //         borderRadius: BorderRadius.circular(5),

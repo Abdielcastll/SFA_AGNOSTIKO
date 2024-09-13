@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/examples/teams_example.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
@@ -8,6 +9,8 @@ class TeamsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return Scaffold(
       floatingActionButton: Wrap(
         direction: Axis.horizontal,
@@ -20,7 +23,7 @@ class TeamsPage extends StatelessWidget {
                 elevation: 2,
                 shape: BeveledRectangleBorder(
                     borderRadius: BorderRadius.circular(0)),
-                backgroundColor: myTheme.colorScheme.primary,
+                backgroundColor: themeProvider.myTheme.colorScheme.primary,
                 onPressed: () {},
                 child: const Icon(
                   AntDesign.addusergroup,
@@ -50,6 +53,8 @@ class _TeamsBodyState extends State<TeamsBody> {
   List<TeamsExample> listOfTeams = allTeams;
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       child: Column(
@@ -130,7 +135,8 @@ class _TeamsBodyState extends State<TeamsBody> {
                               team.name,
                               style: TextStyle(
                                 fontFamily: 'Poppins-regular',
-                                color: myTheme.colorScheme.secondary,
+                                color:
+                                    themeProvider.myTheme.colorScheme.secondary,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -143,7 +149,8 @@ class _TeamsBodyState extends State<TeamsBody> {
                                     'Gerente: ${team.manager}',
                                     style: TextStyle(
                                       fontFamily: 'Poppins-regular',
-                                      color: myTheme.colorScheme.primary,
+                                      color: themeProvider
+                                          .myTheme.colorScheme.primary,
                                       fontSize: 14,
                                     ),
                                   ),
@@ -154,7 +161,8 @@ class _TeamsBodyState extends State<TeamsBody> {
                                       'Integrantes',
                                       style: TextStyle(
                                         fontFamily: 'Poppins-regular',
-                                        color: myTheme.colorScheme.secondary,
+                                        color: themeProvider
+                                            .myTheme.colorScheme.secondary,
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -174,7 +182,8 @@ class _TeamsBodyState extends State<TeamsBody> {
                                           member,
                                           style: TextStyle(
                                             fontFamily: 'Poppins-regular',
-                                            color: myTheme.colorScheme.primary,
+                                            color: themeProvider
+                                                .myTheme.colorScheme.primary,
                                             fontSize: 14,
                                           ),
                                         );

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 import 'package:agnostiko/agnostiko.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
 import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
@@ -65,6 +66,8 @@ class _CardInputViewState extends State<CardInputView> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     transactionArgs ??= (ModalRoute.of(context)?.settings.arguments! as List)[0]
         as TransactionArgs;
 
@@ -111,7 +114,7 @@ class _CardInputViewState extends State<CardInputView> {
         ),
         child: Scaffold(
           appBar: AppBar(
-            backgroundColor: myTheme.colorScheme.primary,
+            backgroundColor: themeProvider.myTheme.colorScheme.primary,
             foregroundColor: Colors.white,
             title: Text(appBarText),
           ),

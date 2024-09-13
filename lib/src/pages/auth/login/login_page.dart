@@ -5,6 +5,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/pages/auth/login/email_page.dart';
 import 'package:pwa_sales2go_flutter/src/services/auth.dart';
@@ -45,6 +46,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return loading
         ? LoadingWidget(
             message: 'Verificando Credenciales',
@@ -54,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: myTheme.colorScheme.primary,
+                  color: themeProvider.myTheme.colorScheme.primary,
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -259,6 +262,8 @@ class _ButtonState2 extends State<Button2> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return loading
         ? Center(
             child: Column(
@@ -270,7 +275,7 @@ class _ButtonState2 extends State<Button2> {
                 style: TextStyle(
                   fontSize: 14,
                   fontFamily: 'Poppins-regular',
-                  color: myTheme.colorScheme.onPrimaryContainer,
+                  color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
                 ),
               ),
             ],
@@ -305,12 +310,13 @@ class _ButtonState2 extends State<Button2> {
               style: ButtonStyle(
                 alignment: Alignment.center,
                 backgroundColor: MaterialStateProperty.all<Color>(
-                  myTheme.colorScheme.secondary,
+                  themeProvider.myTheme.colorScheme.secondary,
                 ),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
-                    side: BorderSide(color: myTheme.colorScheme.primary),
+                    side: BorderSide(
+                        color: themeProvider.myTheme.colorScheme.primary),
                   ),
                 ),
               ),
@@ -352,6 +358,8 @@ class _ButtonState extends State<Button> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return loading
         ? Center(
             child: Column(
@@ -363,7 +371,7 @@ class _ButtonState extends State<Button> {
                 style: TextStyle(
                   fontSize: 14,
                   fontFamily: 'Poppins-regular',
-                  color: myTheme.colorScheme.onPrimaryContainer,
+                  color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
                 ),
               ),
             ],
@@ -384,6 +392,7 @@ class _ButtonState extends State<Button> {
                   bool userLogged = await _auth.signInWithEmailAndPassword(
                     widget.emailController.text.toString(),
                     widget.passwordController.text.toString(),
+                    context,
                   );
                   sharedPreferences!.setString(
                     "tenantEmail",
@@ -416,12 +425,13 @@ class _ButtonState extends State<Button> {
               style: ButtonStyle(
                 alignment: Alignment.center,
                 backgroundColor: MaterialStateProperty.all<Color>(
-                  myTheme.colorScheme.primary,
+                  themeProvider.myTheme.colorScheme.primary,
                 ),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
-                    side: BorderSide(color: myTheme.colorScheme.primary),
+                    side: BorderSide(
+                        color: themeProvider.myTheme.colorScheme.primary),
                   ),
                 ),
               ),
@@ -452,6 +462,8 @@ class InputField extends StatefulWidget {
 class _InputFieldState extends State<InputField> {
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return Form(
       key: widget.formKey,
       child: Column(
@@ -466,7 +478,7 @@ class _InputFieldState extends State<InputField> {
                 fontFamily: 'Poppins-regular',
                 fontSize: 28,
                 fontWeight: FontWeight.w400,
-                color: myTheme.colorScheme.onPrimaryContainer,
+                color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
               ),
             ),
           ),
@@ -486,11 +498,11 @@ class _InputFieldState extends State<InputField> {
               },
               maxLines: 1,
               keyboardType: TextInputType.emailAddress,
-              cursorColor: myTheme.colorScheme.primary,
+              cursorColor: themeProvider.myTheme.colorScheme.primary,
               textInputAction: TextInputAction.next,
               style: TextStyle(
                 fontFamily: 'Poppins-regular',
-                color: myTheme.colorScheme.primary,
+                color: themeProvider.myTheme.colorScheme.primary,
               ),
               validator: (email) =>
                   email != null && !EmailValidator.validate(email)
@@ -544,12 +556,12 @@ class _InputFieldState extends State<InputField> {
               },
               maxLines: 1,
               keyboardType: TextInputType.emailAddress,
-              cursorColor: myTheme.colorScheme.primary,
+              cursorColor: themeProvider.myTheme.colorScheme.primary,
               textInputAction: TextInputAction.next,
               obscureText: true,
               style: TextStyle(
                 fontFamily: 'Poppins-regular',
-                color: myTheme.colorScheme.primary,
+                color: themeProvider.myTheme.colorScheme.primary,
               ),
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.allow(

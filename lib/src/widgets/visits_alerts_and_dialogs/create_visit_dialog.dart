@@ -27,6 +27,8 @@ void showCreateClientDialog(context, uid) {
   bool isLoading = false;
   bool isAllSelected = false;
   bool light = false;
+  final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -92,7 +94,7 @@ void showCreateClientDialog(context, uid) {
                 AppLocalizations.of(context)!.newVisit,
                 style: TextStyle(
                   fontFamily: 'Poppins-regular',
-                  color: myTheme.colorScheme.onPrimaryContainer,
+                  color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
                   fontSize: 22,
                 ),
               ),
@@ -170,8 +172,10 @@ void showCreateClientDialog(context, uid) {
                                                     ),
                                                   ),
                                                   colorScheme: ColorScheme.dark(
-                                                    primary: myTheme
-                                                        .colorScheme.primary,
+                                                    primary: themeProvider
+                                                        .myTheme
+                                                        .colorScheme
+                                                        .primary,
                                                     onPrimary: Colors.white,
                                                     surface: Colors.white,
                                                     onSurface:
@@ -180,7 +184,8 @@ void showCreateClientDialog(context, uid) {
                                                   textButtonTheme:
                                                       TextButtonThemeData(
                                                     style: TextButton.styleFrom(
-                                                      foregroundColor: myTheme
+                                                      foregroundColor: themeProvider
+                                                          .myTheme
                                                           .colorScheme
                                                           .primary, // button text color
                                                     ),
@@ -314,8 +319,8 @@ void showCreateClientDialog(context, uid) {
                                         Icons.arrow_forward_ios_outlined,
                                       ),
                                       iconSize: 11,
-                                      iconEnabledColor: myTheme
-                                          .colorScheme.primary
+                                      iconEnabledColor: themeProvider
+                                          .myTheme.colorScheme.primary
                                           .withOpacity(0.5),
                                       iconDisabledColor: Colors.grey,
                                     ),
@@ -518,7 +523,9 @@ void showCreateClientDialog(context, uid) {
                                                     style: TextStyle(
                                                       fontFamily:
                                                           'Poppins-regular',
-                                                      color: myTheme.colorScheme
+                                                      color: themeProvider
+                                                          .myTheme
+                                                          .colorScheme
                                                           .onPrimaryContainer,
                                                       fontSize: 14,
                                                     ),
@@ -543,7 +550,8 @@ void showCreateClientDialog(context, uid) {
                                                           style: TextStyle(
                                                             fontFamily:
                                                                 'Poppins-regular',
-                                                            color: myTheme
+                                                            color: themeProvider
+                                                                .myTheme
                                                                 .colorScheme
                                                                 .primary,
                                                             fontSize: 14,
@@ -601,7 +609,8 @@ void showCreateClientDialog(context, uid) {
                               AppLocalizations.of(context)!.goBack,
                               style: TextStyle(
                                 fontFamily: 'Poppins-regular',
-                                color: myTheme.colorScheme.primary,
+                                color:
+                                    themeProvider.myTheme.colorScheme.primary,
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -643,7 +652,8 @@ void showCreateClientDialog(context, uid) {
                                     style: ButtonStyle(
                                       backgroundColor:
                                           MaterialStateProperty.all(
-                                        myTheme.colorScheme.onPrimaryContainer,
+                                        themeProvider.myTheme.colorScheme
+                                            .onPrimaryContainer,
                                       ),
                                       shape: MaterialStateProperty.all<
                                           RoundedRectangleBorder>(
@@ -695,7 +705,8 @@ void showCreateClientDialog(context, uid) {
                                     style: ButtonStyle(
                                       backgroundColor:
                                           MaterialStateProperty.all(
-                                        myTheme.colorScheme.onPrimaryContainer,
+                                        themeProvider.myTheme.colorScheme
+                                            .onPrimaryContainer,
                                       ),
                                       shape: MaterialStateProperty.all<
                                           RoundedRectangleBorder>(

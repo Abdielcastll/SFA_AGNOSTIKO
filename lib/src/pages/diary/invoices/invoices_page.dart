@@ -37,6 +37,7 @@ class _InvoicesPageState extends State<InvoicesPage> {
     final currentDayDateTime = currentDay!.toDate();
     DateTime tomorrow = DateTime(currentDayDateTime.year,
         currentDayDateTime.month, currentDayDateTime.day + 1);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     List<String> currentCoinSplit = currentCoin!.split(' ');
@@ -91,7 +92,7 @@ class _InvoicesPageState extends State<InvoicesPage> {
       ],
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: myTheme.colorScheme.background,
+          backgroundColor: themeProvider.myTheme.colorScheme.background,
           body: InvoicesBody(isNotesChecked: isCheckedNotes),
         ),
       ),
@@ -124,6 +125,8 @@ class _InvoicesBodyState extends State<InvoicesBody> {
         Provider.of<CounterLimitFirestore>(context).currentDayInvoice;
     final currentDateTime = currentDay?.toDate();
     String formattedDate = dateFormatter.format(currentDateTime!);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -145,7 +148,7 @@ class _InvoicesBodyState extends State<InvoicesBody> {
                     isDescending
                         ? MaterialCommunityIcons.sort_calendar_descending
                         : MaterialCommunityIcons.sort_calendar_ascending,
-                    color: myTheme.colorScheme.onPrimaryContainer,
+                    color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
                   ),
                   label: Container(
                     width: 88,
@@ -157,7 +160,8 @@ class _InvoicesBodyState extends State<InvoicesBody> {
                       // AppLocalizations.of(context)!.descendingFilter,
                       style: TextStyle(
                         fontFamily: 'Poppins-medium',
-                        color: myTheme.colorScheme.onPrimaryContainer,
+                        color: themeProvider
+                            .myTheme.colorScheme.onPrimaryContainer,
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
                       ),
@@ -202,14 +206,15 @@ class _InvoicesBodyState extends State<InvoicesBody> {
                                 ),
                               ),
                               colorScheme: ColorScheme.dark(
-                                primary: myTheme.colorScheme.primary,
+                                primary:
+                                    themeProvider.myTheme.colorScheme.primary,
                                 onPrimary: Colors.white,
                                 surface: Colors.white,
                                 onSurface: Color(0xFF1D1B20),
                               ),
                               textButtonTheme: TextButtonThemeData(
                                 style: TextButton.styleFrom(
-                                  foregroundColor: myTheme
+                                  foregroundColor: themeProvider.myTheme
                                       .colorScheme.primary, // button text color
                                 ),
                               ),
@@ -231,7 +236,8 @@ class _InvoicesBodyState extends State<InvoicesBody> {
                     },
                     icon: Icon(
                       MaterialIcons.event,
-                      color: myTheme.colorScheme.onPrimaryContainer,
+                      color:
+                          themeProvider.myTheme.colorScheme.onPrimaryContainer,
                     ),
                     label: Container(
                       width: 100,
@@ -253,7 +259,8 @@ class _InvoicesBodyState extends State<InvoicesBody> {
                             : 'Elige una fecha',
                         style: TextStyle(
                           fontFamily: 'Poppins-medium',
-                          color: myTheme.colorScheme.onPrimaryContainer,
+                          color: themeProvider
+                              .myTheme.colorScheme.onPrimaryContainer,
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                         ),

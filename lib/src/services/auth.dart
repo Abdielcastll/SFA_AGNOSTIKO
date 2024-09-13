@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -26,7 +27,8 @@ class AuthService {
 
   // sign in with email and password
 
-  Future<bool> signInWithEmailAndPassword(String email, String password) async {
+  Future<bool> signInWithEmailAndPassword(
+      String email, String password, context) async {
     try {
       UserCredential result = await _auth.signInWithEmailAndPassword(
         email: email.trim().toLowerCase(),
@@ -34,15 +36,17 @@ class AuthService {
       );
       User? user = result.user;
       if (user != null) {
-        checkIfUserRecordExist(user);
+        checkIfUserRecordExist(user, context);
         return true;
       } else {
         return false;
       }
     } catch (e) {
+      final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
       Fluttertoast.showToast(
         msg: 'Los datos proporcionados son invalidos',
-        backgroundColor: myTheme.colorScheme.secondary,
+        backgroundColor: themeProvider.myTheme.colorScheme.secondary,
         textColor: Colors.white,
       );
       return false;
@@ -51,7 +55,9 @@ class AuthService {
 
   // check if user record exist after logging
 
-  checkIfUserRecordExist(User user) async {
+  checkIfUserRecordExist(User user, context) async {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     await firebaseInstance
         .collection('usuarios')
         .doc(user.uid)
@@ -67,14 +73,14 @@ class AuthService {
               await signOut();
               Fluttertoast.showToast(
                 msg: 'Usuario no vendedor',
-                backgroundColor: myTheme.colorScheme.secondary,
+                backgroundColor: themeProvider.myTheme.colorScheme.secondary,
                 textColor: Colors.white,
               );
             }
           } else {
             Fluttertoast.showToast(
               msg: 'Usuario no activo o bloqueado',
-              backgroundColor: myTheme.colorScheme.secondary,
+              backgroundColor: themeProvider.myTheme.colorScheme.secondary,
               textColor: Colors.white,
             );
           }
@@ -82,14 +88,14 @@ class AuthService {
           print(e);
           Fluttertoast.showToast(
             msg: 'Error en la petición',
-            backgroundColor: myTheme.colorScheme.secondary,
+            backgroundColor: themeProvider.myTheme.colorScheme.secondary,
             textColor: Colors.white,
           );
         }
       } else {
         Fluttertoast.showToast(
           msg: 'Este usuario no existe',
-          backgroundColor: myTheme.colorScheme.secondary,
+          backgroundColor: themeProvider.myTheme.colorScheme.secondary,
           textColor: Colors.white,
         );
       }

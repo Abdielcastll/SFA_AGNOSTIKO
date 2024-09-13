@@ -24,6 +24,7 @@ class SelectedClient extends StatelessWidget {
     final userRole = Provider.of<UserRole?>(context, listen: true);
     // print('User Role ${userRole?.name}');
     // print("Retail: ${userRole?.isRetail}");
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return Column(
       children: [
@@ -99,10 +100,12 @@ class SelectedClient extends StatelessWidget {
                         color: Colors.white,
                         child: IconButton(
                           splashRadius: 30,
-                          splashColor:
-                              myTheme.colorScheme.secondary.withOpacity(0.7),
-                          highlightColor:
-                              myTheme.colorScheme.secondary.withOpacity(0.3),
+                          splashColor: themeProvider
+                              .myTheme.colorScheme.secondary
+                              .withOpacity(0.7),
+                          highlightColor: themeProvider
+                              .myTheme.colorScheme.secondary
+                              .withOpacity(0.3),
                           onPressed: () {
                             // Regresar y elegir otro cliente
                             showDialog(
@@ -150,7 +153,7 @@ class SelectedClient extends StatelessWidget {
                           },
                           icon: Icon(
                             Feather.edit,
-                            color: myTheme.colorScheme.primary,
+                            color: themeProvider.myTheme.colorScheme.primary,
                             size: 24,
                           ),
                         ),

@@ -6,6 +6,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -33,8 +34,10 @@ paymentCheck(
   String accountHolder = '';
   File? imageFile;
 
-  return StatefulBuilder(
-    builder: (context, setState) => Column(
+  return StatefulBuilder(builder: (context, setState) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
+    return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -42,7 +45,7 @@ paymentCheck(
           '${AppLocalizations.of(context)!.bank}*',
           style: TextStyle(
             fontFamily: 'Poppins-regular',
-            color: myTheme.colorScheme.primary,
+            color: themeProvider.myTheme.colorScheme.primary,
             fontSize: 14,
           ),
         ),
@@ -58,7 +61,7 @@ paymentCheck(
                       selectedBank ?? 'Seleccione una opción',
                       style: TextStyle(
                         fontSize: 12,
-                        color: myTheme.colorScheme.primary,
+                        color: themeProvider.myTheme.colorScheme.primary,
                         fontFamily: "Poppins-regular",
                       ),
                       overflow: TextOverflow.ellipsis,
@@ -73,7 +76,7 @@ paymentCheck(
                           item,
                           style: TextStyle(
                             fontSize: 14,
-                            color: myTheme.colorScheme.primary,
+                            color: themeProvider.myTheme.colorScheme.primary,
                             fontFamily: "Poppins-regular",
                           ),
                           overflow: TextOverflow.ellipsis,
@@ -97,7 +100,8 @@ paymentCheck(
                   Icons.arrow_forward_ios_outlined,
                 ),
                 iconSize: 11,
-                iconEnabledColor: myTheme.colorScheme.primary.withOpacity(0.5),
+                iconEnabledColor:
+                    themeProvider.myTheme.colorScheme.primary.withOpacity(0.5),
                 iconDisabledColor: Colors.grey,
               ),
               buttonStyleData: ButtonStyleData(
@@ -106,7 +110,8 @@ paymentCheck(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
-                    color: myTheme.colorScheme.primary.withOpacity(0.3),
+                    color: themeProvider.myTheme.colorScheme.primary
+                        .withOpacity(0.3),
                   ),
                   color: Colors.white,
                 ),
@@ -139,7 +144,7 @@ paymentCheck(
           '${AppLocalizations.of(context)!.accountNumber}*',
           style: TextStyle(
             fontFamily: 'Poppins-regular',
-            color: myTheme.colorScheme.primary,
+            color: themeProvider.myTheme.colorScheme.primary,
             fontSize: 14,
           ),
         ),
@@ -150,7 +155,7 @@ paymentCheck(
             style: TextStyle(
               fontSize: 14,
               fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.primary,
+              color: themeProvider.myTheme.colorScheme.primary,
             ),
             keyboardType: TextInputType.phone,
             maxLines: 1,
@@ -171,7 +176,8 @@ paymentCheck(
               hintStyle: TextStyle(
                 fontFamily: 'Poppins-regular',
                 fontSize: 14,
-                color: myTheme.colorScheme.primary.withOpacity(0.2),
+                color:
+                    themeProvider.myTheme.colorScheme.primary.withOpacity(0.2),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -183,7 +189,8 @@ paymentCheck(
               fillColor: Colors.white,
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-                  color: myTheme.colorScheme.primary.withOpacity(0.3),
+                  color: themeProvider.myTheme.colorScheme.primary
+                      .withOpacity(0.3),
                 ),
                 borderRadius: BorderRadius.all(Radius.circular(8)),
               ),
@@ -202,7 +209,7 @@ paymentCheck(
             '${AppLocalizations.of(context)!.accountHolder}*',
             style: TextStyle(
               fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.primary,
+              color: themeProvider.myTheme.colorScheme.primary,
               fontSize: 14,
             ),
           ),
@@ -214,7 +221,7 @@ paymentCheck(
             style: TextStyle(
               fontSize: 14,
               fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.primary,
+              color: themeProvider.myTheme.colorScheme.primary,
             ),
             keyboardType: TextInputType.name,
             maxLines: 1,
@@ -237,7 +244,8 @@ paymentCheck(
               hintStyle: TextStyle(
                 fontFamily: 'Poppins-regular',
                 fontSize: 14,
-                color: myTheme.colorScheme.primary.withOpacity(0.2),
+                color:
+                    themeProvider.myTheme.colorScheme.primary.withOpacity(0.2),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -249,7 +257,8 @@ paymentCheck(
               fillColor: Colors.white,
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-                  color: myTheme.colorScheme.primary.withOpacity(0.3),
+                  color: themeProvider.myTheme.colorScheme.primary
+                      .withOpacity(0.3),
                 ),
                 borderRadius: BorderRadius.all(Radius.circular(8)),
               ),
@@ -270,7 +279,7 @@ paymentCheck(
               'Subir comprobante',
               style: TextStyle(
                 fontFamily: 'Poppins-medium',
-                color: myTheme.colorScheme.primary,
+                color: themeProvider.myTheme.colorScheme.primary,
                 fontSize: 14,
               ),
             ),
@@ -281,14 +290,14 @@ paymentCheck(
               child: ElevatedButton(
                 onPressed: () async {},
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: myTheme.colorScheme.primary,
+                  foregroundColor: themeProvider.myTheme.colorScheme.primary,
                   backgroundColor: Color(0xFFDFE0FF),
                   elevation: 0,
                 ),
                 child: Text(
                   'Seleccionar archivo',
                   style: TextStyle(
-                    color: myTheme.colorScheme.onPrimaryContainer,
+                    color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
                     fontFamily: 'Poppins-medium',
                     fontSize: 11,
                   ),
@@ -303,7 +312,8 @@ paymentCheck(
                       Fluttertoast.showToast(
                         msg:
                             'Presione 2 veces para eliminar imagen seleccionada',
-                        backgroundColor: myTheme.colorScheme.primary,
+                        backgroundColor:
+                            themeProvider.myTheme.colorScheme.primary,
                         textColor: Colors.white,
                       );
                     },
@@ -320,7 +330,7 @@ paymentCheck(
                     child: Container(
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: myTheme.colorScheme.primary,
+                          color: themeProvider.myTheme.colorScheme.primary,
                         ),
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -350,7 +360,7 @@ paymentCheck(
                       },
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(
-                          // myTheme.colorScheme.primary,
+                          // themeProvider.myTheme.colorScheme.primary,
                           Colors.white,
                         ),
                         elevation: MaterialStateProperty.all(0),
@@ -360,7 +370,7 @@ paymentCheck(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(100),
                             side: BorderSide(
-                              color: myTheme.colorScheme.primary,
+                              color: themeProvider.myTheme.colorScheme.primary,
                             ),
                           ),
                         ),
@@ -368,7 +378,7 @@ paymentCheck(
                       child: Text(
                         'Cancelar',
                         style: TextStyle(
-                          color: myTheme.colorScheme.primary,
+                          color: themeProvider.myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-medium',
                           fontSize: 12,
                         ),
@@ -394,8 +404,8 @@ paymentCheck(
                                   print('Cantidad permitida');
                                   Fluttertoast.showToast(
                                     msg: 'Registrando Cheque',
-                                    backgroundColor:
-                                        myTheme.colorScheme.primary,
+                                    backgroundColor: themeProvider
+                                        .myTheme.colorScheme.primary,
                                     textColor: Colors.white,
                                   );
                                   try {
@@ -451,7 +461,8 @@ paymentCheck(
                             },
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(
-                                myTheme.colorScheme.onPrimaryContainer,
+                                themeProvider
+                                    .myTheme.colorScheme.onPrimaryContainer,
                               ),
                               shape: MaterialStateProperty.all<
                                   RoundedRectangleBorder>(
@@ -479,6 +490,6 @@ paymentCheck(
           ],
         ),
       ],
-    ),
-  );
+    );
+  });
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 
@@ -83,6 +84,8 @@ class _RolesManagerBodyState extends State<RolesManagerBody> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -167,7 +170,7 @@ class _RolesManagerBodyState extends State<RolesManagerBody> {
                     style: TextStyle(
                       fontFamily: 'Poppins-regular',
                       fontSize: 14,
-                      color: myTheme.colorScheme.primary,
+                      color: themeProvider.myTheme.colorScheme.primary,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -189,7 +192,8 @@ class _RolesManagerBodyState extends State<RolesManagerBody> {
                               style: TextStyle(
                                 fontFamily: 'Poppins-regular',
                                 fontSize: 14,
-                                color: myTheme.colorScheme.secondary,
+                                color:
+                                    themeProvider.myTheme.colorScheme.secondary,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -301,7 +305,8 @@ class _RolesManagerBodyState extends State<RolesManagerBody> {
                               style: TextStyle(
                                 fontFamily: 'Poppins-regular',
                                 fontSize: 14,
-                                color: myTheme.colorScheme.secondary,
+                                color:
+                                    themeProvider.myTheme.colorScheme.secondary,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -381,7 +386,8 @@ class _RolesManagerBodyState extends State<RolesManagerBody> {
                               style: TextStyle(
                                 fontFamily: 'Poppins-regular',
                                 fontSize: 14,
-                                color: myTheme.colorScheme.secondary,
+                                color:
+                                    themeProvider.myTheme.colorScheme.secondary,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -477,7 +483,8 @@ class _RolesManagerBodyState extends State<RolesManagerBody> {
                               style: TextStyle(
                                 fontFamily: 'Poppins-regular',
                                 fontSize: 14,
-                                color: myTheme.colorScheme.secondary,
+                                color:
+                                    themeProvider.myTheme.colorScheme.secondary,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -573,7 +580,8 @@ class _RolesManagerBodyState extends State<RolesManagerBody> {
                               style: TextStyle(
                                 fontFamily: 'Poppins-regular',
                                 fontSize: 14,
-                                color: myTheme.colorScheme.secondary,
+                                color:
+                                    themeProvider.myTheme.colorScheme.secondary,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -669,7 +677,8 @@ class _RolesManagerBodyState extends State<RolesManagerBody> {
                               style: TextStyle(
                                 fontFamily: 'Poppins-regular',
                                 fontSize: 14,
-                                color: myTheme.colorScheme.secondary,
+                                color:
+                                    themeProvider.myTheme.colorScheme.secondary,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),

@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/pages/clients/clients_details/client_details.dart';
 import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -27,11 +28,13 @@ void modalBottomSheetForCompleted({
   currentClientIdType,
   required String date,
 }) {
+  final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
   showModalBottomSheet(
     isScrollControlled: true,
     elevation: 0,
     backgroundColor: Colors.white,
-    barrierColor: myTheme.colorScheme.secondary.withOpacity(0.5),
+    barrierColor: themeProvider.myTheme.colorScheme.secondary.withOpacity(0.5),
     context: context,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(
@@ -91,7 +94,8 @@ void modalBottomSheetForCompleted({
                       'Comentario',
                       style: TextStyle(
                         fontSize: 16,
-                        color: myTheme.colorScheme.onPrimaryContainer,
+                        color: themeProvider
+                            .myTheme.colorScheme.onPrimaryContainer,
                         fontFamily: 'Poppins-medium',
                         letterSpacing: 0.15,
                       ),
@@ -136,7 +140,8 @@ void modalBottomSheetForCompleted({
                                   (states) {
                                     return states
                                             .contains(MaterialState.pressed)
-                                        ? myTheme.colorScheme.primary
+                                        ? themeProvider
+                                            .myTheme.colorScheme.primary
                                         : null;
                                   },
                                 ),
@@ -147,7 +152,8 @@ void modalBottomSheetForCompleted({
                                   RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(100),
                                     side: BorderSide(
-                                      color: myTheme.colorScheme.primary,
+                                      color: themeProvider
+                                          .myTheme.colorScheme.primary,
                                     ),
                                   ),
                                 ),
@@ -156,7 +162,8 @@ void modalBottomSheetForCompleted({
                                 AppLocalizations.of(context)!.seeClient,
                                 style: TextStyle(
                                   fontFamily: 'Poppins-medium',
-                                  color: myTheme.colorScheme.primary,
+                                  color:
+                                      themeProvider.myTheme.colorScheme.primary,
                                   fontSize: 12,
                                 ),
                               ),
@@ -210,6 +217,8 @@ class TextBoxWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return Container(
       alignment: Alignment.centerLeft,
       margin: EdgeInsets.fromLTRB(10, 15, 0, 10),
@@ -218,7 +227,7 @@ class TextBoxWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         color: Colors.white,
         border: Border.all(
-          color: myTheme.colorScheme.primary.withOpacity(0.5),
+          color: themeProvider.myTheme.colorScheme.primary.withOpacity(0.5),
         ),
       ),
       child: Text(
@@ -226,7 +235,7 @@ class TextBoxWidget extends StatelessWidget {
         style: TextStyle(
           fontFamily: 'Poppins-regular',
           fontSize: 14,
-          color: myTheme.colorScheme.primary.withOpacity(0.5),
+          color: themeProvider.myTheme.colorScheme.primary.withOpacity(0.5),
         ),
       ),
     );

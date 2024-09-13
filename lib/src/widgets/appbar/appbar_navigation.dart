@@ -37,6 +37,7 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
     final currentClientForTheOrder =
         Provider.of<OrderProvider>(context).clientForTheOrder;
     // print('userZoneDocument: $userZoneDocument');
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return AppBar(
       foregroundColor: Colors.white,
@@ -69,7 +70,7 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
       // ),
       elevation: 0,
       leadingWidth: 24.0,
-      backgroundColor: myTheme.colorScheme.primary,
+      backgroundColor: themeProvider.myTheme.colorScheme.primary,
       actions: [
         globalRemoteConfig.conversionKiosko == true
             ? Container()
@@ -107,7 +108,9 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               fontFamily: 'Poppins-regular',
-                                              color: myTheme.colorScheme
+                                              color: themeProvider
+                                                  .myTheme
+                                                  .colorScheme
                                                   .onPrimaryContainer,
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
@@ -464,7 +467,8 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
                                 ),
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
-                            backgroundColor: myTheme.colorScheme.primary,
+                            backgroundColor:
+                                themeProvider.myTheme.colorScheme.primary,
                           ),
                         ),
                   NotificationBell()

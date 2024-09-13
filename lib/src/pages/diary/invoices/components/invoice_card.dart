@@ -87,6 +87,8 @@ class InvoiceCardBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 0;
     final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
 
@@ -105,7 +107,7 @@ class InvoiceCardBody extends StatelessWidget {
           AppLocalizations.of(context)!.invoiced) {
         return Colors.green.shade600;
       } else {
-        return myTheme.colorScheme.secondary;
+        return themeProvider.myTheme.colorScheme.secondary;
       }
     }
 
@@ -135,7 +137,7 @@ class InvoiceCardBody extends StatelessWidget {
             margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
             child: Center(
               child: SpinKitCircle(
-                color: myTheme.colorScheme.primary,
+                color: themeProvider.myTheme.colorScheme.primary,
                 size: 50,
               ),
             ),
@@ -265,7 +267,8 @@ class InvoiceCardBody extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 10,
                                 fontFamily: "Poppins-regular",
-                                color: myTheme.colorScheme.secondary,
+                                color:
+                                    themeProvider.myTheme.colorScheme.secondary,
                               ),
                             ),
                           ),
@@ -278,7 +281,8 @@ class InvoiceCardBody extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 10,
                                 fontFamily: "Poppins-regular",
-                                color: myTheme.colorScheme.secondary,
+                                color:
+                                    themeProvider.myTheme.colorScheme.secondary,
                               ),
                             ),
                           ),
@@ -291,7 +295,8 @@ class InvoiceCardBody extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 10,
                                 fontFamily: "Poppins-regular",
-                                color: myTheme.colorScheme.secondary,
+                                color:
+                                    themeProvider.myTheme.colorScheme.secondary,
                               ),
                             ),
                           ),

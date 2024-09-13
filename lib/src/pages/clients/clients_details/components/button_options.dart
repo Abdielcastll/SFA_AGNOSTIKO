@@ -46,6 +46,7 @@ class ButtonOptions extends StatelessWidget {
     final currentClientForTheOrder =
         Provider.of<OrderProvider>(context).clientForTheOrder;
     // final userRole = Provider.of<CurrentUserInfo>(context).role;
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
@@ -58,7 +59,7 @@ class ButtonOptions extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100),
               border: Border.all(
-                color: myTheme.colorScheme.primary,
+                color: themeProvider.myTheme.colorScheme.primary,
               ),
             ),
             child: ClipRRect(
@@ -106,13 +107,13 @@ class ButtonOptions extends StatelessWidget {
                 },
                 icon: Icon(
                   MaterialCommunityIcons.calendar_month_outline,
-                  color: myTheme.colorScheme.primary,
+                  color: themeProvider.myTheme.colorScheme.primary,
                   size: 18,
                 ),
                 label: Text(
                   AppLocalizations.of(context)!.clientRecord,
                   style: TextStyle(
-                    color: myTheme.colorScheme.primary,
+                    color: themeProvider.myTheme.colorScheme.primary,
                     fontFamily: 'Poppins-medium',
                     fontSize: 14,
                   ),
@@ -125,8 +126,9 @@ class ButtonOptions extends StatelessWidget {
                       //         255, 159, 165, 252)
                       //     .withOpacity(0.3),
                       Colors.white),
-                  overlayColor: MaterialStateProperty.all<Color>(
-                      myTheme.colorScheme.primary.withOpacity(0.3)),
+                  overlayColor: MaterialStateProperty.all<Color>(themeProvider
+                      .myTheme.colorScheme.primary
+                      .withOpacity(0.3)),
                 ),
               ),
             ),
@@ -187,7 +189,7 @@ class ButtonOptions extends StatelessWidget {
                   orderActive.orderActive == false
                       ? MaterialCommunityIcons.cart_plus
                       : Icons.shopping_cart_checkout,
-                  color: myTheme.colorScheme.background,
+                  color: themeProvider.myTheme.colorScheme.background,
                   size: 17,
                 ),
                 label: Text(
@@ -197,7 +199,7 @@ class ButtonOptions extends StatelessWidget {
                           ? 'Cliente actual'
                           : 'Orden en progreso',
                   style: TextStyle(
-                    color: myTheme.colorScheme.background,
+                    color: themeProvider.myTheme.colorScheme.background,
                     fontFamily: 'Poppins-medium',
                     fontSize: orderActive.orderActive == false ? 14 : 11,
                   ),
@@ -205,14 +207,14 @@ class ButtonOptions extends StatelessWidget {
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color?>(
                     orderActive.orderActive == false
-                        ? myTheme.colorScheme.primary
+                        ? themeProvider.myTheme.colorScheme.primary
                         : currentClientForTheOrder?.name == name
                             ? Colors.green
-                            : myTheme.colorScheme.error,
+                            : themeProvider.myTheme.colorScheme.error,
                   ),
                   overlayColor: MaterialStateProperty.all<Color>(
                     orderActive.orderActive == false
-                        ? myTheme.colorScheme.background
+                        ? themeProvider.myTheme.colorScheme.background
                         : Colors.transparent,
                   ),
                 ),

@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -14,6 +15,8 @@ class AppBarOrder extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return AppBar(
       foregroundColor: Colors.white,
       // shape: RoundedRectangleBorder(
@@ -31,7 +34,7 @@ class AppBarOrder extends StatelessWidget implements PreferredSizeWidget {
           color: Colors.white,
         ),
       ),
-      backgroundColor: myTheme.colorScheme.primary,
+      backgroundColor: themeProvider.myTheme.colorScheme.primary,
       elevation: 0,
     );
   }

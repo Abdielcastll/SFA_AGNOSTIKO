@@ -22,12 +22,13 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return Scaffold(
       appBar: AppBarNavigation(
           message: AppLocalizations.of(context)!.profile,
           userZoneDocument: userZoneDocument),
-      backgroundColor: myTheme.colorScheme.surface,
+      backgroundColor: themeProvider.myTheme.colorScheme.surface,
       body: const ProfileBody(),
     );
   }

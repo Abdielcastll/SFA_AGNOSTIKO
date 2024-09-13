@@ -86,7 +86,7 @@ class SfaAgnostiko extends StatelessWidget {
               GlobalCupertinoLocalizations.delegate,
             ],
             title: 'Field Sales',
-            theme: myTheme,
+            theme: myThemeBase,
             home: const SplashScreenView(redirect: false),
           );
         }
@@ -213,7 +213,6 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
     final localeProvider = Provider.of<LocaleProvider>(context);
     final themeProvider =
         Provider.of<ThemeProvider>(context, listen: true); // Get theme colors
-    print("primary on provider: ${themeProvider.myTheme.colorScheme.primary}");
 
     return GestureDetector(
       onTap: () {

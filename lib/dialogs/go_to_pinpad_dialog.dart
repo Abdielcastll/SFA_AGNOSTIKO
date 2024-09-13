@@ -2,10 +2,13 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 void showGoToPinpadDialog(BuildContext context, String message,
     {Future<bool> Function()? onWillPop}) {
+  final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
   // por defecto no se permite cerrar el dialog
   if (onWillPop == null) onWillPop = () async => false;
 
@@ -43,7 +46,7 @@ void showGoToPinpadDialog(BuildContext context, String message,
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: myTheme.colorScheme.primary,
+                      color: themeProvider.myTheme.colorScheme.primary,
                       fontFamily: 'Poppins-regular',
                     ),
                   ),

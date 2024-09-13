@@ -29,6 +29,8 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     final user = Provider.of<UserModel>(context);
 
     final orderActive = Provider.of<OrderProvider>(context);
@@ -61,7 +63,7 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
             ),
       // centerTitle: true,
       elevation: 0,
-      backgroundColor: myTheme.colorScheme.primary,
+      backgroundColor: themeProvider.myTheme.colorScheme.primary,
       actions: [
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -96,7 +98,7 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontFamily: 'Poppins-regular',
-                                          color: myTheme
+                                          color: themeProvider.myTheme
                                               .colorScheme.onPrimaryContainer,
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,

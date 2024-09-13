@@ -66,6 +66,8 @@ class _ClientListState extends State<ClientList> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     final zonesSummary = Provider.of<ZoneSummary?>(context)?.summary ?? {};
     final idTypeSummary = Provider.of<IdTypeSummary?>(context)?.summary ?? {};
     final clientsLimit =
@@ -83,7 +85,7 @@ class _ClientListState extends State<ClientList> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            color: myTheme.colorScheme.surface,
+            color: themeProvider.myTheme.colorScheme.surface,
             child: Row(
               children: [
                 Container(
@@ -108,14 +110,16 @@ class _ClientListState extends State<ClientList> {
                       prefixIcon: Icon(
                         isSearchingByname ? Icons.person : Icons.numbers,
                         color: isSearchingByname
-                            ? myTheme.colorScheme.primary
-                            : myTheme.colorScheme.onPrimaryContainer,
+                            ? themeProvider.myTheme.colorScheme.primary
+                            : themeProvider
+                                .myTheme.colorScheme.onPrimaryContainer,
                       ),
                       suffixIcon: IconButton(
                         splashRadius: 1,
                         icon: Icon(
                           Icons.compare_arrows_rounded,
-                          color: myTheme.colorScheme.onPrimaryContainer,
+                          color: themeProvider
+                              .myTheme.colorScheme.onPrimaryContainer,
                         ),
                         onPressed: () {
                           setState(() {
@@ -139,13 +143,15 @@ class _ClientListState extends State<ClientList> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                         borderSide: BorderSide(
-                          color: myTheme.colorScheme.primary.withOpacity(0.5),
+                          color: themeProvider.myTheme.colorScheme.primary
+                              .withOpacity(0.5),
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                         borderSide: BorderSide(
-                          color: myTheme.colorScheme.primary.withOpacity(0.5),
+                          color: themeProvider.myTheme.colorScheme.primary
+                              .withOpacity(0.5),
                         ),
                       ),
                     ),
@@ -211,7 +217,7 @@ class _ClientListState extends State<ClientList> {
                   child: IconButton.filled(
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
-                        myTheme.colorScheme.primaryContainer,
+                        themeProvider.myTheme.colorScheme.primaryContainer,
                       ),
                     ),
                     onPressed: () =>
@@ -219,11 +225,13 @@ class _ClientListState extends State<ClientList> {
                     icon: isDescending
                         ? Icon(
                             MaterialCommunityIcons.sort_alphabetical_descending,
-                            color: myTheme.colorScheme.onPrimaryContainer,
+                            color: themeProvider
+                                .myTheme.colorScheme.onPrimaryContainer,
                           )
                         : Icon(
                             MaterialCommunityIcons.sort_alphabetical_ascending,
-                            color: myTheme.colorScheme.onPrimaryContainer,
+                            color: themeProvider
+                                .myTheme.colorScheme.onPrimaryContainer,
                           ),
                   ),
                 ),
@@ -247,7 +255,8 @@ class _ClientListState extends State<ClientList> {
                               style: TextStyle(
                                 fontSize: 14,
                                 fontFamily: 'Poppins-regular',
-                                color: myTheme.colorScheme.onPrimaryContainer,
+                                color: themeProvider
+                                    .myTheme.colorScheme.onPrimaryContainer,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -259,7 +268,7 @@ class _ClientListState extends State<ClientList> {
                                         style: TextStyle(
                                           fontSize: 14,
                                           fontFamily: 'Poppins-regular',
-                                          color: myTheme
+                                          color: themeProvider.myTheme
                                               .colorScheme.onPrimaryContainer,
                                           fontWeight: FontWeight.bold,
                                         ),

@@ -204,6 +204,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
     final userRole = Provider.of<UserRole?>(context, listen: true);
     // print('User Role ${userRole?.name}');
     // print("Retail: ${userRole?.isRetail}");
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return coinName == ''
         ? Column(
@@ -370,7 +371,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                 .size
                                                 .width,
                                             decoration: BoxDecoration(
-                                              color: myTheme
+                                              color: themeProvider.myTheme
                                                   .colorScheme.background,
                                               borderRadius:
                                                   BorderRadius.circular(8),
@@ -555,7 +556,8 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                                 Icons
                                                                     .delete_outline_rounded,
                                                                 size: 20,
-                                                                color: myTheme
+                                                                color: themeProvider
+                                                                    .myTheme
                                                                     .colorScheme
                                                                     .error,
                                                               ),
@@ -603,7 +605,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                                             icon:
                                                                                 Icon(
                                                                               Icons.remove,
-                                                                              color: myTheme.colorScheme.onPrimaryContainer,
+                                                                              color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
                                                                             ),
                                                                             onPressed:
                                                                                 () {
@@ -695,7 +697,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                                             icon:
                                                                                 Icon(
                                                                               Icons.add,
-                                                                              color: myTheme.colorScheme.primary,
+                                                                              color: themeProvider.myTheme.colorScheme.primary,
                                                                             ),
                                                                             onPressed:
                                                                                 () {
@@ -834,7 +836,8 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                 style: ButtonStyle(
                                                   backgroundColor:
                                                       MaterialStateProperty.all(
-                                                    myTheme.colorScheme.primary,
+                                                    themeProvider.myTheme
+                                                        .colorScheme.primary,
                                                   ),
                                                   foregroundColor:
                                                       MaterialStateProperty.all(
@@ -908,7 +911,8 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                               style: ButtonStyle(
                                                 backgroundColor:
                                                     MaterialStateProperty.all(
-                                                  myTheme.colorScheme.primary,
+                                                  themeProvider.myTheme
+                                                      .colorScheme.primary,
                                                 ),
                                                 foregroundColor:
                                                     MaterialStateProperty.all(
@@ -1001,14 +1005,14 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                               (Set<MaterialState> states) {
                                                 if (states.contains(
                                                     MaterialState.pressed)) {
-                                                  return myTheme
+                                                  return themeProvider.myTheme
                                                       .colorScheme.primary
                                                       .withOpacity(0.8);
                                                 } else if (states.contains(
                                                     MaterialState.disabled)) {
                                                   return Colors.grey.shade500;
                                                 } else {
-                                                  return myTheme
+                                                  return themeProvider.myTheme
                                                       .colorScheme.primary;
                                                 }
                                               },

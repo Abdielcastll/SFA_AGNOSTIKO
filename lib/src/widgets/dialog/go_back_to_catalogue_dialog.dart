@@ -7,6 +7,8 @@ import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 goBackToCatalogue(BuildContext context) {
+  final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
   final orderActive = context.read<OrderProvider>();
   bool isKiosko = globalRemoteConfig.conversionKiosko!;
   showDialog(
@@ -21,7 +23,7 @@ goBackToCatalogue(BuildContext context) {
                 ? "Desea regresar a revisar su carrito?"
                 : "Salir de este proceso hara que deba continuarlo desde el menu de facturas como registro manual",
             style: TextStyle(
-              color: myTheme.colorScheme.primary,
+              color: themeProvider.myTheme.colorScheme.primary,
               fontFamily: 'Poppins-regular',
               fontSize: 14,
               fontWeight: FontWeight.bold,
@@ -31,7 +33,7 @@ goBackToCatalogue(BuildContext context) {
             " ¿Esta seguro?",
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: myTheme.colorScheme.primary,
+              color: themeProvider.myTheme.colorScheme.primary,
               fontFamily: 'Poppins-regular',
               fontSize: 14,
             ),
@@ -57,7 +59,8 @@ goBackToCatalogue(BuildContext context) {
                 ..removeCurrentSnackBar()
                 ..showSnackBar(
                   SnackBar(
-                    backgroundColor: myTheme.colorScheme.onPrimaryContainer,
+                    backgroundColor:
+                        themeProvider.myTheme.colorScheme.onPrimaryContainer,
                     duration: const Duration(seconds: 3),
                     content: const Column(
                       children: [

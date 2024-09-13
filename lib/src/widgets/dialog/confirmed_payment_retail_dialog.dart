@@ -2,6 +2,7 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -17,6 +18,8 @@ Future<dynamic> showDialogForConfirmedPaymentRetail(
     AddPaymentBodyAtt paymentBody,
     double amountExchanged,
     double totalOfTheOrder) {
+  final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
   return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -39,7 +42,8 @@ Future<dynamic> showDialogForConfirmedPaymentRetail(
                           style: TextStyle(
                             fontFamily: 'Poppins-regular',
                             fontSize: 18,
-                            color: myTheme.colorScheme.onPrimaryContainer,
+                            color: themeProvider
+                                .myTheme.colorScheme.onPrimaryContainer,
                             // color: Colors.green,
                             fontWeight: FontWeight.bold,
                           ),
@@ -48,15 +52,16 @@ Future<dynamic> showDialogForConfirmedPaymentRetail(
                           margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color:
-                                  myTheme.colorScheme.primary.withOpacity(0.6)),
+                              color: themeProvider.myTheme.colorScheme.primary
+                                  .withOpacity(0.6)),
                           width: 100,
                           height: 100,
                           child: Opacity(
                               opacity: 0.8,
                               child: Icon(
                                 Icons.check,
-                                color: myTheme.colorScheme.onPrimaryContainer,
+                                color: themeProvider
+                                    .myTheme.colorScheme.onPrimaryContainer,
                                 size: 50,
                               )),
                         ),
@@ -74,7 +79,8 @@ Future<dynamic> showDialogForConfirmedPaymentRetail(
                                   style: TextStyle(
                                     fontFamily: 'Poppins-regular',
                                     fontSize: 12,
-                                    color: myTheme.colorScheme.primary,
+                                    color: themeProvider
+                                        .myTheme.colorScheme.primary,
                                     // color: Colors.green,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -87,7 +93,8 @@ Future<dynamic> showDialogForConfirmedPaymentRetail(
                                   style: TextStyle(
                                     fontFamily: 'Poppins-regular',
                                     fontSize: 12,
-                                    color: myTheme.colorScheme.primary,
+                                    color: themeProvider
+                                        .myTheme.colorScheme.primary,
                                     // color: Colors.green,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -100,7 +107,8 @@ Future<dynamic> showDialogForConfirmedPaymentRetail(
                                   style: TextStyle(
                                     fontFamily: 'Poppins-regular',
                                     fontSize: 12,
-                                    color: myTheme.colorScheme.primary,
+                                    color: themeProvider
+                                        .myTheme.colorScheme.primary,
                                     // color: Colors.green,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -113,7 +121,8 @@ Future<dynamic> showDialogForConfirmedPaymentRetail(
                                   style: TextStyle(
                                     fontFamily: 'Poppins-regular',
                                     fontSize: 12,
-                                    color: myTheme.colorScheme.primary,
+                                    color: themeProvider
+                                        .myTheme.colorScheme.primary,
                                     // color: Colors.green,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -174,7 +183,7 @@ Future<dynamic> showDialogForConfirmedPaymentRetail(
                             },
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(
-                                myTheme.colorScheme.primary,
+                                themeProvider.myTheme.colorScheme.primary,
                               ),
                               shape: MaterialStateProperty.all<
                                   RoundedRectangleBorder>(

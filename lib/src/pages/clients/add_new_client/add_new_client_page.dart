@@ -152,6 +152,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
     // for (var element in coinsExhangesRates) {
     //   // print(element.exchangeRatio);
     // }
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return isGeolocatorLoading
         ? LoadingWidget(
@@ -173,7 +174,8 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                       child: Text(
                         'Confirmación',
                         style: TextStyle(
-                          color: myTheme.colorScheme.onPrimaryContainer,
+                          color: themeProvider
+                              .myTheme.colorScheme.onPrimaryContainer,
                           fontFamily: 'Poppins-regular',
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -191,7 +193,8 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                               'Los datos introducidos se borraran una vez salga de esta pantalla',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: myTheme.colorScheme.primary,
+                                color:
+                                    themeProvider.myTheme.colorScheme.primary,
                                 fontFamily: 'Poppins-regular',
                                 fontSize: 11,
                               ),
@@ -202,7 +205,8 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                               '¿Esta seguro que quieres salir?',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: myTheme.colorScheme.primary,
+                                color:
+                                    themeProvider.myTheme.colorScheme.primary,
                                 fontFamily: 'Poppins-regular',
                                 fontSize: 11,
                               ),
@@ -221,7 +225,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                             },
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(
-                                myTheme.colorScheme.primary,
+                                themeProvider.myTheme.colorScheme.primary,
                               ),
                               shape: MaterialStateProperty.all<
                                   RoundedRectangleBorder>(
@@ -251,7 +255,8 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                             },
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(
-                                myTheme.colorScheme.onPrimaryContainer,
+                                themeProvider
+                                    .myTheme.colorScheme.onPrimaryContainer,
                               ),
                               shape: MaterialStateProperty.all<
                                   RoundedRectangleBorder>(
@@ -286,7 +291,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
             child: Scaffold(
               backgroundColor: Colors.grey[200],
               appBar: AppBar(
-                backgroundColor: myTheme.colorScheme.primary,
+                backgroundColor: themeProvider.myTheme.colorScheme.primary,
                 foregroundColor: Colors.white,
                 elevation: 0,
                 leadingWidth: 24.0,
@@ -332,7 +337,8 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontFamily: 'Poppins-regular',
-                                color: myTheme.colorScheme.onPrimaryContainer,
+                                color: themeProvider
+                                    .myTheme.colorScheme.onPrimaryContainer,
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -420,7 +426,8 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                       padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                                       decoration: BoxDecoration(
                                         border: Border.all(
-                                          color: myTheme.colorScheme.primary,
+                                          color: themeProvider
+                                              .myTheme.colorScheme.primary,
                                         ),
                                         borderRadius: BorderRadius.circular(5),
                                         color: Colors.white,
@@ -433,7 +440,8 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                       elevation: 1,
                                       decoration: BoxDecoration(
                                         border: Border.all(
-                                          color: myTheme.colorScheme.primary,
+                                          color: themeProvider
+                                              .myTheme.colorScheme.primary,
                                         ),
                                         borderRadius: BorderRadius.circular(5),
                                         color: Colors.white,
@@ -473,14 +481,14 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                       child: Checkbox(
                                         shape: CircleBorder(),
                                         checkColor: Colors.white,
-                                        activeColor:
-                                            myTheme.colorScheme.primary,
+                                        activeColor: themeProvider
+                                            .myTheme.colorScheme.primary,
                                         value: isSpecialContributor,
                                         side:
                                             MaterialStateBorderSide.resolveWith(
                                           (states) => BorderSide(
                                             // width: 2.0,
-                                            color: myTheme
+                                            color: themeProvider.myTheme
                                                 .colorScheme.onPrimaryContainer,
                                           ),
                                         ),
@@ -677,7 +685,8 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                       padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                                       decoration: BoxDecoration(
                                         border: Border.all(
-                                          color: myTheme.colorScheme.primary,
+                                          color: themeProvider
+                                              .myTheme.colorScheme.primary,
                                         ),
                                         borderRadius: BorderRadius.circular(5),
                                         color: Colors.white,
@@ -687,7 +696,8 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                       elevation: 1,
                                       decoration: BoxDecoration(
                                         border: Border.all(
-                                          color: myTheme.colorScheme.primary,
+                                          color: themeProvider
+                                              .myTheme.colorScheme.primary,
                                         ),
                                         borderRadius: BorderRadius.circular(5),
                                         color: Colors.white,
@@ -770,7 +780,8 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                     child: IconButton(
                                       icon: Icon(
                                         Icons.place_sharp,
-                                        color: myTheme.colorScheme.primary,
+                                        color: themeProvider
+                                            .myTheme.colorScheme.primary,
                                       ),
                                       onPressed: () async {
                                         // Obtener Localización (latitud y longitud);
@@ -809,15 +820,16 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                     children: [
                                       Icon(
                                         Icons.camera,
-                                        color: myTheme
-                                            .colorScheme.onPrimaryContainer,
+                                        color: themeProvider.myTheme.colorScheme
+                                            .onPrimaryContainer,
                                       ),
                                       SizedBox(width: 10),
                                       Text(
                                         // AppLocalizations.of(context)!.gallery,
                                         'Subir Imagen',
                                         style: TextStyle(
-                                          color: myTheme.colorScheme.primary,
+                                          color: themeProvider
+                                              .myTheme.colorScheme.primary,
                                           fontFamily: 'Poppins-regular',
                                         ),
                                       ),
@@ -835,8 +847,10 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                         ..removeCurrentSnackBar()
                                         ..showSnackBar(
                                           SnackBar(
-                                            backgroundColor: myTheme
-                                                .colorScheme.onPrimaryContainer,
+                                            backgroundColor: themeProvider
+                                                .myTheme
+                                                .colorScheme
+                                                .onPrimaryContainer,
                                             duration:
                                                 const Duration(seconds: 1),
                                             content: Text(
@@ -872,7 +886,8 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                       // width: 300,
                                       decoration: BoxDecoration(
                                         border: Border.all(
-                                          color: myTheme.colorScheme.primary,
+                                          color: themeProvider
+                                              .myTheme.colorScheme.primary,
                                         ),
                                         borderRadius: BorderRadius.circular(10),
                                       ),
@@ -918,7 +933,8 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                 ..removeCurrentSnackBar()
                                 ..showSnackBar(
                                   SnackBar(
-                                    backgroundColor: myTheme.colorScheme.error,
+                                    backgroundColor:
+                                        themeProvider.myTheme.colorScheme.error,
                                     duration: const Duration(seconds: 1),
                                     content: Text(
                                       "Uno de los campos requeridos esta vacio",
@@ -941,8 +957,8 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                     child: Text(
                                       'Confirmación',
                                       style: TextStyle(
-                                        color: myTheme
-                                            .colorScheme.onPrimaryContainer,
+                                        color: themeProvider.myTheme.colorScheme
+                                            .onPrimaryContainer,
                                         fontFamily: 'Poppins-regular',
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
@@ -962,8 +978,8 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                             'Este registro de cliente será guardado',
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
-                                              color:
-                                                  myTheme.colorScheme.primary,
+                                              color: themeProvider
+                                                  .myTheme.colorScheme.primary,
                                               fontFamily: 'Poppins-regular',
                                               fontSize: 11,
                                             ),
@@ -974,8 +990,8 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                             '¿Desea continuar?',
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
-                                              color:
-                                                  myTheme.colorScheme.primary,
+                                              color: themeProvider
+                                                  .myTheme.colorScheme.primary,
                                               fontFamily: 'Poppins-regular',
                                               fontSize: 11,
                                             ),
@@ -996,7 +1012,8 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                           style: ButtonStyle(
                                             backgroundColor:
                                                 MaterialStateProperty.all(
-                                              myTheme.colorScheme.primary,
+                                              themeProvider
+                                                  .myTheme.colorScheme.primary,
                                             ),
                                             shape: MaterialStateProperty.all<
                                                 RoundedRectangleBorder>(
@@ -1073,8 +1090,10 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                               ..removeCurrentSnackBar()
                                               ..showSnackBar(
                                                 SnackBar(
-                                                  backgroundColor: myTheme
-                                                      .colorScheme.primary,
+                                                  backgroundColor: themeProvider
+                                                      .myTheme
+                                                      .colorScheme
+                                                      .primary,
                                                   duration: const Duration(
                                                       seconds: 1),
                                                   content: Text(
@@ -1145,7 +1164,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                           style: ButtonStyle(
                                             backgroundColor:
                                                 MaterialStateProperty.all(
-                                              myTheme.colorScheme
+                                              themeProvider.myTheme.colorScheme
                                                   .onPrimaryContainer,
                                             ),
                                             shape: MaterialStateProperty.all<
@@ -1179,7 +1198,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                           },
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(
-                              myTheme.colorScheme.primary,
+                              themeProvider.myTheme.colorScheme.primary,
                             ),
                             shape: MaterialStateProperty.all<
                                 RoundedRectangleBorder>(
@@ -1229,13 +1248,15 @@ class TextFieldForNewClient extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return TextField(
       readOnly: readOnly,
       controller: controller,
       style: TextStyle(
         fontSize: 14,
         fontFamily: 'Poppins-regular',
-        color: myTheme.colorScheme.primary,
+        color: themeProvider.myTheme.colorScheme.primary,
       ),
       keyboardType: textInputType,
       maxLines: maxLines,
@@ -1248,12 +1269,12 @@ class TextFieldForNewClient extends StatelessWidget {
         hintStyle: TextStyle(
           fontFamily: 'Poppins-regular',
           fontSize: 14,
-          color: myTheme.colorScheme.primary.withOpacity(0.7),
+          color: themeProvider.myTheme.colorScheme.primary.withOpacity(0.7),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5),
           borderSide: BorderSide(
-            color: myTheme.colorScheme.primary,
+            color: themeProvider.myTheme.colorScheme.primary,
           ),
         ),
         counterText: '',
@@ -1281,11 +1302,13 @@ class TextMessageForTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return Text(
       message,
       style: TextStyle(
         fontFamily: 'Poppins-regular',
-        color: myTheme.colorScheme.primary,
+        color: themeProvider.myTheme.colorScheme.primary,
         fontSize: 14,
         fontWeight: FontWeight.bold,
       ),
@@ -1300,11 +1323,13 @@ class PointTextWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return Text(
       '·',
       style: TextStyle(
         fontFamily: 'Poppins-regular',
-        color: myTheme.colorScheme.error,
+        color: themeProvider.myTheme.colorScheme.error,
         fontSize: 30,
         fontWeight: FontWeight.bold,
       ),

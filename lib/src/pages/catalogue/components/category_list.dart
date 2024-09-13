@@ -22,6 +22,8 @@ class ListOfCategories extends StatefulWidget {
 class _ListOfCategoriesState extends State<ListOfCategories> {
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     final categories = Provider.of<CategorieSummary?>(context)?.summary ?? {};
     List<MapEntry> listData = categories.entries.toList();
     listData.sort(
@@ -46,7 +48,7 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                 padding: EdgeInsets.only(left: 16),
                 child: Icon(
                   Icons.category_outlined,
-                  color: myTheme.colorScheme.onPrimaryContainer,
+                  color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
                   size: 20.0,
                 ),
               ),
@@ -56,7 +58,7 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                 "Categorías",
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
-                  color: myTheme.colorScheme.onPrimaryContainer,
+                  color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
                   fontSize: 16.0,
                   fontFamily: 'Poppins-medium',
                   letterSpacing: 0.15,

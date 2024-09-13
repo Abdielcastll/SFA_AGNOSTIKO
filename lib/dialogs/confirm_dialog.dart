@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 import '../src/services/utils/keypad.dart';
@@ -12,6 +13,8 @@ Future<T?> showConfirmDialog<T>(
   String textAccept = 'Aceptar',
   String textCancel = 'Cancelar',
 }) {
+  final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
   return showDialog<T>(
     context: context,
     barrierDismissible: false,
@@ -52,7 +55,7 @@ Future<T?> showConfirmDialog<T>(
             ElevatedButton(
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(
-                  myTheme.colorScheme.primary,
+                  themeProvider.myTheme.colorScheme.primary,
                 ),
                 foregroundColor:
                     MaterialStateProperty.all(Colors.grey.shade400),

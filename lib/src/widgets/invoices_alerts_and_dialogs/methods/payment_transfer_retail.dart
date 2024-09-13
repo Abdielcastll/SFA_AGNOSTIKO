@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/completed_pay.dart';
@@ -46,14 +47,16 @@ paymentTransferRetail(
   final bankItems =
       selectedValueA == 'Transferencia' ? itemsBank : itemsBankInter;
 
-  return StatefulBuilder(
-    builder: (context, setState) => Column(
+  return StatefulBuilder(builder: (context, setState) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
+    return Column(
       children: [
         Text(
           '${AppLocalizations.of(context)!.bank}*',
           style: TextStyle(
             fontFamily: 'Poppins-regular',
-            color: myTheme.colorScheme.primary,
+            color: themeProvider.myTheme.colorScheme.primary,
             fontSize: 14,
           ),
         ),
@@ -70,7 +73,8 @@ paymentTransferRetail(
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
-                        color: myTheme.colorScheme.primary.withOpacity(0.7),
+                        color: themeProvider.myTheme.colorScheme.primary
+                            .withOpacity(0.7),
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -85,7 +89,7 @@ paymentTransferRetail(
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
-                            color: myTheme.colorScheme.primary,
+                            color: themeProvider.myTheme.colorScheme.primary,
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -104,7 +108,8 @@ paymentTransferRetail(
                   Icons.arrow_forward_ios_outlined,
                 ),
                 iconSize: 11,
-                iconEnabledColor: myTheme.colorScheme.primary.withOpacity(0.5),
+                iconEnabledColor:
+                    themeProvider.myTheme.colorScheme.primary.withOpacity(0.5),
                 iconDisabledColor: Colors.grey,
               ),
               buttonStyleData: ButtonStyleData(
@@ -113,7 +118,8 @@ paymentTransferRetail(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                   border: Border.all(
-                    color: myTheme.colorScheme.primary.withOpacity(0.3),
+                    color: themeProvider.myTheme.colorScheme.primary
+                        .withOpacity(0.3),
                   ),
                   color: Colors.white,
                 ),
@@ -146,7 +152,7 @@ paymentTransferRetail(
           '${AppLocalizations.of(context)!.referenceNumber}*',
           style: TextStyle(
             fontFamily: 'Poppins-regular',
-            color: myTheme.colorScheme.primary,
+            color: themeProvider.myTheme.colorScheme.primary,
             fontSize: 14,
           ),
         ),
@@ -157,7 +163,7 @@ paymentTransferRetail(
             style: TextStyle(
               fontSize: 14,
               fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.primary,
+              color: themeProvider.myTheme.colorScheme.primary,
             ),
             keyboardType: TextInputType.phone,
             maxLines: 1,
@@ -183,7 +189,8 @@ paymentTransferRetail(
               fillColor: Colors.white,
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-                  color: myTheme.colorScheme.primary.withOpacity(0.3),
+                  color: themeProvider.myTheme.colorScheme.primary
+                      .withOpacity(0.3),
                 ),
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
               ),
@@ -191,7 +198,8 @@ paymentTransferRetail(
               hintStyle: TextStyle(
                 fontFamily: 'Poppins-regular',
                 fontSize: 14,
-                color: myTheme.colorScheme.primary.withOpacity(0.2),
+                color:
+                    themeProvider.myTheme.colorScheme.primary.withOpacity(0.2),
               ),
 
               // counterText: '',
@@ -230,14 +238,14 @@ paymentTransferRetail(
                     padding: const EdgeInsets.all(4.0),
                     child: Icon(
                       Icons.camera,
-                      color: myTheme.colorScheme.secondary,
+                      color: themeProvider.myTheme.colorScheme.secondary,
                     ),
                   ),
                   Text(
                     // AppLocalizations.of(context)!.gallery,
                     'Subir Imagen',
                     style: TextStyle(
-                      color: myTheme.colorScheme.primary,
+                      color: themeProvider.myTheme.colorScheme.primary,
                       fontFamily: 'Poppins-regular',
                     ),
                   ),
@@ -251,7 +259,7 @@ paymentTransferRetail(
                 // width: 300,
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: myTheme.colorScheme.primary,
+                    color: themeProvider.myTheme.colorScheme.primary,
                   ),
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -282,7 +290,7 @@ paymentTransferRetail(
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
-                        myTheme.colorScheme.primary,
+                        themeProvider.myTheme.colorScheme.primary,
                       ),
                       foregroundColor: MaterialStateProperty.all(
                         Colors.white,
@@ -326,8 +334,8 @@ paymentTransferRetail(
                                   print('Cantidad permitida');
                                   Fluttertoast.showToast(
                                     msg: 'Registrando $selectedValueA',
-                                    backgroundColor:
-                                        myTheme.colorScheme.primary,
+                                    backgroundColor: themeProvider
+                                        .myTheme.colorScheme.primary,
                                     textColor: Colors.white,
                                   );
 
@@ -353,6 +361,7 @@ paymentTransferRetail(
                                           paymentBody.payments.length + 1);
                                     }).whenComplete(() {
                                       checkIfInvoiceIsCompleted(
+                                        context: context,
                                         paidAmount: paidAmount,
                                         remaining: remainingConverted,
                                         client: client,
@@ -414,8 +423,8 @@ paymentTransferRetail(
                                   print('Cantidad permitida');
                                   Fluttertoast.showToast(
                                     msg: 'Registrando $selectedValueA',
-                                    backgroundColor:
-                                        myTheme.colorScheme.primary,
+                                    backgroundColor: themeProvider
+                                        .myTheme.colorScheme.primary,
                                     textColor: Colors.white,
                                   );
 
@@ -495,7 +504,7 @@ paymentTransferRetail(
                           },
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(
-                              myTheme.colorScheme.primary,
+                              themeProvider.myTheme.colorScheme.primary,
                             ),
                             foregroundColor: MaterialStateProperty.all(
                               Colors.white,
@@ -529,6 +538,6 @@ paymentTransferRetail(
           ],
         )
       ],
-    ),
-  );
+    );
+  });
 }

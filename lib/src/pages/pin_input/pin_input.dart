@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:agnostiko/agnostiko.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
@@ -81,6 +82,8 @@ class _PinInputViewState extends State<PinInputView> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     if (transactionArgs == null) {
       transactionArgs ??= (ModalRoute.of(context)?.settings.arguments!
           as List)[0] as TransactionArgs;
@@ -107,7 +110,7 @@ class _PinInputViewState extends State<PinInputView> {
       ),
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: myTheme.colorScheme.primary,
+          backgroundColor: themeProvider.myTheme.colorScheme.primary,
           foregroundColor: Colors.white,
           title: Text(appBarText),
         ),

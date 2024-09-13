@@ -16,6 +16,7 @@ class PlaceOrderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('userZoneDocument: $userZoneDocument');
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return Scaffold(
       floatingActionButton: globalRemoteConfig.addClientOnOpenCartDialog!
@@ -24,7 +25,7 @@ class PlaceOrderPage extends StatelessWidget {
                 FloatingActionButton(
                   heroTag: 1,
                   elevation: 10,
-                  backgroundColor: myTheme.colorScheme.primary,
+                  backgroundColor: themeProvider.myTheme.colorScheme.primary,
                   onPressed: () {
                     // Redireccionar a crear cliente
                     Navigator.push(
@@ -54,7 +55,7 @@ class PlaceOrderPage extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        backgroundColor: myTheme.colorScheme.primary,
+        backgroundColor: themeProvider.myTheme.colorScheme.primary,
         elevation: 0,
         foregroundColor: Colors.white,
       ),

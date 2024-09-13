@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
@@ -48,6 +49,8 @@ class _PaymentMethodDialogState extends State<PaymentMethodDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return AlertDialog(
       backgroundColor: Colors.white,
       actionsOverflowButtonSpacing: 1,
@@ -62,7 +65,7 @@ class _PaymentMethodDialogState extends State<PaymentMethodDialog> {
             'Registrar Pago',
             style: TextStyle(
               fontFamily: 'Poppins-regular',
-              color: myTheme.colorScheme.primary,
+              color: themeProvider.myTheme.colorScheme.primary,
             ),
           ),
         ],
@@ -78,7 +81,7 @@ class _PaymentMethodDialogState extends State<PaymentMethodDialog> {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
-                color: myTheme.colorScheme.primary,
+                color: themeProvider.myTheme.colorScheme.primary,
                 fontFamily: 'Poppins-regular',
               ),
             ),
@@ -107,7 +110,8 @@ class _PaymentMethodDialogState extends State<PaymentMethodDialog> {
                                 style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
-                                  color: myTheme.colorScheme.onPrimaryContainer,
+                                  color: themeProvider
+                                      .myTheme.colorScheme.onPrimaryContainer,
                                   fontFamily: 'Poppins-regular',
                                 ),
                                 overflow: TextOverflow.ellipsis,

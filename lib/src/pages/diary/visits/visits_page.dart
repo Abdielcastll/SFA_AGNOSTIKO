@@ -53,6 +53,8 @@ class _VisitsPageState extends State<VisitsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     final currentDayProvider = context.watch<CounterLimitFirestore>();
     final currentDay = currentDayProvider.currentDayVisits;
 
@@ -97,14 +99,14 @@ class _VisitsPageState extends State<VisitsPage> {
         print(snapshot.error);
         return SafeArea(
           child: Scaffold(
-            backgroundColor: myTheme.colorScheme.background,
+            backgroundColor: themeProvider.myTheme.colorScheme.background,
             floatingActionButton: Wrap(
               direction: Axis.vertical,
               children: [
                 FloatingActionButton(
                   elevation: 10,
                   heroTag: null,
-                  backgroundColor: myTheme.colorScheme.primary,
+                  backgroundColor: themeProvider.myTheme.colorScheme.primary,
                   onPressed: () {
                     if (globalRemoteConfig.visitas == true)
                       Navigator.of(context).push(
@@ -156,7 +158,7 @@ class _VisitsPageState extends State<VisitsPage> {
                 FloatingActionButton(
                   heroTag: null,
                   elevation: 10,
-                  backgroundColor: myTheme.colorScheme.primary,
+                  backgroundColor: themeProvider.myTheme.colorScheme.primary,
                   onPressed: () {
                     // ShowDialog de a;adir visita
                     showCreateClientDialog(context, user?.uid);
@@ -211,6 +213,8 @@ class VisitsBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     final currentDay =
         Provider.of<CounterLimitFirestore>(context).currentDayVisits;
     final currentDateTime = currentDay.toDate();
@@ -236,7 +240,7 @@ class VisitsBody extends StatelessWidget {
                     isDescending
                         ? MaterialCommunityIcons.sort_calendar_descending
                         : MaterialCommunityIcons.sort_calendar_ascending,
-                    color: myTheme.colorScheme.onPrimaryContainer,
+                    color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
                   ),
                   label: Container(
                     width: 88,
@@ -248,7 +252,8 @@ class VisitsBody extends StatelessWidget {
                       // AppLocalizations.of(context)!.descendingFilter,
                       style: TextStyle(
                         fontFamily: 'Poppins-medium',
-                        color: myTheme.colorScheme.onPrimaryContainer,
+                        color: themeProvider
+                            .myTheme.colorScheme.onPrimaryContainer,
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
                       ),
@@ -293,14 +298,15 @@ class VisitsBody extends StatelessWidget {
                                 ),
                               ),
                               colorScheme: ColorScheme.dark(
-                                primary: myTheme.colorScheme.primary,
+                                primary:
+                                    themeProvider.myTheme.colorScheme.primary,
                                 onPrimary: Colors.white,
                                 surface: Colors.white,
                                 onSurface: Color(0xFF1D1B20),
                               ),
                               textButtonTheme: TextButtonThemeData(
                                 style: TextButton.styleFrom(
-                                  foregroundColor: myTheme
+                                  foregroundColor: themeProvider.myTheme
                                       .colorScheme.primary, // button text color
                                 ),
                               ),
@@ -319,7 +325,8 @@ class VisitsBody extends StatelessWidget {
                     },
                     icon: Icon(
                       MaterialIcons.event,
-                      color: myTheme.colorScheme.onPrimaryContainer,
+                      color:
+                          themeProvider.myTheme.colorScheme.onPrimaryContainer,
                     ),
                     label: SizedBox(
                       width: 100,
@@ -341,7 +348,8 @@ class VisitsBody extends StatelessWidget {
                             : 'Elige una fecha',
                         style: TextStyle(
                           fontFamily: 'Poppins-medium',
-                          color: myTheme.colorScheme.onPrimaryContainer,
+                          color: themeProvider
+                              .myTheme.colorScheme.onPrimaryContainer,
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                         ),

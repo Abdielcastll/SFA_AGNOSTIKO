@@ -114,6 +114,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
   @override
   Widget build(BuildContext context) {
     print('OPENING CHECKOUT RETAIL PAGE');
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     final userUid = Provider.of<UserModel>(context).uid;
     int? clientMasterDiscount = widget.client?.masterDiscount;
@@ -304,7 +305,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       child: Text(
                         AppLocalizations.of(context)!.subtotal,
                         style: TextStyle(
-                          color: myTheme.colorScheme.primary,
+                          color: themeProvider.myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-Regular',
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -317,7 +318,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       child: Text(
                         '$coinSymbol $subTotalFormatted',
                         style: TextStyle(
-                          color: myTheme.colorScheme.primary,
+                          color: themeProvider.myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-Regular',
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -335,7 +336,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         child: Text(
                           '${AppLocalizations.of(context)!.masterDiscount} ($clientMasterDiscount%)',
                           style: TextStyle(
-                            color: myTheme.colorScheme.primary,
+                            color: themeProvider.myTheme.colorScheme.primary,
                             fontFamily: 'Poppins-Regular',
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
@@ -348,7 +349,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         child: Text(
                           '- $coinSymbol $subTotalWithMasterDiscountFormatted',
                           style: TextStyle(
-                            color: myTheme.colorScheme.primary,
+                            color: themeProvider.myTheme.colorScheme.primary,
                             fontFamily: 'Poppins-Regular',
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
@@ -369,7 +370,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                             Text(
                               'Descuento aplicado ($discountByInput%)',
                               style: TextStyle(
-                                color: myTheme.colorScheme.primary,
+                                color:
+                                    themeProvider.myTheme.colorScheme.primary,
                                 fontFamily: 'Poppins-Regular',
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
@@ -412,8 +414,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                           child: Text(
                                             'Aplicar descuento',
                                             style: TextStyle(
-                                              color:
-                                                  myTheme.colorScheme.primary,
+                                              color: themeProvider
+                                                  .myTheme.colorScheme.primary,
                                               fontFamily: 'Poppins-Regular',
                                               fontSize: 15,
                                               fontWeight: FontWeight.bold,
@@ -434,7 +436,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                                           Icon(
                                                             Icons.list,
                                                             size: 16,
-                                                            color: myTheme
+                                                            color: themeProvider
+                                                                .myTheme
                                                                 .colorScheme
                                                                 .primary,
                                                           ),
@@ -449,7 +452,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
-                                                                color: myTheme
+                                                                color: themeProvider
+                                                                    .myTheme
                                                                     .colorScheme
                                                                     .primary,
                                                               ),
@@ -480,7 +484,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                                                             14,
                                                                         fontWeight:
                                                                             FontWeight.bold,
-                                                                        color: myTheme
+                                                                        color: themeProvider
+                                                                            .myTheme
                                                                             .colorScheme
                                                                             .primary,
                                                                         fontFamily:
@@ -494,7 +499,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                                                       MaterialCommunityIcons
                                                                           .percent,
                                                                       size: 14,
-                                                                      color: myTheme
+                                                                      color: themeProvider
+                                                                          .myTheme
                                                                           .colorScheme
                                                                           .primary,
                                                                     )
@@ -516,13 +522,16 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                                         icon: Icon(
                                                           Icons.arrow_drop_down,
                                                           size: 16,
-                                                          color: myTheme
+                                                          color: themeProvider
+                                                              .myTheme
                                                               .colorScheme
                                                               .primary,
                                                         ),
                                                         iconSize: 14,
                                                         iconEnabledColor:
-                                                            myTheme.colorScheme
+                                                            themeProvider
+                                                                .myTheme
+                                                                .colorScheme
                                                                 .primary,
                                                         iconDisabledColor:
                                                             Colors.grey,
@@ -542,7 +551,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                                               BorderRadius
                                                                   .circular(14),
                                                           border: Border.all(
-                                                            color: myTheme
+                                                            color: themeProvider
+                                                                .myTheme
                                                                 .colorScheme
                                                                 .primary,
                                                           ),
@@ -566,7 +576,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                                         decoration:
                                                             BoxDecoration(
                                                           border: Border.all(
-                                                            color: myTheme
+                                                            color: themeProvider
+                                                                .myTheme
                                                                 .colorScheme
                                                                 .primary,
                                                           ),
@@ -613,7 +624,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                                 style: ButtonStyle(
                                                   backgroundColor:
                                                       MaterialStateProperty.all(
-                                                    myTheme.colorScheme.primary,
+                                                    themeProvider.myTheme
+                                                        .colorScheme.primary,
                                                   ),
                                                   shape:
                                                       MaterialStateProperty.all<
@@ -659,7 +671,9 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                                 style: ButtonStyle(
                                                   backgroundColor:
                                                       MaterialStateProperty.all(
-                                                    myTheme.colorScheme
+                                                    themeProvider
+                                                        .myTheme
+                                                        .colorScheme
                                                         .onPrimaryContainer,
                                                   ),
                                                   shape:
@@ -698,11 +712,13 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                   setState(() {});
                                 },
                                 splashRadius: 10,
-                                splashColor: myTheme.colorScheme.primary,
+                                splashColor:
+                                    themeProvider.myTheme.colorScheme.primary,
                                 icon: Icon(
                                   MaterialIcons.add,
                                   size: 16,
-                                  color: myTheme.colorScheme.primary,
+                                  color:
+                                      themeProvider.myTheme.colorScheme.primary,
                                 ),
                               ),
                             ),
@@ -715,7 +731,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         child: Text(
                           '- $coinSymbol $discountAppliedFormatted',
                           style: TextStyle(
-                            color: myTheme.colorScheme.primary,
+                            color: themeProvider.myTheme.colorScheme.primary,
                             fontFamily: 'Poppins-Regular',
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
@@ -733,7 +749,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       child: Text(
                         '${AppLocalizations.of(context)!.tax} (16%)',
                         style: TextStyle(
-                          color: myTheme.colorScheme.primary,
+                          color: themeProvider.myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-Regular',
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -746,7 +762,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       child: Text(
                         '+ $coinSymbol $taxFormatted',
                         style: TextStyle(
-                          color: myTheme.colorScheme.primary,
+                          color: themeProvider.myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-Regular',
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -763,7 +779,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       child: Text(
                         AppLocalizations.of(context)!.orderTotal,
                         style: TextStyle(
-                          color: myTheme.colorScheme.onPrimaryContainer,
+                          color: themeProvider
+                              .myTheme.colorScheme.onPrimaryContainer,
                           fontFamily: 'Poppins-Regular',
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -776,7 +793,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       child: Text(
                         '$coinSymbol $totalPriceOfTheOrderFormatted',
                         style: TextStyle(
-                          color: myTheme.colorScheme.onPrimaryContainer,
+                          color: themeProvider
+                              .myTheme.colorScheme.onPrimaryContainer,
                           fontFamily: 'Poppins-Regular',
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -807,7 +825,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: myTheme.colorScheme.primary,
+                      color: themeProvider.myTheme.colorScheme.primary,
                     ),
                   ),
                 ),
@@ -816,7 +834,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                   child: TextField(
                     style: TextStyle(
                       fontSize: 14,
-                      color: myTheme.colorScheme.primary,
+                      color: themeProvider.myTheme.colorScheme.primary,
                     ),
                     keyboardType: TextInputType.text,
                     maxLines: 1,
@@ -827,12 +845,14 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       hintText: 'Comentario sobre la entrega',
                       hintStyle: TextStyle(
                         fontSize: 14,
-                        color: myTheme.colorScheme.primary.withOpacity(0.4),
+                        color: themeProvider.myTheme.colorScheme.primary
+                            .withOpacity(0.4),
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                         borderSide: BorderSide(
-                          color: myTheme.colorScheme.primary.withOpacity(0.5),
+                          color: themeProvider.myTheme.colorScheme.primary
+                              .withOpacity(0.5),
                         ),
                       ),
                     ),
@@ -916,7 +936,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                         style: ButtonStyle(
                                           backgroundColor:
                                               MaterialStateProperty.all(
-                                            myTheme.colorScheme.primary,
+                                            themeProvider
+                                                .myTheme.colorScheme.primary,
                                           ),
                                           foregroundColor:
                                               MaterialStateProperty.all(
@@ -1088,7 +1109,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                         style: ButtonStyle(
                                           backgroundColor:
                                               MaterialStateProperty.all(
-                                            myTheme.colorScheme.primary,
+                                            themeProvider
+                                                .myTheme.colorScheme.primary,
                                           ),
                                           foregroundColor:
                                               MaterialStateProperty.all(
@@ -1129,7 +1151,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
-                    myTheme.colorScheme.primary,
+                    themeProvider.myTheme.colorScheme.primary,
                   ),
                   foregroundColor: MaterialStateProperty.all(
                     Colors.white,
@@ -1222,7 +1244,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                   },
                                   style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(
-                                      myTheme.colorScheme.primary,
+                                      themeProvider.myTheme.colorScheme.primary,
                                     ),
                                     foregroundColor: MaterialStateProperty.all(
                                       Colors.white,
@@ -1306,7 +1328,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                   },
                                   style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(
-                                      myTheme.colorScheme.primary,
+                                      themeProvider.myTheme.colorScheme.primary,
                                     ),
                                     foregroundColor: MaterialStateProperty.all(
                                       Colors.white,
@@ -1343,7 +1365,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                   },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
-                      myTheme.colorScheme.onPrimaryContainer,
+                      themeProvider.myTheme.colorScheme.onPrimaryContainer,
                     ),
                     foregroundColor: MaterialStateProperty.all(
                       Colors.white,

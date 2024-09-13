@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -29,6 +30,8 @@ class _ZonesDropDownMenuState extends State<ZonesDropDownMenu> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return SingleChildScrollView(
       child: Container(
         margin: const EdgeInsets.fromLTRB(8, 10, 8, 0),
@@ -47,7 +50,7 @@ class _ZonesDropDownMenuState extends State<ZonesDropDownMenu> {
                   child: Text(
                     AppLocalizations.of(context)!.salesArea,
                     style: TextStyle(
-                      color: myTheme.colorScheme.primary,
+                      color: themeProvider.myTheme.colorScheme.primary,
                       fontFamily: 'Poppins-medium',
                       fontWeight: FontWeight.bold,
                       fontSize: 11,
@@ -67,7 +70,8 @@ class _ZonesDropDownMenuState extends State<ZonesDropDownMenu> {
                           color: Colors.transparent,
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
-                            color: myTheme.colorScheme.primary.withOpacity(0.7),
+                            color: themeProvider.myTheme.colorScheme.primary
+                                .withOpacity(0.7),
                           )),
                       child: Text(
                         widget.zone,

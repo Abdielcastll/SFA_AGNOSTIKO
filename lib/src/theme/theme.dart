@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-ThemeData myTheme = ThemeData.light().copyWith(
+ThemeData myThemeBase = ThemeData.light().copyWith(
   //useMaterial3: false,
   colorScheme: const ColorScheme.light(
     // Colores primarios
@@ -89,7 +89,7 @@ class ThemeProvider with ChangeNotifier {
         // onContainers
         onPrimaryContainer: onPrimaryContainer,
         onSecondaryContainer: const Color.fromRGBO(23, 26, 49, 1),
-        onTertiaryContainer: onPrimaryContainer,
+        onTertiaryContainer: onTertiaryContainer,
         // Errores
         error: const Color.fromRGBO(186, 26, 26, 1),
         errorContainer: const Color.fromRGBO(255, 218, 214, 1),

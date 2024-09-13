@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/visit_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/visits/components/visit_card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -17,6 +18,7 @@ class VisitsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var dateFormatter = DateFormat('dd-MM-yyyy');
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return Column(
       children: [
@@ -68,14 +70,16 @@ class VisitsList extends StatelessWidget {
                             shape: BoxShape.circle,
                             color:
                                 // Colors.red.withOpacity(0.3)),
-                                myTheme.colorScheme.primary.withOpacity(0.3)),
+                                themeProvider.myTheme.colorScheme.primary
+                                    .withOpacity(0.3)),
                         width: 120,
                         height: 120,
                         child: Opacity(
                           opacity: 0.8,
                           child: Icon(
                             MaterialCommunityIcons.truck_fast,
-                            color: myTheme.colorScheme.onPrimaryContainer,
+                            color: themeProvider
+                                .myTheme.colorScheme.onPrimaryContainer,
                             size: 60,
                           ),
                         ),
@@ -91,7 +95,8 @@ class VisitsList extends StatelessWidget {
                               style: TextStyle(
                                 fontFamily: 'Poppins-medium',
                                 fontSize: 12,
-                                color: myTheme.colorScheme.onPrimaryContainer,
+                                color: themeProvider
+                                    .myTheme.colorScheme.onPrimaryContainer,
                               ),
                             ),
                           ),

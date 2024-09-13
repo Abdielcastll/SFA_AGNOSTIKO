@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
@@ -148,11 +149,13 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     print('Opening bar code scanner');
     String? scanResult;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: myTheme.colorScheme.primary,
+        backgroundColor: themeProvider.myTheme.colorScheme.primary,
         foregroundColor: Colors.white,
         title: const Text('Escaner de barras'),
         actions: [

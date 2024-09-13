@@ -82,10 +82,12 @@ void modalBottomSheetForOrders(
   print('  correlativeNumber: $correlativeNumber,');
   // print('isRetai: $isRetail');
   // print(showButton);
+  final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
   showModalBottomSheet(
     elevation: 0,
     backgroundColor: Colors.white,
-    barrierColor: myTheme.colorScheme.secondary.withOpacity(0.5),
+    barrierColor: themeProvider.myTheme.colorScheme.secondary.withOpacity(0.5),
     context: context,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(
@@ -141,7 +143,8 @@ void modalBottomSheetForOrders(
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: myTheme.colorScheme.onPrimaryContainer,
+                            color: themeProvider
+                                .myTheme.colorScheme.onPrimaryContainer,
                           ),
                         ),
                       ),
@@ -155,7 +158,8 @@ void modalBottomSheetForOrders(
                           borderRadius: BorderRadius.circular(16),
                           color: Colors.white,
                           border: Border.all(
-                            color: myTheme.colorScheme.primary.withOpacity(0.5),
+                            color: themeProvider.myTheme.colorScheme.primary
+                                .withOpacity(0.5),
                           ),
                         ),
                         child: Text(
@@ -168,7 +172,8 @@ void modalBottomSheetForOrders(
                           style: TextStyle(
                             fontFamily: 'Poppins-regular',
                             fontSize: 14,
-                            color: myTheme.colorScheme.primary.withOpacity(0.5),
+                            color: themeProvider.myTheme.colorScheme.primary
+                                .withOpacity(0.5),
                           ),
                         ),
                       ),
@@ -216,7 +221,8 @@ void modalBottomSheetForOrders(
                                     style: ButtonStyle(
                                       backgroundColor:
                                           MaterialStateProperty.all(
-                                        myTheme.colorScheme.primary,
+                                        themeProvider
+                                            .myTheme.colorScheme.primary,
                                       ),
                                       shape: MaterialStateProperty.all<
                                           RoundedRectangleBorder>(
@@ -261,7 +267,7 @@ void modalBottomSheetForOrders(
                                   },
                                   style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(
-                                      myTheme.colorScheme.primary,
+                                      themeProvider.myTheme.colorScheme.primary,
                                     ),
                                     shape: MaterialStateProperty.all<
                                         RoundedRectangleBorder>(
@@ -349,7 +355,8 @@ void modalBottomSheetForOrders(
                                                                         TextStyle(
                                                                       fontFamily:
                                                                           'Poppins-regular',
-                                                                      color: myTheme
+                                                                      color: themeProvider
+                                                                          .myTheme
                                                                           .colorScheme
                                                                           .onPrimaryContainer,
                                                                       fontSize:
@@ -379,7 +386,7 @@ void modalBottomSheetForOrders(
                                                                             fontFamily:
                                                                                 'Poppins-regular',
                                                                             color:
-                                                                                myTheme.colorScheme.primary,
+                                                                                themeProvider.myTheme.colorScheme.primary,
                                                                             fontSize:
                                                                                 14,
                                                                             fontWeight:
@@ -395,7 +402,7 @@ void modalBottomSheetForOrders(
                                                                         decoration: BoxDecoration(
                                                                             borderRadius:
                                                                                 BorderRadius.circular(16),
-                                                                            color: myTheme.colorScheme.primary),
+                                                                            color: themeProvider.myTheme.colorScheme.primary),
                                                                         child:
                                                                             TextButton(
                                                                           onPressed:
@@ -476,7 +483,7 @@ void modalBottomSheetForOrders(
                                                                               ..removeCurrentSnackBar()
                                                                               ..showSnackBar(
                                                                                 SnackBar(
-                                                                                  backgroundColor: myTheme.colorScheme.primary,
+                                                                                  backgroundColor: themeProvider.myTheme.colorScheme.primary,
                                                                                   duration: const Duration(seconds: 2),
                                                                                   content: const Text(
                                                                                     "Orden retomada dentro del carrito",
@@ -498,7 +505,7 @@ void modalBottomSheetForOrders(
                                                                           style:
                                                                               TextButton.styleFrom(
                                                                             foregroundColor:
-                                                                                myTheme.colorScheme.primary,
+                                                                                themeProvider.myTheme.colorScheme.primary,
                                                                           ),
                                                                           child:
                                                                               Text(
@@ -546,7 +553,8 @@ void modalBottomSheetForOrders(
                                                                         TextStyle(
                                                                       fontFamily:
                                                                           'Poppins-regular',
-                                                                      color: myTheme
+                                                                      color: themeProvider
+                                                                          .myTheme
                                                                           .colorScheme
                                                                           .primary,
                                                                       fontSize:
@@ -580,7 +588,7 @@ void modalBottomSheetForOrders(
                                                                             ButtonStyle(
                                                                           backgroundColor:
                                                                               MaterialStateProperty.all(
-                                                                            myTheme.colorScheme.onPrimaryContainer,
+                                                                            themeProvider.myTheme.colorScheme.onPrimaryContainer,
                                                                           ),
                                                                           shape:
                                                                               MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -612,7 +620,7 @@ void modalBottomSheetForOrders(
                                                                               ButtonStyle(
                                                                             backgroundColor:
                                                                                 MaterialStateProperty.all(
-                                                                              myTheme.colorScheme.onPrimaryContainer,
+                                                                              themeProvider.myTheme.colorScheme.onPrimaryContainer,
                                                                             ),
                                                                             shape:
                                                                                 MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -650,7 +658,9 @@ void modalBottomSheetForOrders(
                                                       backgroundColor:
                                                           MaterialStateProperty
                                                               .all(
-                                                        myTheme.colorScheme
+                                                        themeProvider
+                                                            .myTheme
+                                                            .colorScheme
                                                             .onPrimaryContainer,
                                                       ),
                                                       shape: MaterialStateProperty
@@ -698,8 +708,8 @@ void modalBottomSheetForOrders(
                                             alignment: Alignment.center,
                                             // margin: const EdgeInsets.only(right: 20),
                                             child: CircleAvatar(
-                                              backgroundColor:
-                                                  myTheme.colorScheme.error,
+                                              backgroundColor: themeProvider
+                                                  .myTheme.colorScheme.error,
                                               child: IconButton(
                                                 onPressed: () {
                                                   showDialog(
@@ -772,6 +782,8 @@ class DeleteOrderAlertDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return AlertDialog(
       surfaceTintColor: Color.fromARGB(255, 222, 222, 222),
       shape: RoundedRectangleBorder(
@@ -782,7 +794,7 @@ class DeleteOrderAlertDialog extends StatelessWidget {
         textAlign: TextAlign.center,
         style: TextStyle(
           fontFamily: 'Poppins-regular',
-          color: myTheme.colorScheme.primary,
+          color: themeProvider.myTheme.colorScheme.primary,
           fontSize: 14,
           fontWeight: FontWeight.bold,
         ),
@@ -796,7 +808,7 @@ class DeleteOrderAlertDialog extends StatelessWidget {
             },
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(
-                myTheme.colorScheme.primary,
+                themeProvider.myTheme.colorScheme.primary,
               ),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
@@ -824,7 +836,8 @@ class DeleteOrderAlertDialog extends StatelessWidget {
                   ..removeCurrentSnackBar()
                   ..showSnackBar(
                     SnackBar(
-                      backgroundColor: myTheme.colorScheme.onPrimaryContainer,
+                      backgroundColor:
+                          themeProvider.myTheme.colorScheme.onPrimaryContainer,
                       duration: const Duration(seconds: 2),
                       content: const Text(
                         "Pedido seleccionado eliminado",
@@ -837,7 +850,7 @@ class DeleteOrderAlertDialog extends StatelessWidget {
               },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(
-                  myTheme.colorScheme.onPrimaryContainer,
+                  themeProvider.myTheme.colorScheme.onPrimaryContainer,
                 ),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
@@ -912,6 +925,7 @@ class SeeProductsAlertDialog extends StatelessWidget {
         coinDecimals: coinDecimals,
         coinExchangeRatio: coinExchangeRateFromDB);
     var totalFormatted = formatDecimalPriceByRegion(price: totalConverted);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return AlertDialog(
       surfaceTintColor: Color.fromARGB(255, 222, 222, 222),
@@ -928,7 +942,7 @@ class SeeProductsAlertDialog extends StatelessWidget {
         AppLocalizations.of(context)!.order,
         style: TextStyle(
           fontFamily: 'Poppins-regular',
-          color: myTheme.colorScheme.onPrimaryContainer,
+          color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
           fontSize: 16,
           fontWeight: FontWeight.bold,
         ),
@@ -959,13 +973,13 @@ class SeeProductsAlertDialog extends StatelessWidget {
                     return ListTile(
                       leading: Icon(
                         Icons.photo,
-                        color: myTheme.colorScheme.secondary,
+                        color: themeProvider.myTheme.colorScheme.secondary,
                       ),
                       title: Text(
                         '${product['nombre']}',
                         style: TextStyle(
                           fontFamily: 'Poppins-regular',
-                          color: myTheme.colorScheme.secondary,
+                          color: themeProvider.myTheme.colorScheme.secondary,
                           fontSize: 11,
                           fontWeight: FontWeight.bold,
                         ),
@@ -981,7 +995,8 @@ class SeeProductsAlertDialog extends StatelessWidget {
                                     '${product['codigo']} x ${product['cantidad']}',
                                     style: TextStyle(
                                       fontFamily: 'Poppins-regular',
-                                      color: myTheme.colorScheme.secondary,
+                                      color: themeProvider
+                                          .myTheme.colorScheme.secondary,
                                       fontSize: 11,
                                     ),
                                   ),
@@ -990,7 +1005,8 @@ class SeeProductsAlertDialog extends StatelessWidget {
                                   '${AppLocalizations.of(context)!.payable}:',
                                   style: TextStyle(
                                     fontFamily: 'Poppins-regular',
-                                    color: myTheme.colorScheme.secondary,
+                                    color: themeProvider
+                                        .myTheme.colorScheme.secondary,
                                     fontSize: 11,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -999,7 +1015,8 @@ class SeeProductsAlertDialog extends StatelessWidget {
                                   '$coinSymbol $priceFormatted',
                                   style: TextStyle(
                                     fontFamily: 'Poppins-regular',
-                                    color: myTheme.colorScheme.primary,
+                                    color: themeProvider
+                                        .myTheme.colorScheme.primary,
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -1119,7 +1136,7 @@ class SeeProductsAlertDialog extends StatelessWidget {
               },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(
-                  myTheme.colorScheme.primary,
+                  themeProvider.myTheme.colorScheme.primary,
                 ),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
@@ -1159,6 +1176,8 @@ class TextBoxWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     return Container(
       alignment: Alignment.centerLeft,
       margin: EdgeInsets.fromLTRB(10, 15, 0, 10),
@@ -1167,7 +1186,7 @@ class TextBoxWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         color: Colors.white,
         border: Border.all(
-          color: myTheme.colorScheme.primary.withOpacity(0.5),
+          color: themeProvider.myTheme.colorScheme.primary.withOpacity(0.5),
         ),
       ),
       child: Text(
@@ -1175,7 +1194,7 @@ class TextBoxWidget extends StatelessWidget {
         style: TextStyle(
           fontFamily: 'Poppins-regular',
           fontSize: 14,
-          color: myTheme.colorScheme.primary.withOpacity(0.5),
+          color: themeProvider.myTheme.colorScheme.primary.withOpacity(0.5),
         ),
       ),
     );

@@ -23,6 +23,7 @@ class _ListOfProductsButtonState extends State<ListOfProductsButton> {
     final pricesName = Provider.of<Prices?>(context)?.name ?? {};
     final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
     final products = Provider.of<List<Products>?>(context) ?? [];
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     // print('products from button: ${products.length}');
     return Center(
@@ -60,7 +61,7 @@ class _ListOfProductsButtonState extends State<ListOfProductsButton> {
             elevation: MaterialStateProperty.all<double>(0),
             backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
             overlayColor: MaterialStateProperty.all<Color>(
-              myTheme.colorScheme.primary.withOpacity(0.5),
+              themeProvider.myTheme.colorScheme.primary.withOpacity(0.5),
             ),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
@@ -72,7 +73,7 @@ class _ListOfProductsButtonState extends State<ListOfProductsButton> {
             margin: const EdgeInsets.only(bottom: 3, left: 8),
             child: Icon(
               MaterialCommunityIcons.tag_outline,
-              color: myTheme.colorScheme.onPrimaryContainer,
+              color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
               size: 20,
             ),
           ),
@@ -84,14 +85,14 @@ class _ListOfProductsButtonState extends State<ListOfProductsButton> {
                 child: Text(
                   AppLocalizations.of(context)!.listOfProducts,
                   style: TextStyle(
-                    color: myTheme.colorScheme.onPrimaryContainer,
+                    color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
                     fontFamily: 'Poppins-medium',
                   ),
                 ),
               ),
               Icon(
                 MaterialIcons.keyboard_arrow_right,
-                color: myTheme.colorScheme.onPrimaryContainer,
+                color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
                 size: 16,
               ),
             ],

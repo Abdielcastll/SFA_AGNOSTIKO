@@ -5,6 +5,7 @@ import 'package:decimal/decimal.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
@@ -1239,7 +1240,11 @@ Future<List> cancelPayment(
 }
 
 checkIfInvoiceIsCompleted(
-    {double? remaining, double? paidAmount, client, invoiceDocumentID}) {
+    {double? remaining,
+    double? paidAmount,
+    client,
+    invoiceDocumentID,
+    context}) {
   try {
     double total = double.parse((Decimal.parse(remaining!.toString()) -
             Decimal.parse(paidAmount!.toString()))
@@ -1251,9 +1256,11 @@ checkIfInvoiceIsCompleted(
     if (total <= 0.00) {
       print('Factura pagada completamente');
       if (!globalRemoteConfig.conversionKiosko!) {
+        final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
         Fluttertoast.showToast(
           msg: 'Factura pagada completamente',
-          backgroundColor: myTheme.colorScheme.onPrimaryContainer,
+          backgroundColor: themeProvider.myTheme.colorScheme.onPrimaryContainer,
           textColor: Colors.white,
         );
       }
