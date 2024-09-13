@@ -36,6 +36,8 @@ class AccountBalancePage extends StatefulWidget {
 class _AccountBalancePageState extends State<AccountBalancePage> {
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     List<String> currentCoinSplit = currentCoin!.split(' ');
     String currentCoinSelectedCode = currentCoinSplit.last;
@@ -56,7 +58,7 @@ class _AccountBalancePageState extends State<AccountBalancePage> {
         ),
       ],
       child: Scaffold(
-        backgroundColor: myTheme.colorScheme.background,
+        backgroundColor: themeProvider.myTheme.colorScheme.background,
         body: AccountBalanceBody(
           clientDocument: widget.clientDocument,
           clientName: widget.clientName,

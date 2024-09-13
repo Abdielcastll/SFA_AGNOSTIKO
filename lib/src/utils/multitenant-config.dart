@@ -5,12 +5,14 @@ import 'package:agnostiko/agnostiko.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/firebase_options.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/pages/auth/login/email_page.dart';
 import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 //import 'package:tms_agent_communication/tms_agent_communication.dart';
 import 'package:collection/collection.dart';
+import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class _MultitenantConfig {
   Map<String, dynamic>? fieldSalesConfig;
@@ -177,12 +179,48 @@ class _MultitenantConfig {
         name: 'tenant-app',
         options: tennantInfo,
       );
-
       RemoteConfigProvider provider = RemoteConfigProvider();
       provider.getRemoteConfig();
       return true;
     } catch (e) {
       throw (e);
+    }
+  }
+
+  Future<void> getColorsApp(BuildContext context) async {
+    try {
+      print("GET COLORES");
+      FirebaseFirestore firestore =
+          FirebaseFirestore.instanceFor(app: tenantApp!);
+
+      DocumentSnapshot document =
+          await firestore.collection('tenant').doc('colores_app').get();
+
+      if (document.exists) {
+        Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+
+        // Parse colors
+        Color primaryColor = Color(int.parse(data['primary'], radix: 16));
+        Color secondaryColor = Color(int.parse(data['secondary'], radix: 16));
+        Color onBackground = Color(int.parse(data['onBackground'], radix: 16));
+        Color onPrimaryContainer =
+            Color(int.parse(data['onPrimaryContainer'], radix: 16));
+        Color onTertiaryContainer =
+            Color(int.parse(data['onTertiaryContainer'], radix: 16));
+
+        // Update the theme provider
+        Provider.of<ThemeProvider>(context, listen: false).setColors(
+          primary: primaryColor,
+          secondary: secondaryColor,
+          onBackground: onBackground,
+          onPrimaryContainer: onPrimaryContainer,
+          onTertiaryContainer: onTertiaryContainer,
+        );
+      } else {
+        print('Document does not exist.');
+      }
+    } catch (e) {
+      print('Error fetching colors: $e');
     }
   }
 

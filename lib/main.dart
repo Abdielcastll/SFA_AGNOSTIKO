@@ -110,6 +110,9 @@ class SfaAgnostiko extends StatelessWidget {
               ChangeNotifierProvider<CounterLimitFirestore>(
                 create: (context) => CounterLimitFirestore(),
               ),
+              ChangeNotifierProvider<ThemeProvider>(
+                create: (context) => ThemeProvider(),
+              ),
             ],
             builder: (context, child) {
               final productsLimit =
@@ -156,6 +159,9 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      multitenantConfig.getColorsApp(context);
+    });
     WidgetsBinding.instance.addObserver(this);
     Timer(const Duration(minutes: 1), () {
       _startInactivityTimer();
@@ -205,6 +211,9 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
   @override
   Widget build(BuildContext context) {
     final localeProvider = Provider.of<LocaleProvider>(context);
+    final themeProvider =
+        Provider.of<ThemeProvider>(context, listen: true); // Get theme colors
+    print("primary on provider: ${themeProvider.myTheme.colorScheme.primary}");
 
     return GestureDetector(
       onTap: () {
@@ -222,7 +231,7 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
           GlobalCupertinoLocalizations.delegate,
         ],
         title: 'Field Sales',
-        theme: myTheme,
+        theme: themeProvider.myTheme,
         initialRoute: SplashScreenView.route,
         routes: {
           SplashScreenView.route: (BuildContext context) =>
