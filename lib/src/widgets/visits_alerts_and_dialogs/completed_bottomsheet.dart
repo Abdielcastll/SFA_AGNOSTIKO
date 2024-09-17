@@ -28,7 +28,7 @@ void modalBottomSheetForCompleted({
   currentClientIdType,
   required String date,
 }) {
-  final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+  final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
   showModalBottomSheet(
     isScrollControlled: true,
@@ -217,7 +217,7 @@ class TextBoxWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return Container(
       alignment: Alignment.centerLeft,

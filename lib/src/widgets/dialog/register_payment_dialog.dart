@@ -42,7 +42,7 @@ Future<dynamic> showDialogForRegisterPayment(
   required String invoiceDocumentID,
   required int invoiceNumber,
 }) {
-  final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+  final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
   List<String> nationalBanks = [];
   List<String> internationalBanks = [];

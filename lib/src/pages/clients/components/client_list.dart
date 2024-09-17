@@ -66,7 +66,7 @@ class _ClientListState extends State<ClientList> {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     final zonesSummary = Provider.of<ZoneSummary?>(context)?.summary ?? {};
     final idTypeSummary = Provider.of<IdTypeSummary?>(context)?.summary ?? {};

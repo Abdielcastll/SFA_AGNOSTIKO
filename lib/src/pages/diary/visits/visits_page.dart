@@ -53,7 +53,7 @@ class _VisitsPageState extends State<VisitsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     final currentDayProvider = context.watch<CounterLimitFirestore>();
     final currentDay = currentDayProvider.currentDayVisits;
@@ -213,7 +213,7 @@ class VisitsBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     final currentDay =
         Provider.of<CounterLimitFirestore>(context).currentDayVisits;

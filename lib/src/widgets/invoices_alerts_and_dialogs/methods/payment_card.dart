@@ -141,7 +141,7 @@ paymentCard(
 
     return Container();
   }
-  final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+  final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
   return StatefulBuilder(
     builder: (context, setState) => Column(

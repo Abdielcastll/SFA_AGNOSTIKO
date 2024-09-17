@@ -28,7 +28,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
   @override
   Widget build(BuildContext context) {
     // final productsBySales = Provider.of<List<ProductsByDate>?>(context) ?? [];
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     final linesSummary = Provider.of<LineSummary?>(context)?.summary ?? {};
     final stockValues = Provider.of<StockModel?>(context)?.stock ?? {};

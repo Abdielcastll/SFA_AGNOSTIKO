@@ -49,7 +49,7 @@ class ProductsPage extends StatefulWidget {
 class _ProductsPageState extends State<ProductsPage> {
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     List<String> currentCoinSplit = currentCoin!.split(' ');
@@ -177,7 +177,7 @@ class _ProductsBodyState extends State<ProductsBody> {
 
   @override
   void initState() {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     super.initState();
     // products = widget.listOfProducts;
@@ -258,7 +258,7 @@ class _ProductsBodyState extends State<ProductsBody> {
         Provider.of<CounterLimitFirestore>(context).getScrollProductLimit;
     // Produtos
     final products = Provider.of<List<Products>?>(context) ?? [];
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return coinName.toString().isEmpty
         ? Center(

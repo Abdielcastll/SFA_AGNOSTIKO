@@ -31,7 +31,7 @@ class _PanInputViewState extends State<PanInputView> {
   Widget build(BuildContext context) {
     transactionArgs =
         ModalRoute.of(context)?.settings.arguments as TransactionArgs;
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return WillPopScope(
       onWillPop: cancelTransactionDialogFn(

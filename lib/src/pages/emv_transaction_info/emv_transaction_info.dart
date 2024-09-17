@@ -149,7 +149,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   }
 
   void kioskoDialog() {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     showDialog(
       context: context,
@@ -363,7 +363,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       transactionOnlineStr =
           transactionInfo?.onlineRequested == true ? onlineStr : offlineStr;
     }
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return WillPopScope(
       onWillPop: globalRemoteConfig.conversionKiosko!
@@ -543,7 +543,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   }
 
   onCancel() {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     Navigator.pop(context);
     printTicket();

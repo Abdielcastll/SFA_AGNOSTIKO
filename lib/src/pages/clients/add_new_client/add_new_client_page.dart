@@ -152,7 +152,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
     // for (var element in coinsExhangesRates) {
     //   // print(element.exchangeRatio);
     // }
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return isGeolocatorLoading
         ? LoadingWidget(
@@ -1248,7 +1248,7 @@ class TextFieldForNewClient extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return TextField(
       readOnly: readOnly,
@@ -1302,7 +1302,7 @@ class TextMessageForTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return Text(
       message,
@@ -1323,7 +1323,7 @@ class PointTextWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return Text(
       '·',

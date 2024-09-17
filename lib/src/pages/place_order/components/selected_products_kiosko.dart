@@ -189,7 +189,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
     final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 1;
     final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
     final userUid = Provider.of<UserModel>(context).uid;
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return coinName == '' || deviceType == null
         ? Column(

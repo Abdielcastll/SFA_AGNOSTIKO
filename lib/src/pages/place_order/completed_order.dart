@@ -33,7 +33,7 @@ class CompletedOrderPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     List<String> currentCoinSplit = currentCoin!.split(' ');
@@ -115,7 +115,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
         productPrice: widget.total,
         coinDecimals: coinDecimals,
         coinExchangeRatio: coinExchangeRatio);
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return Column(
       children: [

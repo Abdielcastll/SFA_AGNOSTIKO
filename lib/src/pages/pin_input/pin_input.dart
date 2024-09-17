@@ -82,7 +82,7 @@ class _PinInputViewState extends State<PinInputView> {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     if (transactionArgs == null) {
       transactionArgs ??= (ModalRoute.of(context)?.settings.arguments!

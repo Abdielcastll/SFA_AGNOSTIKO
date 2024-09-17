@@ -34,7 +34,7 @@ paymentTransfer(
   String referenceId = '';
 
   return StatefulBuilder(builder: (context, setState) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,

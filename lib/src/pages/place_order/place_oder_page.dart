@@ -16,7 +16,7 @@ class PlaceOrderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('userZoneDocument: $userZoneDocument');
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return Scaffold(
       floatingActionButton: globalRemoteConfig.addClientOnOpenCartDialog!

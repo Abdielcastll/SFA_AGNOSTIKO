@@ -44,7 +44,7 @@ class ProductsPageKiosko extends StatefulWidget {
 class _ProductsPageKioskoState extends State<ProductsPageKiosko> {
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     List<String> currentCoinSplit = currentCoin!.split(' ');
@@ -190,7 +190,7 @@ class _ProductsBodyState extends State<ProductsBody> {
 
     // Produtos
     final products = Provider.of<List<Products>?>(context) ?? [];
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return coinName.toString().isEmpty
         ? Center(

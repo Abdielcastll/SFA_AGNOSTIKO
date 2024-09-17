@@ -33,7 +33,7 @@ class _CataloguePageKioskoState extends State<CataloguePageKiosko> {
   @override
   Widget build(BuildContext context) {
     final userZoneDocument = context.watch<CurrentUserInfo>().zoneDocument;
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     print('zoneDocument: $userZoneDocument');
 

@@ -36,7 +36,7 @@ class AccountBalancePage extends StatefulWidget {
 class _AccountBalancePageState extends State<AccountBalancePage> {
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     List<String> currentCoinSplit = currentCoin!.split(' ');
@@ -122,7 +122,7 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
     );
 
     var balanceFormatted = formatDecimalPriceByRegion(price: balanceConverted);
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return MultiProvider(
       providers: [
@@ -356,7 +356,7 @@ class _ShowInvoicesState extends State<ShowInvoices> {
     _controller.addListener(() {
       final productsLimitProvider =
           Provider.of<CounterLimitFirestore>(context, listen: false);
-      final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+      final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
       if (_controller.position.atEdge) {
         bool isTop = _controller.position.pixels == 0;
@@ -392,7 +392,7 @@ class _ShowInvoicesState extends State<ShowInvoices> {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 2;
     final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 1;
@@ -612,7 +612,7 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
           final noteConciled = note.paymentsData['conciliado'] ?? 'NaN';
           final balanceNC = noteBalance + noteOriginalAmount;
           final themeProvider =
-              Provider.of<ThemeProvider>(context, listen: true);
+              Provider.of<ThemeProvider>(context, listen: false);
 
           return ListTile(
             onTap: () {

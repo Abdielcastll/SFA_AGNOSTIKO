@@ -26,7 +26,7 @@ class _ExpDateInputViewState extends State<ExpDateInputView> {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     transactionArgs =
         ModalRoute.of(context)?.settings.arguments as TransactionArgs;

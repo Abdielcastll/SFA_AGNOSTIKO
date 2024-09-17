@@ -7,7 +7,7 @@ import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 goBackToCatalogue(BuildContext context) {
-  final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+  final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
   final orderActive = context.read<OrderProvider>();
   bool isKiosko = globalRemoteConfig.conversionKiosko!;

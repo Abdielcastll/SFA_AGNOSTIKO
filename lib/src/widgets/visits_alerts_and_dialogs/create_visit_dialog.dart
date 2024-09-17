@@ -27,7 +27,7 @@ void showCreateClientDialog(context, uid) {
   bool isLoading = false;
   bool isAllSelected = false;
   bool light = false;
-  final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+  final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
   showDialog(
     context: context,

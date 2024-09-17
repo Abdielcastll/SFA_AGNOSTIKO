@@ -17,7 +17,7 @@ class FilterInvoices extends StatefulWidget {
 class FilterInvoicesState extends State<FilterInvoices> {
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return Container(
       height: 50.0,

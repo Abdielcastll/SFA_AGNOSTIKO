@@ -18,7 +18,7 @@ Future<dynamic> showDialogForConfirmedPaymentRetail(
     AddPaymentBodyAtt paymentBody,
     double amountExchanged,
     double totalOfTheOrder) {
-  final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+  final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
   return showDialog(
       context: context,

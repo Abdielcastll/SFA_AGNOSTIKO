@@ -25,7 +25,7 @@ class _ClientsPageState extends State<ClientsPage> {
     final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
     final clientsLimit =
         Provider.of<CounterLimitFirestore>(context).getClientsLimit;
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return MultiProvider(
       providers: [

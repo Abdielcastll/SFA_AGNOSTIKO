@@ -148,7 +148,8 @@ class _OrderCardBodyState extends State<OrderCardBody> {
         return Colors.red;
       }
     }
-  final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return currentClientName == ''
         ? Container(

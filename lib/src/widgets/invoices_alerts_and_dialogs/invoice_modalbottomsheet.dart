@@ -112,7 +112,7 @@ void modalBottomSheetForInvoices({
       coinExchangeRatio: coinExchangeRatio,
       productPrice: invoiceTotal);
   var totalformatted = formatDecimalPriceByRegion(price: totalConverted);
-  final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+  final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
   showModalBottomSheet(
     elevation: 0,
@@ -638,7 +638,8 @@ class SeePaymentsALertDialog extends StatelessWidget {
 
         print('sumOfPendingPaymenstConverted: $sumOfPendingPaymenstConverted');
         print('sumOfPendingPaymensFormatted: $sumOfPendingPaymensFormatted');
-        final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+        final themeProvider =
+            Provider.of<ThemeProvider>(context, listen: false);
 
         return AlertDialog(
           surfaceTintColor: Color.fromARGB(255, 222, 222, 222),

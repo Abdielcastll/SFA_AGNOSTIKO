@@ -14,7 +14,7 @@ class FilterOrders extends StatefulWidget {
 class _FilterOrdersState extends State<FilterOrders> {
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return Container(
       height: 50.0,

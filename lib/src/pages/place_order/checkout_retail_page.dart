@@ -114,7 +114,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
   @override
   Widget build(BuildContext context) {
     print('OPENING CHECKOUT RETAIL PAGE');
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     final userUid = Provider.of<UserModel>(context).uid;
     int? clientMasterDiscount = widget.client?.masterDiscount;

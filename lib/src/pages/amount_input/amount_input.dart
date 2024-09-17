@@ -46,7 +46,7 @@ class _AmountInputViewState extends State<AmountInputView> {
     } else {
       appBarText = "sale";
     }
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return WillPopScope(
       onWillPop: cancelTransactionDialogFn(

@@ -1256,7 +1256,8 @@ checkIfInvoiceIsCompleted(
     if (total <= 0.00) {
       print('Factura pagada completamente');
       if (!globalRemoteConfig.conversionKiosko!) {
-        final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+        final themeProvider =
+            Provider.of<ThemeProvider>(context, listen: false);
 
         Fluttertoast.showToast(
           msg: 'Factura pagada completamente',

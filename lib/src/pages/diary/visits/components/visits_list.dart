@@ -18,7 +18,7 @@ class VisitsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var dateFormatter = DateFormat('dd-MM-yyyy');
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return Column(
       children: [

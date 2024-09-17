@@ -21,7 +21,7 @@ class DiaryTabs extends StatefulWidget {
 class _DiaryTabsState extends State<DiaryTabs> {
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
 

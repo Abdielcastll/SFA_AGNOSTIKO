@@ -204,7 +204,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
     final userRole = Provider.of<UserRole?>(context, listen: true);
     // print('User Role ${userRole?.name}');
     // print("Retail: ${userRole?.isRetail}");
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return coinName == ''
         ? Column(

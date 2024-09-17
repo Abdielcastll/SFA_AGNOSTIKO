@@ -30,7 +30,7 @@ class ListTileOptions extends StatefulWidget {
 class _ListTileOptionsState extends State<ListTileOptions> {
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     final zoneSummary = Provider.of<ZoneSummary?>(context)!.summary ?? [];
     final userZone = Provider.of<CurrentUserInfo?>(context)?.zone ?? {};
@@ -299,7 +299,7 @@ class ListTileProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return Container(
       margin: EdgeInsets.fromLTRB(15, 0, 0, 0),

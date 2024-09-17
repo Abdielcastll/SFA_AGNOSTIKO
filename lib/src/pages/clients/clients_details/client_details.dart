@@ -50,7 +50,7 @@ class _ClientDetailsState extends State<ClientDetails> {
   @override
   Widget build(BuildContext context) {
     // print('userRole IN CLIENT DETAILS: $userRole');
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return Scaffold(
       backgroundColor: themeProvider.myTheme.colorScheme.background,

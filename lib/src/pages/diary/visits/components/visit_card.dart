@@ -104,7 +104,7 @@ class _VIsitCardBodyState extends State<VIsitCardBody> {
         Provider.of<Client?>(context)?.masterDiscount ?? {};
     final zonesSummary = Provider.of<ZoneSummary?>(context)?.summary ?? '';
     final userUID = Provider.of<UserModel>(context).uid;
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return currentClientName == ''
         ? Container(

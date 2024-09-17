@@ -49,7 +49,7 @@ class _SelectClientState extends State<SelectClient> {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     final orderActive = Provider.of<OrderProvider>(context);
     return Column(

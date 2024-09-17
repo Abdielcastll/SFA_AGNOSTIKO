@@ -17,7 +17,7 @@ class FilterSection extends StatefulWidget {
 class FilterSectionState extends State<FilterSection> {
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return Container(
       height: 50.0,

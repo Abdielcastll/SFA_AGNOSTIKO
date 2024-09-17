@@ -31,7 +31,7 @@ class _InvoicesOnProcessState extends State<InvoicesOnProcess> {
     final invoices = Provider.of<List<Invoices>?>(context) ?? [];
     final invoicesList =
         invoices.where((element) => element.isPaid == false).toList();
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return SingleChildScrollView(
       child: Column(

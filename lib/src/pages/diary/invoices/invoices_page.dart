@@ -37,7 +37,7 @@ class _InvoicesPageState extends State<InvoicesPage> {
     final currentDayDateTime = currentDay!.toDate();
     DateTime tomorrow = DateTime(currentDayDateTime.year,
         currentDayDateTime.month, currentDayDateTime.day + 1);
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     List<String> currentCoinSplit = currentCoin!.split(' ');
@@ -125,7 +125,7 @@ class _InvoicesBodyState extends State<InvoicesBody> {
         Provider.of<CounterLimitFirestore>(context).currentDayInvoice;
     final currentDateTime = currentDay?.toDate();
     String formattedDate = dateFormatter.format(currentDateTime!);
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return SingleChildScrollView(
       child: Column(

@@ -19,7 +19,7 @@ class NavigationPages extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     final screens = [
       if (globalRemoteConfig.visualizacionCatalogo == true)

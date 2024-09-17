@@ -21,7 +21,7 @@ class VisitsMap extends StatelessWidget {
   Widget build(BuildContext context) {
     final visits = context.watch<List<Visits>?>() ?? [];
     print('visits $visits');
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return Scaffold(
         appBar: AppBar(
@@ -192,7 +192,7 @@ class _VisitMapBodyState extends State<VisitMapBody> {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return MultiProvider(
       providers: [

@@ -22,7 +22,7 @@ class ListOfCategories extends StatefulWidget {
 class _ListOfCategoriesState extends State<ListOfCategories> {
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     final categories = Provider.of<CategorieSummary?>(context)?.summary ?? {};
     List<MapEntry> listData = categories.entries.toList();

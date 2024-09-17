@@ -31,7 +31,7 @@ class ClientOrders extends StatefulWidget {
 class _ClientOrdersState extends State<ClientOrders> {
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     final user = Provider.of<CurrentUserInfo?>(context);
     final userUID = Provider.of<UserModel?>(context);
@@ -123,7 +123,7 @@ class _ClientOrdersBodyState extends State<ClientOrdersBody> {
     super.initState();
     // products = widget.listOfProducts;
     _controller.addListener(() {
-      final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+      final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
       final productsLimitProvider =
           Provider.of<CounterLimitFirestore>(context, listen: false);
@@ -159,7 +159,7 @@ class _ClientOrdersBodyState extends State<ClientOrdersBody> {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     final currentDay =
         Provider.of<CounterLimitFirestore>(context).currentDayOrder;

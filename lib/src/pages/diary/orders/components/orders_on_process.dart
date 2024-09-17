@@ -32,7 +32,7 @@ class _OrdersOnProcessState extends State<OrdersOnProcess> {
         .toList()
         .reversed
         .toList();
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return SingleChildScrollView(
       child: Column(

@@ -82,7 +82,7 @@ void modalBottomSheetForOrders(
   print('  correlativeNumber: $correlativeNumber,');
   // print('isRetai: $isRetail');
   // print(showButton);
-  final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+  final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
   showModalBottomSheet(
     elevation: 0,
@@ -782,7 +782,7 @@ class DeleteOrderAlertDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return AlertDialog(
       surfaceTintColor: Color.fromARGB(255, 222, 222, 222),
@@ -925,7 +925,7 @@ class SeeProductsAlertDialog extends StatelessWidget {
         coinDecimals: coinDecimals,
         coinExchangeRatio: coinExchangeRateFromDB);
     var totalFormatted = formatDecimalPriceByRegion(price: totalConverted);
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return AlertDialog(
       surfaceTintColor: Color.fromARGB(255, 222, 222, 222),
@@ -1176,7 +1176,7 @@ class TextBoxWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return Container(
       alignment: Alignment.centerLeft,

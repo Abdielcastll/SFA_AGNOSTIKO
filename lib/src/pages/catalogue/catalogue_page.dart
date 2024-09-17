@@ -40,7 +40,7 @@ class _CataloguePageState extends State<CataloguePage> {
     print('currentClientForTheOrder: ${currentClientForTheOrder?.prices}');
     print('userRole: $userRole');
     getDiscounts();
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return MultiProvider(
       providers: [

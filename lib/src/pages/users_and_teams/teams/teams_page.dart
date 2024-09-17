@@ -9,7 +9,7 @@ class TeamsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return Scaffold(
       floatingActionButton: Wrap(
@@ -53,7 +53,7 @@ class _TeamsBodyState extends State<TeamsBody> {
   List<TeamsExample> listOfTeams = allTeams;
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),

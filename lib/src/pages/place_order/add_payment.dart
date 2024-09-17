@@ -67,7 +67,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     List<String> currentCoinSplit = currentCoin!.split(' ');
     String currentCoinSelectedCode = currentCoinSplit.last;
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return WillPopScope(
       onWillPop: () async {
@@ -424,7 +424,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
       coinExchangeRatio,
       coinCode,
       double remainingConverted) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return StatefulBuilder(
       builder: (context, setState) => Column(children: [

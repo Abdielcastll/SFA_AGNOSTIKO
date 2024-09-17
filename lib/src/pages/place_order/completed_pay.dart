@@ -48,7 +48,7 @@ class CompletedPayPage extends StatelessWidget {
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     List<String> currentCoinSplit = currentCoin!.split(' ');
     String currentCoinSelectedCode = currentCoinSplit.last;
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
@@ -166,7 +166,8 @@ class _CompletedPayBody extends State<CompletedPayBody> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+        final themeProvider =
+            Provider.of<ThemeProvider>(context, listen: false);
 
         Future.delayed(Duration(seconds: 3), () {
           onGoBack();
@@ -203,7 +204,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
       return convertedAmount;
     }
 
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return Column(
       children: [

@@ -31,7 +31,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
     final pricesName = Provider.of<Prices?>(context)?.name ?? {};
     final products = Provider.of<List<Products>?>(context) ?? [];
     final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     print('pricesAAA ${prices}');
 

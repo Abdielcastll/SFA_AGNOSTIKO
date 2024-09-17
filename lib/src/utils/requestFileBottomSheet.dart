@@ -9,7 +9,7 @@ requestFileBottomSheet(BuildContext context, Function(File) onFileSelected) {
   showModalBottomSheet(
     context: context,
     builder: (context) {
-      final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+      final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
       return Column(
         mainAxisSize: MainAxisSize.min,

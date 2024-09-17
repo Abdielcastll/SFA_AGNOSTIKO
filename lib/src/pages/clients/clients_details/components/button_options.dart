@@ -46,7 +46,7 @@ class ButtonOptions extends StatelessWidget {
     final currentClientForTheOrder =
         Provider.of<OrderProvider>(context).clientForTheOrder;
     // final userRole = Provider.of<CurrentUserInfo>(context).role;
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),

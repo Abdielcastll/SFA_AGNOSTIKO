@@ -30,7 +30,7 @@ class _ZonesDropDownMenuState extends State<ZonesDropDownMenu> {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return SingleChildScrollView(
       child: Container(

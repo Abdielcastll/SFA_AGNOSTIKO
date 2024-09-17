@@ -47,7 +47,7 @@ class _OrdersPageState extends State<OrdersPage> {
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     List<String> currentCoinSplit = currentCoin!.split(' ');
     String currentCoinSelectedCode = currentCoinSplit.last;
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return MultiProvider(
       providers: [
@@ -136,7 +136,7 @@ class _OrdersBodyState extends State<OrdersBody> {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     final currentDay =
         Provider.of<CounterLimitFirestore>(context).currentDayOrder;

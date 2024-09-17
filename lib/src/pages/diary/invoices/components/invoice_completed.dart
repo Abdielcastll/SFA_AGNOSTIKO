@@ -30,7 +30,7 @@ class _InvoicesCompletedState extends State<InvoicesCompleted> {
     final invoices = Provider.of<List<Invoices>?>(context) ?? [];
     final invoicesList =
         invoices.where((element) => element.isPaid == true).toList();
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,

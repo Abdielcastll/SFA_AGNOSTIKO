@@ -42,7 +42,7 @@ class AuthService {
         return false;
       }
     } catch (e) {
-      final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+      final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
       Fluttertoast.showToast(
         msg: 'Los datos proporcionados son invalidos',
@@ -56,7 +56,7 @@ class AuthService {
   // check if user record exist after logging
 
   checkIfUserRecordExist(User user, context) async {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     await firebaseInstance
         .collection('usuarios')

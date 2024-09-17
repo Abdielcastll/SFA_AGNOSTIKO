@@ -6,7 +6,7 @@ import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 showDialogForConfirmedPayment(BuildContext context, String? coinSymbol,
     double paidAmount, Client client, DateTime date, String selectedValueA) {
-  final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+  final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
   return showDialog(
       context: context,

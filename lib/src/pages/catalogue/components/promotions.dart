@@ -63,7 +63,7 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
     final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
 
     int activeIndex = 0;
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return Container(
       // padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 10.0),

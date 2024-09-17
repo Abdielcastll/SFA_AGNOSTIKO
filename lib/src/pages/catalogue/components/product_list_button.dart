@@ -23,7 +23,7 @@ class _ListOfProductsButtonState extends State<ListOfProductsButton> {
     final pricesName = Provider.of<Prices?>(context)?.name ?? {};
     final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
     final products = Provider.of<List<Products>?>(context) ?? [];
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     // print('products from button: ${products.length}');
     return Center(

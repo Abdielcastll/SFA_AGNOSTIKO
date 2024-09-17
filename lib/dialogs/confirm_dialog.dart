@@ -13,7 +13,7 @@ Future<T?> showConfirmDialog<T>(
   String textAccept = 'Aceptar',
   String textCancel = 'Cancelar',
 }) {
-  final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+  final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
   return showDialog<T>(
     context: context,

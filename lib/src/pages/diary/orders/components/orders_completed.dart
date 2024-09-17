@@ -33,7 +33,7 @@ class _CompletedOrdersState extends State<CompletedOrders> {
         .toList()
         .reversed
         .toList();
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
