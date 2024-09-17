@@ -60,13 +60,15 @@ void main() async {
   String? mail = sharedPreferences!.getString("tenantEmail");
   print("tennantMail: $mail ");
   if (mail == null || mail == '') {
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider<ThemeProvider>(
-          create: (context) => ThemeProvider(),
-        ),
-      ],
-      child: const EmailPage(),
+    runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider<ThemeProvider>(
+            create: (context) => ThemeProvider(),
+          ),
+        ],
+        child: const EmailPage(),
+      ),
     );
   } else {
     runApp(const SfaAgnostiko());
