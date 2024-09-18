@@ -283,6 +283,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                   client: transactionArgs!.invoice!.client,
                   invoiceDocumentID:
                       transactionArgs!.invoice!.invoiceDocumentID,
+                  context: context,
                 );
               });
             });
