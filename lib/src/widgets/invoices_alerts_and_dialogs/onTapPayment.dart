@@ -1,8 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:ui' as ui;
+import 'package:http/http.dart' as http;
+import 'dart:async';
 
 import 'package:agnostiko/agnostiko.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -13,8 +16,10 @@ import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/transaction_args.dart';
 import 'package:pwa_sales2go_flutter/src/pages/card_input/card_input.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
+import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/utils/parameters.dart';
+import 'package:pwa_sales2go_flutter/src/utils/multitenant-config.dart';
 
 /* Future<List?> onTapPayment(BuildContext context, payment, String pleaseWait,
     Client client, String invoiceId, int paymentIndex) async {
@@ -224,16 +229,68 @@ Future refund(BuildContext context, payment, String pleaseWait, Client client,
       });
 }
 
+Future<ui.Image?> networkImageToUiImage(String imageUrl) async {
+  try {
+    // Fetch the image data from the network
+    final http.Response response = await http.get(Uri.parse(imageUrl));
+
+    if (response.statusCode == 200) {
+      // Convert the raw bytes into a ui.Image
+      Uint8List imageData = response.bodyBytes;
+      final Completer<ui.Image> completer = Completer();
+
+      ui.decodeImageFromList(imageData, (ui.Image img) {
+        completer.complete(img);
+      });
+
+      return completer.future;
+    } else {
+      print('Failed to load image. Status code: ${response.statusCode}');
+      return null;
+    }
+  } catch (e) {
+    print('Error loading image: $e');
+    return null;
+  }
+}
+
+Future<String?> getDownloadUrl(String filePath) async {
+  try {
+    // Reference the file in Firebase Storage using the provided file path
+    String downloadUrl =
+        await FirebaseStorage.instanceFor(app: multitenantConfig.tenantApp!)
+            .ref(filePath)
+            .getDownloadURL();
+
+    return downloadUrl;
+  } catch (e) {
+    print('Error fetching download URL: $e');
+    return null;
+  }
+}
+
+Future<String?> fetchDownloadLink() async {
+  String? filePath = globalRemoteConfig.refLogoTicket!;
+  String? downloadUrl = await getDownloadUrl(filePath);
+
+  if (downloadUrl != null) {
+    print('Download URL: $downloadUrl');
+    return downloadUrl;
+  } else {
+    print('Failed to retrieve download URL');
+    return null;
+  }
+}
+
 Future printCancelTicket(int stan, String referenceNumber, double monto) async {
   List<PrinterObject> listOfTextLine = [];
   final terminalParameters = await loadTerminalParameters();
 
-  const assetsLogo = AssetImage("assets/images/agn_blue.png");
-
-  ui.Image logo = await assetsLogo.toUiImage();
+  String? urlLogoTicket = await fetchDownloadLink();
+  ui.Image? logo = await networkImageToUiImage(urlLogoTicket ?? '');
 
   final byteDataLogo =
-      await logo.toByteData(format: ui.ImageByteFormat.rawRgba);
+      await logo!.toByteData(format: ui.ImageByteFormat.rawRgba);
   final rgbaLogo = byteDataLogo?.buffer.asUint8List() ?? Uint8List.fromList([]);
 
   final maxWidth = await getPaperWidth();
