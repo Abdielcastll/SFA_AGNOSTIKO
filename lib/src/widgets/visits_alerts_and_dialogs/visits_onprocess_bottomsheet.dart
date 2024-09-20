@@ -71,7 +71,7 @@ void modalBottomSheetForOnProcess({
                         style: TextStyle(
                           fontSize: 24,
                           color: Color(0xFF1B1B1F),
-                          fontFamily: 'Poppins-regular',
+                          fontFamily: 'Poppins-Regular',
                         ),
                       ),
                     ),
@@ -91,7 +91,7 @@ void modalBottomSheetForOnProcess({
                             style: TextStyle(
                               fontSize: 14,
                               color: Color(0xFF5A5D77),
-                              fontFamily: 'Poppins-medium',
+                              fontFamily: 'Poppins-Medium',
                             ),
                           ),
                         ),
@@ -125,7 +125,7 @@ void modalBottomSheetForOnProcess({
                           style: TextStyle(
                             fontSize: 14,
                             color: Color(0xFF5A5D77),
-                            fontFamily: 'Poppins-medium',
+                            fontFamily: 'Poppins-Medium',
                           ),
                         ),
                         Text(
@@ -133,7 +133,7 @@ void modalBottomSheetForOnProcess({
                           style: TextStyle(
                             fontSize: 14,
                             color: Color(0xFF5A5D77),
-                            fontFamily: 'Poppins-medium',
+                            fontFamily: 'Poppins-Medium',
                           ),
                         ),
                       ],
@@ -168,7 +168,7 @@ void modalBottomSheetForOnProcess({
                           // hintText: commentary.toString(),
                           hintText: 'Información adicional de la visita',
                           hintStyle: TextStyle(
-                            fontFamily: 'Poppins-regular',
+                            fontFamily: 'Poppins-Regular',
                             fontSize: 14,
                             color: Color(0xFF5A5D77),
                           ),
@@ -226,7 +226,7 @@ void modalBottomSheetForOnProcess({
                                     fontSize: 12,
                                     // fontWeight: FontWeight.bold,
                                     color: Color(0xFF5A5D77),
-                                    fontFamily: 'Poppins-regular',
+                                    fontFamily: 'Poppins-Regular',
                                   ),
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -503,7 +503,7 @@ void modalBottomSheetForOnProcess({
                                               AppLocalizations.of(context)!
                                                   .visitDelete,
                                               style: const TextStyle(
-                                                fontFamily: 'Poppins-regular',
+                                                fontFamily: 'Poppins-Regular',
                                                 color: Colors.white,
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.bold,
@@ -520,7 +520,7 @@ void modalBottomSheetForOnProcess({
                             // AppLocalizations.of(context)!.visitDelete,
                             'Eliminar',
                             style: TextStyle(
-                              fontFamily: 'Poppins-medium',
+                              fontFamily: 'Poppins-Medium',
                               color: Color(0xFF5A5D77),
                               fontSize: 14,
                             ),
@@ -565,7 +565,7 @@ class TextBoxWidget extends StatelessWidget {
       child: Text(
         '$message',
         style: TextStyle(
-          fontFamily: 'Poppins-regular',
+          fontFamily: 'Poppins-Regular',
           fontSize: 14,
           color: themeProvider.myTheme.colorScheme.primary.withOpacity(0.5),
         ),

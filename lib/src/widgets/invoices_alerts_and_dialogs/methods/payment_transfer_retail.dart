@@ -196,7 +196,7 @@ paymentTransferRetail(
               ),
               hintText: '00000000',
               hintStyle: TextStyle(
-                fontFamily: 'Poppins-regular',
+                fontFamily: 'Poppins-Regular',
                 fontSize: 14,
                 color:
                     themeProvider.myTheme.colorScheme.primary.withOpacity(0.2),
@@ -218,7 +218,7 @@ paymentTransferRetail(
             Text(
               AppLocalizations.of(context)!.selectFile,
               style: TextStyle(
-                fontFamily: 'Poppins-regular',
+                fontFamily: 'Poppins-Regular',
                 color: Colors.grey.shade400,
                 fontSize: 14,
               ),
@@ -312,7 +312,7 @@ paymentTransferRetail(
                       'Cancelar',
                       style: TextStyle(
                         color: Colors.white,
-                        fontFamily: 'Poppins-regular',
+                        fontFamily: 'Poppins-Regular',
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                       ),
@@ -526,7 +526,7 @@ paymentTransferRetail(
                             'Continuar',
                             style: TextStyle(
                               color: Colors.white,
-                              fontFamily: 'Poppins-regular',
+                              fontFamily: 'Poppins-Regular',
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
                             ),

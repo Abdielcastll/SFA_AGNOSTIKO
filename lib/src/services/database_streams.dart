@@ -10,6 +10,7 @@ import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 class DatabaseServiceStreams {
   var prissa = marcasRef.doc('fekpFNxAR5U9PZko1XWq');
   var aceites = marcasRef.doc('bYsgyluivxaZQWLeMJqA');
+  var prosa = marcasRef.doc('VF9KZ9EvBqFWDD7EMTcO');
   // Streams de productos
 
   // Stream de Productos completos
@@ -18,7 +19,7 @@ class DatabaseServiceStreams {
     return productsCollection
         // .orderBy('nombre')
         // .limit(200)
-        /* .where('marca', isEqualTo: aceites) */
+        //.where('marca', isEqualTo: prosa)
         .snapshots()
         .map(productsListFromSnapshot);
   }

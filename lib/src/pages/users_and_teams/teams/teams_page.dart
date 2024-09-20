@@ -84,7 +84,7 @@ class _TeamsBodyState extends State<TeamsBody> {
                       team.name,
                       style: const TextStyle(
                         color: Colors.black,
-                        fontFamily: 'Poppins-regular',
+                        fontFamily: 'Poppins-Regular',
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -99,7 +99,7 @@ class _TeamsBodyState extends State<TeamsBody> {
                             child: Text(
                               team.zone,
                               style: const TextStyle(
-                                fontFamily: 'Poppins-regular',
+                                fontFamily: 'Poppins-Regular',
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -111,7 +111,7 @@ class _TeamsBodyState extends State<TeamsBody> {
                             child: Text(
                               '${team.sellers.length.toString()} miembros',
                               style: TextStyle(
-                                fontFamily: 'Poppins-regular',
+                                fontFamily: 'Poppins-Regular',
                                 fontSize: 12,
                                 color: Colors.purple.shade500,
                                 fontWeight: FontWeight.bold,

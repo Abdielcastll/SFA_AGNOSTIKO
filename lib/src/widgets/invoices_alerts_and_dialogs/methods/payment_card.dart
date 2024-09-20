@@ -185,7 +185,7 @@ paymentCard(
                       'Cancelar',
                       style: TextStyle(
                         color: Colors.white,
-                        fontFamily: 'Poppins-regular',
+                        fontFamily: 'Poppins-Regular',
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                       ),
@@ -222,7 +222,7 @@ paymentCard(
                           label: Text(
                             AppLocalizations.of(context)!.orderContinue,
                             style: const TextStyle(
-                              fontFamily: 'Poppins-regular',
+                              fontFamily: 'Poppins-Regular',
                               color: Colors.white,
                               fontSize: 12,
                               fontWeight: FontWeight.bold,

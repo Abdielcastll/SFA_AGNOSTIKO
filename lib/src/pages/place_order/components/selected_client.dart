@@ -53,7 +53,7 @@ class SelectedClient extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontFamily: 'Poppins-mediumm',
+                        fontFamily: 'Poppins-Mediumm',
                         fontSize: 9,
                         fontWeight: FontWeight.w500,
                         color: Colors.grey.shade500,
@@ -68,7 +68,7 @@ class SelectedClient extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontFamily: 'Poppins-mediumm',
+                        fontFamily: 'Poppins-Mediumm',
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                       ),
@@ -83,7 +83,7 @@ class SelectedClient extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontFamily: 'Poppins-mediumm',
+                        fontFamily: 'Poppins-Mediumm',
                         fontSize: 11,
                         fontWeight: FontWeight.w500,
                         color: Colors.grey.shade500,

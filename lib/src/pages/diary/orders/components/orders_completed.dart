@@ -125,7 +125,7 @@ class _CompletedOrdersState extends State<CompletedOrders> {
                             'No hay ordenes registradas este día',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontFamily: 'Poppins-regular',
+                              fontFamily: 'Poppins-Regular',
                               fontSize: 16,
                               color: themeProvider
                                   .myTheme.colorScheme.onPrimaryContainer,

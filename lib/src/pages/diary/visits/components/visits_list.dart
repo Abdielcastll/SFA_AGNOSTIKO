@@ -93,7 +93,7 @@ class VisitsList extends StatelessWidget {
                               'No hay visitas registradas este día',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                fontFamily: 'Poppins-medium',
+                                fontFamily: 'Poppins-Medium',
                                 fontSize: 12,
                                 color: themeProvider
                                     .myTheme.colorScheme.onPrimaryContainer,

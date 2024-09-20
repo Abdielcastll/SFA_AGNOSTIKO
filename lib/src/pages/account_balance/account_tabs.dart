@@ -29,7 +29,7 @@ class AccountTabs extends StatelessWidget {
             // 'Estado de cuenta',
             style: const TextStyle(
               fontSize: 14,
-              fontFamily: 'Poppins-medium',
+              fontFamily: 'Poppins-Medium',
             ),
           ),
           // centerTitle: true,

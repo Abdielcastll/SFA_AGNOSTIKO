@@ -4,7 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class CounterLimitFirestore extends ChangeNotifier {
   int currentScreen = 0;
-  int _productsLimit = 10;
+  int _productsLimit = 0;
   int _scrollProductLimit = 10;
   int _clientsLimit = 10;
   int _scrollClientLimit = 10;

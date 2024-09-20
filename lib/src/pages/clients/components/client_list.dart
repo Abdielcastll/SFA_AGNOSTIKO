@@ -95,7 +95,7 @@ class _ClientListState extends State<ClientList> {
                   child: TextField(
                     style: const TextStyle(
                       fontSize: 14,
-                      fontFamily: 'Poppins-regular',
+                      fontFamily: 'Poppins-Regular',
                     ),
                     focusNode: myfocus,
                     keyboardType: isSearchingByname
@@ -136,7 +136,7 @@ class _ClientListState extends State<ClientList> {
                           // : AppLocalizations.of(context)!.searchProductCode,
                           : 'Buscar DNI',
                       hintStyle: const TextStyle(
-                        fontFamily: 'Poppins-regular',
+                        fontFamily: 'Poppins-Regular',
                         fontSize: 11,
                       ),
                       counterText: '',
@@ -390,7 +390,7 @@ class _ClientListState extends State<ClientList> {
                         clientName,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                          fontFamily: 'Poppins-regular',
+                          fontFamily: 'Poppins-Regular',
                           fontSize: 14,
                           wordSpacing: 0.5,
                         ),
@@ -412,7 +412,7 @@ class _ClientListState extends State<ClientList> {
                                 textAlign: TextAlign.start,
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
-                                  fontFamily: 'Poppins-regular',
+                                  fontFamily: 'Poppins-Regular',
                                   fontSize: 11,
                                 ),
                               ),
@@ -426,7 +426,7 @@ class _ClientListState extends State<ClientList> {
                                 textAlign: TextAlign.end,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
-                                  fontFamily: 'Poppins-regular',
+                                  fontFamily: 'Poppins-Regular',
                                   fontSize: 11,
                                   color: Colors.purple.shade500,
                                 ),

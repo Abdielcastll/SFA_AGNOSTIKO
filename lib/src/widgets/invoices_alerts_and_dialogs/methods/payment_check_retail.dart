@@ -182,7 +182,7 @@ paymentCheckRetail(
               contentPadding: EdgeInsets.fromLTRB(10, 0, 0, 0),
               hintText: '0112345678',
               hintStyle: TextStyle(
-                fontFamily: 'Poppins-regular',
+                fontFamily: 'Poppins-Regular',
                 fontSize: 14,
                 color:
                     themeProvider.myTheme.colorScheme.primary.withOpacity(0.2),
@@ -253,7 +253,7 @@ paymentCheckRetail(
               contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
               hintText: 'John Doe / Jane Doe',
               hintStyle: TextStyle(
-                fontFamily: 'Poppins-regular',
+                fontFamily: 'Poppins-Regular',
                 fontSize: 14,
                 color:
                     themeProvider.myTheme.colorScheme.primary.withOpacity(0.2),
@@ -291,7 +291,7 @@ paymentCheckRetail(
             Text(
               AppLocalizations.of(context)!.selectFile,
               style: TextStyle(
-                fontFamily: 'Poppins-regular',
+                fontFamily: 'Poppins-Regular',
                 color: Colors.grey.shade400,
                 fontSize: 14,
               ),
@@ -384,7 +384,7 @@ paymentCheckRetail(
                     'Cancelar',
                     style: TextStyle(
                       color: Colors.white,
-                      fontFamily: 'Poppins-regular',
+                      fontFamily: 'Poppins-Regular',
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
                     ),
@@ -511,7 +511,7 @@ paymentCheckRetail(
                             'Continuar',
                             style: TextStyle(
                               color: Colors.white,
-                              fontFamily: 'Poppins-regular',
+                              fontFamily: 'Poppins-Regular',
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
                             ),

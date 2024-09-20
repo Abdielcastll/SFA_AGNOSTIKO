@@ -228,6 +228,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     );
   }
 
+  String transactionResultStr = '';
+  String transactionOnlineStr = '';
+
   @override
   Widget build(BuildContext context) {
     getEmvTags();
@@ -239,8 +242,12 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     String onlineStr = AppLocalizations.of(context)!.online.toUpperCase();
     String errorResultStr = '';
 
-    String transactionResultStr = failedStr;
-    String transactionOnlineStr = offlineStr;
+    @override
+    void initState() {
+      super.initState();
+      transactionResultStr = failedStr;
+      transactionOnlineStr = offlineStr;
+    }
 
     if (transactionArgs == null) {
       transactionArgs = (ModalRoute.of(context)?.settings.arguments! as List)[0]
@@ -496,7 +503,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                     child: Text(
                       'imprimir comprobante'.toUpperCase(),
                       style: const TextStyle(
-                        fontFamily: 'Poppins-regular',
+                        fontFamily: 'Poppins-Regular',
                         color: Colors.white,
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
@@ -529,7 +536,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                   child: Text(
                     'aceptar'.toUpperCase(),
                     style: const TextStyle(
-                      fontFamily: 'Poppins-regular',
+                      fontFamily: 'Poppins-Regular',
                       color: Colors.white,
                       fontSize: 14,
                       fontWeight: FontWeight.bold,

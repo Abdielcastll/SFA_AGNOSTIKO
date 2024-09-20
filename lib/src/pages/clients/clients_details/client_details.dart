@@ -129,7 +129,7 @@ class ClientDetailsBody extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 22,
                 color: Colors.black,
-                fontFamily: 'Poppins-regular',
+                fontFamily: 'Poppins-Regular',
               ),
             ),
           ),

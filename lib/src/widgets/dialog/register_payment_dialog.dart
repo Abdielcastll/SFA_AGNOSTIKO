@@ -493,7 +493,7 @@ Future<dynamic> showDialogForRegisterPayment(
                                         child: Text(
                                           '$coinSymbol',
                                           style: TextStyle(
-                                            fontFamily: 'Poppins-regular',
+                                            fontFamily: 'Poppins-Regular',
                                             fontSize: 14,
                                             color: themeProvider
                                                 .myTheme.colorScheme.primary,
@@ -513,7 +513,7 @@ Future<dynamic> showDialogForRegisterPayment(
                                         '${(formatDecimalPriceByRegion(price: Decimal.parse(paidAmount.toString())))}',
                                     hintStyle: TextStyle(
                                       height: 1.85,
-                                      fontFamily: 'Poppins-regular',
+                                      fontFamily: 'Poppins-Regular',
                                       fontSize: 14,
                                       color: themeProvider
                                           .myTheme.colorScheme.primary,
@@ -568,7 +568,7 @@ Future<dynamic> showDialogForRegisterPayment(
                               Text(
                                 'Recibido ',
                                 style: TextStyle(
-                                  fontFamily: 'Poppins-regular',
+                                  fontFamily: 'Poppins-Regular',
                                   color: moneyRecievedForRegisterMoney < 0.00001
                                       ? themeProvider
                                           .myTheme.colorScheme.primary
@@ -654,7 +654,7 @@ Future<dynamic> showDialogForRegisterPayment(
                             },
                             style: TextStyle(
                               fontSize: 14,
-                              fontFamily: 'Poppins-regular',
+                              fontFamily: 'Poppins-Regular',
                               color: moneyRecievedForRegisterMoney < 0.00001
                                   ? themeProvider.myTheme.colorScheme.primary
                                   : moneyRecievedForRegisterMoney < paidAmount!
@@ -685,7 +685,7 @@ Future<dynamic> showDialogForRegisterPayment(
                                   child: Text(
                                     '$coinSymbol',
                                     style: TextStyle(
-                                      fontFamily: 'Poppins-regular',
+                                      fontFamily: 'Poppins-Regular',
                                       fontSize: 14,
                                       color: moneyRecievedForRegisterMoney <
                                               0.00001
@@ -711,7 +711,7 @@ Future<dynamic> showDialogForRegisterPayment(
                               hintText: 'Ingrese el monto a recibir',
                               hintStyle: TextStyle(
                                 height: 1.85,
-                                fontFamily: 'Poppins-regular',
+                                fontFamily: 'Poppins-Regular',
                                 fontSize: 11,
                                 color: moneyRecievedForRegisterMoney < 0.00001
                                     ? themeProvider.myTheme.colorScheme.primary
@@ -972,7 +972,7 @@ Future<dynamic> showDialogForRegisterPayment(
                                 Text(
                                   'Cambio: ',
                                   style: TextStyle(
-                                    fontFamily: 'Poppins-regular',
+                                    fontFamily: 'Poppins-Regular',
                                     color: Colors.green.shade600,
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold,
@@ -982,7 +982,7 @@ Future<dynamic> showDialogForRegisterPayment(
                                   // 'Cambio',
                                   '$coinSymbol ${formatDecimalPriceByRegion(price: Decimal.parse(change.toString()))}',
                                   style: TextStyle(
-                                    fontFamily: 'Poppins-regular',
+                                    fontFamily: 'Poppins-Regular',
                                     color: Colors.green.shade600,
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold,

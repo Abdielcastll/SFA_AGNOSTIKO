@@ -109,7 +109,7 @@ class _RolesManagerBodyState extends State<RolesManagerBody> {
                 Text(
                   'Agregar',
                   style: TextStyle(
-                    fontFamily: 'Poppins-regular',
+                    fontFamily: 'Poppins-Regular',
                     fontSize: 14,
                     color: Colors.grey.shade400,
                   ),
@@ -121,7 +121,7 @@ class _RolesManagerBodyState extends State<RolesManagerBody> {
                 Text(
                   'Borrar',
                   style: TextStyle(
-                    fontFamily: 'Poppins-regular',
+                    fontFamily: 'Poppins-Regular',
                     fontSize: 14,
                     color: Colors.grey.shade400,
                   ),
@@ -133,7 +133,7 @@ class _RolesManagerBodyState extends State<RolesManagerBody> {
                 Text(
                   'Editar',
                   style: TextStyle(
-                    fontFamily: 'Poppins-regular',
+                    fontFamily: 'Poppins-Regular',
                     fontSize: 14,
                     color: Colors.grey.shade400,
                   ),
@@ -145,7 +145,7 @@ class _RolesManagerBodyState extends State<RolesManagerBody> {
                 Text(
                   'Ver',
                   style: TextStyle(
-                    fontFamily: 'Poppins-regular',
+                    fontFamily: 'Poppins-Regular',
                     fontSize: 14,
                     color: Colors.grey.shade400,
                   ),
@@ -168,7 +168,7 @@ class _RolesManagerBodyState extends State<RolesManagerBody> {
                   child: Text(
                     'Debt Collector',
                     style: TextStyle(
-                      fontFamily: 'Poppins-regular',
+                      fontFamily: 'Poppins-Regular',
                       fontSize: 14,
                       color: themeProvider.myTheme.colorScheme.primary,
                       fontWeight: FontWeight.bold,
@@ -190,7 +190,7 @@ class _RolesManagerBodyState extends State<RolesManagerBody> {
                             child: Text(
                               'Storage',
                               style: TextStyle(
-                                fontFamily: 'Poppins-regular',
+                                fontFamily: 'Poppins-Regular',
                                 fontSize: 14,
                                 color:
                                     themeProvider.myTheme.colorScheme.secondary,
@@ -303,7 +303,7 @@ class _RolesManagerBodyState extends State<RolesManagerBody> {
                             child: Text(
                               'Catalogo',
                               style: TextStyle(
-                                fontFamily: 'Poppins-regular',
+                                fontFamily: 'Poppins-Regular',
                                 fontSize: 14,
                                 color:
                                     themeProvider.myTheme.colorScheme.secondary,
@@ -384,7 +384,7 @@ class _RolesManagerBodyState extends State<RolesManagerBody> {
                             child: Text(
                               'Productos',
                               style: TextStyle(
-                                fontFamily: 'Poppins-regular',
+                                fontFamily: 'Poppins-Regular',
                                 fontSize: 14,
                                 color:
                                     themeProvider.myTheme.colorScheme.secondary,
@@ -481,7 +481,7 @@ class _RolesManagerBodyState extends State<RolesManagerBody> {
                             child: Text(
                               'Facturas',
                               style: TextStyle(
-                                fontFamily: 'Poppins-regular',
+                                fontFamily: 'Poppins-Regular',
                                 fontSize: 14,
                                 color:
                                     themeProvider.myTheme.colorScheme.secondary,
@@ -578,7 +578,7 @@ class _RolesManagerBodyState extends State<RolesManagerBody> {
                             child: Text(
                               'Pedidos',
                               style: TextStyle(
-                                fontFamily: 'Poppins-regular',
+                                fontFamily: 'Poppins-Regular',
                                 fontSize: 14,
                                 color:
                                     themeProvider.myTheme.colorScheme.secondary,
@@ -675,7 +675,7 @@ class _RolesManagerBodyState extends State<RolesManagerBody> {
                             child: Text(
                               'Visitas',
                               style: TextStyle(
-                                fontFamily: 'Poppins-regular',
+                                fontFamily: 'Poppins-Regular',
                                 fontSize: 14,
                                 color:
                                     themeProvider.myTheme.colorScheme.secondary,

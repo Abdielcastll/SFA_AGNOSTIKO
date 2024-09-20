@@ -101,7 +101,7 @@ class InvoiceDetailsBody extends StatelessWidget {
         title: Text(
           'Ticket #${widget.number}',
           style: TextStyle(
-            fontFamily: 'Poppins-regular',
+            fontFamily: 'Poppins-Regular',
             fontSize: 20,
           ),
         ),
@@ -128,7 +128,7 @@ class InvoiceDetailsBody extends StatelessWidget {
               Text(
                 'Total del pedido',
                 style: TextStyle(
-                  fontFamily: 'Poppins-medium',
+                  fontFamily: 'Poppins-Medium',
                   fontSize: 14,
                   color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
                 ),
@@ -136,7 +136,7 @@ class InvoiceDetailsBody extends StatelessWidget {
               Text(
                 '${widget.coinSymbol} $totalAmountFormatted',
                 style: TextStyle(
-                  fontFamily: 'Poppins-medium',
+                  fontFamily: 'Poppins-Medium',
                   fontSize: 14,
                   color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
                 ),
@@ -163,7 +163,7 @@ class InvoiceDetailsBody extends StatelessWidget {
                   child: Text(
                     '$currentClientName',
                     style: TextStyle(
-                      fontFamily: 'Poppins-medium',
+                      fontFamily: 'Poppins-Medium',
                       fontSize: 14,
                       color: Colors.black,
                     ),
@@ -180,7 +180,7 @@ class InvoiceDetailsBody extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.start,
                         style: TextStyle(
-                          fontFamily: 'Poppins-medium',
+                          fontFamily: 'Poppins-Medium',
                           fontSize: 11,
                           color: Color(0xFF5A5D77),
                         ),
@@ -189,7 +189,7 @@ class InvoiceDetailsBody extends StatelessWidget {
                     Text(
                       '$currentClientPhone',
                       style: TextStyle(
-                        fontFamily: 'Poppins-medium',
+                        fontFamily: 'Poppins-Medium',
                         fontSize: 11,
                         color: Color(0xFF7D5070),
                       ),
@@ -218,7 +218,7 @@ class InvoiceDetailsBody extends StatelessWidget {
                         'FECHA DE COBRO',
                         textAlign: TextAlign.left,
                         style: TextStyle(
-                          fontFamily: 'Poppins-medium',
+                          fontFamily: 'Poppins-Medium',
                           fontSize: 14,
                           color: Color(0xFF7D5070),
                         ),
@@ -227,7 +227,7 @@ class InvoiceDetailsBody extends StatelessWidget {
                         '10/07/2023',
                         textAlign: TextAlign.left,
                         style: TextStyle(
-                          fontFamily: 'Poppins-medium',
+                          fontFamily: 'Poppins-Medium',
                           fontSize: 12,
                           color: Color(0xFF5A5D77),
                         ),
@@ -242,7 +242,7 @@ class InvoiceDetailsBody extends StatelessWidget {
                         'TIPO DE TICKET',
                         textAlign: TextAlign.left,
                         style: TextStyle(
-                          fontFamily: 'Poppins-medium',
+                          fontFamily: 'Poppins-Medium',
                           fontSize: 14,
                           color: Color(0xFF7D5070),
                         ),
@@ -251,7 +251,7 @@ class InvoiceDetailsBody extends StatelessWidget {
                         widget.isPaid ? 'Completada' : 'En proceso',
                         textAlign: TextAlign.left,
                         style: TextStyle(
-                          fontFamily: 'Poppins-medium',
+                          fontFamily: 'Poppins-Medium',
                           fontSize: 12,
                           color: Color(0xFF5A5D77),
                         ),
@@ -266,7 +266,7 @@ class InvoiceDetailsBody extends StatelessWidget {
               child: Text(
                 'ITEMS',
                 style: TextStyle(
-                  fontFamily: 'Poppins-medium',
+                  fontFamily: 'Poppins-Medium',
                   fontSize: 14,
                   color: Color(0xFF7D5070),
                 ),
@@ -353,7 +353,7 @@ class InvoiceDetailsBody extends StatelessWidget {
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                      fontFamily: 'Poppins-medium',
+                                      fontFamily: 'Poppins-Medium',
                                       fontSize: 12,
                                       color: Colors.black,
                                     ),
@@ -368,7 +368,7 @@ class InvoiceDetailsBody extends StatelessWidget {
                                       Text(
                                         'U: ${product['cantidad']}',
                                         style: TextStyle(
-                                          fontFamily: 'Poppins-medium',
+                                          fontFamily: 'Poppins-Medium',
                                           fontSize: 12,
                                           color: Colors.grey,
                                         ),
@@ -377,7 +377,7 @@ class InvoiceDetailsBody extends StatelessWidget {
                                       Text(
                                         '${widget.coinSymbol} $unitPriceFormatted',
                                         style: TextStyle(
-                                          fontFamily: 'Poppins-medium',
+                                          fontFamily: 'Poppins-Medium',
                                           fontSize: 12,
                                           color: Colors.grey,
                                         ),
@@ -386,7 +386,7 @@ class InvoiceDetailsBody extends StatelessWidget {
                                       Text(
                                         '${widget.coinSymbol} $productPriceFormatted',
                                         style: TextStyle(
-                                          fontFamily: 'Poppins-medium',
+                                          fontFamily: 'Poppins-Medium',
                                           fontSize: 14,
                                           color: Color(0xFF7D5070),
                                         ),

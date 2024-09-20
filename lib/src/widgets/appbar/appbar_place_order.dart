@@ -21,7 +21,7 @@ class AppBarPlaceOrder extends StatelessWidget implements PreferredSizeWidget {
       title: Text(
         'Nuevo Pedido',
         style: TextStyle(
-          fontFamily: 'Poppins-regular',
+          fontFamily: 'Poppins-Regular',
           fontSize: 21,
           fontWeight: FontWeight.w300,
           color: Colors.white,

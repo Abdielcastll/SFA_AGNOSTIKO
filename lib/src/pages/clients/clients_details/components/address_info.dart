@@ -44,7 +44,7 @@ class AddressInfo extends StatelessWidget {
               child: Text(
                 fiscalAddress.toLowerCase(),
                 style: const TextStyle(
-                  fontFamily: 'Poppins-medium',
+                  fontFamily: 'Poppins-Medium',
                   fontSize: 11,
                   color: Color(0xFF5A5D77),
                 ),

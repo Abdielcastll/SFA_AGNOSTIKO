@@ -49,7 +49,7 @@ class PlaceOrderPage extends StatelessWidget {
         title: Text(
           AppLocalizations.of(context)!.newOrder,
           style: const TextStyle(
-            fontFamily: 'IBMPlexSans-Regular',
+            fontFamily: 'Poppins-Regular',
             fontSize: 21,
             fontWeight: FontWeight.w300,
             color: Colors.white,

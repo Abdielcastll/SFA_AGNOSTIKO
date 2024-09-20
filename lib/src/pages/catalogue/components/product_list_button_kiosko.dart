@@ -7,6 +7,7 @@ import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/products_page_kiosko.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class ListOfProductsButtonKiosko extends StatefulWidget {
   const ListOfProductsButtonKiosko({Key? key}) : super(key: key);
@@ -24,6 +25,7 @@ class _ListOfProductsButtonKioskoState
     final pricesName = Provider.of<Prices?>(context)?.name ?? {};
     final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
     final products = Provider.of<List<Products>?>(context) ?? [];
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     // print('products from button: ${products.length}');
     return Container(
@@ -45,7 +47,7 @@ class _ListOfProductsButtonKioskoState
               child: ElevatedButton.icon(
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
-                    Color.fromARGB(255, 78, 146, 200),
+                    themeProvider.myTheme.colorScheme.primary,
                   ),
                   foregroundColor: MaterialStateProperty.all(
                     Colors.white,
@@ -79,7 +81,7 @@ class _ListOfProductsButtonKioskoState
                   AppLocalizations.of(context)!.addProducts,
                   style: const TextStyle(
                     color: Colors.white,
-                    fontFamily: 'Poppins-medium',
+                    fontFamily: 'Poppins-Medium',
                     fontSize: 14,
                   ),
                 ),

@@ -1,8 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:async';
 import 'dart:ui' as ui;
 import 'package:http/http.dart' as http;
-import 'dart:async';
 
 import 'package:agnostiko/agnostiko.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -295,7 +295,6 @@ Future printCancelTicket(int stan, String referenceNumber, double monto) async {
 
   final maxWidth = await getPaperWidth();
 
-  // final img = await bytesToUiImage(rgbaLogo, logo.width, logo.height);
   final imgLogo = PrinterImage(rgbaLogo, logo.width, logo.height,
       offsetX: (maxWidth / 2) - (logo.width / 2));
 
@@ -306,7 +305,8 @@ Future printCancelTicket(int stan, String referenceNumber, double monto) async {
 
   listOfTextLine.add(imgLogo);
 
-  listOfTextLine.add(PrinterText("Agnostiko SFA".toUpperCase(),
+  listOfTextLine.add(PrinterText(
+      "Promoción y Operación S.A. de C.V.".toUpperCase(),
       format: TextFormat(fontSize: 16, fontFamily: specialFont),
       alignment: TextAlignment.Center));
 

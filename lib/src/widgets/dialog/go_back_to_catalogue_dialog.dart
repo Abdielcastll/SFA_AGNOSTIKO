@@ -14,7 +14,15 @@ goBackToCatalogue(BuildContext context) {
   showDialog(
     context: context,
     builder: (context) => AlertDialog(
-      title: const Text("Advertencia"),
+      title: const Text(
+        "Advertencia",
+        style: TextStyle(
+          color: Colors.black,
+          fontFamily: 'Poppins-Regular',
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -67,13 +75,13 @@ goBackToCatalogue(BuildContext context) {
                         Text(
                           "Facturación Pausada",
                           style: TextStyle(
-                            fontFamily: 'Poppins-regular',
+                            fontFamily: 'Poppins-Regular',
                           ),
                         ),
                         Text(
                           "Consulte lista de facturas",
                           style: TextStyle(
-                            fontFamily: 'Poppins-regular',
+                            fontFamily: 'Poppins-Regular',
                           ),
                         ),
                       ],

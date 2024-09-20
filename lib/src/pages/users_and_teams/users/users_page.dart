@@ -138,7 +138,7 @@ class _UserBodyState extends State<UserBody> {
                           user.name,
                           style: const TextStyle(
                             color: Colors.black,
-                            fontFamily: 'Poppins-regular',
+                            fontFamily: 'Poppins-Regular',
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
@@ -147,7 +147,7 @@ class _UserBodyState extends State<UserBody> {
                           'CI: ${user.ci}',
                           style: TextStyle(
                             color: Colors.grey.shade500,
-                            fontFamily: 'Poppins-regular',
+                            fontFamily: 'Poppins-Regular',
                             fontSize: 16,
                           ),
                         ),
@@ -163,7 +163,7 @@ class _UserBodyState extends State<UserBody> {
                             child: Text(
                               user.email,
                               style: const TextStyle(
-                                fontFamily: 'Poppins-regular',
+                                fontFamily: 'Poppins-Regular',
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -176,7 +176,7 @@ class _UserBodyState extends State<UserBody> {
                               identifyCharge(
                                   user.isManager, user.isAdmin, user.isSeller),
                               style: TextStyle(
-                                fontFamily: 'Poppins-regular',
+                                fontFamily: 'Poppins-Regular',
                                 fontSize: 12,
                                 color: Colors.purple.shade500,
                                 fontWeight: FontWeight.bold,

@@ -77,7 +77,7 @@ class _ProductsInCartState extends State<ProductsInCart> {
       //                       overflow: TextOverflow.ellipsis,
       //                       style: TextStyle(
       //                         fontSize: 12,
-      //                         fontFamily: 'Poppins-regular',
+      //                         fontFamily: 'Poppins-Regular',
       //                       ),
       //                     ),
       //                   ),
@@ -130,7 +130,7 @@ class _ProductsInCartState extends State<ProductsInCart> {
       //                       'U: ${product.productUnits}',
       //                       style: TextStyle(
       //                         color: Colors.grey,
-      //                         fontFamily: 'Poppins-regular',
+      //                         fontFamily: 'Poppins-Regular',
       //                         fontSize: 12,
       //                       ),
       //                     ),
@@ -141,7 +141,7 @@ class _ProductsInCartState extends State<ProductsInCart> {
       //                       'P/U: ${product.unitPrice.toStringAsFixed(4)}',
       //                       style: TextStyle(
       //                         color: Colors.grey,
-      //                         fontFamily: 'Poppins-regular',
+      //                         fontFamily: 'Poppins-Regular',
       //                         fontSize: 12,
       //                       ),
       //                     ),
@@ -152,7 +152,7 @@ class _ProductsInCartState extends State<ProductsInCart> {
       //                       'Total: ${product.totalPrice.toStringAsFixed(4)}',
       //                       style: TextStyle(
       //                         color: Colors.purple.shade600,
-      //                         fontFamily: 'Poppins-regular',
+      //                         fontFamily: 'Poppins-Regular',
       //                         fontSize: 12,
       //                       ),
       //                     ),
@@ -164,7 +164,7 @@ class _ProductsInCartState extends State<ProductsInCart> {
       //                   //         product.promotionDiscount, product.promotion),
       //                   //     style: TextStyle(
       //                   //       color: Colors.purple.shade600,
-      //                   //       fontFamily: 'Poppins-regular',
+      //                   //       fontFamily: 'Poppins-Regular',
       //                   //       fontSize: 12,
       //                   //     ),
       //                   //   ),

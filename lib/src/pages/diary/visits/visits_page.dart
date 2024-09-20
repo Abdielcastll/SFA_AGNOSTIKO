@@ -379,7 +379,7 @@ class VisitsBody extends StatelessWidget {
                   'Ver completados',
                   style: TextStyle(
                     fontSize: 14,
-                    fontFamily: 'Poppins-medium',
+                    fontFamily: 'Poppins-Medium',
                     color: Color(0xFF5A5D77),
                   ),
                 ),

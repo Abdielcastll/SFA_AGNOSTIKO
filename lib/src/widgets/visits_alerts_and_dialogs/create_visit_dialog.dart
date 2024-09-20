@@ -119,7 +119,7 @@ void showCreateClientDialog(context, uid) {
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: Color(0xFF4353C2),
-                                    fontFamily: 'Poppins-medium',
+                                    fontFamily: 'Poppins-Medium',
                                   ),
                                 ),
                               ),
@@ -143,7 +143,7 @@ void showCreateClientDialog(context, uid) {
                                       style: TextStyle(
                                         fontSize: 14,
                                         color: Color(0xFF4353C2),
-                                        fontFamily: 'Poppins-regular',
+                                        fontFamily: 'Poppins-Regular',
                                       ),
                                     ),
                                     Container(
@@ -226,7 +226,7 @@ void showCreateClientDialog(context, uid) {
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: Color(0xFF4353C2),
-                                    fontFamily: 'Poppins-medium',
+                                    fontFamily: 'Poppins-Medium',
                                   ),
                                 ),
                               ),
@@ -250,7 +250,7 @@ void showCreateClientDialog(context, uid) {
                                       style: TextStyle(
                                         fontSize: 14,
                                         color: Color(0xFF4353C2),
-                                        fontFamily: 'Poppins-regular',
+                                        fontFamily: 'Poppins-Regular',
                                       ),
                                     ),
                                   ],
@@ -264,7 +264,7 @@ void showCreateClientDialog(context, uid) {
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: Color(0xFF4353C2),
-                                    fontFamily: 'Poppins-medium',
+                                    fontFamily: 'Poppins-Medium',
                                   ),
                                 ),
                               ),
@@ -283,7 +283,7 @@ void showCreateClientDialog(context, uid) {
                                             textAlign: TextAlign.left,
                                             style: TextStyle(
                                               fontSize: 14,
-                                              fontFamily: 'Poppins-regular',
+                                              fontFamily: 'Poppins-Regular',
                                               color: Color(0xFF4353C2),
                                             ),
                                             overflow: TextOverflow.ellipsis,
@@ -298,7 +298,7 @@ void showCreateClientDialog(context, uid) {
                                                 item,
                                                 style: TextStyle(
                                                   fontSize: 14,
-                                                  fontFamily: 'Poppins-regular',
+                                                  fontFamily: 'Poppins-Regular',
                                                   color: Color(0xFF4353C2),
                                                 ),
                                                 overflow: TextOverflow.ellipsis,
@@ -376,7 +376,7 @@ void showCreateClientDialog(context, uid) {
                                             style: TextStyle(
                                               fontSize: 14,
                                               color: Color(0xFF4353C2),
-                                              fontFamily: "Poppins-medium",
+                                              fontFamily: "Poppins-Medium",
                                             ),
                                           ),
                                         ),
@@ -396,7 +396,7 @@ void showCreateClientDialog(context, uid) {
                                                             style: TextStyle(
                                                               fontSize: 12,
                                                               fontFamily:
-                                                                  'Poppins-regular',
+                                                                  'Poppins-Regular',
                                                               color: Color(
                                                                   0xFF4353C2),
                                                             ),
@@ -418,7 +418,7 @@ void showCreateClientDialog(context, uid) {
                                                                     TextStyle(
                                                                   fontSize: 12,
                                                                   fontFamily:
-                                                                      'Poppins-regular',
+                                                                      'Poppins-Regular',
                                                                   color: Color(
                                                                       0xFF4353C2),
                                                                 ),
@@ -668,7 +668,7 @@ void showCreateClientDialog(context, uid) {
                                     label: Text(
                                       AppLocalizations.of(context)!.createVisit,
                                       style: TextStyle(
-                                        fontFamily: 'Poppins-regular',
+                                        fontFamily: 'Poppins-Regular',
                                         color: Colors.white,
                                         fontSize: 14,
                                         // fontWeight: FontWeight.bold,
@@ -721,7 +721,7 @@ void showCreateClientDialog(context, uid) {
                                     label: Text(
                                       AppLocalizations.of(context)!.createVisit,
                                       style: TextStyle(
-                                        fontFamily: 'Poppins-regular',
+                                        fontFamily: 'Poppins-Regular',
                                         color: Colors.white,
                                         fontSize: 14,
                                         // fontWeight: FontWeight.bold,

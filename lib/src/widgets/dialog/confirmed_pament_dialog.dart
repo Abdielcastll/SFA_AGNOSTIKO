@@ -28,7 +28,7 @@ showDialogForConfirmedPayment(BuildContext context, String? coinSymbol,
                         Text(
                           "¡PAGO REGISTRADO!",
                           style: TextStyle(
-                            fontFamily: 'Poppins-regular',
+                            fontFamily: 'Poppins-Regular',
                             fontSize: 18,
                             color: themeProvider
                                 .myTheme.colorScheme.onPrimaryContainer,
@@ -65,7 +65,7 @@ showDialogForConfirmedPayment(BuildContext context, String? coinSymbol,
                                 child: Text(
                                   'Monto pagado: $coinSymbol ${paidAmount.toStringAsFixed(2)}',
                                   style: TextStyle(
-                                    fontFamily: 'Poppins-regular',
+                                    fontFamily: 'Poppins-Regular',
                                     fontSize: 12,
                                     color: themeProvider
                                         .myTheme.colorScheme.primary,
@@ -79,7 +79,7 @@ showDialogForConfirmedPayment(BuildContext context, String? coinSymbol,
                                 child: Text(
                                   '${client.name}',
                                   style: TextStyle(
-                                    fontFamily: 'Poppins-regular',
+                                    fontFamily: 'Poppins-Regular',
                                     fontSize: 12,
                                     color: themeProvider
                                         .myTheme.colorScheme.primary,
@@ -93,7 +93,7 @@ showDialogForConfirmedPayment(BuildContext context, String? coinSymbol,
                                 child: Text(
                                   'Fecha: $date',
                                   style: TextStyle(
-                                    fontFamily: 'Poppins-regular',
+                                    fontFamily: 'Poppins-Regular',
                                     fontSize: 12,
                                     color: themeProvider
                                         .myTheme.colorScheme.primary,
@@ -107,7 +107,7 @@ showDialogForConfirmedPayment(BuildContext context, String? coinSymbol,
                                 child: Text(
                                   selectedValueA,
                                   style: TextStyle(
-                                    fontFamily: 'Poppins-regular',
+                                    fontFamily: 'Poppins-Regular',
                                     fontSize: 12,
                                     color: themeProvider
                                         .myTheme.colorScheme.primary,
@@ -147,7 +147,7 @@ showDialogForConfirmedPayment(BuildContext context, String? coinSymbol,
                               'Aceptar',
                               style: TextStyle(
                                 color: Colors.white,
-                                fontFamily: 'Poppins-regular',
+                                fontFamily: 'Poppins-Regular',
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
                               ),

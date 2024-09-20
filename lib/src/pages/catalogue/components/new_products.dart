@@ -11,6 +11,7 @@ import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pwa_sales2go_flutter/src/utils/custom_cache_manager.dart';
 import '../../../models/prices_model.dart';
 
 class NewProductsWidget extends StatefulWidget {
@@ -61,7 +62,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                     color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
                     letterSpacing: 0.15,
                     fontSize: 16,
-                    fontFamily: 'Poppins-medium',
+                    fontFamily: 'Poppins-Medium',
                   ),
                 ),
               ),
@@ -142,6 +143,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                     height: 150,
                                     width: 160,
                                     child: CachedNetworkImage(
+                                      cacheManager: CustomCacheManager.instance,
                                       fit: BoxFit.cover,
                                       imageUrl: url!,
                                       placeholder: (context, url) => Container(

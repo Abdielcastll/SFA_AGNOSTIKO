@@ -60,7 +60,7 @@ class _LogoutButtonState extends State<LogoutButton> {
               AppLocalizations.of(context)!.logOut,
               style: const TextStyle(
                 color: Colors.red,
-                fontFamily: 'Poppins-regular',
+                fontFamily: 'Poppins-Regular',
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
               ),

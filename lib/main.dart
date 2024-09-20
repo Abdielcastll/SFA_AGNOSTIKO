@@ -196,7 +196,7 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
   void _startInactivityTimer() {
     print("start timer");
     _inactivityTimer?.cancel();
-    _inactivityTimer = Timer(const Duration(minutes: 1), () {
+    _inactivityTimer = Timer(const Duration(minutes: 3), () {
       print('timer complete');
       print('show video');
       if (globalRemoteConfig.promoVideoDisponible!) {

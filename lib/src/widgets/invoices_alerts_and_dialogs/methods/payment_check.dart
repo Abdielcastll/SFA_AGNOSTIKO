@@ -174,7 +174,7 @@ paymentCheck(
               contentPadding: EdgeInsets.fromLTRB(10, 0, 0, 0),
               hintText: '0112345678',
               hintStyle: TextStyle(
-                fontFamily: 'Poppins-regular',
+                fontFamily: 'Poppins-Regular',
                 fontSize: 14,
                 color:
                     themeProvider.myTheme.colorScheme.primary.withOpacity(0.2),
@@ -242,7 +242,7 @@ paymentCheck(
               contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
               hintText: 'John Doe / Jane Doe',
               hintStyle: TextStyle(
-                fontFamily: 'Poppins-regular',
+                fontFamily: 'Poppins-Regular',
                 fontSize: 14,
                 color:
                     themeProvider.myTheme.colorScheme.primary.withOpacity(0.2),
@@ -475,7 +475,7 @@ paymentCheck(
                               'Continuar',
                               style: TextStyle(
                                 color: Colors.white,
-                                fontFamily: 'Poppins-medium',
+                                fontFamily: 'Poppins-Medium',
                                 fontSize: 12,
                               ),
                             ),

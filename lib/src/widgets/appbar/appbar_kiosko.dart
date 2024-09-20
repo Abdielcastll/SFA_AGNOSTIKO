@@ -28,7 +28,7 @@ class AppBarKiosko extends StatelessWidget implements PreferredSizeWidget {
         style: TextStyle(
           letterSpacing: 0,
           fontSize: 26,
-          fontFamily: 'Poppins-regular',
+          fontFamily: 'Poppins-Regular',
           fontWeight: FontWeight.w800,
         ),
       ),

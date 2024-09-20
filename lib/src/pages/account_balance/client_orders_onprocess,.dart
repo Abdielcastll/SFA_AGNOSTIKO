@@ -128,7 +128,7 @@ class _ClientsOrdersOnProcessState extends State<ClientsOrdersOnProcess> {
                               'No hay ordenes registradas',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                fontFamily: 'Poppins-regular',
+                                fontFamily: 'Poppins-Regular',
                                 fontSize: 16,
                                 color: themeProvider
                                     .myTheme.colorScheme.onPrimaryContainer,

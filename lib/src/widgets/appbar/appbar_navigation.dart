@@ -45,9 +45,9 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
           ? Container(
               margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
               height: 50,
-              width: 50,
+              width: 120,
               child: Image.asset(
-                'assets/images/agn.png',
+                'assets/images/prosa_blanco.png',
                 fit: BoxFit.contain,
               ),
             )
@@ -56,7 +56,7 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
               height: 50,
               width: 120,
               child: Image.asset(
-                'assets/images/agn_full.png',
+                'assets/images/prosa_blanco.png',
                 fit: BoxFit.contain,
               ),
             ),
@@ -65,7 +65,7 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
       //   style: TextStyle(
       //     letterSpacing: 0,
       //     fontSize: 22,
-      //     fontFamily: 'Poppins-regular',
+      //     fontFamily: 'Poppins-Regular',
       //   ),
       // ),
       elevation: 0,
@@ -157,7 +157,7 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                       fontFamily:
-                                                          'Poppins-regular',
+                                                          'Poppins-Regular',
                                                       fontSize: 16,
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -434,7 +434,7 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
                                       currentClientForTheOrder!.name,
                                       style: TextStyle(
                                         fontSize: 11,
-                                        fontFamily: 'Poppins-regular',
+                                        fontFamily: 'Poppins-Regular',
                                         color:
                                             Color.fromARGB(255, 196, 196, 196),
                                       ),
@@ -443,7 +443,7 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
                                       currentClientForTheOrder.prices,
                                       style: TextStyle(
                                         fontSize: 11,
-                                        fontFamily: 'Poppins-regular',
+                                        fontFamily: 'Poppins-Regular',
                                         color:
                                             Color.fromARGB(255, 196, 196, 196),
                                       ),

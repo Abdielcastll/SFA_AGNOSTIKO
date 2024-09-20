@@ -24,7 +24,7 @@ class _NewUserPageState extends State<NewUserPage> {
           style: TextStyle(
             letterSpacing: 0,
             fontSize: 22,
-            fontFamily: 'Poppins-regular',
+            fontFamily: 'Poppins-Regular',
           ),
         ),
         elevation: 0,
@@ -84,7 +84,7 @@ class _NewUserBodyState extends State<NewUserBody> {
                       'Nombre y Apellido',
                       style: TextStyle(
                         color: Colors.black,
-                        fontFamily: 'Poppins-regular',
+                        fontFamily: 'Poppins-Regular',
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -120,7 +120,7 @@ class _NewUserBodyState extends State<NewUserBody> {
                         contentPadding: const EdgeInsets.fromLTRB(14, 0, 0, 0),
                         hintText: 'Victor Velasquez',
                         hintStyle: TextStyle(
-                          fontFamily: 'Poppins-regular',
+                          fontFamily: 'Poppins-Regular',
                           fontSize: 14,
                           color: themeProvider.myTheme.colorScheme.primary
                               .withOpacity(0.2),
@@ -154,7 +154,7 @@ class _NewUserBodyState extends State<NewUserBody> {
                       'Cedula de Identidad',
                       style: TextStyle(
                         color: Colors.black,
-                        fontFamily: 'Poppins-regular',
+                        fontFamily: 'Poppins-Regular',
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -186,7 +186,7 @@ class _NewUserBodyState extends State<NewUserBody> {
                         contentPadding: const EdgeInsets.fromLTRB(14, 0, 0, 0),
                         hintText: 'XX.XXX.XXX',
                         hintStyle: TextStyle(
-                          fontFamily: 'Poppins-regular',
+                          fontFamily: 'Poppins-Regular',
                           fontSize: 14,
                           color: themeProvider.myTheme.colorScheme.primary
                               .withOpacity(0.2),
@@ -219,7 +219,7 @@ class _NewUserBodyState extends State<NewUserBody> {
               'E-mail',
               style: TextStyle(
                 color: Colors.black,
-                fontFamily: 'Poppins-regular',
+                fontFamily: 'Poppins-Regular',
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -253,7 +253,7 @@ class _NewUserBodyState extends State<NewUserBody> {
                 contentPadding: const EdgeInsets.fromLTRB(14, 0, 0, 0),
                 hintText: 'example@gmail.com',
                 hintStyle: TextStyle(
-                  fontFamily: 'Poppins-regular',
+                  fontFamily: 'Poppins-Regular',
                   fontSize: 14,
                   color: themeProvider.myTheme.colorScheme.primary
                       .withOpacity(0.2),
@@ -287,7 +287,7 @@ class _NewUserBodyState extends State<NewUserBody> {
                       'Contraseña',
                       style: TextStyle(
                         color: Colors.black,
-                        fontFamily: 'Poppins-regular',
+                        fontFamily: 'Poppins-Regular',
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -322,7 +322,7 @@ class _NewUserBodyState extends State<NewUserBody> {
                         contentPadding: const EdgeInsets.fromLTRB(14, 0, 0, 0),
                         hintText: 'Contraseña',
                         hintStyle: TextStyle(
-                          fontFamily: 'Poppins-regular',
+                          fontFamily: 'Poppins-Regular',
                           fontSize: 14,
                           color: themeProvider.myTheme.colorScheme.primary
                               .withOpacity(0.2),
@@ -356,7 +356,7 @@ class _NewUserBodyState extends State<NewUserBody> {
                       'Validar Contraseña',
                       style: TextStyle(
                         color: Colors.black,
-                        fontFamily: 'Poppins-regular',
+                        fontFamily: 'Poppins-Regular',
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -391,7 +391,7 @@ class _NewUserBodyState extends State<NewUserBody> {
                         contentPadding: const EdgeInsets.fromLTRB(14, 0, 0, 0),
                         hintText: 'Contraseña',
                         hintStyle: TextStyle(
-                          fontFamily: 'Poppins-regular',
+                          fontFamily: 'Poppins-Regular',
                           fontSize: 14,
                           color: themeProvider.myTheme.colorScheme.primary
                               .withOpacity(0.2),
@@ -424,7 +424,7 @@ class _NewUserBodyState extends State<NewUserBody> {
               'Validar Contraseña',
               style: TextStyle(
                 color: Colors.black,
-                fontFamily: 'Poppins-regular',
+                fontFamily: 'Poppins-Regular',
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -533,7 +533,7 @@ class _NewUserBodyState extends State<NewUserBody> {
                 child: Text(
                   'Regresar',
                   style: TextStyle(
-                    fontFamily: 'Poppins-regular',
+                    fontFamily: 'Poppins-Regular',
                     fontSize: 14,
                     color: Colors.grey.shade400,
                   ),
@@ -561,7 +561,7 @@ class _NewUserBodyState extends State<NewUserBody> {
                     const Text(
                       'CONTINUAR',
                       style: TextStyle(
-                        fontFamily: 'Poppins-regular',
+                        fontFamily: 'Poppins-Regular',
                         fontSize: 14,
                       ),
                     ),

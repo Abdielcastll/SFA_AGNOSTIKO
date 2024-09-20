@@ -228,7 +228,7 @@ class InvoiceCardBody extends StatelessWidget {
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 13,
-                                fontFamily: "Poppins-regular",
+                                fontFamily: "Poppins-Regular",
                               ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
@@ -240,7 +240,7 @@ class InvoiceCardBody extends StatelessWidget {
                               style: TextStyle(
                                 color: identifyColor(),
                                 fontSize: 13,
-                                fontFamily: "Poppins-regular",
+                                fontFamily: "Poppins-Regular",
                               ),
                             ),
                           ),
@@ -309,7 +309,7 @@ class InvoiceCardBody extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 fontSize: 10,
-                                fontFamily: "Poppins-regular",
+                                fontFamily: "Poppins-Regular",
                                 color: identifyColor(),
                               ),
                             ),

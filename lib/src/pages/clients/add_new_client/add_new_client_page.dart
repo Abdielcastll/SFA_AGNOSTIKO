@@ -129,6 +129,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
     }
   }
 
+  bool loading = false;
   @override
   Widget build(BuildContext context) {
     determinePosition();
@@ -947,251 +948,329 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                             } else {
                               showDialog(
                                 context: context,
-                                builder: (context) => AlertDialog(
-                                  actionsOverflowButtonSpacing: 1,
-                                  actionsPadding: EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 10,
-                                  ),
-                                  title: Center(
-                                    child: Text(
-                                      'Confirmación',
-                                      style: TextStyle(
-                                        color: themeProvider.myTheme.colorScheme
-                                            .onPrimaryContainer,
-                                        fontFamily: 'Poppins-regular',
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
+                                builder: (context) => StatefulBuilder(
+                                  builder: (context, setState) {
+                                    return AlertDialog(
+                                      actionsOverflowButtonSpacing: 1,
+                                      actionsPadding: EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 10,
                                       ),
-                                    ),
-                                  ),
-                                  content: SingleChildScrollView(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      // ignore: prefer_const_literals_to_create_immutables
-                                      children: [
-                                        Center(
-                                          child: Text(
-                                            'Este registro de cliente será guardado',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: themeProvider
-                                                  .myTheme.colorScheme.primary,
-                                              fontFamily: 'Poppins-regular',
-                                              fontSize: 11,
-                                            ),
+                                      title: Center(
+                                        child: Text(
+                                          'Confirmación',
+                                          style: TextStyle(
+                                            color: themeProvider.myTheme
+                                                .colorScheme.onPrimaryContainer,
+                                            fontFamily: 'Poppins-regular',
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        Center(
-                                          child: Text(
-                                            '¿Desea continuar?',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: themeProvider
-                                                  .myTheme.colorScheme.primary,
-                                              fontFamily: 'Poppins-regular',
-                                              fontSize: 11,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  actions: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        ElevatedButton.icon(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                              themeProvider
-                                                  .myTheme.colorScheme.primary,
-                                            ),
-                                            shape: MaterialStateProperty.all<
-                                                RoundedRectangleBorder>(
-                                              RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(18.0),
+                                      ),
+                                      content: SingleChildScrollView(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Center(
+                                              child: Text(
+                                                'Este registro de cliente será guardado',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  color: themeProvider.myTheme
+                                                      .colorScheme.primary,
+                                                  fontFamily: 'Poppins-regular',
+                                                  fontSize: 11,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          icon: Icon(
-                                            MaterialIcons.arrow_back_ios,
-                                            size: 16,
-                                            color: Colors.white,
-                                          ),
-                                          label: Text(
-                                            'No',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: 'Poppins-regular',
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                        ElevatedButton.icon(
-                                          onPressed: () async {
-                                            final String
-                                                newClientNameForFirebase =
-                                                newClientName!.text
-                                                    .trim()
-                                                    .toUpperCase();
-                                            final int newClientIdForFirebase =
-                                                int.parse(newClientId!.text
-                                                    .trim()
-                                                    .toString());
-                                            final String
-                                                newclientPhoneForFirebase =
-                                                newclientPhone!.text
-                                                    .trim()
-                                                    .toString();
-                                            final String
-                                                newClientEmailForFirebase =
-                                                newClientEmail!.text.trim()
-                                                  ..toString();
-                                            final String
-                                                newClientAddress1ForFirebase =
-                                                isSimple
-                                                    ? ''
-                                                    : newClientAddress1!.text
-                                                        .trim()
-                                                        .toString();
-                                            final String
-                                                newClientAddress2ForFirebase =
-                                                isSimple
-                                                    ? ''
-                                                    : newClientAddress2!.text
-                                                        .trim()
-                                                        .toString();
-                                            final int
-                                                newClientMasterDiscountForFirebase =
-                                                isSimple
-                                                    ? 0
-                                                    : int.parse(
-                                                        newClientMasterDiscount
-                                                                ?.text
-                                                                .trim()
-                                                                .toString() ??
-                                                            '0');
-                                            final userUid =
-                                                Provider.of<UserModel?>(context,
-                                                        listen: false)!
-                                                    .uid;
-                                            ScaffoldMessenger.of(context)
-                                              ..removeCurrentSnackBar()
-                                              ..showSnackBar(
-                                                SnackBar(
-                                                  backgroundColor: themeProvider
-                                                      .myTheme
-                                                      .colorScheme
-                                                      .primary,
-                                                  duration: const Duration(
-                                                      seconds: 1),
-                                                  content: Text(
-                                                    "Registrando Cliente",
-                                                    style: const TextStyle(
-                                                      fontFamily:
-                                                          'Poppins-regular',
-                                                    ),
-                                                  ),
+                                            Center(
+                                              child: Text(
+                                                '¿Desea continuar?',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  color: themeProvider.myTheme
+                                                      .colorScheme.primary,
+                                                  fontFamily: 'Poppins-regular',
+                                                  fontSize: 11,
                                                 ),
-                                              );
-
-                                            await registerClient(
-                                              isSpecialContributor: isSimple
-                                                  ? false
-                                                  : isSpecialContributor,
-                                              newClientAddress1:
-                                                  newClientAddress1ForFirebase,
-                                              newClientAddress2:
-                                                  newClientAddress2ForFirebase,
-                                              newClientEmail:
-                                                  newClientEmailForFirebase,
-                                              newClientId:
-                                                  newClientIdForFirebase,
-                                              newClientMasterDiscount:
-                                                  newClientMasterDiscountForFirebase,
-                                              newClientName:
-                                                  newClientNameForFirebase,
-                                              newClientSalesZone:
-                                                  newClientSalesZone!,
-                                              newclientPhone:
-                                                  newclientPhoneForFirebase,
-                                              selectedIdType: selectedIdType!,
-                                              uid: userUid!,
-                                              selectedPricesList:
-                                                  selectedPriceList!,
-                                              image:
-                                                  isSimple ? null : imageFile,
-                                              latitude:
-                                                  isSimple ? '' : latitude,
-                                              longitude:
-                                                  isSimple ? '' : longitude,
-                                              userZoneDocument:
-                                                  widget.userZoneDocument,
-                                            ).whenComplete(() {
-                                              ScaffoldMessenger.of(context)
-                                                ..removeCurrentSnackBar()
-                                                ..showSnackBar(
-                                                  SnackBar(
-                                                    backgroundColor:
-                                                        Colors.green,
-                                                    duration: const Duration(
-                                                        seconds: 1),
-                                                    content: Text(
-                                                      "Registro exitoso",
-                                                      style: const TextStyle(
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      actions: [
+                                        loading
+                                            ? Center(
+                                                child:
+                                                    CircularProgressIndicator()) // Show loading spinner
+                                            : Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceAround,
+                                                children: [
+                                                  ElevatedButton.icon(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    style: ButtonStyle(
+                                                      backgroundColor:
+                                                          MaterialStateProperty
+                                                              .all(
+                                                        themeProvider
+                                                            .myTheme
+                                                            .colorScheme
+                                                            .primary,
+                                                      ),
+                                                      shape: MaterialStateProperty
+                                                          .all<
+                                                              RoundedRectangleBorder>(
+                                                        RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      18.0),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    icon: Icon(
+                                                      MaterialIcons
+                                                          .arrow_back_ios,
+                                                      size: 16,
+                                                      color: Colors.white,
+                                                    ),
+                                                    label: Text(
+                                                      'No',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
                                                         fontFamily:
                                                             'Poppins-regular',
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.bold,
                                                       ),
                                                     ),
                                                   ),
-                                                );
-                                            }).whenComplete(() {
-                                              Navigator.pop(context);
-                                              Navigator.pop(context);
-                                            });
-                                          },
-                                          style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                              themeProvider.myTheme.colorScheme
-                                                  .onPrimaryContainer,
-                                            ),
-                                            shape: MaterialStateProperty.all<
-                                                RoundedRectangleBorder>(
-                                              RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(18.0),
+                                                  ElevatedButton.icon(
+                                                    onPressed: () async {
+                                                      setState(() {
+                                                        loading =
+                                                            true; // Set loading state to true
+                                                      });
+
+                                                      // Proceed with registration logic
+                                                      final String
+                                                          newClientNameForFirebase =
+                                                          newClientName!.text
+                                                              .trim()
+                                                              .toUpperCase();
+                                                      final int
+                                                          newClientIdForFirebase =
+                                                          int.parse(newClientId!
+                                                              .text
+                                                              .trim());
+                                                      final String
+                                                          newclientPhoneForFirebase =
+                                                          newclientPhone!.text
+                                                              .trim();
+                                                      final String
+                                                          newClientEmailForFirebase =
+                                                          newClientEmail!.text
+                                                              .trim();
+                                                      final String
+                                                          newClientAddress1ForFirebase =
+                                                          isSimple
+                                                              ? ''
+                                                              : newClientAddress1!
+                                                                  .text
+                                                                  .trim();
+                                                      final String
+                                                          newClientAddress2ForFirebase =
+                                                          isSimple
+                                                              ? ''
+                                                              : newClientAddress2!
+                                                                  .text
+                                                                  .trim();
+                                                      final int
+                                                          newClientMasterDiscountForFirebase =
+                                                          isSimple
+                                                              ? 0
+                                                              : int.parse(
+                                                                  newClientMasterDiscount
+                                                                          ?.text
+                                                                          .trim() ??
+                                                                      '0');
+                                                      final userUid = Provider
+                                                              .of<UserModel?>(
+                                                                  context,
+                                                                  listen:
+                                                                      false)!
+                                                          .uid;
+
+                                                      ScaffoldMessenger.of(
+                                                          context)
+                                                        ..removeCurrentSnackBar()
+                                                        ..showSnackBar(
+                                                          SnackBar(
+                                                            backgroundColor:
+                                                                themeProvider
+                                                                    .myTheme
+                                                                    .colorScheme
+                                                                    .primary,
+                                                            duration:
+                                                                const Duration(
+                                                                    seconds: 1),
+                                                            content: Text(
+                                                              "Registrando Cliente",
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontFamily:
+                                                                    'Poppins-regular',
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        );
+
+                                                      final result =
+                                                          await registerClient(
+                                                        isSpecialContributor:
+                                                            isSimple
+                                                                ? false
+                                                                : isSpecialContributor,
+                                                        newClientAddress1:
+                                                            newClientAddress1ForFirebase,
+                                                        newClientAddress2:
+                                                            newClientAddress2ForFirebase,
+                                                        newClientEmail:
+                                                            newClientEmailForFirebase,
+                                                        newClientId:
+                                                            newClientIdForFirebase,
+                                                        newClientMasterDiscount:
+                                                            newClientMasterDiscountForFirebase,
+                                                        newClientName:
+                                                            newClientNameForFirebase,
+                                                        newClientSalesZone:
+                                                            newClientSalesZone!,
+                                                        newclientPhone:
+                                                            newclientPhoneForFirebase,
+                                                        selectedIdType:
+                                                            selectedIdType!,
+                                                        uid: userUid!,
+                                                        selectedPricesList:
+                                                            selectedPriceList!,
+                                                        image: isSimple
+                                                            ? null
+                                                            : imageFile,
+                                                        latitude: isSimple
+                                                            ? ''
+                                                            : latitude,
+                                                        longitude: isSimple
+                                                            ? ''
+                                                            : longitude,
+                                                        userZoneDocument: widget
+                                                            .userZoneDocument,
+                                                      );
+
+                                                      if (result ==
+                                                          "client_exists") {
+                                                        ScaffoldMessenger.of(
+                                                            context)
+                                                          ..removeCurrentSnackBar()
+                                                          ..showSnackBar(
+                                                            SnackBar(
+                                                              backgroundColor:
+                                                                  Colors.red,
+                                                              duration:
+                                                                  const Duration(
+                                                                      seconds:
+                                                                          2),
+                                                              content: Text(
+                                                                "Ya existe el usuario",
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontFamily:
+                                                                      'Poppins-regular',
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          );
+                                                      } else if (result ==
+                                                          "success") {
+                                                        ScaffoldMessenger.of(
+                                                            context)
+                                                          ..removeCurrentSnackBar()
+                                                          ..showSnackBar(
+                                                            SnackBar(
+                                                              backgroundColor:
+                                                                  Colors.green,
+                                                              duration:
+                                                                  const Duration(
+                                                                      seconds:
+                                                                          1),
+                                                              content: Text(
+                                                                "Registro exitoso",
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontFamily:
+                                                                      'Poppins-regular',
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          );
+                                                        Navigator.pop(context);
+                                                        Navigator.pop(context);
+                                                      }
+
+                                                      setState(() {
+                                                        loading =
+                                                            false; // Reset loading state
+                                                      });
+                                                    },
+                                                    style: ButtonStyle(
+                                                      backgroundColor:
+                                                          MaterialStateProperty
+                                                              .all(
+                                                        themeProvider
+                                                            .myTheme
+                                                            .colorScheme
+                                                            .onPrimaryContainer,
+                                                      ),
+                                                      shape: MaterialStateProperty
+                                                          .all<
+                                                              RoundedRectangleBorder>(
+                                                        RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      18.0),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    icon: Icon(
+                                                      MaterialCommunityIcons
+                                                          .content_save,
+                                                      size: 20,
+                                                    ),
+                                                    label: Text(
+                                                      'Si',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontFamily:
+                                                            'Poppins-regular',
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                            ),
-                                          ),
-                                          icon: Icon(
-                                            MaterialCommunityIcons.content_save,
-                                            size: 20,
-                                          ),
-                                          label: Text(
-                                            'Si',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: 'Poppins-regular',
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
                                       ],
-                                    )
-                                  ],
+                                    );
+                                  },
                                 ),
                               );
                             }

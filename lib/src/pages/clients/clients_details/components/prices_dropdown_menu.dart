@@ -78,7 +78,7 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontFamily: 'Poppins-medium',
+                        fontFamily: 'Poppins-Medium',
                         fontSize: 14,
                         color: themeProvider.myTheme.colorScheme.primary
                             .withOpacity(0.7),
@@ -197,7 +197,7 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontFamily: 'Poppins-medium',
+                          fontFamily: 'Poppins-Medium',
                           fontSize: 14,
                           color: themeProvider.myTheme.colorScheme.primary
                               .withOpacity(0.7),
@@ -231,7 +231,7 @@ class _PricesDropDownMenuState extends State<PricesDropDownMenu> {
                   //       contentPadding: const EdgeInsets.fromLTRB(14, 0, 0, 0),
                   //       hintText: '${widget.masterDiscount}%',
                   //       hintStyle: TextStyle(
-                  //         fontFamily: 'Poppins-regular',
+                  //         fontFamily: 'Poppins-Regular',
                   //         fontSize: 14,
                   //         color: themeProvider.myTheme.colorScheme.primary,
                   //       ),

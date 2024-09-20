@@ -3,6 +3,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
+import 'package:pwa_sales2go_flutter/src/utils/custom_cache_manager.dart';
 
 class ClientPicture extends StatelessWidget {
   const ClientPicture({
@@ -41,6 +42,7 @@ class ClientPicture extends StatelessWidget {
                 height: 200,
                 width: MediaQuery.of(context).size.width,
                 child: CachedNetworkImage(
+                  cacheManager: CustomCacheManager.instance,
                   fit: BoxFit.cover,
                   imageUrl: url,
                   placeholder: (context, url) => Container(

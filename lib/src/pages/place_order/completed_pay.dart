@@ -241,7 +241,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
                           'CLIENTE',
                           style: TextStyle(
                             color: Colors.purple.shade600,
-                            fontFamily: 'Poppins-regular',
+                            fontFamily: 'Poppins-Regular',
                             fontSize: 16,
                           ),
                         ),
@@ -251,7 +251,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
                             widget.client.name,
                             style: TextStyle(
                               color: Colors.grey.shade500,
-                              fontFamily: 'Poppins-regular',
+                              fontFamily: 'Poppins-Regular',
                               fontSize: 12,
                             ),
                           ),
@@ -269,7 +269,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
                           'FECHA DE PAGO',
                           style: TextStyle(
                             color: Colors.purple.shade600,
-                            fontFamily: 'Poppins-regular',
+                            fontFamily: 'Poppins-Regular',
                             fontSize: 16,
                           ),
                         ),
@@ -277,7 +277,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
                           widget.date,
                           style: TextStyle(
                             color: Colors.grey.shade500,
-                            fontFamily: 'Poppins-regular',
+                            fontFamily: 'Poppins-Regular',
                             fontSize: 12,
                           ),
                         ),
@@ -317,7 +317,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
                               fontSize: 14,
                             ),
                           ),
-                        ),
+                        )
                       ],
                     ),
                   ),
@@ -331,7 +331,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
                           'No. de ticket',
                           style: TextStyle(
                             color: Colors.purple.shade600,
-                            fontFamily: 'Poppins-regular',
+                            fontFamily: 'Poppins-Regular',
                             fontSize: 16,
                           ),
                         ),
@@ -442,7 +442,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
                       const Text(
                         'Regresar al Inicio',
                         style: TextStyle(
-                          fontFamily: 'Poppins-regular',
+                          fontFamily: 'Poppins-Regular',
                           fontSize: 14,
                           color: Colors.white,
                         ),
@@ -486,7 +486,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
                       const Text(
                         'Imprimir Factura',
                         style: TextStyle(
-                          fontFamily: 'Poppins-regular',
+                          fontFamily: 'Poppins-Regular',
                           fontSize: 14,
                           color: Colors.white,
                         ),

@@ -51,7 +51,7 @@ paymentCashRetail(
               Text(
                 AppLocalizations.of(context)!.selectFile,
                 style: TextStyle(
-                  fontFamily: 'Poppins-regular',
+                  fontFamily: 'Poppins-Regular',
                   color: Colors.grey.shade400,
                   fontSize: 14,
                 ),
@@ -148,7 +148,7 @@ paymentCashRetail(
                       'Cancelar',
                       style: TextStyle(
                         color: Colors.white,
-                        fontFamily: 'Poppins-regular',
+                        fontFamily: 'Poppins-Regular',
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                       ),
@@ -261,7 +261,7 @@ paymentCashRetail(
                                 'Continuar',
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontFamily: 'Poppins-regular',
+                                  fontFamily: 'Poppins-Regular',
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
                                 ),

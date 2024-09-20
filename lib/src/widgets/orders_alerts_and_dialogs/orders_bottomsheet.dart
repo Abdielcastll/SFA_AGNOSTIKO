@@ -170,7 +170,7 @@ void modalBottomSheetForOrders(
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontFamily: 'Poppins-regular',
+                            fontFamily: 'Poppins-Regular',
                             fontSize: 14,
                             color: themeProvider.myTheme.colorScheme.primary
                                 .withOpacity(0.5),
@@ -235,7 +235,7 @@ void modalBottomSheetForOrders(
                                     label: Text(
                                       AppLocalizations.of(context)!.seeClient,
                                       style: TextStyle(
-                                        fontFamily: 'Poppins-regular',
+                                        fontFamily: 'Poppins-Regular',
                                         color: Colors.white,
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
@@ -284,7 +284,7 @@ void modalBottomSheetForOrders(
                                   label: Text(
                                     AppLocalizations.of(context)!.seeProducts,
                                     style: TextStyle(
-                                      fontFamily: 'Poppins-regular',
+                                      fontFamily: 'Poppins-Regular',
                                       color: Colors.white,
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
@@ -384,7 +384,7 @@ void modalBottomSheetForOrders(
                                                                           style:
                                                                               TextStyle(
                                                                             fontFamily:
-                                                                                'Poppins-regular',
+                                                                                'Poppins-Regular',
                                                                             color:
                                                                                 themeProvider.myTheme.colorScheme.primary,
                                                                             fontSize:
@@ -488,7 +488,7 @@ void modalBottomSheetForOrders(
                                                                                   content: const Text(
                                                                                     "Orden retomada dentro del carrito",
                                                                                     style: TextStyle(
-                                                                                      fontFamily: 'Poppins-regular',
+                                                                                      fontFamily: 'Poppins-Regular',
                                                                                     ),
                                                                                   ),
                                                                                 ),
@@ -512,7 +512,7 @@ void modalBottomSheetForOrders(
                                                                             'Aceptar',
                                                                             style:
                                                                                 TextStyle(
-                                                                              fontFamily: 'Poppins-regular',
+                                                                              fontFamily: 'Poppins-Regular',
                                                                               color: Colors.white,
                                                                               fontSize: 14,
                                                                               fontWeight: FontWeight.bold,
@@ -636,7 +636,7 @@ void modalBottomSheetForOrders(
                                                                             AppLocalizations.of(context)!.createInvoiceConfirmation,
                                                                             style:
                                                                                 TextStyle(
-                                                                              fontFamily: 'Poppins-regular',
+                                                                              fontFamily: 'Poppins-Regular',
                                                                               color: Colors.white,
                                                                               fontSize: 14,
                                                                               fontWeight: FontWeight.bold,
@@ -683,7 +683,7 @@ void modalBottomSheetForOrders(
                                                       //     .createInvoiceConfirmation,
                                                       style: TextStyle(
                                                         fontFamily:
-                                                            'Poppins-regular',
+                                                            'Poppins-Regular',
                                                         color: Colors.white,
                                                         fontSize: 14,
                                                         fontWeight:
@@ -842,7 +842,7 @@ class DeleteOrderAlertDialog extends StatelessWidget {
                       content: const Text(
                         "Pedido seleccionado eliminado",
                         style: TextStyle(
-                          fontFamily: 'Poppins-regular',
+                          fontFamily: 'Poppins-Regular',
                         ),
                       ),
                     ),
@@ -861,7 +861,7 @@ class DeleteOrderAlertDialog extends StatelessWidget {
               child: Text(
                 AppLocalizations.of(context)!.visitDelete,
                 style: TextStyle(
-                  fontFamily: 'Poppins-regular',
+                  fontFamily: 'Poppins-Regular',
                   color: Colors.white,
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
@@ -1037,7 +1037,7 @@ class SeeProductsAlertDialog extends StatelessWidget {
               Text(
                 '${AppLocalizations.of(context)!.subtotal}: ',
                 style: TextStyle(
-                  fontFamily: 'Poppins-regular',
+                  fontFamily: 'Poppins-Regular',
                   color: Colors.black,
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
@@ -1046,7 +1046,7 @@ class SeeProductsAlertDialog extends StatelessWidget {
               Text(
                 '$coinSymbol $subTotalFormatted',
                 style: TextStyle(
-                  fontFamily: 'Poppins-regular',
+                  fontFamily: 'Poppins-Regular',
                   color: Colors.black,
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
@@ -1060,7 +1060,7 @@ class SeeProductsAlertDialog extends StatelessWidget {
               Text(
                 '${AppLocalizations.of(context)!.masterDiscount}: ',
                 style: TextStyle(
-                  fontFamily: 'Poppins-regular',
+                  fontFamily: 'Poppins-Regular',
                   color: Colors.black,
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
@@ -1069,7 +1069,7 @@ class SeeProductsAlertDialog extends StatelessWidget {
               Text(
                 '$coinSymbol $discountFormatted',
                 style: TextStyle(
-                  fontFamily: 'Poppins-regular',
+                  fontFamily: 'Poppins-Regular',
                   color: Colors.black,
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
@@ -1083,7 +1083,7 @@ class SeeProductsAlertDialog extends StatelessWidget {
               Text(
                 '${AppLocalizations.of(context)!.tax}: ',
                 style: TextStyle(
-                  fontFamily: 'Poppins-regular',
+                  fontFamily: 'Poppins-Regular',
                   color: Colors.black,
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
@@ -1092,7 +1092,7 @@ class SeeProductsAlertDialog extends StatelessWidget {
               Text(
                 '$coinSymbol $taxFormatted',
                 style: TextStyle(
-                  fontFamily: 'Poppins-regular',
+                  fontFamily: 'Poppins-Regular',
                   color: Colors.black,
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
@@ -1106,7 +1106,7 @@ class SeeProductsAlertDialog extends StatelessWidget {
               Text(
                 'Total a Pagar',
                 style: TextStyle(
-                  fontFamily: 'Poppins-regular',
+                  fontFamily: 'Poppins-Regular',
                   color: Colors.green,
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
@@ -1115,7 +1115,7 @@ class SeeProductsAlertDialog extends StatelessWidget {
               Text(
                 '$coinSymbol $totalFormatted',
                 style: TextStyle(
-                  fontFamily: 'Poppins-regular',
+                  fontFamily: 'Poppins-Regular',
                   color: Colors.green,
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
@@ -1152,7 +1152,7 @@ class SeeProductsAlertDialog extends StatelessWidget {
               label: Text(
                 AppLocalizations.of(context)!.goBack,
                 style: TextStyle(
-                  fontFamily: 'Poppins-regular',
+                  fontFamily: 'Poppins-Regular',
                   color: Colors.white,
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
@@ -1192,7 +1192,7 @@ class TextBoxWidget extends StatelessWidget {
       child: Text(
         '$message',
         style: TextStyle(
-          fontFamily: 'Poppins-regular',
+          fontFamily: 'Poppins-Regular',
           fontSize: 14,
           color: themeProvider.myTheme.colorScheme.primary.withOpacity(0.5),
         ),

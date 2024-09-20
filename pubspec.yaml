@@ -143,16 +143,16 @@ flutter:
   #   - images/a_dot_ham.jpeg
 
   fonts:
-    - family: Poppins-regular
+    - family: Poppins-Regular
       fonts:
-        - asset: assets/fonts/Poppins-Regular.otf
-    - family: Poppins-italic
+        - asset: assets/fonts/Poppins-Regular.ttf
+    - family: Poppins-Italic
       fonts:
-        - asset: assets/fonts/Poppins-Italic.otf
-    - family: Poppins-bold
+        - asset: assets/fonts/Poppins-Italic.ttf
+    - family: Poppins-Bold
       fonts:
-        - asset: assets/fonts/Poppins-Bold.otf
-    - family: Poppins-medium
+        - asset: assets/fonts/Poppins-Bold.ttf
+    - family: Poppins-Medium
       fonts:
         - asset: assets/fonts/Poppins-Medium.ttf
 

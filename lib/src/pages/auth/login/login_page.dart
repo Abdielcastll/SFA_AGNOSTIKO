@@ -134,7 +134,7 @@ class _InputWrapperState extends State<InputWrapper> {
                 "Recuperar contraseña",
                 style: TextStyle(
                   color: Color(0xFF7D5070),
-                  fontFamily: 'Poppins-regular',
+                  fontFamily: 'Poppins-Regular',
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
                 ),
@@ -178,8 +178,7 @@ class Header extends StatefulWidget {
 class _HeaderState extends State<Header> {
   int activeIndex = 0;
   final assetsImages = [
-    "assets/images/logo_agnostiko_blanco_eslogan.png",
-    "assets/images/chedraui.jpg",
+    "assets/images/logo_prosa_blanco.png",
   ];
   @override
   Widget build(BuildContext context) {
@@ -195,7 +194,7 @@ class _HeaderState extends State<Header> {
                   CarouselSlider.builder(
                     itemCount: assetsImages.length,
                     options: CarouselOptions(
-                      height: 100,
+                      height: 200,
                       autoPlay: false,
                       // autoPlayInterval: Duration(seconds: 5),
                       viewportFraction: 1,
@@ -475,7 +474,7 @@ class _InputFieldState extends State<InputField> {
             child: Text(
               "¡Hola de nuevo!",
               style: TextStyle(
-                fontFamily: 'Poppins-regular',
+                fontFamily: 'Poppins-Regular',
                 fontSize: 28,
                 fontWeight: FontWeight.w400,
                 color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
@@ -529,7 +528,7 @@ class _InputFieldState extends State<InputField> {
                 hintText: "Correo",
                 hintStyle: TextStyle(
                   color: Color(0xFF5A5D77),
-                  fontFamily: 'Poppins-regular',
+                  fontFamily: 'Poppins-Regular',
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
                   letterSpacing: 0.25,
@@ -587,7 +586,7 @@ class _InputFieldState extends State<InputField> {
                 hintText: "Contraseña",
                 hintStyle: TextStyle(
                   color: Color(0xFF5A5D77),
-                  fontFamily: 'Poppins-regular',
+                  fontFamily: 'Poppins-Regular',
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
                   letterSpacing: 0.25,

@@ -47,7 +47,7 @@ class _SplashScreenWidgetState extends State<SplashScreenWidget> {
                   fontWeight: FontWeight.bold,
                   letterSpacing: 3,
                   color: Colors.white,
-                  fontFamily: 'Poppins-bold',
+                  fontFamily: 'Poppins-Bold',
                 ),
               )
             ],

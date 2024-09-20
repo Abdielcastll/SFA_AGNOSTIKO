@@ -170,7 +170,7 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontSize: 11,
-                            fontFamily: 'Poppins-medium',
+                            fontFamily: 'Poppins-Medium',
                             color: Color(0xFF33C926),
                           ),
                         ),
@@ -180,7 +180,7 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontSize: 14,
-                            fontFamily: 'Poppins-regular',
+                            fontFamily: 'Poppins-Regular',
                             color: Colors.black,
                           ),
                         ),
@@ -209,7 +209,7 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                 fontSize: 11,
-                                fontFamily: 'Poppins-medium',
+                                fontFamily: 'Poppins-Medium',
                                 color: Color(0xFFC97426),
                               ),
                             ),
@@ -220,7 +220,7 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                 fontSize: 14,
-                                fontFamily: 'Poppins-regular',
+                                fontFamily: 'Poppins-Regular',
                                 color: Colors.black,
                               ),
                             ),
@@ -246,7 +246,7 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                 fontSize: 11,
-                                fontFamily: 'Poppins-medium',
+                                fontFamily: 'Poppins-Medium',
                                 color: Color(0xFF2667C9),
                               ),
                             ),
@@ -256,7 +256,7 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                 fontSize: 14,
-                                fontFamily: 'Poppins-regular',
+                                fontFamily: 'Poppins-Regular',
                                 color: Colors.black,
                               ),
                             ),
@@ -276,7 +276,7 @@ class _AccountBalanceBodyState extends State<AccountBalanceBody> {
                   Text(
                     'Ver pendientes',
                     style: TextStyle(
-                      fontFamily: 'Poppins-medium',
+                      fontFamily: 'Poppins-Medium',
                       fontSize: 12,
                       color: themeProvider.myTheme.colorScheme.secondary,
                     ),
@@ -456,14 +456,14 @@ class _ShowInvoicesState extends State<ShowInvoices> {
                       Text(
                         'Ticket #$noteNumber',
                         style: const TextStyle(
-                          fontFamily: 'Poppins-regular',
+                          fontFamily: 'Poppins-Regular',
                           fontSize: 14,
                         ),
                       ),
                       Text(
                         noteDate,
                         style: const TextStyle(
-                          fontFamily: 'Poppins-regular',
+                          fontFamily: 'Poppins-Regular',
                           fontSize: 12,
                           color: Colors.grey,
                         ),
@@ -477,7 +477,7 @@ class _ShowInvoicesState extends State<ShowInvoices> {
                           Text(
                             "Monto original: ",
                             style: TextStyle(
-                              fontFamily: 'Poppins-regular',
+                              fontFamily: 'Poppins-Regular',
                               fontSize: 12,
                               color: Colors.grey,
                             ),
@@ -490,7 +490,7 @@ class _ShowInvoicesState extends State<ShowInvoices> {
                             // ).toStringAsFixed(2)}',
                             '000000',
                             style: TextStyle(
-                              fontFamily: 'Poppins-regular',
+                              fontFamily: 'Poppins-Regular',
                               fontSize: 12,
                               color: themeProvider
                                   .myTheme.colorScheme.onPrimaryContainer,
@@ -504,7 +504,7 @@ class _ShowInvoicesState extends State<ShowInvoices> {
                           Text(
                             'Saldo: ',
                             style: const TextStyle(
-                              fontFamily: 'Poppins-regular',
+                              fontFamily: 'Poppins-Regular',
                               fontSize: 12,
                               color: Colors.grey,
                             ),
@@ -520,7 +520,7 @@ class _ShowInvoicesState extends State<ShowInvoices> {
                             //         coinExchangeRatio: coinExchangeRatio,
                             //       ).toStringAsFixed(2)}',
                             style: TextStyle(
-                              fontFamily: 'Poppins-regular',
+                              fontFamily: 'Poppins-Regular',
                               fontSize: 12,
                               color: Colors.amber.shade600,
                             ),
@@ -643,7 +643,7 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
                                 const Text(
                                   'Cliente',
                                   style: TextStyle(
-                                    fontFamily: 'Poppins-regular',
+                                    fontFamily: 'Poppins-Regular',
                                     color: Colors.grey,
                                     fontSize: 14,
                                   ),
@@ -670,7 +670,7 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                      fontFamily: 'Poppins-regular',
+                                      fontFamily: 'Poppins-Regular',
                                       fontSize: 14,
                                       color: themeProvider
                                           .myTheme.colorScheme.primary
@@ -681,7 +681,7 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
                                 const Text(
                                   'Fecha',
                                   style: TextStyle(
-                                    fontFamily: 'Poppins-regular',
+                                    fontFamily: 'Poppins-Regular',
                                     color: Colors.grey,
                                     fontSize: 14,
                                   ),
@@ -712,7 +712,7 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                          fontFamily: 'Poppins-regular',
+                                          fontFamily: 'Poppins-Regular',
                                           fontSize: 14,
                                           color: themeProvider
                                               .myTheme.colorScheme.primary
@@ -737,7 +737,7 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
                                     coinExchangeRatio: coinExchangeRatio,
                                   )}',
                                   style: const TextStyle(
-                                    fontFamily: 'Poppins-regular',
+                                    fontFamily: 'Poppins-Regular',
                                     color: Colors.grey,
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
@@ -750,7 +750,7 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
                                     coinExchangeRatio: coinExchangeRatio,
                                   )}',
                                   style: const TextStyle(
-                                    fontFamily: 'Poppins-regular',
+                                    fontFamily: 'Poppins-Regular',
                                     color: Colors.grey,
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
@@ -763,7 +763,7 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
                                     coinExchangeRatio: coinExchangeRatio,
                                   )}',
                                   style: const TextStyle(
-                                    fontFamily: 'Poppins-regular',
+                                    fontFamily: 'Poppins-Regular',
                                     color: Colors.grey,
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
@@ -804,14 +804,14 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
                 Text(
                   'Nota de credito #$noteNumber',
                   style: const TextStyle(
-                    fontFamily: 'Poppins-regular',
+                    fontFamily: 'Poppins-Regular',
                     fontSize: 14,
                   ),
                 ),
                 Text(
                   noteDate,
                   style: const TextStyle(
-                    fontFamily: 'Poppins-regular',
+                    fontFamily: 'Poppins-Regular',
                     fontSize: 12,
                     color: Colors.grey,
                   ),
@@ -829,7 +829,7 @@ class _ShowCreditNotesState extends State<ShowCreditNotes> {
                 coinExchangeRatio: coinExchangeRatio,
               )}',
               style: const TextStyle(
-                fontFamily: 'Poppins-regular',
+                fontFamily: 'Poppins-Regular',
                 fontSize: 12,
                 color: Colors.grey,
               ),

@@ -61,7 +61,7 @@ class NavigationPages extends StatelessWidget {
                 color: Color.fromARGB(255, 196, 196, 196),
 
                 // color: Colors.white,
-                fontFamily: 'Poppins-regular',
+                fontFamily: 'Poppins-Regular',
               ),
             ),
           ),

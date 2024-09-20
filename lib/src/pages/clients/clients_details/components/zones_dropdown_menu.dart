@@ -78,7 +78,7 @@ class _ZonesDropDownMenuState extends State<ZonesDropDownMenu> {
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontFamily: 'Poppins-medium',
+                          fontFamily: 'Poppins-Medium',
                           fontSize: 14,
                           color: Color.fromARGB(255, 40, 41, 48),
                         ),

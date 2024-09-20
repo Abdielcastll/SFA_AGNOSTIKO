@@ -43,11 +43,11 @@ void showGoToPinpadDialog(BuildContext context, String message,
                 Flexible(
                   child: Text(
                     message,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: themeProvider.myTheme.colorScheme.primary,
-                      fontFamily: 'Poppins-regular',
+                      color: Colors.black,
+                      fontFamily: 'Poppins-Regular',
                     ),
                   ),
                 ),

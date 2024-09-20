@@ -182,7 +182,7 @@ void modalBottomSheetForInvoices({
                         style: TextStyle(
                           fontSize: 24,
                           color: Color(0xFF1B1B1F),
-                          fontFamily: 'Poppins-regular',
+                          fontFamily: 'Poppins-Regular',
                         ),
                       ),
                       SizedBox(height: 14),
@@ -514,7 +514,7 @@ void modalBottomSheetForInvoices({
                                       AppLocalizations.of(context)!
                                           .registerPayment,
                                       style: TextStyle(
-                                        fontFamily: 'Poppins-medium',
+                                        fontFamily: 'Poppins-Medium',
                                         color: Colors.white,
                                         fontSize: 12,
                                       ),
@@ -697,7 +697,7 @@ class SeePaymentsALertDialog extends StatelessWidget {
                                 Text(
                                   AppLocalizations.of(context)!.noPayments,
                                   style: TextStyle(
-                                    fontFamily: 'Poppins-regular',
+                                    fontFamily: 'Poppins-Regular',
                                     fontSize: 13,
                                     color: themeProvider
                                         .myTheme.colorScheme.onPrimaryContainer,
@@ -774,7 +774,7 @@ class SeePaymentsALertDialog extends StatelessWidget {
                                           Text(
                                             '$coinSymbol ${paymentAmount.toStringAsFixed(2)}',
                                             style: TextStyle(
-                                              fontFamily: 'Poppins-regular',
+                                              fontFamily: 'Poppins-Regular',
                                               color: payment['refund'] == true
                                                   ? Colors.blue.shade800
                                                   : payment['anulado'] == false
@@ -909,7 +909,7 @@ class SeePaymentsALertDialog extends StatelessWidget {
                     Text(
                       '${AppLocalizations.of(context)!.upToPay}: ',
                       style: TextStyle(
-                        fontFamily: 'Poppins-regular',
+                        fontFamily: 'Poppins-Regular',
                         color: Colors.black,
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
@@ -922,7 +922,7 @@ class SeePaymentsALertDialog extends StatelessWidget {
                       //     ? '$coinSymbol $remainingConverted'
                       //     : '$coinSymbol ${remainingConverted.abs().toStringAsFixed(2)}',
                       style: TextStyle(
-                        fontFamily: 'Poppins-regular',
+                        fontFamily: 'Poppins-Regular',
                         color: Colors.black,
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
@@ -957,7 +957,7 @@ class SeePaymentsALertDialog extends StatelessWidget {
                     Text(
                       '${AppLocalizations.of(context)!.balanceConfirmed}: ',
                       style: TextStyle(
-                        fontFamily: 'Poppins-regular',
+                        fontFamily: 'Poppins-Regular',
                         color: Colors.green.shade600,
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
@@ -968,7 +968,7 @@ class SeePaymentsALertDialog extends StatelessWidget {
 
                       '$coinSymbol $sumOfApprovedPaymentsFormatted',
                       style: TextStyle(
-                        fontFamily: 'Poppins-regular',
+                        fontFamily: 'Poppins-Regular',
                         color: Colors.green.shade600,
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
@@ -982,7 +982,7 @@ class SeePaymentsALertDialog extends StatelessWidget {
                     Text(
                       '${AppLocalizations.of(context)!.balanceLeft}: ',
                       style: TextStyle(
-                        fontFamily: 'Poppins-regular',
+                        fontFamily: 'Poppins-Regular',
                         color: Colors.amber.shade600,
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
@@ -993,7 +993,7 @@ class SeePaymentsALertDialog extends StatelessWidget {
                       // '${AppLocalizations.of(context)!.balanceLeft}: ${priceFormat(sumOfPendingPayments)}',
                       '$coinSymbol $sumOfPendingPaymensFormatted',
                       style: TextStyle(
-                        fontFamily: 'Poppins-regular',
+                        fontFamily: 'Poppins-Regular',
                         color: Colors.amber.shade600,
                         fontSize: 12,
                         fontWeight: FontWeight.bold,

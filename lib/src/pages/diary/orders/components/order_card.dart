@@ -256,7 +256,7 @@ class _OrderCardBodyState extends State<OrderCardBody> {
                             '$currentClientName',
                             style: TextStyle(
                               fontSize: 13,
-                              fontFamily: 'Poppins-regular',
+                              fontFamily: 'Poppins-Regular',
                             ),
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
@@ -282,7 +282,7 @@ class _OrderCardBodyState extends State<OrderCardBody> {
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: 10,
-                        fontFamily: 'Poppins-medium',
+                        fontFamily: 'Poppins-Medium',
                         color: Color(0xFF7D5070),
                       ),
                     ),
@@ -320,7 +320,8 @@ class _OrderCardBodyState extends State<OrderCardBody> {
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontSize: 10,
-                              fontFamily: 'Poppins-medium',
+                              fontFamily: 'Poppins-Medium',
+                              color: identifyStatusColor(),
                             ),
                           ),
                         ),
@@ -334,7 +335,7 @@ class _OrderCardBodyState extends State<OrderCardBody> {
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontSize: 10,
-                              fontFamily: 'Poppins-medium',
+                              fontFamily: 'Poppins-Medium',
                               color: identifyStatusColor(),
                             ),
                           ),

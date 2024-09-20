@@ -121,7 +121,7 @@ class _InvoicesCompletedState extends State<InvoicesCompleted> {
                             'No hay pagos registrados este día',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontFamily: 'Poppins-regular',
+                              fontFamily: 'Poppins-Regular',
                               fontSize: 16,
                               color: themeProvider
                                   .myTheme.colorScheme.onPrimaryContainer,

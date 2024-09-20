@@ -16,6 +16,7 @@ import 'package:pwa_sales2go_flutter/src/services/cloud_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pwa_sales2go_flutter/src/utils/custom_cache_manager.dart';
 
 class MostSelledProducts extends StatefulWidget {
   const MostSelledProducts({Key? key}) : super(key: key);
@@ -114,7 +115,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                             .myTheme.colorScheme.onPrimaryContainer,
                         letterSpacing: 0.15,
                         fontSize: 16,
-                        fontFamily: 'Poppins-medium',
+                        fontFamily: 'Poppins-Medium',
                       ),
                     ),
                   ],
@@ -195,6 +196,8 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                           height: 150,
                                           width: 160,
                                           child: CachedNetworkImage(
+                                            cacheManager:
+                                                CustomCacheManager.instance,
                                             fit: BoxFit.cover,
                                             imageUrl: url,
                                             placeholder: (context, url) =>
@@ -225,7 +228,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                           style: TextStyle(
                                             color: themeProvider.myTheme
                                                 .colorScheme.onPrimaryContainer,
-                                            fontFamily: 'Poppins-regular',
+                                            fontFamily: 'Poppins-Regular',
                                             fontSize: 12,
                                             letterSpacing: 0.25,
                                           ),
@@ -309,7 +312,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                           style: TextStyle(
                                             color: themeProvider.myTheme
                                                 .colorScheme.onPrimaryContainer,
-                                            fontFamily: 'Poppins-regular',
+                                            fontFamily: 'Poppins-Regular',
                                             fontSize: 11,
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -357,7 +360,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                         content: const Text(
                                           "No hay stock disponible de este producto",
                                           style: TextStyle(
-                                            fontFamily: 'Poppins-regular',
+                                            fontFamily: 'Poppins-Regular',
                                           ),
                                         ),
                                       ),
@@ -384,6 +387,8 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                           height: 150,
                                           width: 160,
                                           child: CachedNetworkImage(
+                                            cacheManager:
+                                                CustomCacheManager.instance,
                                             fit: BoxFit.cover,
                                             imageUrl: url,
                                             placeholder: (context, url) =>
@@ -414,7 +419,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                           style: TextStyle(
                                             color: themeProvider.myTheme
                                                 .colorScheme.onPrimaryContainer,
-                                            fontFamily: 'Poppins-regular',
+                                            fontFamily: 'Poppins-Regular',
                                             fontSize: 12,
                                             letterSpacing: 0.25,
                                           ),
@@ -498,7 +503,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                           style: TextStyle(
                                             color: themeProvider.myTheme
                                                 .colorScheme.onPrimaryContainer,
-                                            fontFamily: 'Poppins-regular',
+                                            fontFamily: 'Poppins-Regular',
                                             fontSize: 11,
                                             fontWeight: FontWeight.bold,
                                           ),

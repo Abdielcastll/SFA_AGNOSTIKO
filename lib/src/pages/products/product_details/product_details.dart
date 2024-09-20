@@ -18,6 +18,7 @@ import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pwa_sales2go_flutter/src/utils/custom_cache_manager.dart';
 
 import '../../../utils/functions.dart';
 
@@ -203,6 +204,7 @@ class ProductDetailsBody extends StatelessWidget {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(8),
                               child: CachedNetworkImage(
+                                cacheManager: CustomCacheManager.instance,
                                 fit: BoxFit.cover,
                                 imageUrl: imageUrl,
                                 placeholder: (context, url) => Container(
@@ -294,7 +296,7 @@ class ProductDetailsBody extends StatelessWidget {
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontFamily: 'Poppins-regular',
+                        fontFamily: 'Poppins-Regular',
                         fontSize: 26,
                         color: Color(0xFF1B1B1F),
                       ),
@@ -373,7 +375,7 @@ class ProductDetailsBody extends StatelessWidget {
                                                       .myTheme
                                                       .colorScheme
                                                       .onPrimaryContainer,
-                                                  fontFamily: 'Poppins-regular',
+                                                  fontFamily: 'Poppins-Regular',
                                                   fontSize: 13,
                                                   fontWeight: FontWeight.bold),
                                             ),
@@ -467,7 +469,7 @@ class ProductDetailsBody extends StatelessWidget {
                                                   .myTheme
                                                   .colorScheme
                                                   .onPrimaryContainer,
-                                              fontFamily: 'Poppins-regular',
+                                              fontFamily: 'Poppins-Regular',
                                               fontSize: 13,
                                               fontWeight: FontWeight.bold,
                                             ),
@@ -488,7 +490,7 @@ class ProductDetailsBody extends StatelessWidget {
                                 '${AppLocalizations.of(context)!.price}: ',
                                 style: TextStyle(
                                   color: Color(0xFF5A5D77),
-                                  fontFamily: 'Poppins-regular',
+                                  fontFamily: 'Poppins-Regular',
                                   fontSize: 16,
                                 ),
                               ),
@@ -496,7 +498,7 @@ class ProductDetailsBody extends StatelessWidget {
                                 '$coinSymbol $formattedPrice',
                                 style: TextStyle(
                                   color: Color(0xFF5A5D77),
-                                  fontFamily: 'Poppins-regular',
+                                  fontFamily: 'Poppins-Regular',
                                   fontSize: 16,
                                 ),
                               ),
@@ -513,7 +515,7 @@ class ProductDetailsBody extends StatelessWidget {
                                 '${AppLocalizations.of(context)!.stock}: ',
                                 style: TextStyle(
                                   color: Color(0xFF5A5D77),
-                                  fontFamily: 'Poppins-regular',
+                                  fontFamily: 'Poppins-Regular',
                                   fontSize: 16,
                                 ),
                               ),
@@ -521,7 +523,7 @@ class ProductDetailsBody extends StatelessWidget {
                                 '$stock en Inventario',
                                 style: TextStyle(
                                   color: Color(0xFF5A5D77),
-                                  fontFamily: 'Poppins-regular',
+                                  fontFamily: 'Poppins-Regular',
                                   fontSize: 16,
                                 ),
                               ),
@@ -538,7 +540,7 @@ class ProductDetailsBody extends StatelessWidget {
                                 'Linea: ',
                                 style: TextStyle(
                                   color: Color(0xFF5A5D77),
-                                  fontFamily: 'Poppins-regular',
+                                  fontFamily: 'Poppins-Regular',
                                   fontSize: 16,
                                 ),
                               ),
@@ -546,7 +548,7 @@ class ProductDetailsBody extends StatelessWidget {
                                 '$line •',
                                 style: TextStyle(
                                   color: Color(0xFF5A5D77),
-                                  fontFamily: 'Poppins-regular',
+                                  fontFamily: 'Poppins-Regular',
                                   fontSize: 16,
                                 ),
                               ),

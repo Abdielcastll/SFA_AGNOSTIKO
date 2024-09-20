@@ -11,6 +11,7 @@ import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:pwa_sales2go_flutter/src/utils/custom_cache_manager.dart';
 
 class ListOfCategories extends StatefulWidget {
   const ListOfCategories({Key? key}) : super(key: key);
@@ -60,7 +61,7 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                   fontWeight: FontWeight.w500,
                   color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
                   fontSize: 16.0,
-                  fontFamily: 'Poppins-medium',
+                  fontFamily: 'Poppins-Medium',
                   letterSpacing: 0.15,
                 ),
               ),
@@ -237,7 +238,7 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              fontFamily: 'Poppins-regular',
+                              fontFamily: 'Poppins-Regular',
                               fontSize: 12,
                               color: Colors.white,
                             ),

@@ -247,7 +247,7 @@ paymentCash(
                             'Continuar',
                             style: TextStyle(
                               color: Colors.white,
-                              fontFamily: 'Poppins-medium',
+                              fontFamily: 'Poppins-Medium',
                               fontSize: 12,
                             ),
                           ),

@@ -793,9 +793,6 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                               'U/P:$coinSymbol $productPriceConvertedFormatted',
                                                               style:
                                                                   const TextStyle(
-                                                                letterSpacing:
-                                                                    0.4,
-                                                                fontSize: 14,
                                                                 fontFamily:
                                                                     'Poppins-Regular',
                                                               ),
@@ -1071,6 +1068,89 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
   }
 
   processSelection(
+    userUid,
+    products,
+    paymentMethod,
+    ivaConverted,
+    subTotalConverted,
+    totalConverted,
+  ) async {
+    setState(() {
+      loading = true;
+    });
+    final firebaseID = FirebaseFirestore.instance
+        .collection('clientes')
+        .doc(widget.client!.clientDocumentId)
+        .collection('pedidos')
+        .doc()
+        .id;
+
+    final invoiceNumber = await completePaymentProcess(
+      widget.client,
+      userUid,
+      '',
+      0,
+      products,
+      'Factura',
+      'Fiscal',
+      DateTime.now(),
+      ivaConverted,
+      0,
+      subTotalConverted,
+      totalConverted,
+      0,
+      firebaseID,
+    );
+
+    Client currentClient = Client(
+      active: widget.client!.active,
+      specialContributor: widget.client!.specialContributor,
+      madeBy: widget.client!.madeBy,
+      masterDiscount: widget.client!.masterDiscount,
+      fiscalAdress: widget.client!.fiscalAdress,
+      dispatchAdress: widget.client!.dispatchAdress,
+      email: widget.client!.email,
+      prices: widget.client!.prices,
+      modified: widget.client!.modified,
+      name: widget.client!.name,
+      id: widget.client!.id,
+      prospect: widget.client!.prospect,
+      phone1: widget.client!.phone1,
+      phone2: widget.client!.phone2,
+      idType: widget.client!.idType,
+      zone: widget.client!.zone,
+      clientDocumentId: widget.client!.clientDocumentId,
+    );
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        settings: const RouteSettings(
+          name: 'PAGO-DIRECTO',
+        ),
+        builder: (BuildContext context) => AddPaymentPage(
+          invoiceTotal: totalConverted,
+          remaining: totalConverted,
+          subTotal: subTotalConverted,
+          discountPercentage: 0,
+          discount: 0,
+          tax: ivaConverted,
+          percentageTax: 16,
+          client: currentClient,
+          invoiceDocumentID: firebaseID,
+          invoiceNumber: invoiceNumber,
+          payments: const [],
+          isKiosko: true,
+          paymentType: paymentMethod,
+        ),
+      ),
+    );
+    setState(() {
+      loading = false;
+    });
+  }
+
+  showSelectPaymentMethodDialog(
     userUid,
     products,
     paymentMethod,

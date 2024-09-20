@@ -152,7 +152,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                           'CLIENTE',
                           style: TextStyle(
                             color: Color(0xFF7D5070),
-                            fontFamily: 'Poppins-medium',
+                            fontFamily: 'Poppins-Medium',
                             fontSize: 14,
                           ),
                         ),
@@ -164,7 +164,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                             widget.client,
                             style: TextStyle(
                               color: Color(0xFF5A5D77),
-                              fontFamily: 'Poppins-medium',
+                              fontFamily: 'Poppins-Medium',
                               fontSize: 12,
                             ),
                           ),
@@ -182,7 +182,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                           'FECHA DE PEDIDO',
                           style: TextStyle(
                             color: Color(0xFF7D5070),
-                            fontFamily: 'Poppins-medium',
+                            fontFamily: 'Poppins-Medium',
                             fontSize: 14,
                           ),
                         ),
@@ -191,7 +191,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                           widget.date,
                           style: TextStyle(
                             color: Color(0xFF5A5D77),
-                            fontFamily: 'Poppins-medium',
+                            fontFamily: 'Poppins-Medium',
                             fontSize: 12,
                           ),
                         ),
@@ -208,7 +208,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                           'PEDIDO',
                           style: TextStyle(
                             color: Color(0xFF7D5070),
-                            fontFamily: 'Poppins-medium',
+                            fontFamily: 'Poppins-Medium',
                             fontSize: 14,
                           ),
                         ),
@@ -217,7 +217,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                           '# ${widget.orderNumber}',
                           style: TextStyle(
                             color: Color(0xFF5A5D77),
-                            fontFamily: 'Poppins-medium',
+                            fontFamily: 'Poppins-Medium',
                             fontSize: 12,
                           ),
                         ),
@@ -243,7 +243,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                             'MÉTODO DE PAGO',
                             style: TextStyle(
                               color: Color(0xFF7D5070),
-                              fontFamily: 'Poppins-medium',
+                              fontFamily: 'Poppins-Medium',
                               fontSize: 14,
                             ),
                           ),
@@ -252,7 +252,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                             '${widget.method}',
                             style: TextStyle(
                               color: Color(0xFF5A5D77),
-                              fontFamily: 'Poppins-medium',
+                              fontFamily: 'Poppins-Medium',
                               fontSize: 12,
                             ),
                           ),
@@ -269,7 +269,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                             'MONTO A PAGAR',
                             style: TextStyle(
                               color: Color(0xFF7D5070),
-                              fontFamily: 'Poppins-medium',
+                              fontFamily: 'Poppins-Medium',
                               fontSize: 14,
                             ),
                           ),
@@ -278,7 +278,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                             '$coinSymbol ${total.toStringAsFixed(2)}',
                             style: TextStyle(
                               color: Color(0xFF5A5D77),
-                              fontFamily: 'Poppins-medium',
+                              fontFamily: 'Poppins-Medium',
                               fontSize: 12,
                             ),
                           ),
@@ -295,7 +295,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                             'DIRECCION',
                             style: TextStyle(
                               color: Color(0xFF7D5070),
-                              fontFamily: 'Poppins-medium',
+                              fontFamily: 'Poppins-Medium',
                               fontSize: 14,
                             ),
                           ),
@@ -307,7 +307,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                               '${widget.address ?? ''}',
                               style: TextStyle(
                                 color: Color(0xFF5A5D77),
-                                fontFamily: 'Poppins-medium',
+                                fontFamily: 'Poppins-Medium',
                                 fontSize: 12,
                               ),
                             ),
@@ -386,7 +386,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                   Text(
                     'REGRESAR AL INICIO',
                     style: TextStyle(
-                        fontFamily: 'Poppins-medium',
+                        fontFamily: 'Poppins-Medium',
                         fontSize: 14,
                         color: Colors.white),
                   ),
@@ -425,7 +425,7 @@ class _CompletedOrderBody extends State<CompletedOrderBody> {
                   Text(
                     'VER AGENDA',
                     style: TextStyle(
-                      fontFamily: 'Poppins-medium',
+                      fontFamily: 'Poppins-Medium',
                       fontSize: 14,
                       color: themeProvider.myTheme.colorScheme.primary,
                     ),

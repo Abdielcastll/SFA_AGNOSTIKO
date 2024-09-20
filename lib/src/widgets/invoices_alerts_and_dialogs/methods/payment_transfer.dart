@@ -256,7 +256,7 @@ paymentTransfer(
               contentPadding: const EdgeInsets.fromLTRB(14, 0, 0, 0),
               hintText: '00000000',
               hintStyle: TextStyle(
-                fontFamily: 'Poppins-regular',
+                fontFamily: 'Poppins-Regular',
                 fontSize: 14,
                 color:
                     themeProvider.myTheme.colorScheme.primary.withOpacity(0.2),
@@ -397,7 +397,7 @@ paymentTransfer(
                       'Cancelar',
                       style: TextStyle(
                         color: Colors.white,
-                        fontFamily: 'Poppins-regular',
+                        fontFamily: 'Poppins-Regular',
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                       ),
@@ -555,7 +555,7 @@ paymentTransfer(
                             'Continuar',
                             style: TextStyle(
                               color: Colors.white,
-                              fontFamily: 'Poppins-regular',
+                              fontFamily: 'Poppins-Regular',
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
                             ),

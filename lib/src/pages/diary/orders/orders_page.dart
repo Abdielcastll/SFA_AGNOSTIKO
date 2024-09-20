@@ -304,7 +304,7 @@ class _OrdersBodyState extends State<OrdersBody> {
                   'Ver completados',
                   style: TextStyle(
                     fontSize: 14,
-                    fontFamily: 'Poppins-medium',
+                    fontFamily: 'Poppins-Medium',
                     color: Color(0xFF5A5D77),
                   ),
                 ),
@@ -352,7 +352,7 @@ class _OrdersBodyState extends State<OrdersBody> {
           //               : Colors.amber.shade600,
           //           fontSize: 15,
           //           fontWeight: FontWeight.bold,
-          //           fontFamily: 'Poppins-regular',
+          //           fontFamily: 'Poppins-Regular',
           //         ),
           //       ),
           //     ),

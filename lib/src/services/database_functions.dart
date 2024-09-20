@@ -1088,7 +1088,7 @@ Future<UserRole?> getUserRol(String rolId) async {
 
 // Registrar cliente
 
-Future registerClient({
+Future<String> registerClient({
   required String newClientName,
   required String newclientPhone,
   required String newClientEmail,
@@ -1106,7 +1106,18 @@ Future registerClient({
   String? longitude,
   userZoneDocument,
 }) async {
-  // CAMBIOS A LA DIRECCION EN LA DB
+  // Query to check if any client exists with the same phone number
+  final existingClients = await clientsCollection
+      .where('telefono', isEqualTo: newclientPhone)
+      .get();
+
+  // If a client already exists with this phone number, return early with "client_exists"
+  if (existingClients.docs.isNotEmpty) {
+    print('Client with phone number $newclientPhone already exists.');
+    return "client_exists";
+  }
+
+  // Proceed to create a new client if no duplicate phone found
   final clientDocument = clientsCollection.doc();
   final storagePath = storage
       .ref()
@@ -1115,10 +1126,12 @@ Future registerClient({
       .child(clientDocument.id)
       .child('1');
   print(clientDocument);
+
   final lastModified = <String, dynamic>{
     'timestamp': Timestamp.now(),
     'usuario': usuariosRef.doc(uid)
   };
+
   checkLocalization(la, lo) {
     double? laDouble = double.tryParse(la);
     double? loDouble = double.tryParse(lo);
@@ -1134,23 +1147,16 @@ Future registerClient({
 
   List<String> listnumber = newClientName.split(' ');
   List<String> output = [];
-  print(listnumber);
   for (int i = 0; i < listnumber.length; i++) {
-    print(listnumber[i]);
     List<String> listnumberSplit = listnumber[i].toLowerCase().split('');
-    print(listnumberSplit);
     List<String> temp = [];
     for (int j = 0; j < listnumberSplit.length; j++) {
-      print(listnumberSplit[j]);
       temp.add(listnumberSplit[j].toLowerCase());
       output.add(temp.join().toLowerCase());
     }
-    print('temp');
-    print(temp);
   }
-  print(output.toString());
-  print('TEST OUTPUT PHOS IN CLIENT CREATION');
 
+  // Set new client data in the database
   await clientDocument.set({
     'activo': true,
     'contribuyenteEspecial': isSpecialContributor,
@@ -1173,20 +1179,21 @@ Future registerClient({
     'zona': userZoneDocument,
     if (localization != null) 'localizacion': localization,
   });
-  if (image == null) {
-    print('No image avaliable');
-    return;
-  } else {
-    print('Image avaliable: $image');
+
+  // Handle image upload if an image is provided
+  if (image != null) {
     try {
       await storagePath
           .putFile(image)
-          .whenComplete(() => print('Imagen subida'));
+          .whenComplete(() => print('Image uploaded'));
     } catch (e) {
       print(e);
-      print('Error subiendo la imagen');
+      print('Error uploading the image');
     }
   }
+
+  // Return "success" if everything was successful
+  return "success";
 }
 
 Future uploadReceiptImage(image, invoiceDocumentId, paymentIndex) async {

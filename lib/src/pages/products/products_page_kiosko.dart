@@ -17,6 +17,7 @@ import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:pwa_sales2go_flutter/src/utils/custom_cache_manager.dart';
 import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -251,7 +252,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                           child: TextField(
                             style: const TextStyle(
                               fontSize: 18,
-                              fontFamily: 'Poppins-regular',
+                              fontFamily: 'Poppins-Regular',
                             ),
                             keyboardType: TextInputType.text,
                             maxLines: 1,
@@ -263,7 +264,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                               focusColor: Colors.white,
                               hintText: "Buscar",
                               hintStyle: TextStyle(
-                                fontFamily: 'Poppins-regular',
+                                fontFamily: 'Poppins-Regular',
                                 fontSize: 18,
                                 color: Color(0xFF5A5D77),
                               ),
@@ -317,7 +318,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                         width: 68,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(100),
-                          color: Color(0xFFDFE0FF),
+                          color: Color.fromARGB(255, 255, 223, 223),
                         ),
                         child: IconButton(
                           onPressed: () =>
@@ -446,7 +447,6 @@ class _ProductsBodyState extends State<ProductsBody> {
                             coinExchangeRatio: coinExchangeRatio);
 
                         if (productStock == 0 || priceProduct == 0.0) {
-                          // Return an empty Container if either condition is true
                           return Container();
                         }
                         return Container(
@@ -487,7 +487,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                         content: const Text(
                                           "No hay stock disponible de este producto",
                                           style: TextStyle(
-                                            fontFamily: 'Poppins-regular',
+                                            fontFamily: 'Poppins-Regular',
                                           ),
                                         ),
                                       ),
@@ -524,11 +524,11 @@ class _ProductsBodyState extends State<ProductsBody> {
                                         ),
                                         child: Checkbox(
                                           side: MaterialStateBorderSide
-                                              .resolveWith((states) =>
-                                                  const BorderSide(
-                                                      width: 1.0,
-                                                      color:
-                                                          Colors.transparent)),
+                                              .resolveWith(
+                                            (states) => const BorderSide(
+                                                width: 1.0,
+                                                color: Colors.transparent),
+                                          ),
                                           shape: const CircleBorder(),
                                           activeColor: themeProvider
                                               .myTheme.colorScheme.primary,
@@ -575,7 +575,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                         "No hay stock disponible de este producto",
                                                         style: TextStyle(
                                                           fontFamily:
-                                                              'Poppins-regular',
+                                                              'Poppins-Regular',
                                                         ),
                                                       ),
                                                     ),
@@ -636,7 +636,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       SizedBox(
-                                        width: 50,
+                                        width: 75,
                                         child: TextFieldForCard(
                                           message:
                                               '$coinSymbol ${formatDecimalPriceByRegion(price: Decimal.parse(priceProduct.toString()))}',
@@ -690,6 +690,9 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                         Radius.circular(8),
                                                   ),
                                                   child: CachedNetworkImage(
+                                                    cacheManager:
+                                                        CustomCacheManager
+                                                            .instance,
                                                     fit: BoxFit.cover,
                                                     imageUrl: url,
                                                     placeholder:
@@ -784,7 +787,7 @@ class TextFieldForCard extends StatelessWidget {
     return Text(
       '$message',
       style: TextStyle(
-        fontFamily: 'Poppins-regular',
+        fontFamily: 'Poppins-Regular',
         fontSize: 11,
         fontWeight: bold,
       ),

@@ -120,7 +120,7 @@ class _SettingsFormState extends State<SettingsForm> {
                     '${widget.productName}',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontFamily: 'Poppins-regular',
+                      fontFamily: 'Poppins-Regular',
                       color: Colors.black,
                       fontSize: 14,
                       fontWeight: FontWeight.w500,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:pwa_sales2go_flutter/src/utils/multitenant-config.dart';
@@ -18,7 +20,12 @@ class _PromoVideoPlayerState extends State<PromoVideoPlayer> {
   @override
   void initState() {
     super.initState();
-    _fetchVideoLink();
+    final orderActive = Provider.of<OrderProvider>(context, listen: false);
+    if (orderActive.orderActive!) {
+      Navigator.pop(context);
+    } else {
+      _fetchVideoLink();
+    }
   }
 
   Future<void> _fetchVideoLink() async {

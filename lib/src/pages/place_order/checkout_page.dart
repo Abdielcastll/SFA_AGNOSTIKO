@@ -481,7 +481,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                                                               .colorScheme
                                                                               .primary,
                                                                           fontFamily:
-                                                                              'Poppins-regular',
+                                                                              'Poppins-Regular',
                                                                         ),
                                                                         overflow:
                                                                             TextOverflow.ellipsis,
@@ -632,7 +632,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                                 'Cancelar',
                                                 style: TextStyle(
                                                   color: Colors.white,
-                                                  fontFamily: 'Poppins-regular',
+                                                  fontFamily: 'Poppins-Regular',
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.bold,
                                                 ),
@@ -679,7 +679,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                                 'Aceptar',
                                                 style: TextStyle(
                                                   color: Colors.white,
-                                                  fontFamily: 'Poppins-regular',
+                                                  fontFamily: 'Poppins-Regular',
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.bold,
                                                 ),
@@ -809,7 +809,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                     AppLocalizations.of(context)!.orderDeliveryAddress,
                     style: TextStyle(
                       color: Color(0xFF4353C2),
-                      fontFamily: 'Poppins-medium',
+                      fontFamily: 'Poppins-Medium',
                       fontSize: 14,
                     ),
                   ),
@@ -827,7 +827,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Color(0xFF4353C2),
-                                fontFamily: 'Poppins-medium',
+                                fontFamily: 'Poppins-Medium',
                               ),
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -843,7 +843,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: Color(0xFF4353C2),
-                                  fontFamily: 'Poppins-medium',
+                                  fontFamily: 'Poppins-Medium',
                                 ),
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -927,7 +927,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                     style: TextStyle(
                       fontSize: 14,
                       color: Color(0xFF4353C2),
-                      fontFamily: 'Poppins-medium',
+                      fontFamily: 'Poppins-Medium',
                     ),
                   ),
                 ),
@@ -956,7 +956,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                           style: TextStyle(
                             fontSize: 14,
                             color: Color(0xFF4353C2),
-                            fontFamily: 'Poppins-medium',
+                            fontFamily: 'Poppins-Medium',
                           ),
                         ),
                       ),
@@ -967,7 +967,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                           style: TextStyle(
                             fontSize: 14,
                             color: Color(0xFF4353C2),
-                            fontFamily: 'Poppins-medium',
+                            fontFamily: 'Poppins-Medium',
                           ),
                         ),
                       ),
@@ -984,7 +984,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         style: TextStyle(
                           fontSize: 14,
                           color: Color(0xFF4353C2),
-                          fontFamily: 'Poppins-medium',
+                          fontFamily: 'Poppins-Medium',
                         ),
                         keyboardType: TextInputType.phone,
                         maxLines: 1,
@@ -1098,7 +1098,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                     style: TextStyle(
                       fontSize: 14,
                       color: Color(0xFF4353C2),
-                      fontFamily: 'Poppins-medium',
+                      fontFamily: 'Poppins-Medium',
                     ),
                   ),
                 ),
@@ -1116,7 +1116,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Color(0xFF4353C2),
-                                fontFamily: 'Poppins-medium',
+                                fontFamily: 'Poppins-Medium',
                               ),
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -1131,7 +1131,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: Color(0xFF4353C2),
-                                    fontFamily: 'Poppins-medium',
+                                    fontFamily: 'Poppins-Medium',
                                   ),
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -1209,7 +1209,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                     style: TextStyle(
                       fontSize: 14,
                       color: Color(0xFF4353C2),
-                      fontFamily: 'Poppins-medium',
+                      fontFamily: 'Poppins-Medium',
                     ),
                   ),
                 ),
@@ -1337,7 +1337,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                     'Cancelar',
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontFamily: 'Poppins-regular',
+                                      fontFamily: 'Poppins-Regular',
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -1412,7 +1412,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                     'Continuar',
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontFamily: 'Poppins-regular',
+                                      fontFamily: 'Poppins-Regular',
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -1447,7 +1447,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       'Completar Pedido',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontFamily: 'Poppins-regular',
+                        fontFamily: 'Poppins-Regular',
                         fontSize: 14,
                       ),
                     ),

@@ -32,7 +32,7 @@ customToast({
                   color: textColor,
                   fontSize: 12,
                   letterSpacing: 0.5,
-                  fontFamily: 'Poppins-medium',
+                  fontFamily: 'Poppins-Medium',
                 ),
               )
             ],

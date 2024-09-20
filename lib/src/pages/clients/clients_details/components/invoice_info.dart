@@ -48,7 +48,7 @@ class InvoiceInfo extends StatelessWidget {
               child: Text(
                 tlf2,
                 style: const TextStyle(
-                  fontFamily: 'Poppins-medium',
+                  fontFamily: 'Poppins-Medium',
                   fontSize: 11,
                   color: Color(0xFF5A5D77),
                 ),
@@ -60,7 +60,7 @@ class InvoiceInfo extends StatelessWidget {
               child: Text(
                 'RIF: $typeId-$nameId ',
                 style: const TextStyle(
-                  fontFamily: 'Poppins-medium',
+                  fontFamily: 'Poppins-Medium',
                   fontSize: 11,
                   color: Color(0xFF5A5D77),
                 ),

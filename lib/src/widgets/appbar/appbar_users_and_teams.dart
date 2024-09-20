@@ -22,7 +22,7 @@ class AppBarUsersAndTeams extends StatelessWidget
         style: TextStyle(
           fontSize: 21,
           fontWeight: FontWeight.w300,
-          fontFamily: 'Poppins-regular',
+          fontFamily: 'Poppins-Regular',
         ),
       ),
       centerTitle: true,

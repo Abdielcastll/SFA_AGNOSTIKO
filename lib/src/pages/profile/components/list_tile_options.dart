@@ -322,7 +322,7 @@ class ListTileProfile extends StatelessWidget {
         subtitle: Text(
           sub,
           style: TextStyle(
-            fontFamily: 'Poppins-regular',
+            fontFamily: 'Poppins-Regular',
             color: Colors.grey.shade500,
             fontSize: 12,
           ),

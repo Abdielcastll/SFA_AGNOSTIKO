@@ -14,6 +14,7 @@ import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pwa_sales2go_flutter/src/utils/custom_cache_manager.dart';
 
 class PromotionsWidget extends StatefulWidget {
   const PromotionsWidget({
@@ -88,13 +89,13 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
                 ),
                 const SizedBox(width: 5.0),
                 Text(
-                  AppLocalizations.of(context)!.promotions,
+                  "Destacados", //AppLocalizations.of(context)!.promotions,
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                     color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
                     letterSpacing: 0.15,
                     fontSize: 16,
-                    fontFamily: 'Poppins-medium',
+                    fontFamily: 'Poppins-Medium',
                   ),
                 ),
               ],
@@ -142,7 +143,7 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
                               textAlign: TextAlign.start,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                fontFamily: 'Poppins-regular',
+                                fontFamily: 'Poppins-Regular',
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                                 color:
@@ -238,6 +239,8 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(8),
                                       child: CachedNetworkImage(
+                                        cacheManager:
+                                            CustomCacheManager.instance,
                                         fit: BoxFit.cover,
                                         imageUrl: url,
                                         placeholder: (context, url) =>
@@ -327,7 +330,7 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
                                       textAlign: TextAlign.start,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
-                                        fontFamily: 'Poppins-regular',
+                                        fontFamily: 'Poppins-Regular',
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
                                         color: themeProvider.myTheme.colorScheme

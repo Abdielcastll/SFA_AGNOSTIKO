@@ -126,7 +126,7 @@ class _PaymentMethodDialogState extends State<PaymentMethodDialog> {
                                     item,
                                     style: const TextStyle(
                                       fontSize: 14,
-                                      fontFamily: 'Poppins-regular',
+                                      fontFamily: 'Poppins-Regular',
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),

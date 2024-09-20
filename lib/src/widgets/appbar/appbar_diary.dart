@@ -47,7 +47,7 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
                 style: const TextStyle(
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
-                  fontFamily: 'Poppins-regular',
+                  fontFamily: 'Poppins-Regular',
                   color: Colors.white,
                 ),
               ),
@@ -55,9 +55,9 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
           : Container(
               margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
               height: 50,
-              width: 50,
+              width: 120,
               child: Image.asset(
-                'assets/images/agn.png',
+                'assets/images/prosa_blanco.png',
                 fit: BoxFit.contain,
               ),
             ),
@@ -375,7 +375,7 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
                                   currentClientForTheOrder!.name,
                                   style: TextStyle(
                                     fontSize: 11,
-                                    fontFamily: 'Poppins-regular',
+                                    fontFamily: 'Poppins-Regular',
                                     color: Color.fromARGB(255, 196, 196, 196),
                                   ),
                                 ),
@@ -383,7 +383,7 @@ class AppBarDiary extends StatelessWidget implements PreferredSizeWidget {
                                   currentClientForTheOrder.prices,
                                   style: TextStyle(
                                     fontSize: 11,
-                                    fontFamily: 'Poppins-regular',
+                                    fontFamily: 'Poppins-Regular',
                                     color: Color.fromARGB(255, 196, 196, 196),
                                   ),
                                 ),

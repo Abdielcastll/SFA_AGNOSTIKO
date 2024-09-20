@@ -55,13 +55,13 @@ confirmationDialog(BuildContext context) {
                       Text(
                         "Facturación Pausada",
                         style: TextStyle(
-                          fontFamily: 'Poppins-regular',
+                          fontFamily: 'Poppins-Regular',
                         ),
                       ),
                       Text(
                         "Consulte lista de facturas",
                         style: TextStyle(
-                          fontFamily: 'Poppins-regular',
+                          fontFamily: 'Poppins-Regular',
                         ),
                       ),
                     ],

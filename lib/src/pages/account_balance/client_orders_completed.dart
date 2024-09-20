@@ -67,7 +67,7 @@ class _ClientOrdersCompletedState extends State<ClientOrdersCompleted> {
         //                   ? AppLocalizations.of(context)!.ascendingFilter
         //                   : AppLocalizations.of(context)!.descendingFilter,
         //               style: TextStyle(
-        //                   fontFamily: 'Poppins-regular',
+        //                   fontFamily: 'Poppins-Regular',
         //                   color: Colors.grey.shade500,
         //                   fontSize: 14,
         //                   fontWeight: FontWeight.bold),
@@ -170,7 +170,7 @@ class _ClientOrdersCompletedState extends State<ClientOrdersCompleted> {
                             'No hay ordenes registradas',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontFamily: 'Poppins-regular',
+                              fontFamily: 'Poppins-Regular',
                               fontSize: 16,
                               color: themeProvider
                                   .myTheme.colorScheme.onPrimaryContainer,

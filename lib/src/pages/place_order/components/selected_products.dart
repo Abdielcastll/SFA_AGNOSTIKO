@@ -25,6 +25,7 @@ import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/checkout_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pwa_sales2go_flutter/src/utils/custom_cache_manager.dart';
 import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/mobile_scanner/mobile_scanner.dart';
 
@@ -284,7 +285,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                         'No hay productos seleccionados\nAcerca el código de barras al escáner.',
                                                         style: TextStyle(
                                                           fontFamily:
-                                                              'Poppins-medium',
+                                                              'Poppins-Medium',
                                                           fontSize: 16,
                                                           color: Colors.black,
                                                         ),
@@ -306,7 +307,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                     style: TextStyle(
                                                       color: Colors.black,
                                                       fontFamily:
-                                                          'Poppins-medium',
+                                                          'Poppins-Medium',
                                                       fontSize: 14,
                                                     ),
                                                   ),
@@ -430,6 +431,9 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                           ),
                                                           child:
                                                               CachedNetworkImage(
+                                                            cacheManager:
+                                                                CustomCacheManager
+                                                                    .instance,
                                                             fit: BoxFit.cover,
                                                             imageUrl: url,
                                                             placeholder:
@@ -533,7 +537,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                                   0.4,
                                                               fontSize: 10,
                                                               fontFamily:
-                                                                  'Poppins-regular',
+                                                                  'Poppins-Regular',
                                                             ),
                                                           ),
                                                         ),
@@ -669,7 +673,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                                         fontSize:
                                                                             12,
                                                                         fontFamily:
-                                                                            'Poppins-regular',
+                                                                            'Poppins-Regular',
                                                                       ),
                                                                     ),
                                                                   ),
@@ -765,7 +769,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                                     0.4,
                                                                 fontSize: 10,
                                                                 fontFamily:
-                                                                    'Poppins-regular',
+                                                                    'Poppins-Regular',
                                                               ),
                                                             ),
                                                           ),
@@ -789,7 +793,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                                       0.4,
                                                                   fontSize: 10,
                                                                   fontFamily:
-                                                                      'Poppins-regular',
+                                                                      'Poppins-Regular',
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold),
@@ -884,7 +888,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                   style: TextStyle(
                                                     color: Colors.white,
                                                     fontFamily:
-                                                        'Poppins-medium',
+                                                        'Poppins-Medium',
                                                     fontSize: 12,
                                                   ),
                                                 ),
@@ -949,7 +953,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                     .addProducts,
                                                 style: TextStyle(
                                                   color: Colors.white,
-                                                  fontFamily: 'Poppins-medium',
+                                                  fontFamily: 'Poppins-Medium',
                                                   fontSize: 12,
                                                 ),
                                               ),
@@ -971,7 +975,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                             //     .orderSubTotal,
                                             'Subtotal',
                                             style: const TextStyle(
-                                              fontFamily: 'Poppins-regular',
+                                              fontFamily: 'Poppins-Regular',
                                               fontSize: 14,
                                               color: Color(0xff000C99),
                                             ),
@@ -979,7 +983,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                           Text(
                                             '$coinSymbol $subTotalFormatted',
                                             style: const TextStyle(
-                                              fontFamily: 'Poppins-regular',
+                                              fontFamily: 'Poppins-Regular',
                                               fontSize: 14,
                                               color: Color(0xff000C99),
                                             ),
@@ -1081,7 +1085,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                 'Continuar',
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
-                                                  fontFamily: 'Poppins-medium',
+                                                  fontFamily: 'Poppins-Medium',
                                                   fontSize: 14,
                                                   color: products.isEmpty
                                                       ? Colors.grey.shade700

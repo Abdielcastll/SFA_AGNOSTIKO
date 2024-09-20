@@ -69,7 +69,7 @@ class _SelectClientState extends State<SelectClient> {
                 Text(
                   AppLocalizations.of(context)!.selectClient,
                   style: const TextStyle(
-                    fontFamily: 'Poppins-regular',
+                    fontFamily: 'Poppins-Regular',
                     color: Colors.white,
                     fontSize: 15,
                   ),
@@ -126,7 +126,7 @@ class _SelectClientState extends State<SelectClient> {
                     title: Text(
                       clientName,
                       style: const TextStyle(
-                        fontFamily: 'Poppins-regular',
+                        fontFamily: 'Poppins-Regular',
                       ),
                     ),
                     subtitle: Container(

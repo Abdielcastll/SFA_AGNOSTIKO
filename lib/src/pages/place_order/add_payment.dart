@@ -143,13 +143,13 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                                 Text(
                                   "Facturación Pausada",
                                   style: TextStyle(
-                                    fontFamily: 'Poppins-regular',
+                                    fontFamily: 'Poppins-Regular',
                                   ),
                                 ),
                                 Text(
                                   "Consulte lista de facturas",
                                   style: TextStyle(
-                                    fontFamily: 'Poppins-regular',
+                                    fontFamily: 'Poppins-Regular',
                                   ),
                                 ),
                               ],
@@ -687,7 +687,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                         style: TextStyle(
                                           color: themeProvider.myTheme
                                               .colorScheme.onPrimaryContainer,
-                                          fontFamily: 'Poppins-regular',
+                                          fontFamily: 'Poppins-Regular',
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -700,7 +700,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                         style: TextStyle(
                                           color: themeProvider.myTheme
                                               .colorScheme.onPrimaryContainer,
-                                          fontFamily: 'Poppins-regular',
+                                          fontFamily: 'Poppins-Regular',
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -723,7 +723,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                         style: TextStyle(
                                           color: themeProvider.myTheme
                                               .colorScheme.onPrimaryContainer,
-                                          fontFamily: 'Poppins-regular',
+                                          fontFamily: 'Poppins-Regular',
                                           fontSize: 12,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -738,7 +738,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                         style: TextStyle(
                                           color: themeProvider.myTheme
                                               .colorScheme.onPrimaryContainer,
-                                          fontFamily: 'Poppins-regular',
+                                          fontFamily: 'Poppins-Regular',
                                           fontSize: 12,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -872,7 +872,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                 child: Text(
                                   '$coinSymbol',
                                   style: TextStyle(
-                                    fontFamily: 'Poppins-regular',
+                                    fontFamily: 'Poppins-Regular',
                                     fontSize: 14,
                                     color: themeProvider
                                         .myTheme.colorScheme.primary,
@@ -890,7 +890,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                             hintText:
                                 '${formatDecimalPriceByRegion(price: Decimal.parse(paidAmount.toString()))}',
                             hintStyle: TextStyle(
-                              fontFamily: 'Poppins-regular',
+                              fontFamily: 'Poppins-Regular',
                               fontSize: 14,
                               color: themeProvider.myTheme.colorScheme.primary,
                             ),
@@ -920,7 +920,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                             Text(
                               'Recibido',
                               style: TextStyle(
-                                fontFamily: 'Poppins-regular',
+                                fontFamily: 'Poppins-Regular',
                                 color: moneyRecievedForRegisterMoney < 0.00001
                                     ? themeProvider.myTheme.colorScheme.primary
                                     : moneyRecievedForRegisterMoney < paidAmount
@@ -1014,7 +1014,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                           //     fieldText,
                           style: TextStyle(
                             fontSize: 14,
-                            fontFamily: 'Poppins-regular',
+                            fontFamily: 'Poppins-Regular',
                             color: moneyRecievedForRegisterMoney < 0.00001
                                 ? themeProvider.myTheme.colorScheme.primary
                                 : moneyRecievedForRegisterMoney < paidAmount
@@ -1049,7 +1049,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                 child: Text(
                                   '$coinSymbol',
                                   style: TextStyle(
-                                    fontFamily: 'Poppins-regular',
+                                    fontFamily: 'Poppins-Regular',
                                     fontSize: 14,
                                     color:
                                         moneyRecievedForRegisterMoney < 0.00001
@@ -1075,7 +1075,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                             // ' ${priceToCurrencySelectedInput(remaining, selectedCoin)}',
                             hintStyle: TextStyle(
                               height: 1.85,
-                              fontFamily: 'Poppins-regular',
+                              fontFamily: 'Poppins-Regular',
                               fontSize: 11,
                               color: themeProvider.myTheme.colorScheme.primary,
                             ),
@@ -1348,7 +1348,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                                   'Cambio:',
                                                   style: TextStyle(
                                                     fontFamily:
-                                                        'Poppins-regular',
+                                                        'Poppins-Regular',
                                                     color: Colors.green,
                                                     fontSize: 12,
                                                     fontWeight: FontWeight.bold,
@@ -1357,7 +1357,7 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
                                           Text(
                                             '\$ ${formatDecimalPriceByRegion(price: Decimal.parse(change.toString()))}',
                                             style: TextStyle(
-                                              fontFamily: 'Poppins-regular',
+                                              fontFamily: 'Poppins-Regular',
                                               color: Colors.green,
                                               fontSize: 12,
                                               fontWeight: FontWeight.bold,

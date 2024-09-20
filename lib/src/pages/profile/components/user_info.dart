@@ -50,7 +50,7 @@ class _UserInfoState extends State<UserInfo> {
               Text(
                 '${widget.charge}',
                 style: const TextStyle(
-                  fontFamily: 'Poppins-regular',
+                  fontFamily: 'Poppins-Regular',
                   color: Color(0xFF7D5070),
                   fontSize: 12,
                   fontWeight: FontWeight.bold,

@@ -187,7 +187,7 @@ class _VIsitCardBodyState extends State<VIsitCardBody> {
                               '$currentClientName',
                               style: const TextStyle(
                                   fontSize: 14,
-                                  fontFamily: 'Poppins-regular',
+                                  fontFamily: 'Poppins-Regular',
                                   color: Colors.black,
                                   letterSpacing: 0.5),
                               maxLines: 2,
@@ -202,7 +202,7 @@ class _VIsitCardBodyState extends State<VIsitCardBody> {
                             style: TextStyle(
                               color: identifyColor(),
                               fontSize: 12,
-                              fontFamily: 'Poppins-medium',
+                              fontFamily: 'Poppins-Medium',
                             ),
                           ),
                         ),
@@ -283,7 +283,7 @@ class _VIsitCardBodyState extends State<VIsitCardBody> {
                                 fontSize: 11,
                                 fontWeight: FontWeight.w400,
                                 color: identifyColor(),
-                                fontFamily: 'Poppins-regular',
+                                fontFamily: 'Poppins-Regular',
                               ),
                             ),
                           ),

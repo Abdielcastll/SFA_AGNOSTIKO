@@ -58,7 +58,7 @@ void modalBottomSheetForCompleted({
                       style: TextStyle(
                         fontSize: 24,
                         color: Color(0xFF1B1B1F),
-                        fontFamily: 'Poppins-regular',
+                        fontFamily: 'Poppins-Regular',
                       ),
                     ),
                     SizedBox(height: 14),
@@ -77,7 +77,7 @@ void modalBottomSheetForCompleted({
                             style: TextStyle(
                               fontSize: 14,
                               color: Color(0xFF5A5D77),
-                              fontFamily: 'Poppins-medium',
+                              fontFamily: 'Poppins-Medium',
                             ),
                           ),
                         ),
@@ -118,7 +118,7 @@ void modalBottomSheetForCompleted({
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontFamily: 'Poppins-regular',
+                          fontFamily: 'Poppins-Regular',
                           fontSize: 14,
                           color: Color(0xFF5A5D77),
                         ),
@@ -233,7 +233,7 @@ class TextBoxWidget extends StatelessWidget {
       child: Text(
         message,
         style: TextStyle(
-          fontFamily: 'Poppins-regular',
+          fontFamily: 'Poppins-Regular',
           fontSize: 14,
           color: themeProvider.myTheme.colorScheme.primary.withOpacity(0.5),
         ),
