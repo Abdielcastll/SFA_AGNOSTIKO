@@ -14,31 +14,6 @@ import 'package:http/http.dart' as http;
 import '../../services/utils/parameters.dart';
 import 'add_payment.dart';
 
-Future<ui.Image?> networkImageToUiImage(String imageUrl) async {
-  try {
-    // Fetch the image data from the network
-    final http.Response response = await http.get(Uri.parse(imageUrl));
-
-    if (response.statusCode == 200) {
-      // Convert the raw bytes into a ui.Image
-      Uint8List imageData = response.bodyBytes;
-      final Completer<ui.Image> completer = Completer();
-
-      ui.decodeImageFromList(imageData, (ui.Image img) {
-        completer.complete(img);
-      });
-
-      return completer.future;
-    } else {
-      print('Failed to load image. Status code: ${response.statusCode}');
-      return null;
-    }
-  } catch (e) {
-    print('Error loading image: $e');
-    return null;
-  }
-}
-
 Future<String?> getDownloadUrl(String filePath) async {
   try {
     // Reference the file in Firebase Storage using the provided file path
@@ -88,34 +63,6 @@ Future<ui.Image?> networkImageToUiImage(String imageUrl) async {
     }
   } catch (e) {
     print('Error loading image: $e');
-    return null;
-  }
-}
-
-Future<String?> getDownloadUrl(String filePath) async {
-  try {
-    // Reference the file in Firebase Storage using the provided file path
-    String downloadUrl =
-        await FirebaseStorage.instanceFor(app: multitenantConfig.tenantApp!)
-            .ref(filePath)
-            .getDownloadURL();
-
-    return downloadUrl;
-  } catch (e) {
-    print('Error fetching download URL: $e');
-    return null;
-  }
-}
-
-Future<String?> fetchDownloadLink() async {
-  String? filePath = globalRemoteConfig.refLogoTicket!;
-  String? downloadUrl = await getDownloadUrl(filePath);
-
-  if (downloadUrl != null) {
-    print('Download URL: $downloadUrl');
-    return downloadUrl;
-  } else {
-    print('Failed to retrieve download URL');
     return null;
   }
 }
