@@ -413,30 +413,84 @@ class ProductDetailsBody extends StatelessWidget {
                                         borderRadius:
                                             BorderRadius.circular(100),
                                         child: ElevatedButton.icon(
-                                          onPressed: () {
+                                          onPressed: () async {
                                             if (stock! > 0) {
-                                              final newProduct =
-                                                  ShoppingCartProduct(
-                                                productQuantity: 1,
-                                                code: code,
-                                                productId: code,
-                                                listOfPricesId:
-                                                    pricesName.toString(),
-                                                totalAmount: price.toString(),
-                                                name: name,
-                                                unitPrice: price.toString(),
-                                                availableStock: stock,
-                                                urlPicture:
-                                                    catalogueID.toString(),
-                                              );
-
-                                              objectBox
-                                                  .insertShoppingCartProduct(
-                                                      newProduct);
-                                              Fluttertoast.showToast(
-                                                  msg:
-                                                      'Producto añadido correctamente');
+                                              // Get all products in the cart
+                                              final productsInCart = await objectBox
+                                                  .getAllShoppingCartProducts();
+                                              // Initialize a flag to check if the product is already in the cart
+                                              bool isProductAlreadyInCart =
+                                                  false;
+                                              // Iterate through the products in the cart
+                                              for (var element
+                                                  in productsInCart) {
+                                                if (element.code == code) {
+                                                  // Product is already in the cart, increase its quantity
+                                                  print(
+                                                      'Product is already in the cart, increasing quantity by 1');
+                                                  isProductAlreadyInCart = true;
+                                                  // Create a new product object with updated quantity
+                                                  final updatedProduct =
+                                                      ShoppingCartProduct(
+                                                    id: element.id,
+                                                    availableStock:
+                                                        element.availableStock,
+                                                    productQuantity: element
+                                                            .productQuantity! +
+                                                        1,
+                                                    code: element.code,
+                                                    listOfPricesId:
+                                                        element.listOfPricesId,
+                                                    name: element.name,
+                                                    productId:
+                                                        element.productId,
+                                                    unitPrice: element.unitPrice
+                                                        .toString(),
+                                                    totalAmount: element
+                                                        .totalAmount
+                                                        .toString(),
+                                                    urlPicture: element
+                                                        .urlPicture
+                                                        .toString(),
+                                                  );
+                                                  // Update the product in ObjectBox
+                                                  objectBox
+                                                      .insertShoppingCartProduct(
+                                                          updatedProduct);
+                                                  // Show a toast message
+                                                  Fluttertoast.showToast(
+                                                      msg:
+                                                          '${element.code} + 1');
+                                                  break; // Exit the loop as we've found the product
+                                                }
+                                              }
+                                              // If the product is not already in the cart, add it as a new product
+                                              if (!isProductAlreadyInCart) {
+                                                final newProduct =
+                                                    ShoppingCartProduct(
+                                                  productQuantity: 1,
+                                                  code: code,
+                                                  productId: code,
+                                                  listOfPricesId:
+                                                      pricesName.toString(),
+                                                  totalAmount: price.toString(),
+                                                  name: name,
+                                                  unitPrice: price.toString(),
+                                                  availableStock: stock,
+                                                  urlPicture:
+                                                      catalogueID.toString(),
+                                                );
+                                                // Insert the new product into ObjectBox
+                                                objectBox
+                                                    .insertShoppingCartProduct(
+                                                        newProduct);
+                                                // Show a toast message for successful addition
+                                                Fluttertoast.showToast(
+                                                    msg:
+                                                        'Producto añadido correctamente');
+                                              }
                                             } else {
+                                              // Show a toast message if no stock is available
                                               Fluttertoast.showToast(
                                                   msg:
                                                       'No hay stock disponible para este producto');
