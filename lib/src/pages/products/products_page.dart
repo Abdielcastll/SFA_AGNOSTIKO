@@ -281,10 +281,87 @@ class _ProductsBodyState extends State<ProductsBody> {
                       elevation: 2,
                       backgroundColor:
                           themeProvider.myTheme.colorScheme.primary,
-                      onPressed: () {
-                        // Agregar productos al carrito
-                        objectBox
-                            .insertManyShoppingCartProducts(selectedProducts);
+                      onPressed: () async {
+                        // Fetch all products in the cart once
+                        final productsInCart =
+                            await objectBox.getAllShoppingCartProducts();
+
+                        // Iterate through each selected product
+                        for (var selectedProduct in selectedProducts) {
+                          // Check if the selected product has stock
+                          if (selectedProduct.availableStock! > 0) {
+                            // Initialize a flag to check if the product is already in the cart
+                            bool isProductAlreadyInCart = false;
+
+                            // Iterate through the products in the cart
+                            for (var cartProduct in productsInCart) {
+                              if (cartProduct.code == selectedProduct.code) {
+                                // Product is already in the cart, increase its quantity
+                                print(
+                                    'Product ${selectedProduct.code} is already in the cart, increasing quantity by 1');
+                                isProductAlreadyInCart = true;
+
+                                // Create an updated product with increased quantity
+                                final updatedProduct = ShoppingCartProduct(
+                                  id: cartProduct.id,
+                                  availableStock: cartProduct.availableStock,
+                                  productQuantity:
+                                      cartProduct.productQuantity! + 1,
+                                  code: cartProduct.code,
+                                  listOfPricesId: cartProduct.listOfPricesId,
+                                  name: cartProduct.name,
+                                  productId: cartProduct.productId,
+                                  unitPrice: cartProduct.unitPrice.toString(),
+                                  totalAmount:
+                                      cartProduct.totalAmount.toString(),
+                                  urlPicture: cartProduct.urlPicture.toString(),
+                                );
+
+                                // Update the product in ObjectBox
+                                await objectBox
+                                    .insertShoppingCartProduct(updatedProduct);
+
+                                // Show a toast message for the updated quantity
+                                Fluttertoast.showToast(
+                                    msg: '${cartProduct.code} + 1');
+
+                                break; // Exit the loop as we've found the product
+                              }
+                            }
+
+                            // If the product is not already in the cart, add it as a new product
+                            if (!isProductAlreadyInCart) {
+                              final newProduct = ShoppingCartProduct(
+                                productQuantity: 1,
+                                code: selectedProduct.code,
+                                productId: selectedProduct.productId,
+                                listOfPricesId: selectedProduct.listOfPricesId,
+                                totalAmount:
+                                    selectedProduct.unitPrice.toString(),
+                                name: selectedProduct.name,
+                                unitPrice: selectedProduct.unitPrice.toString(),
+                                availableStock: selectedProduct.availableStock,
+                                urlPicture: selectedProduct.urlPicture,
+                              );
+
+                              // Insert the new product into ObjectBox
+                              await objectBox
+                                  .insertShoppingCartProduct(newProduct);
+
+                              // Show a toast message for successfully adding the new product
+                              Fluttertoast.showToast(
+                                  msg:
+                                      'Producto ${selectedProduct.code} añadido correctamente');
+                            }
+                          } else {
+                            // Show a toast message if no stock is available for the product
+                            Fluttertoast.showToast(
+                                msg:
+                                    'No hay stock disponible para ${selectedProduct.code}');
+                          }
+                        }
+
+                        // Show feedback based on remote config
                         if (globalRemoteConfig.conversionKiosko! == false) {
                           ScaffoldMessenger.of(context)
                             ..removeCurrentSnackBar()
@@ -301,8 +378,8 @@ class _ProductsBodyState extends State<ProductsBody> {
                                 ),
                               ),
                             );
-                        }
-                        if (globalRemoteConfig.conversionKiosko == true) {
+                        } else if (globalRemoteConfig.conversionKiosko ==
+                            true) {
                           Navigator.pop(context);
                           Fluttertoast.showToast(
                             gravity: ToastGravity.TOP,

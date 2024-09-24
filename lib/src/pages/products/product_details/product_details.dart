@@ -460,7 +460,7 @@ class ProductDetailsBody extends StatelessWidget {
                                                   // Show a toast message
                                                   Fluttertoast.showToast(
                                                       msg:
-                                                          '${element.code} + 1');
+                                                          'Producto añadido correctamente + 1');
                                                   break; // Exit the loop as we've found the product
                                                 }
                                               }
