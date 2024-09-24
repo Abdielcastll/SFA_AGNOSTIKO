@@ -283,7 +283,6 @@ class _ProductsBodyState extends State<ProductsBody> {
                           themeProvider.myTheme.colorScheme.primary,
                       onPressed: () {
                         // Agregar productos al carrito
-
                         objectBox
                             .insertManyShoppingCartProducts(selectedProducts);
                         if (globalRemoteConfig.conversionKiosko! == false) {
