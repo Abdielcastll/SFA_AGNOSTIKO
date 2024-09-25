@@ -14,7 +14,7 @@ class SelectedClientKiosko extends StatelessWidget {
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
             height: 120,
             child: Image.asset(
-              'assets/images/logo_prosa_color.png',
+              'assets/images/agn_full.png',
               fit: BoxFit.fitWidth,
             ),
           ),

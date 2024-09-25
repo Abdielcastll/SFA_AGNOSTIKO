@@ -47,7 +47,7 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
               height: 50,
               width: 120,
               child: Image.asset(
-                'assets/images/prosa_blanco.png',
+                'assets/images/agn_full.png',
                 fit: BoxFit.contain,
               ),
             )
@@ -56,7 +56,7 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
               height: 50,
               width: 120,
               child: Image.asset(
-                'assets/images/prosa_blanco.png',
+                'assets/images/agn_full.png',
                 fit: BoxFit.contain,
               ),
             ),

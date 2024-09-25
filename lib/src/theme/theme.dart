@@ -3,19 +3,20 @@ import 'package:flutter/material.dart';
 ThemeData myThemeBase = ThemeData.light().copyWith(
   colorScheme: const ColorScheme.light(
     // Colores primarios
-    primary: Color.fromARGB(255, 229, 48, 40),
-    secondary: Color.fromRGBO(119, 90, 90, 1),
+    primary: Color.fromRGBO(67, 83, 194, 1),
+    secondary: Color.fromRGBO(90, 93, 119, 1),
+    // tertiary: Color.fromRGBO(255, 255, 255, 1),
     tertiary: Color.fromRGBO(125, 80, 112, 1),
     // Background
     background: Color.fromRGBO(255, 251, 255, 1),
-    onBackground: Color.fromRGBO(31, 27, 27, 1),
+    onBackground: Color.fromRGBO(27, 27, 31, 1),
     // Containers
     primaryContainer: Color.fromRGBO(223, 224, 255, 1),
     tertiaryContainer: Color.fromRGBO(255, 215, 240, 1),
     secondaryContainer: Color.fromRGBO(223, 224, 255, 1),
     // onContainers
-    onPrimaryContainer: Color.fromARGB(255, 143, 24, 24),
-    onSecondaryContainer: Color.fromRGBO(49, 23, 23, 1),
+    onPrimaryContainer: Color.fromARGB(255, 0, 24, 143),
+    onSecondaryContainer: Color.fromRGBO(23, 26, 49, 1),
     onTertiaryContainer: Color.fromRGBO(49, 14, 42, 1),
     // Errores
     error: Color.fromRGBO(186, 26, 26, 1),
@@ -30,19 +31,20 @@ class ThemeProvider with ChangeNotifier {
   ThemeData _myTheme = ThemeData.light().copyWith(
     colorScheme: const ColorScheme.light(
       // Colores primarios
-      primary: Color.fromARGB(255, 229, 48, 40),
-      secondary: Color.fromRGBO(119, 90, 90, 1),
+      primary: Color.fromRGBO(67, 83, 194, 1),
+      secondary: Color.fromRGBO(90, 93, 119, 1),
+      // tertiary: Color.fromRGBO(255, 255, 255, 1),
       tertiary: Color.fromRGBO(125, 80, 112, 1),
       // Background
       background: Color.fromRGBO(255, 251, 255, 1),
-      onBackground: Color.fromRGBO(31, 27, 27, 1),
+      onBackground: Color.fromRGBO(27, 27, 31, 1),
       // Containers
       primaryContainer: Color.fromRGBO(223, 224, 255, 1),
       tertiaryContainer: Color.fromRGBO(255, 215, 240, 1),
       secondaryContainer: Color.fromRGBO(223, 224, 255, 1),
       // onContainers
-      onPrimaryContainer: Color.fromARGB(255, 143, 24, 24),
-      onSecondaryContainer: Color.fromRGBO(49, 23, 23, 1),
+      onPrimaryContainer: Color.fromARGB(255, 0, 24, 143),
+      onSecondaryContainer: Color.fromRGBO(23, 26, 49, 1),
       onTertiaryContainer: Color.fromRGBO(49, 14, 42, 1),
       // Errores
       error: Color.fromRGBO(186, 26, 26, 1),

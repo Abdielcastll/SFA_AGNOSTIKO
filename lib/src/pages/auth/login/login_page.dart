@@ -177,7 +177,7 @@ class Header extends StatefulWidget {
 class _HeaderState extends State<Header> {
   int activeIndex = 0;
   final assetsImages = [
-    "assets/images/logo_prosa_blanco.png",
+    "assets/images/agn_full.png",
   ];
   @override
   Widget build(BuildContext context) {
