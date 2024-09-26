@@ -39,7 +39,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
     final pricesName = Provider.of<Prices?>(context)?.name ?? {};
 
     return FutureBuilder(
-      future: getDataFromBQ(queryProductosMasVendidos),
+      future: getDataFromBQ(),
       builder: (context, snapshot) {
         final List<ProductsByDate> productsBySales = [];
         var productsBySalesList = productsBySales;
