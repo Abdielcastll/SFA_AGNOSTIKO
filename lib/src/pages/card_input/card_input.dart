@@ -487,6 +487,14 @@ class _CardInputViewState extends State<CardInputView> {
         content: Text("Error de lectura de chip"),
       ));
     }
+    if (event.transactionInfo.result == EmvTransactionResult.Denied) {
+      if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+        await cancelPaymentProcess(
+          paymentBody!.client,
+          paymentBody!.invoiceNumber,
+        );
+      }
+    }
     if (event.transactionInfo.onlineRequested &&
         !event.transactionInfo.isContactless) {
       // si la transacción terminó tras irse online, ya el 1st GENERATE AC

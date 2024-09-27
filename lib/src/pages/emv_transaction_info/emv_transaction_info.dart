@@ -648,32 +648,38 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       if (globalRemoteConfig.conversionKiosko!) {
         setMethod = 'Tarjeta de Debito';
       }
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          settings: const RouteSettings(name: 'PAGO-DIRECTO'),
-          builder: (BuildContext context) => AddPaymentPage(
-            remaining: double.parse(
-                (Decimal.parse(paymentBody.remaining.toString()) -
-                        Decimal.parse(payed.toString()))
-                    .toString()),
-            subTotal: paymentBody.subTotal,
-            discountPercentage: paymentBody.discountPercentage,
-            discount: paymentBody.discount,
-            tax: paymentBody.tax,
-            percentageTax: paymentBody.percentageTax,
-            client: paymentBody.client,
-            invoiceDocumentID: paymentBody.invoiceDocumentID,
-            invoiceNumber: paymentBody.invoiceNumber,
-            payments: paymentBody.payments,
-            amountPayed: (paymentBody.amountPaied ?? 0) + payed,
-            invoiceTotal: transactionArgs!.invoice!.totalOfTheOrder,
-            isKiosko: globalRemoteConfig.conversionKiosko!,
-            paymentType: setMethod,
-            // updatePayed: updatePayed,
+      if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+        Navigator.pop(context);
+        Navigator.pop(context);
+        Navigator.pop(context);
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            settings: const RouteSettings(name: 'PAGO-DIRECTO'),
+            builder: (BuildContext context) => AddPaymentPage(
+              remaining: double.parse(
+                  (Decimal.parse(paymentBody.remaining.toString()) -
+                          Decimal.parse(payed.toString()))
+                      .toString()),
+              subTotal: paymentBody.subTotal,
+              discountPercentage: paymentBody.discountPercentage,
+              discount: paymentBody.discount,
+              tax: paymentBody.tax,
+              percentageTax: paymentBody.percentageTax,
+              client: paymentBody.client,
+              invoiceDocumentID: paymentBody.invoiceDocumentID,
+              invoiceNumber: paymentBody.invoiceNumber,
+              payments: paymentBody.payments,
+              amountPayed: (paymentBody.amountPaied ?? 0) + payed,
+              invoiceTotal: transactionArgs!.invoice!.totalOfTheOrder,
+              isKiosko: globalRemoteConfig.conversionKiosko!,
+              paymentType: setMethod,
+              // updatePayed: updatePayed,
+            ),
           ),
-        ),
-      );
+        );
+      }
     }
   }
 
