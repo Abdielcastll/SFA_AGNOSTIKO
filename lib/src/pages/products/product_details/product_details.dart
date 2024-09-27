@@ -128,7 +128,7 @@ class ProductDetailsBody extends StatelessWidget {
     required this.isProductInAPromotion,
     this.prices,
     this.pricesName,
-    this.catalogueID,
+    this.catalogueID = '',
     required this.userZoneDocument,
     required this.showListButton,
   }) : super(key: key);
@@ -203,21 +203,27 @@ class ProductDetailsBody extends StatelessWidget {
                             width: MediaQuery.of(context).size.width * 0.90,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(8),
-                              child: CachedNetworkImage(
-                                cacheManager: CustomCacheManager.instance,
-                                fit: BoxFit.cover,
-                                imageUrl: imageUrl,
-                                placeholder: (context, url) => Container(
-                                    alignment: Alignment.center,
-                                    width: 300,
-                                    child: const Center(
-                                        child: CircularProgressIndicator())),
-                                errorWidget: (context, url, error) =>
-                                    Image.asset(
-                                  'assets/images/noproduct.jpg',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+                              child: imageUrl != ''
+                                  ? CachedNetworkImage(
+                                      cacheManager: CustomCacheManager.instance,
+                                      fit: BoxFit.cover,
+                                      imageUrl: imageUrl,
+                                      placeholder: (context, url) => Container(
+                                          alignment: Alignment.center,
+                                          width: 300,
+                                          child: const Center(
+                                              child:
+                                                  CircularProgressIndicator())),
+                                      errorWidget: (context, url, error) =>
+                                          Image.asset(
+                                        'assets/images/noproduct.jpg',
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )
+                                  : Image.asset(
+                                      'assets/images/noproduct.jpg',
+                                      fit: BoxFit.cover,
+                                    ),
                             ),
                           ),
                         ),

@@ -45,14 +45,12 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
         var productsBySalesList = productsBySales;
         if (snapshot.hasData) {
           final data = snapshot.data! as List;
-          // print(data);
           data.forEach(
             (el) {
+              print("processing most selled: ");
               print(el);
               String elQuality = el['calidad'];
               String quality = elQuality.replaceAll(RegExp('"'), '');
-              String elCatalogue = el['catalogo'];
-              String catalogue = elCatalogue.replaceAll(RegExp('"'), '');
               String elCategorie = el['categoria'];
               String categorie = elCategorie.replaceAll(RegExp('"'), '');
               String elCode = el['codigo'];
@@ -71,10 +69,11 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
               String size = elSize.replaceAll(RegExp('"'), '');
               String elLine = el['linea'];
               String line = elLine.replaceAll(RegExp('"'), '');
+              print("setted variables");
 
               var msp = ProductsByDate(
                 quality: firebase.doc(quality).id,
-                catalogue: firebase.doc(catalogue).id,
+                //catalogue: catalogo,
                 categorie: firebase.doc(categorie).id,
                 code: code,
                 barCode: barCode,
@@ -86,11 +85,12 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                 subCategorie: firebase.doc(subcategorie).id,
                 size: firebase.doc(size).id,
                 selected: false,
+                promotion: "",
               );
-
               productsBySales.add(msp);
             },
           );
+
           return Container(
             margin: const EdgeInsets.fromLTRB(0, 12.0, 0, 15.0),
             child: Column(
@@ -143,7 +143,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                           }),
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
-                              final url = snapshot.data!.toString();
+                              String url = snapshot.data!.toString();
                               return GestureDetector(
                                 onTap: () {
                                   print(prices[product.code]);
@@ -167,7 +167,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                             .toList(),
                                         isProductInAPromotion: false,
                                         prices: prices,
-                                        catalogueID: product.catalogue,
+                                        //catalogueID: product.catalogue,
                                         userZoneDocument: userZoneDocument,
                                         showListButton: true,
                                         // pricesName: pricesName,

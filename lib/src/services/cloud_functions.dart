@@ -4,12 +4,12 @@ import 'package:pwa_sales2go_flutter/src/utils/multitenant-config.dart';
 Future<List?> getDataFromBQ() async {
   String projectId = multitenantConfig.tenantApp!.options.projectId!;
   String queryProductosMasVendidos =
-      '''SELECT Count(*) as cantidad, ped.codigo, ped.nombre, prod.catalogo, prod.linea, prod.calidad, prod.categoria, prod.diseno, prod.marca, prod.subcategoria, prod.tamano
+      '''SELECT Count(*) as cantidad, ped.codigo, ped.nombre, prod.linea, prod.calidad, prod.categoria, prod.diseno, prod.marca, prod.subcategoria, prod.tamano
 FROM `$projectId.pedidos_export.pedidos_productos` as ped
 INNER JOIN `$projectId.productos_export.productos` as prod
 ON prod.codigo = ped.codigo
 WHERE timestamp_diff(CURRENT_TIMESTAMP(), ped.fecha, DAY) <= 90
-group by ped.codigo, ped.nombre, prod.catalogo, prod.linea, prod.calidad, prod.categoria, prod.diseno, prod.marca, prod.subcategoria, prod.tamano
+group by ped.codigo, ped.nombre, prod.linea, prod.calidad, prod.categoria, prod.diseno, prod.marca, prod.subcategoria, prod.tamano
 order by cantidad desc
 LIMIT 10''';
 
@@ -20,10 +20,7 @@ LIMIT 10''';
   final result = await function({
     "query": queryProductosMasVendidos,
   });
-  print("result bq:");
-  print(result.data);
   return result.data as List;
-
   // print(result.data);
 }
 

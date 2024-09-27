@@ -2632,7 +2632,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                 list: [
                                                   ProductsByDate(
                                                     quality: 'nan',
-                                                    catalogue: 'test',
+                                                    //catalogue: 'test',
                                                     categorie: 'test',
                                                     code: 'test',
                                                     barCode: 'test',
@@ -2668,7 +2668,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                 list: [
                                                   ProductsByDate(
                                                     quality: 'nan',
-                                                    catalogue: 'test',
+                                                    //catalogue: 'test',
                                                     categorie: 'test',
                                                     code: 'test',
                                                     barCode: 'test',
@@ -3078,7 +3078,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                 list: [
                                                   ProductsByDate(
                                                     quality: 'nan',
-                                                    catalogue: 'test',
+                                                    //catalogue: 'test',
                                                     categorie: 'test',
                                                     code: 'test',
                                                     barCode: 'test',
@@ -3114,7 +3114,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                 list: [
                                                   ProductsByDate(
                                                     quality: 'nan',
-                                                    catalogue: 'test',
+                                                    //catalogue: 'test',
                                                     categorie: 'test',
                                                     code: 'test',
                                                     barCode: 'test',

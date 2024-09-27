@@ -116,7 +116,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                   isProductInAPromotion: false,
                                   prices: prices,
                                   pricesName: pricesName,
-                                  catalogueID: product.catalogue,
+                                  //catalogueID: product.catalogue,
                                   userZoneDocument: userZoneDocument,
                                   showListButton: true,
                                 ),

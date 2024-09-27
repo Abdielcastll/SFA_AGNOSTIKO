@@ -70,7 +70,7 @@ class ProductsWithPromotions {
 
 class ProductsByDate {
   final quality;
-  final catalogue;
+  //final catalogue;
   final categorie;
   final code;
   final design;
@@ -86,7 +86,7 @@ class ProductsByDate {
 
   ProductsByDate({
     required this.quality,
-    required this.catalogue,
+    //required this.catalogue,
     required this.categorie,
     required this.code,
     required this.design,
@@ -199,9 +199,9 @@ List<ProductsByDate> productsByDateListFromSnapshot(QuerySnapshot snapshot) {
       quality: doc.data().toString().contains('calidad')
           ? doc.get('calidad').id
           : '',
-      catalogue: doc.data().toString().contains('catalogo')
-          ? doc.get('catalogo').id
-          : '',
+      // catalogue: doc.data().toString().contains('catalogo')
+      //     ? doc.get('catalogo').id
+      //     : '',
       categorie: doc.data().toString().contains('categoria')
           ? doc.get('categoria').id
           : '',
