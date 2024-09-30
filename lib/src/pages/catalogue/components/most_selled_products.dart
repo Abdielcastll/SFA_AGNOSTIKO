@@ -47,8 +47,6 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
           final data = snapshot.data! as List;
           data.forEach(
             (el) {
-              print("processing most selled: ");
-              print(el);
               String elQuality = el['calidad'];
               String quality = elQuality.replaceAll(RegExp('"'), '');
               String elCategorie = el['categoria'];
@@ -69,8 +67,6 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
               String size = elSize.replaceAll(RegExp('"'), '');
               String elLine = el['linea'];
               String line = elLine.replaceAll(RegExp('"'), '');
-              print("setted variables");
-
               var msp = ProductsByDate(
                 quality: firebase.doc(quality).id,
                 //catalogue: catalogo,

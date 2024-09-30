@@ -651,7 +651,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       if (globalRemoteConfig.onlyFullPaymentWithCard!) {
         Navigator.pop(context);
         Navigator.pop(context);
-        Navigator.pop(context);
+        //Navigator.pop(context);
       } else {
         Navigator.pushReplacement(
           context,
