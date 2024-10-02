@@ -592,6 +592,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     final noRetail = (ModalRoute.of(context)?.settings.arguments! as List)[3];
 
     if (noRetail) {
+      print("noRetail");
       Navigator.pop(context);
       Navigator.pop(context);
       return;

@@ -300,6 +300,12 @@ class _CardInputViewState extends State<CardInputView> {
         (await EmvModule.instance.getTagValue(0x57))?.toHexStr().split('d')[0];
     // en caso de error, nos movemos a la pantalla de cierre
     final arguments = (ModalRoute.of(context)?.settings.arguments! as List);
+    if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+      await cancelPaymentProcess(
+        paymentBody!.client,
+        paymentBody!.invoiceNumber,
+      );
+    }
     Navigator.pushReplacementNamed(
       context,
       EmvTransactionInfoView.route,
@@ -479,6 +485,12 @@ class _CardInputViewState extends State<CardInputView> {
     MPOSController.instance.showHomeScreen();
     Navigator.pop(context); // quitamos el popup de progreso
     if (event.transactionInfo.result == EmvTransactionResult.Fallback) {
+      if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+        await cancelPaymentProcess(
+          paymentBody!.client,
+          paymentBody!.invoiceNumber,
+        );
+      }
       transactionArgs?.isFallback = true;
       setState(() {
         this._isFallback = true;
@@ -488,6 +500,22 @@ class _CardInputViewState extends State<CardInputView> {
       ));
     }
     if (event.transactionInfo.result == EmvTransactionResult.Denied) {
+      if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+        await cancelPaymentProcess(
+          paymentBody!.client,
+          paymentBody!.invoiceNumber,
+        );
+      }
+    }
+    if (event.transactionInfo.result == EmvTransactionResult.Fail) {
+      if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+        await cancelPaymentProcess(
+          paymentBody!.client,
+          paymentBody!.invoiceNumber,
+        );
+      }
+    }
+    if (event.transactionInfo.result == EmvTransactionResult.CmdError) {
       if (globalRemoteConfig.onlyFullPaymentWithCard!) {
         await cancelPaymentProcess(
           paymentBody!.client,
