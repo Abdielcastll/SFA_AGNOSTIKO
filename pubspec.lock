@@ -21,10 +21,10 @@ packages:
     dependency: "direct main"
     description:
       name: agnostiko
-      sha256: "8d7e6668b48c79c797e527484dd11835151977e90378c87ebc3b77f62687cceb"
+      sha256: "41c830a4b800e0c9d6b8c996cfafd67c92d27e964725861355497849418c10e3"
       url: "https://server-agnostiko-web-gnbxyenkeq-ue.a.run.app"
     source: hosted
-    version: "1.7.3"
+    version: "1.8.02-beta"
   analyzer:
     dependency: transitive
     description:
