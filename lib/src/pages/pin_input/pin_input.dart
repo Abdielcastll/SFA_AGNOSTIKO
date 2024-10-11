@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:agnostiko/agnostiko.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
+import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 import '../../../dialogs/cancel_transaction_dialog.dart';
@@ -198,6 +200,10 @@ class _PinInputViewState extends State<PinInputView> {
     }
     // si llegamos aquí, hubo cancelación, timeout o error
     await cancelEmvTransaction();
+    if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+      await cancelPaymentProcess(
+          paymentBody!.client, paymentBody!.invoiceNumber);
+    }
     print("****************PIN ENTRY CLOSED*****************");
   }
 }

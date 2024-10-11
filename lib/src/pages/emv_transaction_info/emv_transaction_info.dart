@@ -783,6 +783,16 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
 
     final fechaTag = await emv.getTagValue(0x9a);
     final horaTag = await emv.getTagValue(0x9f21);
+    Uint8List? arqc = await emv.getTagValue(0x9f26);
+    String? maskedHexString;
+    if (arqc != null) {
+      final hexString = arqc
+          .map((byte) => byte.toRadixString(16).padLeft(2, '0'))
+          .join()
+          .toUpperCase();
+      maskedHexString = '*' * (hexString.length - 4) +
+          hexString.substring(hexString.length - 4);
+    }
     String fecha = "";
     String hora = "";
     if (fechaTag != null) {
@@ -891,7 +901,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     );
     listOfTextLine.add(
       PrinterText(
-        "ARQC: E47BF856EDEB5B31".toUpperCase(),
+        'ARQC:${maskedHexString!.toUpperCase()}',
         format: TextFormat(
           fontSize: 16,
           fontFamily: regularFont,

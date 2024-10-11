@@ -261,14 +261,24 @@ class _CardInputViewState extends State<CardInputView> {
               await showCandidateListDialog(context, event.candidateList) ?? 0;
           emvSelectCandidate(selectedIndex);
         } else if (event is EmvAppSelectedEvent) {
+          print('app select evebt');
+
           await _onAppSelected(event);
         } else if (event is EmvPinRequestedEvent) {
+          print('pin  requested evebt');
+
           await _onPinRequested(event);
         } else if (event is EmvPinpadEntryEvent) {
+          print('pinpad pin evebt');
+
           await _onPinpadEntry();
         } else if (event is EmvOnlineRequestedEvent) {
+          print('emv online evebt');
+
           await _onOnlineRequested(event);
         } else if (event is EmvFinishedEvent) {
+          print('emv finished evebt');
+
           return _onEmvFinished(event);
         }
       }
@@ -277,6 +287,7 @@ class _CardInputViewState extends State<CardInputView> {
     } catch (e) {
       return _processEMVException(e, "Error interno");
     }
+    print('se cancela en pantalla card input');
 
     if (!mounted) return;
     // si llegamos aquí es porque se canceló la transacción en esta pantalla
@@ -338,6 +349,7 @@ class _CardInputViewState extends State<CardInputView> {
   }
 
   Future<void> _onPinpadEntry() async {
+    print('pinpad entry');
     Navigator.pop(context);
     showCircularProgressDialog(
       context,
@@ -349,11 +361,15 @@ class _CardInputViewState extends State<CardInputView> {
       allowedLength: [0, 4, 8, 23, 13, 6],
     );
     try {
+      print('try pinpad entry');
+
       await emvConfirmPinpadEntry(pinEntryParameters);
       return;
     } catch (e) {
       print("PIN Error: $e");
     }
+    print('acabo pinpad entry en cancelacion timeout o error');
+
     // si llegamos aquí, hubo cancelación, timeout o error
     await cancelEmvTransaction();
     if (globalRemoteConfig.onlyFullPaymentWithCard!) {
@@ -472,6 +488,7 @@ class _CardInputViewState extends State<CardInputView> {
   }
 
   void _onEmvFinished(EmvFinishedEvent event) async {
+    print(event.transactionInfo.result);
     final transactionArgs = this.transactionArgs;
     transactionArgs?.transactionInfo = event.transactionInfo;
 
@@ -498,8 +515,33 @@ class _CardInputViewState extends State<CardInputView> {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Error de lectura de chip"),
       ));
-    }
-    if (event.transactionInfo.result == EmvTransactionResult.Denied) {
+    } else if (event.transactionInfo.result ==
+        EmvTransactionResult.PinTimeout) {
+      if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+        await cancelPaymentProcess(
+          paymentBody!.client,
+          paymentBody!.invoiceNumber,
+        );
+      }
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Tiempo de ingreso de pin agotado"),
+      ));
+      Navigator.popUntil(context, (route) => route.isFirst == true);
+    } else if (event.transactionInfo.result == EmvTransactionResult.Denied) {
+      if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+        await cancelPaymentProcess(
+          paymentBody!.client,
+          paymentBody!.invoiceNumber,
+        );
+      }
+    } else if (event.transactionInfo.result == EmvTransactionResult.Fail) {
+      if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+        await cancelPaymentProcess(
+          paymentBody!.client,
+          paymentBody!.invoiceNumber,
+        );
+      }
+    } else if (event.transactionInfo.result == EmvTransactionResult.CmdError) {
       if (globalRemoteConfig.onlyFullPaymentWithCard!) {
         await cancelPaymentProcess(
           paymentBody!.client,
@@ -507,22 +549,7 @@ class _CardInputViewState extends State<CardInputView> {
         );
       }
     }
-    if (event.transactionInfo.result == EmvTransactionResult.Fail) {
-      if (globalRemoteConfig.onlyFullPaymentWithCard!) {
-        await cancelPaymentProcess(
-          paymentBody!.client,
-          paymentBody!.invoiceNumber,
-        );
-      }
-    }
-    if (event.transactionInfo.result == EmvTransactionResult.CmdError) {
-      if (globalRemoteConfig.onlyFullPaymentWithCard!) {
-        await cancelPaymentProcess(
-          paymentBody!.client,
-          paymentBody!.invoiceNumber,
-        );
-      }
-    }
+
     if (event.transactionInfo.onlineRequested &&
         !event.transactionInfo.isContactless) {
       // si la transacción terminó tras irse online, ya el 1st GENERATE AC
