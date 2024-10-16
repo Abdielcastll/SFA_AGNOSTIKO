@@ -50,44 +50,49 @@ class CompletedPayPage extends StatelessWidget {
     String currentCoinSelectedCode = currentCoinSplit.last;
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
-    return Scaffold(
-      backgroundColor: Colors.grey.shade100,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(20),
-        child: AppBar(
-          automaticallyImplyLeading: false,
-          elevation: 0,
-          backgroundColor: themeProvider.myTheme.colorScheme.primary,
-          foregroundColor: Colors.white,
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.grey.shade100,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(20),
+          child: AppBar(
+            automaticallyImplyLeading: false,
+            elevation: 0,
+            backgroundColor: themeProvider.myTheme.colorScheme.primary,
+            foregroundColor: Colors.white,
+          ),
         ),
-      ),
-      body: SingleChildScrollView(
-        child: MultiProvider(
-          providers: [
-            StreamProvider<Coin?>.value(
-              initialData: Coin(),
-              catchError: (context, error) {
-                print(
-                    'ERROR ON STREAM PROVIDER OF COINEXCHANGE RATES IN ADD CLIENT');
-                print(error);
-                return;
-              },
-              value: coinCollection
-                  .doc(currentCoinSelectedCode)
-                  .snapshots()
-                  .map(coinFromSnapshot),
+        body: SingleChildScrollView(
+          child: MultiProvider(
+            providers: [
+              StreamProvider<Coin?>.value(
+                initialData: Coin(),
+                catchError: (context, error) {
+                  print(
+                      'ERROR ON STREAM PROVIDER OF COINEXCHANGE RATES IN ADD CLIENT');
+                  print(error);
+                  return;
+                },
+                value: coinCollection
+                    .doc(currentCoinSelectedCode)
+                    .snapshots()
+                    .map(coinFromSnapshot),
+              ),
+            ],
+            child: CompletedPayBody(
+              client: client,
+              total: total,
+              method: method,
+              date: date,
+              address: address,
+              orderNumber: orderNumber,
+              coinsExchangeRates: coinsExchangeRates,
+              addPaymentBody: addPaymentBody,
+              currentCoin: currentCoin,
             ),
-          ],
-          child: CompletedPayBody(
-            client: client,
-            total: total,
-            method: method,
-            date: date,
-            address: address,
-            orderNumber: orderNumber,
-            coinsExchangeRates: coinsExchangeRates,
-            addPaymentBody: addPaymentBody,
-            currentCoin: currentCoin,
           ),
         ),
       ),

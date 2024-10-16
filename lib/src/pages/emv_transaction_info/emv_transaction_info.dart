@@ -375,7 +375,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
 
     return WillPopScope(
       onWillPop: globalRemoteConfig.conversionKiosko!
-          ? null
+          ? () async {
+              return false;
+            }
           : showModalNoTicketPrinted,
       child: Scaffold(
         appBar: AppBar(
