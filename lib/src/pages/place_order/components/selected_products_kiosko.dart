@@ -14,6 +14,7 @@ import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
+import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/components/product_list_button_kiosko.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
@@ -59,7 +60,10 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
   }
 
   addProductFromBarcodeResult(
-      String? scanResult, List<ShoppingCartProduct>? productsInCart) async {
+    String? scanResult,
+    List<ShoppingCartProduct>? productsInCart,
+    stockValues,
+  ) async {
     final String? productScanResult = scanResult;
     List<ShoppingCartProduct> scannedProducts = [];
 
@@ -86,11 +90,11 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                 fontSize: 20,
                 backgroundColor: Colors.red.shade700);
           }
-          const stock = 999;
-          const productQuantity = 1;
           final code = doc.data().toString().contains('codigo')
               ? doc.get('codigo')
               : 'NaN';
+          var stock = stockValues[code] ?? 000;
+          const productQuantity = 1;
           final pricesList = clientPriceList;
           final name = doc.data().toString().contains('nombre')
               ? doc.get('nombre')
@@ -114,13 +118,22 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
               urlPicture: catalogue.toString(),
             );
             scannedProducts.add(result);
-            objectBox.insertShoppingCartProduct(result);
-            Fluttertoast.showToast(
-              gravity: ToastGravity.TOP,
-              msg: 'Se ha agregado exitosamente al carrito',
-              fontSize: 20,
-              backgroundColor: const Color.fromARGB(255, 149, 231, 184),
-            );
+            if (productQuantity <= stock) {
+              objectBox.insertShoppingCartProduct(result);
+              Fluttertoast.showToast(
+                gravity: ToastGravity.TOP,
+                msg: 'Se ha agregado exitosamente al carrito',
+                fontSize: 20,
+                backgroundColor: const Color.fromARGB(255, 149, 231, 184),
+              );
+            } else {
+              Fluttertoast.showToast(
+                gravity: ToastGravity.TOP,
+                msg: 'Producto sin stock',
+                fontSize: 20,
+                backgroundColor: const Color.fromARGB(255, 149, 231, 184),
+              );
+            }
           } else {
             bool isProductAlreadyInCart = false;
             productsInCart.forEach((element) {
@@ -138,13 +151,22 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                   totalAmount: element.totalAmount.toString(),
                   urlPicture: element.urlPicture.toString(),
                 );
-                objectBox.insertShoppingCartProduct(result);
-                Fluttertoast.showToast(
-                  gravity: ToastGravity.TOP,
-                  msg: 'Se ha agregado exitosamente al carrito',
-                  fontSize: 20,
-                  backgroundColor: const Color.fromARGB(255, 149, 231, 184),
-                );
+                if (productQuantity + 1 <= stock) {
+                  objectBox.insertShoppingCartProduct(result);
+                  Fluttertoast.showToast(
+                    gravity: ToastGravity.TOP,
+                    msg: 'Se ha agregado exitosamente al carrito',
+                    fontSize: 20,
+                    backgroundColor: const Color.fromARGB(255, 149, 231, 184),
+                  );
+                } else {
+                  Fluttertoast.showToast(
+                    gravity: ToastGravity.TOP,
+                    msg: 'Producto sin stock',
+                    fontSize: 20,
+                    backgroundColor: const Color.fromARGB(255, 149, 231, 184),
+                  );
+                }
               }
             });
             if (isProductAlreadyInCart == false) {
@@ -159,13 +181,22 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                 totalAmount: productTotalAmount.toString(),
                 urlPicture: catalogue.toString(),
               );
-              objectBox.insertShoppingCartProduct(result);
-              Fluttertoast.showToast(
-                gravity: ToastGravity.TOP,
-                msg: 'Se ha agregado exitosamente al carrito',
-                fontSize: 20,
-                backgroundColor: const Color.fromARGB(255, 149, 231, 184),
-              );
+              if (productQuantity <= stock) {
+                objectBox.insertShoppingCartProduct(result);
+                Fluttertoast.showToast(
+                  gravity: ToastGravity.TOP,
+                  msg: 'Se ha agregado exitosamente al carrito',
+                  fontSize: 20,
+                  backgroundColor: const Color.fromARGB(255, 149, 231, 184),
+                );
+              } else {
+                Fluttertoast.showToast(
+                  gravity: ToastGravity.TOP,
+                  msg: 'Producto sin stock',
+                  fontSize: 20,
+                  backgroundColor: const Color.fromARGB(255, 149, 231, 184),
+                );
+              }
             }
           }
         },
@@ -190,6 +221,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
     final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '';
     final userUid = Provider.of<UserModel>(context).uid;
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    final stockValues = Provider.of<StockModel?>(context)?.stock ?? {};
 
     return coinName == '' || deviceType == null
         ? Column(
@@ -258,7 +290,11 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                       bufferDuration: Duration(milliseconds: 500),
                       onBarcodeScanned: (barcode) {
                         print(barcode);
-                        addProductFromBarcodeResult(barcode, products);
+                        addProductFromBarcodeResult(
+                          barcode,
+                          products,
+                          stockValues,
+                        );
                       },
                       child: Container(
                         constraints: BoxConstraints(
@@ -747,8 +783,10 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                                                   availableStock: product.availableStock,
                                                                                   urlPicture: product.urlPicture,
                                                                                 );
-                                                                                updatedList.add(updatedProduct);
-                                                                                objectBox.insertManyShoppingCartProducts(updatedList);
+                                                                                if (product.productQuantity! + 1 <= product.availableStock!) {
+                                                                                  updatedList.add(updatedProduct);
+                                                                                  objectBox.insertManyShoppingCartProducts(updatedList);
+                                                                                }
                                                                               });
                                                                             },
                                                                           ),

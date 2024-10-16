@@ -4,6 +4,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
+import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
@@ -22,7 +23,10 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
   bool captured = false;
 
   Future addProductFromBarcodeResult(
-      String? scanResult, List<ShoppingCartProduct>? productsInCart) async {
+    String? scanResult,
+    List<ShoppingCartProduct>? productsInCart,
+    stockValues,
+  ) async {
     print('productsInCart: $productsInCart');
     final String? productScanResult = scanResult;
     print('BARCODE SCAN RESULT: ////////////////////////');
@@ -42,11 +46,11 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
           .get()
           .then((docs) {
         var doc = docs.docs.first;
-        const stock = 999;
-        const productQuantity = 1;
         final code = doc.data().toString().contains('codigo')
             ? doc.get('codigo')
             : 'NaN';
+        var stock = stockValues[code] ?? 000;
+        const productQuantity = 1;
         final pricesList = widget.clientPriceList;
         final name = doc.data().toString().contains('nombre')
             ? doc.get('nombre')
@@ -81,8 +85,22 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
           );
           print(result);
           scannedProducts.add(result);
-          objectBox.insertShoppingCartProduct(result);
-          // Navigator.popUntil(context, ModalRoute.withName('ORDER'));
+          if (productQuantity <= stock) {
+            objectBox.insertShoppingCartProduct(result);
+            Fluttertoast.showToast(
+              gravity: ToastGravity.TOP,
+              msg: 'Se ha agregado exitosamente al carrito',
+              fontSize: 20,
+              backgroundColor: const Color.fromARGB(255, 149, 231, 184),
+            );
+          } else {
+            Fluttertoast.showToast(
+              gravity: ToastGravity.TOP,
+              msg: 'Producto sin stock',
+              fontSize: 20,
+              backgroundColor: const Color.fromARGB(255, 149, 231, 184),
+            );
+          } // Navigator.popUntil(context, ModalRoute.withName('ORDER'));
         } else {
           bool isProductAlreadyInCart = false;
           print('Kaede not empty');
@@ -104,8 +122,22 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
                 totalAmount: element.totalAmount.toString(),
                 urlPicture: element.urlPicture.toString(),
               );
-              objectBox.insertShoppingCartProduct(result);
-              Fluttertoast.showToast(msg: 'Producto añadido: $scanResult');
+              if (productQuantity + 1 <= stock) {
+                objectBox.insertShoppingCartProduct(result);
+                Fluttertoast.showToast(
+                  gravity: ToastGravity.TOP,
+                  msg: 'Se ha agregado exitosamente al carrito',
+                  fontSize: 20,
+                  backgroundColor: const Color.fromARGB(255, 149, 231, 184),
+                );
+              } else {
+                Fluttertoast.showToast(
+                  gravity: ToastGravity.TOP,
+                  msg: 'Producto sin stock',
+                  fontSize: 20,
+                  backgroundColor: const Color.fromARGB(255, 149, 231, 184),
+                );
+              }
               // Navigator.popUntil(context, ModalRoute.withName('ORDER'));
             }
           });
@@ -123,8 +155,22 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
               totalAmount: productTotalAmount.toString(),
               urlPicture: catalogue.toString(),
             );
-            objectBox.insertShoppingCartProduct(result);
-            Fluttertoast.showToast(msg: 'Producto añadido: $scanResult');
+            if (productQuantity <= stock) {
+              objectBox.insertShoppingCartProduct(result);
+              Fluttertoast.showToast(
+                gravity: ToastGravity.TOP,
+                msg: 'Se ha agregado exitosamente al carrito',
+                fontSize: 20,
+                backgroundColor: const Color.fromARGB(255, 149, 231, 184),
+              );
+            } else {
+              Fluttertoast.showToast(
+                gravity: ToastGravity.TOP,
+                msg: 'Producto sin stock',
+                fontSize: 20,
+                backgroundColor: const Color.fromARGB(255, 149, 231, 184),
+              );
+            }
             // Navigator.popUntil(context, ModalRoute.withName('ORDER'));
           }
         }
@@ -150,6 +196,7 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    final stockValues = Provider.of<StockModel?>(context)?.stock ?? {};
 
     print('Opening bar code scanner');
     String? scanResult;
@@ -214,6 +261,7 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
               addProductFromBarcodeResult(
                 scanResult,
                 widget.products,
+                stockValues,
               );
             }
             setState(() {

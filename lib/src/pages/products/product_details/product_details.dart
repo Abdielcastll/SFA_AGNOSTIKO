@@ -460,13 +460,18 @@ class ProductDetailsBody extends StatelessWidget {
                                                         .toString(),
                                                   );
                                                   // Update the product in ObjectBox
-                                                  objectBox
-                                                      .insertShoppingCartProduct(
-                                                          updatedProduct);
+                                                  if (element.productQuantity! +
+                                                          1 <=
+                                                      element.availableStock!) {
+                                                    objectBox
+                                                        .insertShoppingCartProduct(
+                                                            updatedProduct);
+                                                  } else {
+                                                    Fluttertoast.showToast(
+                                                        msg:
+                                                            'producto sin stock: ${code}');
+                                                  }
                                                   // Show a toast message
-                                                  Fluttertoast.showToast(
-                                                      msg:
-                                                          'Producto añadido correctamente + 1');
                                                   break; // Exit the loop as we've found the product
                                                 }
                                               }
@@ -487,13 +492,19 @@ class ProductDetailsBody extends StatelessWidget {
                                                       catalogueID.toString(),
                                                 );
                                                 // Insert the new product into ObjectBox
-                                                objectBox
-                                                    .insertShoppingCartProduct(
-                                                        newProduct);
-                                                // Show a toast message for successful addition
-                                                Fluttertoast.showToast(
-                                                    msg:
-                                                        'Producto añadido correctamente');
+                                                if (newProduct
+                                                            .productQuantity! +
+                                                        1 <=
+                                                    newProduct
+                                                        .availableStock!) {
+                                                  objectBox
+                                                      .insertShoppingCartProduct(
+                                                          newProduct);
+                                                } else {
+                                                  Fluttertoast.showToast(
+                                                      msg:
+                                                          'producto sin stock: ${code}');
+                                                }
                                               }
                                             } else {
                                               // Show a toast message if no stock is available

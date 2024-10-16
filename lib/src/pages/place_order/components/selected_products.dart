@@ -16,6 +16,7 @@ import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/devices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
+import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/checkout_retail_page.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
@@ -68,7 +69,10 @@ class _SelectedProductsState extends State<SelectedProducts> {
   }
 
   addProductFromBarcodeResult(
-      String? scanResult, List<ShoppingCartProduct>? productsInCart) async {
+    String? scanResult,
+    List<ShoppingCartProduct>? productsInCart,
+    stockValues,
+  ) async {
     print('productsInCart: $productsInCart');
     final String? productScanResult = scanResult;
     print('BARCODE SCAN RESULT: ////////////////////////');
@@ -103,11 +107,11 @@ class _SelectedProductsState extends State<SelectedProducts> {
               fontSize: 20,
               backgroundColor: Colors.red.shade700);
         }
-        const stock = 999;
-        const productQuantity = 1;
         final code = doc.data().toString().contains('codigo')
             ? doc.get('codigo')
             : 'NaN';
+        var stock = stockValues[code] ?? 000;
+        const productQuantity = 1;
         final pricesList = clientPriceList;
         final name = doc.data().toString().contains('nombre')
             ? doc.get('nombre')
@@ -141,7 +145,11 @@ class _SelectedProductsState extends State<SelectedProducts> {
           );
           print(result);
           scannedProducts.add(result);
-          objectBox.insertShoppingCartProduct(result);
+          if (productQuantity <= stock) {
+            objectBox.insertShoppingCartProduct(result);
+          } else {
+            Fluttertoast.showToast(msg: 'producto sin stock: ${code}');
+          }
         } else {
           bool isProductAlreadyInCart = false;
           print('cart is not empty');
@@ -163,7 +171,11 @@ class _SelectedProductsState extends State<SelectedProducts> {
                 totalAmount: element.totalAmount.toString(),
                 urlPicture: element.urlPicture.toString(),
               );
-              objectBox.insertShoppingCartProduct(result);
+              if (element.productQuantity! + 1 <= stock) {
+                objectBox.insertShoppingCartProduct(result);
+              } else {
+                Fluttertoast.showToast(msg: 'producto sin stock: ${code}');
+              }
             }
           });
           if (isProductAlreadyInCart == false) {
@@ -180,7 +192,11 @@ class _SelectedProductsState extends State<SelectedProducts> {
               totalAmount: productTotalAmount.toString(),
               urlPicture: catalogue.toString(),
             );
-            objectBox.insertShoppingCartProduct(result);
+            if (productQuantity <= stock) {
+              objectBox.insertShoppingCartProduct(result);
+            } else {
+              Fluttertoast.showToast(msg: 'producto sin stock: ${code}');
+            }
           }
         }
       });
@@ -206,6 +222,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
     // print('User Role ${userRole?.name}');
     // print("Retail: ${userRole?.isRetail}");
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    final stockValues = Provider.of<StockModel?>(context)?.stock ?? {};
 
     return coinName == ''
         ? Column(
@@ -251,7 +268,8 @@ class _SelectedProductsState extends State<SelectedProducts> {
                       onBarcodeScanned: (barcode) {
                         print(barcode);
 
-                        addProductFromBarcodeResult(barcode, products);
+                        addProductFromBarcodeResult(
+                            barcode, products, stockValues);
                       },
                       child: SingleChildScrollView(
                         child: Container(
@@ -719,8 +737,10 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                                                   availableStock: product.availableStock,
                                                                                   urlPicture: product.urlPicture,
                                                                                 );
-                                                                                updatedList.add(updatedProduct);
-                                                                                objectBox.insertManyShoppingCartProducts(updatedList);
+                                                                                if (product.productQuantity! + 1 <= product.availableStock!) {
+                                                                                  updatedList.add(updatedProduct);
+                                                                                  objectBox.insertManyShoppingCartProducts(updatedList);
+                                                                                }
                                                                               });
                                                                             },
                                                                           ),
@@ -867,6 +887,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                     addProductFromBarcodeResult(
                                                       scanResult,
                                                       products,
+                                                      stockValues,
                                                     );
                                                   } else {
                                                     Navigator.push(

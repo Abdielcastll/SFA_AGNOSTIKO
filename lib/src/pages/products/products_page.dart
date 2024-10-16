@@ -318,14 +318,21 @@ class _ProductsBodyState extends State<ProductsBody> {
                                 );
 
                                 // Update the product in ObjectBox
-                                await objectBox
-                                    .insertShoppingCartProduct(updatedProduct);
+                                if (cartProduct.productQuantity! + 1 <
+                                    selectedProduct.availableStock!) {
+                                  await objectBox.insertShoppingCartProduct(
+                                      updatedProduct);
+                                  // Show a toast message for the updated quantity
+                                  Fluttertoast.showToast(
+                                      msg: '${cartProduct.code} + 1');
 
-                                // Show a toast message for the updated quantity
-                                Fluttertoast.showToast(
-                                    msg: '${cartProduct.code} + 1');
-
-                                break; // Exit the loop as we've found the product
+                                  break; // Exit the loop as we've found the product
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg:
+                                          'Ya no hay stock de: ${cartProduct.code}');
+                                  break; // Exit the loop as we've found the product
+                                }
                               }
                             }
 
@@ -345,13 +352,19 @@ class _ProductsBodyState extends State<ProductsBody> {
                               );
 
                               // Insert the new product into ObjectBox
-                              await objectBox
-                                  .insertShoppingCartProduct(newProduct);
-
-                              // Show a toast message for successfully adding the new product
-                              Fluttertoast.showToast(
-                                  msg:
-                                      'Producto ${selectedProduct.code} añadido correctamente');
+                              if (newProduct.productQuantity! <=
+                                  selectedProduct.availableStock!) {
+                                await objectBox
+                                    .insertShoppingCartProduct(newProduct);
+                                // Show a toast message for the updated quantity
+                                Fluttertoast.showToast(
+                                    msg:
+                                        'Producto ${selectedProduct.code} añadido correctamente');
+                              } else {
+                                Fluttertoast.showToast(
+                                    msg:
+                                        'Ya no hay stock de: ${selectedProduct.code}');
+                              }
                             }
                           } else {
                             // Show a toast message if no stock is available for the product
