@@ -27,6 +27,7 @@ class TransactionArgs {
   String? clearTrack2;
   int? stan;
   String? referenceNumber;
+  String? authCode;
   String? currencyCode;
   bool timeout = false;
 
@@ -46,19 +47,21 @@ class TransactionArgs {
 
   InvoiceData? invoice;
 
-  TransactionArgs(
-      {required this.platformInfo,
-      required this.entryMode,
-      required this.showNumericKeyboard,
-      required this.supportedCardTypes,
-      required this.emvTransactionType,
-      this.amountInCents,
-      this.pan,
-      this.expDate,
-      this.cvv,
-      this.stan,
-      this.referenceNumber,
-      this.invoice});
+  TransactionArgs({
+    required this.platformInfo,
+    required this.entryMode,
+    required this.showNumericKeyboard,
+    required this.supportedCardTypes,
+    required this.emvTransactionType,
+    this.amountInCents,
+    this.pan,
+    this.expDate,
+    this.cvv,
+    this.stan,
+    this.referenceNumber,
+    this.invoice,
+    this.authCode,
+  });
 }
 
 class InvoiceData {

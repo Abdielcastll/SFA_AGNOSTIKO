@@ -231,10 +231,39 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   String transactionResultStr = '';
   String transactionOnlineStr = '';
 
+  Future<String> getAid() async {
+    final emv = EmvModule.instance;
+
+    String? aid;
+    final auxAid1 = await emv.getTagValue(0x9f06);
+    final auxAid2 = await emv.getTagValue(0x84);
+    if (auxAid1 != null) {
+      aid = auxAid1.toHexStr();
+    } else if (auxAid2 != null) {
+      aid = auxAid2.toHexStr();
+    }
+    return aid ?? 'No encontrado';
+  }
+
+  Future<String> getARQC() async {
+    final emv = EmvModule.instance;
+
+    String? maskedHexString;
+    Uint8List? arqc = await emv.getTagValue(0x9f26);
+    if (arqc != null) {
+      final hexString = arqc
+          .map((byte) => byte.toRadixString(16).padLeft(2, '0'))
+          .join()
+          .toUpperCase();
+      maskedHexString = '*' * (hexString.length - 4) +
+          hexString.substring(hexString.length - 4);
+    }
+    return maskedHexString ?? 'no encontrado';
+  }
+
   @override
   Widget build(BuildContext context) {
     getEmvTags();
-
     String approvedStr = AppLocalizations.of(context)!.approved.toUpperCase();
     String declinedStr = AppLocalizations.of(context)!.declined.toUpperCase();
     String failedStr = AppLocalizations.of(context)!.failed.toUpperCase();
@@ -459,26 +488,96 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
               const Divider(
                 color: Colors.grey,
               ),
+            Container(
+              padding: EdgeInsets.all(20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Column(
+                    children: [
+                      const Text(
+                        "Monto",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
+                      Text(
+                        _amountString,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
             ListTile(
               enableFeedback: true,
-              title:
-                  Text('${AppLocalizations.of(context)!.transactionType} (9C)'),
+              title: const Text('STAN'),
               subtitle: Text(
-                infoTags?.transactionType?.toHexStr().toUpperCase() ?? '-',
+                transactionArgs!.stan.toString(),
               ),
               onTap: () {},
             ),
             ListTile(
               enableFeedback: true,
-              title: Text('${AppLocalizations.of(context)!.amount} (9F02)'),
-              subtitle: Text(_amountString),
+              title: const Text('Referencia'),
+              subtitle: Text(
+                transactionArgs!.referenceNumber.toString(),
+              ),
               onTap: () {},
             ),
             ListTile(
               enableFeedback: true,
-              title: Text(
-                  '${AppLocalizations.of(context)!.cashbackAmount} (9F03)'),
-              subtitle: Text(_amountOtherString),
+              title: const Text('Autorizacion'),
+              subtitle: Text(
+                transactionArgs!.authCode.toString(),
+              ),
+              onTap: () {},
+            ),
+            ListTile(
+              enableFeedback: true,
+              title: const Text('ARQC'),
+              subtitle: FutureBuilder<String>(
+                future: getARQC(), // The async function
+                builder:
+                    (BuildContext context, AsyncSnapshot<String> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Text(
+                        'Loading...'); // Placeholder while waiting for data
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}'); // Error message
+                  } else {
+                    return Text(
+                        snapshot.data ?? 'No ARQC found'); // Display the result
+                  }
+                },
+              ),
+              onTap: () {},
+            ),
+            ListTile(
+              enableFeedback: true,
+              title: const Text('AID'),
+              subtitle: FutureBuilder<String>(
+                future: getAid(), // The async function
+                builder:
+                    (BuildContext context, AsyncSnapshot<String> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Text(
+                        'Loading...'); // Placeholder while waiting for data
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}'); // Error message
+                  } else {
+                    return Text(
+                        snapshot.data ?? 'No AID found'); // Display the result
+                  }
+                },
+              ),
               onTap: () {},
             ),
             if (!transactionArgs!.isFallback)

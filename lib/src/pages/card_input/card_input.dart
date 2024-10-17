@@ -431,6 +431,7 @@ class _CardInputViewState extends State<CardInputView> {
         print('responseCode');
         print(responseCode);
         transactionArgs.referenceNumber = response.referenceNumber;
+        transactionArgs.authCode = response.authCode;
         await emvCompleteOnline(EmvOnlineResponse(
           authorisationResponseCode: responseCode,
         ));
