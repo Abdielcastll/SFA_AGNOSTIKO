@@ -92,7 +92,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
   TextEditingController? newClientMasterDiscount = TextEditingController();
   bool isSpecialContributor = false;
   bool isGeolocatorLoading = false;
-  String? selectedIdType = 'V';
+  String? selectedIdType = '-';
   String? selectedPriceList = 'GENER-03';
   late String? latitude = '';
   late String? longitude = '';
@@ -295,7 +295,18 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                 backgroundColor: themeProvider.myTheme.colorScheme.primary,
                 foregroundColor: Colors.white,
                 elevation: 0,
-                leadingWidth: 24.0,
+                leading: Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pop(
+                          context); // This will pop the current screen.
+                    },
+                    child: Container(
+                      width: 40, // Make the button wider
+                      child: Center(child: Icon(Icons.arrow_back)),
+                    ),
+                  ),
+                ),
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -369,10 +380,11 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                             readOnly: false,
                           ),
                         ),
+                        SizedBox(height: 20),
                         Container(
                           margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
                           child: Row(
-                            // mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             // ignore: prefer_const_literals_to_create_immutables
                             children: [
                               TextMessageForTextField(
@@ -385,7 +397,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                         Container(
                           margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Container(
                                 width: 100,
@@ -452,9 +464,9 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                   ),
                                 ),
                               ),
-                              Container(
-                                width: 200,
-                                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                              SizedBox(width: 20),
+                              SizedBox(
+                                width: 220,
                                 child: TextFieldForNewClient(
                                   controller: newClientId,
                                   hintMessage: '11222333',
@@ -503,41 +515,39 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                   ],
                                 ),
                               ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                          child: Row(
-                            // mainAxisAlignment: MainAxisAlignment.center,
-                            // ignore: prefer_const_literals_to_create_immutables
-                            children: [
-                              TextMessageForTextField(
-                                message: 'Telefono / Correo Electronico',
-                              ),
-                              SizedBox(width: 5),
-                              PointTextWidget(),
-                            ],
-                          ),
+                        SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          // ignore: prefer_const_literals_to_create_immutables
+                          children: [
+                            TextMessageForTextField(
+                              message: 'Telefono / Correo Electronico',
+                            ),
+                            SizedBox(width: 5),
+                            PointTextWidget(),
+                          ],
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Container(
-                              width: 150,
-                              margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                            SizedBox(
+                              width: 160,
                               child: TextFieldForNewClient(
                                 controller: newclientPhone,
-                                hintMessage: isSimple ? '' : '000 0000',
+                                hintMessage: isSimple ? 'Telefono' : '000 0000',
                                 textInputType: TextInputType.phone,
                                 maxLines: 1,
                                 readOnly: false,
                               ),
                             ),
-                            Container(
+                            SizedBox(width: 20),
+                            SizedBox(
                               width: 160,
-                              margin: EdgeInsets.fromLTRB(5, 0, 20, 0),
                               child: TextFieldForNewClient(
                                 controller: newClientEmail,
-                                hintMessage:
-                                    isSimple ? '' : 'example@gmail.com',
+                                hintMessage: isSimple
+                                    ? 'Correo electronico'
+                                    : 'example@gmail.com',
                                 textInputType: TextInputType.emailAddress,
                                 maxLines: 1,
                                 readOnly: false,
