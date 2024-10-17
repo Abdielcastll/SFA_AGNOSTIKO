@@ -786,6 +786,12 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                                                                                 if (product.productQuantity! + 1 <= product.availableStock!) {
                                                                                   updatedList.add(updatedProduct);
                                                                                   objectBox.insertManyShoppingCartProducts(updatedList);
+                                                                                  Fluttertoast.showToast(
+                                                                                    gravity: ToastGravity.TOP,
+                                                                                    msg: 'Se ha agregado exitosamente al carrito',
+                                                                                    fontSize: 20,
+                                                                                    backgroundColor: const Color.fromARGB(255, 149, 231, 184),
+                                                                                  );
                                                                                 }
                                                                               });
                                                                             },

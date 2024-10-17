@@ -67,16 +67,16 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   Future<bool> showModalNoTicketPrinted() async {
     return await showConfirmDialog(
       context,
-      title: '¿Estas seguro?',
-      message: 'No has imprimido el comprobante. ¿Seguro que deseas continuar?',
+      title: '¿Estas seguro de regresar?',
+      message: '¿Desea imprimir el ticket otra ves?',
       textAccept: 'Si',
       textCancel: 'No',
       onAccept: () {
         Navigator.pop(context);
-        onAccept();
       },
       onCancel: () {
         Navigator.pop(context);
+        onAccept();
       },
     );
   }

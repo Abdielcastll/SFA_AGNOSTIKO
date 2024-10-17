@@ -147,6 +147,12 @@ class _SelectedProductsState extends State<SelectedProducts> {
           scannedProducts.add(result);
           if (productQuantity <= stock) {
             objectBox.insertShoppingCartProduct(result);
+            Fluttertoast.showToast(
+              gravity: ToastGravity.TOP,
+              msg: 'Se ha agregado exitosamente al carrito',
+              fontSize: 20,
+              backgroundColor: const Color.fromARGB(255, 149, 231, 184),
+            );
           } else {
             Fluttertoast.showToast(msg: 'producto sin stock: ${code}');
           }
@@ -173,6 +179,12 @@ class _SelectedProductsState extends State<SelectedProducts> {
               );
               if (element.productQuantity! + 1 <= stock) {
                 objectBox.insertShoppingCartProduct(result);
+                Fluttertoast.showToast(
+                  gravity: ToastGravity.TOP,
+                  msg: 'Se ha agregado exitosamente al carrito',
+                  fontSize: 20,
+                  backgroundColor: const Color.fromARGB(255, 149, 231, 184),
+                );
               } else {
                 Fluttertoast.showToast(msg: 'producto sin stock: ${code}');
               }
@@ -194,6 +206,12 @@ class _SelectedProductsState extends State<SelectedProducts> {
             );
             if (productQuantity <= stock) {
               objectBox.insertShoppingCartProduct(result);
+              Fluttertoast.showToast(
+                gravity: ToastGravity.TOP,
+                msg: 'Se ha agregado exitosamente al carrito',
+                fontSize: 20,
+                backgroundColor: const Color.fromARGB(255, 149, 231, 184),
+              );
             } else {
               Fluttertoast.showToast(msg: 'producto sin stock: ${code}');
             }
@@ -740,6 +758,12 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                                                 if (product.productQuantity! + 1 <= product.availableStock!) {
                                                                                   updatedList.add(updatedProduct);
                                                                                   objectBox.insertManyShoppingCartProducts(updatedList);
+                                                                                  Fluttertoast.showToast(
+                                                                                    gravity: ToastGravity.TOP,
+                                                                                    msg: 'Se ha agregado exitosamente al carrito',
+                                                                                    fontSize: 20,
+                                                                                    backgroundColor: const Color.fromARGB(255, 149, 231, 184),
+                                                                                  );
                                                                                 }
                                                                               });
                                                                             },

@@ -124,7 +124,7 @@ Future invoicePrintLayout(AddPaymentBodyAtt invoice, String currentCoin) async {
 
   listOfTextLine.add(
     PrinterText(
-      'ID: ${invoice.client.id.toString().toUpperCase()}',
+      'Nombre: ${invoice.client.name.toString().toUpperCase()}',
       format: TextFormat(
         fontSize: 16,
         fontFamily: regularFont,

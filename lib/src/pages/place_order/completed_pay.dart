@@ -145,15 +145,19 @@ class _CompletedPayBody extends State<CompletedPayBody> {
   }
 
   showModalNoTicketPrinted() {
-    showConfirmDialog(context,
-        title: '¿Estas seguro?',
-        message: 'No has imprimido la factura. ¿Seguro que deseas regresar?',
-        textAccept: 'Si',
-        textCancel: 'No', onAccept: () {
-      onGoBack();
-    }, onCancel: () {
-      Navigator.pop(context);
-    });
+    showConfirmDialog(
+      context,
+      title: '¿Estas seguro de regresar?',
+      message: '¿Desea imprimir el ticket otra ves?',
+      textAccept: 'Si',
+      textCancel: 'No',
+      onAccept: () {
+        Navigator.pop(context);
+      },
+      onCancel: () {
+        onGoBack();
+      },
+    );
   }
 
   @override
