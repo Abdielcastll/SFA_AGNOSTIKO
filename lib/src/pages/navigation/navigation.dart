@@ -105,19 +105,20 @@ class NavigationPages extends StatelessWidget {
                         ),
                         label: AppLocalizations.of(context)!.home,
                       ),
-                    NavigationDestination(
-                      icon: Icon(
-                        Icons.calendar_today_outlined,
-                        size: 24,
-                        color: Color.fromARGB(255, 196, 196, 196),
+                    if (globalRemoteConfig.showAgendaMenu == true)
+                      NavigationDestination(
+                        icon: Icon(
+                          Icons.calendar_today_outlined,
+                          size: 24,
+                          color: Color.fromARGB(255, 196, 196, 196),
+                        ),
+                        selectedIcon: Icon(
+                          Icons.calendar_today,
+                          size: 24,
+                          color: Color.fromARGB(255, 196, 196, 196),
+                        ),
+                        label: AppLocalizations.of(context)!.diary,
                       ),
-                      selectedIcon: Icon(
-                        Icons.calendar_today,
-                        size: 24,
-                        color: Color.fromARGB(255, 196, 196, 196),
-                      ),
-                      label: AppLocalizations.of(context)!.diary,
-                    ),
                     if (globalRemoteConfig.clientesEnabled == true)
                       NavigationDestination(
                         icon: Icon(
