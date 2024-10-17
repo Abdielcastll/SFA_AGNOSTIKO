@@ -42,7 +42,7 @@ class NavigationPages extends StatelessWidget {
           final screens = [
             if (globalRemoteConfig.visualizacionCatalogo == true)
               const CataloguePage(),
-            const DiaryTabs(),
+            if (globalRemoteConfig.showAgendaMenu == true) const DiaryTabs(),
             if (globalRemoteConfig.clientesEnabled == true) const ClientsPage(),
             if (deviceType != DeviceType.PINPAD) const ProfilePage(),
           ];

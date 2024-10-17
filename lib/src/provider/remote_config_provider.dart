@@ -41,6 +41,7 @@ class RemoteConfig {
   bool? isClienteSimple;
   String? refLogo;
   String? refLogoTicket;
+  bool? showAgendaMenu;
 
   RemoteConfig({
     this.aplicacionDescuentoMaestro,
@@ -76,6 +77,7 @@ class RemoteConfig {
     this.isClienteSimple,
     this.refLogo,
     this.refLogoTicket,
+    this.showAgendaMenu,
   });
 
   Map<String, dynamic> toMap() {
@@ -113,6 +115,7 @@ class RemoteConfig {
       'isClienteSimple': isClienteSimple,
       'refLogo': refLogo,
       'refLogoTicket': refLogoTicket,
+      'showAgendaMenu': showAgendaMenu,
     };
   }
 }
@@ -182,6 +185,7 @@ class RemoteConfigProvider {
       isClienteSimple: allConfigs['isClienteSimple']?.asBool() ?? false,
       refLogo: allConfigs['refLogo']?.asString() ?? '',
       refLogoTicket: allConfigs['refLogoTicket']?.asString() ?? '',
+      showAgendaMenu: allConfigs['showAgendaMenu']?.asBool() ?? false,
     );
     globalRemoteConfig = remoteConfigModel;
     //printProperties(globalRemoteConfig);
