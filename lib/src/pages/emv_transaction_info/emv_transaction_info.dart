@@ -151,9 +151,13 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     super.initState();
   }
 
+  bool timerExpired = false;
   void startTimerFullPaymentWithCard() {
     Future.delayed(Duration(seconds: 30), () {
       if (transactionResult == EmvTransactionResult.Approved) {
+        setState(() {
+          timerExpired = true;
+        });
         onAccept();
       } else {
         kioskoDialog();
@@ -695,7 +699,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   }
 
   onAccept() {
-    if (globalRemoteConfig.conversionKiosko == true) {
+    if (globalRemoteConfig.conversionKiosko == true && timerExpired) {
       printTicket();
     }
     if (transactionArgs!.emvTransactionType == EmvTransactionType.Refund) {
