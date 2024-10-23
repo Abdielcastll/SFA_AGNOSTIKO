@@ -232,7 +232,11 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                   foregroundColor:
                       MaterialStateProperty.all(Colors.grey.shade400),
                 ),
-                onPressed: onAccept,
+                onPressed: () {
+                  if (globalRemoteConfig.onlyFullPaymentWithCard!)
+                    Navigator.pop(context);
+                  onAccept();
+                },
                 child: const Text(
                   "Reintentar pago",
                   style: TextStyle(color: Colors.white),
