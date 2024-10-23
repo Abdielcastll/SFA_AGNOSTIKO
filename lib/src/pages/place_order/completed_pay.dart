@@ -166,7 +166,16 @@ class _CompletedPayBody extends State<CompletedPayBody> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (isKiosko) {
         startTimer();
+      } else if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+        startTimerFullPaymentWithCard();
       }
+    });
+  }
+
+  void startTimerFullPaymentWithCard() {
+    invoicePrintLayout(widget.addPaymentBody, widget.currentCoin);
+    Future.delayed(Duration(minutes: 1), () {
+      onGoBack();
     });
   }
 

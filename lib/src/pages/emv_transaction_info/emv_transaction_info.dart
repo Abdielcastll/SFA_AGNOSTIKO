@@ -144,8 +144,21 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
           kioskoDialog();
         }
       }
+      if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+        startTimerFullPaymentWithCard();
+      }
     });
     super.initState();
+  }
+
+  void startTimerFullPaymentWithCard() {
+    Future.delayed(Duration(seconds: 30), () {
+      if (transactionResult == EmvTransactionResult.Approved) {
+        onAccept();
+      } else {
+        kioskoDialog();
+      }
+    });
   }
 
   void kioskoDialog() {
