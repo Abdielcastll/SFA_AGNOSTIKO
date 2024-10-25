@@ -15,6 +15,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/dialogs/confirm_dialog.dart';
+import 'package:pwa_sales2go_flutter/dialogs/info_dialog.dart';
+import 'package:pwa_sales2go_flutter/dialogs/try_chip_dialog.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/completed_pay.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
@@ -233,8 +235,13 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                       MaterialStateProperty.all(Colors.grey.shade400),
                 ),
                 onPressed: () {
-                  if (globalRemoteConfig.onlyFullPaymentWithCard!)
+                  if (globalRemoteConfig.onlyFullPaymentWithCard!) {
                     Navigator.pop(context);
+                    Navigator.pop(context);
+                    if (transactionResult == EmvTransactionResult.Fail) {
+                      tryChipDialog(context);
+                    }
+                  }
                   onAccept();
                 },
                 child: const Text(
@@ -345,7 +352,6 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
               });
             });
 
-            print('enviando notificacion');
             notificationService.sendNotificationToId(
                 'DC8jpgQh4IRIKTI8PJ06c2uGwud2',
                 'Pago registrado',
@@ -353,26 +359,21 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
 
             break;
           case EmvTransactionResult.Denied:
-            errorResultStr = 'Denegado';
             transactionResultStr = declinedStr;
             break;
           case EmvTransactionResult.CmdError:
-            print('Tarjeta Retirada');
             transactionResultStr = declinedStr;
             errorResultStr = 'Tarjeta Retirada';
             break;
           case EmvTransactionResult.Fallback:
-            print('Falback conexion');
             transactionResultStr = declinedStr;
             errorResultStr = 'Error de lectura de chip';
             break;
           case EmvTransactionResult.Fail:
-            print('Fail conexion');
             transactionResultStr = declinedStr;
             errorResultStr = 'Fallo en la transacción';
             break;
           default:
-            print('Pago Fallido');
             break;
         }
         if (transactionArgs!.timeout) {
@@ -703,7 +704,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   }
 
   onAccept() {
-    if (globalRemoteConfig.conversionKiosko == true && timerExpired) {
+    if (globalRemoteConfig.conversionKiosko == true || timerExpired) {
       printTicket();
     }
     if (transactionArgs!.emvTransactionType == EmvTransactionType.Refund) {
@@ -774,7 +775,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       if (globalRemoteConfig.onlyFullPaymentWithCard!) {
         Navigator.pop(context);
         Navigator.pop(context);
-        //Navigator.pop(context);
+        if (transactionResult == EmvTransactionResult.Fail) {
+          tryChipDialog(context);
+        }
       } else {
         Navigator.pushReplacement(
           context,
