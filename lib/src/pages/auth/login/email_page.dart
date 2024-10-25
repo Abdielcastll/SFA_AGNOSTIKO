@@ -134,6 +134,7 @@ class Header extends StatefulWidget {
 class _HeaderState extends State<Header> {
   int activeIndex = 0;
   final assetsImages = [
+    //info: logo spot
     "assets/images/logo_agnostiko_blanco_eslogan.png",
     "assets/images/chedraui.jpg",
   ];
