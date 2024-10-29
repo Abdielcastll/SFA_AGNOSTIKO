@@ -136,7 +136,6 @@ class _HeaderState extends State<Header> {
   final assetsImages = [
     //info: logo spot
     "assets/images/logo_agnostiko_blanco_eslogan.png",
-    "assets/images/chedraui.jpg",
   ];
   @override
   Widget build(BuildContext context) {

@@ -2546,8 +2546,10 @@ class _ProductsBodyState extends State<ProductsBody> {
                                   sizesSummary[product.size] ?? '';
                               final productDesign =
                                   designsSummary[product.design] ?? '';
-                              final productPrice =
-                                  widget.listOfPrices[product.code] ?? 0.00;
+                              final productPrice = widget
+                                      .listOfPrices[product.code] is int
+                                  ? widget.listOfPrices[product.code] * 1.0
+                                  : widget.listOfPrices[product.code] ?? 0.00;
                               final priceProduct =
                                   priceMultipliedByItsExchangeRatio(
                                       productPrice: productPrice,
