@@ -4,16 +4,19 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
-import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class NewBardcodeScanner extends StatefulWidget {
   const NewBardcodeScanner(
-      {super.key, required this.clientPriceList, required this.products});
+      {super.key,
+      required this.clientPriceList,
+      required this.products,
+      required this.stockValues});
 
   final clientPriceList;
   final List<ShoppingCartProduct>? products;
+  final stockValues;
 
   @override
   State<NewBardcodeScanner> createState() => _NewBardcodeScannerState();
@@ -49,6 +52,7 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
         final code = doc.data().toString().contains('codigo')
             ? doc.get('codigo')
             : 'NaN';
+        print(stockValues);
         var stock = stockValues[code] ?? 000;
         const productQuantity = 1;
         final pricesList = widget.clientPriceList;
@@ -122,7 +126,7 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
                 totalAmount: element.totalAmount.toString(),
                 urlPicture: element.urlPicture.toString(),
               );
-              if (productQuantity + 1 <= stock) {
+              if (result.productQuantity! <= stock) {
                 objectBox.insertShoppingCartProduct(result);
                 Fluttertoast.showToast(
                   gravity: ToastGravity.TOP,
@@ -196,7 +200,6 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
-    final stockValues = Provider.of<StockModel?>(context)?.stock ?? {};
 
     print('Opening bar code scanner');
     String? scanResult;
@@ -261,7 +264,7 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
               addProductFromBarcodeResult(
                 scanResult,
                 widget.products,
-                stockValues,
+                widget.stockValues,
               );
             }
             setState(() {

@@ -923,6 +923,8 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                           clientPriceList:
                                                               clientPriceList,
                                                           products: products,
+                                                          stockValues:
+                                                              stockValues,
                                                         ),
                                                       ),
                                                     );

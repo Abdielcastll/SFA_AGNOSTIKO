@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/components/selected_client.dart';
@@ -8,6 +9,7 @@ import 'package:pwa_sales2go_flutter/src/pages/place_order/components/selected_p
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_orderd.dart';
 
@@ -32,6 +34,7 @@ class OrderPage extends StatelessWidget {
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     List<String> currentCoinSplit = currentCoin!.split(' ');
     String currentCoinSelectedCode = currentCoinSplit.last;
+
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: const AppBarOrder(),
@@ -52,6 +55,13 @@ class OrderPage extends StatelessWidget {
             },
             child: MultiProvider(
               providers: [
+                StreamProvider<StockModel?>.value(
+                  value: DatabaseServiceStreams().stockValues,
+                  initialData: null,
+                  catchError: (context, error) {
+                    return;
+                  },
+                ),
                 StreamProvider<Coin?>.value(
                   initialData: Coin(),
                   catchError: (context, error) {
