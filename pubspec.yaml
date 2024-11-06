@@ -40,7 +40,7 @@ dependencies:
   material_design_icons_flutter: ^6.0.7096
 
   agnostiko:
-    version: 1.8.02-beta # reemplazar con la versión que se quiere utilizar
+    version: 1.8.03 # reemplazar con la versión que se quiere utilizar
     hosted: 
       url: https://server-agnostiko-web-gnbxyenkeq-ue.a.run.app
       name: agnostiko

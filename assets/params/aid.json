@@ -10,7 +10,7 @@
     "contactlessFloorLimit": "000000005000",
     "contactlessTransactionLimit": "000000099999",
     "cvmRequiredLimit": "000000010000",
-    "terminalTransactionQualifiers": "A6004080"
+    "terminalTransactionQualifiers": "A2004080"
   },
   {
     "aid": "A0000000032010",
@@ -23,7 +23,7 @@
     "contactlessFloorLimit": "000000001000",
     "contactlessTransactionLimit": "000000099999",
     "cvmRequiredLimit": "000000010000",
-    "terminalTransactionQualifiers": "A6004080"
+    "terminalTransactionQualifiers": "A2004080"
   },
   {
     "aid": "A0000000980840",
