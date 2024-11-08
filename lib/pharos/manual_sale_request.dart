@@ -15,8 +15,15 @@ class PharosManualSaleRequest extends PharosSaleRequest {
     required String merchantCode,
     required bool isSale,
     required this.card,
-  }) : super(date, amount, currency, orderNumber, terminalCode, merchantCode,
-            isSale);
+  }) : super(
+          date,
+          amount,
+          currency,
+          orderNumber,
+          terminalCode,
+          merchantCode,
+          isSale,
+        );
 
   Map<String, dynamic> toJson() {
     final map = super.toJson();

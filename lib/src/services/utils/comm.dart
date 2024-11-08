@@ -19,7 +19,9 @@ final pharosUsername = "NECS01Oeyx";
 final pharosPassword = dotenv.env['pharosPassword'] ?? '';
 
 //  PROD
-// const prodEnvURL = 'https://api.pharospayments.com/payments/v1/charge';
+//const EnvUrl = 'https://api.pharospayments.com/payments/v1/charge';
+// DEV
+const EnvUrl = 'http://api-sandbox.pharospayments.com/gateway/charge';
 
 Future<Uint8List> getToken(String serialNumber) async {
   final brand = (await getPlatformInfo()).deviceBrand;
@@ -46,12 +48,7 @@ Future<PharosSaleResponse> processSalePharos(
 
   var header = {"Authorization": authorizationStr};
   final response = await http
-      .post(
-          Uri.parse(
-            'http://api-sandbox.pharospayments.com/gateway/charge',
-          ),
-          headers: header,
-          body: jsonEncode(pharosMsg))
+      .post(Uri.parse(EnvUrl), headers: header, body: jsonEncode(pharosMsg))
       .timeout(const Duration(seconds: 60));
   final pharosResponseJson = jsonDecode(response.body.toString());
   final saleResponse = PharosSaleResponse.fromJson(pharosResponseJson);
@@ -67,12 +64,8 @@ Future<PharosVoidResponse> processVoidPharos(
   final authorizationStr = "Basic " + encoded;
 
   var header = {"Authorization": authorizationStr};
-  final response = await http.post(
-      Uri.parse(
-        'http://api-sandbox.pharospayments.com/gateway/charge',
-      ),
-      headers: header,
-      body: jsonEncode(pharosVoidMsg));
+  final response = await http.post(Uri.parse(EnvUrl),
+      headers: header, body: jsonEncode(pharosVoidMsg));
   final pharosResponseJson = jsonDecode(response.body.toString());
   final voidResponse = PharosVoidResponse.fromJson(pharosResponseJson);
   print("Pharos Void response : ${response.body.toString()}");
@@ -101,11 +94,10 @@ Future<PharosKeyInitResponse> processKeyInitPharos(
   var header = {"Authorization": authorizationStr};
   var body = jsonEncode(pharosMsgKeyInit);
   final response = await http.post(
-      Uri.parse(
-        'http://api-sandbox.pharospayments.com/gateway/charge',
-      ),
-      headers: header,
-      body: body);
+    Uri.parse(EnvUrl),
+    headers: header,
+    body: body,
+  );
   final pharosResponseJson = jsonDecode(response.body.toString());
   final keyInitResponse = PharosKeyInitResponse.fromJson(pharosResponseJson);
   print("Pharos Key init response: ${response.body.toString()}");

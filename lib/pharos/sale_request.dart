@@ -1,7 +1,7 @@
 import 'dart:core';
 
 //TODO resolver variable posEnvironment dinamicamente segun el tipo de terminal
-class PharosSaleRequest{
+class PharosSaleRequest {
   String tranType;
   String date;
   final String posEnvironment = "attended";
@@ -12,16 +12,9 @@ class PharosSaleRequest{
   String merchantCode;
   bool isSale;
 
-
-  PharosSaleRequest(
-        this.date,
-        this.amount,
-        this.currency,
-        this.orderNumber,
-        this.terminalCode,
-        this.merchantCode,
-        this.isSale
-        ): tranType = isSale? "SALE" : "REFUND";
+  PharosSaleRequest(this.date, this.amount, this.currency, this.orderNumber,
+      this.terminalCode, this.merchantCode, this.isSale)
+      : tranType = isSale ? "SALE" : "REFUND";
 
   Map<String, dynamic> toJson() {
     return {
@@ -33,8 +26,6 @@ class PharosSaleRequest{
       'order_number': orderNumber,
       'terminal_code': terminalCode,
       'merchant_code': merchantCode,
-
     };
   }
-
 }

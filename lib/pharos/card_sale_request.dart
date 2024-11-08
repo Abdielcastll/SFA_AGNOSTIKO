@@ -21,8 +21,15 @@ class PharosCardSaleRequest extends PharosSaleRequest {
     required this.card,
     required this.ksn,
     required this.referenceNumber,
-  }) : super(date, amount, currency, orderNumber, terminalCode, merchantCode,
-            isSale);
+  }) : super(
+          date,
+          amount,
+          currency,
+          orderNumber,
+          terminalCode,
+          merchantCode,
+          isSale,
+        );
 
   Map<String, dynamic> toJson() {
     final map = super.toJson();

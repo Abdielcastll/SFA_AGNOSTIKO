@@ -223,6 +223,7 @@ class SplashScreenViewState extends State<SplashScreenView> {
     bool keyExists = await cryptoDUKPTCheckKeyExists(1);
     if (keyExists) {
       print('Ya existe la llave');
+
       _tryKeyInitialization();
     } else {
       _tryKeyInitialization();
@@ -267,20 +268,30 @@ class SplashScreenViewState extends State<SplashScreenView> {
     final pharosResponse = await processKeyInitPharos(pharosMsgKeyInit);
     print('pharos responde $pharosResponse');
 
-    // final encryptedK0 = pharosResponse.encryptedNewKey;
-    // final ksn = pharosResponse.newKeyKsn;
+    final encryptedK0 = pharosResponse.encryptedNewKey;
+    final ksn = pharosResponse.newKeyKsn;
     // TODO - habilitar en entorno de producción
-    // await capx.loadEncryptedIPEK(ksn.toHexBytes(), encryptedK0.toHexBytes());
+    //await capx.loadEncryptedIPEK(ksn.toHexBytes(), encryptedK0.toHexBytes());
 
     // cargamos la llave fija del entorno de prueba
     // esta llave está encriptada con un KEK de valor '1D7BA112D144429260D2C219A6A80798'
     // la llave en claro es 'A66AB26590D3186E8A4C5A40D6F4F15D'
 
     //Carga de llaves en terminales de forma manual
-    await loadTestKEK();
-    await cryptoLoadIPEK(1, "FFFF7790169673800001".toHexBytes(),
-        "B566BD27A7839A31A8CC265A1A7702A1".toHexBytes(),
-        kekIndex: 1, kcv: "2764ba".toHexBytes());
+    //cosas de dev
+    //await loadTestKEK();
+    try {
+      await cryptoLoadIPEK(
+        1,
+        ksn.toHexBytes(),
+        encryptedK0.toHexBytes(),
+        kekIndex: 10,
+      );
+      var ksno = await cryptoDUKPTGetKSN(1);
+      print("setksn: ${ksno!.toHexStr()}");
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override

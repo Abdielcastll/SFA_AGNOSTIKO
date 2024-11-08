@@ -90,18 +90,18 @@ Future<Map<String, dynamic>> pharosGenerateSaleMsg(
       tags: tags,
     );
     return PharosCardSaleRequest(
-            stan: stan.toString(),
-            date: dateStr,
-            card: card,
-            amount: amount,
-            currency: currency,
-            orderNumber: orderNumber,
-            terminalCode: terminalCode,
-            merchantCode: merchantCode,
-            isSale: isSale,
-            ksn: ksn,
-            referenceNumber: referenceNumber)
-        .toJson();
+      stan: stan.toString(),
+      date: dateStr,
+      card: card,
+      amount: amount,
+      currency: currency,
+      orderNumber: orderNumber,
+      terminalCode: terminalCode,
+      merchantCode: merchantCode,
+      isSale: isSale,
+      ksn: ksn,
+      referenceNumber: referenceNumber,
+    ).toJson();
   } else {
     final pan = transactionArgs.pan;
     if (pan == null) {
@@ -172,6 +172,7 @@ Future<bool> onVoidExecute(
 Future<Map<String, dynamic>> pharosGenerateVoidMsg(
   String stan,
 ) async {
+  //todo estos valores son dinamicos obtenidos de pharos
   final terminalCode = "1774";
   final merchantCode = "1230";
   return PharosVoidRequest(stan, terminalCode, merchantCode).toJson();
@@ -225,20 +226,60 @@ String _getReadingMethod(TransactionArgs transactionArgs) {
 
 Future<Tags> _getTagsPharos() async {
   final emvModule = EmvModule.instance;
+
   final tag9A = await emvModule.getTagValue(0x9A);
   final tagC0 = await emvModule.getTagValue(0xC0);
-  final tag9F26 = await emvModule.getTagValue(0xC0);
+  final tag9F26 = await emvModule.getTagValue(0x9F26);
   final tag9B = await emvModule.getTagValue(0x9B);
-  final tag4F = await emvModule.getTagValue(0x9B);
+  final tag4F = await emvModule.getTagValue(0x4F);
   final tag9F27 = await emvModule.getTagValue(0x9F27);
+  final tag9F10 = await emvModule.getTagValue(0x9F10);
+  final tag5F2A = await emvModule.getTagValue(0x5F2A);
+  final tag9F09 = await emvModule.getTagValue(0x9F09);
+  final tag9F35 = await emvModule.getTagValue(0x9F35);
+  final tag9F02 = await emvModule.getTagValue(0x9F02);
+  final tag82 = await emvModule.getTagValue(0x82);
+  final tag9F34 = await emvModule.getTagValue(0x9F34);
+  final tag9F36 = await emvModule.getTagValue(0x9F36);
+  final tag9F03 = await emvModule.getTagValue(0x9F03);
+  final tag9F1A = await emvModule.getTagValue(0x9F1A);
+  final tag9F37 = await emvModule.getTagValue(0x9F37);
+  final tag9F1E = await emvModule.getTagValue(0x9F1E);
+  final tag9C = await emvModule.getTagValue(0x9C);
+  final tag5F34 = await emvModule.getTagValue(0x5F34);
+  final tag95 = await emvModule.getTagValue(0x95);
+  final tag9F33 = await emvModule.getTagValue(0x9F33);
+  final tag9F6E = await emvModule.getTagValue(0x9F6E);
+  final tag9F66 = await emvModule.getTagValue(0x9F66);
+  final tag9F6C = await emvModule.getTagValue(0x9F6C);
 
   final tags = Tags(
-      tag9A: tag9A,
-      tagC0: tagC0,
-      tag9F26: tag9F26,
-      tag9B: tag9B,
-      tag4F: tag4F,
-      tag9F27: tag9F27);
+    tag9A: tag9A,
+    tagC0: tagC0,
+    tag9F26: tag9F26,
+    tag9B: tag9B,
+    tag4F: tag4F,
+    tag9F27: tag9F27,
+    tag9F10: tag9F10,
+    tag5F2A: tag5F2A,
+    tag9F09: tag9F09,
+    tag9F35: tag9F35,
+    tag9F02: tag9F02,
+    tag82: tag82,
+    tag9F34: tag9F34,
+    tag9F36: tag9F36,
+    tag9F03: tag9F03,
+    tag9F1A: tag9F1A,
+    tag9F37: tag9F37,
+    tag9F1E: tag9F1E,
+    tag9C: tag9C,
+    tag5F34: tag5F34,
+    tag95: tag95,
+    tag9F33: tag9F33,
+    tag9F6E: tag9F6E,
+    tag9F66: tag9F66,
+    tag9F6C: tag9F6C,
+  );
 
   return tags;
 }
@@ -290,9 +331,12 @@ Future<Map<String, dynamic>> pharosGenerateKeyInitialization({
 }) async {
   final cipheredTKStr = cipheredTK.toHexStr().toUpperCase();
   final crcValue = calculateCRC32(AsciiCodec().encode(cipheredTKStr));
+  //todo aqui saldria un login a pharos que nos da el merchant code y el terminal code
   return PharosKeyInitRequest(
-          terminalCode: "1774",
-          merchantCode: "1230",
+          terminalCode:
+              "1774", //todo hacer dinamico, pharos nos lo tiene que dar
+          merchantCode:
+              "1230", //todo hacer dinamico, pharos nos lo tiene que dar
           encryptedRandomKey: cipheredTK.toHexStr(),
           randomKeyCheckValue: kcv.toHexStr(),
           randomKeyCRC: crcValue.toHexStr())
