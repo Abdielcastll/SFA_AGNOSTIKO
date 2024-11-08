@@ -572,8 +572,12 @@ class _CompletedPayBody extends State<CompletedPayBody> {
     String idTicket = facturasQuery.docs.first.id;
 
     // Step 5: Construct the URL using the fetched values
-    String url =
-        'https://prueba83-fieldsales.web.app/#/ticketDownload/$email/$idClient/$idTicket';
+    final String baseUrl =
+        await firestore.collection('tenant').doc("empresa").get().then((value) {
+      return value['url'];
+    });
+
+    String url = '$baseUrl/$idClient/$idTicket';
     print('Generated URL: $url');
 
     return url;

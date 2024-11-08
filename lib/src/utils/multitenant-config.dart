@@ -217,7 +217,7 @@ class _MultitenantConfig {
           onTertiaryContainer: onTertiaryContainer,
         );
       } else {
-        print('Document does not exist.');
+        print('Colors Document does not exist.');
       }
     } catch (e) {
       print('Error fetching colors: $e');
