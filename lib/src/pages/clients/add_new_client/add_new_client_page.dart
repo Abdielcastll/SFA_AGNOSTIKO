@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/src/global/logo_widget_dynamic.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
@@ -315,12 +316,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                         // margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                         height: 50,
                         width: 120,
-                        child: Image.asset(
-                          //info: logo spot
-
-                          'assets/images/agn_full.png',
-                          fit: BoxFit.contain,
-                        ),
+                        child: LogoFromFirebase(),
                       ),
                     ),
                     const Text(

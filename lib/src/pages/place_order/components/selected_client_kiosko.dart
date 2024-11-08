@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pwa_sales2go_flutter/src/global/logo_widget_dynamic.dart';
 
 class SelectedClientKiosko extends StatelessWidget {
   const SelectedClientKiosko({
@@ -13,12 +14,7 @@ class SelectedClientKiosko extends StatelessWidget {
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
             height: 120,
-            child: Image.asset(
-              //info: logo spot
-
-              'assets/images/agn_full.png',
-              fit: BoxFit.fitWidth,
-            ),
+            child: const LogoFromFirebase(),
           ),
         ),
         Container(

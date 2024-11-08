@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/src/global/logo_widget_dynamic.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
@@ -41,29 +42,13 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
 
     return AppBar(
       foregroundColor: Colors.white,
-      title: orderActive.orderActive == true
-          ? Container(
-              margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-              height: 50,
-              width: 120,
-              child: Image.asset(
-                //info: logo spot
+      title: Container(
+        margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+        height: 50,
+        width: 120,
+        child: LogoFromFirebase(),
+      ),
 
-                'assets/images/agn_full.png',
-                fit: BoxFit.contain,
-              ),
-            )
-          : Container(
-              margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-              height: 50,
-              width: 120,
-              child: Image.asset(
-                //info: logo spot
-
-                'assets/images/agn_full.png',
-                fit: BoxFit.contain,
-              ),
-            ),
       // title: Text(
       //   message,
       //   style: TextStyle(

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
+import 'package:pwa_sales2go_flutter/src/global/logo_widget_dynamic.dart';
 import 'package:pwa_sales2go_flutter/src/pages/auth/login/email_page.dart';
 import 'package:pwa_sales2go_flutter/src/services/auth.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -178,8 +179,7 @@ class _HeaderState extends State<Header> {
   int activeIndex = 0;
   final assetsImages = [
     //info: logo spot
-    "assets/images/agn_full.png",
-    "assets/images/Logo_FS _V_White.png",
+    "1.png",
   ];
   @override
   Widget build(BuildContext context) {
@@ -206,13 +206,9 @@ class _HeaderState extends State<Header> {
                       },
                     ),
                     itemBuilder: (context, index, realIndex) {
-                      final assetsImage = assetsImages[index];
                       return Container(
                         color: Colors.transparent,
-                        child: Image.asset(
-                          assetsImage,
-                          fit: BoxFit.contain,
-                        ),
+                        child: LogoFromFirebase(),
                       );
                     },
                   ),
