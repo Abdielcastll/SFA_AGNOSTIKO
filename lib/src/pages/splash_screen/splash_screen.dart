@@ -270,7 +270,6 @@ class SplashScreenViewState extends State<SplashScreenView> {
 
     final encryptedK0 = pharosResponse.encryptedNewKey;
     final ksn = pharosResponse.newKeyKsn;
-    // TODO - habilitar en entorno de producción
     //await capx.loadEncryptedIPEK(ksn.toHexBytes(), encryptedK0.toHexBytes());
 
     // cargamos la llave fija del entorno de prueba

@@ -226,7 +226,11 @@ String _getReadingMethod(TransactionArgs transactionArgs) {
 
 Future<Tags> _getTagsPharos() async {
   final emvModule = EmvModule.instance;
+  final tag5F20 = await emvModule.getTagValue(0x5F20);
+  final cardHolderName = AsciiCodec().decode(tag5F20!);
 
+  print("getTagsPharos:");
+  print(cardHolderName);
   final tag9A = await emvModule.getTagValue(0x9A);
   final tagC0 = await emvModule.getTagValue(0xC0);
   final tag9F26 = await emvModule.getTagValue(0x9F26);
@@ -266,7 +270,9 @@ Future<Tags> _getTagsPharos() async {
     tag9F35: tag9F35,
     tag9F02: tag9F02,
     tag82: tag82,
-    tag9F34: tag9F34,
+    tag9F34: cardHolderName == "PAYWAVE/VISA"
+        ? Uint8List.fromList([0x1F, 0x00, 0x00])
+        : tag9F34,
     tag9F36: tag9F36,
     tag9F03: tag9F03,
     tag9F1A: tag9F1A,

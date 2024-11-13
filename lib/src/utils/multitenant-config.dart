@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:agnostiko/agnostiko.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -96,6 +97,17 @@ class _MultitenantConfig {
         ),
       );
 
+      var auth1 = FirebaseAuth.instanceFor(app: baseApp!);
+      auth1.signInWithEmailAndPassword(
+        email: "multitenant_key@apps2go.tech",
+        password: "&9Jk#4Lz!wQ8",
+      );
+      var auth2 = FirebaseAuth.instance;
+      auth2.signInWithEmailAndPassword(
+        email: "multitenant_key@apps2go.tech",
+        password: "&9Jk#4Lz!wQ8",
+      );
+
       String? tenantEmail = sharedPreferences!.getString("tenantEmail");
       await initMultitenantWithEmail(tenantEmail!);
 
@@ -135,6 +147,11 @@ class _MultitenantConfig {
         messagingSenderId: "473200255429",
         appId: "1:473200255429:web:08f7d3d72d91394d68abac",
       ),
+    );
+    var auth1 = FirebaseAuth.instanceFor(app: baseApp!);
+    auth1.signInWithEmailAndPassword(
+      email: "multitenant_key@apps2go.tech",
+      password: "&9Jk#4Lz!wQ8",
     );
     var tenantInfo = await FirebaseFirestore.instanceFor(app: baseApp!)
         .collection('clientes')
