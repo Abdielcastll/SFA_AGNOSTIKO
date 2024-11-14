@@ -238,7 +238,8 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                   if (globalRemoteConfig.onlyFullPaymentWithCard!) {
                     Navigator.pop(context);
                     Navigator.pop(context);
-                    if (transactionResult == EmvTransactionResult.Fail) {
+                    if (transactionResult == EmvTransactionResult.Fail ||
+                        transactionResult == null) {
                       tryChipDialog(context);
                     }
                   }
@@ -775,7 +776,8 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       if (globalRemoteConfig.onlyFullPaymentWithCard!) {
         Navigator.pop(context);
         Navigator.pop(context);
-        if (transactionResult == EmvTransactionResult.Fail) {
+        if (transactionResult == EmvTransactionResult.Fail ||
+            transactionResult == null) {
           tryChipDialog(context);
         }
       } else {

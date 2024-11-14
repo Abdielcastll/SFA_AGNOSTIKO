@@ -531,6 +531,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                             SizedBox(
                               width: 160,
                               child: TextFieldForNewClient(
+                                isTelephone: true,
                                 controller: newclientPhone,
                                 hintMessage: isSimple ? 'Telefono' : '000 0000',
                                 textInputType: TextInputType.phone,
@@ -542,6 +543,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                             SizedBox(
                               width: 160,
                               child: TextFieldForNewClient(
+                                isEmail: true,
                                 controller: newClientEmail,
                                 hintMessage: isSimple
                                     ? 'Correo electronico'
@@ -1317,7 +1319,7 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
   }
 }
 
-class TextFieldForNewClient extends StatelessWidget {
+class TextFieldForNewClient extends StatefulWidget {
   const TextFieldForNewClient({
     super.key,
     required this.controller,
@@ -1325,6 +1327,8 @@ class TextFieldForNewClient extends StatelessWidget {
     required this.textInputType,
     required this.maxLines,
     required this.readOnly,
+    this.isEmail = false,
+    this.isTelephone = false,
   });
 
   final TextEditingController? controller;
@@ -1332,27 +1336,63 @@ class TextFieldForNewClient extends StatelessWidget {
   final TextInputType? textInputType;
   final int? maxLines;
   final bool readOnly;
+  final bool isEmail;
+  final bool isTelephone;
+
+  @override
+  State<TextFieldForNewClient> createState() => _TextFieldForNewClientState();
+}
+
+class _TextFieldForNewClientState extends State<TextFieldForNewClient> {
+  String? _errorText;
+
+  void _validateInput(String value) {
+    if (widget.isEmail) {
+      final emailRegex =
+          RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
+      if (!emailRegex.hasMatch(value)) {
+        setState(() {
+          _errorText = "Favor de ingresar un correo vaildo.";
+        });
+        return;
+      }
+    }
+
+    if (widget.isTelephone) {
+      final phoneRegex = RegExp(r"^\d{10}$");
+      if (!phoneRegex.hasMatch(value)) {
+        setState(() {
+          _errorText = "El telefono debe tener 10 digitos";
+        });
+        return;
+      }
+    }
+
+    setState(() {
+      _errorText = null; // Clear error if validation passes
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return TextField(
-      readOnly: readOnly,
-      controller: controller,
+      readOnly: widget.readOnly,
+      controller: widget.controller,
       style: TextStyle(
         fontSize: 14,
         fontFamily: 'Poppins-regular',
         color: themeProvider.myTheme.colorScheme.primary,
       ),
-      keyboardType: textInputType,
-      maxLines: maxLines,
+      keyboardType: widget.textInputType,
+      maxLines: widget.maxLines,
       maxLength: 100,
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.white,
         contentPadding: EdgeInsets.fromLTRB(10, 15, 0, 0),
-        hintText: hintMessage,
+        hintText: widget.hintMessage,
         hintStyle: TextStyle(
           fontFamily: 'Poppins-regular',
           fontSize: 14,
@@ -1371,9 +1411,10 @@ class TextFieldForNewClient extends StatelessWidget {
             color: Colors.transparent,
           ),
         ),
+        errorText: _errorText,
       ),
       onChanged: (value) {
-        print(value);
+        _validateInput(value);
       },
     );
   }
