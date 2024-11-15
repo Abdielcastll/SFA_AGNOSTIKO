@@ -923,13 +923,23 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                     !RegExp(r'^[0-9_.]+$').hasMatch(
                                         newClientId!.text.toString()) ||
                                     newclientPhone!.text.toString().isEmpty ||
-                                    newClientEmail!.text.toString().isEmpty)
+                                    !RegExp(r'^\d{10}$').hasMatch(
+                                        newclientPhone!.text.toString()) ||
+                                    newClientEmail!.text.toString().isEmpty ||
+                                    !RegExp(r'^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$')
+                                        .hasMatch(
+                                            newClientEmail!.text.toString()))
                                 : (newClientName!.text.toString().isEmpty ||
                                     newClientId!.text.toString().isEmpty ||
                                     !RegExp(r'^[0-9_.]+$').hasMatch(
                                         newClientId!.text.toString()) ||
                                     newclientPhone!.text.toString().isEmpty ||
+                                    !RegExp(r'^\d{10}$').hasMatch(
+                                        newclientPhone!.text.toString()) ||
                                     newClientEmail!.text.toString().isEmpty ||
+                                    !RegExp(r'^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$')
+                                        .hasMatch(
+                                            newClientEmail!.text.toString()) ||
                                     newClientAddress1!.text
                                         .toString()
                                         .isEmpty ||
@@ -937,8 +947,8 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                                         .toString()
                                         .isEmpty ||
                                     !RegExp(r'^[0-9_.]+$').hasMatch(
-                                      newClientMasterDiscount!.text.toString(),
-                                    ))) {
+                                        newClientMasterDiscount!.text
+                                            .toString()))) {
                               print(imageFile);
                               ScaffoldMessenger.of(context)
                                 ..removeCurrentSnackBar()
