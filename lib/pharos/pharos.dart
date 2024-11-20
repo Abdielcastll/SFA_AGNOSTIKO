@@ -59,8 +59,8 @@ Future<Map<String, dynamic>> pharosGenerateSaleMsg(
   }
   final currency = trxCurrency;
   final orderNumber = "#723456";
-  final terminalCode = "1774";
-  final merchantCode = "1230";
+  final terminalCode = "9660";
+  final merchantCode = "4435";
   if (transactionArgs.entryMode == EntryMode.Contact ||
       transactionArgs.entryMode == EntryMode.Contactless ||
       transactionArgs.entryMode == EntryMode.Magstripe) {
@@ -340,9 +340,9 @@ Future<Map<String, dynamic>> pharosGenerateKeyInitialization({
   //todo aqui saldria un login a pharos que nos da el merchant code y el terminal code
   return PharosKeyInitRequest(
           terminalCode:
-              "1774", //todo hacer dinamico, pharos nos lo tiene que dar
+              "9660", //todo hacer dinamico, pharos nos lo tiene que dar
           merchantCode:
-              "1230", //todo hacer dinamico, pharos nos lo tiene que dar
+              "4435", //todo hacer dinamico, pharos nos lo tiene que dar
           encryptedRandomKey: cipheredTK.toHexStr(),
           randomKeyCheckValue: kcv.toHexStr(),
           randomKeyCRC: crcValue.toHexStr())
