@@ -173,8 +173,8 @@ Future<Map<String, dynamic>> pharosGenerateVoidMsg(
   String stan,
 ) async {
   //todo estos valores son dinamicos obtenidos de pharos
-  final terminalCode = "1774";
-  final merchantCode = "1230";
+  final terminalCode = "9660";
+  final merchantCode = "4435";
   return PharosVoidRequest(stan, terminalCode, merchantCode).toJson();
 }
 
