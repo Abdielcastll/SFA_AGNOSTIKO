@@ -107,7 +107,7 @@ final genericClients = Clients(
   email: '',
   prices: 'TPGBASE',
   modified: Timestamp.now(),
-  name: 'Usuario Default Administrador',
+  name: 'Usuario Default',
   id: 0,
   prospect: false,
   phone1: '',

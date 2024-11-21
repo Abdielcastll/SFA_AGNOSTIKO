@@ -72,8 +72,8 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
                           constraints: const BoxConstraints(),
                           splashRadius: 20.0,
                           icon: const Icon(
-                            MdiIcons.cartOutline,
-                            size: 24,
+                            MdiIcons.cart,
+                            size: 30,
                             color: Color.fromARGB(255, 196, 196, 196),
                           ),
                           onPressed: () async {
@@ -460,7 +460,7 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
                                 themeProvider.myTheme.colorScheme.primary,
                           ),
                         ),
-                  NotificationBell()
+                  if (globalRemoteConfig.notificaciones!) NotificationBell()
                 ],
               ),
       ],
