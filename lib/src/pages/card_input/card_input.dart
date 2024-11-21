@@ -306,6 +306,10 @@ class _CardInputViewState extends State<CardInputView> {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(message),
     ));
+    final deviceType = await getDeviceType();
+    if (deviceType == DeviceType.PINPAD) {
+      showPinpadHome();
+    }
     MPOSController.instance.showHomeScreen();
     transactionArgs?.pan ??=
         (await EmvModule.instance.getTagValue(0x57))?.toHexStr().split('d')[0];
@@ -490,6 +494,7 @@ class _CardInputViewState extends State<CardInputView> {
 
   void _onEmvFinished(EmvFinishedEvent event) async {
     print(event.transactionInfo.result);
+
     final transactionArgs = this.transactionArgs;
     transactionArgs?.transactionInfo = event.transactionInfo;
 
@@ -499,7 +504,10 @@ class _CardInputViewState extends State<CardInputView> {
       changeRFCardDialogFn!(false); // Cambiamos el semáforo a rojo
       await waitUntilRFCardRemoved();
     }
-
+    final deviceType = await getDeviceType();
+    if (deviceType == DeviceType.PINPAD) {
+      showPinpadHome();
+    }
     MPOSController.instance.showHomeScreen();
     Navigator.pop(context); // quitamos el popup de progreso
     if (event.transactionInfo.result == EmvTransactionResult.Fallback) {
