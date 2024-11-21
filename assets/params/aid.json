@@ -46,11 +46,12 @@
     "tacDenial": "0010000000",
     "tacOnline": "DE00FC9800",
     "tacDefault": "DC50FC9800",
-    "terminalFloorLimit": "00000000",
+    "terminalFloorLimit": "00003A98",
+    "thresholdValue": "00000000",
     "contactlessFloorLimit": "000000000000",
-    "contactlessTransactionLimit": "001000000000",
-    "cvmRequiredLimit": "000000040000",
-    "terminalTransactionQualifiers": "00000000"
+    "contactlessTransactionLimit": "000000001500",
+    "cvmRequiredLimit": "000000001000",
+    "terminalTransactionQualifiers": "DC800000"
   },
   {
     "aid": "A0000000651010",
