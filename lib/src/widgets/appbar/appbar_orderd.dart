@@ -131,7 +131,7 @@ class AppBarOrder extends StatelessWidget implements PreferredSizeWidget {
           splashRadius: 20.0,
           icon: const Icon(
             Icons.delete,
-            size: 24,
+            size: 30,
             color: Color.fromARGB(255, 196, 196, 196),
           ),
         )

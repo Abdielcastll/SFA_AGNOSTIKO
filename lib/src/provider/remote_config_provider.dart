@@ -78,6 +78,7 @@ class RemoteConfig {
     this.refLogo,
     this.refLogoTicket,
     this.showAgendaMenu,
+    this.notificaciones,
   });
 
   Map<String, dynamic> toMap() {
@@ -116,6 +117,7 @@ class RemoteConfig {
       'refLogo': refLogo,
       'refLogoTicket': refLogoTicket,
       'showAgendaMenu': showAgendaMenu,
+      'notificaciones': notificaciones,
     };
   }
 }
@@ -186,6 +188,7 @@ class RemoteConfigProvider {
       refLogo: allConfigs['refLogo']?.asString() ?? '',
       refLogoTicket: allConfigs['refLogoTicket']?.asString() ?? '',
       showAgendaMenu: allConfigs['showAgendaMenu']?.asBool() ?? false,
+      notificaciones: allConfigs['notificaciones']?.asBool() ?? true,
     );
     globalRemoteConfig = remoteConfigModel;
     //printProperties(globalRemoteConfig);

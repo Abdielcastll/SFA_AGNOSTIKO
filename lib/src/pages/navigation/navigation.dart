@@ -94,12 +94,12 @@ class NavigationPages extends StatelessWidget {
                     if (globalRemoteConfig.visualizacionCatalogo == true)
                       NavigationDestination(
                         icon: Icon(
-                          Icons.sell_outlined,
+                          Icons.store_outlined,
                           size: 24,
                           color: Color.fromARGB(255, 196, 196, 196),
                         ),
                         selectedIcon: Icon(
-                          Icons.sell,
+                          Icons.store,
                           size: 24,
                           color: Color.fromARGB(255, 196, 196, 196),
                         ),
@@ -122,12 +122,12 @@ class NavigationPages extends StatelessWidget {
                     if (globalRemoteConfig.clientesEnabled == true)
                       NavigationDestination(
                         icon: Icon(
-                          Icons.store_outlined,
+                          Icons.group_outlined,
                           size: 24,
                           color: Color.fromARGB(255, 196, 196, 196),
                         ),
                         selectedIcon: Icon(
-                          Icons.store,
+                          Icons.group,
                           size: 24,
                           color: Color.fromARGB(255, 196, 196, 196),
                         ),
@@ -141,7 +141,7 @@ class NavigationPages extends StatelessWidget {
                           color: Color.fromARGB(255, 196, 196, 196),
                         ),
                         selectedIcon: Icon(
-                          Icons.person_outline,
+                          Icons.person,
                           size: 24,
                           color: Color.fromARGB(255, 196, 196, 196),
                         ),
