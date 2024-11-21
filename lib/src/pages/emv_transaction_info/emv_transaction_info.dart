@@ -479,11 +479,21 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                     height: 50,
                     width: 120,
                     child: SvgPicture.asset(
-                      infoTags?.cardNo?.toHexStr().substring(0, 1) == '5' ||
+                      infoTags!.cardNo!.toHexStr().startsWith('5') ||
                               transactionArgs?.transactionInfo?.kernelType ==
                                   ContactlessKernelType.PayPass
                           ? 'assets/images/mastercard.svg'
-                          : 'assets/images/visa.svg',
+                          : infoTags!.cardNo!.toHexStr().startsWith('3') &&
+                                  (infoTags?.cardNo
+                                              ?.toHexStr()
+                                              .substring(0, 2) ==
+                                          '34' ||
+                                      infoTags?.cardNo
+                                              ?.toHexStr()
+                                              .substring(0, 2) ==
+                                          '37')
+                              ? 'assets/images/american_express.png'
+                              : 'assets/images/visa.svg',
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -956,9 +966,13 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       listOfTextLine.add(PrinterText('Tarjeta: ${cardResult.toUpperCase()}',
           format:
               TextFormat(fontSize: 16, bold: true, fontFamily: regularFont)));
-      final cardBrand = infoTags?.cardNo?.toHexStr().substring(0, 1) == '5'
+      final cardBrand = infoTags!.cardNo!.toHexStr().startsWith('5')
           ? 'Mastercard'
-          : 'Visa';
+          : infoTags!.cardNo!.toHexStr().startsWith('3') &&
+                  (infoTags?.cardNo?.toHexStr().substring(0, 2) == '34' ||
+                      infoTags?.cardNo?.toHexStr().substring(0, 2) == '37')
+              ? 'American Express'
+              : 'Visa';
       listOfTextLine.add(PrinterText.emptyLine(32));
       listOfTextLine.add(
         PrinterText(cardBrand.toUpperCase(),
