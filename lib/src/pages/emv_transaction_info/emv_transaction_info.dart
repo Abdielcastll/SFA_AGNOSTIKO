@@ -428,6 +428,19 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     }
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
+    String getCardAsset(String? cardNo, ContactlessKernelType? kernelType) {
+      if (cardNo?.startsWith('5') == true ||
+          kernelType == ContactlessKernelType.PayPass) {
+        return 'assets/images/mastercard.svg';
+      } else if (cardNo?.startsWith('34') == true ||
+          cardNo?.startsWith('37') == true ||
+          kernelType == ContactlessKernelType.Expresspay) {
+        return 'assets/images/american_expres.png';
+      } else {
+        return 'assets/images/visa.svg';
+      }
+    }
+
     return WillPopScope(
       onWillPop: globalRemoteConfig.conversionKiosko!
           ? () async {
@@ -479,21 +492,8 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                     height: 50,
                     width: 120,
                     child: SvgPicture.asset(
-                      infoTags!.cardNo!.toHexStr().startsWith('5') ||
-                              transactionArgs?.transactionInfo?.kernelType ==
-                                  ContactlessKernelType.PayPass
-                          ? 'assets/images/mastercard.svg'
-                          : infoTags!.cardNo!.toHexStr().startsWith('3') &&
-                                  (infoTags?.cardNo
-                                              ?.toHexStr()
-                                              .substring(0, 2) ==
-                                          '34' ||
-                                      infoTags?.cardNo
-                                              ?.toHexStr()
-                                              .substring(0, 2) ==
-                                          '37')
-                              ? 'assets/images/american_express.png'
-                              : 'assets/images/visa.svg',
+                      getCardAsset(infoTags?.cardNo?.toHexStr(),
+                          transactionArgs?.transactionInfo?.kernelType),
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -882,6 +882,17 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     }
   }
 
+  String getCardName(String? cardNo) {
+    if (cardNo?.startsWith('5') == true) {
+      return 'Mastercard';
+    } else if (cardNo?.startsWith('34') == true ||
+        cardNo?.startsWith('37') == true) {
+      return 'American Express';
+    } else {
+      return 'Visa';
+    }
+  }
+
   Future<void> printTicket() async {
     final emv = EmvModule.instance;
 
@@ -966,13 +977,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       listOfTextLine.add(PrinterText('Tarjeta: ${cardResult.toUpperCase()}',
           format:
               TextFormat(fontSize: 16, bold: true, fontFamily: regularFont)));
-      final cardBrand = infoTags!.cardNo!.toHexStr().startsWith('5')
-          ? 'Mastercard'
-          : infoTags!.cardNo!.toHexStr().startsWith('3') &&
-                  (infoTags?.cardNo?.toHexStr().substring(0, 2) == '34' ||
-                      infoTags?.cardNo?.toHexStr().substring(0, 2) == '37')
-              ? 'American Express'
-              : 'Visa';
+      final cardBrand = getCardName(infoTags?.cardNo?.toHexStr());
       listOfTextLine.add(PrinterText.emptyLine(32));
       listOfTextLine.add(
         PrinterText(cardBrand.toUpperCase(),
