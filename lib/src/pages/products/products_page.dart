@@ -324,7 +324,8 @@ class _ProductsBodyState extends State<ProductsBody> {
                                       updatedProduct);
                                   // Show a toast message for the updated quantity
                                   Fluttertoast.showToast(
-                                      msg: '${cartProduct.code} + 1');
+                                      msg:
+                                          'Producto ${selectedProduct.code} añadido correctamente');
 
                                   break; // Exit the loop as we've found the product
                                 } else {
