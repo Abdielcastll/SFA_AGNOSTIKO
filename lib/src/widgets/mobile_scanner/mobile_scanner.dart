@@ -92,17 +92,11 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
           if (productQuantity <= stock) {
             objectBox.insertShoppingCartProduct(result);
             Fluttertoast.showToast(
-              gravity: ToastGravity.TOP,
               msg: 'Se ha agregado exitosamente al carrito',
-              fontSize: 20,
-              backgroundColor: const Color.fromARGB(255, 149, 231, 184),
             );
           } else {
             Fluttertoast.showToast(
-              gravity: ToastGravity.TOP,
               msg: 'Producto sin stock',
-              fontSize: 20,
-              backgroundColor: const Color.fromARGB(255, 149, 231, 184),
             );
           } // Navigator.popUntil(context, ModalRoute.withName('ORDER'));
         } else {
@@ -129,17 +123,11 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
               if (result.productQuantity! <= stock) {
                 objectBox.insertShoppingCartProduct(result);
                 Fluttertoast.showToast(
-                  gravity: ToastGravity.TOP,
                   msg: 'Se ha agregado exitosamente al carrito',
-                  fontSize: 20,
-                  backgroundColor: const Color.fromARGB(255, 149, 231, 184),
                 );
               } else {
                 Fluttertoast.showToast(
-                  gravity: ToastGravity.TOP,
                   msg: 'Producto sin stock',
-                  fontSize: 20,
-                  backgroundColor: const Color.fromARGB(255, 149, 231, 184),
                 );
               }
               // Navigator.popUntil(context, ModalRoute.withName('ORDER'));
@@ -162,17 +150,11 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
             if (productQuantity <= stock) {
               objectBox.insertShoppingCartProduct(result);
               Fluttertoast.showToast(
-                gravity: ToastGravity.TOP,
                 msg: 'Se ha agregado exitosamente al carrito',
-                fontSize: 20,
-                backgroundColor: const Color.fromARGB(255, 149, 231, 184),
               );
             } else {
               Fluttertoast.showToast(
-                gravity: ToastGravity.TOP,
                 msg: 'Producto sin stock',
-                fontSize: 20,
-                backgroundColor: const Color.fromARGB(255, 149, 231, 184),
               );
             }
             // Navigator.popUntil(context, ModalRoute.withName('ORDER'));

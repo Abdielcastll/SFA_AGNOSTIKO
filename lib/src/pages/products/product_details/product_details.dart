@@ -19,6 +19,7 @@ import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/utils/custom_cache_manager.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 
 import '../../../utils/functions.dart';
 
@@ -70,11 +71,9 @@ class _ProductDetailsState extends State<ProductDetails> {
     String currentCoinSelectedCode = currentCoinSplit.last;
     // print(currentCoinSelectedCode);
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        toolbarHeight: 40,
-        foregroundColor: Colors.white,
-        backgroundColor: themeProvider.myTheme.colorScheme.primary,
+      appBar: AppBarNavigation(
+        message: AppLocalizations.of(context)!.products,
+        userZoneDocument: widget.userZoneDocument,
       ),
       backgroundColor: themeProvider.myTheme.colorScheme.surface,
       body: MultiProvider(
@@ -466,6 +465,9 @@ class ProductDetailsBody extends StatelessWidget {
                                                     objectBox
                                                         .insertShoppingCartProduct(
                                                             updatedProduct);
+                                                    Fluttertoast.showToast(
+                                                        msg:
+                                                            'Producto ${element.code} añadido correctamente');
                                                   } else {
                                                     Fluttertoast.showToast(
                                                         msg:
@@ -500,6 +502,9 @@ class ProductDetailsBody extends StatelessWidget {
                                                   objectBox
                                                       .insertShoppingCartProduct(
                                                           newProduct);
+                                                  Fluttertoast.showToast(
+                                                      msg:
+                                                          'Producto ${newProduct.code} añadido correctamente');
                                                 } else {
                                                   Fluttertoast.showToast(
                                                       msg:

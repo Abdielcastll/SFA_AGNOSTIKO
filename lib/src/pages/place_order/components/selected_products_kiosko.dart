@@ -121,17 +121,11 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
             if (productQuantity <= stock) {
               objectBox.insertShoppingCartProduct(result);
               Fluttertoast.showToast(
-                gravity: ToastGravity.TOP,
                 msg: 'Se ha agregado exitosamente al carrito',
-                fontSize: 20,
-                backgroundColor: const Color.fromARGB(255, 149, 231, 184),
               );
             } else {
               Fluttertoast.showToast(
-                gravity: ToastGravity.TOP,
                 msg: 'Producto sin stock',
-                fontSize: 20,
-                backgroundColor: const Color.fromARGB(255, 149, 231, 184),
               );
             }
           } else {
@@ -154,17 +148,11 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                 if (productQuantity + 1 <= stock) {
                   objectBox.insertShoppingCartProduct(result);
                   Fluttertoast.showToast(
-                    gravity: ToastGravity.TOP,
                     msg: 'Se ha agregado exitosamente al carrito',
-                    fontSize: 20,
-                    backgroundColor: const Color.fromARGB(255, 149, 231, 184),
                   );
                 } else {
                   Fluttertoast.showToast(
-                    gravity: ToastGravity.TOP,
                     msg: 'Producto sin stock',
-                    fontSize: 20,
-                    backgroundColor: const Color.fromARGB(255, 149, 231, 184),
                   );
                 }
               }
@@ -184,17 +172,11 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
               if (productQuantity <= stock) {
                 objectBox.insertShoppingCartProduct(result);
                 Fluttertoast.showToast(
-                  gravity: ToastGravity.TOP,
                   msg: 'Se ha agregado exitosamente al carrito',
-                  fontSize: 20,
-                  backgroundColor: const Color.fromARGB(255, 149, 231, 184),
                 );
               } else {
                 Fluttertoast.showToast(
-                  gravity: ToastGravity.TOP,
                   msg: 'Producto sin stock',
-                  fontSize: 20,
-                  backgroundColor: const Color.fromARGB(255, 149, 231, 184),
                 );
               }
             }
