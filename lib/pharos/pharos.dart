@@ -41,7 +41,8 @@ Future<Map<String, dynamic>> pharosGenerateSaleMsg(
   }
   final amount = (amountInCents / 100).toDouble().toStringAsFixed(4);
 
-  final tags = await _getTagsPharos();
+  final tags =
+      await _getTagsPharos(transactionArgs.infoTags?.cardNo?.toHexStr());
   String readingMethod = _getReadingMethod(transactionArgs);
 
   String expYear = await _getExpDate(false, transactionArgs);
@@ -224,18 +225,23 @@ String _getReadingMethod(TransactionArgs transactionArgs) {
   return readingMethod;
 }
 
-Future<Tags> _getTagsPharos() async {
-  final emvModule = EmvModule.instance;
-  Uint8List? tag5F20 = await emvModule.getTagValue(0x5F20);
-  String? cardHolderName;
-  if (tag5F20 != null) {
-    cardHolderName = AsciiCodec().decode(tag5F20);
+String getCardName(String? cardNo) {
+  if (cardNo?.startsWith('5') == true) {
+    return 'Mastercard';
+  } else if (cardNo?.startsWith('34') == true ||
+      cardNo?.startsWith('37') == true) {
+    return 'American Express';
   } else {
-    cardHolderName = '';
+    return 'Visa';
   }
+}
+
+Future<Tags> _getTagsPharos(String? cardNo) async {
+  final emvModule = EmvModule.instance;
+  String company = getCardName(cardNo);
 
   print("getTagsPharos:");
-  print(cardHolderName);
+  print(company);
   final tag9A = await emvModule.getTagValue(0x9A);
   final tagC0 = await emvModule.getTagValue(0xC0);
   final tag9F26 = await emvModule.getTagValue(0x9F26);
@@ -275,9 +281,8 @@ Future<Tags> _getTagsPharos() async {
     tag9F35: tag9F35,
     tag9F02: tag9F02,
     tag82: tag82,
-    tag9F34: cardHolderName == "PAYWAVE/VISA"
-        ? Uint8List.fromList([0x1F, 0x00, 0x00])
-        : tag9F34,
+    tag9F34:
+        company == "Visa" ? Uint8List.fromList([0x1F, 0x00, 0x00]) : tag9F34,
     tag9F36: tag9F36,
     tag9F03: tag9F03,
     tag9F1A: tag9F1A,

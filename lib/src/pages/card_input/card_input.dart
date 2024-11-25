@@ -468,6 +468,7 @@ class _CardInputViewState extends State<CardInputView> {
               onClose: () async {
             await cancelEmvTransaction();
             if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+              Navigator.popUntil(context, (route) => route.isFirst == true);
               await cancelPaymentProcess(
                 paymentBody!.client,
                 paymentBody!.invoiceNumber,
