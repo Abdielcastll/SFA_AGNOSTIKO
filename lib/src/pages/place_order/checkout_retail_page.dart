@@ -242,8 +242,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
 
     // TOTAL DEL PEDIDO
 
-    var totalPriceOfTheOrder = Decimal.parse(accumulated.toString()) +
-        Decimal.parse(taxRounded.toString());
+    var totalPriceOfTheOrder = Decimal.parse(accumulated.toString());
 
     print('totalPriceOfTheOrderRaw: $totalPriceOfTheOrder');
 
@@ -258,6 +257,24 @@ class _CheckoutBodyState extends State<CheckoutBody> {
         formatDecimalPriceByRegion(price: totalPriceOfTheOrderConverted);
 
     print('totalPriceOfTheOrderFormatted: $totalPriceOfTheOrderFormatted');
+
+    //SUBTOTAL show
+    var subtotalTaxless = Decimal.parse(accumulated.toString()) -
+        Decimal.parse(taxRounded.toString());
+
+    print('subtotalTaxless: $subtotalTaxless');
+
+    var subtotalTaxlessConverted = priceMultipliedByItsExchangeRatio2(
+        coinDecimals: coinDecimals,
+        coinExchangeRatio: coinExchangeRatio,
+        productPrice: subtotalTaxless);
+
+    print('subtotalTaxlessConverted: $subtotalTaxlessConverted');
+
+    var subtotalTaxlessFormatted =
+        formatDecimalPriceByRegion(price: subtotalTaxlessConverted);
+
+    print('subtotalTaxlessFormatted: $subtotalTaxlessFormatted');
 
     completeOrder() {
       Navigator.pushReplacement(
@@ -316,7 +333,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       margin: const EdgeInsets.only(right: 10),
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        '$coinSymbol $subTotalFormatted',
+                        '$coinSymbol $subtotalTaxlessFormatted',
                         style: TextStyle(
                           color: themeProvider.myTheme.colorScheme.primary,
                           fontFamily: 'Poppins-Regular',
