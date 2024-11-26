@@ -201,7 +201,8 @@ Future invoicePrintLayout(AddPaymentBodyAtt invoice, String currentCoin) async {
   listOfTextLine.add(
     PrinterSplitText(
       "SubTotal".toUpperCase(),
-      priceFormatForPaidAmount(invoice.subTotal, currentCoin),
+      priceFormatForPaidAmount(
+          invoice.subTotal - (invoice.subTotal * 0.16), currentCoin),
       format: TextFormat(
         fontSize: 16,
         fontFamily: regularFont,
@@ -235,7 +236,7 @@ Future invoicePrintLayout(AddPaymentBodyAtt invoice, String currentCoin) async {
     PrinterSplitText(
       "Total".toUpperCase(),
       priceFormatForPaidAmount(
-        (invoice.subTotal - invoice.discount + invoice.tax).toStringAsFixed(4),
+        (invoice.subTotal - invoice.discount).toStringAsFixed(4),
         currentCoin,
       ),
       format: TextFormat(
