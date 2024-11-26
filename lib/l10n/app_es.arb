@@ -35,7 +35,7 @@
     "@stock": {
         "description": "Stock de productos"
     },
-    "price": "Precio",
+    "price": "Precio sin IVA",
     "@price": {
         "description": "Precio del producto"
     },

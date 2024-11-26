@@ -118,7 +118,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                   pricesName: pricesName,
                                   //catalogueID: product.catalogue,
                                   userZoneDocument: userZoneDocument,
-                                  showListButton: true,
+                                  showListButton: false,
                                 ),
                               ),
                             );
@@ -253,7 +253,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                   isProductInAPromotion: false,
                                   prices: prices,
                                   userZoneDocument: userZoneDocument,
-                                  showListButton: true,
+                                  showListButton: false,
                                 ),
                               ),
                             );
