@@ -3,6 +3,7 @@
 import 'package:agnostiko/device/src/device.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/catalogue/catalogue_page_kiosko.dart';
 import 'package:pwa_sales2go_flutter/src/pages/profile/profile_page.dart';
@@ -11,6 +12,7 @@ import 'package:pwa_sales2go_flutter/src/pages/clients/clients_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/diary/diary_tabs.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/utils/notifications.dart';
@@ -25,7 +27,7 @@ class NavigationPages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
-
+    initializeGenericClient();
     return FutureBuilder<DeviceType>(
       future: _getDeviceType(),
       builder: (context, snapshot) {

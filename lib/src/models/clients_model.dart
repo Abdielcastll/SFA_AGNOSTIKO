@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 
 class Clients {
   final bool active;
@@ -97,7 +98,27 @@ List<Clients> clientListfromSnapshot(QuerySnapshot snapshot) {
   }).toList();
 }
 
-final genericClients = Clients(
+Clients genericClients = Clients(
+  active: true,
+  specialContributor: false,
+  madeBy: '',
+  masterDiscount: 0,
+  fiscalAdress: 'Sin direccion',
+  dispatchAdress: 'Sin Direccion',
+  email: '',
+  prices: 'TPGBASE',
+  modified: Timestamp.now(),
+  name: 'Usuario Default',
+  id: 0,
+  prospect: false,
+  phone1: '',
+  phone2: '',
+  idType: '',
+  zone: 'NaN',
+  clientDocumentId: 'hEIOO4qTPYTqYChVeqxo',
+);
+
+Clients placeholderClient = Clients(
   active: true,
   specialContributor: false,
   madeBy: '',
@@ -236,4 +257,38 @@ List<ClientName> clientNameFromDocumentID(QuerySnapshot snapshot) {
       zone: doc.get('zona').id,
     );
   }).toList();
+}
+
+Future<void> initializeGenericClient() async {
+  print("get default client");
+  try {
+    DocumentSnapshot doc = await clientesRef.doc('hEIOO4qTPYTqYChVeqxo').get();
+    if (doc.exists) {
+      print("cliente default: ${doc.data()}");
+      genericClients = Clients(
+        active: doc.get('activo') ?? true,
+        specialContributor: doc.get('contribuyenteEspecial') ?? false,
+        masterDiscount: doc.get('descuentoMaestro') ?? 0,
+        fiscalAdress: doc.get('direccionFiscal') ?? 'Sin direccion',
+        dispatchAdress: doc.get('direccionDespacho') ?? 'Sin Direccion',
+        email: doc.get('email') ?? '',
+        prices: doc.get('listaDePrecios')?.id ?? 'TPGBASE',
+        modified: doc.get('modificado') ?? Timestamp.now(),
+        name: doc.get('nombre') ?? 'Usuario firebase',
+        id: doc.get('numeroId') ?? 0,
+        prospect: doc.get('prospecto') ?? false,
+        phone1: doc.get('telefono') ?? '',
+        phone2: doc.get('telefono2') ?? '',
+        idType: doc.get('tipoId')?.id ?? '',
+        zone: doc.get('zona')?.id ?? 'NaN',
+        clientDocumentId: doc.id,
+      );
+    } else {
+      print('Generic client document does not exist. Using placeholder.');
+      genericClients = placeholderClient;
+    }
+  } catch (e) {
+    print('Error fetching generic client: $e. Using placeholder.');
+    genericClients = placeholderClient;
+  }
 }
