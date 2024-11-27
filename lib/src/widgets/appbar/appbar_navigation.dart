@@ -25,7 +25,6 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
 
   final String message;
   final userZoneDocument;
-
   @override
   Size get preferredSize => const Size.fromHeight(60);
 
@@ -43,9 +42,8 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       foregroundColor: Colors.white,
       title: Container(
-        margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-        height: 50,
-        width: 120,
+        height: 60,
+        width: 130,
         child: LogoFromFirebase(),
       ),
 
@@ -58,7 +56,6 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
       //   ),
       // ),
       elevation: 0,
-      leadingWidth: 24.0,
       backgroundColor: themeProvider.myTheme.colorScheme.primary,
       actions: [
         globalRemoteConfig.conversionKiosko == true
