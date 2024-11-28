@@ -921,7 +921,8 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
 
     listOfTextLine.add(imgLogo);
 
-    listOfTextLine.add(PrinterText(razonsocial.toUpperCase(),
+    listOfTextLine.add(PrinterText(
+        "Promoción y Operación S.A. de C.V.".toUpperCase(),
         format: TextFormat(fontSize: 16, fontFamily: specialFont),
         alignment: TextAlignment.Center));
 
