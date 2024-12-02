@@ -45,7 +45,9 @@ class NavigationPages extends StatelessWidget {
             if (globalRemoteConfig.visualizacionCatalogo == true)
               const CataloguePage(),
             if (globalRemoteConfig.showAgendaMenu == true) const DiaryTabs(),
-            if (globalRemoteConfig.clientesEnabled == true) const ClientsPage(),
+            if (globalRemoteConfig.clientesEnabled == true &&
+                globalRemoteConfig.clientesMenuDisabled == false)
+              const ClientsPage(),
             if (deviceType != DeviceType.PINPAD) const ProfilePage(),
           ];
 
@@ -121,7 +123,8 @@ class NavigationPages extends StatelessWidget {
                         ),
                         label: AppLocalizations.of(context)!.diary,
                       ),
-                    if (globalRemoteConfig.clientesEnabled == true)
+                    if (globalRemoteConfig.clientesEnabled == true &&
+                        globalRemoteConfig.clientesMenuDisabled == false)
                       NavigationDestination(
                         icon: Icon(
                           Icons.group_outlined,

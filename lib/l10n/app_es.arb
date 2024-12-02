@@ -295,7 +295,7 @@
     "@newOrder": {
         "description": "titulo de nuevo pedido"
     },
-    "selectClient": "Selecciona un Cliente",
+    "selectClient": "Si ya estas registrado, busca por tu nombre.",
     "@selectClient": {
         "description": "Titulo selecciona cliente"
     },

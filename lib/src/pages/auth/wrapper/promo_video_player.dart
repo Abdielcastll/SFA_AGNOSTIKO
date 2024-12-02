@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
@@ -29,39 +31,47 @@ class _PromoVideoPlayerState extends State<PromoVideoPlayer> {
   }
 
   Future<void> _fetchVideoLink() async {
-    // Get the video URL from Firebase Storage
-    int videoNumber = globalRemoteConfig.promoVideoNumber!;
-    print('promo_vids/$videoNumber.mp4');
-    final videoRef =
-        FirebaseStorage.instanceFor(app: multitenantConfig.tenantApp!)
-            .ref('promo_vids/$videoNumber.mp4');
-    _videoUrl = await videoRef.getDownloadURL();
-    print(_videoUrl);
+    try {
+      int videoNumber = globalRemoteConfig.promoVideoNumber!;
+      final videoRef =
+          FirebaseStorage.instanceFor(app: multitenantConfig.tenantApp!)
+              .ref('promo_vids/$videoNumber.mp4');
+      _videoUrl = await videoRef.getDownloadURL();
 
-    // Initialize the video player with the fetched URL
-    _initializeVideoPlayer(_videoUrl!);
+      final file = await DefaultCacheManager().getSingleFile(_videoUrl!);
+
+      _initializeVideoPlayer(file.path);
+    } catch (e) {
+      print('Error fetching or caching video: $e');
+      setState(() {
+        _videoUrl = null;
+      });
+    }
   }
 
-  void _initializeVideoPlayer(String url) {
-    print('init video player');
+  void _initializeVideoPlayer(String filePath) {
+    try {
+      _videoController = VideoPlayerController.file(File(filePath))
+        ..initialize().then((_) {
+          setState(() {});
 
-    _videoController = VideoPlayerController.networkUrl(Uri.parse(url))
-      ..initialize().then((_) {
-        setState(() {});
-
-        if (globalRemoteConfig.promoVideoDisponible!) {
-          _videoController!.play();
-        }
-
-        // Add listener to restart the video when it finishes
-        _videoController!.addListener(() {
-          if (_videoController!.value.position >=
-              _videoController!.value.duration) {
-            _videoController!.seekTo(Duration.zero);
+          if (globalRemoteConfig.promoVideoDisponible!) {
             _videoController!.play();
           }
+
+          _videoController!.addListener(() {
+            if (_videoController!.value.position >=
+                _videoController!.value.duration) {
+              _videoController!.seekTo(Duration.zero);
+              _videoController!.play();
+            }
+          });
+        }).catchError((e) {
+          print('Error initializing video player: $e');
         });
-      });
+    } catch (e) {
+      print('Error setting up video player: $e');
+    }
   }
 
   @override
