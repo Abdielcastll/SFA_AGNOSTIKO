@@ -90,7 +90,7 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
                                         ),
                                         title: Center(
                                           child: Text(
-                                            '¿Desea registrar el cliente?',
+                                            'Personalizar el carrito de compras con tu nombre ',
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               fontFamily: 'Poppins-regular',

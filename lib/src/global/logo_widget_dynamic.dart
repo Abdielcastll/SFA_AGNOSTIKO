@@ -16,10 +16,8 @@ class _LogoFromFirebaseState extends State<LogoFromFirebase> {
     String? downloadUrl = await getDownloadUrl(filePath);
 
     if (downloadUrl != null) {
-      print('Download URL: $downloadUrl');
       return downloadUrl;
     } else {
-      print('Failed to retrieve download URL');
       return null;
     }
   }
