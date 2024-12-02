@@ -251,7 +251,6 @@ class _AddPaymentBodyState extends State<AddPaymentBody> {
 
   get getTotalAmount =>
       double.parse((Decimal.parse(widget.subTotal.toString()) +
-              Decimal.parse(widget.tax.toString()) -
               Decimal.parse(widget.discount.toString()))
           .toString());
 
