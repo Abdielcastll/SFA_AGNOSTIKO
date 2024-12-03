@@ -155,6 +155,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
 
   bool timerExpired = false;
   void startTimerFullPaymentWithCard() {
+    printTicket();
     Future.delayed(Duration(seconds: 30), () {
       if (transactionResult == EmvTransactionResult.Approved) {
         setState(() {
