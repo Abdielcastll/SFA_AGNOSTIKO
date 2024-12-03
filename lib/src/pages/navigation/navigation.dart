@@ -40,6 +40,65 @@ class NavigationPages extends StatelessWidget {
         } else {
           // Once we have the device type, we can build the screens
           final deviceType = snapshot.data;
+          List<Widget> destinationWidgets = [
+            if (globalRemoteConfig.visualizacionCatalogo == true)
+              NavigationDestination(
+                icon: Icon(
+                  Icons.store_outlined,
+                  size: 24,
+                  color: Color.fromARGB(255, 196, 196, 196),
+                ),
+                selectedIcon: Icon(
+                  Icons.store,
+                  size: 24,
+                  color: Color.fromARGB(255, 196, 196, 196),
+                ),
+                label: AppLocalizations.of(context)!.home,
+              ),
+            if (globalRemoteConfig.showAgendaMenu == true)
+              NavigationDestination(
+                icon: Icon(
+                  Icons.calendar_today_outlined,
+                  size: 24,
+                  color: Color.fromARGB(255, 196, 196, 196),
+                ),
+                selectedIcon: Icon(
+                  Icons.calendar_today,
+                  size: 24,
+                  color: Color.fromARGB(255, 196, 196, 196),
+                ),
+                label: AppLocalizations.of(context)!.diary,
+              ),
+            if (globalRemoteConfig.clientesEnabled == true &&
+                globalRemoteConfig.clientesMenuDisabled == false)
+              NavigationDestination(
+                icon: Icon(
+                  Icons.group_outlined,
+                  size: 24,
+                  color: Color.fromARGB(255, 196, 196, 196),
+                ),
+                selectedIcon: Icon(
+                  Icons.group,
+                  size: 24,
+                  color: Color.fromARGB(255, 196, 196, 196),
+                ),
+                label: AppLocalizations.of(context)!.clients,
+              ),
+            if (deviceType != DeviceType.PINPAD)
+              NavigationDestination(
+                icon: Icon(
+                  Icons.person_outline,
+                  size: 24,
+                  color: Color.fromARGB(255, 196, 196, 196),
+                ),
+                selectedIcon: Icon(
+                  Icons.person,
+                  size: 24,
+                  color: Color.fromARGB(255, 196, 196, 196),
+                ),
+                label: AppLocalizations.of(context)!.profile,
+              ),
+          ];
 
           final screens = [
             if (globalRemoteConfig.visualizacionCatalogo == true)
@@ -64,6 +123,16 @@ class NavigationPages extends StatelessWidget {
           if (globalRemoteConfig.conversionKiosko == true) {
             return Scaffold(
               body: const CataloguePageKiosko(),
+            );
+          } else if (destinationWidgets.length < 2) {
+            return Scaffold(
+              body: CataloguePage(),
+            );
+          } else if (destinationWidgets.isEmpty) {
+            return Scaffold(
+              body: Center(
+                child: Text("Ningun modulo activo"),
+              ),
             );
           } else {
             return Scaffold(
@@ -94,65 +163,7 @@ class NavigationPages extends StatelessWidget {
                   onDestinationSelected: (int i) {
                     counterLimitFirestore.setNewScreen(i);
                   },
-                  destinations: [
-                    if (globalRemoteConfig.visualizacionCatalogo == true)
-                      NavigationDestination(
-                        icon: Icon(
-                          Icons.store_outlined,
-                          size: 24,
-                          color: Color.fromARGB(255, 196, 196, 196),
-                        ),
-                        selectedIcon: Icon(
-                          Icons.store,
-                          size: 24,
-                          color: Color.fromARGB(255, 196, 196, 196),
-                        ),
-                        label: AppLocalizations.of(context)!.home,
-                      ),
-                    if (globalRemoteConfig.showAgendaMenu == true)
-                      NavigationDestination(
-                        icon: Icon(
-                          Icons.calendar_today_outlined,
-                          size: 24,
-                          color: Color.fromARGB(255, 196, 196, 196),
-                        ),
-                        selectedIcon: Icon(
-                          Icons.calendar_today,
-                          size: 24,
-                          color: Color.fromARGB(255, 196, 196, 196),
-                        ),
-                        label: AppLocalizations.of(context)!.diary,
-                      ),
-                    if (globalRemoteConfig.clientesEnabled == true &&
-                        globalRemoteConfig.clientesMenuDisabled == false)
-                      NavigationDestination(
-                        icon: Icon(
-                          Icons.group_outlined,
-                          size: 24,
-                          color: Color.fromARGB(255, 196, 196, 196),
-                        ),
-                        selectedIcon: Icon(
-                          Icons.group,
-                          size: 24,
-                          color: Color.fromARGB(255, 196, 196, 196),
-                        ),
-                        label: AppLocalizations.of(context)!.clients,
-                      ),
-                    if (deviceType != DeviceType.PINPAD)
-                      NavigationDestination(
-                        icon: Icon(
-                          Icons.person_outline,
-                          size: 24,
-                          color: Color.fromARGB(255, 196, 196, 196),
-                        ),
-                        selectedIcon: Icon(
-                          Icons.person,
-                          size: 24,
-                          color: Color.fromARGB(255, 196, 196, 196),
-                        ),
-                        label: AppLocalizations.of(context)!.profile,
-                      ),
-                  ],
+                  destinations: destinationWidgets,
                 ),
               ),
             );
