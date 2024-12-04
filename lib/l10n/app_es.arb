@@ -299,7 +299,7 @@
     "@selectClient": {
         "description": "Titulo selecciona cliente"
     },
-    "searchClient": "Busca un Cliente...",
+    "searchClient": "Escribe tu nombre",
     "@searchClient": {
         "description": "Barra de busqueda de pedido"
     },
