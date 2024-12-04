@@ -539,7 +539,7 @@ class ProductDetailsBody extends StatelessWidget {
                                                     .withOpacity(0.3)),
                                           ),
                                           label: Text(
-                                            'Añadir',
+                                            'Agregar al carrito',
                                             style: TextStyle(
                                               color: themeProvider
                                                   .myTheme

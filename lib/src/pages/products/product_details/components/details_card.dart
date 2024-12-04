@@ -88,7 +88,7 @@ class DetailsCard extends StatelessWidget {
                           color: Colors.white,
                         ),
                         label: Text(
-                          'Añadir producto',
+                          'Agregar al carrito',
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
