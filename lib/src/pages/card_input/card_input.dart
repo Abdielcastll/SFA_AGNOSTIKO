@@ -321,6 +321,9 @@ class _CardInputViewState extends State<CardInputView> {
         paymentBody!.invoiceNumber,
       );
     }
+    if (deviceType == DeviceType.PINPAD) {
+      showPinpadHome();
+    }
     Navigator.pushReplacementNamed(
       context,
       EmvTransactionInfoView.route,
@@ -472,8 +475,7 @@ class _CardInputViewState extends State<CardInputView> {
                 paymentBody!.client,
                 paymentBody!.invoiceNumber,
               );
-              Navigator.pop(context);
-              Navigator.pop(context);
+              Navigator.popUntil(context, (route) => route.isFirst == true);
             }
             Navigator.popUntil(context, (route) => route.isFirst == true);
           });
@@ -576,6 +578,9 @@ class _CardInputViewState extends State<CardInputView> {
         (await EmvModule.instance.getTagValue(0x57))?.toHexStr().split('d')[0];
 
     final arguments = (ModalRoute.of(context)?.settings.arguments! as List);
+    if (deviceType == DeviceType.PINPAD) {
+      showPinpadHome();
+    }
     Navigator.pushReplacementNamed(context, EmvTransactionInfoView.route,
         arguments: [
           transactionArgs,
