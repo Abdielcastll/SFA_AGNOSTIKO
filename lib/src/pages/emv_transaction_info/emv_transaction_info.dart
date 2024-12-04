@@ -794,6 +794,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
           Navigator.pop(context);
         }
         if (transactionResult == EmvTransactionResult.Fail ||
+            transactionResult == EmvTransactionResult.Denied ||
             transactionResult == null) {
           tryChipDialog(context);
         }
@@ -1055,7 +1056,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     );
     listOfTextLine.add(
       PrinterText(
-        'ARQC:${maskedHexString!.toUpperCase()}',
+        'ARQC:${maskedHexString ?? 'N/A'.toUpperCase()}',
         format: TextFormat(
           fontSize: 16,
           fontFamily: regularFont,
