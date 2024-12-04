@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'dart:ui' as ui;
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:agnostiko/agnostiko.dart';
@@ -231,21 +232,23 @@ Future refund(BuildContext context, payment, String pleaseWait, Client client,
 
 Future<ui.Image?> networkImageToUiImage(String imageUrl) async {
   try {
-    // Fetch the image data from the network
-    final http.Response response = await http.get(Uri.parse(imageUrl));
+    // Use the default cache manager to fetch the image file
+    final cacheManager = DefaultCacheManager();
+    final file = await cacheManager.getSingleFile(imageUrl);
 
-    if (response.statusCode == 200) {
+    if (file != null) {
+      // Read the file as bytes
+      final Uint8List imageData = await file.readAsBytes();
+
       // Convert the raw bytes into a ui.Image
-      Uint8List imageData = response.bodyBytes;
       final Completer<ui.Image> completer = Completer();
-
       ui.decodeImageFromList(imageData, (ui.Image img) {
         completer.complete(img);
       });
 
       return completer.future;
     } else {
-      print('Failed to load image. Status code: ${response.statusCode}');
+      print('Failed to load image from cache.');
       return null;
     }
   } catch (e) {
