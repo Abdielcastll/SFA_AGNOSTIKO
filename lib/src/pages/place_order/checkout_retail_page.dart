@@ -1185,7 +1185,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'PROCESAR PAGO ',
+                      'PAGAR',
                       style: TextStyle(
                         fontFamily: 'Poppins-Regular',
                         fontSize: 14,
