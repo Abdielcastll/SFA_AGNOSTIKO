@@ -286,6 +286,8 @@ Future<String?> fetchDownloadLink() async {
 }
 
 Future printCancelTicket(int stan, String referenceNumber, double monto) async {
+  print('Print ticket cancel');
+
   List<PrinterObject> listOfTextLine = [];
   final terminalParameters = await loadTerminalParameters();
 

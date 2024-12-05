@@ -84,6 +84,23 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     );
   }
 
+  Future<bool> showModalTicketPrinted() async {
+    return await showConfirmDialog(
+      context,
+      title: '¿Estas seguro?',
+      message: '¿Desea imprimir el ticket otra ves?',
+      textAccept: 'Si',
+      textCancel: 'No',
+      onAccept: () {
+        handlerPress();
+        Navigator.pop(context);
+      },
+      onCancel: () {
+        Navigator.pop(context);
+      },
+    );
+  }
+
   Future<String?> getDownloadUrl(String filePath) async {
     try {
       // Reference the file in Firebase Storage using the provided file path
@@ -293,6 +310,14 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
           hexString.substring(hexString.length - 4);
     }
     return maskedHexString ?? 'no encontrado';
+  }
+
+  final Handler handler = Handler();
+
+  void handlerPress() async {
+    handler.run(() async {
+      printTicket();
+    });
   }
 
   @override
@@ -618,6 +643,12 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
               ),
               onTap: () {},
             ),
+            ListTile(
+              enableFeedback: true,
+              title: const Text('Response code: '),
+              subtitle: Text(transactionArgs!.responseCode!),
+              onTap: () {},
+            ),
             if (!transactionArgs!.isFallback)
               if (globalRemoteConfig.conversionKiosko == false)
                 Padding(
@@ -625,8 +656,14 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                       vertical: 4.0, horizontal: 16.0),
                   child: OutlinedButton(
                     onPressed: () async {
-                      await printTicket();
-                      ticketPrinted = true;
+                      if (ticketPrinted) {
+                        showModalTicketPrinted();
+                      } else {
+                        handlerPress();
+                        setState(() {
+                          ticketPrinted = true;
+                        });
+                      }
                     },
                     style: TextButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -656,11 +693,11 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                     const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
                 child: OutlinedButton(
                   onPressed: () {
+                    onAccept();
                     if (!ticketPrinted && !transactionArgs!.isFallback) {
                       showModalNoTicketPrinted();
                       return;
                     }
-                    onAccept();
                   },
                   style: TextButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -899,6 +936,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   }
 
   Future<void> printTicket() async {
+    print('ticket emv');
     final emv = EmvModule.instance;
 
     List<PrinterObject> listOfTextLine = [];
@@ -1223,5 +1261,20 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     }
 
     return "unknown";
+  }
+}
+
+class Handler {
+  bool _isRunning = false;
+  Handler();
+  Future<void> run(Future<void> Function() action) async {
+    if (_isRunning) return;
+
+    _isRunning = true;
+    try {
+      await action();
+    } finally {
+      _isRunning = false;
+    }
   }
 }

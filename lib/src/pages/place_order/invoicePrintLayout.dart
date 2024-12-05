@@ -71,6 +71,8 @@ Future<ui.Image?> networkImageToUiImage(String imageUrl) async {
 }
 
 Future invoicePrintLayout(AddPaymentBodyAtt invoice, String currentCoin) async {
+  print('Print ticket invoice');
+
   final products = objectBox.getAllShoppingCartProducts();
 
   List<PrinterObject> listOfTextLine = [];

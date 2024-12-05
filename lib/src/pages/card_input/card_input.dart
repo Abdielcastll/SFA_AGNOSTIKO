@@ -439,6 +439,8 @@ class _CardInputViewState extends State<CardInputView> {
         print(responseCode);
         transactionArgs.referenceNumber = response.referenceNumber;
         transactionArgs.authCode = response.authCode;
+        transactionArgs.responseCode = response.resultCode;
+
         await emvCompleteOnline(EmvOnlineResponse(
           authorisationResponseCode: responseCode,
         ));
@@ -449,36 +451,44 @@ class _CardInputViewState extends State<CardInputView> {
         if (stan != null) {
           final response = await runVoidPharos(stan);
           String? responseCode = response.resultCode;
-
+          transactionArgs.responseCode = response.resultCode;
           Navigator.pop(context);
 
-          String infoDialogText;
-          if (responseCode == "00") {
-            infoDialogText = "Reverso aceptado";
-          } else {
-            infoDialogText = "Reverso rechazado";
+          await closeCardReader();
+          await cancelEmvTransaction();
+          await emvCompleteOnline(EmvOnlineResponse(
+            authorisationResponseCode: '01',
+          ));
+
+          if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+            await cancelPaymentProcess(
+              paymentBody!.client,
+              paymentBody!.invoiceNumber,
+            );
           }
+          final arguments =
+              (ModalRoute.of(context)?.settings.arguments! as List);
+          print('navigate');
 
-          String exception;
-
-          if (transactionArgs.emvTransactionType == EmvTransactionType.Refund) {
-            exception = "Devolucion procesada";
-          } else {
-            exception = "Devolucion rechazada";
-          }
-
-          showInfoDialog(context, "$exception. $infoDialogText",
-              onClose: () async {
-            await cancelEmvTransaction();
-            if (globalRemoteConfig.onlyFullPaymentWithCard!) {
-              await cancelPaymentProcess(
-                paymentBody!.client,
-                paymentBody!.invoiceNumber,
-              );
-              Navigator.popUntil(context, (route) => route.isFirst == true);
-            }
-            Navigator.popUntil(context, (route) => route.isFirst == true);
-          });
+          Navigator.pushReplacementNamed(context, EmvTransactionInfoView.route,
+              arguments: [
+                transactionArgs,
+                if (arguments.length >= 2) arguments[1] else null,
+                if (arguments.length >= 3) arguments[2] else null,
+                if (arguments.length >= 4) arguments[3] else null
+              ]);
+          // showInfoDialog(context, "$exception. $infoDialogText",
+          //     onClose: () async {
+          //   await cancelEmvTransaction();
+          //   if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+          //     await cancelPaymentProcess(
+          //       paymentBody!.client,
+          //       paymentBody!.invoiceNumber,
+          //     );
+          //     Navigator.popUntil(context, (route) => route.isFirst == true);
+          //   }
+          //   Navigator.popUntil(context, (route) => route.isFirst == true);
+          // });
         } else {
           Navigator.pop(context);
           throw StateError(
