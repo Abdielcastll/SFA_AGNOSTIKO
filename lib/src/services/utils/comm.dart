@@ -50,13 +50,28 @@ Future<PharosSaleResponse> processSalePharos(
   final authorizationStr = "Basic " + encoded;
 
   var header = {"Authorization": authorizationStr};
-  final response = await http
-      .post(Uri.parse(EnvUrl), headers: header, body: jsonEncode(pharosMsg))
-      .timeout(const Duration(seconds: 60));
-  final pharosResponseJson = jsonDecode(response.body.toString());
-  final saleResponse = PharosSaleResponse.fromJson(pharosResponseJson);
-  print("Pharos Sale response : ${response.body.toString()}");
-  return saleResponse;
+  try {
+    final response = await http
+        .post(Uri.parse(EnvUrl), headers: header, body: jsonEncode(pharosMsg))
+        .timeout(const Duration(seconds: 60));
+    final pharosResponseJson = jsonDecode(response.body.toString());
+    final saleResponse = PharosSaleResponse.fromJson(pharosResponseJson);
+    print("Pharos Sale response : ${response.body.toString()}");
+    return saleResponse;
+  } catch (e) {
+    return PharosSaleResponse(
+      successful: false,
+      displayMessage: '',
+      resultCode: '01',
+      authCode: '',
+      referenceNumber: '',
+      script1: '',
+      script2: '',
+      script3: '',
+      arpc: '',
+      issuerAuthRespCode: '',
+    );
+  }
 }
 
 Future<PharosVoidResponse> processVoidPharos(

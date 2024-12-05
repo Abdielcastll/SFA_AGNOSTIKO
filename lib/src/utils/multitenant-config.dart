@@ -138,30 +138,37 @@ class _MultitenantConfig {
   }
 
   Future<bool> checkExistence(String email) async {
-    baseApp = await Firebase.initializeApp(
-      options: const FirebaseOptions(
-        apiKey: "AIzaSyCoOXpe8Y3eI7yo85ExuFKHJ9q8OvuDG_g",
-        authDomain: "multitenant-example-1.firebaseapp.com",
-        projectId: "multitenant-example-1",
-        storageBucket: "multitenant-example-1.appspot.com",
-        messagingSenderId: "473200255429",
-        appId: "1:473200255429:web:08f7d3d72d91394d68abac",
-      ),
-    );
-    var auth1 = FirebaseAuth.instanceFor(app: baseApp!);
-    auth1.signInWithEmailAndPassword(
-      email: "multitenant_key@apps2go.tech",
-      password: "&9Jk#4Lz!wQ8",
-    );
-    var tenantInfo = await FirebaseFirestore.instanceFor(app: baseApp!)
-        .collection('clientes')
-        .where('usuarios', arrayContains: email)
-        .get();
+    try {
+      baseApp = await Firebase.initializeApp(
+        options: const FirebaseOptions(
+          apiKey: "AIzaSyCoOXpe8Y3eI7yo85ExuFKHJ9q8OvuDG_g",
+          authDomain: "multitenant-example-1.firebaseapp.com",
+          projectId: "multitenant-example-1",
+          storageBucket: "multitenant-example-1.appspot.com",
+          messagingSenderId: "473200255429",
+          appId: "1:473200255429:web:08f7d3d72d91394d68abac",
+        ),
+      );
+      var auth1 = FirebaseAuth.instanceFor(app: baseApp!);
+      auth1.signInWithEmailAndPassword(
+        email: "multitenant_key@apps2go.tech",
+        password: "&9Jk#4Lz!wQ8",
+      );
+      var tenantInfo = await FirebaseFirestore.instanceFor(app: baseApp!)
+          .collection('clientes')
+          .where('usuarios', arrayContains: email)
+          .get()
+          .timeout(const Duration(seconds: 30));
 
-    if (tenantInfo.docs.isEmpty) {
+      if (tenantInfo.docs.isEmpty) {
+        return false;
+      } else {
+        return true;
+      }
+    } catch (e) {
+      print('error del check existence');
+      print(e);
       return false;
-    } else {
-      return true;
     }
   }
 

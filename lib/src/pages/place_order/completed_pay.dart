@@ -144,6 +144,23 @@ class _CompletedPayBody extends State<CompletedPayBody> {
     Navigator.popUntil(context, (route) => route.isFirst);
   }
 
+  Future<bool> showModalTicketPrinted() async {
+    return await showConfirmDialog(
+      context,
+      title: '¿Estas seguro?',
+      message: '¿Desea imprimir el ticket otra ves?',
+      textAccept: 'Si',
+      textCancel: 'No',
+      onAccept: () {
+        invoicePrintLayout(widget.addPaymentBody, widget.currentCoin);
+        Navigator.pop(context);
+      },
+      onCancel: () {
+        Navigator.pop(context);
+      },
+    );
+  }
+
   showModalNoTicketPrinted() {
     showConfirmDialog(
       context,
@@ -477,11 +494,15 @@ class _CompletedPayBody extends State<CompletedPayBody> {
                 ),
                 ElevatedButton(
                   onPressed: () async {
-                    await invoicePrintLayout(
-                        widget.addPaymentBody, currentCoin);
-                    setState(() {
-                      ticketPrinted = true;
-                    });
+                    if (ticketPrinted) {
+                      showModalTicketPrinted();
+                    } else {
+                      await invoicePrintLayout(
+                          widget.addPaymentBody, currentCoin);
+                      setState(() {
+                        ticketPrinted = true;
+                      });
+                    }
                   },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
