@@ -59,7 +59,9 @@ class _LogoFromFirebaseState extends State<LogoFromFirebase> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator(); // Show a loading indicator while fetching the URL
         } else if (snapshot.hasError) {
-          return const Text('Error loading logo'); // Handle errors gracefully
+          return Image.asset(
+            "assets/images/Logo_FS _V_White.png",
+          ); // error loading
         } else if (snapshot.hasData && snapshot.data != null) {
           return FutureBuilder<File?>(
             future: fetchLogoWithCache(snapshot.data!),
@@ -67,19 +69,25 @@ class _LogoFromFirebaseState extends State<LogoFromFirebase> {
               if (cacheSnapshot.connectionState == ConnectionState.waiting) {
                 return const CircularProgressIndicator(); // Show loading while fetching from cache
               } else if (cacheSnapshot.hasError) {
-                return const Text('Error loading cached logo');
+                return Image.asset(
+                  "assets/images/Logo_FS _V_White.png",
+                ); // error loading cache
               } else if (cacheSnapshot.hasData && cacheSnapshot.data != null) {
                 return Image.file(
                   cacheSnapshot.data!,
                   fit: BoxFit.contain, // Adjust the fit as needed
                 );
               } else {
-                return const Text('No cached logo available');
+                return Image.asset(
+                  "assets/images/Logo_FS _V_White.png",
+                ); // Handle no cache data
               }
             },
           );
         } else {
-          return const Text('No logo available'); // Handle null data
+          return Image.asset(
+            "assets/images/Logo_FS _V_White.png",
+          ); // Handle null data
         }
       },
     );

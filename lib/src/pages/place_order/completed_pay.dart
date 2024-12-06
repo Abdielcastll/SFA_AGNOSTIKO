@@ -10,6 +10,7 @@ import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
+import 'package:pwa_sales2go_flutter/src/pages/emv_transaction_info/emv_transaction_info.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/invoicePrintLayout.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/widgets/qr_widget.dart';
@@ -144,6 +145,8 @@ class _CompletedPayBody extends State<CompletedPayBody> {
     Navigator.popUntil(context, (route) => route.isFirst);
   }
 
+  final Handler handler = Handler();
+
   Future<bool> showModalTicketPrinted() async {
     return await showConfirmDialog(
       context,
@@ -231,6 +234,12 @@ class _CompletedPayBody extends State<CompletedPayBody> {
     final currentCoin =
         Provider.of<CurrencyProvider>(context).currentCurrency ?? 'MXN';
     final userUID = Provider.of<UserModel?>(context);
+
+    void handlerPress() async {
+      handler.run(() async {
+        await invoicePrintLayout(widget.addPaymentBody, currentCoin);
+      });
+    }
 
     priceFormat(productPrice) {
       double correctAmount = double.parse(productPrice.toStringAsFixed(4));
@@ -497,8 +506,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
                     if (ticketPrinted) {
                       showModalTicketPrinted();
                     } else {
-                      await invoicePrintLayout(
-                          widget.addPaymentBody, currentCoin);
+                      handlerPress();
                       setState(() {
                         ticketPrinted = true;
                       });
