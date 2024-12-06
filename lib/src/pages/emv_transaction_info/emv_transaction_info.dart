@@ -54,7 +54,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   String razonsocial = '';
   EmvTransactionResult? transactionResult;
   String urlLogoTicket = '';
-
+  bool dialogOn = false;
   getEmvTags() async {
     final emvModule = EmvModule.instance;
     print('EMV TAGS');
@@ -68,6 +68,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   }
 
   Future<bool> showModalNoTicketPrinted() async {
+    setState(() {
+      dialogOn = true;
+    });
     return await showConfirmDialog(
       context,
       title: '¿Estas seguro de regresar?',
@@ -85,6 +88,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   }
 
   Future<bool> showModalTicketPrinted() async {
+    setState(() {
+      dialogOn = true;
+    });
     return await showConfirmDialog(
       context,
       title: '¿Estas seguro?',
@@ -174,7 +180,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   bool timerExpired = false;
   void startTimerFullPaymentWithCard() {
     printTicket();
-    Future.delayed(Duration(minutes: 2), () {
+    Future.delayed(Duration(seconds: 20), () {
       if (transactionResult == EmvTransactionResult.Approved) {
         setState(() {
           timerExpired = true;
@@ -733,7 +739,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        Future.delayed(const Duration(seconds: 4), () {
+        Future.delayed(const Duration(minutes: 2), () {
           Navigator.popUntil(context, (route) => route.isFirst);
         });
         return AlertDialog(
@@ -753,6 +759,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   }
 
   onAccept() {
+    if (dialogOn) {
+      Navigator.pop(context);
+    }
     if (globalRemoteConfig.conversionKiosko == true || timerExpired) {
       printTicket();
     }

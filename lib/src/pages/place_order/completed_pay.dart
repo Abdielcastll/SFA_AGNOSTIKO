@@ -134,8 +134,12 @@ class _CompletedPayBody extends State<CompletedPayBody> {
       0.0, (previousValue, element) => previousValue + element.amount);
   bool isKiosko = false; //globalRemoteConfig.conversionKiosko!;
   bool ticketPrinted = false;
+  bool dialogOn = false;
 
   onGoBack() {
+    if (dialogOn) {
+      Navigator.pop(context);
+    }
     if (!isKiosko) {
       final orderActive = Provider.of<OrderProvider>(context, listen: false);
       orderActive.setOrder(false);
@@ -148,6 +152,9 @@ class _CompletedPayBody extends State<CompletedPayBody> {
   final Handler handler = Handler();
 
   Future<bool> showModalTicketPrinted() async {
+    setState(() {
+      dialogOn = true;
+    });
     return await showConfirmDialog(
       context,
       title: '¿Estas seguro?',
@@ -165,6 +172,9 @@ class _CompletedPayBody extends State<CompletedPayBody> {
   }
 
   showModalNoTicketPrinted() {
+    setState(() {
+      dialogOn = true;
+    });
     showConfirmDialog(
       context,
       title: '¿Estas seguro de regresar?',
