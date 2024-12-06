@@ -1362,7 +1362,7 @@ class _TextFieldForNewClientState extends State<TextFieldForNewClient> {
           RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
       if (!emailRegex.hasMatch(value)) {
         setState(() {
-          _errorText = "Favor de ingresar un correo vaildo.";
+          _errorText = "Correo invalido";
         });
         return;
       }
@@ -1372,7 +1372,7 @@ class _TextFieldForNewClientState extends State<TextFieldForNewClient> {
       final phoneRegex = RegExp(r"^\d{10}$");
       if (!phoneRegex.hasMatch(value)) {
         setState(() {
-          _errorText = "El telefono debe tener 10 digitos";
+          _errorText = "Telefono invalido";
         });
         return;
       }

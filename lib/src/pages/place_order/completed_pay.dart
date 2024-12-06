@@ -168,14 +168,13 @@ class _CompletedPayBody extends State<CompletedPayBody> {
     showConfirmDialog(
       context,
       title: '¿Estas seguro de regresar?',
-      message: '¿Desea imprimir el ticket otra ves?',
       textAccept: 'Si',
       textCancel: 'No',
       onAccept: () {
-        Navigator.pop(context);
+        onGoBack();
       },
       onCancel: () {
-        onGoBack();
+        Navigator.pop(context);
       },
     );
   }
@@ -194,7 +193,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
 
   void startTimerFullPaymentWithCard() {
     invoicePrintLayout(widget.addPaymentBody, widget.currentCoin);
-    Future.delayed(Duration(minutes: 1), () {
+    Future.delayed(Duration(minutes: 2), () {
       onGoBack();
     });
   }
@@ -207,7 +206,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
         final themeProvider =
             Provider.of<ThemeProvider>(context, listen: false);
 
-        Future.delayed(Duration(seconds: 3), () {
+        Future.delayed(Duration(seconds: 4), () {
           onGoBack();
         });
         return AlertDialog(

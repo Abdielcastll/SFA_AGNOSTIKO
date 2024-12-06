@@ -174,7 +174,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   bool timerExpired = false;
   void startTimerFullPaymentWithCard() {
     printTicket();
-    Future.delayed(Duration(seconds: 30), () {
+    Future.delayed(Duration(minutes: 2), () {
       if (transactionResult == EmvTransactionResult.Approved) {
         setState(() {
           timerExpired = true;
@@ -694,10 +694,6 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                 child: OutlinedButton(
                   onPressed: () {
                     onAccept();
-                    if (!ticketPrinted && !transactionArgs!.isFallback) {
-                      showModalNoTicketPrinted();
-                      return;
-                    }
                   },
                   style: TextButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -737,7 +733,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        Future.delayed(const Duration(seconds: 3), () {
+        Future.delayed(const Duration(seconds: 4), () {
           Navigator.popUntil(context, (route) => route.isFirst);
         });
         return AlertDialog(

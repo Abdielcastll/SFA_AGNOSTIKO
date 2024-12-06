@@ -7,7 +7,7 @@ import '../src/services/utils/keypad.dart';
 Future<T?> showConfirmDialog<T>(
   BuildContext context, {
   required String title,
-  required String message,
+  String? message,
   required void Function() onAccept,
   required void Function() onCancel,
   String textAccept = 'Aceptar',
@@ -45,7 +45,7 @@ Future<T?> showConfirmDialog<T>(
                 height: 10,
               ),
               Text(
-                message,
+                message ?? '',
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 13),
               ),
