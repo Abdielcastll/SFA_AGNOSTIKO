@@ -8,6 +8,7 @@ import 'package:pwa_sales2go_flutter/dialogs/go_to_pinpad_dialog.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/card_input/card_input.dart';
 import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
+import 'package:pwa_sales2go_flutter/src/services/utils/pinpad_conection.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
@@ -75,8 +76,28 @@ Future acceptAmount(
         );
       }
 
-      await emvPreTransaction();
-      Navigator.pop(context); // y cerramos el popup antes de seguir
+      if (deviceType == DeviceType.PINPAD) {
+        final pinpadManager = PinpadManager();
+        bool isConnected = await pinpadManager.ensureConnected(context);
+        if (!isConnected) {
+          Navigator.pop(context);
+          Navigator.pop(context);
+          return;
+        } else {
+          try {
+            await emvPreTransaction();
+            await cancelEmvTransaction();
+            Navigator.pop(context);
+          } catch (e) {
+            Navigator.pop(context);
+            Navigator.pop(context);
+          }
+        }
+      } else {
+        await emvPreTransaction();
+        await cancelEmvTransaction();
+        Navigator.pop(context);
+      } // y cerramos el popup antes de seguir
     }
 
     Navigator.pushNamed(

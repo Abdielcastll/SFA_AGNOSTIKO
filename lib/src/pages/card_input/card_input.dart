@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
 import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
+import 'package:pwa_sales2go_flutter/src/services/utils/pinpad_conection.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 /* import '../../config/app_config.dart'; */
@@ -63,6 +64,8 @@ class _CardInputViewState extends State<CardInputView> {
     closeCardReader();
     super.dispose();
   }
+
+  final pinpadManager = PinpadManager();
 
   @override
   Widget build(BuildContext context) {
@@ -168,13 +171,31 @@ class _CardInputViewState extends State<CardInputView> {
     }
   }
 
+  Future<void> checkPinpadConnection() async {
+    DeviceType deviceType = await getDeviceType();
+    if (deviceType == DeviceType.PINPAD) {
+      bool isConnected = await pinpadManager.isConnected();
+      if (!isConnected) {
+        if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+          await cancelPaymentProcess(
+              paymentBody!.client, paymentBody!.invoiceNumber);
+        }
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Error de conexion con el pinpad, vuelve a intentar"),
+        ));
+        Navigator.popUntil(context, (route) => route.isFirst == true);
+      }
+    }
+  }
+
   void _startCardDetection(List<CardType> cardTypes) async {
+    await checkPinpadConnection();
     // Si no hay tarjetas para leer es que llegamos a un punto de error
     if (cardTypes.isEmpty) {
       Navigator.popUntil(context, (route) => route.isFirst == true);
     }
 
-    final cardReaderStream = openCardReader(cardTypes: cardTypes, timeout: 30);
+    final cardReaderStream = openCardReader(cardTypes: cardTypes, timeout: 60);
 
     setState(() {
       _expectedCardTypes = cardTypes;
@@ -183,7 +204,6 @@ class _CardInputViewState extends State<CardInputView> {
     try {
       await for (final event in cardReaderStream) {
         if (!mounted) return;
-
         if (event.cardType == CardType.Magnetic) {
           final iv = "0000000000000000".toHexBytes();
           final encryptedTracksData = await getDUKPTEncryptedTracksData(
@@ -247,7 +267,6 @@ class _CardInputViewState extends State<CardInputView> {
       transactionSequenceCounter: sequenceCounter,
       amount: amount,
     );
-
     _pinProcessFlag = false;
     final transactionStream = startEmvTransaction(params);
     transactionArgs?.emvStream = transactionStream;
@@ -376,7 +395,7 @@ class _CardInputViewState extends State<CardInputView> {
       print("PIN Error: $e");
     }
     print('acabo pinpad entry en cancelacion timeout o error');
-
+    await checkPinpadConnection();
     // si llegamos aquí, hubo cancelación, timeout o error
     await cancelEmvTransaction();
     if (globalRemoteConfig.onlyFullPaymentWithCard!) {
@@ -549,6 +568,7 @@ class _CardInputViewState extends State<CardInputView> {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Tiempo de ingreso de pin agotado"),
       ));
+      await checkPinpadConnection();
       Navigator.popUntil(context, (route) => route.isFirst == true);
     } else if (event.transactionInfo.result == EmvTransactionResult.Denied) {
       if (globalRemoteConfig.onlyFullPaymentWithCard!) {

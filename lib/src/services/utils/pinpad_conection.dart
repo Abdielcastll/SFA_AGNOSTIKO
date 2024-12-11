@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:agnostiko/agnostiko.dart';
 import 'package:flutter/material.dart';
 
@@ -12,100 +11,83 @@ class PinpadManager {
   }
 
   bool _isConnected = false;
-  Timer? _connectionCheckTimer;
 
-  /// Starts a periodic check for the pinpad connection.
-  void startConnectionMonitoring({
-    required BuildContext context,
-    required Future<void> Function() onConnectionLost,
-    Duration interval = const Duration(seconds: 2),
-  }) {
-    stopConnectionMonitoring(); // Ensure no duplicate timers
-    print("Starting connection monitoring...");
+  /// Checks and ensures the connection with the pinpad.
+  /// Retries the connection until successful.
+  Future<bool> ensureConnected(BuildContext context) async {
+    const int maxRetries = 5;
+    int retryCount = 0;
 
-    _connectionCheckTimer = Timer.periodic(interval, (_) async {
-      print("Performing periodic pinpad connection check...");
-      String? serialNumber = await getSerialNumber();
-      print("serial: $serialNumber");
-      if (serialNumber == null) {
-        if (_isConnected) {
-          print("Connection lost during monitoring! Serial number is null.");
-          _isConnected = false;
-          await onConnectionLost();
-        } else {
-          print("Pinpad still disconnected during monitoring.");
-        }
-      } else {
-        if (!_isConnected) {
-          print("Pinpad reconnected during monitoring. Serial: $serialNumber");
-        }
+    while (retryCount < maxRetries) {
+      String? serialNumber;
+
+      try {
+        // Safely attempt to get the serial number
+        serialNumber = await getSerialNumber();
+      } catch (e) {
+        print("Error during getSerialNumber: $e");
+        serialNumber = null; // Handle exception by setting result to null
+      }
+
+      if (serialNumber != null) {
         _isConnected = true;
-      }
-    });
-  }
-
-  /// Stops the periodic connection monitoring.
-  void stopConnectionMonitoring() {
-    if (_connectionCheckTimer != null) {
-      print("Stopping connection monitoring...");
-      _connectionCheckTimer!.cancel();
-      _connectionCheckTimer = null;
-    }
-  }
-
-  /// Reconnects to the pinpad if disconnected.
-  Future<void> reconnect() async {
-    print("Attempting to reconnect to the pinpad...");
-    if (!_isConnected) {
-      await connectPinpad();
-      String? serialNumber = await getSerialNumber();
-      _isConnected = serialNumber != null;
-
-      if (_isConnected) {
-        print("Reconnection successful. Serial: $serialNumber");
+        print("Pinpad is connected. Serial: $serialNumber");
+        return true;
       } else {
-        print("Reconnection failed. Serial number is still null.");
+        print(
+            "Pinpad not connected. Attempting to reconnect... (${retryCount + 1}/$maxRetries)");
+
+        try {
+          await connectPinpad();
+          await closeCardReader();
+          await cancelEmvTransaction();
+        } catch (e) {
+          print("Error during connectPinpad: $e");
+        }
       }
-    } else {
-      print("Reconnection skipped. Pinpad is already connected.");
+
+      // Optional: Show a loading dialog while retrying
+      // ignore: use_build_context_synchronously
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => const AlertDialog(
+          content: Row(
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(width: 16),
+              Text("Connecting to pinpad..."),
+            ],
+          ),
+        ),
+      );
+
+      await Future.delayed(const Duration(seconds: 1)); // Delay between retries
+      Navigator.pop(context); // Close the dialog
+
+      retryCount++;
     }
+
+    print("Failed to connect to the pinpad after $maxRetries retries.");
+    return false;
   }
 
-  /// Performs a single action while ensuring connection.
-  Future<void> performWithConnection({
-    required BuildContext context,
-    required Future<void> Function() action,
-    required Future<void> Function() onConnectionLost,
-  }) async {
-    print("Checking pinpad connection...");
-    String? serialNumber = await getSerialNumber();
-
-    if (serialNumber == null) {
-      if (_isConnected) {
-        print("Connection lost! Serial number is null.");
-      } else {
-        print("Pinpad still disconnected.");
-      }
-
-      _isConnected = false;
-      await onConnectionLost();
-      return;
-    }
-
-    if (!_isConnected) {
-      print("Pinpad connected successfully. Serial: $serialNumber");
-    } else {
-      print("Pinpad is already connected. Serial: $serialNumber");
-    }
-
-    _isConnected = true;
-
+  Future<bool> isConnected() async {
     try {
-      print("Executing action while connected...");
-      await action();
-      print("Action completed successfully.");
+      final serialNumber = await getSerialNumber();
+      if (serialNumber != null) {
+        _isConnected = true;
+        print("Pinpad is connected. Serial: $serialNumber");
+        return true;
+      } else {
+        _isConnected = false;
+        print("Pinpad is not connected.");
+        return false;
+      }
     } catch (e) {
-      print("Error during action execution: $e");
+      _isConnected = false;
+      print("Error during getSerialNumber: $e");
+      return false;
     }
   }
 }
