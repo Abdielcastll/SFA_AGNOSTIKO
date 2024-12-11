@@ -54,7 +54,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   String razonsocial = '';
   EmvTransactionResult? transactionResult;
   String urlLogoTicket = '';
-
+  bool dialogOn = false;
   getEmvTags() async {
     final emvModule = EmvModule.instance;
     print('EMV TAGS');
@@ -68,6 +68,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   }
 
   Future<bool> showModalNoTicketPrinted() async {
+    setState(() {
+      dialogOn = true;
+    });
     return await showConfirmDialog(
       context,
       title: '¿Estas seguro de regresar?',
@@ -85,6 +88,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   }
 
   Future<bool> showModalTicketPrinted() async {
+    setState(() {
+      dialogOn = true;
+    });
     return await showConfirmDialog(
       context,
       title: '¿Estas seguro?',
@@ -174,7 +180,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   bool timerExpired = false;
   void startTimerFullPaymentWithCard() {
     printTicket();
-    Future.delayed(Duration(seconds: 30), () {
+    Future.delayed(Duration(seconds: 20), () {
       if (transactionResult == EmvTransactionResult.Approved) {
         setState(() {
           timerExpired = true;
@@ -591,7 +597,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
               enableFeedback: true,
               title: const Text('Referencia'),
               subtitle: Text(
-                transactionArgs!.referenceNumber.toString(),
+                transactionArgs!.referenceNumber ?? 'N/A'.toString(),
               ),
               onTap: () {},
             ),
@@ -599,7 +605,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
               enableFeedback: true,
               title: const Text('Autorizacion'),
               subtitle: Text(
-                transactionArgs!.authCode.toString(),
+                transactionArgs!.authCode ?? 'N/A'.toString(),
               ),
               onTap: () {},
             ),
@@ -646,14 +652,16 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
             ListTile(
               enableFeedback: true,
               title: const Text('Response code: '),
-              subtitle: Text(transactionArgs!.responseCode!),
+              subtitle: Text(transactionArgs!.responseCode ?? '09'),
               onTap: () {},
             ),
             if (!transactionArgs!.isFallback)
               if (globalRemoteConfig.conversionKiosko == false)
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                      vertical: 4.0, horizontal: 16.0),
+                    vertical: 4.0,
+                    horizontal: 16.0,
+                  ),
                   child: OutlinedButton(
                     onPressed: () async {
                       if (ticketPrinted) {
@@ -694,21 +702,17 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                 child: OutlinedButton(
                   onPressed: () {
                     onAccept();
-                    if (!ticketPrinted && !transactionArgs!.isFallback) {
-                      showModalNoTicketPrinted();
-                      return;
-                    }
                   },
                   style: TextButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      side: const BorderSide(
-                        color: Colors.black12,
-                      ),
-                      foregroundColor:
-                          themeProvider.myTheme.colorScheme.primary,
-                      backgroundColor: Colors.blue.shade800),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    side: const BorderSide(
+                      color: Colors.black12,
+                    ),
+                    foregroundColor: themeProvider.myTheme.colorScheme.primary,
+                    backgroundColor: Colors.blue.shade800,
+                  ),
                   child: Text(
                     'aceptar'.toUpperCase(),
                     style: const TextStyle(
@@ -737,7 +741,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        Future.delayed(const Duration(seconds: 3), () {
+        Future.delayed(const Duration(minutes: 2), () {
           Navigator.popUntil(context, (route) => route.isFirst);
         });
         return AlertDialog(
@@ -757,6 +761,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   }
 
   onAccept() {
+    if (dialogOn) {
+      Navigator.pop(context);
+    }
     if (globalRemoteConfig.conversionKiosko == true || timerExpired) {
       printTicket();
     }

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -854,16 +855,16 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       color: themeProvider.myTheme.colorScheme.primary,
                     ),
                     keyboardType: TextInputType.text,
-                    maxLines: 1,
+                    maxLines: 3,
                     maxLength: 200,
+                    maxLengthEnforcement: MaxLengthEnforcement.enforced,
                     textCapitalization: TextCapitalization.characters,
                     decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.fromLTRB(14, 0, 0, 0),
+                      contentPadding: const EdgeInsets.fromLTRB(14, 6, 6, 6),
                       hintText: 'Comentario sobre la entrega',
                       hintStyle: TextStyle(
                         fontSize: 14,
-                        color: themeProvider.myTheme.colorScheme.primary
-                            .withOpacity(0.4),
+                        color: themeProvider.myTheme.colorScheme.primary,
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
@@ -872,10 +873,20 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                               .withOpacity(0.5),
                         ),
                       ),
+                      counterText: '', // Hide default counter
+                      errorText: commentary.length >= 200
+                          ? 'Largo maximo del comentario'
+                          : null,
                     ),
                     onChanged: (value) {
                       setState(() {
-                        commentary = value;
+                        // Allow deleting characters
+                        if (value.length <= 200) {
+                          commentary = value;
+                        } else {
+                          // Prevent typing beyond max length
+                          commentary = commentary; // Keep the previous value
+                        }
                       });
                     },
                   ),

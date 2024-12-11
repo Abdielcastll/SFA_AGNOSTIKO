@@ -10,6 +10,7 @@ import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
+import 'package:pwa_sales2go_flutter/src/pages/emv_transaction_info/emv_transaction_info.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/invoicePrintLayout.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/widgets/qr_widget.dart';
@@ -133,8 +134,12 @@ class _CompletedPayBody extends State<CompletedPayBody> {
       0.0, (previousValue, element) => previousValue + element.amount);
   bool isKiosko = false; //globalRemoteConfig.conversionKiosko!;
   bool ticketPrinted = false;
+  bool dialogOn = false;
 
   onGoBack() {
+    if (dialogOn) {
+      Navigator.pop(context);
+    }
     if (!isKiosko) {
       final orderActive = Provider.of<OrderProvider>(context, listen: false);
       orderActive.setOrder(false);
@@ -144,7 +149,12 @@ class _CompletedPayBody extends State<CompletedPayBody> {
     Navigator.popUntil(context, (route) => route.isFirst);
   }
 
+  final Handler handler = Handler();
+
   Future<bool> showModalTicketPrinted() async {
+    setState(() {
+      dialogOn = true;
+    });
     return await showConfirmDialog(
       context,
       title: '¿Estas seguro?',
@@ -162,17 +172,19 @@ class _CompletedPayBody extends State<CompletedPayBody> {
   }
 
   showModalNoTicketPrinted() {
+    setState(() {
+      dialogOn = true;
+    });
     showConfirmDialog(
       context,
       title: '¿Estas seguro de regresar?',
-      message: '¿Desea imprimir el ticket otra ves?',
       textAccept: 'Si',
       textCancel: 'No',
       onAccept: () {
-        Navigator.pop(context);
+        onGoBack();
       },
       onCancel: () {
-        onGoBack();
+        Navigator.pop(context);
       },
     );
   }
@@ -191,7 +203,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
 
   void startTimerFullPaymentWithCard() {
     invoicePrintLayout(widget.addPaymentBody, widget.currentCoin);
-    Future.delayed(Duration(minutes: 1), () {
+    Future.delayed(Duration(minutes: 2), () {
       onGoBack();
     });
   }
@@ -204,7 +216,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
         final themeProvider =
             Provider.of<ThemeProvider>(context, listen: false);
 
-        Future.delayed(Duration(seconds: 3), () {
+        Future.delayed(Duration(seconds: 4), () {
           onGoBack();
         });
         return AlertDialog(
@@ -231,6 +243,12 @@ class _CompletedPayBody extends State<CompletedPayBody> {
     final currentCoin =
         Provider.of<CurrencyProvider>(context).currentCurrency ?? 'MXN';
     final userUID = Provider.of<UserModel?>(context);
+
+    void handlerPress() async {
+      handler.run(() async {
+        await invoicePrintLayout(widget.addPaymentBody, currentCoin);
+      });
+    }
 
     priceFormat(productPrice) {
       double correctAmount = double.parse(productPrice.toStringAsFixed(4));
@@ -497,8 +515,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
                     if (ticketPrinted) {
                       showModalTicketPrinted();
                     } else {
-                      await invoicePrintLayout(
-                          widget.addPaymentBody, currentCoin);
+                      handlerPress();
                       setState(() {
                         ticketPrinted = true;
                       });

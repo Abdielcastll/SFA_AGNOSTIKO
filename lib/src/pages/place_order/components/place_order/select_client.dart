@@ -21,14 +21,8 @@ class SelectClient extends StatefulWidget {
 
 class _SelectClientState extends State<SelectClient> {
   final clientController = TextEditingController();
-  List<Clients> starterClient = [genericClients];
+  List<Clients> starterClient = [];
   List<Clients>? mutatedList = [];
-
-  @override
-  initState() {
-    mutatedList = widget.clientsList;
-    super.initState();
-  }
 
   // Esta funcion se llama cada vez que el text field cambia
   void _searchClient(String query) {
@@ -36,11 +30,11 @@ class _SelectClientState extends State<SelectClient> {
     // si la barra de busqueda esta vacia o solo contiene espacios vacios,
     // se hara display de todos los items
     if (query.isEmpty) {
-      suggestions = widget.clientsList;
+      //suggestions = widget.clientsList;
     } else {
       suggestions = widget.clientsList
-          ?.where((clients) =>
-              clients.name.toLowerCase().contains(query.toLowerCase()))
+          ?.where(
+              (clients) => clients.name.toLowerCase() == query.toLowerCase())
           .toList();
     }
     // Refrescar la UI
