@@ -2514,7 +2514,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                   filteredProducts.isEmpty
                       ? SizedBox(
                           width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height * 0.70,
+                          height: MediaQuery.of(context).size.height - 90,
                           child: ListView.builder(
                             controller: _controller,
                             physics: const BouncingScrollPhysics(),
@@ -2973,7 +2973,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                         )
                       : SizedBox(
                           width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height * 0.74,
+                          height: MediaQuery.of(context).size.height - 90,
                           child: ListView.builder(
                             controller: _controller,
                             physics: const BouncingScrollPhysics(),

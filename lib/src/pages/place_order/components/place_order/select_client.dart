@@ -33,8 +33,8 @@ class _SelectClientState extends State<SelectClient> {
       //suggestions = widget.clientsList;
     } else {
       suggestions = widget.clientsList
-          ?.where(
-              (clients) => clients.name.toLowerCase() == query.toLowerCase())
+          ?.where((clients) =>
+              clients.name.toLowerCase().contains(query.toLowerCase()))
           .toList();
     }
     // Refrescar la UI
