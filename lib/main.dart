@@ -195,13 +195,19 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
 
   void _startInactivityTimer() {
     print("start timer");
+    // Cancel any existing timer
     _inactivityTimer?.cancel();
+
+    // Ensure only one timer exists
     _inactivityTimer = Timer(const Duration(minutes: 3), () {
       print('timer complete');
       print('show video');
       if (globalRemoteConfig.promoVideoDisponible!) {
         navigatorKey.currentState?.pushNamed('promo');
       }
+
+      // Reset the timer reference to null after completion
+      _inactivityTimer = null;
     });
   }
 
@@ -209,6 +215,8 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
     print('cancel timer');
     if (_inactivityTimer?.isActive ?? false) {
       _inactivityTimer!.cancel();
+      // Ensure no residual timer reference
+      _inactivityTimer = null;
     }
   }
 
@@ -262,7 +270,11 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
           'profile': (BuildContext context) => const ProfilePage(),
           DiaryTabs.route: (BuildContext context) => const DiaryTabs(),
           'order': (BuildContext context) => const OrderPage(),
-          'promo': (BuildContext context) => const PromoVideoPlayer(),
+          'promo': (BuildContext context) => PromoVideoPlayer(
+                onDisposeCallback: () {
+                  _resetInactivityTimer();
+                },
+              ),
         },
       ),
     );

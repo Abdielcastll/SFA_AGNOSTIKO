@@ -189,6 +189,7 @@ class _CardInputViewState extends State<CardInputView> {
   }
 
   void _startCardDetection(List<CardType> cardTypes) async {
+    print('Start Detection');
     await checkPinpadConnection();
     // Si no hay tarjetas para leer es que llegamos a un punto de error
     if (cardTypes.isEmpty) {
@@ -196,13 +197,18 @@ class _CardInputViewState extends State<CardInputView> {
     }
 
     final cardReaderStream = openCardReader(cardTypes: cardTypes, timeout: 60);
+    print('Open readers stream');
 
     setState(() {
       _expectedCardTypes = cardTypes;
     });
 
     try {
+      print('try card reader');
+
       await for (final event in cardReaderStream) {
+        print('card reader event: $event');
+
         if (!mounted) return;
         if (event.cardType == CardType.Magnetic) {
           final iv = "0000000000000000".toHexBytes();
@@ -219,6 +225,8 @@ class _CardInputViewState extends State<CardInputView> {
         }
       }
     } on ChipCardException {
+      print('Chip exception');
+
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Tarjeta con chip, usar chip"),
       ));
@@ -228,6 +236,8 @@ class _CardInputViewState extends State<CardInputView> {
           .where((type) => type != CardType.Magnetic)
           .toList());
     } catch (e, stackTrace) {
+      print('catch card Detection: $e');
+
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("Error en la deteccion"),
       ));
