@@ -187,6 +187,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
         });
         onAccept();
       } else {
+        setState(() {
+          timerExpired = true;
+        });
         kioskoDialog();
       }
     });
@@ -741,7 +744,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        Future.delayed(const Duration(minutes: 2), () {
+        Future.delayed(const Duration(seconds: 8), () {
           Navigator.popUntil(context, (route) => route.isFirst);
         });
         return AlertDialog(
