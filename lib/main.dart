@@ -201,9 +201,14 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
     // Ensure only one timer exists
     _inactivityTimer = Timer(const Duration(minutes: 3), () {
       print('timer complete');
-      print('show video');
       if (globalRemoteConfig.promoVideoDisponible!) {
-        navigatorKey.currentState?.pushNamed('promo');
+        if (objectBox.getAllShoppingCartProducts().isEmpty) {
+          _cancelInactivityTimer();
+          print('show video');
+          navigatorKey.currentState?.pushNamed('promo');
+        } else {
+          _resetInactivityTimer();
+        }
       }
 
       // Reset the timer reference to null after completion
@@ -270,11 +275,7 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
           'profile': (BuildContext context) => const ProfilePage(),
           DiaryTabs.route: (BuildContext context) => const DiaryTabs(),
           'order': (BuildContext context) => const OrderPage(),
-          'promo': (BuildContext context) => PromoVideoPlayer(
-                onDisposeCallback: () {
-                  _resetInactivityTimer();
-                },
-              ),
+          'promo': (BuildContext context) => const PromoVideoPlayer(),
         },
       ),
     );

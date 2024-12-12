@@ -9,9 +9,7 @@ import 'package:video_player/video_player.dart';
 import 'package:pwa_sales2go_flutter/src/utils/multitenant-config.dart';
 
 class PromoVideoPlayer extends StatefulWidget {
-  final VoidCallback? onDisposeCallback; // Callback to reset
-
-  const PromoVideoPlayer({Key? key, this.onDisposeCallback}) : super(key: key);
+  const PromoVideoPlayer({Key? key}) : super(key: key);
 
   @override
   _PromoVideoPlayerState createState() => _PromoVideoPlayerState();
@@ -79,12 +77,6 @@ class _PromoVideoPlayerState extends State<PromoVideoPlayer> {
   @override
   void dispose() {
     _videoController?.dispose();
-
-    // Call the callback when the view is disposed
-    if (widget.onDisposeCallback != null) {
-      widget.onDisposeCallback!();
-    }
-
     super.dispose();
   }
 
