@@ -417,7 +417,6 @@ class _ProductsBodyState extends State<ProductsBody> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // TEST
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -512,7 +511,6 @@ class _ProductsBodyState extends State<ProductsBody> {
                               }
                             });
                           }),
-                          // onChanged: ((value) => print(value)),
                         ),
                       ),
                       Container(
@@ -542,1833 +540,6 @@ class _ProductsBodyState extends State<ProductsBody> {
                                 ),
                         ),
                       ),
-                      // Container(
-                      //   margin: widget.showFullList == true
-                      //       ? EdgeInsets.fromLTRB(4, 16, 0, 0)
-                      //       : EdgeInsets.fromLTRB(4, 16, 0, 8),
-                      //   height: 40,
-                      //   width: 68,
-                      //   decoration: BoxDecoration(
-                      //       borderRadius: BorderRadius.circular(100),
-                      //       color: Color(0xFFDFE0FF)),
-                      //   child: IconButton(
-                      //     onPressed: () async {
-                      //       // Filtro avanzado de productos
-                      //       String? selectedCategorie;
-                      //       String? selectedSubCategorie;
-                      //       String? selectedLine;
-                      //       String? selectedQuality;
-                      //       String? selectedSize;
-                      //       String? combinationKeyForSubCategories;
-                      //       String? combinationKeyForLines;
-                      //       Map<String, dynamic> summaryDataCategories = {};
-                      //       List<String> categoriesKeys = [];
-                      //       List<String> categoriesValues = [];
-                      //       Map<String, dynamic> combinationsDataSubCategories =
-                      //           {};
-                      //       Map<String, dynamic> summarysDataSubCategories = {};
-                      //       List<String> subCategoriesValues = [];
-                      //       Map<String, dynamic> combinationsDataLines = {};
-                      //       Map<String, dynamic> summarysDataLines = {};
-                      //       List<String> linesValues = [];
-                      //       List<String> linesKeys = [];
-                      //       Map<String, dynamic> summarysDataQuality = {};
-                      //       Map<String, dynamic> summarysDataSize = {};
-                      //       List<String> sizeList = [];
-                      //       List<String> qualityList = [];
-
-                      //       await subCategoriesCollection
-                      //           .doc('resumen')
-                      //           .get()
-                      //           .then(
-                      //         (value) {
-                      //           summaryDataCategories =
-                      //               value.data().toString().contains('nombres')
-                      //                   ? value.get('nombres')
-                      //                   : {'n/a': 'n/a'};
-                      //           summaryDataCategories.entries.forEach((name) {
-                      //             categoriesKeys.add(name.key);
-                      //             categoriesValues.add(name.value);
-                      //           });
-                      //         },
-                      //       );
-
-                      //       await showDialog(
-                      //         barrierDismissible: false,
-                      //         context: context,
-                      //         builder: (context) => StatefulBuilder(
-                      //           builder: (BuildContext context, setState) {
-                      //             return Center(
-                      //               child: Column(
-                      //                 mainAxisSize: MainAxisSize.min,
-                      //                 children: [
-                      //                   AlertDialog(
-                      //                     actionsOverflowButtonSpacing: 1,
-                      //                     actionsPadding: EdgeInsets.symmetric(
-                      //                       horizontal: 10,
-                      //                       vertical: 10,
-                      //                     ),
-                      //                     scrollable: true,
-                      //                     shape: RoundedRectangleBorder(
-                      //                       borderRadius:
-                      //                           BorderRadius.circular(20),
-                      //                     ),
-                      //                     title: Text('Filtro de productos'),
-                      //                     content: SingleChildScrollView(
-                      //                       child: Column(
-                      //                         mainAxisAlignment:
-                      //                             MainAxisAlignment.center,
-                      //                         crossAxisAlignment:
-                      //                             CrossAxisAlignment.start,
-                      //                         mainAxisSize: MainAxisSize.min,
-                      //                         children: [
-                      //                           // Selecciona de las sub-categorias
-                      //                           // de la DB
-                      //                           Container(
-                      //                             margin: EdgeInsets.fromLTRB(
-                      //                                 0, 10, 0, 10),
-                      //                             child: Text('Categoria'),
-                      //                           ),
-                      //                           DropdownButtonHideUnderline(
-                      //                             child: DropdownButton2(
-                      //                               items: categoriesValues
-                      //                                   .map((categorie) =>
-                      //                                       DropdownMenuItem<
-                      //                                           String>(
-                      //                                         value: categorie,
-                      //                                         child: Text(
-                      //                                           categorie,
-                      //                                           style:
-                      //                                               const TextStyle(
-                      //                                             fontSize: 14,
-                      //                                           ),
-                      //                                         ),
-                      //                                       ))
-                      //                                   .toList(),
-                      //                               value: selectedCategorie,
-                      //                               onChanged: (value) async {
-                      //                                 setState(() {
-                      //                                   selectedCategorie =
-                      //                                       value as String;
-                      //                                 });
-
-                      //                                 setState(() {
-                      //                                   selectedSubCategorie =
-                      //                                       null;
-                      //                                   selectedLine = null;
-                      //                                   selectedQuality = null;
-                      //                                   selectedSize = null;
-                      //                                   combinationsDataSubCategories
-                      //                                       .clear();
-                      //                                   summarysDataSubCategories
-                      //                                       .clear();
-                      //                                   subCategoriesValues
-                      //                                       .clear();
-                      //                                   combinationsDataLines
-                      //                                       .clear();
-                      //                                   summarysDataLines
-                      //                                       .clear();
-                      //                                   linesValues.clear();
-                      //                                   linesKeys.clear();
-                      //                                   summarysDataQuality
-                      //                                       .clear();
-                      //                                   qualityList.clear();
-                      //                                   summarysDataSize
-                      //                                       .clear();
-                      //                                   sizeList.clear();
-                      //                                 });
-
-                      //                                 summaryDataCategories
-                      //                                     .entries
-                      //                                     .forEach((name) {
-                      //                                   if (name.value ==
-                      //                                       selectedCategorie!) {
-                      //                                     setState(() {
-                      //                                       combinationKeyForSubCategories =
-                      //                                           name.key
-                      //                                               .toString();
-                      //                                     });
-                      //                                   }
-                      //                                 });
-                      //                                 print(
-                      //                                     'Categoria seleccionada');
-                      //                                 print(selectedCategorie);
-                      //                                 print('Combinacion');
-                      //                                 print(
-                      //                                     combinationKeyForSubCategories);
-
-                      //                                 await categoriesCollection
-                      //                                     .doc('resumen')
-                      //                                     .get()
-                      //                                     .then((value) {
-                      //                                   setState(
-                      //                                     () {
-                      //                                       summarysDataSubCategories = value
-                      //                                               .data()
-                      //                                               .toString()
-                      //                                               .contains(
-                      //                                                   'nombres')
-                      //                                           ? value.get(
-                      //                                               'nombres')
-                      //                                           : {
-                      //                                               'n/a': 'n/a'
-                      //                                             };
-                      //                                       combinationsDataSubCategories = value
-                      //                                               .data()
-                      //                                               .toString()
-                      //                                               .contains(
-                      //                                                   'Combinaciones')
-                      //                                           ? value.get(
-                      //                                               'Combinaciones')
-                      //                                           : {
-                      //                                               'n/a': [
-                      //                                                 'n/a',
-                      //                                                 'n/a'
-                      //                                               ],
-                      //                                             };
-                      //                                     },
-                      //                                   );
-                      //                                 });
-
-                      //                                 // selectedValues.add(summaryDataCategories)
-                      //                               },
-                      //                               buttonStyleData:
-                      //                                   ButtonStyleData(
-                      //                                 padding:
-                      //                                     const EdgeInsets.only(
-                      //                                         left: 14,
-                      //                                         right: 14),
-                      //                                 height: 40,
-                      //                                 width:
-                      //                                     MediaQuery.of(context)
-                      //                                         .size
-                      //                                         .width,
-                      //                                 decoration: BoxDecoration(
-                      //                                   borderRadius:
-                      //                                       BorderRadius
-                      //                                           .circular(14),
-                      //                                   border: Border.all(
-                      //                                     color: themeProvider
-                      //                                         .myTheme
-                      //                                         .colorScheme
-                      //                                         .primary
-                      //                                         .withOpacity(0.5),
-                      //                                   ),
-                      //                                   color: themeProvider
-                      //                                       .myTheme
-                      //                                       .colorScheme
-                      //                                       .background,
-                      //                                 ),
-                      //                                 // elevation: 0,
-                      //                               ),
-                      //                               menuItemStyleData:
-                      //                                   const MenuItemStyleData(
-                      //                                 height: 40,
-                      //                               ),
-                      //                               dropdownStyleData:
-                      //                                   DropdownStyleData(
-                      //                                 decoration: BoxDecoration(
-                      //                                   borderRadius:
-                      //                                       BorderRadius
-                      //                                           .circular(14),
-                      //                                   border: Border.all(
-                      //                                     color: themeProvider
-                      //                                         .myTheme
-                      //                                         .colorScheme
-                      //                                         .primary
-                      //                                         .withOpacity(0.5),
-                      //                                   ),
-                      //                                   // color: themeProvider.myTheme
-                      //                                   //     .colorScheme.primary
-                      //                                   //     .withOpacity(0.5),
-                      //                                 ),
-                      //                                 elevation: 1,
-                      //                                 offset:
-                      //                                     const Offset(0, 0),
-                      //                                 scrollbarTheme:
-                      //                                     ScrollbarThemeData(
-                      //                                   radius: const Radius
-                      //                                       .circular(40),
-                      //                                   thickness:
-                      //                                       MaterialStateProperty
-                      //                                           .all(6),
-                      //                                   thumbVisibility:
-                      //                                       MaterialStateProperty
-                      //                                           .all(true),
-                      //                                 ),
-                      //                               ),
-                      //                               iconStyleData:
-                      //                                   IconStyleData(
-                      //                                 icon: Icon(
-                      //                                   Icons
-                      //                                       .arrow_forward_ios_outlined,
-                      //                                 ),
-                      //                                 iconSize: 14,
-                      //                                 iconEnabledColor:
-                      //                                     themeProvider
-                      //                                         .myTheme
-                      //                                         .colorScheme
-                      //                                         .primary,
-                      //                                 iconDisabledColor:
-                      //                                     Colors.grey,
-                      //                               ),
-                      //                             ),
-                      //                           ),
-                      //                           // Selecciona de las categorias
-                      //                           // de la DB
-                      //                           Container(
-                      //                             margin: EdgeInsets.fromLTRB(
-                      //                                 0, 10, 0, 10),
-                      //                             child: Text('Tipo'),
-                      //                           ),
-                      //                           DropdownButtonHideUnderline(
-                      //                             child: DropdownButton2(
-                      //                               items: List<String>.from(
-                      //                                       combinationsDataSubCategories[
-                      //                                               combinationKeyForSubCategories] ??
-                      //                                           subCategoriesValues)
-                      //                                   .map((subCategorie) =>
-                      //                                       DropdownMenuItem<
-                      //                                           String>(
-                      //                                         value:
-                      //                                             subCategorie,
-                      //                                         child: Text(
-                      //                                           summarysDataSubCategories[
-                      //                                               subCategorie],
-                      //                                           style:
-                      //                                               const TextStyle(
-                      //                                             fontSize: 14,
-                      //                                           ),
-                      //                                         ),
-                      //                                       ))
-                      //                                   .toList(),
-                      //                               value: selectedSubCategorie,
-                      //                               onChanged: selectedCategorie ==
-                      //                                           null ||
-                      //                                       combinationsDataSubCategories
-                      //                                           .isEmpty
-                      //                                   ? null
-                      //                                   : (value) async {
-                      //                                       setState(() {
-                      //                                         selectedSubCategorie =
-                      //                                             value
-                      //                                                 as String;
-                      //                                         combinationKeyForLines =
-                      //                                             '$combinationKeyForSubCategories+$selectedSubCategorie';
-                      //                                       });
-                      //                                       setState(() {
-                      //                                         selectedLine =
-                      //                                             null;
-                      //                                         selectedQuality =
-                      //                                             null;
-                      //                                         selectedSize =
-                      //                                             null;
-                      //                                         combinationsDataLines
-                      //                                             .clear();
-                      //                                         summarysDataLines
-                      //                                             .clear();
-                      //                                         linesValues
-                      //                                             .clear();
-                      //                                         linesKeys.clear();
-                      //                                         summarysDataQuality
-                      //                                             .clear();
-                      //                                         qualityList
-                      //                                             .clear();
-                      //                                         summarysDataSize
-                      //                                             .clear();
-                      //                                         sizeList.clear();
-                      //                                       });
-                      //                                       await linesCollection
-                      //                                           .doc('resumen')
-                      //                                           .get()
-                      //                                           .then(
-                      //                                         (value) {
-                      //                                           setState(() {
-                      //                                             summarysDataLines = value
-                      //                                                     .data()
-                      //                                                     .toString()
-                      //                                                     .contains(
-                      //                                                         'nombres')
-                      //                                                 ? value.get(
-                      //                                                     'nombres')
-                      //                                                 : {
-                      //                                                     'n/a':
-                      //                                                         'n/a'
-                      //                                                   };
-                      //                                             combinationsDataLines = value
-                      //                                                     .data()
-                      //                                                     .toString()
-                      //                                                     .contains(
-                      //                                                         'combinaciones')
-                      //                                                 ? value.get(
-                      //                                                     'combinaciones')
-                      //                                                 : {
-                      //                                                     'n/a':
-                      //                                                         [
-                      //                                                       'n/a',
-                      //                                                       'n/a'
-                      //                                                     ],
-                      //                                                   };
-                      //                                             summarysDataLines
-                      //                                                 .entries
-                      //                                                 .forEach(
-                      //                                                     (name) {
-                      //                                               linesKeys
-                      //                                                   .add(name
-                      //                                                       .key);
-                      //                                               linesValues
-                      //                                                   .add(name
-                      //                                                       .value);
-                      //                                             });
-                      //                                           });
-                      //                                         },
-                      //                                       );
-                      //                                     },
-                      //                               buttonStyleData:
-                      //                                   ButtonStyleData(
-                      //                                 padding:
-                      //                                     const EdgeInsets.only(
-                      //                                         left: 14,
-                      //                                         right: 14),
-                      //                                 height: 40,
-                      //                                 width:
-                      //                                     MediaQuery.of(context)
-                      //                                         .size
-                      //                                         .width,
-                      //                                 decoration: BoxDecoration(
-                      //                                   borderRadius:
-                      //                                       BorderRadius
-                      //                                           .circular(14),
-                      //                                   border: Border.all(
-                      //                                     color: themeProvider
-                      //                                         .myTheme
-                      //                                         .colorScheme
-                      //                                         .primary
-                      //                                         .withOpacity(0.5),
-                      //                                   ),
-                      //                                   color: themeProvider
-                      //                                       .myTheme
-                      //                                       .colorScheme
-                      //                                       .background,
-                      //                                 ),
-                      //                                 // elevation: 0,
-                      //                               ),
-                      //                               menuItemStyleData:
-                      //                                   const MenuItemStyleData(
-                      //                                 height: 40,
-                      //                               ),
-                      //                               dropdownStyleData:
-                      //                                   DropdownStyleData(
-                      //                                 decoration: BoxDecoration(
-                      //                                   borderRadius:
-                      //                                       BorderRadius
-                      //                                           .circular(14),
-                      //                                   border: Border.all(
-                      //                                     color: themeProvider
-                      //                                         .myTheme
-                      //                                         .colorScheme
-                      //                                         .primary
-                      //                                         .withOpacity(0.5),
-                      //                                   ),
-                      //                                   // color: themeProvider.myTheme
-                      //                                   //     .colorScheme.primary
-                      //                                   //     .withOpacity(0.5),
-                      //                                 ),
-                      //                                 elevation: 1,
-                      //                                 offset:
-                      //                                     const Offset(0, 0),
-                      //                                 scrollbarTheme:
-                      //                                     ScrollbarThemeData(
-                      //                                   radius: const Radius
-                      //                                       .circular(40),
-                      //                                   thickness:
-                      //                                       MaterialStateProperty
-                      //                                           .all(6),
-                      //                                   thumbVisibility:
-                      //                                       MaterialStateProperty
-                      //                                           .all(true),
-                      //                                 ),
-                      //                               ),
-                      //                               iconStyleData:
-                      //                                   IconStyleData(
-                      //                                 icon: Icon(
-                      //                                   Icons
-                      //                                       .arrow_forward_ios_outlined,
-                      //                                 ),
-                      //                                 iconSize: 14,
-                      //                                 iconEnabledColor:
-                      //                                     themeProvider
-                      //                                         .myTheme
-                      //                                         .colorScheme
-                      //                                         .primary,
-                      //                                 iconDisabledColor:
-                      //                                     Colors.grey,
-                      //                               ),
-                      //                             ),
-                      //                           ),
-                      //                           // Selecciona de las lineas de la DB
-                      //                           Container(
-                      //                             margin: EdgeInsets.fromLTRB(
-                      //                                 0, 10, 0, 10),
-                      //                             child: Text('Linea'),
-                      //                           ),
-                      //                           DropdownButtonHideUnderline(
-                      //                             child: DropdownButton2(
-                      //                               items: List<String>.from(
-                      //                                       combinationsDataLines[
-                      //                                               combinationKeyForLines] ??
-                      //                                           linesValues)
-                      //                                   .map((line) =>
-                      //                                       DropdownMenuItem<
-                      //                                           String>(
-                      //                                         value: line,
-                      //                                         child: Text(
-                      //                                           summarysDataLines[
-                      //                                               line],
-                      //                                           overflow:
-                      //                                               TextOverflow
-                      //                                                   .ellipsis,
-                      //                                           maxLines: 1,
-                      //                                           style:
-                      //                                               const TextStyle(
-                      //                                             fontSize: 14,
-                      //                                           ),
-                      //                                         ),
-                      //                                       ))
-                      //                                   .toList(),
-                      //                               value: selectedLine,
-                      //                               onChanged:
-                      //                                   selectedSubCategorie ==
-                      //                                               null ||
-                      //                                           combinationsDataLines
-                      //                                               .isEmpty
-                      //                                       ? null
-                      //                                       : (value) async {
-                      //                                           setState(() {
-                      //                                             selectedLine =
-                      //                                                 value
-                      //                                                     as String;
-                      //                                           });
-                      //                                           setState(() {
-                      //                                             selectedQuality =
-                      //                                                 null;
-                      //                                             selectedSize =
-                      //                                                 null;
-
-                      //                                             summarysDataQuality
-                      //                                                 .clear();
-                      //                                             qualityList
-                      //                                                 .clear();
-                      //                                             summarysDataSize
-                      //                                                 .clear();
-                      //                                             sizeList
-                      //                                                 .clear();
-                      //                                           });
-                      //                                           // TEST
-
-                      //                                           await qualityCollection
-                      //                                               .doc(
-                      //                                                   'resumen')
-                      //                                               .get()
-                      //                                               .then(
-                      //                                                   (value) {
-                      //                                             setState(
-                      //                                               () {
-                      //                                                 summarysDataQuality = value
-                      //                                                         .data()
-                      //                                                         .toString()
-                      //                                                         .contains(
-                      //                                                             'nombres')
-                      //                                                     ? value.get(
-                      //                                                         'nombres')
-                      //                                                     : {
-                      //                                                         'n/a': 'n/a'
-                      //                                                       };
-                      //                                               },
-                      //                                             );
-                      //                                           });
-                      //                                           await productsCollection
-                      //                                               .where(
-                      //                                                   'subcategoria',
-                      //                                                   isEqualTo:
-                      //                                                       subCategoriesCollection.doc(
-                      //                                                           combinationKeyForSubCategories))
-                      //                                               .where(
-                      //                                                   'categoria',
-                      //                                                   isEqualTo:
-                      //                                                       categoriesCollection.doc(
-                      //                                                           selectedSubCategorie))
-                      //                                               .where(
-                      //                                                   'linea',
-                      //                                                   isEqualTo:
-                      //                                                       linesCollection.doc(
-                      //                                                           selectedLine))
-                      //                                               .snapshots()
-                      //                                               .forEach(
-                      //                                                   (element) {
-                      //                                             print(
-                      //                                                 'Length quality: ${element.toString().length}');
-                      //                                             for (var element
-                      //                                                 in element
-                      //                                                     .docs) {
-                      //                                               var quality = element
-                      //                                                       .data()
-                      //                                                       .toString()
-                      //                                                       .contains(
-                      //                                                           'calidad')
-                      //                                                   ? element
-                      //                                                       .get('calidad')
-                      //                                                       .id
-                      //                                                   : '';
-                      //                                               if (qualityList
-                      //                                                       .contains(quality) ==
-                      //                                                   false) {
-                      //                                                 print(
-                      //                                                     'Quality added: $quality');
-                      //                                                 setState(
-                      //                                                     () {
-                      //                                                   qualityList
-                      //                                                       .add(quality);
-                      //                                                 });
-                      //                                                 print(
-                      //                                                     qualityList);
-                      //                                               }
-                      //                                             }
-                      //                                           });
-                      //                                         },
-                      //                               buttonStyleData:
-                      //                                   ButtonStyleData(
-                      //                                 padding:
-                      //                                     const EdgeInsets.only(
-                      //                                         left: 14,
-                      //                                         right: 14),
-                      //                                 height: 40,
-                      //                                 width:
-                      //                                     MediaQuery.of(context)
-                      //                                         .size
-                      //                                         .width,
-                      //                                 decoration: BoxDecoration(
-                      //                                   borderRadius:
-                      //                                       BorderRadius
-                      //                                           .circular(14),
-                      //                                   border: Border.all(
-                      //                                     color: themeProvider
-                      //                                         .myTheme
-                      //                                         .colorScheme
-                      //                                         .primary
-                      //                                         .withOpacity(0.5),
-                      //                                   ),
-                      //                                   color: themeProvider
-                      //                                       .myTheme
-                      //                                       .colorScheme
-                      //                                       .background,
-                      //                                 ),
-                      //                                 // elevation: 0,
-                      //                               ),
-                      //                               menuItemStyleData:
-                      //                                   const MenuItemStyleData(
-                      //                                 height: 40,
-                      //                               ),
-                      //                               dropdownStyleData:
-                      //                                   DropdownStyleData(
-                      //                                 decoration: BoxDecoration(
-                      //                                   borderRadius:
-                      //                                       BorderRadius
-                      //                                           .circular(14),
-                      //                                   border: Border.all(
-                      //                                     color: themeProvider
-                      //                                         .myTheme
-                      //                                         .colorScheme
-                      //                                         .primary
-                      //                                         .withOpacity(0.5),
-                      //                                   ),
-                      //                                   // color: themeProvider.myTheme
-                      //                                   //     .colorScheme.primary
-                      //                                   //     .withOpacity(0.5),
-                      //                                 ),
-                      //                                 elevation: 1,
-                      //                                 offset:
-                      //                                     const Offset(0, 0),
-                      //                                 scrollbarTheme:
-                      //                                     ScrollbarThemeData(
-                      //                                   radius: const Radius
-                      //                                       .circular(40),
-                      //                                   thickness:
-                      //                                       MaterialStateProperty
-                      //                                           .all(6),
-                      //                                   thumbVisibility:
-                      //                                       MaterialStateProperty
-                      //                                           .all(true),
-                      //                                 ),
-                      //                               ),
-                      //                               iconStyleData:
-                      //                                   IconStyleData(
-                      //                                 icon: Icon(
-                      //                                   Icons
-                      //                                       .arrow_forward_ios_outlined,
-                      //                                 ),
-                      //                                 iconSize: 14,
-                      //                                 iconEnabledColor:
-                      //                                     themeProvider
-                      //                                         .myTheme
-                      //                                         .colorScheme
-                      //                                         .primary,
-                      //                                 iconDisabledColor:
-                      //                                     Colors.grey,
-                      //                               ),
-                      //                             ),
-                      //                           ),
-                      //                           // Selecciona de las calidades de la DB
-                      //                           Container(
-                      //                             margin: EdgeInsets.fromLTRB(
-                      //                                 0, 10, 0, 10),
-                      //                             child: Text('Calidad'),
-                      //                           ),
-                      //                           DropdownButtonHideUnderline(
-                      //                             child: DropdownButton2(
-                      //                               items: List<String>.from(
-                      //                                       qualityList)
-                      //                                   .map((quality) =>
-                      //                                       DropdownMenuItem<
-                      //                                           String>(
-                      //                                         value: quality,
-                      //                                         child: Container(
-                      //                                           width: 150,
-                      //                                           child: Text(
-                      //                                             // quality,
-                      //                                             summarysDataQuality[
-                      //                                                 quality],
-                      //                                             overflow:
-                      //                                                 TextOverflow
-                      //                                                     .ellipsis,
-                      //                                             maxLines: 3,
-                      //                                             style:
-                      //                                                 const TextStyle(
-                      //                                               fontSize:
-                      //                                                   14,
-                      //                                             ),
-                      //                                           ),
-                      //                                         ),
-                      //                                       ))
-                      //                                   .toList(),
-                      //                               value: selectedQuality,
-                      //                               onChanged: selectedLine ==
-                      //                                       null
-                      //                                   ? null
-                      //                                   : (value) async {
-                      //                                       setState(() {
-                      //                                         selectedQuality =
-                      //                                             value
-                      //                                                 as String;
-                      //                                       });
-                      //                                       setState(() {
-                      //                                         selectedSize =
-                      //                                             null;
-                      //                                         summarysDataSize
-                      //                                             .clear();
-                      //                                         sizeList.clear();
-                      //                                       });
-
-                      //                                       await sizesCollection
-                      //                                           .doc('resumen')
-                      //                                           .get()
-                      //                                           .then((value) {
-                      //                                         setState(
-                      //                                           () {
-                      //                                             summarysDataSize = value
-                      //                                                     .data()
-                      //                                                     .toString()
-                      //                                                     .contains(
-                      //                                                         'nombres')
-                      //                                                 ? value.get(
-                      //                                                     'nombres')
-                      //                                                 : {
-                      //                                                     'n/a':
-                      //                                                         'n/a'
-                      //                                                   };
-                      //                                           },
-                      //                                         );
-                      //                                       });
-                      //                                       await productsCollection
-                      //                                           .where(
-                      //                                               'subcategoria',
-                      //                                               isEqualTo:
-                      //                                                   subCategoriesCollection.doc(
-                      //                                                       combinationKeyForSubCategories))
-                      //                                           .where(
-                      //                                               'categoria',
-                      //                                               isEqualTo:
-                      //                                                   categoriesCollection.doc(
-                      //                                                       selectedSubCategorie))
-                      //                                           .where('linea',
-                      //                                               isEqualTo:
-                      //                                                   linesCollection.doc(
-                      //                                                       selectedLine))
-                      //                                           .where(
-                      //                                               'calidad',
-                      //                                               isEqualTo:
-                      //                                                   qualityCollection.doc(
-                      //                                                       selectedQuality))
-                      //                                           .snapshots()
-                      //                                           .forEach(
-                      //                                               (element) {
-                      //                                         print(
-                      //                                             'Lenght size: ${element.toString().length}');
-                      //                                         for (var element
-                      //                                             in element
-                      //                                                 .docs) {
-                      //                                           var size = element
-                      //                                                   .data()
-                      //                                                   .toString()
-                      //                                                   .contains(
-                      //                                                       'tamano')
-                      //                                               ? element
-                      //                                                   .get(
-                      //                                                       'tamano')
-                      //                                                   .id
-                      //                                               : '';
-                      //                                           if (sizeList.contains(
-                      //                                                   size) ==
-                      //                                               false) {
-                      //                                             print(
-                      //                                                 'size added: $size');
-                      //                                             setState(() {
-                      //                                               sizeList.add(
-                      //                                                   size);
-                      //                                             });
-                      //                                             print(
-                      //                                                 sizeList);
-                      //                                           }
-                      //                                         }
-                      //                                       });
-                      //                                     },
-                      //                               buttonStyleData:
-                      //                                   ButtonStyleData(
-                      //                                 padding:
-                      //                                     const EdgeInsets.only(
-                      //                                         left: 14,
-                      //                                         right: 14),
-                      //                                 height: 40,
-                      //                                 width:
-                      //                                     MediaQuery.of(context)
-                      //                                         .size
-                      //                                         .width,
-                      //                                 decoration: BoxDecoration(
-                      //                                   borderRadius:
-                      //                                       BorderRadius
-                      //                                           .circular(14),
-                      //                                   border: Border.all(
-                      //                                     color: themeProvider
-                      //                                         .myTheme
-                      //                                         .colorScheme
-                      //                                         .primary
-                      //                                         .withOpacity(0.5),
-                      //                                   ),
-                      //                                   color: themeProvider
-                      //                                       .myTheme
-                      //                                       .colorScheme
-                      //                                       .background,
-                      //                                 ),
-                      //                                 // elevation: 0,
-                      //                               ),
-                      //                               menuItemStyleData:
-                      //                                   const MenuItemStyleData(
-                      //                                 height: 40,
-                      //                               ),
-                      //                               dropdownStyleData:
-                      //                                   DropdownStyleData(
-                      //                                 decoration: BoxDecoration(
-                      //                                   borderRadius:
-                      //                                       BorderRadius
-                      //                                           .circular(14),
-                      //                                   border: Border.all(
-                      //                                     color: themeProvider
-                      //                                         .myTheme
-                      //                                         .colorScheme
-                      //                                         .primary
-                      //                                         .withOpacity(0.5),
-                      //                                   ),
-                      //                                   // color: themeProvider.myTheme
-                      //                                   //     .colorScheme.primary
-                      //                                   //     .withOpacity(0.5),
-                      //                                 ),
-                      //                                 elevation: 1,
-                      //                                 offset:
-                      //                                     const Offset(0, 0),
-                      //                                 scrollbarTheme:
-                      //                                     ScrollbarThemeData(
-                      //                                   radius: const Radius
-                      //                                       .circular(40),
-                      //                                   thickness:
-                      //                                       MaterialStateProperty
-                      //                                           .all(6),
-                      //                                   thumbVisibility:
-                      //                                       MaterialStateProperty
-                      //                                           .all(true),
-                      //                                 ),
-                      //                               ),
-                      //                               iconStyleData:
-                      //                                   IconStyleData(
-                      //                                 icon: Icon(
-                      //                                   Icons
-                      //                                       .arrow_forward_ios_outlined,
-                      //                                 ),
-                      //                                 iconSize: 14,
-                      //                                 iconEnabledColor:
-                      //                                     themeProvider
-                      //                                         .myTheme
-                      //                                         .colorScheme
-                      //                                         .primary,
-                      //                                 iconDisabledColor:
-                      //                                     Colors.grey,
-                      //                               ),
-                      //                             ),
-                      //                           ),
-                      //                           // Selecciona de los tamaños de la DB
-                      //                           Container(
-                      //                             margin: EdgeInsets.fromLTRB(
-                      //                                 0, 10, 0, 10),
-                      //                             child: Text('Tamaños'),
-                      //                           ),
-                      //                           DropdownButtonHideUnderline(
-                      //                             child: DropdownButton2(
-                      //                               items: List<String>.from(
-                      //                                       sizeList)
-                      //                                   .map((size) =>
-                      //                                       DropdownMenuItem<
-                      //                                           String>(
-                      //                                         value: size,
-                      //                                         child: Text(
-                      //                                           summarysDataSize[
-                      //                                               size],
-                      //                                           style:
-                      //                                               const TextStyle(
-                      //                                             fontSize: 14,
-                      //                                           ),
-                      //                                         ),
-                      //                                       ))
-                      //                                   .toList(),
-                      //                               value: selectedSize,
-                      //                               onChanged:
-                      //                                   selectedQuality == null
-                      //                                       ? null
-                      //                                       : (value) {
-                      //                                           setState(() {
-                      //                                             selectedSize =
-                      //                                                 value
-                      //                                                     as String;
-                      //                                           });
-                      //                                         },
-                      //                               buttonStyleData:
-                      //                                   ButtonStyleData(
-                      //                                 padding:
-                      //                                     const EdgeInsets.only(
-                      //                                         left: 14,
-                      //                                         right: 14),
-                      //                                 height: 40,
-                      //                                 width:
-                      //                                     MediaQuery.of(context)
-                      //                                         .size
-                      //                                         .width,
-                      //                                 decoration: BoxDecoration(
-                      //                                   borderRadius:
-                      //                                       BorderRadius
-                      //                                           .circular(14),
-                      //                                   border: Border.all(
-                      //                                     color: themeProvider
-                      //                                         .myTheme
-                      //                                         .colorScheme
-                      //                                         .primary
-                      //                                         .withOpacity(0.5),
-                      //                                   ),
-                      //                                   color: themeProvider
-                      //                                       .myTheme
-                      //                                       .colorScheme
-                      //                                       .background,
-                      //                                 ),
-                      //                                 // elevation: 0,
-                      //                               ),
-                      //                               menuItemStyleData:
-                      //                                   const MenuItemStyleData(
-                      //                                 height: 40,
-                      //                               ),
-                      //                               dropdownStyleData:
-                      //                                   DropdownStyleData(
-                      //                                 decoration: BoxDecoration(
-                      //                                   borderRadius:
-                      //                                       BorderRadius
-                      //                                           .circular(14),
-                      //                                   border: Border.all(
-                      //                                     color: themeProvider
-                      //                                         .myTheme
-                      //                                         .colorScheme
-                      //                                         .primary
-                      //                                         .withOpacity(0.5),
-                      //                                   ),
-                      //                                   // color: themeProvider.myTheme
-                      //                                   //     .colorScheme.primary
-                      //                                   //     .withOpacity(0.5),
-                      //                                 ),
-                      //                                 elevation: 1,
-                      //                                 offset:
-                      //                                     const Offset(0, 0),
-                      //                                 scrollbarTheme:
-                      //                                     ScrollbarThemeData(
-                      //                                   radius: const Radius
-                      //                                       .circular(40),
-                      //                                   thickness:
-                      //                                       MaterialStateProperty
-                      //                                           .all(6),
-                      //                                   thumbVisibility:
-                      //                                       MaterialStateProperty
-                      //                                           .all(true),
-                      //                                 ),
-                      //                               ),
-                      //                               iconStyleData:
-                      //                                   IconStyleData(
-                      //                                 icon: Icon(
-                      //                                   Icons
-                      //                                       .arrow_forward_ios_outlined,
-                      //                                 ),
-                      //                                 iconSize: 14,
-                      //                                 iconEnabledColor:
-                      //                                     themeProvider
-                      //                                         .myTheme
-                      //                                         .colorScheme
-                      //                                         .primary,
-                      //                                 iconDisabledColor:
-                      //                                     Colors.grey,
-                      //                               ),
-                      //                             ),
-                      //                           ),
-                      //                         ],
-                      //                       ),
-                      //                     ),
-                      //                     actions: [
-                      //                       Row(
-                      //                         mainAxisAlignment:
-                      //                             MainAxisAlignment.spaceAround,
-                      //                         children: [
-                      //                           ElevatedButton.icon(
-                      //                             onPressed: () {
-                      //                               Navigator.pop(context);
-                      //                             },
-                      //                             style: ButtonStyle(
-                      //                               backgroundColor:
-                      //                                   MaterialStateProperty
-                      //                                       .all(
-                      //                                 themeProvider.myTheme
-                      //                                     .colorScheme.primary,
-                      //                               ),
-                      //                               shape: MaterialStateProperty
-                      //                                   .all<
-                      //                                       RoundedRectangleBorder>(
-                      //                                 RoundedRectangleBorder(
-                      //                                   borderRadius:
-                      //                                       BorderRadius
-                      //                                           .circular(18.0),
-                      //                                 ),
-                      //                               ),
-                      //                             ),
-                      //                             icon: Icon(
-                      //                               MaterialCommunityIcons
-                      //                                   .backspace,
-                      //                               size: 16,
-                      //                             ),
-                      //                             label: Text(
-                      //                               'Cancelar',
-                      //                               style: TextStyle(
-                      //                                 color: Colors.white,
-                      //                                 fontFamily:
-                      //                                     'Poppins-Regular',
-                      //                                 fontSize: 14,
-                      //                                 fontWeight:
-                      //                                     FontWeight.bold,
-                      //                               ),
-                      //                             ),
-                      //                           ),
-                      //                           ElevatedButton.icon(
-                      //                             onPressed:
-                      //                                 combinationKeyForSubCategories ==
-                      //                                         null
-                      //                                     ? null
-                      //                                     : () async {
-                      //                                         print(
-                      //                                             'Keys seleccionadas');
-                      //                                         DocumentReference<
-                      //                                                 Map<String,
-                      //                                                     dynamic>>
-                      //                                             firestoreCategorie =
-                      //                                             subCategoriesCollection
-                      //                                                 .doc(
-                      //                                                     combinationKeyForSubCategories);
-
-                      //                                         print(
-                      //                                             'combinationKeyForSubCategories: $combinationKeyForSubCategories');
-                      //                                         if (selectedSubCategorie !=
-                      //                                             null) {
-                      //                                           print(
-                      //                                               'selectedSubCategorie: $selectedSubCategorie');
-                      //                                         }
-                      //                                         if (selectedLine !=
-                      //                                             null) {
-                      //                                           print(
-                      //                                               'selectedLine: $selectedLine');
-                      //                                         }
-                      //                                         if (selectedQuality !=
-                      //                                             null) {
-                      //                                           print(
-                      //                                               'selectedQuality: $selectedQuality');
-                      //                                         }
-                      //                                         if (selectedSize !=
-                      //                                             null) {
-                      //                                           print(
-                      //                                               'selectedSize: $selectedSize');
-                      //                                         }
-
-                      //                                         DocumentReference<
-                      //                                                 Map<String,
-                      //                                                     dynamic>>
-                      //                                             firestoreSubCategorie =
-                      //                                             categoriesCollection
-                      //                                                 .doc(
-                      //                                                     selectedSubCategorie);
-                      //                                         DocumentReference<
-                      //                                                 Map<String,
-                      //                                                     dynamic>>
-                      //                                             firestoreLine =
-                      //                                             linesCollection
-                      //                                                 .doc(
-                      //                                                     selectedLine);
-                      //                                         DocumentReference<
-                      //                                                 Map<String,
-                      //                                                     dynamic>>
-                      //                                             firestoreQuality =
-                      //                                             qualityCollection
-                      //                                                 .doc(
-                      //                                                     selectedQuality);
-                      //                                         DocumentReference<
-                      //                                                 Map<String,
-                      //                                                     dynamic>>
-                      //                                             firestoreSize =
-                      //                                             sizesCollection
-                      //                                                 .doc(
-                      //                                                     selectedSize);
-                      //                                         print(
-                      //                                             firestoreCategorie);
-                      //                                         print(
-                      //                                             firestoreSubCategorie);
-                      //                                         print(
-                      //                                             firestoreLine);
-                      //                                         print(
-                      //                                             firestoreQuality);
-                      //                                         print(
-                      //                                             firestoreSize);
-                      //                                         setState(() {
-                      //                                           filteredProducts
-                      //                                               .clear();
-                      //                                         });
-
-                      //                                         // if (selectedLine !=
-                      //                                         //                                                             null)
-                      //                                         //                                                         }
-                      //                                         //  if (selectedQuality !=
-                      //                                         //                                                             null)
-                      //                                         //  if (selectedSize !=
-                      //                                         //                                                             null)
-                      //                                         //  if (selectedSubCategorie !=
-                      //                                         //     null){}
-
-                      //                                         if (selectedCategorie != null &&
-                      //                                             selectedSubCategorie ==
-                      //                                                 null &&
-                      //                                             selectedLine ==
-                      //                                                 null &&
-                      //                                             selectedQuality ==
-                      //                                                 null &&
-                      //                                             selectedSize ==
-                      //                                                 null) {
-                      //                                           print(
-                      //                                               'Solo se seleciono categoria');
-                      //                                           await productsCollection
-                      //                                               .where(
-                      //                                                   'subcategoria',
-                      //                                                   isEqualTo:
-                      //                                                       firestoreCategorie)
-                      //                                               .snapshots()
-                      //                                               .forEach(
-                      //                                                   (element) {
-                      //                                             for (var element
-                      //                                                 in element
-                      //                                                     .docs) {
-                      //                                               Products
-                      //                                                   product =
-                      //                                                   Products(
-                      //                                                 quality: element
-                      //                                                     .data()[
-                      //                                                         'calidad']
-                      //                                                     .id,
-                      //                                                 catalogue: element
-                      //                                                     .data()[
-                      //                                                         'catalogo']
-                      //                                                     .id,
-                      //                                                 categorie: element
-                      //                                                     .data()[
-                      //                                                         'categoria']
-                      //                                                     .id,
-                      //                                                 code: element
-                      //                                                         .data()[
-                      //                                                     'codigo'],
-                      //                                                 barCode: element
-                      //                                                         .data()[
-                      //                                                     'codigoBarra'],
-                      //                                                 design: element
-                      //                                                     .data()[
-                      //                                                         'diseno']
-                      //                                                     .id,
-                      //                                                 line: element
-                      //                                                     .data()[
-                      //                                                         'linea']
-                      //                                                     .id,
-                      //                                                 brand: element
-                      //                                                     .data()[
-                      //                                                         'marca']
-                      //                                                     .id,
-                      //                                                 lastModifiedDate:
-                      //                                                     element
-                      //                                                         .data()['modificado'],
-                      //                                                 name: element
-                      //                                                         .data()[
-                      //                                                     'nombre'],
-                      //                                                 subCategorie: element
-                      //                                                     .data()[
-                      //                                                         'subcategoria']
-                      //                                                     .id,
-                      //                                                 size: element
-                      //                                                     .data()[
-                      //                                                         'tamano']
-                      //                                                     .id,
-                      //                                                 promotion: element
-                      //                                                         .data()
-                      //                                                         .toString()
-                      //                                                         .contains(
-                      //                                                             'promocion')
-                      //                                                     ? element
-                      //                                                         .data()['promocion']
-                      //                                                         .id
-                      //                                                     : '',
-                      //                                                 selected:
-                      //                                                     false,
-                      //                                               );
-                      //                                               print(
-                      //                                                   product);
-
-                      //                                               setState(
-                      //                                                   () {
-                      //                                                 filteredProducts
-                      //                                                     .add(
-                      //                                                         product);
-                      //                                               });
-                      //                                               print(
-                      //                                                   'productos filtrados: ${filteredProducts.length}');
-                      //                                             }
-                      //                                             Navigator.of(
-                      //                                                     context)
-                      //                                                 .pop();
-                      //                                             ScaffoldMessenger
-                      //                                                 .of(context)
-                      //                                               ..removeCurrentSnackBar()
-                      //                                               ..showSnackBar(
-                      //                                                 SnackBar(
-                      //                                                   backgroundColor: themeProvider
-                      //                                                       .myTheme
-                      //                                                       .colorScheme
-                      //                                                       .primary,
-                      //                                                   duration:
-                      //                                                       const Duration(seconds: 1),
-                      //                                                   content:
-                      //                                                       Text(
-                      //                                                     "${filteredProducts.length} Producto(s) Filtrado(s)",
-                      //                                                     style:
-                      //                                                         TextStyle(
-                      //                                                       fontFamily:
-                      //                                                           'Poppins-Regular',
-                      //                                                     ),
-                      //                                                   ),
-                      //                                                 ),
-                      //                                               );
-                      //                                           });
-                      //                                         } else if (selectedCategorie != null &&
-                      //                                             selectedSubCategorie !=
-                      //                                                 null &&
-                      //                                             selectedLine ==
-                      //                                                 null &&
-                      //                                             selectedQuality ==
-                      //                                                 null &&
-                      //                                             selectedSize ==
-                      //                                                 null) {
-                      //                                           print(
-                      //                                               'seleccionado categoria y subcategoria');
-                      //                                           await productsCollection
-                      //                                               .where(
-                      //                                                   'subcategoria',
-                      //                                                   isEqualTo:
-                      //                                                       firestoreCategorie)
-                      //                                               .where(
-                      //                                                   'categoria',
-                      //                                                   isEqualTo:
-                      //                                                       firestoreSubCategorie)
-                      //                                               .snapshots()
-                      //                                               .forEach(
-                      //                                                   (element) {
-                      //                                             for (var element
-                      //                                                 in element
-                      //                                                     .docs) {
-                      //                                               Products
-                      //                                                   product =
-                      //                                                   Products(
-                      //                                                 quality: element
-                      //                                                     .data()[
-                      //                                                         'calidad']
-                      //                                                     .id,
-                      //                                                 catalogue: element
-                      //                                                     .data()[
-                      //                                                         'catalogo']
-                      //                                                     .id,
-                      //                                                 categorie: element
-                      //                                                     .data()[
-                      //                                                         'categoria']
-                      //                                                     .id,
-                      //                                                 code: element
-                      //                                                         .data()[
-                      //                                                     'codigo'],
-                      //                                                 barCode: element
-                      //                                                         .data()[
-                      //                                                     'codigoBarra'],
-                      //                                                 design: element
-                      //                                                     .data()[
-                      //                                                         'diseno']
-                      //                                                     .id,
-                      //                                                 line: element
-                      //                                                     .data()[
-                      //                                                         'linea']
-                      //                                                     .id,
-                      //                                                 brand: element
-                      //                                                     .data()[
-                      //                                                         'marca']
-                      //                                                     .id,
-                      //                                                 lastModifiedDate:
-                      //                                                     element
-                      //                                                         .data()['modificado'],
-                      //                                                 name: element
-                      //                                                         .data()[
-                      //                                                     'nombre'],
-                      //                                                 subCategorie: element
-                      //                                                     .data()[
-                      //                                                         'subcategoria']
-                      //                                                     .id,
-                      //                                                 size: element
-                      //                                                     .data()[
-                      //                                                         'tamano']
-                      //                                                     .id,
-                      //                                                 promotion: element
-                      //                                                         .data()
-                      //                                                         .toString()
-                      //                                                         .contains(
-                      //                                                             'promocion')
-                      //                                                     ? element
-                      //                                                         .data()['promocion']
-                      //                                                         .id
-                      //                                                     : '',
-                      //                                                 selected:
-                      //                                                     false,
-                      //                                               );
-                      //                                               print(
-                      //                                                   product);
-
-                      //                                               setState(
-                      //                                                   () {
-                      //                                                 filteredProducts
-                      //                                                     .add(
-                      //                                                         product);
-                      //                                               });
-                      //                                               print(
-                      //                                                   'productos filtrados: ${filteredProducts.length}');
-                      //                                             }
-                      //                                             Navigator.of(
-                      //                                                     context)
-                      //                                                 .pop();
-                      //                                             ScaffoldMessenger
-                      //                                                 .of(context)
-                      //                                               ..removeCurrentSnackBar()
-                      //                                               ..showSnackBar(
-                      //                                                 SnackBar(
-                      //                                                   backgroundColor: themeProvider
-                      //                                                       .myTheme
-                      //                                                       .colorScheme
-                      //                                                       .primary,
-                      //                                                   duration:
-                      //                                                       const Duration(seconds: 1),
-                      //                                                   content:
-                      //                                                       Text(
-                      //                                                     "${filteredProducts.length} Producto(s) Filtrado(s)",
-                      //                                                     style:
-                      //                                                         TextStyle(
-                      //                                                       fontFamily:
-                      //                                                           'Poppins-Regular',
-                      //                                                     ),
-                      //                                                   ),
-                      //                                                 ),
-                      //                                               );
-                      //                                           });
-                      //                                         } else if (selectedCategorie != null &&
-                      //                                             selectedSubCategorie !=
-                      //                                                 null &&
-                      //                                             selectedLine !=
-                      //                                                 null &&
-                      //                                             selectedQuality ==
-                      //                                                 null &&
-                      //                                             selectedSize ==
-                      //                                                 null) {
-                      //                                           print(
-                      //                                               'seleccionado categoria / subcategoria / Linea');
-                      //                                           await productsCollection
-                      //                                               .where(
-                      //                                                   'subcategoria',
-                      //                                                   isEqualTo:
-                      //                                                       firestoreCategorie)
-                      //                                               .where(
-                      //                                                   'categoria',
-                      //                                                   isEqualTo:
-                      //                                                       firestoreSubCategorie)
-                      //                                               .where(
-                      //                                                   'linea',
-                      //                                                   isEqualTo:
-                      //                                                       firestoreLine)
-                      //                                               .snapshots()
-                      //                                               .forEach(
-                      //                                                   (element) {
-                      //                                             for (var element
-                      //                                                 in element
-                      //                                                     .docs) {
-                      //                                               Products
-                      //                                                   product =
-                      //                                                   Products(
-                      //                                                 quality: element
-                      //                                                     .data()[
-                      //                                                         'calidad']
-                      //                                                     .id,
-                      //                                                 catalogue: element
-                      //                                                     .data()[
-                      //                                                         'catalogo']
-                      //                                                     .id,
-                      //                                                 categorie: element
-                      //                                                     .data()[
-                      //                                                         'categoria']
-                      //                                                     .id,
-                      //                                                 code: element
-                      //                                                         .data()[
-                      //                                                     'codigo'],
-                      //                                                 barCode: element
-                      //                                                         .data()[
-                      //                                                     'codigoBarra'],
-                      //                                                 design: element
-                      //                                                     .data()[
-                      //                                                         'diseno']
-                      //                                                     .id,
-                      //                                                 line: element
-                      //                                                     .data()[
-                      //                                                         'linea']
-                      //                                                     .id,
-                      //                                                 brand: element
-                      //                                                     .data()[
-                      //                                                         'marca']
-                      //                                                     .id,
-                      //                                                 lastModifiedDate:
-                      //                                                     element
-                      //                                                         .data()['modificado'],
-                      //                                                 name: element
-                      //                                                         .data()[
-                      //                                                     'nombre'],
-                      //                                                 subCategorie: element
-                      //                                                     .data()[
-                      //                                                         'subcategoria']
-                      //                                                     .id,
-                      //                                                 size: element
-                      //                                                     .data()[
-                      //                                                         'tamano']
-                      //                                                     .id,
-                      //                                                 promotion: element
-                      //                                                         .data()
-                      //                                                         .toString()
-                      //                                                         .contains(
-                      //                                                             'promocion')
-                      //                                                     ? element
-                      //                                                         .data()['promocion']
-                      //                                                         .id
-                      //                                                     : '',
-                      //                                                 selected:
-                      //                                                     false,
-                      //                                               );
-                      //                                               print(
-                      //                                                   product);
-
-                      //                                               setState(
-                      //                                                   () {
-                      //                                                 filteredProducts
-                      //                                                     .add(
-                      //                                                         product);
-                      //                                               });
-                      //                                               print(
-                      //                                                   'productos filtrados: ${filteredProducts.length}');
-                      //                                             }
-                      //                                             Navigator.of(
-                      //                                                     context)
-                      //                                                 .pop();
-                      //                                             ScaffoldMessenger
-                      //                                                 .of(context)
-                      //                                               ..removeCurrentSnackBar()
-                      //                                               ..showSnackBar(
-                      //                                                 SnackBar(
-                      //                                                   backgroundColor: themeProvider
-                      //                                                       .myTheme
-                      //                                                       .colorScheme
-                      //                                                       .primary,
-                      //                                                   duration:
-                      //                                                       const Duration(seconds: 1),
-                      //                                                   content:
-                      //                                                       Text(
-                      //                                                     "${filteredProducts.length} Producto(s) Filtrado(s)",
-                      //                                                     style:
-                      //                                                         TextStyle(
-                      //                                                       fontFamily:
-                      //                                                           'Poppins-Regular',
-                      //                                                     ),
-                      //                                                   ),
-                      //                                                 ),
-                      //                                               );
-                      //                                           });
-                      //                                         } else if (selectedCategorie != null &&
-                      //                                             selectedSubCategorie !=
-                      //                                                 null &&
-                      //                                             selectedLine !=
-                      //                                                 null &&
-                      //                                             selectedQuality !=
-                      //                                                 null &&
-                      //                                             selectedSize ==
-                      //                                                 null) {
-                      //                                           print(
-                      //                                               'seleccionado categoria / subcategoria / Linea / calidad');
-                      //                                           await productsCollection
-                      //                                               .where(
-                      //                                                   'subcategoria',
-                      //                                                   isEqualTo:
-                      //                                                       firestoreCategorie)
-                      //                                               .where(
-                      //                                                   'categoria',
-                      //                                                   isEqualTo:
-                      //                                                       firestoreSubCategorie)
-                      //                                               .where(
-                      //                                                   'linea',
-                      //                                                   isEqualTo:
-                      //                                                       firestoreLine)
-                      //                                               .where(
-                      //                                                   'calidad',
-                      //                                                   isEqualTo:
-                      //                                                       firestoreQuality)
-                      //                                               .snapshots()
-                      //                                               .forEach(
-                      //                                                   (element) {
-                      //                                             for (var element
-                      //                                                 in element
-                      //                                                     .docs) {
-                      //                                               Products
-                      //                                                   product =
-                      //                                                   Products(
-                      //                                                 quality: element
-                      //                                                     .data()[
-                      //                                                         'calidad']
-                      //                                                     .id,
-                      //                                                 catalogue: element
-                      //                                                     .data()[
-                      //                                                         'catalogo']
-                      //                                                     .id,
-                      //                                                 categorie: element
-                      //                                                     .data()[
-                      //                                                         'categoria']
-                      //                                                     .id,
-                      //                                                 code: element
-                      //                                                         .data()[
-                      //                                                     'codigo'],
-                      //                                                 barCode: element
-                      //                                                         .data()[
-                      //                                                     'codigoBarra'],
-                      //                                                 design: element
-                      //                                                     .data()[
-                      //                                                         'diseno']
-                      //                                                     .id,
-                      //                                                 line: element
-                      //                                                     .data()[
-                      //                                                         'linea']
-                      //                                                     .id,
-                      //                                                 brand: element
-                      //                                                     .data()[
-                      //                                                         'marca']
-                      //                                                     .id,
-                      //                                                 lastModifiedDate:
-                      //                                                     element
-                      //                                                         .data()['modificado'],
-                      //                                                 name: element
-                      //                                                         .data()[
-                      //                                                     'nombre'],
-                      //                                                 subCategorie: element
-                      //                                                     .data()[
-                      //                                                         'subcategoria']
-                      //                                                     .id,
-                      //                                                 size: element
-                      //                                                     .data()[
-                      //                                                         'tamano']
-                      //                                                     .id,
-                      //                                                 promotion: element
-                      //                                                         .data()
-                      //                                                         .toString()
-                      //                                                         .contains(
-                      //                                                             'promocion')
-                      //                                                     ? element
-                      //                                                         .data()['promocion']
-                      //                                                         .id
-                      //                                                     : '',
-                      //                                                 selected:
-                      //                                                     false,
-                      //                                               );
-                      //                                               print(
-                      //                                                   product);
-
-                      //                                               setState(
-                      //                                                   () {
-                      //                                                 filteredProducts
-                      //                                                     .add(
-                      //                                                         product);
-                      //                                               });
-                      //                                               print(
-                      //                                                   'productos filtrados: ${filteredProducts.length}');
-                      //                                             }
-                      //                                             Navigator.of(
-                      //                                                     context)
-                      //                                                 .pop();
-                      //                                             ScaffoldMessenger
-                      //                                                 .of(context)
-                      //                                               ..removeCurrentSnackBar()
-                      //                                               ..showSnackBar(
-                      //                                                 SnackBar(
-                      //                                                   backgroundColor: themeProvider
-                      //                                                       .myTheme
-                      //                                                       .colorScheme
-                      //                                                       .primary,
-                      //                                                   duration:
-                      //                                                       const Duration(seconds: 1),
-                      //                                                   content:
-                      //                                                       Text(
-                      //                                                     "${filteredProducts.length} Producto(s) Filtrado(s)",
-                      //                                                     style:
-                      //                                                         TextStyle(
-                      //                                                       fontFamily:
-                      //                                                           'Poppins-Regular',
-                      //                                                     ),
-                      //                                                   ),
-                      //                                                 ),
-                      //                                               );
-                      //                                           });
-                      //                                         } else if (selectedCategorie != null &&
-                      //                                             selectedSubCategorie !=
-                      //                                                 null &&
-                      //                                             selectedLine !=
-                      //                                                 null &&
-                      //                                             selectedQuality !=
-                      //                                                 null &&
-                      //                                             selectedSize !=
-                      //                                                 null) {
-                      //                                           print(
-                      //                                               'Se selecciono todas las opciones disponibles del filtro');
-                      //                                           await productsCollection
-                      //                                               .where(
-                      //                                                   'subcategoria',
-                      //                                                   isEqualTo:
-                      //                                                       firestoreCategorie)
-                      //                                               .where(
-                      //                                                   'categoria',
-                      //                                                   isEqualTo:
-                      //                                                       firestoreSubCategorie)
-                      //                                               .where(
-                      //                                                   'linea',
-                      //                                                   isEqualTo:
-                      //                                                       firestoreLine)
-                      //                                               .where(
-                      //                                                   'calidad',
-                      //                                                   isEqualTo:
-                      //                                                       firestoreQuality)
-                      //                                               .where(
-                      //                                                   'tamano',
-                      //                                                   isEqualTo:
-                      //                                                       firestoreSize)
-                      //                                               .snapshots()
-                      //                                               .forEach(
-                      //                                                   (element) {
-                      //                                             for (var element
-                      //                                                 in element
-                      //                                                     .docs) {
-                      //                                               Products
-                      //                                                   product =
-                      //                                                   Products(
-                      //                                                 quality: element
-                      //                                                     .data()[
-                      //                                                         'calidad']
-                      //                                                     .id,
-                      //                                                 catalogue: element
-                      //                                                     .data()[
-                      //                                                         'catalogo']
-                      //                                                     .id,
-                      //                                                 categorie: element
-                      //                                                     .data()[
-                      //                                                         'categoria']
-                      //                                                     .id,
-                      //                                                 code: element
-                      //                                                         .data()[
-                      //                                                     'codigo'],
-                      //                                                 barCode: element
-                      //                                                         .data()[
-                      //                                                     'codigoBarra'],
-                      //                                                 design: element
-                      //                                                     .data()[
-                      //                                                         'diseno']
-                      //                                                     .id,
-                      //                                                 line: element
-                      //                                                     .data()[
-                      //                                                         'linea']
-                      //                                                     .id,
-                      //                                                 brand: element
-                      //                                                     .data()[
-                      //                                                         'marca']
-                      //                                                     .id,
-                      //                                                 lastModifiedDate:
-                      //                                                     element
-                      //                                                         .data()['modificado'],
-                      //                                                 name: element
-                      //                                                         .data()[
-                      //                                                     'nombre'],
-                      //                                                 subCategorie: element
-                      //                                                     .data()[
-                      //                                                         'subcategoria']
-                      //                                                     .id,
-                      //                                                 size: element
-                      //                                                     .data()[
-                      //                                                         'tamano']
-                      //                                                     .id,
-                      //                                                 promotion: element
-                      //                                                         .data()
-                      //                                                         .toString()
-                      //                                                         .contains(
-                      //                                                             'promocion')
-                      //                                                     ? element
-                      //                                                         .data()['promocion']
-                      //                                                         .id
-                      //                                                     : '',
-                      //                                                 selected:
-                      //                                                     false,
-                      //                                               );
-                      //                                               print(
-                      //                                                   product);
-
-                      //                                               setState(
-                      //                                                   () {
-                      //                                                 filteredProducts
-                      //                                                     .add(
-                      //                                                         product);
-                      //                                               });
-                      //                                               print(
-                      //                                                   'productos filtrados: ${filteredProducts.length}');
-                      //                                             }
-                      //                                             Navigator.of(
-                      //                                                     context)
-                      //                                                 .pop();
-                      //                                             ScaffoldMessenger
-                      //                                                 .of(context)
-                      //                                               ..removeCurrentSnackBar()
-                      //                                               ..showSnackBar(
-                      //                                                 SnackBar(
-                      //                                                   backgroundColor: themeProvider
-                      //                                                       .myTheme
-                      //                                                       .colorScheme
-                      //                                                       .primary,
-                      //                                                   duration:
-                      //                                                       const Duration(seconds: 1),
-                      //                                                   content:
-                      //                                                       Text(
-                      //                                                     "${filteredProducts.length} Producto(s) Filtrado(s)",
-                      //                                                     style:
-                      //                                                         TextStyle(
-                      //                                                       fontFamily:
-                      //                                                           'Poppins-Regular',
-                      //                                                     ),
-                      //                                                   ),
-                      //                                                 ),
-                      //                                               );
-                      //                                           });
-                      //                                         }
-                      //                                       },
-                      //                             style: ButtonStyle(
-                      //                               backgroundColor:
-                      //                                   MaterialStateProperty
-                      //                                       .all(
-                      //                                 themeProvider
-                      //                                     .myTheme
-                      //                                     .colorScheme
-                      //                                     .onPrimaryContainer,
-                      //                               ),
-                      //                               shape: MaterialStateProperty
-                      //                                   .all<
-                      //                                       RoundedRectangleBorder>(
-                      //                                 RoundedRectangleBorder(
-                      //                                   borderRadius:
-                      //                                       BorderRadius
-                      //                                           .circular(18.0),
-                      //                                 ),
-                      //                               ),
-                      //                             ),
-                      //                             icon: Icon(
-                      //                               MaterialIcons.filter_list,
-                      //                               size: 20,
-                      //                             ),
-                      //                             label: Text(
-                      //                               'Filtrar',
-                      //                               style: TextStyle(
-                      //                                 color: Colors.white,
-                      //                                 fontFamily:
-                      //                                     'Poppins-Regular',
-                      //                                 fontSize: 14,
-                      //                                 fontWeight:
-                      //                                     FontWeight.bold,
-                      //                               ),
-                      //                             ),
-                      //                           ),
-                      //                         ],
-                      //                       )
-                      //                     ],
-                      //                   ),
-                      //                 ],
-                      //               ),
-                      //             );
-                      //           },
-                      //         ),
-                      //       );
-                      //       setState(() {});
-                      //     },
-                      //     icon: Icon(Icons.filter_alt_rounded,
-                      //         color: themeProvider
-                      //             .myTheme.colorScheme.onPrimaryContainer),
-                      //     splashRadius: 5,
-                      //   ),
-                      // ),
 
                       //todo bajar el boton cuando se arregle el filtro
                       widget.showFullList == true
@@ -2504,264 +675,731 @@ class _ProductsBodyState extends State<ProductsBody> {
                                 ),
                     ],
                   ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.end,
-                  //   children: [
-                  //     //Todo regresar el boton a esta linea
-                  //   ],
-                  // ),
                   SizedBox(height: 8),
                   filteredProducts.isEmpty
                       ? SizedBox(
                           width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.height - 90,
-                          child: ListView.builder(
+                          child: Scrollbar(
+                            thickness: 10,
+                            thumbVisibility: true,
                             controller: _controller,
-                            physics: const BouncingScrollPhysics(),
-                            itemCount: widget.showFullList == true
-                                ? products.length
-                                : widget.listOfProducts?.length,
-                            itemBuilder: (BuildContext context, index) {
-                              final sortedProducts = isDescending
-                                  ? widget.showFullList == true
-                                      ? products.reversed.toList()
-                                      : widget.listOfProducts?.reversed.toList()
-                                  : widget.showFullList == true
-                                      ? products
-                                      : widget.listOfProducts;
-                              final product = sortedProducts![index];
-                              final productStock =
-                                  stockValues[product.code] ?? 000;
-                              final productBrand =
-                                  brandsSummary[product.brand] ?? '';
-                              final productCategorie =
-                                  categoriesSummary[product.categorie] ?? '';
-                              final productSubCategorie =
-                                  subCategoriesSummary[product.subCategorie] ??
-                                      '';
-                              final productLine =
-                                  linesSummary[product.line] ?? '';
-                              final productQuality =
-                                  qualitiesSummary[product.quality] ?? '';
-                              final productSize =
-                                  sizesSummary[product.size] ?? '';
-                              final productDesign =
-                                  designsSummary[product.design] ?? '';
-                              final productPrice = widget
-                                      .listOfPrices[product.code] is int
-                                  ? widget.listOfPrices[product.code] * 1.0
-                                  : widget.listOfPrices[product.code] ?? 0.00;
-                              final priceProduct =
-                                  priceMultipliedByItsExchangeRatio(
-                                      productPrice: productPrice,
-                                      coinDecimals: coinDecimals,
-                                      coinExchangeRatio: coinExchangeRatio);
-                              return Container(
-                                margin: const EdgeInsets.only(bottom: 10.0),
-                                height: 120,
-                                width: MediaQuery.of(context).size.width,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                child: ListTile(
-                                  onTap: () {
-                                    if (product.selected == false) {
-                                      if (productStock > 0) {
-                                        final newProduct = ShoppingCartProduct(
-                                          productQuantity: 1,
-                                          availableStock: productStock,
-                                          code: product.code.toString(),
-                                          productId: product.code.toString(),
-                                          listOfPricesId:
-                                              widget.listOfPrices.toString(),
-                                          totalAmount: productPrice.toString(),
-                                          name: product.name,
-                                          unitPrice: productPrice.toString(),
-                                          urlPicture:
-                                              product.catalogue.toString(),
-                                        );
+                            child: ListView.builder(
+                              controller: _controller,
+                              physics: const BouncingScrollPhysics(),
+                              itemCount: widget.showFullList == true
+                                  ? products.length
+                                  : widget.listOfProducts?.length,
+                              itemBuilder: (BuildContext context, index) {
+                                final sortedProducts = isDescending
+                                    ? widget.showFullList == true
+                                        ? products.reversed.toList()
+                                        : widget.listOfProducts?.reversed
+                                            .toList()
+                                    : widget.showFullList == true
+                                        ? products
+                                        : widget.listOfProducts;
+                                final product = sortedProducts![index];
+                                final productStock =
+                                    stockValues[product.code] ?? 000;
+                                final productBrand =
+                                    brandsSummary[product.brand] ?? '';
+                                final productCategorie =
+                                    categoriesSummary[product.categorie] ?? '';
+                                final productSubCategorie =
+                                    subCategoriesSummary[
+                                            product.subCategorie] ??
+                                        '';
+                                final productLine =
+                                    linesSummary[product.line] ?? '';
+                                final productQuality =
+                                    qualitiesSummary[product.quality] ?? '';
+                                final productSize =
+                                    sizesSummary[product.size] ?? '';
+                                final productDesign =
+                                    designsSummary[product.design] ?? '';
+                                final productPrice = widget
+                                        .listOfPrices[product.code] is int
+                                    ? widget.listOfPrices[product.code] * 1.0
+                                    : widget.listOfPrices[product.code] ?? 0.00;
+                                final priceProduct =
+                                    priceMultipliedByItsExchangeRatio(
+                                        productPrice: productPrice,
+                                        coinDecimals: coinDecimals,
+                                        coinExchangeRatio: coinExchangeRatio);
+                                return Container(
+                                  margin: const EdgeInsets.only(bottom: 10.0),
+                                  height: 120,
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  child: ListTile(
+                                    onTap: () {
+                                      if (product.selected == false) {
+                                        if (productStock > 0) {
+                                          final newProduct =
+                                              ShoppingCartProduct(
+                                            productQuantity: 1,
+                                            availableStock: productStock,
+                                            code: product.code.toString(),
+                                            productId: product.code.toString(),
+                                            listOfPricesId:
+                                                widget.listOfPrices.toString(),
+                                            totalAmount:
+                                                productPrice.toString(),
+                                            name: product.name,
+                                            unitPrice: productPrice.toString(),
+                                            urlPicture:
+                                                product.catalogue.toString(),
+                                          );
+                                          setState(() => product.selected =
+                                              !product.selected);
+                                          selectedProducts.add(newProduct);
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                            ..removeCurrentSnackBar()
+                                            ..showSnackBar(
+                                              SnackBar(
+                                                backgroundColor: themeProvider
+                                                    .myTheme
+                                                    .colorScheme
+                                                    .primary,
+                                                duration:
+                                                    const Duration(seconds: 1),
+                                                content: const Text(
+                                                  "No hay stock disponible de este producto",
+                                                  style: TextStyle(
+                                                    fontFamily:
+                                                        'Poppins-Regular',
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                        }
+                                      } else if (product.selected == true) {
                                         setState(() => product.selected =
                                             !product.selected);
-                                        selectedProducts.add(newProduct);
-                                      } else {
-                                        ScaffoldMessenger.of(context)
-                                          ..removeCurrentSnackBar()
-                                          ..showSnackBar(
-                                            SnackBar(
-                                              backgroundColor: themeProvider
-                                                  .myTheme.colorScheme.primary,
-                                              duration:
-                                                  const Duration(seconds: 1),
-                                              content: const Text(
-                                                "No hay stock disponible de este producto",
-                                                style: TextStyle(
-                                                  fontFamily: 'Poppins-Regular',
-                                                ),
-                                              ),
-                                            ),
-                                          );
+                                        selectedProducts.removeWhere((item) =>
+                                            item.code == product.code);
                                       }
-                                    } else if (product.selected == true) {
-                                      setState(() =>
-                                          product.selected = !product.selected);
-                                      selectedProducts.removeWhere(
-                                          (item) => item.code == product.code);
-                                    }
-                                  },
-                                  onLongPress: () {
-                                    // Pendiente
+                                    },
+                                    onLongPress: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              FutureBuilder(
+                                            future: storage
+                                                .ref()
+                                                .child('imagenes')
+                                                .child('productos')
+                                                .child(product.code)
+                                                .child('1')
+                                                .getDownloadURL()
+                                                .catchError((e) {
+                                              print('ERROR GETTING IMG');
+                                              print(e);
+                                              return e.message;
+                                            }),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasData) {
+                                                final url =
+                                                    snapshot.data?.toString();
 
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            FutureBuilder(
-                                          future: storage
-                                              .ref()
-                                              .child('imagenes')
-                                              .child('productos')
-                                              .child(product.code)
-                                              .child('1')
-                                              .getDownloadURL()
-                                              .catchError((e) {
-                                            print('ERROR GETTING IMG');
-                                            print(e);
-                                            return e.message;
-                                          }),
-                                          builder: (context, snapshot) {
-                                            if (snapshot.hasData) {
-                                              final url =
-                                                  snapshot.data?.toString();
+                                                print(product.catalogue);
 
-                                              print(product.catalogue);
-
-                                              return ProductDetails(
-                                                code: product.code,
-                                                price: productPrice,
-                                                line: productLine,
-                                                imageUrl: url ??
-                                                    'https://i.imgur.com/BPbj6Gy.jpg',
-                                                isProductNew: false,
-                                                name: product.name,
-                                                stock: productStock ?? 0,
-                                                list: [
-                                                  ProductsByDate(
-                                                    quality: 'nan',
-                                                    //catalogue: 'test',
-                                                    categorie: 'test',
-                                                    code: 'test',
-                                                    barCode: 'test',
-                                                    design: 'test',
-                                                    line: 'test',
-                                                    brand: 'test',
-                                                    lastModifiedDate:
-                                                        DateTime.now(),
-                                                    name: 'test',
-                                                    subCategorie: 'test',
-                                                    size: 'test',
-                                                    selected: false,
-                                                  )
-                                                ],
-                                                isProductInAPromotion: false,
-                                                prices: widget.listOfPrices,
-                                                pricesName: widget.pricesName,
-                                                catalogueID: product.catalogue,
-                                                userZoneDocument:
-                                                    widget.userZoneDocument,
-                                                showListButton: false,
-                                              );
-                                            } else if (snapshot.hasError) {
-                                              return ProductDetails(
-                                                code: product.code,
-                                                price: productPrice,
-                                                line: productLine,
-                                                imageUrl:
-                                                    'https://i.imgur.com/BPbj6Gy.jpg',
-                                                isProductNew: false,
-                                                name: product.name,
-                                                stock: productStock ?? 0,
-                                                list: [
-                                                  ProductsByDate(
-                                                    quality: 'nan',
-                                                    //catalogue: 'test',
-                                                    categorie: 'test',
-                                                    code: 'test',
-                                                    barCode: 'test',
-                                                    design: 'test',
-                                                    line: 'test',
-                                                    brand: 'test',
-                                                    lastModifiedDate:
-                                                        DateTime.now(),
-                                                    name: 'test',
-                                                    subCategorie: 'test',
-                                                    size: 'test',
-                                                    selected: false,
-                                                  )
-                                                ],
-                                                isProductInAPromotion: false,
-                                                prices: widget.listOfPrices,
-                                                pricesName: widget.pricesName,
-                                                catalogueID: product.catalogue,
-                                                userZoneDocument:
-                                                    widget.userZoneDocument,
-                                                showListButton: false,
-                                              );
-                                            } else {
-                                              return const SizedBox(
-                                                width: 140,
-                                                child: Center(
-                                                  child:
-                                                      CircularProgressIndicator(),
-                                                ),
-                                              );
-                                            }
-                                          },
+                                                return ProductDetails(
+                                                  code: product.code,
+                                                  price: productPrice,
+                                                  line: productLine,
+                                                  imageUrl: url ??
+                                                      'https://i.imgur.com/BPbj6Gy.jpg',
+                                                  isProductNew: false,
+                                                  name: product.name,
+                                                  stock: productStock ?? 0,
+                                                  list: [
+                                                    ProductsByDate(
+                                                      quality: 'nan',
+                                                      //catalogue: 'test',
+                                                      categorie: 'test',
+                                                      code: 'test',
+                                                      barCode: 'test',
+                                                      design: 'test',
+                                                      line: 'test',
+                                                      brand: 'test',
+                                                      lastModifiedDate:
+                                                          DateTime.now(),
+                                                      name: 'test',
+                                                      subCategorie: 'test',
+                                                      size: 'test',
+                                                      selected: false,
+                                                    )
+                                                  ],
+                                                  isProductInAPromotion: false,
+                                                  prices: widget.listOfPrices,
+                                                  pricesName: widget.pricesName,
+                                                  catalogueID:
+                                                      product.catalogue,
+                                                  userZoneDocument:
+                                                      widget.userZoneDocument,
+                                                  showListButton: false,
+                                                );
+                                              } else if (snapshot.hasError) {
+                                                return ProductDetails(
+                                                  code: product.code,
+                                                  price: productPrice,
+                                                  line: productLine,
+                                                  imageUrl:
+                                                      'https://i.imgur.com/BPbj6Gy.jpg',
+                                                  isProductNew: false,
+                                                  name: product.name,
+                                                  stock: productStock ?? 0,
+                                                  list: [
+                                                    ProductsByDate(
+                                                      quality: 'nan',
+                                                      //catalogue: 'test',
+                                                      categorie: 'test',
+                                                      code: 'test',
+                                                      barCode: 'test',
+                                                      design: 'test',
+                                                      line: 'test',
+                                                      brand: 'test',
+                                                      lastModifiedDate:
+                                                          DateTime.now(),
+                                                      name: 'test',
+                                                      subCategorie: 'test',
+                                                      size: 'test',
+                                                      selected: false,
+                                                    )
+                                                  ],
+                                                  isProductInAPromotion: false,
+                                                  prices: widget.listOfPrices,
+                                                  pricesName: widget.pricesName,
+                                                  catalogueID:
+                                                      product.catalogue,
+                                                  userZoneDocument:
+                                                      widget.userZoneDocument,
+                                                  showListButton: false,
+                                                );
+                                              } else {
+                                                return const SizedBox(
+                                                  width: 140,
+                                                  child: Center(
+                                                    child:
+                                                        CircularProgressIndicator(),
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                          ),
                                         ),
-                                      ),
-                                    );
-                                  },
-                                  title: SingleChildScrollView(
-                                    physics: const BouncingScrollPhysics(),
-                                    scrollDirection: Axis.horizontal,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            // if (orderActive.orderActive == true ||
-                                            //     userCharge == 'Administrador' ||
-                                            //     userCharge == 'Gerente')
-                                            Container(
-                                              height: 17,
-                                              width: 17,
-                                              margin: const EdgeInsets.fromLTRB(
-                                                  5, 0, 0, 0),
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(16),
-                                                color: Colors.grey.shade400,
+                                      );
+                                    },
+                                    title: SingleChildScrollView(
+                                      physics: const BouncingScrollPhysics(),
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                height: 17,
+                                                width: 17,
+                                                margin:
+                                                    const EdgeInsets.fromLTRB(
+                                                        5, 0, 0, 0),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(16),
+                                                  color: Colors.grey.shade400,
+                                                ),
+                                                child: Checkbox(
+                                                    side: MaterialStateBorderSide
+                                                        .resolveWith((states) =>
+                                                            const BorderSide(
+                                                                width: 1.0,
+                                                                color:
+                                                                    Colors
+                                                                        .transparent)),
+                                                    shape: const CircleBorder(),
+                                                    activeColor: themeProvider
+                                                        .myTheme
+                                                        .colorScheme
+                                                        .primary,
+                                                    value: product.selected,
+                                                    onChanged: (value) {
+                                                      if (product.selected ==
+                                                          false) {
+                                                        if (productStock > 0) {
+                                                          final newProduct =
+                                                              ShoppingCartProduct(
+                                                            productQuantity: 1,
+                                                            code: product.code
+                                                                .toString(),
+                                                            productId: product
+                                                                .code
+                                                                .toString(),
+                                                            listOfPricesId:
+                                                                widget
+                                                                    .listOfPrices
+                                                                    .toString(),
+                                                            totalAmount:
+                                                                productPrice
+                                                                    .toString(),
+                                                            name: product.name,
+                                                            unitPrice:
+                                                                productPrice
+                                                                    .toString(),
+                                                            availableStock:
+                                                                productStock,
+                                                            urlPicture: product
+                                                                .catalogue
+                                                                .toString(),
+                                                          );
+                                                          setState(() => product
+                                                                  .selected =
+                                                              !product
+                                                                  .selected);
+                                                          selectedProducts
+                                                              .add(newProduct);
+                                                        } else {
+                                                          ScaffoldMessenger.of(
+                                                              context)
+                                                            ..removeCurrentSnackBar()
+                                                            ..showSnackBar(
+                                                              SnackBar(
+                                                                backgroundColor:
+                                                                    themeProvider
+                                                                        .myTheme
+                                                                        .colorScheme
+                                                                        .primary,
+                                                                duration:
+                                                                    const Duration(
+                                                                        seconds:
+                                                                            1),
+                                                                content:
+                                                                    const Text(
+                                                                  "No hay stock disponible de este producto",
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontFamily:
+                                                                        'Poppins-Regular',
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            );
+                                                        }
+                                                      } else if (product
+                                                              .selected ==
+                                                          true) {
+                                                        setState(() => product
+                                                                .selected =
+                                                            !product.selected);
+                                                        selectedProducts
+                                                            .removeWhere(
+                                                                (item) =>
+                                                                    item.code ==
+                                                                    product
+                                                                        .code);
+                                                      }
+                                                    }),
                                               ),
-                                              child: Checkbox(
-                                                  side: MaterialStateBorderSide
-                                                      .resolveWith((states) =>
-                                                          const BorderSide(
-                                                              width: 1.0,
-                                                              color: Colors
-                                                                  .transparent)),
-                                                  shape: const CircleBorder(),
-                                                  activeColor: themeProvider
-                                                      .myTheme
-                                                      .colorScheme
-                                                      .primary,
-                                                  value: product.selected,
-                                                  onChanged: (value) {
-                                                    if (product.selected ==
-                                                        false) {
-                                                      if (productStock > 0) {
+                                            ],
+                                          ),
+                                          const SizedBox(width: 20),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              SizedBox(
+                                                width: 90,
+                                                child: TextFieldForCard(
+                                                  message: product.name,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              TextFieldForCard(
+                                                message:
+                                                    '${AppLocalizations.of(context)!.productCode}:',
+                                                bold: FontWeight.bold,
+                                              ),
+                                              TextFieldForCard(
+                                                message:
+                                                    '${AppLocalizations.of(context)!.stock}:',
+                                                bold: FontWeight.bold,
+                                              ),
+                                              TextFieldForCard(
+                                                message:
+                                                    '${AppLocalizations.of(context)!.price}:',
+                                                bold: FontWeight.bold,
+                                              ),
+                                              TextFieldForCard(
+                                                message:
+                                                    '${AppLocalizations.of(context)!.productBrand}:',
+                                                bold: FontWeight.bold,
+                                              ),
+                                              TextFieldForCard(
+                                                message:
+                                                    '${AppLocalizations.of(context)!.productCategorie}:',
+                                                bold: FontWeight.bold,
+                                              ),
+                                              TextFieldForCard(
+                                                message:
+                                                    '${AppLocalizations.of(context)!.productSubCategorie}:',
+                                                bold: FontWeight.bold,
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              TextFieldForCard(
+                                                message: product.code,
+                                              ),
+                                              TextFieldForCard(
+                                                message: productStock,
+                                              ),
+                                              TextFieldForCard(
+                                                message:
+                                                    '$coinSymbol ${formatDecimalPriceByRegion(price: Decimal.parse(priceProduct.toString()))}',
+                                              ),
+                                              TextFieldForCard(
+                                                message: productBrand,
+                                              ),
+                                              TextFieldForCard(
+                                                message: productCategorie,
+                                              ),
+                                              TextFieldForCard(
+                                                message: productSubCategorie,
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              TextFieldForCard(
+                                                message:
+                                                    '${AppLocalizations.of(context)!.productLine}:',
+                                                bold: FontWeight.bold,
+                                              ),
+                                              TextFieldForCard(
+                                                message:
+                                                    '${AppLocalizations.of(context)!.productQuality}:',
+                                                bold: FontWeight.bold,
+                                              ),
+                                              TextFieldForCard(
+                                                message:
+                                                    '${AppLocalizations.of(context)!.productSize}:',
+                                                bold: FontWeight.bold,
+                                              ),
+                                              TextFieldForCard(
+                                                message:
+                                                    '${AppLocalizations.of(context)!.productDesign}:',
+                                                bold: FontWeight.bold,
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              TextFieldForCard(
+                                                message: productLine,
+                                              ),
+                                              TextFieldForCard(
+                                                message: productQuality,
+                                              ),
+                                              TextFieldForCard(
+                                                message: productSize,
+                                              ),
+                                              TextFieldForCard(
+                                                message: productDesign,
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        )
+                      : SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height - 90,
+                          child: Scrollbar(
+                            thickness: 10,
+                            thumbVisibility: true,
+                            controller: _controller,
+                            child: ListView.builder(
+                              controller: _controller,
+                              physics: const BouncingScrollPhysics(),
+                              itemCount: filteredProducts.length,
+                              itemBuilder: (BuildContext context, index) {
+                                final sortedProducts = isDescending
+                                    ? filteredProducts.reversed.toList()
+                                    : filteredProducts;
+                                final product = sortedProducts[index];
+                                final productStock =
+                                    stockValues[product.code] ?? 000;
+                                final productBrand =
+                                    brandsSummary[product.brand] ?? '';
+                                final productCategorie =
+                                    categoriesSummary[product.categorie] ?? '';
+                                final productSubCategorie =
+                                    subCategoriesSummary[
+                                            product.subCategorie] ??
+                                        '';
+                                final productLine =
+                                    linesSummary[product.line] ?? '';
+                                final productQuality =
+                                    qualitiesSummary[product.quality] ?? '';
+                                final productSize =
+                                    sizesSummary[product.size] ?? '';
+                                final productDesign =
+                                    designsSummary[product.design] ?? '';
+                                final productPrice =
+                                    widget.listOfPrices[product.code] ?? 0;
+                                final priceProduct =
+                                    priceMultipliedByItsExchangeRatio(
+                                        productPrice: productPrice,
+                                        coinDecimals: coinDecimals,
+                                        coinExchangeRatio: coinExchangeRatio);
+                                return Container(
+                                  margin: const EdgeInsets.only(bottom: 10.0),
+                                  height: 120,
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  child: ListTile(
+                                    onTap: () {
+                                      if (product.selected == false) {
+                                        if (productStock > 0) {
+                                          final newProduct =
+                                              ShoppingCartProduct(
+                                            productQuantity: 1,
+                                            code: product.code.toString(),
+                                            productId: product.code.toString(),
+                                            listOfPricesId:
+                                                widget.listOfPrices.toString(),
+                                            totalAmount:
+                                                productPrice.toString(),
+                                            name: product.name,
+                                            unitPrice: productPrice.toString(),
+                                            availableStock: productStock,
+                                            urlPicture:
+                                                product.catalogue.toString(),
+                                          );
+                                          setState(() => product.selected =
+                                              !product.selected);
+                                          selectedProducts.add(newProduct);
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                            ..removeCurrentSnackBar()
+                                            ..showSnackBar(
+                                              SnackBar(
+                                                backgroundColor: themeProvider
+                                                    .myTheme
+                                                    .colorScheme
+                                                    .primary,
+                                                duration:
+                                                    const Duration(seconds: 1),
+                                                content: const Text(
+                                                  "No hay stock disponible de este producto",
+                                                  style: TextStyle(
+                                                    fontFamily:
+                                                        'Poppins-Regular',
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                        }
+                                      } else if (product.selected == true) {
+                                        setState(() => product.selected =
+                                            !product.selected);
+                                        selectedProducts.removeWhere((item) =>
+                                            item.code == product.code);
+                                      }
+                                    },
+                                    onLongPress: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              FutureBuilder(
+                                            future: storage
+                                                .ref()
+                                                .child('imagenes')
+                                                .child('productos')
+                                                .child(product.code)
+                                                .child('1')
+                                                .getDownloadURL()
+                                                .catchError((e) {
+                                              print(e);
+                                              return e.message;
+                                            }),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasData) {
+                                                final url =
+                                                    snapshot.data!.toString();
+
+                                                return ProductDetails(
+                                                  code: product.code,
+                                                  price: (productPrice),
+                                                  line: productLine,
+                                                  imageUrl: url,
+                                                  isProductNew: false,
+                                                  name: product.name,
+                                                  stock: productStock ?? 0,
+                                                  list: [
+                                                    ProductsByDate(
+                                                      quality: 'nan',
+                                                      //catalogue: 'test',
+                                                      categorie: 'test',
+                                                      code: 'test',
+                                                      barCode: 'test',
+                                                      design: 'test',
+                                                      line: 'test',
+                                                      brand: 'test',
+                                                      lastModifiedDate:
+                                                          DateTime.now(),
+                                                      name: 'test',
+                                                      subCategorie: 'test',
+                                                      size: 'test',
+                                                      selected: false,
+                                                    )
+                                                  ],
+                                                  isProductInAPromotion: false,
+                                                  prices: widget.listOfPrices,
+                                                  pricesName: widget.pricesName,
+                                                  catalogueID:
+                                                      product.catalogue,
+                                                  userZoneDocument:
+                                                      widget.userZoneDocument,
+                                                  showListButton: false,
+                                                );
+                                              } else if (snapshot.hasError) {
+                                                return ProductDetails(
+                                                  code: product.code,
+                                                  price: (productPrice),
+                                                  line: productLine,
+                                                  imageUrl:
+                                                      'https://i.imgur.com/BPbj6Gy.jpg',
+                                                  isProductNew: false,
+                                                  name: product.name,
+                                                  stock: productStock ?? 0,
+                                                  list: [
+                                                    ProductsByDate(
+                                                      quality: 'nan',
+                                                      //catalogue: 'test',
+                                                      categorie: 'test',
+                                                      code: 'test',
+                                                      barCode: 'test',
+                                                      design: 'test',
+                                                      line: 'test',
+                                                      brand: 'test',
+                                                      lastModifiedDate:
+                                                          DateTime.now(),
+                                                      name: 'test',
+                                                      subCategorie: 'test',
+                                                      size: 'test',
+                                                      selected: false,
+                                                    )
+                                                  ],
+                                                  isProductInAPromotion: false,
+                                                  prices: widget.listOfPrices,
+                                                  pricesName: widget.pricesName,
+                                                  catalogueID:
+                                                      product.catalogue,
+                                                  userZoneDocument:
+                                                      widget.userZoneDocument,
+                                                  showListButton: false,
+                                                );
+                                              } else {
+                                                return const SizedBox(
+                                                  width: 140,
+                                                  child: Center(
+                                                    child:
+                                                        CircularProgressIndicator(),
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    title: SingleChildScrollView(
+                                      physics: const BouncingScrollPhysics(),
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              // if (orderActive.orderActive == true ||
+                                              //     userCharge == 'Administrador' ||
+                                              //     userCharge == 'Gerente')
+                                              Container(
+                                                height: 17,
+                                                width: 17,
+                                                margin:
+                                                    const EdgeInsets.fromLTRB(
+                                                        5, 0, 0, 0),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(16),
+                                                  color: Colors.grey.shade400,
+                                                ),
+                                                child: Checkbox(
+                                                    side: MaterialStateBorderSide
+                                                        .resolveWith((states) =>
+                                                            const BorderSide(
+                                                                width: 1.0,
+                                                                color:
+                                                                    Colors
+                                                                        .transparent)),
+                                                    shape: const CircleBorder(),
+                                                    activeColor: themeProvider
+                                                        .myTheme
+                                                        .colorScheme
+                                                        .primary,
+                                                    value: product.selected,
+                                                    onChanged: (value) {
+                                                      if (product.selected ==
+                                                          false) {
                                                         final newProduct =
                                                             ShoppingCartProduct(
                                                           productQuantity: 1,
@@ -2782,604 +1420,164 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                                   .toString(),
                                                           availableStock:
                                                               productStock,
-                                                          urlPicture: product
-                                                              .catalogue
-                                                              .toString(),
+                                                          urlPicture:
+                                                              product.catalogue,
                                                         );
-                                                        setState(() => product
-                                                                .selected =
-                                                            !product.selected);
                                                         selectedProducts
                                                             .add(newProduct);
-                                                      } else {
-                                                        ScaffoldMessenger.of(
-                                                            context)
-                                                          ..removeCurrentSnackBar()
-                                                          ..showSnackBar(
-                                                            SnackBar(
-                                                              backgroundColor:
-                                                                  themeProvider
-                                                                      .myTheme
-                                                                      .colorScheme
-                                                                      .primary,
-                                                              duration:
-                                                                  const Duration(
-                                                                      seconds:
-                                                                          1),
-                                                              content:
-                                                                  const Text(
-                                                                "No hay stock disponible de este producto",
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontFamily:
-                                                                      'Poppins-Regular',
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          );
+                                                      } else if (product
+                                                              .selected ==
+                                                          true) {
+                                                        selectedProducts
+                                                            .removeWhere(
+                                                                (item) =>
+                                                                    item.code ==
+                                                                    product
+                                                                        .code);
                                                       }
-                                                    } else if (product
-                                                            .selected ==
-                                                        true) {
                                                       setState(() => product
-                                                              .selected =
-                                                          !product.selected);
-                                                      selectedProducts
-                                                          .removeWhere((item) =>
-                                                              item.code ==
-                                                              product.code);
-                                                    }
-                                                  }),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(width: 20),
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            SizedBox(
-                                              width: 90,
-                                              child: TextFieldForCard(
-                                                message: product.name,
+                                                          .selected = value!);
+                                                    }),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(width: 10),
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            TextFieldForCard(
-                                              message:
-                                                  '${AppLocalizations.of(context)!.productCode}:',
-                                              bold: FontWeight.bold,
-                                            ),
-                                            TextFieldForCard(
-                                              message:
-                                                  '${AppLocalizations.of(context)!.stock}:',
-                                              bold: FontWeight.bold,
-                                            ),
-                                            TextFieldForCard(
-                                              message:
-                                                  '${AppLocalizations.of(context)!.price}:',
-                                              bold: FontWeight.bold,
-                                            ),
-                                            TextFieldForCard(
-                                              message:
-                                                  '${AppLocalizations.of(context)!.productBrand}:',
-                                              bold: FontWeight.bold,
-                                            ),
-                                            TextFieldForCard(
-                                              message:
-                                                  '${AppLocalizations.of(context)!.productCategorie}:',
-                                              bold: FontWeight.bold,
-                                            ),
-                                            TextFieldForCard(
-                                              message:
-                                                  '${AppLocalizations.of(context)!.productSubCategorie}:',
-                                              bold: FontWeight.bold,
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(width: 10),
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            TextFieldForCard(
-                                              message: product.code,
-                                            ),
-                                            TextFieldForCard(
-                                              message: productStock,
-                                            ),
-                                            TextFieldForCard(
-                                              message:
-                                                  '$coinSymbol ${formatDecimalPriceByRegion(price: Decimal.parse(priceProduct.toString()))}',
-                                            ),
-                                            TextFieldForCard(
-                                              message: productBrand,
-                                            ),
-                                            TextFieldForCard(
-                                              message: productCategorie,
-                                            ),
-                                            TextFieldForCard(
-                                              message: productSubCategorie,
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(width: 10),
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            TextFieldForCard(
-                                              message:
-                                                  '${AppLocalizations.of(context)!.productLine}:',
-                                              bold: FontWeight.bold,
-                                            ),
-                                            TextFieldForCard(
-                                              message:
-                                                  '${AppLocalizations.of(context)!.productQuality}:',
-                                              bold: FontWeight.bold,
-                                            ),
-                                            TextFieldForCard(
-                                              message:
-                                                  '${AppLocalizations.of(context)!.productSize}:',
-                                              bold: FontWeight.bold,
-                                            ),
-                                            TextFieldForCard(
-                                              message:
-                                                  '${AppLocalizations.of(context)!.productDesign}:',
-                                              bold: FontWeight.bold,
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(width: 10),
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            TextFieldForCard(
-                                              message: productLine,
-                                            ),
-                                            TextFieldForCard(
-                                              message: productQuality,
-                                            ),
-                                            TextFieldForCard(
-                                              message: productSize,
-                                            ),
-                                            TextFieldForCard(
-                                              message: productDesign,
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        )
-                      : SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height - 90,
-                          child: ListView.builder(
-                            controller: _controller,
-                            physics: const BouncingScrollPhysics(),
-                            itemCount: filteredProducts.length,
-                            itemBuilder: (BuildContext context, index) {
-                              final sortedProducts = isDescending
-                                  ? filteredProducts.reversed.toList()
-                                  : filteredProducts;
-                              final product = sortedProducts[index];
-                              final productStock =
-                                  stockValues[product.code] ?? 000;
-                              final productBrand =
-                                  brandsSummary[product.brand] ?? '';
-                              final productCategorie =
-                                  categoriesSummary[product.categorie] ?? '';
-                              final productSubCategorie =
-                                  subCategoriesSummary[product.subCategorie] ??
-                                      '';
-                              final productLine =
-                                  linesSummary[product.line] ?? '';
-                              final productQuality =
-                                  qualitiesSummary[product.quality] ?? '';
-                              final productSize =
-                                  sizesSummary[product.size] ?? '';
-                              final productDesign =
-                                  designsSummary[product.design] ?? '';
-                              final productPrice =
-                                  widget.listOfPrices[product.code] ?? 0;
-                              final priceProduct =
-                                  priceMultipliedByItsExchangeRatio(
-                                      productPrice: productPrice,
-                                      coinDecimals: coinDecimals,
-                                      coinExchangeRatio: coinExchangeRatio);
-                              return Container(
-                                margin: const EdgeInsets.only(bottom: 10.0),
-                                height: 120,
-                                width: MediaQuery.of(context).size.width,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                child: ListTile(
-                                  onTap: () {
-                                    if (product.selected == false) {
-                                      if (productStock > 0) {
-                                        final newProduct = ShoppingCartProduct(
-                                          productQuantity: 1,
-                                          code: product.code.toString(),
-                                          productId: product.code.toString(),
-                                          listOfPricesId:
-                                              widget.listOfPrices.toString(),
-                                          totalAmount: productPrice.toString(),
-                                          name: product.name,
-                                          unitPrice: productPrice.toString(),
-                                          availableStock: productStock,
-                                          urlPicture:
-                                              product.catalogue.toString(),
-                                        );
-                                        setState(() => product.selected =
-                                            !product.selected);
-                                        selectedProducts.add(newProduct);
-                                      } else {
-                                        ScaffoldMessenger.of(context)
-                                          ..removeCurrentSnackBar()
-                                          ..showSnackBar(
-                                            SnackBar(
-                                              backgroundColor: themeProvider
-                                                  .myTheme.colorScheme.primary,
-                                              duration:
-                                                  const Duration(seconds: 1),
-                                              content: const Text(
-                                                "No hay stock disponible de este producto",
-                                                style: TextStyle(
-                                                  fontFamily: 'Poppins-Regular',
+                                            ],
+                                          ),
+                                          const SizedBox(width: 20),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              SizedBox(
+                                                width: 90,
+                                                child: TextFieldForCard(
+                                                  message: product.name,
                                                 ),
                                               ),
-                                            ),
-                                          );
-                                      }
-                                    } else if (product.selected == true) {
-                                      setState(() =>
-                                          product.selected = !product.selected);
-                                      selectedProducts.removeWhere(
-                                          (item) => item.code == product.code);
-                                    }
-                                  },
-                                  onLongPress: () {
-                                    // Pendiente
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            FutureBuilder(
-                                          future: storage
-                                              .ref()
-                                              .child('imagenes')
-                                              .child('productos')
-                                              .child(product.code)
-                                              .child('1')
-                                              .getDownloadURL()
-                                              .catchError((e) {
-                                            print(e);
-                                            return e.message;
-                                          }),
-                                          builder: (context, snapshot) {
-                                            if (snapshot.hasData) {
-                                              final url =
-                                                  snapshot.data!.toString();
-
-                                              return ProductDetails(
-                                                code: product.code,
-                                                price: (productPrice),
-                                                line: productLine,
-                                                imageUrl: url,
-                                                isProductNew: false,
-                                                name: product.name,
-                                                stock: productStock ?? 0,
-                                                list: [
-                                                  ProductsByDate(
-                                                    quality: 'nan',
-                                                    //catalogue: 'test',
-                                                    categorie: 'test',
-                                                    code: 'test',
-                                                    barCode: 'test',
-                                                    design: 'test',
-                                                    line: 'test',
-                                                    brand: 'test',
-                                                    lastModifiedDate:
-                                                        DateTime.now(),
-                                                    name: 'test',
-                                                    subCategorie: 'test',
-                                                    size: 'test',
-                                                    selected: false,
-                                                  )
-                                                ],
-                                                isProductInAPromotion: false,
-                                                prices: widget.listOfPrices,
-                                                pricesName: widget.pricesName,
-                                                catalogueID: product.catalogue,
-                                                userZoneDocument:
-                                                    widget.userZoneDocument,
-                                                showListButton: false,
-                                              );
-                                            } else if (snapshot.hasError) {
-                                              return ProductDetails(
-                                                code: product.code,
-                                                price: (productPrice),
-                                                line: productLine,
-                                                imageUrl:
-                                                    'https://i.imgur.com/BPbj6Gy.jpg',
-                                                isProductNew: false,
-                                                name: product.name,
-                                                stock: productStock ?? 0,
-                                                list: [
-                                                  ProductsByDate(
-                                                    quality: 'nan',
-                                                    //catalogue: 'test',
-                                                    categorie: 'test',
-                                                    code: 'test',
-                                                    barCode: 'test',
-                                                    design: 'test',
-                                                    line: 'test',
-                                                    brand: 'test',
-                                                    lastModifiedDate:
-                                                        DateTime.now(),
-                                                    name: 'test',
-                                                    subCategorie: 'test',
-                                                    size: 'test',
-                                                    selected: false,
-                                                  )
-                                                ],
-                                                isProductInAPromotion: false,
-                                                prices: widget.listOfPrices,
-                                                pricesName: widget.pricesName,
-                                                catalogueID: product.catalogue,
-                                                userZoneDocument:
-                                                    widget.userZoneDocument,
-                                                showListButton: false,
-                                              );
-                                            } else {
-                                              return const SizedBox(
-                                                width: 140,
-                                                child: Center(
-                                                  child:
-                                                      CircularProgressIndicator(),
-                                                ),
-                                              );
-                                            }
-                                          },
-                                        ),
+                                            ],
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              TextFieldForCard(
+                                                message:
+                                                    '${AppLocalizations.of(context)!.productCode}:',
+                                                bold: FontWeight.bold,
+                                              ),
+                                              TextFieldForCard(
+                                                message:
+                                                    '${AppLocalizations.of(context)!.stock}:',
+                                                bold: FontWeight.bold,
+                                              ),
+                                              TextFieldForCard(
+                                                message:
+                                                    '${AppLocalizations.of(context)!.price}:',
+                                                bold: FontWeight.bold,
+                                              ),
+                                              TextFieldForCard(
+                                                message:
+                                                    '${AppLocalizations.of(context)!.productBrand}:',
+                                                bold: FontWeight.bold,
+                                              ),
+                                              TextFieldForCard(
+                                                message:
+                                                    '${AppLocalizations.of(context)!.productCategorie}:',
+                                                bold: FontWeight.bold,
+                                              ),
+                                              TextFieldForCard(
+                                                message:
+                                                    '${AppLocalizations.of(context)!.productSubCategorie}:',
+                                                bold: FontWeight.bold,
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              TextFieldForCard(
+                                                message: product.code,
+                                              ),
+                                              TextFieldForCard(
+                                                message: productStock,
+                                              ),
+                                              TextFieldForCard(
+                                                message: priceProduct
+                                                    .toStringAsFixed(2),
+                                              ),
+                                              TextFieldForCard(
+                                                message: productBrand,
+                                              ),
+                                              TextFieldForCard(
+                                                message: productCategorie,
+                                              ),
+                                              TextFieldForCard(
+                                                message: productSubCategorie,
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              TextFieldForCard(
+                                                message:
+                                                    '${AppLocalizations.of(context)!.productLine}:',
+                                                bold: FontWeight.bold,
+                                              ),
+                                              TextFieldForCard(
+                                                message:
+                                                    '${AppLocalizations.of(context)!.productQuality}:',
+                                                bold: FontWeight.bold,
+                                              ),
+                                              TextFieldForCard(
+                                                message:
+                                                    '${AppLocalizations.of(context)!.productSize}:',
+                                                bold: FontWeight.bold,
+                                              ),
+                                              TextFieldForCard(
+                                                message:
+                                                    '${AppLocalizations.of(context)!.productDesign}:',
+                                                bold: FontWeight.bold,
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              TextFieldForCard(
+                                                message: productLine,
+                                              ),
+                                              TextFieldForCard(
+                                                message: productQuality,
+                                              ),
+                                              TextFieldForCard(
+                                                message: productSize,
+                                              ),
+                                              TextFieldForCard(
+                                                message: productDesign,
+                                              ),
+                                            ],
+                                          ),
+                                        ],
                                       ),
-                                    );
-                                  },
-                                  title: SingleChildScrollView(
-                                    physics: const BouncingScrollPhysics(),
-                                    scrollDirection: Axis.horizontal,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            // if (orderActive.orderActive == true ||
-                                            //     userCharge == 'Administrador' ||
-                                            //     userCharge == 'Gerente')
-                                            Container(
-                                              height: 17,
-                                              width: 17,
-                                              margin: const EdgeInsets.fromLTRB(
-                                                  5, 0, 0, 0),
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(16),
-                                                color: Colors.grey.shade400,
-                                              ),
-                                              child: Checkbox(
-                                                  side: MaterialStateBorderSide
-                                                      .resolveWith((states) =>
-                                                          const BorderSide(
-                                                              width: 1.0,
-                                                              color: Colors
-                                                                  .transparent)),
-                                                  shape: const CircleBorder(),
-                                                  activeColor: themeProvider
-                                                      .myTheme
-                                                      .colorScheme
-                                                      .primary,
-                                                  value: product.selected,
-                                                  onChanged: (value) {
-                                                    if (product.selected ==
-                                                        false) {
-                                                      final newProduct =
-                                                          ShoppingCartProduct(
-                                                        productQuantity: 1,
-                                                        code: product.code
-                                                            .toString(),
-                                                        productId: product.code
-                                                            .toString(),
-                                                        listOfPricesId: widget
-                                                            .listOfPrices
-                                                            .toString(),
-                                                        totalAmount:
-                                                            productPrice
-                                                                .toString(),
-                                                        name: product.name,
-                                                        unitPrice: productPrice
-                                                            .toString(),
-                                                        availableStock:
-                                                            productStock,
-                                                        urlPicture:
-                                                            product.catalogue,
-                                                      );
-                                                      selectedProducts
-                                                          .add(newProduct);
-                                                    } else if (product
-                                                            .selected ==
-                                                        true) {
-                                                      selectedProducts
-                                                          .removeWhere((item) =>
-                                                              item.code ==
-                                                              product.code);
-                                                    }
-                                                    setState(() => product
-                                                        .selected = value!);
-                                                  }),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(width: 20),
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            SizedBox(
-                                              width: 90,
-                                              child: TextFieldForCard(
-                                                message: product.name,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(width: 10),
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            TextFieldForCard(
-                                              message:
-                                                  '${AppLocalizations.of(context)!.productCode}:',
-                                              bold: FontWeight.bold,
-                                            ),
-                                            TextFieldForCard(
-                                              message:
-                                                  '${AppLocalizations.of(context)!.stock}:',
-                                              bold: FontWeight.bold,
-                                            ),
-                                            TextFieldForCard(
-                                              message:
-                                                  '${AppLocalizations.of(context)!.price}:',
-                                              bold: FontWeight.bold,
-                                            ),
-                                            TextFieldForCard(
-                                              message:
-                                                  '${AppLocalizations.of(context)!.productBrand}:',
-                                              bold: FontWeight.bold,
-                                            ),
-                                            TextFieldForCard(
-                                              message:
-                                                  '${AppLocalizations.of(context)!.productCategorie}:',
-                                              bold: FontWeight.bold,
-                                            ),
-                                            TextFieldForCard(
-                                              message:
-                                                  '${AppLocalizations.of(context)!.productSubCategorie}:',
-                                              bold: FontWeight.bold,
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(width: 10),
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            TextFieldForCard(
-                                              message: product.code,
-                                            ),
-                                            TextFieldForCard(
-                                              message: productStock,
-                                            ),
-                                            TextFieldForCard(
-                                              message: priceProduct
-                                                  .toStringAsFixed(2),
-                                            ),
-                                            TextFieldForCard(
-                                              message: productBrand,
-                                            ),
-                                            TextFieldForCard(
-                                              message: productCategorie,
-                                            ),
-                                            TextFieldForCard(
-                                              message: productSubCategorie,
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(width: 10),
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            TextFieldForCard(
-                                              message:
-                                                  '${AppLocalizations.of(context)!.productLine}:',
-                                              bold: FontWeight.bold,
-                                            ),
-                                            TextFieldForCard(
-                                              message:
-                                                  '${AppLocalizations.of(context)!.productQuality}:',
-                                              bold: FontWeight.bold,
-                                            ),
-                                            TextFieldForCard(
-                                              message:
-                                                  '${AppLocalizations.of(context)!.productSize}:',
-                                              bold: FontWeight.bold,
-                                            ),
-                                            TextFieldForCard(
-                                              message:
-                                                  '${AppLocalizations.of(context)!.productDesign}:',
-                                              bold: FontWeight.bold,
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(width: 10),
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            TextFieldForCard(
-                                              message: productLine,
-                                            ),
-                                            TextFieldForCard(
-                                              message: productQuality,
-                                            ),
-                                            TextFieldForCard(
-                                              message: productSize,
-                                            ),
-                                            TextFieldForCard(
-                                              message: productDesign,
-                                            ),
-                                          ],
-                                        ),
-                                      ],
                                     ),
                                   ),
-                                ),
-                              );
-                            },
+                                );
+                              },
+                            ),
                           ),
                         ),
                 ],
