@@ -23,9 +23,9 @@ final pharosPassword = dotenv.env['pharosPasswordSandbox'] ?? '';
 //final pharosPassword = dotenv.env['pharosPasswordProsa'] ?? '';
 
 //  PROD
-const EnvUrl = 'https://api.pharospayments.com/payments/v1/charge';
+//const EnvUrl = 'https://api.pharospayments.com/payments/v1/charge';
 // DEV
-//const EnvUrl = 'http://api-sandbox.pharospayments.com/gateway/charge';
+const EnvUrl = 'http://api-sandbox.pharospayments.com/gateway/charge';
 
 Future<Uint8List> getToken(String serialNumber) async {
   final brand = (await getPlatformInfo()).deviceBrand;
