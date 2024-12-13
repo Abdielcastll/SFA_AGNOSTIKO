@@ -40,7 +40,6 @@ class PinpadManager {
         try {
           await connectPinpad();
           await closeCardReader();
-          await cancelEmvTransaction();
         } catch (e) {
           print("Error during connectPinpad: $e");
         }

@@ -86,7 +86,6 @@ Future acceptAmount(
         } else {
           try {
             await emvPreTransaction();
-            await cancelEmvTransaction();
             Navigator.pop(context);
           } catch (e) {
             Navigator.pop(context);
@@ -95,7 +94,6 @@ Future acceptAmount(
         }
       } else {
         await emvPreTransaction();
-        await cancelEmvTransaction();
         Navigator.pop(context);
       } // y cerramos el popup antes de seguir
     }

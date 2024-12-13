@@ -55,6 +55,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   EmvTransactionResult? transactionResult;
   String urlLogoTicket = '';
   bool dialogOn = false;
+
   getEmvTags() async {
     final emvModule = EmvModule.instance;
     print('EMV TAGS');
@@ -180,13 +181,16 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   bool timerExpired = false;
   void startTimerFullPaymentWithCard() {
     printTicket();
-    Future.delayed(Duration(seconds: 20), () {
+    Future.delayed(Duration(seconds: 30), () {
       if (transactionResult == EmvTransactionResult.Approved) {
         setState(() {
           timerExpired = true;
         });
         onAccept();
       } else {
+        setState(() {
+          timerExpired = true;
+        });
         kioskoDialog();
       }
     });
@@ -263,10 +267,8 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                   if (globalRemoteConfig.onlyFullPaymentWithCard!) {
                     Navigator.pop(context);
                     Navigator.pop(context);
-                    if (transactionResult == null) {
-                      Navigator.pop(context);
-                    }
                     if (transactionResult == EmvTransactionResult.Fail ||
+                        transactionResult == EmvTransactionResult.Denied ||
                         transactionResult == null) {
                       tryChipDialog(context);
                     }
@@ -360,6 +362,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       final notificationService = context.read<NotificationService>();
       final paymentBody = (ModalRoute.of(context)?.settings.arguments!
           as List)[2] as AddPaymentBodyAtt;
+
+      print("result: $transactionResult");
+      print("result: ${this.transactionResult}");
 
       if (transactionArgs!.emvTransactionType != EmvTransactionType.Refund) {
         switch (transactionResult) {
@@ -741,7 +746,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        Future.delayed(const Duration(minutes: 2), () {
+        Future.delayed(const Duration(seconds: 8), () {
           Navigator.popUntil(context, (route) => route.isFirst);
         });
         return AlertDialog(
@@ -835,15 +840,15 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       if (globalRemoteConfig.onlyFullPaymentWithCard!) {
         Navigator.pop(context);
         Navigator.pop(context);
-        if (transactionResult == null) {
-          Navigator.pop(context);
-        }
         if (transactionResult == EmvTransactionResult.Fail ||
             transactionResult == EmvTransactionResult.Denied ||
             transactionResult == null) {
-          tryChipDialog(context);
+          if (transactionArgs!.responseCode != '88') {
+            tryChipDialog(context);
+          }
         }
       } else {
+        print("me fui aca por alguna razon");
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
