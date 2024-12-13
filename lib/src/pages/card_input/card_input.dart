@@ -208,8 +208,12 @@ class _CardInputViewState extends State<CardInputView> {
 
       await for (final event in cardReaderStream) {
         print('card reader event: $event');
+        // todo hacer caso para timeout de ir a emv result en vacio
+        if (!mounted) {
+          print('Not mounted');
 
-        if (!mounted) return;
+          return;
+        }
         if (event.cardType == CardType.Magnetic) {
           final iv = "0000000000000000".toHexBytes();
           final encryptedTracksData = await getDUKPTEncryptedTracksData(
@@ -235,6 +239,22 @@ class _CardInputViewState extends State<CardInputView> {
       _startCardDetection(_supportedCardTypes
           .where((type) => type != CardType.Magnetic)
           .toList());
+    } on TimeoutException {
+      print("timeout");
+      if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+        await cancelPaymentProcess(
+            paymentBody!.client, paymentBody!.invoiceNumber);
+      }
+      await closeCardReader();
+      transactionArgs!.responseCode = "88"; //vamos a usar 88 para timeout
+      final arguments = (ModalRoute.of(context)?.settings.arguments! as List);
+      Navigator.pushReplacementNamed(context, EmvTransactionInfoView.route,
+          arguments: [
+            transactionArgs,
+            if (arguments.length >= 2) arguments[1] else null,
+            if (arguments.length >= 3) arguments[2] else null,
+            if (arguments.length >= 4) arguments[3] else null
+          ]);
     } catch (e, stackTrace) {
       print('catch card Detection: $e');
 
@@ -249,6 +269,7 @@ class _CardInputViewState extends State<CardInputView> {
       }
       Navigator.popUntil(context, (route) => route.isFirst == true);
     }
+    await closeCardReader();
     print("****************CARD READER CLOSED*****************");
   }
 
@@ -336,9 +357,6 @@ class _CardInputViewState extends State<CardInputView> {
       content: Text(message),
     ));
     final deviceType = await getDeviceType();
-    if (deviceType == DeviceType.PINPAD) {
-      showPinpadHome();
-    }
     MPOSController.instance.showHomeScreen();
     transactionArgs?.pan ??=
         (await EmvModule.instance.getTagValue(0x57))?.toHexStr().split('d')[0];
@@ -353,6 +371,7 @@ class _CardInputViewState extends State<CardInputView> {
     if (deviceType == DeviceType.PINPAD) {
       showPinpadHome();
     }
+    await closeCardReader();
     Navigator.pushReplacementNamed(
       context,
       EmvTransactionInfoView.route,
@@ -406,7 +425,6 @@ class _CardInputViewState extends State<CardInputView> {
     }
     print('acabo pinpad entry en cancelacion timeout o error');
     await checkPinpadConnection();
-    // si llegamos aquí, hubo cancelación, timeout o error
     await cancelEmvTransaction();
     if (globalRemoteConfig.onlyFullPaymentWithCard!) {
       await cancelPaymentProcess(
@@ -479,15 +497,14 @@ class _CardInputViewState extends State<CardInputView> {
         print(e.toString());
         if (stan != null) {
           final response = await runVoidPharos(stan);
-          String? responseCode = response.resultCode;
           transactionArgs.responseCode = response.resultCode;
           Navigator.pop(context);
 
           await closeCardReader();
-          await cancelEmvTransaction();
           await emvCompleteOnline(EmvOnlineResponse(
             authorisationResponseCode: '01',
           ));
+          await cancelEmvTransaction();
 
           if (globalRemoteConfig.onlyFullPaymentWithCard!) {
             await cancelPaymentProcess(
@@ -497,8 +514,6 @@ class _CardInputViewState extends State<CardInputView> {
           }
           final arguments =
               (ModalRoute.of(context)?.settings.arguments! as List);
-          print('navigate');
-
           Navigator.pushReplacementNamed(context, EmvTransactionInfoView.route,
               arguments: [
                 transactionArgs,
@@ -506,18 +521,6 @@ class _CardInputViewState extends State<CardInputView> {
                 if (arguments.length >= 3) arguments[2] else null,
                 if (arguments.length >= 4) arguments[3] else null
               ]);
-          // showInfoDialog(context, "$exception. $infoDialogText",
-          //     onClose: () async {
-          //   await cancelEmvTransaction();
-          //   if (globalRemoteConfig.onlyFullPaymentWithCard!) {
-          //     await cancelPaymentProcess(
-          //       paymentBody!.client,
-          //       paymentBody!.invoiceNumber,
-          //     );
-          //     Navigator.popUntil(context, (route) => route.isFirst == true);
-          //   }
-          //   Navigator.popUntil(context, (route) => route.isFirst == true);
-          // });
         } else {
           Navigator.pop(context);
           throw StateError(
@@ -578,7 +581,6 @@ class _CardInputViewState extends State<CardInputView> {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Tiempo de ingreso de pin agotado"),
       ));
-      await checkPinpadConnection();
       Navigator.popUntil(context, (route) => route.isFirst == true);
     } else if (event.transactionInfo.result == EmvTransactionResult.Denied) {
       if (globalRemoteConfig.onlyFullPaymentWithCard!) {
@@ -621,6 +623,7 @@ class _CardInputViewState extends State<CardInputView> {
     if (deviceType == DeviceType.PINPAD) {
       showPinpadHome();
     }
+    await closeCardReader();
     Navigator.pushReplacementNamed(context, EmvTransactionInfoView.route,
         arguments: [
           transactionArgs,

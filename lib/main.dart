@@ -164,70 +164,56 @@ class LifecycleWatcher extends StatefulWidget {
 class _LifecycleWatcherState extends State<LifecycleWatcher>
     with WidgetsBindingObserver {
   Timer? _inactivityTimer;
+  bool isVideoPlaying = false;
+  bool promoVideo = false;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       multitenantConfig.getColorsApp(context);
+      promoVideo = globalRemoteConfig.promoVideoDisponible!;
     });
     WidgetsBinding.instance.addObserver(this);
-    Timer(const Duration(minutes: 1), () {
-      _startInactivityTimer();
-    });
+    _startInactivityTimer();
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    _inactivityTimer?.cancel();
+    _cancelInactivityTimer();
     super.dispose();
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      _startInactivityTimer();
-    } else if (state == AppLifecycleState.paused) {
-      _cancelInactivityTimer();
-    }
-  }
-
   void _startInactivityTimer() {
-    print("start timer");
-    // Cancel any existing timer
-    _inactivityTimer?.cancel();
+    if (isVideoPlaying) return;
 
-    // Ensure only one timer exists
+    _cancelInactivityTimer();
     _inactivityTimer = Timer(const Duration(minutes: 3), () {
-      print('timer complete');
-      if (globalRemoteConfig.promoVideoDisponible!) {
-        if (objectBox.getAllShoppingCartProducts().isEmpty) {
-          _cancelInactivityTimer();
-          print('show video');
-          navigatorKey.currentState?.pushNamed('promo');
-        } else {
-          _resetInactivityTimer();
-        }
+      if (promoVideo && objectBox.getAllShoppingCartProducts().isEmpty) {
+        _cancelInactivityTimer();
+        setState(() {
+          isVideoPlaying = true;
+        });
+        navigatorKey.currentState?.pushNamed('promo').then((_) {
+          setState(() {
+            isVideoPlaying = false;
+          });
+          _startInactivityTimer();
+        });
       }
-
-      // Reset the timer reference to null after completion
-      _inactivityTimer = null;
     });
   }
 
   void _cancelInactivityTimer() {
-    print('cancel timer');
-    if (_inactivityTimer?.isActive ?? false) {
-      _inactivityTimer!.cancel();
-      // Ensure no residual timer reference
-      _inactivityTimer = null;
-    }
+    _inactivityTimer?.cancel();
+    _inactivityTimer = null;
   }
 
   void _resetInactivityTimer() {
-    print('reset timer');
-    _startInactivityTimer();
+    if (!isVideoPlaying) {
+      _startInactivityTimer();
+    }
   }
 
   @override
