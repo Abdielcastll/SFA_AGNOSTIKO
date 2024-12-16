@@ -165,7 +165,7 @@ class _PinInputViewState extends State<PinInputView> {
     print('startTimer');
 
     final pinEntryStream = startOfflinePinEntry(PinEntryParameters(
-      timeout: 120,
+      timeout: 50,
       pinRSAData: event.pinRSAData,
       allowedLength: [4, 8, 23, 13, 6],
     ));

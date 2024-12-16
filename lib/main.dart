@@ -174,13 +174,11 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
       multitenantConfig.getColorsApp(context);
       promoVideo = globalRemoteConfig.promoVideoDisponible!;
     });
-    WidgetsBinding.instance.addObserver(this);
     _startInactivityTimer();
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
     _cancelInactivityTimer();
     super.dispose();
   }
@@ -219,8 +217,7 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
   @override
   Widget build(BuildContext context) {
     final localeProvider = Provider.of<LocaleProvider>(context);
-    final themeProvider =
-        Provider.of<ThemeProvider>(context, listen: true); // Get theme colors
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return GestureDetector(
       onTap: () {

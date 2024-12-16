@@ -181,7 +181,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   bool timerExpired = false;
   void startTimerFullPaymentWithCard() {
     printTicket();
-    Future.delayed(Duration(seconds: 30), () {
+    Future.delayed(Duration(seconds: 18), () {
       if (transactionResult == EmvTransactionResult.Approved) {
         setState(() {
           timerExpired = true;
@@ -496,7 +496,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
           children: [
             const Text(''),
             Text(
-              "${AppLocalizations.of(context)!.transaction} $transactionResultStr - $transactionOnlineStr",
+              transactionArgs!.responseCode == '88'
+                  ? "Tiempo de espera exedido"
+                  : "${AppLocalizations.of(context)!.transaction} $transactionResultStr - $transactionOnlineStr",
               style: TextStyle(
                 color: this.transactionResult == EmvTransactionResult.Approved
                     ? Colors.green
@@ -744,9 +746,10 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     objectBox.delelteAllShoppingCart();
     orderActive.setOrder(false);
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
-        Future.delayed(const Duration(seconds: 8), () {
+        Future.delayed(const Duration(seconds: 5), () {
           Navigator.popUntil(context, (route) => route.isFirst);
         });
         return AlertDialog(

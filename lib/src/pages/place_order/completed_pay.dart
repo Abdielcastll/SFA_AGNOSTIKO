@@ -203,7 +203,7 @@ class _CompletedPayBody extends State<CompletedPayBody> {
 
   void startTimerFullPaymentWithCard() {
     invoicePrintLayout(widget.addPaymentBody, widget.currentCoin);
-    Future.delayed(Duration(minutes: 2), () {
+    Future.delayed(Duration(minutes: 1), () {
       onGoBack();
     });
   }
