@@ -196,7 +196,7 @@ class _CardInputViewState extends State<CardInputView> {
       Navigator.popUntil(context, (route) => route.isFirst == true);
     }
 
-    final cardReaderStream = openCardReader(cardTypes: cardTypes, timeout: 60);
+    final cardReaderStream = openCardReader(cardTypes: cardTypes, timeout: 50);
     print('Open readers stream');
 
     setState(() {
@@ -411,7 +411,7 @@ class _CardInputViewState extends State<CardInputView> {
       "Por favor ingrese el PIN en el Pinpad.",
     );
     final pinEntryParameters = PinEntryParameters(
-      timeout: 60,
+      timeout: 50,
       pinRSAData: null,
       allowedLength: [0, 4, 8, 23, 13, 6],
     );
