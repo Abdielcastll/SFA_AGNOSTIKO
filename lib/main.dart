@@ -165,14 +165,12 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
     with WidgetsBindingObserver {
   Timer? _inactivityTimer;
   bool isVideoPlaying = false;
-  bool promoVideo = false;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       multitenantConfig.getColorsApp(context);
-      promoVideo = globalRemoteConfig.promoVideoDisponible!;
     });
     _startInactivityTimer();
   }
@@ -184,16 +182,27 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
   }
 
   void _startInactivityTimer() {
+    print("Start timer");
     if (isVideoPlaying) return;
 
     _cancelInactivityTimer();
     _inactivityTimer = Timer(const Duration(minutes: 3), () {
-      if (promoVideo && objectBox.getAllShoppingCartProducts().isEmpty) {
+      print("timer complete");
+      print(globalRemoteConfig.promoVideoDisponible!);
+      print(objectBox.getAllShoppingCartProducts().isEmpty);
+      if (globalRemoteConfig.promoVideoDisponible! &&
+          objectBox.getAllShoppingCartProducts().isEmpty) {
+        print("conditions for video");
+
         _cancelInactivityTimer();
         setState(() {
           isVideoPlaying = true;
         });
+        print("start video");
+
         navigatorKey.currentState?.pushNamed('promo').then((_) {
+          print("then del video");
+
           setState(() {
             isVideoPlaying = false;
           });
@@ -204,12 +213,16 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
   }
 
   void _cancelInactivityTimer() {
+    print("Cancel timer");
+
     _inactivityTimer?.cancel();
     _inactivityTimer = null;
   }
 
   void _resetInactivityTimer() {
     if (!isVideoPlaying) {
+      print("reset timer");
+
       _startInactivityTimer();
     }
   }
