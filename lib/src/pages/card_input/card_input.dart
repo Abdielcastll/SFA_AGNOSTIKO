@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:agnostiko/agnostiko.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/dialogs/try_again_dialog.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
 import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
@@ -207,7 +208,7 @@ class _CardInputViewState extends State<CardInputView> {
       print('try card reader');
 
       await for (final event in cardReaderStream) {
-        print('card reader event: $event');
+        print('card reader event: ${event.cardType}');
         // todo hacer caso para timeout de ir a emv result en vacio
         if (!mounted) {
           print('Not mounted');
@@ -258,16 +259,37 @@ class _CardInputViewState extends State<CardInputView> {
     } catch (e, stackTrace) {
       print('catch card Detection: $e');
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Error en la deteccion"),
-      ));
       print("Error: $e");
       print(stackTrace);
+      if (e.toString().contains("CardReaderCancel")) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Lectura cancelada"),
+          ),
+        );
+        if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+          await cancelPaymentProcess(
+              paymentBody!.client, paymentBody!.invoiceNumber);
+          Navigator.pop(context);
+          Navigator.pop(context);
+        } else {
+          Navigator.popUntil(context, (route) => route.isFirst == true);
+        }
+      }
       if (globalRemoteConfig.onlyFullPaymentWithCard!) {
         await cancelPaymentProcess(
             paymentBody!.client, paymentBody!.invoiceNumber);
+        Navigator.pop(context);
+        Navigator.pop(context);
+        tryAgainDialog(context);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Error en la deteccion"),
+          ),
+        );
+        Navigator.popUntil(context, (route) => route.isFirst == true);
       }
-      Navigator.popUntil(context, (route) => route.isFirst == true);
     }
     await closeCardReader();
     print("****************CARD READER CLOSED*****************");
