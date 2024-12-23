@@ -120,7 +120,7 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
                 totalAmount: element.totalAmount.toString(),
                 urlPicture: element.urlPicture.toString(),
               );
-              if (result.productQuantity! <= stock) {
+              if (result.productQuantity! + 1 <= stock) {
                 objectBox.insertShoppingCartProduct(result);
                 Fluttertoast.showToast(
                   msg: 'Se ha agregado exitosamente al carrito',

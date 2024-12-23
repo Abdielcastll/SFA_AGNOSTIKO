@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:decimal/decimal.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -8,20 +9,27 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
+import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
+import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/place_order/place_oder_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/product_details/product_details.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
+import 'package:pwa_sales2go_flutter/src/services/auth.dart';
+import 'package:pwa_sales2go_flutter/src/services/connection_service.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
+import 'package:pwa_sales2go_flutter/src/utils/custom_cache_manager.dart';
 import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -259,6 +267,7 @@ class _ProductsBodyState extends State<ProductsBody> {
     // Produtos
     final products = Provider.of<List<Products>?>(context) ?? [];
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    final user = Provider.of<UserModel>(context);
 
     return coinName.toString().isEmpty
         ? Center(
@@ -271,8 +280,7 @@ class _ProductsBodyState extends State<ProductsBody> {
               children: [
                 if (selectedProducts.isEmpty)
                   Container()
-                else if (selectedProducts.isNotEmpty &&
-                    orderActive.orderActive == true)
+                else if (selectedProducts.isNotEmpty)
                   Container(
                     height: 70,
                     width: 70,
@@ -282,6 +290,293 @@ class _ProductsBodyState extends State<ProductsBody> {
                       backgroundColor:
                           themeProvider.myTheme.colorScheme.primary,
                       onPressed: () async {
+                        if (orderActive.orderActive == false) {
+                          bool internet =
+                              await checkInternetConnection(context);
+                          if (globalRemoteConfig.clientesEnabled == true &&
+                              internet) {
+                            showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Center(
+                                  child: SingleChildScrollView(
+                                    child: AlertDialog(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      title: Center(
+                                        child: Text(
+                                          'Personalizar el carrito de compras con tu nombre ',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontFamily: 'Poppins-regular',
+                                            color: themeProvider.myTheme
+                                                .colorScheme.onPrimaryContainer,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                      content: Container(
+                                        // color: Colors.grey,
+                                        // height: 30,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          // crossAxisAlignment:
+                                          //     CrossAxisAlignment.start,
+                                          children: [
+                                            TextButton(
+                                              style: ButtonStyle(
+                                                overlayColor: MaterialStateColor
+                                                    .resolveWith((states) =>
+                                                        Colors.transparent),
+                                              ),
+                                              onPressed: () {
+                                                // Escoger lista de clientes
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (BuildContext
+                                                            context) =>
+                                                        PlaceOrderPage(
+                                                      userZoneDocument: widget
+                                                          .userZoneDocument,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              child: Container(
+                                                margin:
+                                                    const EdgeInsets.fromLTRB(
+                                                        0, 5, 0, 0),
+                                                child: Text(
+                                                  'Si',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    fontFamily:
+                                                        'Poppins-Regular',
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                    decoration: TextDecoration
+                                                        .underline,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            TextButton(
+                                              style: ButtonStyle(
+                                                overlayColor: MaterialStateColor
+                                                    .resolveWith((states) =>
+                                                        Colors.transparent),
+                                              ),
+                                              onPressed: () async {
+                                                // Escoger lista de clientes
+                                                // var client =
+                                                print(
+                                                    'SELECTING DEFAULT CLIENT');
+                                                Clients? defaultClient =
+                                                    genericClients;
+                                                await clientsCollection
+                                                    .where('zona',
+                                                        isEqualTo: widget
+                                                            .userZoneDocument)
+                                                    .where('numeroId',
+                                                        isEqualTo: 0)
+                                                    .get()
+                                                    .then(
+                                                  (value) {
+                                                    return value.docs.map(
+                                                      (snapshot) {
+                                                        if (snapshot
+                                                            .get('nombre')
+                                                            .toString()
+                                                            .contains(
+                                                                '000A Cliente Default')) {
+                                                          print(
+                                                              'SENDING DATA BASE DEFAULT CLIENT');
+                                                          defaultClient =
+                                                              genericClients;
+                                                        } else {
+                                                          print(
+                                                              'SENDING ERROR DEFAULT CLIENT');
+                                                          defaultClient =
+                                                              genericClients;
+                                                        }
+                                                      },
+                                                    ).toList();
+                                                  },
+                                                ).catchError(
+                                                  (e) {
+                                                    print(
+                                                        'ERROR ON GETTING CLIENT DEFAULT ON APPBAR NAVIGATION');
+                                                    print(e);
+                                                    print(
+                                                        'SENDING ERROR DEFAULT CLIENT');
+                                                    return <Null>[];
+                                                  },
+                                                );
+
+                                                print(
+                                                    'defaultClient?.zone: ${defaultClient?.zone}');
+                                                orderActive.setOrder(
+                                                    true, defaultClient);
+                                                Navigator.pop(context);
+                                                if (defaultClient == null) {
+                                                  print(
+                                                      'ERROR ON GETTING DEFAULT CLIENT');
+                                                } else {
+                                                  // ignore: use_build_context_synchronously
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      settings:
+                                                          const RouteSettings(
+                                                        name: "ORDER",
+                                                      ),
+                                                      builder: (context) =>
+                                                          StreamProvider<
+                                                              CurrentUserInfo?>.value(
+                                                        value: usersCollection
+                                                            .doc(user.uid)
+                                                            .snapshots()
+                                                            .map(
+                                                              AuthService()
+                                                                  .userDataFromsnapshot,
+                                                            ),
+                                                        initialData:
+                                                            CurrentUserInfo(
+                                                          name: '',
+                                                          dni: '',
+                                                          zone: '',
+                                                          zoneDocument: '',
+                                                          email: '',
+                                                          role: '',
+                                                          uid: '',
+                                                        ),
+                                                        catchError:
+                                                            (context, error) {
+                                                          print(error);
+                                                          return;
+                                                        },
+                                                        // builder: (context, child) {
+
+                                                        //   return NavigationPages();
+                                                        // });
+                                                        child:
+                                                            const OrderPage(),
+                                                      ),
+                                                    ),
+                                                  );
+                                                }
+                                              },
+                                              child: Container(
+                                                margin:
+                                                    const EdgeInsets.fromLTRB(
+                                                        0, 5, 0, 0),
+                                                child: Text(
+                                                  'No',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    fontFamily:
+                                                        'Poppins-regular',
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                    decoration: TextDecoration
+                                                        .underline,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          } else if (internet) {
+                            print('CLIENTS OFF, selecting default');
+                            Clients? defaultClient = genericClients;
+                            await clientsCollection
+                                .where('zona',
+                                    isEqualTo: widget.userZoneDocument)
+                                .where('numeroId', isEqualTo: 0)
+                                .get()
+                                .then(
+                              (value) {
+                                return value.docs.map(
+                                  (snapshot) {
+                                    if (snapshot
+                                        .get('nombre')
+                                        .toString()
+                                        .contains('000A Cliente Default')) {
+                                      print('SENDING DATA BASE DEFAULT CLIENT');
+                                      defaultClient = genericClients;
+                                    } else {
+                                      print('SENDING ERROR DEFAULT CLIENT');
+                                      defaultClient = genericClients;
+                                    }
+                                  },
+                                ).toList();
+                              },
+                            ).catchError(
+                              (e) {
+                                print(
+                                    'ERROR ON GETTING CLIENT DEFAULT ON APPBAR NAVIGATION');
+                                print(e);
+                                print('SENDING ERROR DEFAULT CLIENT');
+                                return <Null>[];
+                              },
+                            );
+
+                            print(
+                                'defaultClient?.zone: ${defaultClient?.zone}');
+                            orderActive.setOrder(true, defaultClient);
+                            if (defaultClient == null) {
+                              print('ERROR ON GETTING DEFAULT CLIENT');
+                            } else {
+                              // ignore: use_build_context_synchronously
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  settings: const RouteSettings(
+                                    name: "ORDER",
+                                  ),
+                                  builder: (context) =>
+                                      StreamProvider<CurrentUserInfo?>.value(
+                                    value: usersCollection
+                                        .doc(user.uid)
+                                        .snapshots()
+                                        .map(
+                                          AuthService().userDataFromsnapshot,
+                                        ),
+                                    initialData: CurrentUserInfo(
+                                      name: '',
+                                      dni: '',
+                                      zone: '',
+                                      zoneDocument: '',
+                                      email: '',
+                                      role: '',
+                                      uid: '',
+                                    ),
+                                    catchError: (context, error) {
+                                      print(error);
+                                      return;
+                                    },
+                                    // builder: (context, child) {
+
+                                    //   return NavigationPages();
+                                    // });
+                                    child: const OrderPage(),
+                                  ),
+                                ),
+                              );
+                            }
+                          }
+                        }
                         // Fetch all products in the cart once
                         final productsInCart =
                             await objectBox.getAllShoppingCartProducts();
@@ -736,7 +1031,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                     borderRadius: BorderRadius.circular(16),
                                   ),
                                   child: ListTile(
-                                    onTap: () {
+                                    onLongPress: () {
                                       if (product.selected == false) {
                                         if (productStock > 0) {
                                           final newProduct =
@@ -785,7 +1080,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                             item.code == product.code);
                                       }
                                     },
-                                    onLongPress: () {
+                                    onTap: () {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -1142,6 +1437,84 @@ class _ProductsBodyState extends State<ProductsBody> {
                                               ),
                                             ],
                                           ),
+                                          const SizedBox(width: 10),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                child: FutureBuilder<String>(
+                                                  future: storage
+                                                      .ref()
+                                                      .child('imagenes')
+                                                      .child('productos')
+                                                      .child(product.code)
+                                                      .child('1')
+                                                      .getDownloadURL()
+                                                      .catchError((e) {
+                                                    print('ERROR GETTING IMG');
+                                                    print(e);
+                                                    return ''; // Return an empty string if there's an error.
+                                                  }),
+                                                  builder: (context, snapshot) {
+                                                    if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      // Show a loading spinner while fetching the URL.
+                                                      return const Center(
+                                                          child:
+                                                              CircularProgressIndicator());
+                                                    }
+
+                                                    if (snapshot.hasError ||
+                                                        snapshot.data == null ||
+                                                        snapshot
+                                                            .data!.isEmpty) {
+                                                      // Show the placeholder image if there's an error or no data.
+                                                      return Image.asset(
+                                                        height: 100,
+                                                        'assets/images/noproduct.jpg',
+                                                        fit: BoxFit.fitHeight,
+                                                      );
+                                                    }
+
+                                                    final url = snapshot.data!;
+
+                                                    return CachedNetworkImage(
+                                                      height: 100,
+                                                      cacheManager:
+                                                          CustomCacheManager
+                                                              .instance,
+                                                      fit: BoxFit.fitHeight,
+                                                      imageUrl: url,
+                                                      placeholder:
+                                                          (context, url) =>
+                                                              Container(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: const Center(
+                                                          child:
+                                                              CircularProgressIndicator(),
+                                                        ),
+                                                      ),
+                                                      errorWidget: (context,
+                                                              url, error) =>
+                                                          Image.asset(
+                                                        height: 100,
+                                                        'assets/images/noproduct.jpg',
+                                                        fit: BoxFit.fitHeight,
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -1201,7 +1574,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                     borderRadius: BorderRadius.circular(16),
                                   ),
                                   child: ListTile(
-                                    onTap: () {
+                                    onLongPress: () {
                                       if (product.selected == false) {
                                         if (productStock > 0) {
                                           final newProduct =
@@ -1250,7 +1623,7 @@ class _ProductsBodyState extends State<ProductsBody> {
                                             item.code == product.code);
                                       }
                                     },
-                                    onLongPress: () {
+                                    onTap: () {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -1369,9 +1742,6 @@ class _ProductsBodyState extends State<ProductsBody> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
-                                              // if (orderActive.orderActive == true ||
-                                              //     userCharge == 'Administrador' ||
-                                              //     userCharge == 'Gerente')
                                               Container(
                                                 height: 17,
                                                 width: 17,
@@ -1568,6 +1938,84 @@ class _ProductsBodyState extends State<ProductsBody> {
                                               ),
                                               TextFieldForCard(
                                                 message: productDesign,
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                child: FutureBuilder<String>(
+                                                  future: storage
+                                                      .ref()
+                                                      .child('imagenes')
+                                                      .child('productos')
+                                                      .child(product.code)
+                                                      .child('1')
+                                                      .getDownloadURL()
+                                                      .catchError((e) {
+                                                    print('ERROR GETTING IMG');
+                                                    print(e);
+                                                    return ''; // Return an empty string if there's an error.
+                                                  }),
+                                                  builder: (context, snapshot) {
+                                                    if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      // Show a loading spinner while fetching the URL.
+                                                      return const Center(
+                                                          child:
+                                                              CircularProgressIndicator());
+                                                    }
+
+                                                    if (snapshot.hasError ||
+                                                        snapshot.data == null ||
+                                                        snapshot
+                                                            .data!.isEmpty) {
+                                                      // Show the placeholder image if there's an error or no data.
+                                                      return Image.asset(
+                                                        height: 100,
+                                                        'assets/images/noproduct.jpg',
+                                                        fit: BoxFit.fitHeight,
+                                                      );
+                                                    }
+
+                                                    final url = snapshot.data!;
+
+                                                    return CachedNetworkImage(
+                                                      height: 100,
+                                                      cacheManager:
+                                                          CustomCacheManager
+                                                              .instance,
+                                                      fit: BoxFit.fitHeight,
+                                                      imageUrl: url,
+                                                      placeholder:
+                                                          (context, url) =>
+                                                              Container(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: const Center(
+                                                          child:
+                                                              CircularProgressIndicator(),
+                                                        ),
+                                                      ),
+                                                      errorWidget: (context,
+                                                              url, error) =>
+                                                          Image.asset(
+                                                        height: 100,
+                                                        'assets/images/noproduct.jpg',
+                                                        fit: BoxFit.fitHeight,
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
                                               ),
                                             ],
                                           ),
