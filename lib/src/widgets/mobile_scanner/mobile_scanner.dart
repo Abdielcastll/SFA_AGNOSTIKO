@@ -33,7 +33,7 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
     print('productsInCart: $productsInCart');
     final String? productScanResult = scanResult;
     print('BARCODE SCAN RESULT: ////////////////////////');
-    print('ScanResult: $scanResult');
+    print('ScanResult camera start: $scanResult');
     List<ShoppingCartProduct> scannedProducts = [];
     try {
       final priceProducts = await listaDePreciosRef
@@ -241,7 +241,7 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
             for (final barcode in barcodes) {
               // debugPrint('Barcode found! ${barcode.rawValue}');
               scanResult = barcode.rawValue.toString();
-              print(scanResult);
+              print("scan result camera: $scanResult");
               Fluttertoast.showToast(msg: 'scanResult: $scanResult');
               addProductFromBarcodeResult(
                 scanResult,

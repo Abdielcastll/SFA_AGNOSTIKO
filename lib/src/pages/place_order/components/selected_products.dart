@@ -75,7 +75,6 @@ class _SelectedProductsState extends State<SelectedProducts> {
   ) async {
     print('productsInCart: $productsInCart');
     final String? productScanResult = scanResult;
-    print('BARCODE SCAN RESULT: ////////////////////////');
     print('ScanResult: $scanResult');
     List<ShoppingCartProduct> scannedProducts = [];
 
@@ -275,10 +274,17 @@ class _SelectedProductsState extends State<SelectedProducts> {
                     return BarcodeKeyboardListener(
                       bufferDuration: Duration(milliseconds: 500),
                       onBarcodeScanned: (barcode) {
-                        print(barcode);
-
+                        print("barcodeKeyboardListener code: $barcode");
+                        String barcodeParse = barcode;
+                        if (deviceType == DeviceType.PINPAD) {
+                          barcodeParse = barcodeParse.toUpperCase();
+                          print("uppercasse for pinpad telpo: $barcodeParse");
+                        }
                         addProductFromBarcodeResult(
-                            barcode, products, stockValues);
+                          barcodeParse,
+                          products,
+                          stockValues,
+                        );
                       },
                       child: SingleChildScrollView(
                         child: Container(
@@ -899,6 +905,8 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                             timeout: 30);
                                                     var scanResult =
                                                         content?.trim();
+                                                    print(
+                                                        "hw scanner result: $scanResult");
                                                     addProductFromBarcodeResult(
                                                       scanResult,
                                                       products,

@@ -271,9 +271,14 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                     return BarcodeKeyboardListener(
                       bufferDuration: Duration(milliseconds: 500),
                       onBarcodeScanned: (barcode) {
-                        print(barcode);
+                        print("barcodeKeyboardListener code: $barcode");
+                        String barcodeParse = barcode;
+                        if (deviceType == DeviceType.PINPAD) {
+                          barcodeParse = barcodeParse.toUpperCase();
+                          print("uppercasse for pinpad telpo: $barcodeParse");
+                        }
                         addProductFromBarcodeResult(
-                          barcode,
+                          barcodeParse,
                           products,
                           stockValues,
                         );
