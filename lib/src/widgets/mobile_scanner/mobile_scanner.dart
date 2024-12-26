@@ -33,7 +33,6 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
   ) async {
     print('productsInCart: $productsInCart');
     final String? productScanResult = scanResult;
-    print('BARCODE SCAN RESULT: ////////////////////////');
     print('ScanResult camera start: $scanResult');
     List<ShoppingCartProduct> scannedProducts = [];
     try {
