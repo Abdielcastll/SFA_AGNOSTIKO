@@ -61,9 +61,9 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
 
   addProductFromBarcodeResult(
     String? scanResult,
-    List<ShoppingCartProduct>? productsInCart,
     stockValues,
   ) async {
+    final productsInCart = await objectBox.getAllShoppingCartProducts();
     final String? productScanResult = scanResult;
     List<ShoppingCartProduct> scannedProducts = [];
 
@@ -191,8 +191,6 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
           backgroundColor: Colors.red.shade700);
       print(e);
     }
-
-    print(scannedProducts);
   }
 
   @override
@@ -279,7 +277,6 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                         }
                         addProductFromBarcodeResult(
                           barcodeParse,
-                          products,
                           stockValues,
                         );
                       },

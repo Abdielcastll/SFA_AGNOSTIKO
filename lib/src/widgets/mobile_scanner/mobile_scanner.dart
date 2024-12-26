@@ -8,11 +8,12 @@ import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class NewBardcodeScanner extends StatefulWidget {
-  const NewBardcodeScanner(
-      {super.key,
-      required this.clientPriceList,
-      required this.products,
-      required this.stockValues});
+  const NewBardcodeScanner({
+    super.key,
+    required this.clientPriceList,
+    required this.products,
+    required this.stockValues,
+  });
 
   final clientPriceList;
   final List<ShoppingCartProduct>? products;
@@ -120,7 +121,7 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
                 totalAmount: element.totalAmount.toString(),
                 urlPicture: element.urlPicture.toString(),
               );
-              if (result.productQuantity! + 1 <= stock) {
+              if (result.productQuantity! <= stock) {
                 objectBox.insertShoppingCartProduct(result);
                 Fluttertoast.showToast(
                   msg: 'Se ha agregado exitosamente al carrito',
