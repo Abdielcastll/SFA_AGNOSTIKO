@@ -70,12 +70,11 @@ class _SelectedProductsState extends State<SelectedProducts> {
 
   addProductFromBarcodeResult(
     String? scanResult,
-    List<ShoppingCartProduct>? productsInCart,
     stockValues,
   ) async {
-    print('productsInCart: $productsInCart');
+    final productsInCart = await objectBox.getAllShoppingCartProducts();
+    print('productsInCart: ${productsInCart.toString()}');
     final String? productScanResult = scanResult;
-    print('BARCODE SCAN RESULT: ////////////////////////');
     print('ScanResult: $scanResult');
     List<ShoppingCartProduct> scannedProducts = [];
 
@@ -87,15 +86,12 @@ class _SelectedProductsState extends State<SelectedProducts> {
     }
 
     try {
-      // print(stockProducts);
       final priceProducts = await listaDePreciosRef
           .doc(clientPriceList.toString())
           .get()
           .then((value) {
         return value['precios'];
       });
-      print(priceProducts);
-
       await productosRef
           .where('codigoBarra', isEqualTo: productScanResult)
           .get()
@@ -132,6 +128,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
         print('productTotalAmount:$productTotalAmount');
 
         if (productsInCart!.isEmpty) {
+          print("empty cart");
           final result = ShoppingCartProduct(
             availableStock: stock,
             productQuantity: productQuantity,
@@ -143,7 +140,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
             totalAmount: productTotalAmount.toString(),
             urlPicture: catalogue.toString(),
           );
-          print(result);
+          print(result.code);
           scannedProducts.add(result);
           if (productQuantity <= stock) {
             objectBox.insertShoppingCartProduct(result);
@@ -174,7 +171,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
                 totalAmount: element.totalAmount.toString(),
                 urlPicture: element.urlPicture.toString(),
               );
-              if (element.productQuantity! + 1 <= stock) {
+              if (result.productQuantity! <= stock) {
                 objectBox.insertShoppingCartProduct(result);
                 Fluttertoast.showToast(
                   msg: 'Se ha agregado exitosamente al carrito',
@@ -216,8 +213,6 @@ class _SelectedProductsState extends State<SelectedProducts> {
           backgroundColor: Colors.red.shade700);
       print(e);
     }
-
-    print(scannedProducts);
   }
 
   @override
@@ -275,10 +270,16 @@ class _SelectedProductsState extends State<SelectedProducts> {
                     return BarcodeKeyboardListener(
                       bufferDuration: Duration(milliseconds: 500),
                       onBarcodeScanned: (barcode) {
-                        print(barcode);
-
+                        print("barcodeKeyboardListener code: $barcode");
+                        String barcodeParse = barcode;
+                        if (deviceType == DeviceType.PINPAD) {
+                          barcodeParse = barcodeParse.toUpperCase();
+                          print("uppercasse for pinpad telpo: $barcodeParse");
+                        }
                         addProductFromBarcodeResult(
-                            barcode, products, stockValues);
+                          barcodeParse,
+                          stockValues,
+                        );
                       },
                       child: SingleChildScrollView(
                         child: Container(
@@ -625,8 +626,6 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                                             0,
                                                                             0,
                                                                           ),
-                                                                          // color: Colors
-                                                                          //     .red,
                                                                           child:
                                                                               IconButton(
                                                                             iconSize:
@@ -899,9 +898,10 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                             timeout: 30);
                                                     var scanResult =
                                                         content?.trim();
+                                                    print(
+                                                        "hw scanner result: $scanResult");
                                                     addProductFromBarcodeResult(
                                                       scanResult,
-                                                      products,
                                                       stockValues,
                                                     );
                                                   } else {

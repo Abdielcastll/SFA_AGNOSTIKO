@@ -8,11 +8,12 @@ import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class NewBardcodeScanner extends StatefulWidget {
-  const NewBardcodeScanner(
-      {super.key,
-      required this.clientPriceList,
-      required this.products,
-      required this.stockValues});
+  const NewBardcodeScanner({
+    super.key,
+    required this.clientPriceList,
+    required this.products,
+    required this.stockValues,
+  });
 
   final clientPriceList;
   final List<ShoppingCartProduct>? products;
@@ -32,8 +33,7 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
   ) async {
     print('productsInCart: $productsInCart');
     final String? productScanResult = scanResult;
-    print('BARCODE SCAN RESULT: ////////////////////////');
-    print('ScanResult: $scanResult');
+    print('ScanResult camera start: $scanResult');
     List<ShoppingCartProduct> scannedProducts = [];
     try {
       final priceProducts = await listaDePreciosRef
@@ -241,7 +241,7 @@ class _NewBardcodeScannerState extends State<NewBardcodeScanner> {
             for (final barcode in barcodes) {
               // debugPrint('Barcode found! ${barcode.rawValue}');
               scanResult = barcode.rawValue.toString();
-              print(scanResult);
+              print("scan result camera: $scanResult");
               Fluttertoast.showToast(msg: 'scanResult: $scanResult');
               addProductFromBarcodeResult(
                 scanResult,

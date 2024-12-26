@@ -61,9 +61,9 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
 
   addProductFromBarcodeResult(
     String? scanResult,
-    List<ShoppingCartProduct>? productsInCart,
     stockValues,
   ) async {
+    final productsInCart = await objectBox.getAllShoppingCartProducts();
     final String? productScanResult = scanResult;
     List<ShoppingCartProduct> scannedProducts = [];
 
@@ -191,8 +191,6 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
           backgroundColor: Colors.red.shade700);
       print(e);
     }
-
-    print(scannedProducts);
   }
 
   @override
@@ -271,10 +269,14 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
                     return BarcodeKeyboardListener(
                       bufferDuration: Duration(milliseconds: 500),
                       onBarcodeScanned: (barcode) {
-                        print(barcode);
+                        print("barcodeKeyboardListener code: $barcode");
+                        String barcodeParse = barcode;
+                        if (deviceType == DeviceType.PINPAD) {
+                          barcodeParse = barcodeParse.toUpperCase();
+                          print("uppercasse for pinpad telpo: $barcodeParse");
+                        }
                         addProductFromBarcodeResult(
-                          barcode,
-                          products,
+                          barcodeParse,
                           stockValues,
                         );
                       },

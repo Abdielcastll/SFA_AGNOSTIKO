@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:decimal/decimal.dart';
@@ -9,12 +9,19 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:full_screen_image/full_screen_image.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
+import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
+import 'package:pwa_sales2go_flutter/src/pages/place_order/order_page.dart';
+import 'package:pwa_sales2go_flutter/src/pages/place_order/place_oder_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
 import 'package:pwa_sales2go_flutter/src/provider/currency_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
+import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
+import 'package:pwa_sales2go_flutter/src/services/auth.dart';
+import 'package:pwa_sales2go_flutter/src/services/connection_service.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -154,6 +161,7 @@ class ProductDetailsBody extends StatelessWidget {
     final coinDecimals = Provider.of<Coin?>(context)?.decimals ?? 2;
     final coinExchangeRatio = Provider.of<Coin?>(context)?.exchangeRatio ?? 1;
     final coinSymbol = Provider.of<Coin?>(context)?.symbol ?? '\$';
+    final user = Provider.of<UserModel>(context);
 
     print(coinName);
     print(coinDecimals);
@@ -208,11 +216,12 @@ class ProductDetailsBody extends StatelessWidget {
                                       fit: BoxFit.cover,
                                       imageUrl: imageUrl,
                                       placeholder: (context, url) => Container(
-                                          alignment: Alignment.center,
-                                          width: 300,
-                                          child: const Center(
-                                              child:
-                                                  CircularProgressIndicator())),
+                                        alignment: Alignment.center,
+                                        width: 300,
+                                        child: const Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                      ),
                                       errorWidget: (context, url, error) =>
                                           Image.asset(
                                         'assets/images/noproduct.jpg',
@@ -243,7 +252,7 @@ class ProductDetailsBody extends StatelessWidget {
                                     Colors.transparent,
                                     themeProvider
                                         .myTheme.colorScheme.onPrimaryContainer
-                                        .withOpacity(0.8), // top Right part
+                                        .withOpacity(0.8),
                                   ],
                                 ),
                               ),
@@ -274,7 +283,7 @@ class ProductDetailsBody extends StatelessWidget {
                                     Colors.transparent,
                                     themeProvider
                                         .myTheme.colorScheme.onPrimaryContainer
-                                        .withOpacity(0.8), // top Right part
+                                        .withOpacity(0.8),
                                   ],
                                 ),
                               ),
@@ -316,17 +325,13 @@ class ProductDetailsBody extends StatelessWidget {
                               ? MainAxisAlignment.center
                               : MainAxisAlignment.spaceBetween,
                           children: [
-                            // SizedBox(height: 10),
                             showListButton == false
                                 ? Container()
-                                : Container(
-                                    // margin: const EdgeInsets.only(left: 30.0),
-                                    // width: 160,
+                                : SizedBox(
                                     width: orderActive.orderActive == false
                                         ? 300
                                         : 180,
                                     height: 46,
-
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(100),
                                       child: ElevatedButton.icon(
@@ -357,16 +362,14 @@ class ProductDetailsBody extends StatelessWidget {
                                                   Colors.transparent),
                                           backgroundColor:
                                               MaterialStateProperty.all<Color>(
-                                            // const Color.fromARGB(
-                                            //         255, 159, 165, 252)
-                                            //     .withOpacity(0.3),
                                             Colors.white,
                                           ),
                                           overlayColor:
                                               MaterialStateProperty.all<Color>(
-                                                  themeProvider.myTheme
-                                                      .colorScheme.primary
-                                                      .withOpacity(0.3)),
+                                            themeProvider
+                                                .myTheme.colorScheme.primary
+                                                .withOpacity(0.3),
+                                          ),
                                         ),
                                         label: Row(
                                           mainAxisAlignment:
@@ -376,13 +379,14 @@ class ProductDetailsBody extends StatelessWidget {
                                               AppLocalizations.of(context)!
                                                   .seeInList,
                                               style: TextStyle(
-                                                  color: themeProvider
-                                                      .myTheme
-                                                      .colorScheme
-                                                      .onPrimaryContainer,
-                                                  fontFamily: 'Poppins-Regular',
-                                                  fontSize: 13,
-                                                  fontWeight: FontWeight.bold),
+                                                color: themeProvider
+                                                    .myTheme
+                                                    .colorScheme
+                                                    .onPrimaryContainer,
+                                                fontFamily: 'Poppins-Regular',
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
                                             Icon(
                                               MaterialIcons.arrow_forward_ios,
@@ -397,163 +401,536 @@ class ProductDetailsBody extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                            orderActive.orderActive == false
-                                ? Container()
-                                : Container(
-                                    width: 5,
-                                  ),
-                            orderActive.orderActive == false
-                                ? Container()
-                                : Container(
-                                    // margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                    // alignment: Alignment.center,
-                                    child: Container(
-                                      // margin: const EdgeInsets.only(left: 30.0),
-                                      height: 46,
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                        child: ElevatedButton.icon(
-                                          onPressed: () async {
-                                            if (stock! > 0) {
-                                              // Get all products in the cart
-                                              final productsInCart = await objectBox
-                                                  .getAllShoppingCartProducts();
-                                              // Initialize a flag to check if the product is already in the cart
-                                              bool isProductAlreadyInCart =
-                                                  false;
-                                              // Iterate through the products in the cart
-                                              for (var element
-                                                  in productsInCart) {
-                                                if (element.code == code) {
-                                                  // Product is already in the cart, increase its quantity
+                            Container(
+                              width: 5,
+                            ),
+                            Container(
+                              height: 46,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: ElevatedButton.icon(
+                                  onPressed: () async {
+                                    if (orderActive.orderActive == false) {
+                                      bool internet =
+                                          await checkInternetConnection(
+                                              context);
+                                      if (globalRemoteConfig.clientesEnabled ==
+                                              true &&
+                                          internet) {
+                                        showDialog(
+                                          barrierDismissible: false,
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return Center(
+                                              child: SingleChildScrollView(
+                                                child: AlertDialog(
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                  ),
+                                                  title: Center(
+                                                    child: Text(
+                                                      'Personalizar el carrito de compras con tu nombre ',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            'Poppins-regular',
+                                                        color: themeProvider
+                                                            .myTheme
+                                                            .colorScheme
+                                                            .onPrimaryContainer,
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  // ignore: avoid_unnecessary_containers
+                                                  content: Container(
+                                                    // color: Colors.grey,
+                                                    // height: 30,
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceEvenly,
+                                                      // crossAxisAlignment:
+                                                      //     CrossAxisAlignment.start,
+                                                      children: [
+                                                        TextButton(
+                                                          style: ButtonStyle(
+                                                            overlayColor:
+                                                                MaterialStateColor
+                                                                    .resolveWith(
+                                                                        (states) =>
+                                                                            Colors.transparent),
+                                                          ),
+                                                          onPressed: () {
+                                                            // Escoger lista de clientes
+                                                            Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                builder: (BuildContext
+                                                                        context) =>
+                                                                    PlaceOrderPage(
+                                                                  userZoneDocument:
+                                                                      userZoneDocument,
+                                                                ),
+                                                              ),
+                                                            );
+                                                          },
+                                                          child: Container(
+                                                            margin:
+                                                                const EdgeInsets
+                                                                    .fromLTRB(
+                                                                    0, 5, 0, 0),
+                                                            child: Text(
+                                                              'Si',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                fontFamily:
+                                                                    'Poppins-Regular',
+                                                                fontSize: 16,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                decoration:
+                                                                    TextDecoration
+                                                                        .underline,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        TextButton(
+                                                          style: ButtonStyle(
+                                                            overlayColor:
+                                                                MaterialStateColor
+                                                                    .resolveWith(
+                                                                        (states) =>
+                                                                            Colors.transparent),
+                                                          ),
+                                                          onPressed: () async {
+                                                            // Escoger lista de clientes
+                                                            // var client =
+                                                            print(
+                                                                'SELECTING DEFAULT CLIENT');
+                                                            Clients?
+                                                                defaultClient =
+                                                                genericClients;
+                                                            await clientsCollection
+                                                                .where('zona',
+                                                                    isEqualTo:
+                                                                        userZoneDocument)
+                                                                .where(
+                                                                    'numeroId',
+                                                                    isEqualTo:
+                                                                        0)
+                                                                .get()
+                                                                .then(
+                                                              (value) {
+                                                                return value
+                                                                    .docs
+                                                                    .map(
+                                                                  (snapshot) {
+                                                                    if (snapshot
+                                                                        .get(
+                                                                            'nombre')
+                                                                        .toString()
+                                                                        .contains(
+                                                                            '000A Cliente Default')) {
+                                                                      print(
+                                                                          'SENDING DATA BASE DEFAULT CLIENT');
+                                                                      defaultClient =
+                                                                          genericClients;
+                                                                    } else {
+                                                                      print(
+                                                                          'SENDING ERROR DEFAULT CLIENT');
+                                                                      defaultClient =
+                                                                          genericClients;
+                                                                    }
+                                                                  },
+                                                                ).toList();
+                                                              },
+                                                            ).catchError(
+                                                              (e) {
+                                                                print(
+                                                                    'ERROR ON GETTING CLIENT DEFAULT ON APPBAR NAVIGATION');
+                                                                print(e);
+                                                                print(
+                                                                    'SENDING ERROR DEFAULT CLIENT');
+                                                                return <Null>[];
+                                                              },
+                                                            );
+
+                                                            print(
+                                                                'defaultClient?.zone: ${defaultClient?.zone}');
+                                                            orderActive.setOrder(
+                                                                true,
+                                                                defaultClient);
+                                                            Navigator.pop(
+                                                                context);
+                                                            if (defaultClient ==
+                                                                null) {
+                                                              print(
+                                                                  'ERROR ON GETTING DEFAULT CLIENT');
+                                                            } else {
+                                                              // ignore: use_build_context_synchronously
+                                                              Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                  settings:
+                                                                      const RouteSettings(
+                                                                    name:
+                                                                        "ORDER",
+                                                                  ),
+                                                                  builder: (context) =>
+                                                                      StreamProvider<
+                                                                          CurrentUserInfo?>.value(
+                                                                    value: usersCollection
+                                                                        .doc(user
+                                                                            .uid)
+                                                                        .snapshots()
+                                                                        .map(
+                                                                          AuthService()
+                                                                              .userDataFromsnapshot,
+                                                                        ),
+                                                                    initialData:
+                                                                        CurrentUserInfo(
+                                                                      name: '',
+                                                                      dni: '',
+                                                                      zone: '',
+                                                                      zoneDocument:
+                                                                          '',
+                                                                      email: '',
+                                                                      role: '',
+                                                                      uid: '',
+                                                                    ),
+                                                                    catchError:
+                                                                        (context,
+                                                                            error) {
+                                                                      print(
+                                                                          error);
+                                                                      return;
+                                                                    },
+                                                                    // builder: (context, child) {
+
+                                                                    //   return NavigationPages();
+                                                                    // });
+                                                                    child:
+                                                                        const OrderPage(),
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            }
+                                                          },
+                                                          child: Container(
+                                                            margin:
+                                                                const EdgeInsets
+                                                                    .fromLTRB(
+                                                                    0, 5, 0, 0),
+                                                            child: Text(
+                                                              'No',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                fontFamily:
+                                                                    'Poppins-regular',
+                                                                fontSize: 16,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                decoration:
+                                                                    TextDecoration
+                                                                        .underline,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      } else if (internet) {
+                                        print('CLIENTS OFF, selecting default');
+                                        Clients? defaultClient = genericClients;
+                                        await clientsCollection
+                                            .where('zona',
+                                                isEqualTo: userZoneDocument)
+                                            .where('numeroId', isEqualTo: 0)
+                                            .get()
+                                            .then(
+                                          (value) {
+                                            return value.docs.map(
+                                              (snapshot) {
+                                                if (snapshot
+                                                    .get('nombre')
+                                                    .toString()
+                                                    .contains(
+                                                        '000A Cliente Default')) {
                                                   print(
-                                                      'Product is already in the cart, increasing quantity by 1');
-                                                  isProductAlreadyInCart = true;
-                                                  // Create a new product object with updated quantity
-                                                  final updatedProduct =
-                                                      ShoppingCartProduct(
-                                                    id: element.id,
-                                                    availableStock:
-                                                        element.availableStock,
-                                                    productQuantity: element
-                                                            .productQuantity! +
-                                                        1,
-                                                    code: element.code,
-                                                    listOfPricesId:
-                                                        element.listOfPricesId,
-                                                    name: element.name,
-                                                    productId:
-                                                        element.productId,
-                                                    unitPrice: element.unitPrice
-                                                        .toString(),
-                                                    totalAmount: element
-                                                        .totalAmount
-                                                        .toString(),
-                                                    urlPicture: element
-                                                        .urlPicture
-                                                        .toString(),
-                                                  );
-                                                  // Update the product in ObjectBox
-                                                  if (element.productQuantity! +
-                                                          1 <=
-                                                      element.availableStock!) {
-                                                    objectBox
-                                                        .insertShoppingCartProduct(
-                                                            updatedProduct);
-                                                    Fluttertoast.showToast(
-                                                        msg:
-                                                            'Producto ${element.code} añadido correctamente');
-                                                  } else {
-                                                    Fluttertoast.showToast(
-                                                        msg:
-                                                            'producto sin stock: ${code}');
-                                                  }
-                                                  // Show a toast message
-                                                  break; // Exit the loop as we've found the product
-                                                }
-                                              }
-                                              // If the product is not already in the cart, add it as a new product
-                                              if (!isProductAlreadyInCart) {
-                                                final newProduct =
-                                                    ShoppingCartProduct(
-                                                  productQuantity: 1,
-                                                  code: code,
-                                                  productId: code,
-                                                  listOfPricesId:
-                                                      pricesName.toString(),
-                                                  totalAmount: price.toString(),
-                                                  name: name,
-                                                  unitPrice: price.toString(),
-                                                  availableStock: stock,
-                                                  urlPicture:
-                                                      catalogueID.toString(),
-                                                );
-                                                // Insert the new product into ObjectBox
-                                                if (newProduct
-                                                            .productQuantity! +
-                                                        1 <=
-                                                    newProduct
-                                                        .availableStock!) {
-                                                  objectBox
-                                                      .insertShoppingCartProduct(
-                                                          newProduct);
-                                                  Fluttertoast.showToast(
-                                                      msg:
-                                                          'Producto ${newProduct.code} añadido correctamente');
+                                                      'SENDING DATA BASE DEFAULT CLIENT');
+                                                  defaultClient =
+                                                      genericClients;
                                                 } else {
-                                                  Fluttertoast.showToast(
-                                                      msg:
-                                                          'producto sin stock: ${code}');
+                                                  print(
+                                                      'SENDING ERROR DEFAULT CLIENT');
+                                                  defaultClient =
+                                                      genericClients;
                                                 }
-                                              }
-                                            } else {
-                                              // Show a toast message if no stock is available
+                                              },
+                                            ).toList();
+                                          },
+                                        ).catchError(
+                                          (e) {
+                                            print(
+                                                'ERROR ON GETTING CLIENT DEFAULT ON APPBAR NAVIGATION');
+                                            print(e);
+                                            print(
+                                                'SENDING ERROR DEFAULT CLIENT');
+                                            return <Null>[];
+                                          },
+                                        );
+
+                                        print(
+                                            'defaultClient?.zone: ${defaultClient?.zone}');
+                                        orderActive.setOrder(
+                                            true, defaultClient);
+                                        if (defaultClient == null) {
+                                          print(
+                                              'ERROR ON GETTING DEFAULT CLIENT');
+                                        } else {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              settings: const RouteSettings(
+                                                name: "ORDER",
+                                              ),
+                                              builder: (context) =>
+                                                  StreamProvider<
+                                                      CurrentUserInfo?>.value(
+                                                value: usersCollection
+                                                    .doc(user.uid)
+                                                    .snapshots()
+                                                    .map(
+                                                      AuthService()
+                                                          .userDataFromsnapshot,
+                                                    ),
+                                                initialData: CurrentUserInfo(
+                                                  name: '',
+                                                  dni: '',
+                                                  zone: '',
+                                                  zoneDocument: '',
+                                                  email: '',
+                                                  role: '',
+                                                  uid: '',
+                                                ),
+                                                catchError: (context, error) {
+                                                  print(error);
+                                                  return;
+                                                },
+                                                child: const OrderPage(),
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                      }
+                                      if (stock! > 0) {
+                                        final productsInCart = await objectBox
+                                            .getAllShoppingCartProducts();
+                                        bool isProductAlreadyInCart = false;
+                                        for (var element in productsInCart) {
+                                          if (element.code == code) {
+                                            print(
+                                                'Product is already in the cart, increasing quantity by 1');
+                                            isProductAlreadyInCart = true;
+                                            final updatedProduct =
+                                                ShoppingCartProduct(
+                                              id: element.id,
+                                              availableStock:
+                                                  element.availableStock,
+                                              productQuantity:
+                                                  element.productQuantity! + 1,
+                                              code: element.code,
+                                              listOfPricesId:
+                                                  element.listOfPricesId,
+                                              name: element.name,
+                                              productId: element.productId,
+                                              unitPrice:
+                                                  element.unitPrice.toString(),
+                                              totalAmount: element.totalAmount
+                                                  .toString(),
+                                              urlPicture:
+                                                  element.urlPicture.toString(),
+                                            );
+                                            if (element.productQuantity! + 1 <=
+                                                element.availableStock!) {
+                                              objectBox
+                                                  .insertShoppingCartProduct(
+                                                      updatedProduct);
                                               Fluttertoast.showToast(
                                                   msg:
-                                                      'No hay stock disponible para este producto');
+                                                      'Producto ${element.code} añadido correctamente');
+                                            } else {
+                                              Fluttertoast.showToast(
+                                                  msg:
+                                                      'producto sin stock: ${code}');
                                             }
-                                          },
-                                          icon: Icon(
-                                            Icons.add_shopping_cart_rounded,
-                                            color: themeProvider.myTheme
-                                                .colorScheme.onPrimaryContainer,
-                                          ),
-                                          style: ButtonStyle(
-                                            shadowColor: MaterialStateProperty
-                                                .all<Color>(Colors.transparent),
-                                            backgroundColor:
-                                                MaterialStateProperty.all<
-                                                        Color>(
-                                                    // const Color.fromARGB(
-                                                    //         255, 159, 165, 252)
-                                                    //     .withOpacity(0.3),
-                                                    Colors.white),
-                                            overlayColor: MaterialStateProperty
-                                                .all<Color>(themeProvider
-                                                    .myTheme.colorScheme.primary
-                                                    .withOpacity(0.3)),
-                                          ),
-                                          label: Text(
-                                            'Agregar al carrito',
-                                            style: TextStyle(
-                                              color: themeProvider
-                                                  .myTheme
-                                                  .colorScheme
-                                                  .onPrimaryContainer,
-                                              fontFamily: 'Poppins-Regular',
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
+                                            break;
+                                          }
+                                        }
+                                        if (!isProductAlreadyInCart) {
+                                          final newProduct =
+                                              ShoppingCartProduct(
+                                            productQuantity: 1,
+                                            code: code,
+                                            productId: code,
+                                            listOfPricesId:
+                                                pricesName.toString(),
+                                            totalAmount: price.toString(),
+                                            name: name,
+                                            unitPrice: price.toString(),
+                                            availableStock: stock,
+                                            urlPicture: catalogueID.toString(),
+                                          );
+                                          if (newProduct.productQuantity! <=
+                                              newProduct.availableStock!) {
+                                            objectBox.insertShoppingCartProduct(
+                                                newProduct);
+                                            Fluttertoast.showToast(
+                                                msg:
+                                                    'Producto ${newProduct.code} añadido correctamente');
+                                          } else {
+                                            Fluttertoast.showToast(
+                                                msg:
+                                                    'producto sin stock: ${code}');
+                                          }
+                                        }
+                                      } else {
+                                        Fluttertoast.showToast(
+                                            msg:
+                                                'No hay stock disponible para este producto');
+                                      }
+                                    } else {
+                                      if (stock! > 0) {
+                                        final productsInCart = await objectBox
+                                            .getAllShoppingCartProducts();
+                                        bool isProductAlreadyInCart = false;
+                                        for (var element in productsInCart) {
+                                          if (element.code == code) {
+                                            print(
+                                                'Product is already in the cart, increasing quantity by 1');
+                                            isProductAlreadyInCart = true;
+                                            final updatedProduct =
+                                                ShoppingCartProduct(
+                                              id: element.id,
+                                              availableStock:
+                                                  element.availableStock,
+                                              productQuantity:
+                                                  element.productQuantity! + 1,
+                                              code: element.code,
+                                              listOfPricesId:
+                                                  element.listOfPricesId,
+                                              name: element.name,
+                                              productId: element.productId,
+                                              unitPrice:
+                                                  element.unitPrice.toString(),
+                                              totalAmount: element.totalAmount
+                                                  .toString(),
+                                              urlPicture:
+                                                  element.urlPicture.toString(),
+                                            );
+                                            if (element.productQuantity! + 1 <=
+                                                element.availableStock!) {
+                                              objectBox
+                                                  .insertShoppingCartProduct(
+                                                      updatedProduct);
+                                              Fluttertoast.showToast(
+                                                  msg:
+                                                      'Producto ${element.code} añadido correctamente');
+                                            } else {
+                                              Fluttertoast.showToast(
+                                                  msg:
+                                                      'producto sin stock: ${code}');
+                                            }
+                                            break;
+                                          }
+                                        }
+                                        if (!isProductAlreadyInCart) {
+                                          final newProduct =
+                                              ShoppingCartProduct(
+                                            productQuantity: 1,
+                                            code: code,
+                                            productId: code,
+                                            listOfPricesId:
+                                                pricesName.toString(),
+                                            totalAmount: price.toString(),
+                                            name: name,
+                                            unitPrice: price.toString(),
+                                            availableStock: stock,
+                                            urlPicture: catalogueID.toString(),
+                                          );
+                                          if (newProduct.productQuantity! <=
+                                              newProduct.availableStock!) {
+                                            objectBox.insertShoppingCartProduct(
+                                                newProduct);
+                                            Fluttertoast.showToast(
+                                                msg:
+                                                    'Producto ${newProduct.code} añadido correctamente');
+                                          } else {
+                                            Fluttertoast.showToast(
+                                                msg:
+                                                    'producto sin stock: ${code}');
+                                          }
+                                        }
+                                      } else {
+                                        Fluttertoast.showToast(
+                                            msg:
+                                                'No hay stock disponible para este producto');
+                                      }
+                                    }
+                                  },
+                                  icon: Icon(
+                                    Icons.add_shopping_cart_rounded,
+                                    color: themeProvider
+                                        .myTheme.colorScheme.onPrimaryContainer,
+                                  ),
+                                  style: ButtonStyle(
+                                    shadowColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Colors.transparent),
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Colors.white),
+                                    overlayColor:
+                                        MaterialStateProperty.all<Color>(
+                                            themeProvider
+                                                .myTheme.colorScheme.primary
+                                                .withOpacity(0.3)),
+                                  ),
+                                  label: Text(
+                                    'Agregar al carrito',
+                                    style: TextStyle(
+                                      color: themeProvider.myTheme.colorScheme
+                                          .onPrimaryContainer,
+                                      fontFamily: 'Poppins-Regular',
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                         Container(
@@ -631,60 +1008,6 @@ class ProductDetailsBody extends StatelessWidget {
                             ],
                           ),
                         ),
-
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //   children: [
-                        //     Container(
-                        //       alignment: Alignment.centerLeft,
-                        //       margin: const EdgeInsets.fromLTRB(10, 5, 10, 0),
-                        //       child: Text(
-                        //         AppLocalizations.of(context)!.colors,
-                        //         style: TextStyle(
-                        //           color: themeProvider.myTheme.colorScheme.onPrimaryContainer,
-                        //           fontFamily: 'Poppins-regular',
-                        //           fontSize: 16,
-                        //           fontWeight: FontWeight.bold,
-                        //         ),
-                        //       ),
-                        //     ),
-                        //     // Container(
-                        //     //   margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                        //     //   child: Row(
-                        //     //     children: [
-                        //     //       Container(
-                        //     //         margin: const EdgeInsets.only(right: 5.0),
-                        //     //         height: 30,
-                        //     //         width: 30,
-                        //     //         decoration: BoxDecoration(
-                        //     //           color: Colors.amber,
-                        //     //           borderRadius: BorderRadius.circular(20),
-                        //     //         ),
-                        //     //       ),
-                        //     //       Container(
-                        //     //         margin: const EdgeInsets.only(right: 5.0),
-                        //     //         height: 30,
-                        //     //         width: 30,
-                        //     //         decoration: BoxDecoration(
-                        //     //           color: themeProvider.myTheme
-                        //     //               .colorScheme.onPrimaryContainer,
-                        //     //           borderRadius: BorderRadius.circular(20),
-                        //     //         ),
-                        //     //       ),
-                        //     //       Container(
-                        //     //         // margin: const EdgeInsets.only(right: 5.0),
-                        //     //         height: 30,
-                        //     //         width: 30,
-                        //     //         decoration: BoxDecoration(
-                        //     //           color: Colors.green.shade900,
-                        //     //           borderRadius: BorderRadius.circular(20),
-                        //     //         ),
-                        //     //       ),
-                        //     //     ],
-                        //     //   ),
-                        //     // ),
-                        //   ],
-                        // ),
                       ],
                     ),
                   ),
