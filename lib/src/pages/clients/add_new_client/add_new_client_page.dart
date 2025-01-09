@@ -275,29 +275,15 @@ class _AddClientPageBodyState extends State<AddClientPageBody> {
                 backgroundColor: themeProvider.myTheme.colorScheme.primary,
                 foregroundColor: Colors.white,
                 elevation: 0,
-                leading: Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.pop(
-                          context); // This will pop the current screen.
-                    },
-                    child: Container(
-                      width: 40, // Make the button wider
-                      child: Center(child: Icon(Icons.arrow_back)),
-                    ),
-                  ),
-                ),
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Center(
-                      child: Container(
-                        // margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                        height: 50,
-                        width: 120,
-                        child: LogoFromFirebase(),
-                      ),
+                    Container(
+                      height: 60,
+                      width: 130,
+                      child: LogoFromFirebase(),
                     ),
+                    Spacer(),
                     const Text(
                       'Registro de Cliente',
                       style: TextStyle(
