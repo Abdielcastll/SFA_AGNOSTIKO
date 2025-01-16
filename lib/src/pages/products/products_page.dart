@@ -727,7 +727,6 @@ class _ProductsBodyState extends State<ProductsBody> {
                           keyboardType: TextInputType.text,
                           maxLines: 1,
                           maxLength: 200,
-                          textCapitalization: TextCapitalization.characters,
                           controller: searchController,
                           decoration: InputDecoration(
                             filled: true,
@@ -759,51 +758,31 @@ class _ProductsBodyState extends State<ProductsBody> {
                             ),
                           ),
                           textInputAction: TextInputAction.go,
-                          onChanged: ((value) {
+                          onChanged: (value) {
                             if (value.isEmpty) {
                               setState(() {
                                 filteredProducts.clear();
                               });
+                            } else {
+                              setState(() {
+                                String searchQuery = value.toLowerCase();
+                                filteredProducts = products.where((product) {
+                                  return product.name
+                                      .toLowerCase()
+                                      .contains(searchQuery);
+                                }).toList();
+                              });
                             }
-                          }),
-                          onSubmitted: ((value) async {
-                            print(value);
-                            filteredProducts.clear();
-                            await productsCollection
-                                .where('codigoIndice',
-                                    arrayContains:
-                                        value.toString().toLowerCase())
-                                .snapshots()
-                                .forEach((element) {
-                              for (var element in element.docs) {
-                                Products product = Products(
-                                  quality: element.data()['calidad'].id,
-                                  catalogue: element.data()['catalogo'].id,
-                                  categorie: element.data()['categoria'].id,
-                                  code: element.data()['codigo'],
-                                  barCode: element.data()['codigoBarra'],
-                                  design: element.data()['diseno'].id,
-                                  line: element.data()['linea'].id,
-                                  brand: element.data()['marca'].id,
-                                  lastModifiedDate:
-                                      element.data()['modificado'],
-                                  name: element.data()['nombre'],
-                                  subCategorie:
-                                      element.data()['subcategoria'].id,
-                                  size: element.data()['tamano'].id,
-                                  promotion: element
-                                          .data()
-                                          .toString()
-                                          .contains('promocion')
-                                      ? element.data()['promocion'].id
-                                      : '',
-                                  selected: false,
-                                );
-                                setState(() {
-                                  print("adimg products");
-                                  filteredProducts.add(product);
-                                });
-                              }
+                          },
+                          onSubmitted: ((value) {
+                            setState(() {
+                              filteredProducts.clear();
+                              String searchQuery = value.toLowerCase();
+                              filteredProducts = products.where((product) {
+                                return product.name
+                                    .toLowerCase()
+                                    .contains(searchQuery);
+                              }).toList();
                             });
                           }),
                         ),
