@@ -92,8 +92,8 @@ Future invoicePrintLayout(AddPaymentBodyAtt invoice, String currentCoin) async {
 
   // final logo = await assetsLogo.toPrinterImage(offsetX: maxWidth / 4);
 
-  const specialFont = "DancingScript";
-  const regularFont = "Roboto";
+  const specialFont = "Poppins-Bold";
+  const regularFont = "Poppins-Bold";
 
   listOfTextLine.add(imgLogo);
 
