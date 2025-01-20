@@ -527,16 +527,17 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    height: 50,
-                    width: 120,
-                    child: SvgPicture.asset(
-                      getCardAsset(infoTags?.cardNo?.toHexStr(),
-                          transactionArgs?.transactionInfo?.kernelType),
-                      fit: BoxFit.contain,
+                  if (globalRemoteConfig.onlyFullPaymentWithCard! == false)
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      height: 50,
+                      width: 120,
+                      child: SvgPicture.asset(
+                        getCardAsset(infoTags?.cardNo?.toHexStr(),
+                            transactionArgs?.transactionInfo?.kernelType),
+                        fit: BoxFit.contain,
+                      ),
                     ),
-                  ),
                   Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
@@ -974,8 +975,8 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
 
     // final logo = await assetsLogo.toPrinterImage(offsetX: maxWidth / 4);
 
-    const specialFont = "DancingScript";
-    const regularFont = "Roboto";
+    const specialFont = "Poppins-Bold";
+    const regularFont = "Poppins-Bold";
 
     listOfTextLine.add(imgLogo);
 

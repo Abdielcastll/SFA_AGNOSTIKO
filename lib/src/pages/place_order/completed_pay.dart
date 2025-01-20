@@ -510,53 +510,54 @@ class _CompletedPayBody extends State<CompletedPayBody> {
                     ],
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: () async {
-                    if (ticketPrinted) {
-                      showModalTicketPrinted();
-                    } else {
-                      handlerPress();
-                      setState(() {
-                        ticketPrinted = true;
-                      });
-                    }
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
-                      themeProvider.myTheme.colorScheme.primary,
-                    ),
-                    foregroundColor: MaterialStateProperty.all(
-                      Colors.white,
-                    ),
-                    shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                          16,
+                if (globalRemoteConfig.onlyFullPaymentWithCard! == false)
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (ticketPrinted) {
+                        showModalTicketPrinted();
+                      } else {
+                        handlerPress();
+                        setState(() {
+                          ticketPrinted = true;
+                        });
+                      }
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                        themeProvider.myTheme.colorScheme.primary,
+                      ),
+                      foregroundColor: MaterialStateProperty.all(
+                        Colors.white,
+                      ),
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                            16,
+                          ),
                         ),
                       ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Imprimir Ticket',
+                          style: TextStyle(
+                            fontFamily: 'Poppins-Regular',
+                            fontSize: 14,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+                          child: const Icon(
+                            SimpleLineIcons.check,
+                            size: 14,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Imprimir Factura',
-                        style: TextStyle(
-                          fontFamily: 'Poppins-Regular',
-                          fontSize: 14,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
-                        child: const Icon(
-                          SimpleLineIcons.check,
-                          size: 14,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
               ],
             ),
           ),

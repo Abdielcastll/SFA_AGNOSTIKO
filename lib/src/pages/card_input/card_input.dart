@@ -125,6 +125,10 @@ class _CardInputViewState extends State<CardInputView> {
           body: Column(mainAxisSize: MainAxisSize.max, children: [
             Expanded(child: Container()),
             Text(
+              "Total de la compra:",
+              style: style,
+            ),
+            Text(
               _currencyFormat.format(amount),
               style: style,
             ),

@@ -425,15 +425,22 @@ class AppBarNavigation extends StatelessWidget implements PreferredSizeWidget {
                                             Color.fromARGB(255, 196, 196, 196),
                                       ),
                                     ),
-                                    Text(
-                                      currentClientForTheOrder.prices,
-                                      style: TextStyle(
-                                        fontSize: 11,
-                                        fontFamily: 'Poppins-Regular',
-                                        color:
-                                            Color.fromARGB(255, 196, 196, 196),
+                                    if (globalRemoteConfig
+                                            .onlyFullPaymentWithCard! ==
+                                        false)
+                                      Text(
+                                        currentClientForTheOrder.prices,
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          fontFamily: 'Poppins-Regular',
+                                          color: Color.fromARGB(
+                                            255,
+                                            196,
+                                            196,
+                                            196,
+                                          ),
+                                        ),
                                       ),
-                                    ),
                                   ],
                                 )
                               : Column(
