@@ -1174,19 +1174,19 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
             'PIN OFFLINE EN CLARO') {
           listOfTextLine.add(PrinterText(
               "AUTORIZADO MEDIANTE FIRMA ELECTRÓNICA".toUpperCase(),
-              format: TextFormat(fontSize: 12, fontFamily: regularFont),
+              format: TextFormat(fontSize: 14, fontFamily: regularFont),
               alignment: TextAlignment.Center));
           if (nombreTarjetahabiente != null) {
             listOfTextLine.add(PrinterText(
                 const AsciiCodec().decode(nombreTarjetahabiente).toUpperCase(),
-                format: TextFormat(fontSize: 12, fontFamily: regularFont),
+                format: TextFormat(fontSize: 14, fontFamily: regularFont),
                 alignment: TextAlignment.Center));
           }
         } else {
           if (nombreTarjetahabiente != null) {
             listOfTextLine.add(PrinterText(
                 const AsciiCodec().decode(nombreTarjetahabiente).toUpperCase(),
-                format: TextFormat(fontSize: 12, fontFamily: regularFont),
+                format: TextFormat(fontSize: 14, fontFamily: regularFont),
                 alignment: TextAlignment.Center));
           }
         }
@@ -1194,13 +1194,13 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       case true:
         listOfTextLine.add(PrinterText(
             "AUTORIZADO SIN AUTENTICACIÓN DEL TARJETAHABIENTE".toUpperCase(),
-            format: TextFormat(fontSize: 12, fontFamily: regularFont),
+            format: TextFormat(fontSize: 14, fontFamily: regularFont),
             alignment: TextAlignment.Center));
         if (nombreTarjetahabiente != null) {
           listOfTextLine.add(
             PrinterText(
               const AsciiCodec().decode(nombreTarjetahabiente).toUpperCase(),
-              format: TextFormat(fontSize: 12, fontFamily: regularFont),
+              format: TextFormat(fontSize: 14, fontFamily: regularFont),
               alignment: TextAlignment.Center,
             ),
           );

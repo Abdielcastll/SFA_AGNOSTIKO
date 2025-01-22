@@ -30,14 +30,11 @@ void showGoToPinpadDialog(BuildContext context, String message,
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (enableAnimation)
-                  FittedBox(
-                    clipBehavior: Clip.hardEdge,
-                    child: Image.asset(
-                      'assets/images/ver_pinpad.gif',
-                      fit: BoxFit.fitWidth,
-                      width: 340,
-                      height: 300,
-                    ),
+                  Image.asset(
+                    'assets/images/ver_pinpad.gif',
+                    fit: BoxFit.fitHeight,
+                    width: 300,
+                    height: 340,
                   ),
                 const SizedBox(height: 20),
                 Flexible(
