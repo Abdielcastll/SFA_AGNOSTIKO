@@ -27,6 +27,7 @@ Future acceptAmount(
   noRetail = false,
   isKiosko = false,
 }) async {
+  print('a pagar');
   print(invoiceData.totalOfTheOrder);
   print(paymentBody?.remaining);
   print(amount);

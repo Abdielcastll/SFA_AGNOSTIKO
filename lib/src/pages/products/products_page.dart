@@ -1194,98 +1194,97 @@ class _ProductsBodyState extends State<ProductsBody> {
                                                   color: Colors.grey.shade400,
                                                 ),
                                                 child: Checkbox(
-                                                    side: MaterialStateBorderSide
-                                                        .resolveWith((states) =>
-                                                            const BorderSide(
-                                                                width: 1.0,
-                                                                color:
-                                                                    Colors
-                                                                        .transparent)),
-                                                    shape: const CircleBorder(),
-                                                    activeColor: themeProvider
-                                                        .myTheme
-                                                        .colorScheme
-                                                        .primary,
-                                                    value: product.selected,
-                                                    onChanged: (value) {
-                                                      if (product.selected ==
-                                                          false) {
-                                                        if (productStock > 0) {
-                                                          final newProduct =
-                                                              ShoppingCartProduct(
-                                                            productQuantity: 1,
-                                                            code: product.code
-                                                                .toString(),
-                                                            productId: product
-                                                                .code
-                                                                .toString(),
-                                                            listOfPricesId:
-                                                                widget
-                                                                    .listOfPrices
-                                                                    .toString(),
-                                                            totalAmount:
-                                                                productPrice
-                                                                    .toString(),
-                                                            name: product.name,
-                                                            unitPrice:
-                                                                productPrice
-                                                                    .toString(),
-                                                            availableStock:
-                                                                productStock,
-                                                            urlPicture: product
-                                                                .catalogue
-                                                                .toString(),
-                                                          );
-                                                          setState(() => product
-                                                                  .selected =
-                                                              !product
-                                                                  .selected);
-                                                          selectedProducts
-                                                              .add(newProduct);
-                                                        } else {
-                                                          ScaffoldMessenger.of(
-                                                              context)
-                                                            ..removeCurrentSnackBar()
-                                                            ..showSnackBar(
-                                                              SnackBar(
-                                                                backgroundColor:
-                                                                    themeProvider
-                                                                        .myTheme
-                                                                        .colorScheme
-                                                                        .primary,
-                                                                duration:
-                                                                    const Duration(
-                                                                        seconds:
-                                                                            1),
-                                                                content:
-                                                                    const Text(
-                                                                  "No hay stock disponible de este producto",
-                                                                  style:
-                                                                      TextStyle(
-                                                                    fontFamily:
-                                                                        'Poppins-Regular',
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            );
-                                                        }
-                                                      } else if (product
-                                                              .selected ==
-                                                          true) {
+                                                  side: MaterialStateBorderSide
+                                                      .resolveWith((states) =>
+                                                          const BorderSide(
+                                                              width: 1.0,
+                                                              color: Colors
+                                                                  .transparent)),
+                                                  shape: const CircleBorder(),
+                                                  activeColor: themeProvider
+                                                      .myTheme
+                                                      .colorScheme
+                                                      .primary,
+                                                  value: product.selected,
+                                                  onChanged: (value) {
+                                                    if (product.selected ==
+                                                        false) {
+                                                      if (productStock > 0) {
+                                                        final newProduct =
+                                                            ShoppingCartProduct(
+                                                          productQuantity: 1,
+                                                          code: product.code
+                                                              .toString(),
+                                                          productId: product
+                                                              .code
+                                                              .toString(),
+                                                          listOfPricesId: widget
+                                                              .listOfPrices
+                                                              .toString(),
+                                                          totalAmount:
+                                                              productPrice
+                                                                  .toString(),
+                                                          name: product.name,
+                                                          unitPrice:
+                                                              productPrice
+                                                                  .toString(),
+                                                          availableStock:
+                                                              productStock,
+                                                          urlPicture: product
+                                                              .catalogue
+                                                              .toString(),
+                                                        );
                                                         setState(() => product
                                                                 .selected =
                                                             !product.selected);
                                                         selectedProducts
-                                                            .removeWhere(
-                                                                (item) =>
-                                                                    item.code ==
-                                                                    product
-                                                                        .code);
+                                                            .add(newProduct);
+                                                      } else {
+                                                        ScaffoldMessenger.of(
+                                                            context)
+                                                          ..removeCurrentSnackBar()
+                                                          ..showSnackBar(
+                                                            SnackBar(
+                                                              backgroundColor:
+                                                                  themeProvider
+                                                                      .myTheme
+                                                                      .colorScheme
+                                                                      .primary,
+                                                              duration:
+                                                                  const Duration(
+                                                                      seconds:
+                                                                          1),
+                                                              content:
+                                                                  const Text(
+                                                                "No hay stock disponible de este producto",
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontFamily:
+                                                                      'Poppins-Regular',
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          );
                                                       }
-                                                    }),
+                                                    } else if (product
+                                                            .selected ==
+                                                        true) {
+                                                      setState(() => product
+                                                              .selected =
+                                                          !product.selected);
+                                                      selectedProducts
+                                                          .removeWhere((item) =>
+                                                              item.code ==
+                                                              product.code);
+                                                    }
+                                                  },
+                                                ),
                                               ),
                                             ],
                                           ),
+                                          const SizedBox(width: 10),
+                                          ProductImageWidget(
+                                              productCode: product.code),
                                           const SizedBox(width: 20),
                                           Column(
                                             mainAxisAlignment:
@@ -1413,84 +1412,6 @@ class _ProductsBodyState extends State<ProductsBody> {
                                               ),
                                               TextFieldForCard(
                                                 message: productDesign,
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(width: 10),
-                                          Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                child: FutureBuilder<String>(
-                                                  future: storage
-                                                      .ref()
-                                                      .child('imagenes')
-                                                      .child('productos')
-                                                      .child(product.code)
-                                                      .child('1')
-                                                      .getDownloadURL()
-                                                      .catchError((e) {
-                                                    print('ERROR GETTING IMG');
-                                                    print(e);
-                                                    return ''; // Return an empty string if there's an error.
-                                                  }),
-                                                  builder: (context, snapshot) {
-                                                    if (snapshot
-                                                            .connectionState ==
-                                                        ConnectionState
-                                                            .waiting) {
-                                                      // Show a loading spinner while fetching the URL.
-                                                      return const Center(
-                                                          child:
-                                                              CircularProgressIndicator());
-                                                    }
-
-                                                    if (snapshot.hasError ||
-                                                        snapshot.data == null ||
-                                                        snapshot
-                                                            .data!.isEmpty) {
-                                                      // Show the placeholder image if there's an error or no data.
-                                                      return Image.asset(
-                                                        height: 100,
-                                                        'assets/images/noproduct.jpg',
-                                                        fit: BoxFit.fitHeight,
-                                                      );
-                                                    }
-
-                                                    final url = snapshot.data!;
-
-                                                    return CachedNetworkImage(
-                                                      height: 100,
-                                                      cacheManager:
-                                                          CustomCacheManager
-                                                              .instance,
-                                                      fit: BoxFit.fitHeight,
-                                                      imageUrl: url,
-                                                      placeholder:
-                                                          (context, url) =>
-                                                              Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        child: const Center(
-                                                          child:
-                                                              CircularProgressIndicator(),
-                                                        ),
-                                                      ),
-                                                      errorWidget: (context,
-                                                              url, error) =>
-                                                          Image.asset(
-                                                        height: 100,
-                                                        'assets/images/noproduct.jpg',
-                                                        fit: BoxFit.fitHeight,
-                                                      ),
-                                                    );
-                                                  },
-                                                ),
                                               ),
                                             ],
                                           ),
@@ -2033,6 +1954,93 @@ class TextFieldForCard extends StatelessWidget {
         fontSize: 11,
         fontWeight: bold,
       ),
+    );
+  }
+}
+
+class ProductImageWidget extends StatefulWidget {
+  final String productCode;
+
+  const ProductImageWidget({Key? key, required this.productCode})
+      : super(key: key);
+
+  @override
+  _ProductImageWidgetState createState() => _ProductImageWidgetState();
+}
+
+class _ProductImageWidgetState extends State<ProductImageWidget> {
+  late Future<String> _imageUrlFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _imageUrlFuture = _fetchImageUrl();
+  }
+
+  Future<String> _fetchImageUrl() async {
+    try {
+      return await storage
+          .ref()
+          .child('imagenes')
+          .child('productos')
+          .child(widget.productCode)
+          .child('1')
+          .getDownloadURL();
+    } catch (e) {
+      print('ERROR GETTING IMG');
+      print(e);
+      return ''; // Return an empty string if there's an error.
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: FutureBuilder<String>(
+            future: _imageUrlFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                // Show a loading spinner while fetching the URL.
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              if (snapshot.hasError ||
+                  snapshot.data == null ||
+                  snapshot.data!.isEmpty) {
+                // Show the placeholder image if there's an error or no data.
+                return Image.asset(
+                  'assets/images/noproduct.jpg',
+                  height: 100,
+                  fit: BoxFit.fitHeight,
+                );
+              }
+
+              final url = snapshot.data!;
+
+              return CachedNetworkImage(
+                height: 100,
+                cacheManager: CustomCacheManager.instance,
+                fit: BoxFit.fitHeight,
+                imageUrl: url,
+                placeholder: (context, url) => Container(
+                  alignment: Alignment.center,
+                  child: const CircularProgressIndicator(),
+                ),
+                errorWidget: (context, url, error) => Image.asset(
+                  'assets/images/noproduct.jpg',
+                  height: 100,
+                  fit: BoxFit.fitHeight,
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }

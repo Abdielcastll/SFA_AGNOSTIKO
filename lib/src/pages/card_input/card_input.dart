@@ -142,35 +142,55 @@ class _CardInputViewState extends State<CardInputView> {
   }
 
   Widget get _expectedCardsWidget {
-    List<Widget> widgets = [];
-
-    if (_expectedCardTypes.contains(CardType.RF)) {
-      widgets.add(CardExpectedWidget(
-        imageUrl: "assets/images/tap_card.png",
-        message: AppLocalizations.of(context)!.tap,
-      ));
-    }
-    if (_expectedCardTypes.contains(CardType.IC)) {
-      widgets.add(CardExpectedWidget(
-        imageUrl: "assets/images/insert_card.png",
-        message: AppLocalizations.of(context)!.insert,
-      ));
-    }
-    if (_expectedCardTypes.contains(CardType.Magnetic)) {
-      widgets.add(CardExpectedWidget(
-        imageUrl: "assets/images/swipe_card.png",
-        message: AppLocalizations.of(context)!.swipe,
-      ));
-    }
-
     if (MediaQuery.of(context).orientation == Orientation.portrait) {
-      return Column(children: widgets);
+      return const Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: Text(
+                  "INSERTE/APROXIME/DESLICE",
+                  style: TextStyle(fontSize: 24),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Center(
+                child: Image(
+                  image: AssetImage('assets/images/input_tarjeta.gif'),
+                  width: 300,
+                  height: 300,
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
     } else {
-      // Se necesitan los 'Expanded' para que los elementos del 'Row' queden
-      // centrados. Para 'Column' el centrado es vertical y es fuera del widget
       return Row(children: [
         Expanded(child: Container()),
-        ...widgets,
+        const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "INSERTE/APROXIME/DESLICE",
+              style: TextStyle(fontSize: 24),
+            ),
+          ],
+        ),
+        const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image(
+              image: AssetImage('assets/images/input_tarjeta.gif'),
+              width: 300,
+              height: 300,
+            ),
+          ],
+        ),
         Expanded(child: Container()),
       ]);
     }
@@ -707,35 +727,6 @@ class _CardInputViewState extends State<CardInputView> {
     showInfoDialog(context, "Result: $responseCode", onClose: () {
       Navigator.pop(context);
     });
-  }
-}
-
-class CardExpectedWidget extends StatelessWidget {
-  const CardExpectedWidget({
-    Key? key,
-    required this.imageUrl,
-    required this.message,
-  }) : super(key: key);
-
-  final String imageUrl;
-  final String message;
-
-  @override
-  Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
-    final statusBarHeight = mediaQuery.padding.top + kToolbarHeight;
-    final imageWidth = mediaQuery.orientation == Orientation.portrait
-        ? (mediaQuery.size.height - statusBarHeight) / 5
-        : mediaQuery.size.width / 4;
-
-    return Column(children: [
-      Image(
-        image: AssetImage(imageUrl),
-        width: imageWidth,
-        height: imageWidth,
-      ),
-      Text(message, style: const TextStyle(color: Colors.grey, fontSize: 16)),
-    ]);
   }
 }
 
