@@ -231,14 +231,14 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
   Widget build(BuildContext context) {
     final localeProvider = Provider.of<LocaleProvider>(context);
     final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
-    final user = Provider.of<UserModel>(context, listen: false);
+    final user = Provider.of<UserModel?>(context, listen: false);
 
     return GestureDetector(
       onTap: () {
         _resetInactivityTimer();
       },
       child: StreamProvider<CurrentUserInfo?>.value(
-        value: usersCollection.doc(user.uid).snapshots().map(
+        value: usersCollection.doc(user?.uid).snapshots().map(
               AuthService().userDataFromsnapshot,
             ),
         initialData: CurrentUserInfo(

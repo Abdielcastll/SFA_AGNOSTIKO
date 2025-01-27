@@ -10,8 +10,6 @@ import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 selectClientDialog(BuildContext context, products, subTotal) {
   final orderActive = Provider.of<OrderProvider>(context, listen: false);
-  final clientForTheOrder =
-      Provider.of<OrderProvider>(context, listen: false).clientForTheOrder;
   final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
   final userZoneDocument =
       Provider.of<CurrentUserInfo>(context, listen: false).zoneDocument;
@@ -123,6 +121,7 @@ selectClientDialog(BuildContext context, products, subTotal) {
                       if (defaultClient == null) {
                         print('ERROR ON GETTING DEFAULT CLIENT');
                       } else {
+                        var clientForTheOrder = orderActive.clientForTheOrder!;
                         // ignore: use_build_context_synchronously
                         Navigator.push(
                           context,

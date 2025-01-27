@@ -157,6 +157,7 @@ class _CardInputViewState extends State<CardInputView> {
             ],
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Center(
                 child: Image(
@@ -184,10 +185,12 @@ class _CardInputViewState extends State<CardInputView> {
         const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image(
-              image: AssetImage('assets/images/input_tarjeta.gif'),
-              width: 300,
-              height: 300,
+            Center(
+              child: Image(
+                image: AssetImage('assets/images/input_tarjeta.gif'),
+                width: 300,
+                height: 300,
+              ),
             ),
           ],
         ),

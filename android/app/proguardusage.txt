@@ -1,6 +1,35 @@
 _COROUTINE.ArtificialStackFrames:
     public final java.lang.StackTraceElement coroutineCreation()
 _COROUTINE._CREATION
+agnostikoplugin.c.b:
+    public final void a(com.newland.nsdk.core.internal.card.contact.CPUContactCardImpl)
+    public final void b(com.newland.nsdk.core.internal.card.contact.CPUContactCardImpl)
+    public final void c(com.newland.nsdk.core.internal.card.contact.CPUContactCardImpl)
+    public final void d(com.newland.nsdk.core.internal.card.contact.CPUContactCardImpl)
+    public final void e(com.newland.nsdk.core.internal.card.contact.CPUContactCardImpl)
+    public final com.newland.nsdk.core.internal.card.contact.CPUContactCardImpl f()
+    public final com.newland.nsdk.core.internal.card.contact.CPUContactCardImpl g()
+    public final com.newland.nsdk.core.internal.card.contact.CPUContactCardImpl h()
+    public final com.newland.nsdk.core.internal.card.contact.CPUContactCardImpl i()
+    public final com.newland.nsdk.core.internal.card.contact.CPUContactCardImpl j()
+agnostikoplugin.c.e:
+    public final int N()
+agnostikoplugin.c.g:
+    public final com.newland.sdk.emvl3.internal.configuration.AidImpl t()
+    public final com.newland.sdk.emvl3.internal.configuration.AidImpl u()
+    public final com.newland.sdk.emvl3.internal.configuration.CapkImpl v()
+    public final com.newland.sdk.emvl3.internal.transaction.EmvL3Impl w()
+agnostikoplugin.c.h:
+    public final com.newland.sdk.emvl3.api.internal.listener.PerfromTransactionListener n()
+agnostikoplugin.c.i:
+    public final void a(com.newland.nsdk.core.api.internal.pinentry.PINEntryListener)
+    public final com.newland.nsdk.core.api.internal.pinentry.PINEntryListener c()
+    public final boolean e()
+agnostikoplugin.c.k:
+    public final java.lang.String e()
+agnostikoplugin.d.a$a
+agnostikoplugin.d.a:
+    public void <init>(android.content.Context,android.util.AttributeSet)
 android.annotation.SuppressLint
 android.annotation.TargetApi
 android.support.customtabs.ICustomTabsCallback$Default
@@ -15566,33 +15595,20 @@ com.apps2go.agnostiko.R$styleable
 com.apps2go.agnostiko.R$xml
 com.apps2go.agnostiko.R
 com.apps2go.agnostiko.common.IImplementation:
+    private com.apps2go.agnostiko.imp.bluetooth.BluetoothHandler bluetoothHandler
     private com.apps2go.agnostiko.imp.mdb.IMDB mdb
-    private com.apps2go.agnostiko.imp.ped.PinEntryHandler pinEntryHandler
-    private com.apps2go.agnostiko.imp.scanner.IScanner scanner
+    private com.apps2go.agnostiko.imp.pinpad.IPinpad pinpad
     public final android.app.Activity getActivity()
+    public final io.flutter.embedding.engine.plugins.FlutterPlugin$FlutterPluginBinding getPluginBinding()
     public final void setActivity(android.app.Activity)
+    public final void setBluetoothHandler(com.apps2go.agnostiko.imp.bluetooth.BluetoothHandler)
     public final void setMdb(com.apps2go.agnostiko.imp.mdb.IMDB)
-    public final void setPinEntryHandler(com.apps2go.agnostiko.imp.ped.PinEntryHandler)
-    public final void setScanner(com.apps2go.agnostiko.imp.scanner.IScanner)
-com.apps2go.agnostiko.common.bluetooth.BluetoothConnection$Companion:
-    public final java.util.UUID getDEFAULT_UUID()
-com.apps2go.agnostiko.common.bluetooth.BluetoothConnection$ConnectionThread:
-    public final java.io.InputStream getInput()
-    public final java.io.OutputStream getOutput()
-    public final android.bluetooth.BluetoothSocket getSocket()
-    public final void setInput(java.io.InputStream)
-    public final void setOutput(java.io.OutputStream)
-    public final void setRequestedClosing(boolean)
-com.apps2go.agnostiko.common.bluetooth.BluetoothConnection:
-    public static final synthetic java.util.UUID access$getDEFAULT_UUID$cp()
-    public final android.bluetooth.BluetoothAdapter getBluetoothAdapter()
-com.apps2go.agnostiko.common.bluetooth.BluetoothDevice$Companion:
-    public final com.apps2go.agnostiko.common.bluetooth.BluetoothDevice fromHashMap(java.util.HashMap)
-com.apps2go.agnostiko.common.bluetooth.BluetoothDevice:
-    public static final com.apps2go.agnostiko.common.bluetooth.BluetoothDevice fromHashMap(java.util.HashMap)
-    public final java.lang.String getAddress()
-    public final java.lang.String getName()
-    public final boolean isConnected()
+    public final void setPinpad(com.apps2go.agnostiko.imp.pinpad.IPinpad)
+com.apps2go.agnostiko.common.bluetooth.BluetoothConnection$Companion
+com.apps2go.agnostiko.common.bluetooth.BluetoothConnection$ConnectionThread
+com.apps2go.agnostiko.common.bluetooth.BluetoothConnection
+com.apps2go.agnostiko.common.bluetooth.BluetoothDevice$Companion
+com.apps2go.agnostiko.common.bluetooth.BluetoothDevice
 com.apps2go.agnostiko.common.cards.DUKPTEncryptedTracksData$Companion
 com.apps2go.agnostiko.common.cards.DUKPTEncryptedTracksData
 com.apps2go.agnostiko.common.cards.TracksData$Companion:
@@ -15674,8 +15690,6 @@ com.apps2go.agnostiko.common.emv.EmvLog:
     public static final synthetic byte[] access$getTagPrefix$cp()
     public final android.content.Context getContext()
     public final boolean getEnabled()
-    public final void requestAPDU(byte[])
-    public final void responseAPDU(byte[])
 com.apps2go.agnostiko.common.emv.EmvOnlineRequestedEvent$Companion:
     public final java.lang.String getEventName()
 com.apps2go.agnostiko.common.emv.EmvOnlineRequestedEvent:
@@ -15687,23 +15701,22 @@ com.apps2go.agnostiko.common.emv.EmvOnlineResponse:
     public static final com.apps2go.agnostiko.common.emv.EmvOnlineResponse fromJSON(org.json.JSONObject)
     public final java.util.HashMap toHashMap()
     public final org.json.JSONObject toJSON()
-com.apps2go.agnostiko.common.emv.EmvPinRequestedEvent$Companion
+com.apps2go.agnostiko.common.emv.EmvPinRequestedEvent$Companion:
+    public final com.apps2go.agnostiko.common.emv.EmvPinRequestedEvent fromHashMap(java.util.HashMap)
+    public final java.lang.String getEventName()
 com.apps2go.agnostiko.common.emv.EmvPinRequestedEvent:
-    public static final com.apps2go.agnostiko.common.emv.EmvPinRequestedEvent$Companion Companion
-    private static final java.lang.String eventName
-    private final com.apps2go.agnostiko.common.ped.PinRSAData pinRSAData
-    private final java.lang.Integer remainingTries
-    public static void <clinit>()
-    public void <init>(java.lang.Integer,com.apps2go.agnostiko.common.ped.PinRSAData)
     public static final synthetic java.lang.String access$getEventName$cp()
     public static final com.apps2go.agnostiko.common.emv.EmvPinRequestedEvent fromHashMap(java.util.HashMap)
     public final com.apps2go.agnostiko.common.ped.PinRSAData getPinRSAData()
     public final java.lang.Integer getRemainingTries()
-    public java.util.HashMap toHashMap()
-com.apps2go.agnostiko.common.emv.EmvPinpadEntryEvent$Companion:
-    public final java.lang.String getEventName()
+com.apps2go.agnostiko.common.emv.EmvPinpadEntryEvent$Companion
 com.apps2go.agnostiko.common.emv.EmvPinpadEntryEvent:
+    public static final com.apps2go.agnostiko.common.emv.EmvPinpadEntryEvent$Companion Companion
+    private static final java.lang.String eventName
+    public static void <clinit>()
+    public void <init>()
     public static final synthetic java.lang.String access$getEventName$cp()
+    public java.util.HashMap toHashMap()
 com.apps2go.agnostiko.common.emv.EmvTransactionInfo$Companion:
     public final com.apps2go.agnostiko.common.emv.EmvTransactionInfo fromHashMap(java.util.HashMap)
 com.apps2go.agnostiko.common.emv.EmvTransactionInfo:
@@ -15746,33 +15759,44 @@ com.apps2go.agnostiko.common.ped.DUKPTResult:
     public final int getActualDataLen()
     public final byte[] getData()
     public final byte[] getKsn()
-com.apps2go.agnostiko.common.ped.IPinEvent$Companion
-com.apps2go.agnostiko.common.ped.IPinEvent
-com.apps2go.agnostiko.common.ped.PinCancelledEvent$Companion
-com.apps2go.agnostiko.common.ped.PinCancelledEvent
+com.apps2go.agnostiko.common.ped.IPinEvent$Companion:
+    public final com.apps2go.agnostiko.common.ped.IPinEvent fromHashMap(java.util.HashMap)
+com.apps2go.agnostiko.common.ped.IPinEvent:
+    public static final com.apps2go.agnostiko.common.ped.IPinEvent fromHashMap(java.util.HashMap)
+com.apps2go.agnostiko.common.ped.PinCancelledEvent$Companion:
+    public final java.lang.String getEventName()
+com.apps2go.agnostiko.common.ped.PinCancelledEvent:
+    public static final synthetic java.lang.String access$getEventName$cp()
 com.apps2go.agnostiko.common.ped.PinEntryParameters:
     public static final com.apps2go.agnostiko.common.ped.PinEntryParameters fromHashMap(java.util.HashMap)
-    public final com.apps2go.agnostiko.common.ped.PinRSAData getPinRSAData()
     public final java.util.HashMap toHashMap()
-com.apps2go.agnostiko.common.ped.PinFinishedEvent$Companion
-com.apps2go.agnostiko.common.ped.PinFinishedEvent
-com.apps2go.agnostiko.common.ped.PinInputChangedEvent$Companion
-com.apps2go.agnostiko.common.ped.PinInputChangedEvent
+com.apps2go.agnostiko.common.ped.PinFinishedEvent$Companion:
+    public final com.apps2go.agnostiko.common.ped.PinFinishedEvent fromHashMap(java.util.HashMap)
+    public final java.lang.String getEventName()
+com.apps2go.agnostiko.common.ped.PinFinishedEvent:
+    public static final synthetic java.lang.String access$getEventName$cp()
+    public static final com.apps2go.agnostiko.common.ped.PinFinishedEvent fromHashMap(java.util.HashMap)
+    public final byte[] getPinResultSw()
+com.apps2go.agnostiko.common.ped.PinInputChangedEvent$Companion:
+    public final com.apps2go.agnostiko.common.ped.PinInputChangedEvent fromHashMap(java.util.HashMap)
+    public final java.lang.String getEventName()
+com.apps2go.agnostiko.common.ped.PinInputChangedEvent:
+    public static final synthetic java.lang.String access$getEventName$cp()
+    public static final com.apps2go.agnostiko.common.ped.PinInputChangedEvent fromHashMap(java.util.HashMap)
+    public final int getInputLength()
 com.apps2go.agnostiko.common.ped.PinRSAData:
     public static final com.apps2go.agnostiko.common.ped.PinRSAData fromHashMap(java.util.HashMap)
-    public final byte[] getExponent()
     public final byte[] getIccChallenge()
-    public final byte[] getModulus()
-    public final java.util.HashMap toHashMap()
-com.apps2go.agnostiko.common.ped.PinTimeoutEvent$Companion
-com.apps2go.agnostiko.common.ped.PinTimeoutEvent
+com.apps2go.agnostiko.common.ped.PinTimeoutEvent$Companion:
+    public final java.lang.String getEventName()
+com.apps2go.agnostiko.common.ped.PinTimeoutEvent:
+    public static final synthetic java.lang.String access$getEventName$cp()
 com.apps2go.agnostiko.common.ped.TransportKey$Companion
 com.apps2go.agnostiko.common.ped.TransportKey
-com.apps2go.agnostiko.common.pinpad.PinpadTextParameters:
-    public void <init>()
-    public synthetic void <init>(com.apps2go.agnostiko.common.pinpad.PinpadTextAlignment,int,com.apps2go.agnostiko.common.pinpad.PinpadFontSize,int,kotlin.jvm.internal.DefaultConstructorMarker)
-    public static final com.apps2go.agnostiko.common.pinpad.PinpadTextParameters fromHashMap(java.util.HashMap)
-    public final java.util.HashMap toHashMap()
+com.apps2go.agnostiko.common.pinpad.PinpadFontSize
+com.apps2go.agnostiko.common.pinpad.PinpadTextAlignment
+com.apps2go.agnostiko.common.pinpad.PinpadTextParameters$Companion
+com.apps2go.agnostiko.common.pinpad.PinpadTextParameters
 com.apps2go.agnostiko.common.printer.PrinterImage$Companion
 com.apps2go.agnostiko.common.printer.PrinterImage
 com.apps2go.agnostiko.common.printer.PrinterObject
@@ -15800,9 +15824,7 @@ com.apps2go.agnostiko.common.utils.HexExtensionsKt:
     public static final java.lang.String toHexStr(int)
     public static final java.lang.String toHexStr(long)
     public static final java.lang.String toHexStr(short)
-com.apps2go.agnostiko.common.utils.ImageKt:
-    public static final byte[] bitmapToRgba(android.graphics.Bitmap)
-    public static final byte[] convertRGBAtoRGB16(byte[])
+com.apps2go.agnostiko.common.utils.ImageKt
 com.apps2go.agnostiko.common.utils.ImageNative$Companion
 com.apps2go.agnostiko.common.utils.ImageNative
 com.apps2go.agnostiko.common.utils.JSONExtensionsKt
@@ -15840,6 +15862,47 @@ com.apps2go.agnostiko.common.utils.TlvTag$Companion:
 com.apps2go.agnostiko.common.utils.TlvTag:
     public final int getSize()
     public static final com.apps2go.agnostiko.common.utils.TlvTag unpack(byte[])
+com.apps2go.agnostiko.imp.cards.ICardReader:
+    public final void a(com.apps2go.agnostiko.common.cards.CardType)
+    public final com.apps2go.agnostiko.common.IImplementation c()
+com.apps2go.agnostiko.imp.device.IDevice:
+    public final java.lang.Object j()
+com.apps2go.agnostiko.imp.emv.IEmvModule:
+    public final java.util.List h()
+    public final java.lang.Object i()
+    public final java.util.List j()
+    private final java.lang.String p()
+    public final boolean s()
+com.apps2go.agnostiko.imp.emv.IEmvTransaction:
+    public final void a(java.lang.String,java.lang.String,java.lang.Object)
+    public final com.apps2go.agnostiko.imp.cards.ICardReader c()
+    public final com.apps2go.agnostiko.common.IImplementation e()
+    public final boolean i()
+com.apps2go.agnostiko.imp.ped.ICrypto:
+    public final java.lang.Object c()
+    public final com.apps2go.agnostiko.common.IImplementation d()
+com.apps2go.agnostiko.imp.printer.IPrinter:
+    public final java.lang.Object d()
+com.apps2go.agnostiko.imp.scanner.IScanner:
+    public final java.lang.Object c()
+    public final com.apps2go.agnostiko.common.IImplementation d()
+com.apps2go.agnostiko.imp.utils.UtilsKt:
+    public static final byte[] a(byte[])
+com.apps2go.agnostiko.newland_nsdk.NSDKInstallationReceiver$Companion:
+    public final java.lang.String getACTION_DELETE_APP_HIDE()
+    public final java.lang.String getACTION_INSTALL_APP_HIDE()
+com.apps2go.agnostiko.newland_nsdk.NSDKInstallationReceiver:
+    public static final synthetic java.lang.String access$getACTION_DELETE_APP_HIDE$cp()
+    public static final synthetic java.lang.String access$getACTION_INSTALL_APP_HIDE$cp()
+com.apps2go.agnostiko.newland_nsdk.OtaUpgradeResultReceiver$a:
+    public final java.lang.String a()
+    public final java.lang.String b()
+com.apps2go.agnostiko.newland_nsdk.OtaUpgradeResultReceiver:
+    public static final synthetic java.lang.String a()
+    public static final synthetic java.lang.String b()
+com.apps2go.agnostiko.newland_nsdk.activity.KeyBoardNumberActivity:
+    public final com.newland.nsdk.core.api.internal.pinentry.PINEntryListener getInternalListener()
+    public final void setInternalListener(com.newland.nsdk.core.api.internal.pinentry.PINEntryListener)
 com.baseflow.geolocator.BuildConfig
 com.baseflow.geolocator.GeolocatorLocationService:
     private static final java.lang.String CHANNEL_ID
@@ -41228,258 +41291,8 @@ com.google.type.TimeZone$1
 com.google.type.TimeZone$Builder
 com.google.type.TimeZone
 com.google.type.TimeZoneOrBuilder
-com.icod.libusb.UsbIcodDevice
-com.icod.libusb.UsbNative
-com.icod.serial.SerialPort
-com.icod.serial.SerialPortFinder$Driver
-com.icod.serial.SerialPortFinder
 com.newland.me.module.printer.TTFPrint:
     public native int GetStrPrnSize(byte[],int,int[],int[])
-com.szsicod.print.BuildConfig
-com.szsicod.print.escpos.PrinterAPI$FirmwareListener
-com.szsicod.print.escpos.PrinterAPI:
-    public static final int BOXOPEN
-    public static final int CORRECTINGERROR
-    public static final int ERR_PARAM
-    public static final int FAIL
-    public static final int FEEDING
-    public static final int FEEDING_10
-    public static final int HAPPENERROR
-    public static final int IMPACT_PRINTER
-    public static final int MACHINEERROR
-    public static final int NOSUPPROT
-    public static final int NOTCORRECTERROR
-    public static final int OFF_LINE
-    public static final int OUTOFPAPER
-    public static final int OUTOFPAPER_8
-    public static final int PAPERFEW
-    public static final java.lang.String PRINTERNAME
-    public static final int STRINGLONG
-    public static final int SUCCESS
-    public static final int THERMAL_PRINTER
-    private com.szsicod.print.escpos.PrinterAPI$FirmwareListener mFirmwareListener
-    private static volatile com.szsicod.print.escpos.PrinterAPI mPrinterAPI
-    public static final int waitTime
-    private int GetSum(byte[])
-    public synchronized int changeBd(int)
-    private boolean check0_255(int)
-    private boolean check48_57(byte[],byte,int,int)
-    public synchronized int chineseFontSet(int)
-    public synchronized int closeMark()
-    public synchronized int comeInHex()
-    public synchronized int cutMark()
-    public synchronized int doTestPrint(int,int)
-    public synchronized int downLoadNvBitmap(android.graphics.Bitmap[])
-    public synchronized int feedToStartPos()
-    private static byte[] fileGetBytes(java.io.InputStream)
-    private static byte[] fileGetBytes(java.lang.String)
-    public synchronized int fontSizeSet(int)
-    public synchronized int fullCut()
-    public com.szsicod.print.io.InterfaceAPI getIO()
-    public static com.szsicod.print.escpos.PrinterAPI getInstance()
-    public synchronized int getPrinterCutStatus()
-    public synchronized int getPrinterStatus(int)
-    public synchronized java.lang.String getPrinterVersion()
-    public synchronized int getStatusByControl()
-    public synchronized int getStatusForPrinting(int)
-    public synchronized int getStatusV1()
-    public synchronized int getStatusV2()
-    public synchronized int getStatusWithASC()
-    public synchronized int getStatusWithASC(boolean)
-    public synchronized int getSwitch1Value()
-    public synchronized int getSwitch2Value()
-    public synchronized int halfCut()
-    public synchronized int hexMsg(java.lang.String,boolean)
-    public synchronized int init()
-    public synchronized int initAllPrinter(int)
-    public synchronized boolean isBlackMark()
-    public synchronized boolean isYKPrinter()
-    public synchronized int markDefalut()
-    public synchronized int markLengthSet(int,int,int,int,int,int,int)
-    public synchronized int openCashDrawer(int,int,int)
-    public synchronized int openMark()
-    public synchronized int pageMode()
-    public synchronized int pageModeArea(int,int,int,int)
-    public synchronized int pagePrint()
-    public synchronized int pagePrintAndBack2Standard()
-    public synchronized int pageRemoveAllData()
-    public synchronized int pageSelectDirection(int)
-    private int parseStatusWith(byte[])
-    public synchronized int pointTest()
-    public synchronized int printAndBackToStd()
-    public synchronized int printAndFeedLine(int)
-    public synchronized int printBackFlow(int)
-    public synchronized int printBackFlow2(int)
-    public synchronized int printBarCode(int,int,java.lang.String)
-    public synchronized int printCode128(java.lang.String)
-    public synchronized int printCode128(java.lang.String,java.lang.String)
-    public synchronized int printCostomString(android.content.Context,java.lang.String,float)
-    public synchronized int printImageForPin(android.graphics.Bitmap)
-    public synchronized int printKanjiQRCode(java.lang.String,boolean)
-    public synchronized int printPDFCode(java.lang.String,int,int,int)
-    public synchronized int printQRCode(java.lang.String,int,boolean)
-    public synchronized int printQRCode2(java.lang.String)
-    public synchronized int printString(java.lang.String)
-    public synchronized int printString(java.lang.String,java.lang.String,boolean)
-    public synchronized int printTab()
-    public synchronized int printTheBitmap()
-    public synchronized int printerRequestsRealTime(int)
-    public synchronized int readPrinterFlash()
-    public synchronized int resetPrinter()
-    public synchronized int selfTestPage()
-    public synchronized int sendOrder(byte[])
-    public synchronized int sendOrder(byte[],int)
-    public synchronized int sendOrder(byte[],int,int)
-    public synchronized int set2400()
-    public synchronized int set58mm()
-    public synchronized int set80mm()
-    public synchronized int setAbsolutePosition(int,int)
-    public synchronized int setAlignMode(int)
-    public synchronized int setBarCodeHeight(int)
-    public synchronized int setBarCodeWidth(int)
-    public synchronized int setBlackSwitch(int)
-    public synchronized int setCharCodeTable(int)
-    public synchronized int setCharRightSpace(int)
-    public synchronized int setCharSize(int,int)
-    public synchronized int setDefaultLineSpace()
-    public synchronized int setEmphasizedMode(int)
-    public synchronized int setEnablePanelButton(int)
-    public synchronized int setEnableSmoothPrn(int)
-    public synchronized int setEnableUnderLine(int)
-    public synchronized int setFontStyle(int)
-    public synchronized int setFontStyle(int,boolean,boolean,boolean,boolean)
-    public synchronized int setHorizontalTab(int[],boolean)
-    public synchronized int setInterCharSet(int)
-    public synchronized int setLeftMargin(int,int)
-    public synchronized int setLineSpace(int)
-    public synchronized int setNullPointer()
-    public void setOutput(boolean)
-    public synchronized int setOverlapMode(int)
-    public synchronized int setPageAbsolutePosition(int,int)
-    public synchronized int setPageRelativePosition(int,int)
-    public synchronized int setPaperSensor(int)
-    public synchronized int setPaperType(int)
-    public synchronized int setPrintColorSize2(int)
-    public synchronized int setPrintQRCodeErrCL(int)
-    public synchronized int setPrintQRCodeSize(int)
-    public synchronized int setPrintQRCodeType(int)
-    public synchronized int setPrnAreaWidth(int,int)
-    public synchronized int setRelativePosition(int,int)
-    public synchronized int setReverse(boolean)
-    public synchronized int setRotate(int)
-    public synchronized int setSensorToStopPrint(int)
-    public void setmFirmwareListener(com.szsicod.print.escpos.PrinterAPI$FirmwareListener)
-    public synchronized int smallFontSizeSet()
-    public synchronized int standardMode()
-    public synchronized int updateFirmware(java.io.File)
-    public int updateFirmware(java.io.InputStream)
-com.szsicod.print.io.BluetoothAPI$1
-com.szsicod.print.io.BluetoothAPI$BluetoothListener
-com.szsicod.print.io.BluetoothAPI$BluetoothReceiver
-com.szsicod.print.io.BluetoothAPI
-com.szsicod.print.io.SerialAPI:
-    private boolean ThreadFlg
-    private static final int WRITEBYTEMAX
-    private boolean isNeedOutTime
-    private int mBaudRate
-    private java.io.File mFile
-    private int mFlowContorl
-    private static com.icod.serial.SerialPort mSerialPort
-    private int readMinSize
-    private int sleepReadTime
-    static void <clinit>()
-    public void <init>(java.io.File,int,int)
-    private int blockSend(byte[],int,int,long)
-    private int blockSizeCustom(byte[],int,int,int)
-    public void clear()
-    public int closeDevice()
-    public synchronized int getStatus()
-    public java.lang.Boolean isOpen()
-    public int openDevice()
-    public int readBuffer(byte[],int,int,int)
-    public void setNeedOutTime(boolean)
-    public void setReadMinSize(int)
-    public void setSleepReadTime(int)
-    public int writeBuffer(byte[],int,int,int)
-com.szsicod.print.io.SocketAPI
-com.szsicod.print.io.USBAPI:
-    private static final java.lang.String ACTION_USB_PERMISSION
-    private static final int LIBUSB_DT_STRING
-    private static final int MAXSZIE
-    private static final int STD_USB_REQUEST_GET_DESCRIPTOR
-    public void <init>(android.content.Context,android.hardware.usb.UsbDevice)
-    public int getStateByControl()
-com.szsicod.print.io.UsbConnection$1
-com.szsicod.print.io.UsbConnection$UsbCheckSRT
-com.szsicod.print.io.UsbConnection
-com.szsicod.print.io.UsbNativeAPI:
-    private static final int MAXSIZE
-    private com.szsicod.print.io.UsbConnection mUsbConnection
-    private com.icod.libusb.UsbNative mUsbNative
-    public void <init>()
-    public void clear()
-    public int closeDevice()
-    public java.lang.String getProductName()
-    public int getStateByControl()
-    public com.icod.libusb.UsbIcodDevice getUsbIcodDevice()
-    public java.lang.Boolean isOpen()
-    public int openDevice()
-    public int readBuffer(byte[],int,int,int)
-    public int writeBuffer(byte[],int,int,int)
-com.szsicod.print.io.UsbTerminal
-com.szsicod.print.log.AndroidLogCatStrategy
-com.szsicod.print.log.DecorDiskLogStrategy$Builder
-com.szsicod.print.log.DecorDiskLogStrategy
-com.szsicod.print.log.DiskLogStrategy$WriteHandler
-com.szsicod.print.log.DiskLogStrategy
-com.szsicod.print.log.Logger:
-    private static final java.lang.String TAG
-    public void <init>()
-    public static void addLogStrategy(com.szsicod.print.log.LogStrategy)
-    public static void clearLogAdapters()
-    public static void d(java.lang.Object)
-    public static varargs void d(java.lang.String,java.lang.Object[])
-    public static void setCurrentLevel(java.lang.String)
-    public static varargs void v(java.lang.String,java.lang.Object[])
-    public static varargs void w(java.lang.String,java.lang.Object[])
-    public static varargs void wtf(java.lang.String,java.lang.Object[])
-com.szsicod.print.log.Utils:
-    static final java.lang.String DEFAULT_TAG
-    public static final java.lang.String LASTTIME
-    private static android.content.Context context
-    public static long lastTime
-    protected void <init>()
-    static boolean equals(java.lang.CharSequence,java.lang.CharSequence)
-    public static long getLastTime()
-    public static void init(android.content.Context)
-    public static java.lang.String logLevel(int)
-    public static void setLastTime(long)
-com.szsicod.print.utils.BitmapUtils:
-    byte[] mask
-    public void <init>()
-    public static int changePointPx(byte[])
-    private static boolean checkBound(int,int,int,int)
-    public static android.graphics.Bitmap convertGreyImgByFloyd(android.graphics.Bitmap)
-    private static void format_K_dither16x16(int[],int,int,byte[])
-    private static void format_K_dither16x16_int(int[],int,int,int[])
-    public static byte format_K_dither8x8_int(int,int,int)
-    public static android.graphics.Bitmap getBitmapForMutable(android.graphics.Bitmap)
-    public static byte[] parseBmpToByteNOCMD(android.graphics.Bitmap)
-    public static void parseBmpToNVCMD(java.util.ArrayList,android.graphics.Bitmap)
-    public static byte parseDot(int,int,int)
-    public static byte[] pixCrudeToEscRastBitImageCmd(byte[],int,int)
-    public static byte[] pixToEscRastBitImageCmd(byte[],int,int)
-    public static byte[] pixToEscRastBitImageCmd(int[],int,int)
-    public static byte[] pixToNVCMD(byte[],int,int)
-    public static byte[] printImageForPin(android.graphics.Bitmap)
-    public static android.graphics.Bitmap reSize(android.graphics.Bitmap,int,int)
-    public static android.graphics.Bitmap reSizeByWidth(android.graphics.Bitmap,int)
-    private static void setPixel(android.graphics.Bitmap,int,int,int)
-    public static android.graphics.Bitmap sizeCompress(android.graphics.Bitmap,int)
-    public static android.graphics.Bitmap strConvertBmp(android.content.Context,java.lang.String,float)
-    public static void writeToFileWithHex(byte[],java.lang.String,boolean)
-    public static void writeToFileWithHex(byte[],boolean)
-com.szsicod.print.utils.BluetoothUtils
 com.tekartik.sqflite.BuildConfig
 com.tekartik.sqflite.Constant:
     static final java.lang.String CMD_GET
@@ -51341,7 +51154,9 @@ kotlin.text.StringsKt__StringsKt:
     public static final boolean contentEqualsIgnoreCaseImpl(java.lang.CharSequence,java.lang.CharSequence)
     public static final boolean contentEqualsImpl(java.lang.CharSequence,java.lang.CharSequence)
     public static final boolean endsWith(java.lang.CharSequence,char,boolean)
+    public static final boolean endsWith(java.lang.CharSequence,java.lang.CharSequence,boolean)
     public static synthetic boolean endsWith$default(java.lang.CharSequence,char,boolean,int,java.lang.Object)
+    public static synthetic boolean endsWith$default(java.lang.CharSequence,java.lang.CharSequence,boolean,int,java.lang.Object)
     public static final kotlin.Pair findAnyOf(java.lang.CharSequence,java.util.Collection,int,boolean)
     public static synthetic kotlin.Pair findAnyOf$default(java.lang.CharSequence,java.util.Collection,int,boolean,int,java.lang.Object)
     public static final kotlin.Pair findLastAnyOf(java.lang.CharSequence,java.util.Collection,int,boolean)
@@ -51373,6 +51188,7 @@ kotlin.text.StringsKt__StringsKt:
     private static final java.lang.String removeRange(java.lang.String,int,int)
     private static final java.lang.String removeRange(java.lang.String,kotlin.ranges.IntRange)
     public static final java.lang.CharSequence removeSuffix(java.lang.CharSequence,java.lang.CharSequence)
+    public static final java.lang.String removeSuffix(java.lang.String,java.lang.CharSequence)
     public static final java.lang.CharSequence removeSurrounding(java.lang.CharSequence,java.lang.CharSequence)
     public static final java.lang.CharSequence removeSurrounding(java.lang.CharSequence,java.lang.CharSequence,java.lang.CharSequence)
     public static final java.lang.String removeSurrounding(java.lang.String,java.lang.CharSequence)
@@ -55178,9 +54994,7 @@ com.amolg.flutterbarcodescanner.camera.CameraSource$FrameProcessingRunnable:
     public static final synthetic boolean $assertionsDisabled
 com.amolg.flutterbarcodescanner.camera.CameraSource:
     public static synthetic java.lang.Thread access$2000(com.amolg.flutterbarcodescanner.camera.CameraSource)
-com.apps2go.agnostiko.common.emv.EmvLog:
-    public final void pinRequested()
-com.apps2go.agnostiko.common.emv.EmvPinRequestedEvent
+com.apps2go.agnostiko.common.emv.EmvPinpadEntryEvent
 com.baseflow.geolocator.location.LocationClient:
     public abstract boolean checkLocationService(android.content.Context)
 com.google.android.datatransport.runtime.dagger.internal.DoubleCheck:
@@ -55388,11 +55202,6 @@ com.google.protobuf.MessageSchema:
 com.google.protobuf.OneofInfo
 com.google.protobuf.UnsafeUtil:
     public static long objectFieldOffset(java.lang.reflect.Field)
-com.szsicod.print.escpos.PrinterAPI:
-    public final int clearASC(byte[])
-    public final int resolveBitmap()
-com.szsicod.print.io.SerialAPI
-com.szsicod.print.io.UsbNativeAPI
 com.tekartik.sqflite.Utils:
     public static java.util.Locale localeForLanguageTagPre21(java.lang.String)
 com.yalantis.ucrop.util.EglUtils:
