@@ -17,26 +17,27 @@ import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/devices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/shopping_cart_products.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
+import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_rol_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/checkout_retail_page.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
+import 'package:pwa_sales2go_flutter/src/provider/order_provider.dart';
 import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/connection_service.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
+import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/checkout_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pwa_sales2go_flutter/src/utils/custom_cache_manager.dart';
 import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
+import 'package:pwa_sales2go_flutter/src/widgets/dialog/select_client_dialog.dart';
 import 'package:pwa_sales2go_flutter/src/widgets/mobile_scanner/mobile_scanner.dart';
 
 class SelectedProducts extends StatefulWidget {
   const SelectedProducts({
     Key? key,
-    required this.client,
   }) : super(key: key);
-
-  final Clients? client;
 
   @override
   State<SelectedProducts> createState() => _SelectedProductsState();
@@ -47,12 +48,13 @@ class _SelectedProductsState extends State<SelectedProducts> {
   String? deviceName;
   bool hasLaserScanner = false;
   String? scanResult = '';
-  late String? clientPriceList = widget.client?.prices;
+  String? clientPriceList = "GENER-11";
   late Stream<List<ShoppingCartProduct>> streamShoppingCartProducts;
 
   @override
   void initState() {
     super.initState();
+
     streamShoppingCartProducts = objectBox.getShoppingCartProducts();
     localGetDeviceType();
   }
@@ -108,7 +110,7 @@ class _SelectedProductsState extends State<SelectedProducts> {
             : 'NaN';
         var stock = stockValues[code] ?? 000;
         const productQuantity = 1;
-        final pricesList = clientPriceList;
+        final pricesList = clientPriceList ?? "GENER-11";
         final name = doc.data().toString().contains('nombre')
             ? doc.get('nombre')
             : 'NaN';
@@ -227,7 +229,10 @@ class _SelectedProductsState extends State<SelectedProducts> {
     // print("Retail: ${userRole?.isRetail}");
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     final stockValues = Provider.of<StockModel?>(context)?.stock ?? {};
-
+    final orderActive = Provider.of<OrderProvider>(context);
+    final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
+    final currentClientForTheOrder =
+        Provider.of<OrderProvider>(context).clientForTheOrder;
     return coinName == ''
         ? Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -912,7 +917,9 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                                 context) =>
                                                             NewBardcodeScanner(
                                                           clientPriceList:
-                                                              clientPriceList,
+                                                              currentClientForTheOrder
+                                                                      ?.prices ??
+                                                                  clientPriceList,
                                                           products: products,
                                                           stockValues:
                                                               stockValues,
@@ -1078,15 +1085,100 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                   bool internet =
                                                       await checkInternetConnection(
                                                           context);
-                                                  if (internet) {
+                                                  if (currentClientForTheOrder ==
+                                                      null) {
+                                                    if (globalRemoteConfig
+                                                                .clientesEnabled ==
+                                                            true &&
+                                                        internet) {
+                                                      selectClientDialog(
+                                                        context,
+                                                        products,
+                                                        double.parse(
+                                                          subTotal.toString(),
+                                                        ),
+                                                      );
+                                                    } else if (internet) {
+                                                      print(
+                                                          'CLIENTS OFF, selecting default');
+                                                      Clients? defaultClient =
+                                                          genericClients;
+                                                      await clientsCollection
+                                                          .where('zona',
+                                                              isEqualTo:
+                                                                  userZoneDocument)
+                                                          .where('numeroId',
+                                                              isEqualTo: 0)
+                                                          .get()
+                                                          .then(
+                                                        (value) {
+                                                          return value.docs.map(
+                                                            (snapshot) {
+                                                              if (snapshot
+                                                                  .get('nombre')
+                                                                  .toString()
+                                                                  .contains(
+                                                                      '000A Cliente Default')) {
+                                                                print(
+                                                                    'SENDING DATA BASE DEFAULT CLIENT');
+                                                                defaultClient =
+                                                                    genericClients;
+                                                              } else {
+                                                                print(
+                                                                    'SENDING ERROR DEFAULT CLIENT');
+                                                                defaultClient =
+                                                                    genericClients;
+                                                              }
+                                                            },
+                                                          ).toList();
+                                                        },
+                                                      ).catchError(
+                                                        (e) {
+                                                          print(
+                                                              'ERROR ON GETTING CLIENT DEFAULT ON APPBAR NAVIGATION');
+                                                          print(e);
+                                                          print(
+                                                              'SENDING ERROR DEFAULT CLIENT');
+                                                          return <Null>[];
+                                                        },
+                                                      );
+
+                                                      print(
+                                                          'defaultClient?.zone: ${defaultClient?.zone}');
+                                                      orderActive.setOrder(
+                                                          true, defaultClient);
+                                                      if (defaultClient ==
+                                                          null) {
+                                                        print(
+                                                            'ERROR ON GETTING DEFAULT CLIENT');
+                                                      } else {
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                CheckoutRetailPage(
+                                                              client:
+                                                                  currentClientForTheOrder,
+                                                              cart: products,
+                                                              subTotal:
+                                                                  double.parse(
+                                                                subTotal
+                                                                    .toString(),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        );
+                                                      }
+                                                    }
+                                                  } else if (internet) {
                                                     userRole?.isRetail == false
                                                         ? Navigator.push(
                                                             context,
                                                             MaterialPageRoute(
                                                               builder: (context) =>
                                                                   CheckoutPage(
-                                                                client: widget
-                                                                    .client,
+                                                                client:
+                                                                    currentClientForTheOrder,
                                                                 cart: products,
                                                                 subTotal: double
                                                                     .parse(
@@ -1101,8 +1193,8 @@ class _SelectedProductsState extends State<SelectedProducts> {
                                                             MaterialPageRoute(
                                                               builder: (context) =>
                                                                   CheckoutRetailPage(
-                                                                client: widget
-                                                                    .client,
+                                                                client:
+                                                                    currentClientForTheOrder,
                                                                 cart: products,
                                                                 subTotal: double
                                                                     .parse(

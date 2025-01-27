@@ -231,48 +231,64 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
   Widget build(BuildContext context) {
     final localeProvider = Provider.of<LocaleProvider>(context);
     final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final user = Provider.of<UserModel>(context, listen: false);
 
     return GestureDetector(
       onTap: () {
         _resetInactivityTimer();
       },
-      child: MaterialApp(
-        navigatorKey: navigatorKey,
-        debugShowCheckedModeBanner: false,
-        locale: localeProvider.locale,
-        supportedLocales: L10n.all,
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        title: 'Field Sales',
-        theme: themeProvider.myTheme,
-        initialRoute: SplashScreenView.route,
-        routes: {
-          SplashScreenView.route: (BuildContext context) =>
-              const SplashScreenView(),
-          PinInputView.route: (context) => PinInputView(),
-          PanInputView.route: (context) => const PanInputView(),
-          ExpDateInputView.route: (context) => ExpDateInputView(),
-          EmvTransactionInfoView.route: (context) =>
-              const EmvTransactionInfoView(),
-          CvvInputView.route: (context) => const CvvInputView(),
-          CardInputView.route: (context) => CardInputView(),
-          AmountInputView.route: (context) => AmountInputView(),
-          'wrapper': (BuildContext context) => const Wrapper(),
-          'login': (BuildContext context) => const LoginPage(),
-          'navigation': (BuildContext context) => const NavigationPages(),
-          'notifications': (BuildContext context) => const NotificationsPage(),
-          'place_order': (BuildContext context) => const PlaceOrderPage(),
-          'catalogue': (BuildContext context) => const CataloguePage(),
-          'clients': (BuildContext context) => const ClientsPage(),
-          'profile': (BuildContext context) => const ProfilePage(),
-          DiaryTabs.route: (BuildContext context) => const DiaryTabs(),
-          'order': (BuildContext context) => const OrderPage(),
-          'promo': (BuildContext context) => const PromoVideoPlayer(),
-        },
+      child: StreamProvider<CurrentUserInfo?>.value(
+        value: usersCollection.doc(user.uid).snapshots().map(
+              AuthService().userDataFromsnapshot,
+            ),
+        initialData: CurrentUserInfo(
+          name: '',
+          dni: '',
+          zone: '',
+          zoneDocument: '',
+          email: '',
+          role: '',
+          uid: '',
+        ),
+        child: MaterialApp(
+          navigatorKey: navigatorKey,
+          debugShowCheckedModeBanner: false,
+          locale: localeProvider.locale,
+          supportedLocales: L10n.all,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          title: 'Field Sales',
+          theme: themeProvider.myTheme,
+          initialRoute: SplashScreenView.route,
+          routes: {
+            SplashScreenView.route: (BuildContext context) =>
+                const SplashScreenView(),
+            PinInputView.route: (context) => PinInputView(),
+            PanInputView.route: (context) => const PanInputView(),
+            ExpDateInputView.route: (context) => ExpDateInputView(),
+            EmvTransactionInfoView.route: (context) =>
+                const EmvTransactionInfoView(),
+            CvvInputView.route: (context) => const CvvInputView(),
+            CardInputView.route: (context) => CardInputView(),
+            AmountInputView.route: (context) => AmountInputView(),
+            'wrapper': (BuildContext context) => const Wrapper(),
+            'login': (BuildContext context) => const LoginPage(),
+            'navigation': (BuildContext context) => const NavigationPages(),
+            'notifications': (BuildContext context) =>
+                const NotificationsPage(),
+            'place_order': (BuildContext context) => const PlaceOrderPage(),
+            'catalogue': (BuildContext context) => const CataloguePage(),
+            'clients': (BuildContext context) => const ClientsPage(),
+            'profile': (BuildContext context) => const ProfilePage(),
+            DiaryTabs.route: (BuildContext context) => const DiaryTabs(),
+            'order': (BuildContext context) => const OrderPage(),
+            'promo': (BuildContext context) => const PromoVideoPlayer(),
+          },
+        ),
       ),
     );
   }
