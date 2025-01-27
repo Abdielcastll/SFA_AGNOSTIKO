@@ -5,6 +5,7 @@ import 'package:pwa_sales2go_flutter/src/features/product/presentation/screens/p
 import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
+import 'package:pwa_sales2go_flutter/src/pages/products/new_products.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
 import 'package:pwa_sales2go_flutter/src/provider/counter_limit_firestore.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -48,7 +49,7 @@ class _ListOfProductsButtonState extends State<ListOfProductsButton> {
             }
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (BuildContext context) => ProductsPage(
+                builder: (BuildContext context) => NewProductsPage(
                   listOfPrices: prices,
                   userZoneDocument: userZoneDocument,
                   listOfProducts: const [],

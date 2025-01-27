@@ -36,6 +36,9 @@ class ProductsList extends StatelessWidget {
         }
 
         final items = snapshot.data!;
+        final filteredItems =
+            items.where((item) => item.products.isNotEmpty).toList();
+
         return SafeArea(
           child: GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -44,13 +47,16 @@ class ProductsList extends StatelessWidget {
               mainAxisSpacing: 8,
               childAspectRatio: 0.6,
             ),
-            itemCount: items.length,
-            itemBuilder: (context, index) => ProductCard(
-              imageUrl: items[index].mainImageUrl,
-              productName: items[index].nameProduct,
-              productDescription: items[index].description,
-              productPrice: items[index].basePrice,
-            ),
+            itemCount: filteredItems.length,
+            itemBuilder: (context, index) {
+              return ProductCard(
+                imageUrl: filteredItems[index].mainImageUrl,
+                productName: filteredItems[index].nameProduct,
+                productDescription: filteredItems[index].description,
+                productPrice: filteredItems[index].basePrice,
+                sku: filteredItems[index].products[0].sku,
+              );
+            },
           ),
         );
       },

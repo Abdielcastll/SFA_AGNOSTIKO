@@ -9,7 +9,6 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
-import 'package:pwa_sales2go_flutter/src/features/product/presentation/screens/products_list.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
@@ -69,85 +68,86 @@ class _ProductsPageState extends State<ProductsPage> {
         userZoneDocument: widget.userZoneDocument,
       ),
       backgroundColor: themeProvider.myTheme.colorScheme.surface,
-      body: MultiProvider(providers: [
-        StreamProvider<QualitySummary?>.value(
-          value: DatabaseServiceStreams().qualitySummary,
-          initialData: null,
-          catchError: (context, error) {
-            return;
-          },
-        ),
-        StreamProvider<CategorieSummary?>.value(
-          value: DatabaseServiceStreams().categorieSummary,
-          initialData: null,
-          catchError: (context, error) {
-            return;
-          },
-        ),
-        StreamProvider<DesignSummary?>.value(
-          value: DatabaseServiceStreams().designSummary,
-          initialData: null,
-          catchError: (context, error) {
-            return;
-          },
-        ),
-        StreamProvider<LineSummary?>.value(
-          value: DatabaseServiceStreams().lineSummary,
-          initialData: null,
-          catchError: (context, error) {
-            return;
-          },
-        ),
-        StreamProvider<BrandSummary?>.value(
-          value: DatabaseServiceStreams().brandSummary,
-          initialData: null,
-          catchError: (context, error) {
-            return;
-          },
-        ),
-        StreamProvider<SubCategorieSummary?>.value(
-          value: DatabaseServiceStreams().subCategorieSummary,
-          initialData: null,
-          catchError: (context, error) {
-            return;
-          },
-        ),
-        StreamProvider<SizeSummary?>.value(
-          value: DatabaseServiceStreams().sizeSummary,
-          initialData: null,
-          catchError: (context, error) {
-            return;
-          },
-        ),
-        StreamProvider<StockModel?>.value(
-          value: DatabaseServiceStreams().stockValues,
-          initialData: null,
-          catchError: (context, error) {
-            return;
-          },
-        ),
-        StreamProvider<Coin?>.value(
-          initialData: Coin(),
-          catchError: (context, error) {
-            print(
-                'ERROR ON STREAM PROVIDER OF COINEXCHANGE RATES IN ADD CLIENT');
-            print(error);
-            return;
-          },
-          value: coinCollection
-              .doc(currentCoinSelectedCode)
-              .snapshots()
-              .map(coinFromSnapshot),
-        ),
-      ], child: ProductsList()
-          // ProductsBody(
-          //   listOfProducts: widget.listOfProducts,
-          //   listOfPrices: widget.listOfPrices,
-          //   showFullList: widget.showFullList,
-          //   userZoneDocument: widget.userZoneDocument,
-          //   pricesName: widget.pricesName,
-          // ),
+      body: MultiProvider(
+        providers: [
+          StreamProvider<QualitySummary?>.value(
+            value: DatabaseServiceStreams().qualitySummary,
+            initialData: null,
+            catchError: (context, error) {
+              return;
+            },
           ),
+          StreamProvider<CategorieSummary?>.value(
+            value: DatabaseServiceStreams().categorieSummary,
+            initialData: null,
+            catchError: (context, error) {
+              return;
+            },
+          ),
+          StreamProvider<DesignSummary?>.value(
+            value: DatabaseServiceStreams().designSummary,
+            initialData: null,
+            catchError: (context, error) {
+              return;
+            },
+          ),
+          StreamProvider<LineSummary?>.value(
+            value: DatabaseServiceStreams().lineSummary,
+            initialData: null,
+            catchError: (context, error) {
+              return;
+            },
+          ),
+          StreamProvider<BrandSummary?>.value(
+            value: DatabaseServiceStreams().brandSummary,
+            initialData: null,
+            catchError: (context, error) {
+              return;
+            },
+          ),
+          StreamProvider<SubCategorieSummary?>.value(
+            value: DatabaseServiceStreams().subCategorieSummary,
+            initialData: null,
+            catchError: (context, error) {
+              return;
+            },
+          ),
+          StreamProvider<SizeSummary?>.value(
+            value: DatabaseServiceStreams().sizeSummary,
+            initialData: null,
+            catchError: (context, error) {
+              return;
+            },
+          ),
+          StreamProvider<StockModel?>.value(
+            value: DatabaseServiceStreams().stockValues,
+            initialData: null,
+            catchError: (context, error) {
+              return;
+            },
+          ),
+          StreamProvider<Coin?>.value(
+            initialData: Coin(),
+            catchError: (context, error) {
+              print(
+                  'ERROR ON STREAM PROVIDER OF COINEXCHANGE RATES IN ADD CLIENT');
+              print(error);
+              return;
+            },
+            value: coinCollection
+                .doc(currentCoinSelectedCode)
+                .snapshots()
+                .map(coinFromSnapshot),
+          ),
+        ],
+        child: ProductsBody(
+          listOfProducts: widget.listOfProducts,
+          listOfPrices: widget.listOfPrices,
+          showFullList: widget.showFullList,
+          userZoneDocument: widget.userZoneDocument,
+          pricesName: widget.pricesName,
+        ),
+      ),
     );
   }
 }
