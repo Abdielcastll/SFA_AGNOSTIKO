@@ -55,6 +55,10 @@ class ProductsList extends StatelessWidget {
                 productDescription: filteredItems[index].description,
                 productPrice: filteredItems[index].basePrice,
                 sku: filteredItems[index].products[0].sku,
+                products: filteredItems[index].products,
+                availableDesigns: filteredItems[index].availableDesigns,
+                availableLines: filteredItems[index].availableLines,
+                availableSizes: filteredItems[index].availableSizes,
               );
             },
           ),

@@ -4,12 +4,9 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/features/product/presentation/screens/products_list.dart';
-
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
-
 import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
-
 import 'package:pwa_sales2go_flutter/src/widgets/appbar/appbar_navigation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
