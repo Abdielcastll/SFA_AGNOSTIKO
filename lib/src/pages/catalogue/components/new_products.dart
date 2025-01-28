@@ -34,8 +34,6 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
     final userZoneDocument = Provider.of<CurrentUserInfo>(context).zoneDocument;
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
-    print('pricesAAA ${prices}');
-
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 12.0, 0, 0),
       child: Column(
