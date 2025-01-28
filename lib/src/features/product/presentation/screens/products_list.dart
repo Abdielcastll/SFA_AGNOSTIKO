@@ -11,9 +11,9 @@ class ProductsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    const minItemWidth = 150;
-    final cabenPorCol = (size.width / minItemWidth).floor();
-    int crossAxisCount = min(5, cabenPorCol);
+    const minItemWidth = 200;
+    final itemsByCol = (size.width / minItemWidth).floor();
+    int crossAxisCount = min(5, itemsByCol);
 
     return FutureBuilder<List<BaseProductEntity>>(
       future: getDataForSubcategoriesList(),
@@ -45,20 +45,14 @@ class ProductsList extends StatelessWidget {
               crossAxisCount: crossAxisCount,
               crossAxisSpacing: 8,
               mainAxisSpacing: 8,
-              childAspectRatio: 0.6,
+              childAspectRatio: 0.75,
             ),
+            padding: const EdgeInsets.all(8.0),
             itemCount: filteredItems.length,
             itemBuilder: (context, index) {
               return ProductCard(
-                imageUrl: filteredItems[index].mainImageUrl,
-                productName: filteredItems[index].nameProduct,
-                productDescription: filteredItems[index].description,
-                productPrice: filteredItems[index].basePrice,
+                baseProduct: filteredItems[index],
                 sku: filteredItems[index].products[0].sku,
-                products: filteredItems[index].products,
-                availableDesigns: filteredItems[index].availableDesigns,
-                availableLines: filteredItems[index].availableLines,
-                availableSizes: filteredItems[index].availableSizes,
               );
             },
           ),

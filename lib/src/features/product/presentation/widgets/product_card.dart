@@ -1,11 +1,12 @@
 // ignore_for_file: avoid_print
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:pwa_sales2go_flutter/src/features/product/domain/entitites/product_variant_entity.dart';
-import 'package:pwa_sales2go_flutter/src/features/product/domain/enums/product_size_enum.dart';
+import 'package:pwa_sales2go_flutter/src/features/product/domain/entitites/base_product_entity.dart';
 import 'package:pwa_sales2go_flutter/src/features/product/presentation/screens/detail_product.dart';
 import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
@@ -13,36 +14,24 @@ import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/utils/custom_cache_manager.dart';
 
 class ProductCard extends StatelessWidget {
-  final String imageUrl;
-  final String productName;
-  final String productDescription;
-  final double productPrice;
+  final BaseProductEntity baseProduct;
   final String sku;
-  final List<ProductSize> availableSizes;
-  final List<String> availableDesigns;
-  final List<String> availableLines;
-  final List<ProductVariantEntity> products;
 
   const ProductCard({
     super.key,
-    required this.imageUrl,
-    required this.productName,
-    required this.productDescription,
-    required this.productPrice,
+    required this.baseProduct,
     required this.sku,
-    required this.products,
-    required this.availableDesigns,
-    required this.availableSizes,
-    required this.availableLines,
   });
 
   @override
   Widget build(BuildContext context) {
-    final formatedPrice = NumberFormat("\$#,##0.00").format(productPrice);
-    print("Pre Product $availableDesigns");
-    print("Pre Product $availableSizes");
-    print("Pre Product $availableLines");
-    print("Pre Prodcut name $productName");
+    final formattedPrice =
+        NumberFormat("\$#,##0.00").format(baseProduct.basePrice);
+    final colorScheme = Theme.of(context).colorScheme;
+    print("Pre Product ${baseProduct.availableDesigns}");
+    print("Pre Product ${baseProduct.availableSizes}");
+    print("Pre Product ${baseProduct.availableLines}");
+    print("Pre Prodcut name ${baseProduct.nameProduct}");
 
     return GestureDetector(
       onTap: () {
@@ -60,105 +49,143 @@ class ProductCard extends StatelessWidget {
                 ),
               ],
               child: ProductDetailUI(
-                productName: productName,
-                priceText: productPrice.toString(),
-                sizes: availableSizes,
-                colorOptions: availableLines,
-                genderOptions: availableDesigns,
-                products: products,
+                productName: baseProduct.nameProduct,
+                priceText: formattedPrice,
+                sizes: baseProduct.availableSizes,
+                colorOptions: baseProduct.availableLines,
+                genderOptions: baseProduct.availableDesigns,
+                products: baseProduct.products,
               ),
             ),
           ),
         );
       },
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(2),
+          color: colorScheme.inversePrimary,
+        ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
+            Flexible(
+              flex: 2,
               child: FutureBuilder<String>(
-                future: storage
-                    .ref()
-                    .child('imagenes')
-                    .child('productos')
-                    .child(sku)
-                    .child('1')
-                    .getDownloadURL()
-                    .catchError((e) {
-                  print('ERROR GETTING IMG');
-                  print(e);
-                  return ''; // Return an empty string if there's an error.
-                }),
+                future: _getProductThumbnailUrl(sku),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    // Show a loading spinner while fetching the URL.
-                    return const Center(child: CircularProgressIndicator());
-                  }
-
-                  if (snapshot.hasError ||
-                      snapshot.data == null ||
-                      snapshot.data!.isEmpty) {
-                    // Show the placeholder image if there's an error or no data.
-                    return Image.asset(
-                      height: 100,
-                      'assets/images/noproduct.jpg',
-                      fit: BoxFit.fitHeight,
+                    return const Center(
+                      child: CircularProgressIndicator(),
                     );
                   }
-
-                  final url = snapshot.data!;
-
-                  return CachedNetworkImage(
-                    height: 100,
-                    cacheManager: CustomCacheManager.instance,
-                    fit: BoxFit.fitHeight,
-                    imageUrl: url,
-                    placeholder: (context, url) => Container(
-                      alignment: Alignment.center,
-                      child: const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    ),
-                    errorWidget: (context, url, error) => Image.asset(
-                      height: 100,
-                      'assets/images/noproduct.jpg',
-                      fit: BoxFit.fitHeight,
-                    ),
-                  );
+                    
+                  final String imageUrl = snapshot.data as String;
+                  return ProductThumbnail(imageUrl);
                 },
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Text(
-                    productName,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                    textAlign: TextAlign.start,
-                  ),
-                  Text(
-                    productDescription,
-                    style: const TextStyle(
-                      fontSize: 14,
-                    ),
-                    textAlign: TextAlign.start,
-                  ),
-                  Text(
-                    formatedPrice,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )
-                ],
-              ),
-            )
+            Expanded(
+              child: ProductDescription(baseProduct),
+            ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+Future<String> _getProductThumbnailUrl(String sku) async {
+  const defaultImage = 'assets/images/noproduct.jpg';
+
+  final String imageUrl = await storage
+      .ref()
+      .child('imagenes')
+      .child('productos')
+      .child(sku)
+      .child('1')
+      .getDownloadURL()
+      .catchError((e) {
+    print("Cannot get image $e, setting default");
+    return defaultImage;
+  });
+
+  return imageUrl.isNotEmpty ? imageUrl : defaultImage;
+}
+
+class ProductThumbnail extends StatelessWidget {
+  final String imageUrl;
+  const ProductThumbnail(
+    this.imageUrl, {
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+
+    return CachedNetworkImage(
+      fit: BoxFit.cover,
+      imageUrl: imageUrl,
+      cacheManager: CustomCacheManager.instance,
+      placeholder: (context, url) => const CircularProgressIndicator(),
+      errorWidget: (context, url, error) => Image.asset(imageUrl),
+    );
+  }
+}
+
+Widget _buildConditionalAvailableList(List<dynamic> list, TextStyle textStyle, {String prefix = "Disponible en"}) {
+  list.removeWhere((element) => element == "NA");
+
+  if (list.isEmpty) {
+    return const SizedBox.shrink();
+  }
+
+
+  return Text(
+    "$prefix: ${list.join(", ")}",
+    style: textStyle,
+  );
+}
+
+class ProductDescription extends StatelessWidget {
+  final BaseProductEntity baseProduct;
+  const ProductDescription(
+    this.baseProduct, {
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final formattedPrice =
+        NumberFormat("\$#,##0.00").format(baseProduct.basePrice);
+
+    const boldText = TextStyle(fontWeight: FontWeight.bold, fontSize: 18);
+    const ligthText = TextStyle(fontWeight: FontWeight.w200, fontSize: 14);
+
+    return SizedBox(
+      width: double.infinity,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                baseProduct.nameProduct,
+                style: boldText,
+              ),
+              _buildConditionalAvailableList(
+                  baseProduct.availableDesigns, ligthText, prefix: "Diseños"),
+              _buildConditionalAvailableList(
+                  baseProduct.availableSizes, ligthText, prefix: "Tallas"),
+              _buildConditionalAvailableList(
+                  baseProduct.availableLines, ligthText, prefix: "Lineas"),
+              Text(
+                formattedPrice,
+                style: boldText,
+              )
+            ],
+          ),
         ),
       ),
     );
