@@ -39,6 +39,10 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formatedPrice = NumberFormat("\$#,##0.00").format(productPrice);
+    print("Pre Product $availableDesigns");
+    print("Pre Product $availableSizes");
+    print("Pre Product $availableLines");
+    print("Pre Prodcut name $productName");
 
     return GestureDetector(
       onTap: () {

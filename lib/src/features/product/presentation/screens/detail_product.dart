@@ -53,7 +53,9 @@ class _ProductDetailUIState extends State<ProductDetailUI> {
   @override
   void initState() {
     super.initState();
-
+    print("Join ${widget.sizes}");
+    print("Join ${widget.colorOptions}");
+    print("Join ${widget.genderOptions}");
     selectedSize =
         widget.sizes.isNotEmpty ? widget.sizes.first : ProductSize.std;
     selectedGender =
@@ -114,8 +116,7 @@ class _ProductDetailUIState extends State<ProductDetailUI> {
         ),
         middleSection: ProductsDetailsMiddleSection(
           priceText: widget.products[selectedProduct].price.toString(),
-          stockText:
-              stockValues[widget.products[selectedProduct].sku].toString(),
+          stockText: stockValues[widget.products[selectedProduct].sku].toString(),
           colorNames: widget.colorOptions,
           selectedDropdownColor: selectedDropdownColor,
           onDropdownColorSelected: (value) {
@@ -173,7 +174,7 @@ class _ProductDetailUIState extends State<ProductDetailUI> {
               }
               if (stockValues[widget.products[selectedProduct].sku]! > 0) {
                 final productsInCart =
-                    await objectBox.getAllShoppingCartProducts();
+                    objectBox.getAllShoppingCartProducts();
                 bool isProductAlreadyInCart = false;
                 for (var element in productsInCart) {
                   if (element.code == widget.products[selectedProduct].sku) {
@@ -240,7 +241,7 @@ class _ProductDetailUIState extends State<ProductDetailUI> {
             } else {
               if (stockValues[widget.products[selectedProduct].sku]! > 0) {
                 final productsInCart =
-                    await objectBox.getAllShoppingCartProducts();
+                    objectBox.getAllShoppingCartProducts();
                 bool isProductAlreadyInCart = false;
                 for (var element in productsInCart) {
                   if (element.code == widget.products[selectedProduct].sku) {

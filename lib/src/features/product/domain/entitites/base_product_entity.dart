@@ -31,9 +31,7 @@ class BaseProductEntity {
           Map<String, dynamic>.from(productJson as Map<Object?, Object?>);
       return ProductVariantEntity.fromJson(productMap);
     }).toList();
-    print("parseamos:");
-
-    print(productos);
+   
 
     // Extract the lowest price
     final double basePrice = productos.isNotEmpty
@@ -43,15 +41,18 @@ class BaseProductEntity {
     // Extract unique lines from products
     final availableLines =
         (json['linea'] as List<dynamic>).map((e) => e.toString()).toList();
+        print("See lINEA: $availableLines");
 
     // Map availableSizes from "tamanio"
     final availableSizes = (json['tamanio'] as List<dynamic>)
         .map((size) => ProductSizeExtension.fromString(size.toString()))
         .toList();
-
+     print("See lINEA: $availableSizes");
     // Map availableDesigns from "disenio"
     final availableDesigns =
         (json['disenio'] as List<dynamic>).map((e) => e.toString()).toList();
+
+        print("See lINEA: $availableDesigns");
 
     return BaseProductEntity(
       nameProduct: json['nombre'] as String? ?? '',
