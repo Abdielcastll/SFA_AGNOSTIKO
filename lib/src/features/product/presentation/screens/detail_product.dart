@@ -62,30 +62,34 @@ class _ProductDetailUIState extends State<ProductDetailUI> {
         widget.genderOptions.isNotEmpty ? widget.genderOptions.first : "";
     selectedDropdownColor =
         widget.colorOptions.isNotEmpty ? widget.colorOptions.first : "";
-    updateSelectedProduct();
+    updateSelectedProduct(productIndexFind(selectedSize: selectedSize, selectedDropdownColor: selectedDropdownColor, selectedGender: selectedGender));
   }
 
-  /// Helper function to update the selected product
-  void updateSelectedProduct() {
+  int productIndexFind({required ProductSize selectedSize, required String selectedDropdownColor, required String selectedGender}){
     final productIndex = widget.products.indexWhere((product) {
       final isSizeMatch = product.size == selectedSize;
       final isLineMatch = product.line == selectedDropdownColor;
       final isDesignMatch = product.design == selectedGender;
       return isSizeMatch && isLineMatch && isDesignMatch;
     });
+    return productIndex;
+  }
+
+  /// Helper function to update the selected product
+  bool updateSelectedProduct(int productIndex) {
+    
 
     if (productIndex != -1) {
       print(
           "Match found! Product Index: $productIndex, SKU: ${widget.products[productIndex].sku}");
+          return true;
     } else {
       Fluttertoast.showToast(msg: 'No hay producto con esas caracteristicas');
       print("No match found. Defaulting to first product.");
+      return false;
     }
 
-    setState(() {
-      selectedProduct = productIndex != -1 ? productIndex : 0;
-      print("selecting index: $selectedProduct");
-    });
+    
   }
 
   @override
@@ -108,10 +112,13 @@ class _ProductDetailUIState extends State<ProductDetailUI> {
           descripcion: "",
           sizes: widget.sizes,
           onSizeSelected: (value) {
-            setState(() {
-              selectedSize = value;
-              updateSelectedProduct();
-            });
+            final productIndex = productIndexFind(selectedSize: value, selectedDropdownColor: selectedDropdownColor, selectedGender: selectedGender);
+            if(updateSelectedProduct(productIndex)){
+                setState(() {
+                selectedProduct = productIndex != -1 ? productIndex : 0;
+                selectedSize = value;
+                });
+            }
           },
         ),
         middleSection: ProductsDetailsMiddleSection(
@@ -120,18 +127,24 @@ class _ProductDetailUIState extends State<ProductDetailUI> {
           colorNames: widget.colorOptions,
           selectedDropdownColor: selectedDropdownColor,
           onDropdownColorSelected: (value) {
-            setState(() {
-              selectedDropdownColor = value;
-              updateSelectedProduct();
+           final productIndex = productIndexFind(selectedSize: selectedSize, selectedDropdownColor: value, selectedGender: selectedGender);
+            if(updateSelectedProduct(productIndex)){
+                setState(() {
+                selectedProduct = productIndex != -1 ? productIndex : 0;
+                selectedDropdownColor = value;
             });
+            }
           },
           genderOptions: widget.genderOptions,
           selectedGender: selectedGender,
           onGenderSelected: (value) {
-            setState(() {
-              selectedGender = value;
-              updateSelectedProduct();
-            });
+            final productIndex = productIndexFind(selectedSize: selectedSize, selectedDropdownColor: selectedDropdownColor, selectedGender: value);
+            if(updateSelectedProduct(productIndex)){
+                setState(() {
+                selectedProduct = productIndex != -1 ? productIndex : 0;
+                selectedGender = value;
+                });
+            }
           },
         ),
         bottomSection: BottonSection(
