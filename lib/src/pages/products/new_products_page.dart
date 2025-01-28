@@ -41,18 +41,7 @@ class _NewProductsPageState extends State<NewProductsPage> {
         userZoneDocument: widget.userZoneDocument,
       ),
       backgroundColor: themeProvider.myTheme.colorScheme.surface,
-      body: MultiProvider(
-        providers: [
-          StreamProvider<StockModel?>.value(
-            value: DatabaseServiceStreams().stockValues,
-            initialData: null,
-            catchError: (context, error) {
-              return;
-            },
-          ),
-        ],
-        child: ProductsList(),
-      ),
+      body: ProductsList(),
     );
   }
 }

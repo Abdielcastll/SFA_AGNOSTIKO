@@ -3,10 +3,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/features/product/domain/entitites/product_variant_entity.dart';
 import 'package:pwa_sales2go_flutter/src/features/product/domain/enums/product_size_enum.dart';
 import 'package:pwa_sales2go_flutter/src/features/product/presentation/screens/detail_product.dart';
+import 'package:pwa_sales2go_flutter/src/models/stock_model.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_streams.dart';
 import 'package:pwa_sales2go_flutter/src/utils/custom_cache_manager.dart';
 
 class ProductCard extends StatelessWidget {
@@ -42,13 +45,24 @@ class ProductCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (BuildContext context) => ProductDetailUI(
-              productName: productName,
-              priceText: productPrice.toString(),
-              sizes: availableSizes,
-              colorOptions: availableLines,
-              genderOptions: availableDesigns,
-              products: products,
+            builder: (BuildContext context) => MultiProvider(
+              providers: [
+                StreamProvider<StockModel?>.value(
+                  value: DatabaseServiceStreams().stockValues,
+                  initialData: null,
+                  catchError: (context, error) {
+                    return;
+                  },
+                ),
+              ],
+              child: ProductDetailUI(
+                productName: productName,
+                priceText: productPrice.toString(),
+                sizes: availableSizes,
+                colorOptions: availableLines,
+                genderOptions: availableDesigns,
+                products: products,
+              ),
             ),
           ),
         );
