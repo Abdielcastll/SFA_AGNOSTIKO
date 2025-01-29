@@ -1,8 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:pwa_sales2go_flutter/src/features/product/domain/entitites/base_product_entity.dart';
-import 'package:pwa_sales2go_flutter/src/features/product/domain/repositories/product_list_repository.dart';
+import 'package:pwa_sales2go_flutter/src/features/product/data/product_list_info.dart';
 import 'package:pwa_sales2go_flutter/src/features/product/presentation/widgets/product_card.dart';
 
 class ProductsList extends StatelessWidget {
@@ -15,8 +14,8 @@ class ProductsList extends StatelessWidget {
     final itemsByCol = (size.width / minItemWidth).floor();
     int crossAxisCount = min(5, max(itemsByCol, 2));  // Force at least 2 products by row, and at most 5
 
-    return FutureBuilder<List<BaseProductEntity>>(
-      future: getDataForSubcategoriesList(),
+    return FutureBuilder<ProductListInfo>(
+      future: ProductListInfo.instance,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -31,11 +30,11 @@ class ProductsList extends StatelessWidget {
           );
         }
 
-        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+        if (!snapshot.hasData || ProductListInfo.products.isEmpty) {
           return const Center(child: Text("Sin productos disponibles"));
         }
 
-        final items = snapshot.data!;
+        final items = ProductListInfo.products;
         final filteredItems =
             items.where((item) => item.products.isNotEmpty).toList();
 
