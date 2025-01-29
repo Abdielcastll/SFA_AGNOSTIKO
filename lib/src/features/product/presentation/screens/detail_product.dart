@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/features/product/domain/entitites/product_variant_entity.dart';
@@ -62,10 +63,16 @@ class _ProductDetailUIState extends State<ProductDetailUI> {
         widget.genderOptions.isNotEmpty ? widget.genderOptions.first : "";
     selectedDropdownColor =
         widget.colorOptions.isNotEmpty ? widget.colorOptions.first : "";
-    updateSelectedProduct(productIndexFind(selectedSize: selectedSize, selectedDropdownColor: selectedDropdownColor, selectedGender: selectedGender));
+    updateSelectedProduct(productIndexFind(
+        selectedSize: selectedSize,
+        selectedDropdownColor: selectedDropdownColor,
+        selectedGender: selectedGender));
   }
 
-  int productIndexFind({required ProductSize selectedSize, required String selectedDropdownColor, required String selectedGender}){
+  int productIndexFind(
+      {required ProductSize selectedSize,
+      required String selectedDropdownColor,
+      required String selectedGender}) {
     final productIndex = widget.products.indexWhere((product) {
       final isSizeMatch = product.size == selectedSize;
       final isLineMatch = product.line == selectedDropdownColor;
@@ -77,19 +84,15 @@ class _ProductDetailUIState extends State<ProductDetailUI> {
 
   /// Helper function to update the selected product
   bool updateSelectedProduct(int productIndex) {
-    
-
     if (productIndex != -1) {
       print(
           "Match found! Product Index: $productIndex, SKU: ${widget.products[productIndex].sku}");
-          return true;
+      return true;
     } else {
       Fluttertoast.showToast(msg: 'No hay producto con esas caracteristicas');
       print("No match found. Defaulting to first product.");
       return false;
     }
-
-    
   }
 
   @override
@@ -98,228 +101,245 @@ class _ProductDetailUIState extends State<ProductDetailUI> {
     final userZoneDocument = context.watch<CurrentUserInfo>().zoneDocument;
     final orderActive = Provider.of<OrderProvider>(context);
     final user = Provider.of<UserModel>(context);
+    final priceFormatter = NumberFormat("\$#,##0.00", "es_MX");
 
     return Scaffold(
       appBar: AppBarNavigation(
         message: AppLocalizations.of(context)!.products,
         userZoneDocument: userZoneDocument,
       ),
-      body: NewProductDetailsBody(
-        topSection: ProductsDetailsTopSections(
-          sku: widget.products[selectedProduct].sku,
-          productName: widget.productName,
-          selectedSize: selectedSize,
-          descripcion: "",
-          sizes: widget.sizes,
-          onSizeSelected: (value) {
-            final productIndex = productIndexFind(selectedSize: value, selectedDropdownColor: selectedDropdownColor, selectedGender: selectedGender);
-            if(updateSelectedProduct(productIndex)){
+      body: Container(
+        height: double.infinity,
+        padding: const EdgeInsets.only(top: 10, left: 5),
+        color: const Color.fromRGBO(240, 238, 251, 1),
+        child: NewProductDetailsBody(
+          topSection: ProductsDetailsTopSections(
+            sku: widget.products[selectedProduct].sku,
+            productName: widget.productName,
+            selectedSize: selectedSize,
+            descripcion: "",
+            sizes: widget.sizes,
+            onSizeSelected: (value) {
+              final productIndex = productIndexFind(
+                  selectedSize: value,
+                  selectedDropdownColor: selectedDropdownColor,
+                  selectedGender: selectedGender);
+              if (updateSelectedProduct(productIndex)) {
                 setState(() {
-                selectedProduct = productIndex != -1 ? productIndex : 0;
-                selectedSize = value;
+                  selectedProduct = productIndex != -1 ? productIndex : 0;
+                  selectedSize = value;
                 });
-            }
-          },
-        ),
-        middleSection: ProductsDetailsMiddleSection(
-          priceText: widget.products[selectedProduct].price.toString(),
-          stockText: stockValues[widget.products[selectedProduct].sku].toString(),
-          colorNames: widget.colorOptions,
-          selectedDropdownColor: selectedDropdownColor,
-          onDropdownColorSelected: (value) {
-           final productIndex = productIndexFind(selectedSize: selectedSize, selectedDropdownColor: value, selectedGender: selectedGender);
-            if(updateSelectedProduct(productIndex)){
+              }
+            },
+          ),
+          middleSection: ProductsDetailsMiddleSection(
+            priceText: priceFormatter.format(widget.products[selectedProduct].price),
+            stockText:
+                stockValues[widget.products[selectedProduct].sku].toString(),
+            colorNames: widget.colorOptions,
+            selectedDropdownColor: selectedDropdownColor,
+            quality: widget.products[selectedProduct].quality,
+            brand: widget.products[selectedProduct].brand,
+            category: widget.products[selectedProduct].category,
+            onDropdownColorSelected: (value) {
+              final productIndex = productIndexFind(
+                  selectedSize: selectedSize,
+                  selectedDropdownColor: value,
+                  selectedGender: selectedGender);
+              if (updateSelectedProduct(productIndex)) {
                 setState(() {
-                selectedProduct = productIndex != -1 ? productIndex : 0;
-                selectedDropdownColor = value;
-            });
-            }
-          },
-          genderOptions: widget.genderOptions,
-          selectedGender: selectedGender,
-          onGenderSelected: (value) {
-            final productIndex = productIndexFind(selectedSize: selectedSize, selectedDropdownColor: selectedDropdownColor, selectedGender: value);
-            if(updateSelectedProduct(productIndex)){
-                setState(() {
-                selectedProduct = productIndex != -1 ? productIndex : 0;
-                selectedGender = value;
+                  selectedProduct = productIndex != -1 ? productIndex : 0;
+                  selectedDropdownColor = value;
                 });
-            }
-          },
-        ),
-        bottomSection: BottonSection(
-          onAddToCart: () async {
-            // Lógica para añadir al carrito
-            print("Añadido al carrito con:");
-            print("Producto seleccionado: ${widget.products[selectedProduct]}");
-            if (orderActive.orderActive == false) {
-              bool internet = await checkInternetConnection(context);
-              if (internet) {
-                orderActive.setOrder(true, null);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    settings: const RouteSettings(
-                      name: "ORDER",
-                    ),
-                    builder: (context) =>
-                        StreamProvider<CurrentUserInfo?>.value(
-                      value: usersCollection.doc(user.uid).snapshots().map(
-                            AuthService().userDataFromsnapshot,
-                          ),
-                      initialData: CurrentUserInfo(
-                        name: '',
-                        dni: '',
-                        zone: '',
-                        zoneDocument: '',
-                        email: '',
-                        role: '',
-                        uid: '',
+              }
+            },
+            genderOptions: widget.genderOptions,
+            selectedGender: selectedGender,
+            onGenderSelected: (value) {
+              final productIndex = productIndexFind(
+                  selectedSize: selectedSize,
+                  selectedDropdownColor: selectedDropdownColor,
+                  selectedGender: value);
+              if (updateSelectedProduct(productIndex)) {
+                setState(() {
+                  selectedProduct = productIndex != -1 ? productIndex : 0;
+                  selectedGender = value;
+                });
+              }
+            },
+          ),
+          bottomSection: BottonSection(
+            onAddToCart: () async {
+              // Lógica para añadir al carrito
+              print("Añadido al carrito con:");
+              print("Producto seleccionado: ${widget.products[selectedProduct]}");
+              if (orderActive.orderActive == false) {
+                bool internet = await checkInternetConnection(context);
+                if (internet) {
+                  orderActive.setOrder(true, null);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      settings: const RouteSettings(
+                        name: "ORDER",
                       ),
-                      catchError: (context, error) {
-                        print(error);
-                        return;
-                      },
-                      child: const OrderPage(),
+                      builder: (context) =>
+                          StreamProvider<CurrentUserInfo?>.value(
+                        value: usersCollection.doc(user.uid).snapshots().map(
+                              AuthService().userDataFromsnapshot,
+                            ),
+                        initialData: CurrentUserInfo(
+                          name: '',
+                          dni: '',
+                          zone: '',
+                          zoneDocument: '',
+                          email: '',
+                          role: '',
+                          uid: '',
+                        ),
+                        catchError: (context, error) {
+                          print(error);
+                          return;
+                        },
+                        child: const OrderPage(),
+                      ),
                     ),
-                  ),
-                );
-              }
-              if (stockValues[widget.products[selectedProduct].sku]! > 0) {
-                final productsInCart =
-                    objectBox.getAllShoppingCartProducts();
-                bool isProductAlreadyInCart = false;
-                for (var element in productsInCart) {
-                  if (element.code == widget.products[selectedProduct].sku) {
-                    print(
-                        'Product is already in the cart, increasing quantity by 1');
-                    isProductAlreadyInCart = true;
-                    final updatedProduct = ShoppingCartProduct(
-                      id: element.id,
-                      availableStock: element.availableStock,
-                      productQuantity: element.productQuantity! + 1,
-                      code: element.code,
-                      listOfPricesId: element.listOfPricesId,
-                      name: element.name,
-                      productId: element.productId,
-                      unitPrice: element.unitPrice.toString(),
-                      totalAmount: element.totalAmount.toString(),
-                      urlPicture: element.urlPicture.toString(),
+                  );
+                }
+                if (stockValues[widget.products[selectedProduct].sku]! > 0) {
+                  final productsInCart = objectBox.getAllShoppingCartProducts();
+                  bool isProductAlreadyInCart = false;
+                  for (var element in productsInCart) {
+                    if (element.code == widget.products[selectedProduct].sku) {
+                      print(
+                          'Product is already in the cart, increasing quantity by 1');
+                      isProductAlreadyInCart = true;
+                      final updatedProduct = ShoppingCartProduct(
+                        id: element.id,
+                        availableStock: element.availableStock,
+                        productQuantity: element.productQuantity! + 1,
+                        code: element.code,
+                        listOfPricesId: element.listOfPricesId,
+                        name: element.name,
+                        productId: element.productId,
+                        unitPrice: element.unitPrice.toString(),
+                        totalAmount: element.totalAmount.toString(),
+                        urlPicture: element.urlPicture.toString(),
+                      );
+                      if (element.productQuantity! + 1 <=
+                          element.availableStock!) {
+                        objectBox.insertShoppingCartProduct(updatedProduct);
+                        Fluttertoast.showToast(
+                            msg:
+                                'Producto ${element.code} añadido correctamente');
+                      } else {
+                        Fluttertoast.showToast(
+                            msg:
+                                'producto sin stock: ${widget.products[selectedProduct].sku}');
+                      }
+                      break;
+                    }
+                  }
+                  if (!isProductAlreadyInCart) {
+                    final newProduct = ShoppingCartProduct(
+                      productQuantity: 1,
+                      code: widget.products[selectedProduct].sku,
+                      productId: widget.products[selectedProduct].sku,
+                      //listOfPricesId: pricesName.toString(),
+                      totalAmount:
+                          widget.products[selectedProduct].price.toString(),
+                      name: widget.products[selectedProduct].name,
+                      unitPrice:
+                          widget.products[selectedProduct].price.toString(),
+                      availableStock:
+                          stockValues[widget.products[selectedProduct].sku],
+                      //urlPicture: catalogueID.toString(),
                     );
-                    if (element.productQuantity! + 1 <=
-                        element.availableStock!) {
-                      objectBox.insertShoppingCartProduct(updatedProduct);
+                    if (newProduct.productQuantity! <=
+                        newProduct.availableStock!) {
+                      objectBox.insertShoppingCartProduct(newProduct);
                       Fluttertoast.showToast(
                           msg:
-                              'Producto ${element.code} añadido correctamente');
+                              'Producto ${newProduct.code} añadido correctamente');
                     } else {
                       Fluttertoast.showToast(
                           msg:
                               'producto sin stock: ${widget.products[selectedProduct].sku}');
                     }
-                    break;
                   }
-                }
-                if (!isProductAlreadyInCart) {
-                  final newProduct = ShoppingCartProduct(
-                    productQuantity: 1,
-                    code: widget.products[selectedProduct].sku,
-                    productId: widget.products[selectedProduct].sku,
-                    //listOfPricesId: pricesName.toString(),
-                    totalAmount:
-                        widget.products[selectedProduct].price.toString(),
-                    name: widget.products[selectedProduct].name,
-                    unitPrice:
-                        widget.products[selectedProduct].price.toString(),
-                    availableStock:
-                        stockValues[widget.products[selectedProduct].sku],
-                    //urlPicture: catalogueID.toString(),
-                  );
-                  if (newProduct.productQuantity! <=
-                      newProduct.availableStock!) {
-                    objectBox.insertShoppingCartProduct(newProduct);
-                    Fluttertoast.showToast(
-                        msg:
-                            'Producto ${newProduct.code} añadido correctamente');
-                  } else {
-                    Fluttertoast.showToast(
-                        msg:
-                            'producto sin stock: ${widget.products[selectedProduct].sku}');
-                  }
+                } else {
+                  Fluttertoast.showToast(
+                      msg: 'No hay stock disponible para este producto');
                 }
               } else {
-                Fluttertoast.showToast(
-                    msg: 'No hay stock disponible para este producto');
-              }
-            } else {
-              if (stockValues[widget.products[selectedProduct].sku]! > 0) {
-                final productsInCart =
-                    objectBox.getAllShoppingCartProducts();
-                bool isProductAlreadyInCart = false;
-                for (var element in productsInCart) {
-                  if (element.code == widget.products[selectedProduct].sku) {
-                    print(
-                        'Product is already in the cart, increasing quantity by 1');
-                    isProductAlreadyInCart = true;
-                    final updatedProduct = ShoppingCartProduct(
-                      id: element.id,
-                      availableStock: element.availableStock,
-                      productQuantity: element.productQuantity! + 1,
-                      code: element.code,
-                      listOfPricesId: element.listOfPricesId,
-                      name: element.name,
-                      productId: element.productId,
-                      unitPrice: element.unitPrice.toString(),
-                      totalAmount: element.totalAmount.toString(),
-                      urlPicture: element.urlPicture.toString(),
+                if (stockValues[widget.products[selectedProduct].sku]! > 0) {
+                  final productsInCart = objectBox.getAllShoppingCartProducts();
+                  bool isProductAlreadyInCart = false;
+                  for (var element in productsInCart) {
+                    if (element.code == widget.products[selectedProduct].sku) {
+                      print(
+                          'Product is already in the cart, increasing quantity by 1');
+                      isProductAlreadyInCart = true;
+                      final updatedProduct = ShoppingCartProduct(
+                        id: element.id,
+                        availableStock: element.availableStock,
+                        productQuantity: element.productQuantity! + 1,
+                        code: element.code,
+                        listOfPricesId: element.listOfPricesId,
+                        name: element.name,
+                        productId: element.productId,
+                        unitPrice: element.unitPrice.toString(),
+                        totalAmount: element.totalAmount.toString(),
+                        urlPicture: element.urlPicture.toString(),
+                      );
+                      if (element.productQuantity! + 1 <=
+                          element.availableStock!) {
+                        objectBox.insertShoppingCartProduct(updatedProduct);
+                        Fluttertoast.showToast(
+                            msg:
+                                'Producto ${element.code} añadido correctamente');
+                      } else {
+                        Fluttertoast.showToast(
+                            msg:
+                                'producto sin stock: ${widget.products[selectedProduct].sku}');
+                      }
+                      break;
+                    }
+                  }
+                  if (!isProductAlreadyInCart) {
+                    final newProduct = ShoppingCartProduct(
+                      productQuantity: 1,
+                      code: widget.products[selectedProduct].sku,
+                      productId: widget.products[selectedProduct].sku,
+                      //listOfPricesId: pricesName.toString(),
+                      totalAmount:
+                          widget.products[selectedProduct].price.toString(),
+                      name: widget.products[selectedProduct].name,
+                      unitPrice:
+                          widget.products[selectedProduct].price.toString(),
+                      availableStock:
+                          stockValues[widget.products[selectedProduct].sku],
+                      //urlPicture: catalogueID.toString(),
                     );
-                    if (element.productQuantity! + 1 <=
-                        element.availableStock!) {
-                      objectBox.insertShoppingCartProduct(updatedProduct);
+                    if (newProduct.productQuantity! <=
+                        newProduct.availableStock!) {
+                      objectBox.insertShoppingCartProduct(newProduct);
                       Fluttertoast.showToast(
                           msg:
-                              'Producto ${element.code} añadido correctamente');
+                              'Producto ${newProduct.code} añadido correctamente');
                     } else {
                       Fluttertoast.showToast(
                           msg:
                               'producto sin stock: ${widget.products[selectedProduct].sku}');
                     }
-                    break;
                   }
+                } else {
+                  Fluttertoast.showToast(
+                      msg: 'No hay stock disponible para este producto');
                 }
-                if (!isProductAlreadyInCart) {
-                  final newProduct = ShoppingCartProduct(
-                    productQuantity: 1,
-                    code: widget.products[selectedProduct].sku,
-                    productId: widget.products[selectedProduct].sku,
-                    //listOfPricesId: pricesName.toString(),
-                    totalAmount:
-                        widget.products[selectedProduct].price.toString(),
-                    name: widget.products[selectedProduct].name,
-                    unitPrice:
-                        widget.products[selectedProduct].price.toString(),
-                    availableStock:
-                        stockValues[widget.products[selectedProduct].sku],
-                    //urlPicture: catalogueID.toString(),
-                  );
-                  if (newProduct.productQuantity! <=
-                      newProduct.availableStock!) {
-                    objectBox.insertShoppingCartProduct(newProduct);
-                    Fluttertoast.showToast(
-                        msg:
-                            'Producto ${newProduct.code} añadido correctamente');
-                  } else {
-                    Fluttertoast.showToast(
-                        msg:
-                            'producto sin stock: ${widget.products[selectedProduct].sku}');
-                  }
-                }
-              } else {
-                Fluttertoast.showToast(
-                    msg: 'No hay stock disponible para este producto');
               }
-            }
-          },
+            },
+          ),
         ),
       ),
     );

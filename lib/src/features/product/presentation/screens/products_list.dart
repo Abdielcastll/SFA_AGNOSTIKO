@@ -13,7 +13,7 @@ class ProductsList extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     const minItemWidth = 200;
     final itemsByCol = (size.width / minItemWidth).floor();
-    int crossAxisCount = min(5, itemsByCol);
+    int crossAxisCount = min(5, max(itemsByCol, 2));  // Force at least 2 products by row, and at most 5
 
     return FutureBuilder<List<BaseProductEntity>>(
       future: getDataForSubcategoriesList(),

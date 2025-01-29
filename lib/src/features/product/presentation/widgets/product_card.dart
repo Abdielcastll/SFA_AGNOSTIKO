@@ -1,9 +1,9 @@
 // ignore_for_file: avoid_print
 
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/features/product/domain/entitites/base_product_entity.dart';
@@ -66,6 +66,7 @@ class ProductCard extends StatelessWidget {
           color: colorScheme.inversePrimary,
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Flexible(
               flex: 2,
@@ -77,7 +78,7 @@ class ProductCard extends StatelessWidget {
                       child: CircularProgressIndicator(),
                     );
                   }
-                    
+
                   final String imageUrl = snapshot.data as String;
                   return ProductThumbnail(imageUrl);
                 },
@@ -120,7 +121,6 @@ class ProductThumbnail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return CachedNetworkImage(
       fit: BoxFit.cover,
       imageUrl: imageUrl,
@@ -131,16 +131,18 @@ class ProductThumbnail extends StatelessWidget {
   }
 }
 
-Widget _buildConditionalAvailableList(List<dynamic> list, TextStyle textStyle, {String prefix = "Disponible en"}) {
+Widget _buildConditionalAvailableList(List<dynamic> list, TextStyle textStyle,
+    {String prefix = "Disponible en"}) {
   list.removeWhere((element) => element == "NA");
 
   if (list.isEmpty) {
     return const SizedBox.shrink();
   }
 
-
   return Text(
     "$prefix: ${list.join(", ")}",
+    maxLines: 1,
+    overflow: TextOverflow.ellipsis,
     style: textStyle,
   );
 }
@@ -156,9 +158,12 @@ class ProductDescription extends StatelessWidget {
   Widget build(BuildContext context) {
     final formattedPrice =
         NumberFormat("\$#,##0.00").format(baseProduct.basePrice);
+    final screenWidth = MediaQuery.of(context).size.width;
 
-    const boldText = TextStyle(fontWeight: FontWeight.bold, fontSize: 18);
-    const ligthText = TextStyle(fontWeight: FontWeight.w200, fontSize: 14);
+    final boldText =
+        TextStyle(fontWeight: FontWeight.bold, fontSize: min(screenWidth * 0.05, 18));
+    final ligthText =
+        TextStyle(fontWeight: FontWeight.w200, fontSize: min(screenWidth * 0.03, 12));
 
     return SizedBox(
       width: double.infinity,
@@ -167,23 +172,31 @@ class ProductDescription extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
                 baseProduct.nameProduct,
                 style: boldText,
               ),
-              _buildConditionalAvailableList(
-                  baseProduct.availableDesigns, ligthText, prefix: "Diseños"),
-              _buildConditionalAvailableList(
-                  baseProduct.availableSizes, ligthText, prefix: "Tallas"),
-              _buildConditionalAvailableList(
-                  baseProduct.availableLines, ligthText, prefix: "Lineas"),
               Text(
                 formattedPrice,
                 style: boldText,
-              )
+              ),
+              _buildConditionalAvailableList(
+                baseProduct.availableDesigns,
+                ligthText,
+                prefix: "Diseños",
+              ),
+              _buildConditionalAvailableList(
+                baseProduct.availableSizes,
+                ligthText,
+                prefix: "Tallas",
+              ),
+              _buildConditionalAvailableList(
+                baseProduct.availableLines,
+                ligthText,
+                prefix: "Lineas",
+              ),
             ],
           ),
         ),
