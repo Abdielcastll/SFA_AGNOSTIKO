@@ -15,16 +15,20 @@ import '../../../pharos/sale_response.dart';
 import '../../../pharos/void_response.dart';
 import 'iso8583.dart';
 
-final pharosUsername = "NecsProd03";
 //dev
-//final pharosPassword = dotenv.env['pharosPasswordSandbox'] ?? '';
+final pharosUsername = "NECS01Oeyx";
 //prod
-final pharosPassword = dotenv.env['pharosPasswordProsa'] ?? '';
+//final pharosUsername = "NecsProd03";
+
+//dev
+final pharosPassword = dotenv.env['pharosPasswordSandbox'] ?? '';
+//prod
+//final pharosPassword = dotenv.env['pharosPasswordProsa'] ?? '';
 
 //  PROD
-const EnvUrl = 'https://api.pharospayments.com/payments/v1/charge';
+//const EnvUrl = 'https://api.pharospayments.com/payments/v1/charge';
 // DEV
-//const EnvUrl = 'http://api-sandbox.pharospayments.com/gateway/charge';
+const EnvUrl = 'http://api-sandbox.pharospayments.com/gateway/charge';
 
 Future<Uint8List> getToken(String serialNumber) async {
   final brand = (await getPlatformInfo()).deviceBrand;
