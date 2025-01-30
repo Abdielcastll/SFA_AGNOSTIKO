@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class NewProductDetailsBody extends StatelessWidget {
   final Widget topSection;
@@ -14,23 +16,12 @@ class NewProductDetailsBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 10, left: 5),
-      color: const Color.fromRGBO(240, 238, 251, 1),
+    return SingleChildScrollView(
       child: Column(
         children: [
-          Expanded(
-            flex: 5,
-            child: topSection,
-          ),
-          Expanded(
-            flex: 7,
-            child: middleSection,
-          ),
-          Expanded(
-            flex: 3,
-            child: bottomSection,
-          ),
+          topSection,
+          middleSection,
+          bottomSection,
         ],
       ),
     );
