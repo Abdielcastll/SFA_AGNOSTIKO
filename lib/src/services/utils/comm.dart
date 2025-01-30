@@ -15,8 +15,7 @@ import '../../../pharos/sale_response.dart';
 import '../../../pharos/void_response.dart';
 import 'iso8583.dart';
 
-final pharosUsername = "NECS01Oeyx";
-
+final pharosUsername = "NecsProd03";
 //dev
 //final pharosPassword = dotenv.env['pharosPasswordSandbox'] ?? '';
 //prod
