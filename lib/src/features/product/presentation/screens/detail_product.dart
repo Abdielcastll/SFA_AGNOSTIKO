@@ -109,9 +109,9 @@ class _ProductDetailUIState extends State<ProductDetailUI> {
         userZoneDocument: userZoneDocument,
       ),
       body: Container(
-        height: double.infinity,
-        padding: const EdgeInsets.only(top: 10, left: 5),
+        padding: const EdgeInsets.only(top: 10),
         color: const Color.fromRGBO(240, 238, 251, 1),
+        constraints: const BoxConstraints.expand(),
         child: NewProductDetailsBody(
           topSection: ProductsDetailsTopSections(
             sku: widget.products[selectedProduct].sku,

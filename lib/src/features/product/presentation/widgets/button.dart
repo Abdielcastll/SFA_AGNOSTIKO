@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pwa_sales2go_flutter/core/font_size.dart';
 
 class BottonSection extends StatelessWidget {
   const BottonSection({
@@ -10,18 +11,37 @@ class BottonSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      child: Center(
-        child: ElevatedButton.icon(
-            icon: const Icon(Icons.add_shopping_cart_rounded,
-            color: Color.fromARGB(255, 0, 24, 143),),
-          onPressed: onAddToCart,
-          style: ButtonStyle(
-            shadowColor:MaterialStateProperty.all<Color>( Colors.transparent),
-            backgroundColor:MaterialStateProperty.all<Color>(Colors.white),
-            overlayColor: MaterialStateProperty.all<Color>(const Color.fromRGBO(67, 83, 194, 1).withOpacity(0.3)),
+    return Container(
+      decoration: const BoxDecoration(
+        border: BorderDirectional(
+          top: BorderSide(
+            color: Color(0x475A5D77),
+          ),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+        child: SizedBox(
+          width: double.infinity,
+          child: TextButton.icon(
+            onPressed: onAddToCart,
+            icon: Icon(
+              Icons.add_shopping_cart_rounded,
+              color: Colors.white,
+              size: FontSize.fontXL,
             ),
-          label: const Text('Añadir al carrito'),
+            label: Text(
+              "Añadir al carrito",
+              style: TextStyle(color: Colors.white, fontSize: FontSize.fontXL),
+            ),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(
+                  Theme.of(context).colorScheme.primary),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              ),
+            ),
+          ),
         ),
       ),
     );

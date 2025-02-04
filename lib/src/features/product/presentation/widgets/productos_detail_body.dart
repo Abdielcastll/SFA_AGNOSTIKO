@@ -16,14 +16,21 @@ class NewProductDetailsBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          topSection,
-          middleSection,
-          bottomSection,
-        ],
-      ),
+
+    return Column(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                topSection,
+                middleSection,
+              ],
+            ),
+          ),
+        ),
+        bottomSection,
+      ],
     );
   }
 }
