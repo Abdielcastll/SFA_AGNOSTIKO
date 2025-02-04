@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pwa_sales2go_flutter/core/font_size.dart';
 
 class ProductsDetailsMiddleSection extends StatelessWidget {
   const ProductsDetailsMiddleSection({
@@ -30,7 +31,6 @@ class ProductsDetailsMiddleSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
     return SizedBox(
@@ -43,16 +43,13 @@ class ProductsDetailsMiddleSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Center(
-              child: Text(
-                "Detalles de Producto",
-                style: TextStyle(
-                  fontFamily: 'Poppins-Regular',
-                  fontSize: screenWidth * 0.05,
-                  fontWeight: FontWeight.bold,
-                  color: const Color(0xFF1B1B1F),
-                ),
+              child: PoppinsText(
+                text: "Detalles de Producto",
+                fontSize: FontSize.fontXL,
+                fontWeight: FontWeight.bold,
               ),
             ),
+
             if (priceText.isNotEmpty) SizedBox(height: screenHeight * 0.008),
 
             if (quality.isNotEmpty && quality != "NA")
@@ -125,7 +122,8 @@ class ProductsDetailsMiddleSection extends StatelessWidget {
             Center(
               child: PoppinsText(
                 text: "Precio: $priceText",
-                fontSize: screenWidth * 0.04,
+                fontSize: FontSize.fontXL,
+                fontWeight: FontWeight.bold,
               ),
             )
           ],
@@ -171,10 +169,12 @@ class PoppinsText extends StatelessWidget {
     super.key,
     required this.text,
     this.fontSize,
+    this.fontWeight,
   });
 
   final String text;
   final double? fontSize;
+  final FontWeight? fontWeight;
 
   @override
   Widget build(BuildContext context) {
@@ -182,7 +182,8 @@ class PoppinsText extends StatelessWidget {
       text,
       style: TextStyle(
         fontFamily: 'Poppins-Regular',
-        fontSize: fontSize,
+        fontSize: fontSize ?? FontSize.fontM,
+        fontWeight: fontWeight,
         color: const Color(0xFF5A5D77),
       ),
     );

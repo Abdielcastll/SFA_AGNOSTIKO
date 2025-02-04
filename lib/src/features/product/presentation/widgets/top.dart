@@ -1,6 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:pwa_sales2go_flutter/core/font_size.dart';
 import 'package:pwa_sales2go_flutter/src/features/product/domain/enums/product_size_enum.dart';
 import 'package:pwa_sales2go_flutter/src/features/product/presentation/widgets/image_network.dart';
 
@@ -25,11 +24,10 @@ class ProductsDetailsTopSections extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ancho = MediaQuery.of(context).size.width;
-    final alto = MediaQuery.of(context).size.height;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
-      // crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
           flex: 5,
@@ -42,12 +40,13 @@ class ProductsDetailsTopSections extends StatelessWidget {
         Expanded(
           flex: 4,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 productName,
                 style: TextStyle(
-                  fontSize: ancho * 0.05,
+                  fontSize: FontSize.font2XL,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -55,16 +54,16 @@ class ProductsDetailsTopSections extends StatelessWidget {
                 "SKU: $sku",
                 textAlign: TextAlign.start,
                 style: TextStyle(
-                  fontSize: max(ancho * 0.016, 10),
-                  fontWeight: FontWeight.w100,
+                  fontSize: FontSize.fontS,
+                  fontWeight: FontWeight.w200,
                 ),
               ),
-              SizedBox(height: alto * 0.004),
+              // SizedBox(height: alto * 0.004),
               if (descripcion != null)
                 Text(
                   descripcion!,
                   style: TextStyle(
-                    fontSize: ancho * 0.05,
+                    fontSize: FontSize.fontL,
                     fontFamily: 'Poppins-Regular',
                     color: const Color(0xFF5A5D77),
                   ),
@@ -75,7 +74,7 @@ class ProductsDetailsTopSections extends StatelessWidget {
                     Text(
                       "Talla :",
                       style: TextStyle(
-                        fontSize: ancho * 0.04,
+                        fontSize: FontSize.fontL,
                         fontFamily: 'Poppins-Regular',
                         color: const Color(0xFF5A5D77),
                       ),
@@ -92,7 +91,7 @@ class ProductsDetailsTopSections extends StatelessWidget {
                           value: size.size, // use the string value of the enum
                           child: Text(
                             size.size,
-                            style: TextStyle(fontSize: ancho * 0.04),
+                            style: TextStyle(fontSize: FontSize.fontL),
                           ), // display the string value of the enum
                         );
                       }).toList(),

@@ -1,13 +1,14 @@
 enum ProductSize {
-  xs("Extra chico"),
-  s("Chico"),
-  m("Mediano"),
-  l("Grande"),
-  xl("Extra grande"),
-  std("Estandar");
+  xs("Extra chico", "XS"),
+  s("Chico", "S"),
+  m("Mediano", "M"),
+  l("Grande", "L"),
+  xl("Extra grande", "XL"),
+  std("Estándar", "Estándar");
 
   final String size;
-  const ProductSize(this.size);
+  final String abbr;
+  const ProductSize(this.size, this.abbr);
 
   @override
   String toString() => size;

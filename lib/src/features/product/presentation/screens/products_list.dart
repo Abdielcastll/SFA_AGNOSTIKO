@@ -9,11 +9,6 @@ class ProductsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    const minItemWidth = 200;
-    final itemsByCol = (size.width / minItemWidth).floor();
-    int crossAxisCount = min(5, max(itemsByCol, 2));  // Force at least 2 products by row, and at most 5
-
     return FutureBuilder<ProductListInfo>(
       future: ProductListInfo.instance,
       builder: (context, snapshot) {
@@ -37,6 +32,10 @@ class ProductsList extends StatelessWidget {
         final items = ProductListInfo.products;
         final filteredItems =
             items.where((item) => item.products.isNotEmpty).toList();
+        final size = MediaQuery.of(context).size;
+        const minItemWidth = 200;
+        final itemsByCol = (size.width / minItemWidth).floor();
+        int crossAxisCount = min(5, max(itemsByCol, 2)); // Force at least 2 products by row, and at most 5
 
         return SafeArea(
           child: GridView.builder(
@@ -44,7 +43,7 @@ class ProductsList extends StatelessWidget {
               crossAxisCount: crossAxisCount,
               crossAxisSpacing: 8,
               mainAxisSpacing: 8,
-              childAspectRatio: 0.75,
+              childAspectRatio: 0.65,
             ),
             padding: const EdgeInsets.all(8.0),
             itemCount: filteredItems.length,
