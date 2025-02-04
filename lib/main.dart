@@ -1,10 +1,8 @@
 import 'dart:async';
 
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
-import 'package:pwa_sales2go_flutter/core/font_size.dart';
 import 'package:pwa_sales2go_flutter/helper/object_box.dart';
 import 'package:pwa_sales2go_flutter/l10n/l10n.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
@@ -81,7 +79,6 @@ class SfaAgnostiko extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // FontSize.initialize(context);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     return FutureBuilder<bool>(
       future: multitenantConfig.initialize(),

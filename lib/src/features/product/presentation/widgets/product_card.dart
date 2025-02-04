@@ -25,7 +25,6 @@ class ProductCard extends StatelessWidget {
     final formattedPrice =
         NumberFormat("\$#,##0.00").format(baseProduct.basePrice);
     final colorScheme = Theme.of(context).colorScheme;
-    FontSize.initialize(context);
 
     return GestureDetector(
       onTap: () {

@@ -182,7 +182,7 @@ class PoppinsText extends StatelessWidget {
       text,
       style: TextStyle(
         fontFamily: 'Poppins-Regular',
-        fontSize: fontSize ?? FontSize.fontM,
+        fontSize: fontSize ?? FontSize.fontL,
         fontWeight: fontWeight,
         color: const Color(0xFF5A5D77),
       ),

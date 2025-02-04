@@ -31,24 +31,25 @@ class FontSize {
   static double get font3XL => _ensureInitialized(_font3XL);
 
   static void initialize(BuildContext context) {
-    // if (_initialized) return;
+    if (_initialized) return;
     
     final screenWidth = MediaQuery.of(context).size.width;
 
     if (screenWidth <= 400) _deviceName = DeviceName.n910;
-    if (screenWidth > 400 && screenWidth <= 720) _deviceName = DeviceName.k10;
-    if (screenWidth > 720) _deviceName = DeviceName.k20;
+    if (screenWidth > 400 && screenWidth <= 500) _deviceName = DeviceName.k10;
+    if (screenWidth > 500) _deviceName = DeviceName.k20;
 
     _setFontSize(_deviceName, screenWidth);
     _initialized = true;
   }
 
   static void _setFontSize(DeviceName device, double width) {
+    debugPrint("Device: $device, width: $width");
     late final double multiplier;
 
-    if (device == DeviceName.n910) multiplier = 0.030;
+    if (device == DeviceName.n910) multiplier = 0.032;
     if (device == DeviceName.k10) multiplier = 0.033;
-    if (device == DeviceName.k20) multiplier = 0.008;
+    if (device == DeviceName.k20) multiplier = 0.022;
 
     _fontXS = width * 0.9 * multiplier;
     _fontS = width * 1.0 * multiplier;

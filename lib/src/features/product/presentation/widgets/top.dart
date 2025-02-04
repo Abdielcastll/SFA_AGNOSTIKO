@@ -74,7 +74,7 @@ class ProductsDetailsTopSections extends StatelessWidget {
                     Text(
                       "Talla :",
                       style: TextStyle(
-                        fontSize: FontSize.fontL,
+                        fontSize: FontSize.fontM,
                         fontFamily: 'Poppins-Regular',
                         color: const Color(0xFF5A5D77),
                       ),
@@ -91,7 +91,7 @@ class ProductsDetailsTopSections extends StatelessWidget {
                           value: size.size, // use the string value of the enum
                           child: Text(
                             size.size,
-                            style: TextStyle(fontSize: FontSize.fontL),
+                            style: TextStyle(fontSize: FontSize.fontM),
                           ), // display the string value of the enum
                         );
                       }).toList(),
