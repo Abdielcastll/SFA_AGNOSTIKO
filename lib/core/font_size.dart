@@ -34,10 +34,12 @@ class FontSize {
     if (_initialized) return;
     
     final screenWidth = MediaQuery.of(context).size.width;
+    final dpi = MediaQuery.of(context).devicePixelRatio;
+    final physicalWidth = screenWidth * dpi;
 
-    if (screenWidth <= 400) _deviceName = DeviceName.n910;
-    if (screenWidth > 400 && screenWidth <= 720) _deviceName = DeviceName.k10;
-    if (screenWidth > 720) _deviceName = DeviceName.k20;
+    if (physicalWidth <= 720) _deviceName = DeviceName.n910;
+    if (physicalWidth > 720 && physicalWidth < 1080) _deviceName = DeviceName.k10;
+    if (physicalWidth >= 1080) _deviceName = DeviceName.k20;
 
     _setFontSize(_deviceName, screenWidth);
     _initialized = true;
@@ -46,9 +48,9 @@ class FontSize {
   static void _setFontSize(DeviceName device, double width) {
     late final double multiplier;
 
-    if (device == DeviceName.n910) multiplier = 0.0320;
-    if (device == DeviceName.k10) multiplier = 0.0215;
-    if (device == DeviceName.k20) multiplier = 0.0220;
+    if (device == DeviceName.n910) multiplier = 0.030;
+    if (device == DeviceName.k10) multiplier = 0.0200;
+    if (device == DeviceName.k20) multiplier = 0.0200;
 
     _fontXS = width * 0.9 * multiplier;
     _fontS = width * 1.0 * multiplier;

@@ -76,7 +76,7 @@ class ProductsDetailsTopSections extends StatelessWidget {
                       Text(
                         "Talla :",
                         style: TextStyle(
-                          fontSize: FontSize.fontM,
+                          fontSize: FontSize.fontL,
                           fontFamily: 'Poppins-Regular',
                           color: const Color(0xFF5A5D77),
                         ),

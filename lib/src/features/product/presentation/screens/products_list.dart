@@ -43,7 +43,7 @@ class ProductsList extends StatelessWidget {
               crossAxisCount: crossAxisCount,
               crossAxisSpacing: 8,
               mainAxisSpacing: 8,
-              childAspectRatio: 0.65,
+              childAspectRatio: 0.59,
             ),
             padding: const EdgeInsets.all(8.0),
             itemCount: filteredItems.length,

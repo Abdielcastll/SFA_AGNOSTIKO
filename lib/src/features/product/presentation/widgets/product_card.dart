@@ -156,7 +156,7 @@ class ProductDescription extends StatelessWidget {
         TextStyle(fontWeight: FontWeight.w200, fontSize: FontSize.fontS);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      padding: const EdgeInsets.only(right: 4.0, left: 4.0, bottom: 2.0),
       child: Column(
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -164,6 +164,9 @@ class ProductDescription extends StatelessWidget {
           Text(
             baseProduct.nameProduct,
             style: boldText,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.justify,
           ),
           _buildConditionalAvailableList(
             baseProduct.availableDesigns,
@@ -180,7 +183,9 @@ class ProductDescription extends StatelessWidget {
             ligthText,
             prefix: "Lineas",
           ),
+          const Spacer(),
           Text(
+            textAlign: TextAlign.center,
             formattedPrice,
             style: boldText,
           ),

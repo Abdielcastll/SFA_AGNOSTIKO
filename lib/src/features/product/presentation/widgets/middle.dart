@@ -88,7 +88,12 @@ class ProductsDetailsMiddleSection extends StatelessWidget {
                   items: genderOptions.map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
-                      child: Text(value),
+                      child: Text(
+                        value,
+                        style: TextStyle(
+                          fontSize: FontSize.fontM,
+                        ),
+                      ),
                     );
                   }).toList(),
                   onChanged: (newValue) {
@@ -108,7 +113,12 @@ class ProductsDetailsMiddleSection extends StatelessWidget {
                   items: colorNames.map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
-                      child: Text(value),
+                      child: Text(
+                        value,
+                        style: TextStyle(
+                          fontSize: FontSize.fontM,
+                        ),
+                      ),
                     );
                   }).toList(),
                   onChanged: (newValue) {
