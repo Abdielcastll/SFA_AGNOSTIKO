@@ -65,7 +65,8 @@ class _ProductDetailUIState extends State<ProductDetailUI> {
     super.didChangeDependencies();
 
     if (stockValues.isEmpty) {
-      stockValues = Provider.of<StockModel?>(context, listen: false)?.stock ?? {};
+      stockValues =
+          Provider.of<StockModel?>(context, listen: false)?.stock ?? {};
     }
 
     final firstAvailable = widget.products.indexWhere((product) {
@@ -76,7 +77,7 @@ class _ProductDetailUIState extends State<ProductDetailUI> {
     selectedSize = widget.products[firstAvailable].size;
     selectedGender = widget.products[firstAvailable].design;
     selectedDropdownColor = widget.products[firstAvailable].line;
-    // updateSelectedProduct(firstAvailable);
+    selectedProduct = firstAvailable;
   }
 
   int productIndexFind(
