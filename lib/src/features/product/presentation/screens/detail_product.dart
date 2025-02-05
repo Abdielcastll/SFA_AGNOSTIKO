@@ -50,6 +50,7 @@ class _ProductDetailUIState extends State<ProductDetailUI> {
   String selectedDropdownColor = "";
   int selectedProduct = 0;
   int selectedProductStock = 0;
+  Map stockValues = {};
 
   @override
   void initState() {
@@ -57,16 +58,25 @@ class _ProductDetailUIState extends State<ProductDetailUI> {
     print("Join ${widget.sizes}");
     print("Join ${widget.colorOptions}");
     print("Join ${widget.genderOptions}");
-    selectedSize =
-        widget.sizes.isNotEmpty ? widget.sizes.first : ProductSize.std;
-    selectedGender =
-        widget.genderOptions.isNotEmpty ? widget.genderOptions.first : "";
-    selectedDropdownColor =
-        widget.colorOptions.isNotEmpty ? widget.colorOptions.first : "";
-    updateSelectedProduct(productIndexFind(
-        selectedSize: selectedSize,
-        selectedDropdownColor: selectedDropdownColor,
-        selectedGender: selectedGender));
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (stockValues.isEmpty) {
+      stockValues = Provider.of<StockModel?>(context, listen: false)?.stock ?? {};
+    }
+
+    final firstAvailable = widget.products.indexWhere((product) {
+      final stock = stockValues[product.sku];
+      return stock != null && stock > 0;
+    });
+
+    selectedSize = widget.products[firstAvailable].size;
+    selectedGender = widget.products[firstAvailable].design;
+    selectedDropdownColor = widget.products[firstAvailable].line;
+    // updateSelectedProduct(firstAvailable);
   }
 
   int productIndexFind(
@@ -97,7 +107,7 @@ class _ProductDetailUIState extends State<ProductDetailUI> {
 
   @override
   Widget build(BuildContext context) {
-    final stockValues = Provider.of<StockModel?>(context)?.stock ?? {};
+    // final stockValues = Provider.of<StockModel?>(context)?.stock ?? {};
     final userZoneDocument = context.watch<CurrentUserInfo>().zoneDocument;
     final orderActive = Provider.of<OrderProvider>(context);
     final user = Provider.of<UserModel>(context);
@@ -133,7 +143,8 @@ class _ProductDetailUIState extends State<ProductDetailUI> {
             },
           ),
           middleSection: ProductsDetailsMiddleSection(
-            priceText: priceFormatter.format(widget.products[selectedProduct].price),
+            priceText:
+                priceFormatter.format(widget.products[selectedProduct].price),
             stockText:
                 stockValues[widget.products[selectedProduct].sku].toString(),
             colorNames: widget.colorOptions,
@@ -172,7 +183,8 @@ class _ProductDetailUIState extends State<ProductDetailUI> {
             onAddToCart: () async {
               // Lógica para añadir al carrito
               print("Añadido al carrito con:");
-              print("Producto seleccionado: ${widget.products[selectedProduct]}");
+              print(
+                  "Producto seleccionado: ${widget.products[selectedProduct]}");
               if (orderActive.orderActive == false) {
                 bool internet = await checkInternetConnection(context);
                 if (internet) {
