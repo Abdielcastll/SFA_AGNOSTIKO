@@ -7,6 +7,8 @@ class StockModel {
 }
 
 StockModel stockListfromSnapshot(doc) {
+  print("stock from snapshot");
+  print(doc);
   final Map<String, dynamic> valores = {
     '0': 0,
   };

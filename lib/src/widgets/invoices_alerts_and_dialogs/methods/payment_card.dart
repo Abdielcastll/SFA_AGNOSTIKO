@@ -68,7 +68,7 @@ Future acceptAmount(
       if (isKiosko) {
         showGoToPinpadDialog(
           context,
-          "Por favor dirigase al Pinpad",
+          "Por favor diríjase al Pinpad",
         );
       } else {
         showCircularProgressDialog(

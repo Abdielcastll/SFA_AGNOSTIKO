@@ -5,11 +5,17 @@ import 'package:agnostiko/agnostiko.dart';
 
 import 'parameters.dart';
 
+bool _alreadyInitialized = false;
+
 Future<void> emvPreTransaction() async {
   final emv = EmvModule.instance;
 
   final terminalParameters = await loadTerminalParameters();
-  await emv.initKernel(terminalParameters);
+  final deviceType = await getDeviceType();
+  if(_alreadyInitialized && deviceType == DeviceType.PINPAD) {
+  } else {
+    await emv.initKernel(terminalParameters);
+    _alreadyInitialized = true;
   print("EMV initialized!");
 
   final appList = await loadEmvAppList();
@@ -33,6 +39,7 @@ Future<void> emvPreTransaction() async {
         "Error: '${capk.rid.toHexStr()} - " + "${capk.index.toHexStr()}'",
       );
     }
+  }
   }
 }
 
