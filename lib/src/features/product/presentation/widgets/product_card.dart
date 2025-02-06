@@ -25,6 +25,7 @@ class ProductCard extends StatelessWidget {
     final formattedPrice =
         NumberFormat("\$#,##0.00").format(baseProduct.basePrice);
     final colorScheme = Theme.of(context).colorScheme;
+    final futureImage = _getProductThumbnailUrl(sku);
 
     return GestureDetector(
       onTap: () {
@@ -63,7 +64,7 @@ class ProductCard extends StatelessWidget {
             Expanded(
                 flex: 3,
                 child: FutureBuilder<String>(
-                  future: _getProductThumbnailUrl(sku),
+                  future: futureImage,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const SizedBox.expand();
@@ -115,7 +116,12 @@ class ProductThumbnail extends StatelessWidget {
       fit: BoxFit.cover,
       imageUrl: imageUrl,
       cacheManager: CustomCacheManager.instance,
-      placeholder: (context, url) => const CircularProgressIndicator(),
+      placeholder: (context, url) => Container(
+        alignment: Alignment.center,
+        child: const Center(
+          child: CircularProgressIndicator(),
+        ),
+      ),
       errorWidget: (context, url, error) =>
           Image.asset(imageUrl, fit: BoxFit.cover),
     );
