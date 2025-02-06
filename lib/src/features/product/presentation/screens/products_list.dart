@@ -5,7 +5,8 @@ import 'package:pwa_sales2go_flutter/src/features/product/data/product_list_info
 import 'package:pwa_sales2go_flutter/src/features/product/presentation/widgets/product_card.dart';
 
 class ProductsList extends StatelessWidget {
-  const ProductsList({super.key});
+  final String? category;
+  const ProductsList({super.key, this.category});
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +31,22 @@ class ProductsList extends StatelessWidget {
         }
 
         final items = ProductListInfo.products;
-        final filteredItems =
+        var filteredItems =
             items.where((item) => item.products.isNotEmpty).toList();
+
+        if (category != null) {
+          filteredItems = filteredItems
+              .where((item) =>
+                  item.products.any((product) => product.category == category))
+              .toList();
+        }
         final size = MediaQuery.of(context).size;
         const minItemWidth = 200;
         final itemsByCol = (size.width / minItemWidth).floor();
-        int crossAxisCount = min(5, max(itemsByCol, 2)); // Force at least 2 products by row, and at most 5
+        int crossAxisCount = min(
+          5,
+          max(itemsByCol, 2),
+        ); // Force at least 2 products by row, and at most 5
 
         return SafeArea(
           child: GridView.builder(
