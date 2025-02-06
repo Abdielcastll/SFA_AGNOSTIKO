@@ -45,9 +45,18 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
             return const Center(child: Text("Sin productos disponibles"));
           }
 
+          // Get product list and filter out empty product variants
           final items = ProductListInfo.products;
           final filteredItems =
               items.where((item) => item.products.isNotEmpty).toList();
+
+          // Sort by newestProduct in descending order (most recent first)
+          filteredItems
+              .sort((a, b) => b.newestProduct.compareTo(a.newestProduct));
+
+          // Limit to the top 10 newest items
+          final topNewestItems = filteredItems.take(10).toList();
+
           return Container(
             margin: const EdgeInsets.fromLTRB(0, 12.0, 0, 0),
             child: Column(
@@ -88,9 +97,9 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                   child: ListView.builder(
                     physics: const BouncingScrollPhysics(),
                     scrollDirection: Axis.horizontal,
-                    itemCount: filteredItems.length,
+                    itemCount: topNewestItems.length,
                     itemBuilder: (BuildContext context, index) {
-                      final product = filteredItems[index];
+                      final product = topNewestItems[index];
                       if ((stockValues[product.products.first.sku] ?? 000) >
                           0) {
                         return FutureBuilder<String?>(
@@ -142,7 +151,7 @@ class _NewProductsWidgetState extends State<NewProductsWidget> {
                                   );
                                 },
                                 child: Container(
-                                  margin: filteredItems.last == product
+                                  margin: topNewestItems.last == product
                                       ? const EdgeInsets.fromLTRB(16, 12, 16, 8)
                                       : const EdgeInsets.fromLTRB(16, 12, 0, 8),
                                   width: 140,

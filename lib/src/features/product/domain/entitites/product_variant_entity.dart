@@ -15,6 +15,8 @@ class ProductVariantEntity {
   final double price;
   final List<String> imageUrl;
   final int stock;
+  final int timesSold;
+  final DateTime lastModified;
 
   ProductVariantEntity({
     required this.productId,
@@ -31,6 +33,8 @@ class ProductVariantEntity {
     required this.price,
     required this.imageUrl,
     required this.stock,
+    required this.lastModified,
+    required this.timesSold,
   });
 
   factory ProductVariantEntity.fromJson(Map<String, dynamic> json) {
@@ -49,6 +53,10 @@ class ProductVariantEntity {
       price: (json['precio'] as num?)?.toDouble() ?? 0.0,
       imageUrl: [], // Placeholder if no image URLs available in the JSON
       stock: 0, // Placeholder if no stock info is available in the JSON
+      timesSold: (json['cantidadVecesVendida'] as num?)?.toInt() ?? 0,
+      lastModified: json['modificado'] is String
+          ? DateTime.parse(json['modificado'])
+          : DateTime(1970, 1, 1),
     );
   }
 }

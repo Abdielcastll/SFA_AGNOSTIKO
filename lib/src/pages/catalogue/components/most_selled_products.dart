@@ -55,9 +55,16 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
           return const Center(child: Text("Sin productos disponibles"));
         }
 
+        // Get product list and filter out empty product variants
         final items = ProductListInfo.products;
         final filteredItems =
             items.where((item) => item.products.isNotEmpty).toList();
+
+        // Sort by totalSold in descending order
+        filteredItems.sort((a, b) => b.totalSold.compareTo(a.totalSold));
+
+        // Limit to the top 10 items
+        final topItems = filteredItems.take(10).toList();
         return Container(
           margin: const EdgeInsets.fromLTRB(0, 12.0, 0, 15.0),
           child: Column(
@@ -93,9 +100,9 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                 child: ListView.builder(
                   physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
-                  itemCount: filteredItems.length,
+                  itemCount: topItems.length,
                   itemBuilder: (BuildContext context, index) {
-                    final product = filteredItems[index];
+                    final product = topItems[index];
                     if ((stockValues[product.products.first.sku] ?? 000) > 0) {
                       return FutureBuilder<String>(
                         future: storage
@@ -144,7 +151,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                 );
                               },
                               child: Container(
-                                margin: filteredItems.last == product
+                                margin: topItems.last == product
                                     ? const EdgeInsets.fromLTRB(16, 12, 16, 0)
                                     : const EdgeInsets.fromLTRB(16, 12, 0, 0),
                                 width: 140,
@@ -326,7 +333,7 @@ class _MostSelledProductsState extends State<MostSelledProducts> {
                                   );
                               },
                               child: Container(
-                                margin: filteredItems.last == product
+                                margin: topItems.last == product
                                     ? const EdgeInsets.fromLTRB(16, 12, 16, 0)
                                     : const EdgeInsets.fromLTRB(16, 12, 0, 0),
                                 width: 140,
