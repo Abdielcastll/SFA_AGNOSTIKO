@@ -236,7 +236,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                   height: 10,
                 ),
                 Text(
-                  "O\nSolicite ayuda antes de continuar",
+                  "O\nSolicité ayuda antes de continuar",
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 13),
                 ),

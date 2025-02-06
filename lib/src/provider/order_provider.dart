@@ -38,7 +38,7 @@ class OrderProvider extends ChangeNotifier {
       notifyListeners();
 
       // print('Orden activa: $_orderActive');
-      // print('Cliente actual: ${client?.name}');
+      print('Cliente actual: ${client?.name}');
       // print('Lista de precios activa: ${client?.prices}');
       return;
     } else if (orderActive == false) {

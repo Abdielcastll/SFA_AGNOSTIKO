@@ -95,7 +95,7 @@ class _SelectedProductsKioskoState extends State<SelectedProductsKiosko> {
               : 'NaN';
           var stock = stockValues[code] ?? 000;
           const productQuantity = 1;
-          final pricesList = clientPriceList;
+          final pricesList = clientPriceList ?? "GENER-11";
           final name = doc.data().toString().contains('nombre')
               ? doc.get('nombre')
               : 'NaN';

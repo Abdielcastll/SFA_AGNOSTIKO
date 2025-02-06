@@ -81,14 +81,15 @@ class OrderPage extends StatelessWidget {
                   // color: Colors.red,
                   child: Column(
                     children: [
-                      globalRemoteConfig.clientesEnabled == true
+                      globalRemoteConfig.clientesEnabled == true &&
+                              currentClientForTheOrder != null
                           ? SelectedClient(
                               client: currentClientForTheOrder,
                               isEditable: true)
                           : const SizedBox(
                               height: 30,
                             ),
-                      SelectedProducts(client: currentClientForTheOrder),
+                      SelectedProducts(),
                     ],
                   ),
                 ),

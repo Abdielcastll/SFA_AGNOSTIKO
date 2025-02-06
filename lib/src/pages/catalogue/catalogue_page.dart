@@ -108,7 +108,7 @@ class _CataloguePageState extends State<CataloguePage> {
         ),
         StreamProvider<Prices?>.value(
           value: listaDePreciosRef
-              .doc(currentClientForTheOrder?.prices.toString())
+              .doc(currentClientForTheOrder?.prices ?? "GENER-11".toString())
               .snapshots()
               .map(pricesfromSnapshot),
           initialData: null,

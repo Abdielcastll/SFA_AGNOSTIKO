@@ -7,6 +7,7 @@ import 'package:pwa_sales2go_flutter/src/models/prices_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/summary_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
+import 'package:pwa_sales2go_flutter/src/pages/products/new_products_page.dart';
 import 'package:pwa_sales2go_flutter/src/pages/products/products_page.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 import 'package:pwa_sales2go_flutter/src/services/firebase_collections.dart';
@@ -82,55 +83,18 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                 final key = categorieKeys[index];
                 return GestureDetector(
                   onTap: () async {
-                    List<Products>? filteredProducts = [];
-                    filteredProducts.clear();
-                    // print(categoriesCollection.doc(key));
-
-                    await productsCollection
-                        .where('categoria',
-                            isEqualTo: categoriesCollection.doc(key))
-                        .snapshots()
-                        .forEach((element) {
-                      for (var element in element.docs) {
-                        Products product = Products(
-                          quality: element.data()['calidad'].id ?? '',
-                          //catalogue: element.data()['catalogo'].id ?? '',
-                          categorie: element.data()['categoria'].id ?? '',
-                          code: element.data()['codigo'] ?? '',
-                          barCode: element.data()['codigoBarra'] ?? '',
-                          design: element.data()['diseno'].id ?? '',
-                          line: element.data()['linea'].id ?? '',
-                          brand: element.data()['marca'].id ?? '',
-                          lastModifiedDate: element.data()['modificado'] ?? '',
-                          name: element.data()['nombre'] ?? '',
-                          subCategorie: element.data()['subcategoria'].id ?? '',
-                          size: element.data()['tamano'].id ?? '',
-                          promotion:
-                              element.data().toString().contains('promocion')
-                                  ? element.data()['promocion'].id
-                                  : '',
-                          selected: false,
-                        );
-                        // print(product.categorie);
-                        setState(() {
-                          filteredProducts.add(product);
-                        });
-                      }
-                      // print(filteredProducts);
-                      // print(filteredProducts.first.name);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => ProductsPage(
-                            listOfProducts: filteredProducts,
-                            listOfPrices: prices,
-                            userZoneDocument: userZoneDocument,
-                            showFullList: false,
-                            pricesName: pricesName,
-                          ),
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => NewProductsPage(
+                          listOfPrices: prices,
+                          userZoneDocument: userZoneDocument,
+                          listOfProducts: const [],
+                          showFullList: true,
+                          pricesName: pricesName,
+                          category: categorie,
                         ),
-                      );
-                    });
+                      ),
+                    );
                   },
                   child: Container(
                     margin: categoriesSummary.last == categorie
@@ -149,7 +113,8 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                           borderRadius: BorderRadius.circular(8),
                           child: Container(
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8)),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                             height: 240,
                             width: 120,
                             child: FutureBuilder<String?>(
