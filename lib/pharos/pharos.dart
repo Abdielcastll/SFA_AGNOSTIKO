@@ -59,9 +59,10 @@ Future<Map<String, dynamic>> pharosGenerateSaleMsg(
     cardHolderName = AsciiCodec().decode(tag5F20);
   }
   final currency = trxCurrency;
+  //todo estos valores son dinamicos obtenidos de pharos
   final orderNumber = "#723456";
-  final terminalCode = "9660";
-  final merchantCode = "4435";
+  final terminalCode = "1774";
+  final merchantCode = "1230";
   if (transactionArgs.entryMode == EntryMode.Contact ||
       transactionArgs.entryMode == EntryMode.Contactless ||
       transactionArgs.entryMode == EntryMode.Magstripe) {
@@ -174,8 +175,8 @@ Future<Map<String, dynamic>> pharosGenerateVoidMsg(
   String stan,
 ) async {
   //todo estos valores son dinamicos obtenidos de pharos
-  final terminalCode = "9660";
-  final merchantCode = "4435";
+  final terminalCode = "1774";
+  final merchantCode = "1230";
   return PharosVoidRequest(stan, terminalCode, merchantCode).toJson();
 }
 
@@ -350,9 +351,9 @@ Future<Map<String, dynamic>> pharosGenerateKeyInitialization({
   //todo aqui saldria un login a pharos que nos da el merchant code y el terminal code
   return PharosKeyInitRequest(
           terminalCode:
-              "9660", //todo hacer dinamico, pharos nos lo tiene que dar
+              "1774", //todo hacer dinamico, pharos nos lo tiene que dar
           merchantCode:
-              "4435", //todo hacer dinamico, pharos nos lo tiene que dar
+              "1230", //todo hacer dinamico, pharos nos lo tiene que dar
           encryptedRandomKey: cipheredTK.toHexStr(),
           randomKeyCheckValue: kcv.toHexStr(),
           randomKeyCRC: crcValue.toHexStr())
