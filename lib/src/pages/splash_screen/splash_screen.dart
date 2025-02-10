@@ -260,9 +260,7 @@ class SplashScreenViewState extends State<SplashScreenView> {
     );
 
     if (success) {
-      print("Stored API Key: ${BackofficeAuthData().apiKey}");
-      print("Stored Terminal ID: ${BackofficeAuthData().terminalId}");
-      print("Stored Merchant ID: ${BackofficeAuthData().merchantId}");
+      print("Authentication success.");
     } else {
       print("Authentication failed.");
     }

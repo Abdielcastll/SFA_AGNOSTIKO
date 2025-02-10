@@ -17,15 +17,12 @@ class AuthService {
 
       if (response.statusCode == 200) {
         Map<String, dynamic> responseData = jsonDecode(response.body);
-        print("pharos backoffice data:");
-        print(responseData.toString());
         // Update Singleton with API key, terminal ID, and merchant ID
         BackofficeAuthData().updateFromResponse(responseData);
 
-        print("Login Success - API Key: ${BackofficeAuthData().apiKey}");
         return true;
       } else {
-        print("Login Failed: ${response.body}");
+        print("Pharos login Failed: ${response.body}");
         return false;
       }
     } catch (e) {

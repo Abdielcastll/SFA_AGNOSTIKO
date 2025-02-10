@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/core/font_size.dart';
+import 'package:pwa_sales2go_flutter/src/features/product/domain/repositories/detalle_producto_labels.dart';
 
 class ProductsDetailsMiddleSection extends StatelessWidget {
   const ProductsDetailsMiddleSection({
@@ -81,7 +82,7 @@ class ProductsDetailsMiddleSection extends StatelessWidget {
 
             if (genderOptions.isNotEmpty)
               TextDetail(
-                label: "Selecciona género:",
+                label: "Selecciona ${DetalleLabels().diseno}:",
                 descriptor: DropdownButton<String>(
                   value: selectedGender,
                   icon: const Icon(Icons.arrow_drop_down),
@@ -106,7 +107,7 @@ class ProductsDetailsMiddleSection extends StatelessWidget {
 
             if (colorNames.isNotEmpty)
               TextDetail(
-                label: "Selecciona un color: ",
+                label: "Selecciona ${DetalleLabels().linea}: ",
                 descriptor: DropdownButton<String>(
                   value: selectedDropdownColor,
                   icon: const Icon(Icons.arrow_drop_down),

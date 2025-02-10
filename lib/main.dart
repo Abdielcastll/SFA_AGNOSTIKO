@@ -170,6 +170,7 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       multitenantConfig.getColorsApp(context);
+      multitenantConfig.getLabelsDetalleProducto();
     });
     _startInactivityTimer();
   }

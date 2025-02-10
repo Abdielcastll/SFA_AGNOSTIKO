@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/core/font_size.dart';
 import 'package:pwa_sales2go_flutter/src/features/product/domain/enums/product_size_enum.dart';
+import 'package:pwa_sales2go_flutter/src/features/product/domain/repositories/detalle_producto_labels.dart';
 import 'package:pwa_sales2go_flutter/src/features/product/presentation/widgets/image_network.dart';
 
 class ProductsDetailsTopSections extends StatelessWidget {
@@ -74,7 +75,7 @@ class ProductsDetailsTopSections extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "Talla :",
+                        "${DetalleLabels().tamano}:",
                         style: TextStyle(
                           fontSize: FontSize.fontL,
                           fontFamily: 'Poppins-Regular',
@@ -90,7 +91,8 @@ class ProductsDetailsTopSections extends StatelessWidget {
                         icon: const Icon(Icons.arrow_drop_down),
                         items: sizes.map((ProductSize size) {
                           return DropdownMenuItem<String>(
-                            value: size.size, // use the string value of the enum
+                            value:
+                                size.size, // use the string value of the enum
                             child: Text(
                               size.size,
                               style: TextStyle(fontSize: FontSize.fontM),
@@ -100,8 +102,8 @@ class ProductsDetailsTopSections extends StatelessWidget {
                         onChanged: (newValue) {
                           if (newValue != null) {
                             // Convert string back to enum
-                            onSizeSelected
-                                ?.call(ProductSizeExtension.fromString(newValue));
+                            onSizeSelected?.call(
+                                ProductSizeExtension.fromString(newValue));
                           }
                         },
                       )
