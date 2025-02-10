@@ -6,6 +6,8 @@ import 'package:agnostiko/agnostiko.dart';
 import 'package:flutter/services.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:pwa_sales2go_flutter/pharos/pharos.dart';
+import 'package:pwa_sales2go_flutter/src/features/product/domain/repositories/backoffice_auth_data.dart';
+import 'package:pwa_sales2go_flutter/src/features/product/domain/repositories/backoffice_services.dart';
 import 'package:pwa_sales2go_flutter/src/services/utils/comm.dart';
 import 'package:pwa_sales2go_flutter/src/services/utils/emv.dart';
 import '../../services/utils/keypad.dart';
@@ -250,6 +252,20 @@ class SplashScreenViewState extends State<SplashScreenView> {
   }
 
   Future<void> _keyInitializationPharos() async {
+    AuthService authService = AuthService();
+    //todo hacer cambio de mail dinamico dependiendo
+    bool success = await authService.authenticateUser(
+      "svazquez7@necsweb.com",
+      "Sandra123!",
+    );
+
+    if (success) {
+      print("Stored API Key: ${BackofficeAuthData().apiKey}");
+      print("Stored Terminal ID: ${BackofficeAuthData().terminalId}");
+      print("Stored Merchant ID: ${BackofficeAuthData().merchantId}");
+    } else {
+      print("Authentication failed.");
+    }
     // creamos un objeto de "Capítulo X" para la sesión de inicialización de
     // llaves
     final capx = CapX(1);
