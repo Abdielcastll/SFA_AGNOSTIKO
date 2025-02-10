@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/dialogs/circular_progress_dialog.dart';
 import 'package:pwa_sales2go_flutter/dialogs/info_dialog.dart';
+import 'package:pwa_sales2go_flutter/src/features/product/domain/repositories/backoffice_auth_data.dart';
 import 'package:pwa_sales2go_flutter/src/services/utils/comm.dart';
 
 import '../pharos/card_data.dart';
@@ -61,8 +62,8 @@ Future<Map<String, dynamic>> pharosGenerateSaleMsg(
   final currency = trxCurrency;
   //todo estos valores son dinamicos obtenidos de pharos
   final orderNumber = "#723456";
-  final terminalCode = "1774";
-  final merchantCode = "1230";
+  final terminalCode = BackofficeAuthData().terminalId!;
+  final merchantCode = BackofficeAuthData().merchantId!;
   if (transactionArgs.entryMode == EntryMode.Contact ||
       transactionArgs.entryMode == EntryMode.Contactless ||
       transactionArgs.entryMode == EntryMode.Magstripe) {
@@ -174,9 +175,8 @@ Future<bool> onVoidExecute(
 Future<Map<String, dynamic>> pharosGenerateVoidMsg(
   String stan,
 ) async {
-  //todo estos valores son dinamicos obtenidos de pharos
-  final terminalCode = "1774";
-  final merchantCode = "1230";
+  final terminalCode = BackofficeAuthData().terminalId!;
+  final merchantCode = BackofficeAuthData().merchantId!;
   return PharosVoidRequest(stan, terminalCode, merchantCode).toJson();
 }
 
@@ -348,14 +348,11 @@ Future<Map<String, dynamic>> pharosGenerateKeyInitialization({
 }) async {
   final cipheredTKStr = cipheredTK.toHexStr().toUpperCase();
   final crcValue = calculateCRC32(AsciiCodec().encode(cipheredTKStr));
-  //todo aqui saldria un login a pharos que nos da el merchant code y el terminal code
   return PharosKeyInitRequest(
-          terminalCode:
-              "1774", //todo hacer dinamico, pharos nos lo tiene que dar
-          merchantCode:
-              "1230", //todo hacer dinamico, pharos nos lo tiene que dar
-          encryptedRandomKey: cipheredTK.toHexStr(),
-          randomKeyCheckValue: kcv.toHexStr(),
-          randomKeyCRC: crcValue.toHexStr())
-      .toJson();
+    terminalCode: BackofficeAuthData().terminalId!,
+    merchantCode: BackofficeAuthData().merchantId!,
+    encryptedRandomKey: cipheredTK.toHexStr(),
+    randomKeyCheckValue: kcv.toHexStr(),
+    randomKeyCRC: crcValue.toHexStr(),
+  ).toJson();
 }
