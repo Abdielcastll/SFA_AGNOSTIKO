@@ -255,8 +255,10 @@ class SplashScreenViewState extends State<SplashScreenView> {
     AuthService authService = AuthService();
     //todo hacer cambio de mail dinamico dependiendo
     bool success = await authService.authenticateUser(
-      "psh@gmail.com",
-      "Psh%1234",
+      // "psh@gmail.com", // usuario prosa real
+      // "Psh%1234",
+      "pvt@gmail.com", //pruebas productivas
+      "Pvt%1234",
     );
 
     if (success) {
