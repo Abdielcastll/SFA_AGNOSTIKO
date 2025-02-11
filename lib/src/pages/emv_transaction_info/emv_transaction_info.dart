@@ -497,7 +497,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
             const Text(''),
             Text(
               transactionArgs!.responseCode == '88'
-                  ? "Tiempo de espera exedido"
+                  ? "Tiempo de espera excedido"
                   : "${AppLocalizations.of(context)!.transaction} $transactionResultStr - $transactionOnlineStr",
               style: TextStyle(
                 color: this.transactionResult == EmvTransactionResult.Approved
@@ -952,278 +952,287 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   }
 
   Future<void> printTicket() async {
-    print('ticket emv');
-    final emv = EmvModule.instance;
-
-    List<PrinterObject> listOfTextLine = [];
-    final terminalParameters = await loadTerminalParameters();
-
-    //NetworkImage assetsLogo = NetworkImage(urlLogoTicket);
-    //AssetImage("assets/images/agn_blue.png");
-
-    ui.Image? logo = await networkImageToUiImage(urlLogoTicket);
-
-    final byteDataLogo =
-        await logo!.toByteData(format: ui.ImageByteFormat.rawRgba);
-    final rgbaLogo =
-        byteDataLogo?.buffer.asUint8List() ?? Uint8List.fromList([]);
-
-    final maxWidth = await getPaperWidth();
-
-    final imgLogo = PrinterImage(rgbaLogo, logo.width, logo.height,
-        offsetX: (maxWidth / 2) - (logo.width / 2));
-
-    // final logo = await assetsLogo.toPrinterImage(offsetX: maxWidth / 4);
-
-    const specialFont = "Poppins-Bold";
-    const regularFont = "Poppins-Bold";
-
-    listOfTextLine.add(imgLogo);
-
-    listOfTextLine.add(PrinterText(razonsocial.toUpperCase(),
-        format: TextFormat(fontSize: 16, fontFamily: specialFont),
-        alignment: TextAlignment.Center));
-
-    final afiliacion = terminalParameters.acquirerId;
-    final terminalId = terminalParameters.terminalId;
-
-    final line3Part1 = afiliacion.toHexStr();
-    final line3 = line3Part1 + "-" + terminalId;
-    listOfTextLine.add(PrinterText(line3.toUpperCase(),
-        format: TextFormat(fontSize: 16, fontFamily: specialFont),
-        alignment: TextAlignment.Center));
-    listOfTextLine.add(PrinterText.emptyLine(16));
-
-    final fechaTag = await emv.getTagValue(0x9a);
-    final horaTag = await emv.getTagValue(0x9f21);
-    Uint8List? arqc = await emv.getTagValue(0x9f26);
-    String? maskedHexString;
-    if (arqc != null) {
-      final hexString = arqc
-          .map((byte) => byte.toRadixString(16).padLeft(2, '0'))
-          .join()
-          .toUpperCase();
-      maskedHexString = '*' * (hexString.length - 4) +
-          hexString.substring(hexString.length - 4);
-    }
-    String fecha = "";
-    String hora = "";
-    if (fechaTag != null) {
-      final dd = fechaTag[2].toRadixString(16).padLeft(2, "0");
-      final mmNum = fechaTag[1].toRadixString(16).padLeft(2, "0");
-      final mm = getMonth(mmNum);
-      final yy = fechaTag[0].toRadixString(16).padLeft(2, "0");
-      fecha = "Fecha $dd$mm$yy";
-    }
-    if (horaTag != null) {
-      final hh = horaTag[0].toRadixString(16).padLeft(2, "0");
-      final mm = horaTag[1].toRadixString(16).padLeft(2, "0");
-      hora = "Hora $hh:$mm";
-    }
-    listOfTextLine.add(PrinterSplitText(
-      fecha.toUpperCase(),
-      hora.toUpperCase(),
-      format: TextFormat(fontSize: 16, fontFamily: regularFont),
-    ));
-
-    listOfTextLine.add(PrinterText.emptyLine(32));
-
-    final cardTag = transactionArgs?.pan;
-    if (cardTag != null) {
-      final cardlength = cardTag.length;
-      String cardResult =
-          cardTag.replaceRange(0, cardlength - 4, '*' * (cardlength - 4));
-      listOfTextLine.add(PrinterText('Tarjeta: ${cardResult.toUpperCase()}',
-          format:
-              TextFormat(fontSize: 16, bold: true, fontFamily: regularFont)));
-      final cardBrand = getCardName(infoTags?.cardNo?.toHexStr());
-      listOfTextLine.add(PrinterText.emptyLine(32));
-      listOfTextLine.add(
-        PrinterText(cardBrand.toUpperCase(),
-            format: TextFormat(fontSize: 16, fontFamily: regularFont),
-            alignment: TextAlignment.Center),
-      );
-      listOfTextLine.add(PrinterText.emptyLine(16));
-    }
-
-    if (transactionArgs!.emvTransactionType == EmvTransactionType.Refund) {
-      listOfTextLine.add(
-        PrinterText("Devolución".toUpperCase(),
-            format: TextFormat(fontSize: 16, fontFamily: regularFont),
-            alignment: TextAlignment.Center),
-      );
+    if (transactionArgs!.responseCode == "88") {
     } else {
-      final paymentBody = (ModalRoute.of(context)?.settings.arguments!
-          as List)[2] as AddPaymentBodyAtt;
+      print('ticket emv');
+      final emv = EmvModule.instance;
 
-      listOfTextLine.add(
-        PrinterText("Venta #${paymentBody.invoiceNumber}".toUpperCase(),
-            format: TextFormat(fontSize: 16, fontFamily: regularFont),
-            alignment: TextAlignment.Center),
-      );
-    }
+      List<PrinterObject> listOfTextLine = [];
+      final terminalParameters = await loadTerminalParameters();
 
-    final ticketMessage = transactionResult == EmvTransactionResult.Approved
-        ? 'PAGO APROBADO'
-        : transactionResult == EmvTransactionResult.CmdError
-            ? 'TARJETA RETIRADA'
-            : transactionArgs!.timeout || transactionArgs!.stan == null
-                ? 'TIEMPO DE ESPERA AGOTADO'
-                : 'PAGO FALLIDO';
+      //NetworkImage assetsLogo = NetworkImage(urlLogoTicket);
+      //AssetImage("assets/images/agn_blue.png");
 
-    listOfTextLine.add(
-      PrinterText(
-        ticketMessage,
-        format: TextFormat(
-          fontSize: 16,
-          fontFamily: regularFont,
-        ),
-      ),
-    );
-    listOfTextLine.add(
-      PrinterSplitText(
-        "Total:".toUpperCase(),
-        _amountString,
-        format: TextFormat(
-          fontSize: 16,
-          fontFamily: regularFont,
-        ),
-      ),
-    );
+      ui.Image? logo = await networkImageToUiImage(urlLogoTicket);
 
-    final contactlessBool = transactionArgs?.transactionInfo?.isContactless;
+      final byteDataLogo =
+          await logo!.toByteData(format: ui.ImageByteFormat.rawRgba);
+      final rgbaLogo =
+          byteDataLogo?.buffer.asUint8List() ?? Uint8List.fromList([]);
 
-    listOfTextLine.add(PrinterText.emptyLine(16));
-    listOfTextLine.add(
-      PrinterText(
-        "Stan: ${transactionArgs!.stan}".toUpperCase(),
-        format: TextFormat(
-          fontSize: 16,
-          fontFamily: regularFont,
-        ),
-      ),
-    );
-    listOfTextLine.add(
-      PrinterText(
-        "Numero de Referencia: ${int.parse(transactionArgs!.referenceNumber ?? '0')}"
-            .toUpperCase(),
+      final maxWidth = await getPaperWidth();
+
+      final imgLogo = PrinterImage(rgbaLogo, logo.width, logo.height,
+          offsetX: (maxWidth / 2) - (logo.width / 2));
+
+      // final logo = await assetsLogo.toPrinterImage(offsetX: maxWidth / 4);
+
+      const specialFont = "Poppins-Bold";
+      const regularFont = "Poppins-Bold";
+
+      listOfTextLine.add(imgLogo);
+
+      listOfTextLine.add(PrinterText(razonsocial.toUpperCase(),
+          format: TextFormat(fontSize: 16, fontFamily: specialFont),
+          alignment: TextAlignment.Center));
+
+      final afiliacion = terminalParameters.acquirerId;
+      final terminalId = terminalParameters.terminalId;
+
+      final line3Part1 = afiliacion.toHexStr();
+      final line3 = line3Part1 + "-" + terminalId;
+      listOfTextLine.add(PrinterText(line3.toUpperCase(),
+          format: TextFormat(fontSize: 16, fontFamily: specialFont),
+          alignment: TextAlignment.Center));
+      listOfTextLine.add(PrinterText.emptyLine(16));
+
+      final fechaTag = await emv.getTagValue(0x9a);
+      final horaTag = await emv.getTagValue(0x9f21);
+      Uint8List? arqc = await emv.getTagValue(0x9f26);
+      String? maskedHexString;
+      if (arqc != null) {
+        final hexString = arqc
+            .map((byte) => byte.toRadixString(16).padLeft(2, '0'))
+            .join()
+            .toUpperCase();
+        maskedHexString = '*' * (hexString.length - 4) +
+            hexString.substring(hexString.length - 4);
+      }
+      String fecha = "";
+      String hora = "";
+      if (fechaTag != null) {
+        final dd = fechaTag[2].toRadixString(16).padLeft(2, "0");
+        final mmNum = fechaTag[1].toRadixString(16).padLeft(2, "0");
+        final mm = getMonth(mmNum);
+        final yy = fechaTag[0].toRadixString(16).padLeft(2, "0");
+        fecha = "Fecha $dd$mm$yy";
+      }
+      if (horaTag != null) {
+        final hh = horaTag[0].toRadixString(16).padLeft(2, "0");
+        final mm = horaTag[1].toRadixString(16).padLeft(2, "0");
+        hora = "Hora $hh:$mm";
+      }
+      listOfTextLine.add(PrinterSplitText(
+        fecha.toUpperCase(),
+        hora.toUpperCase(),
         format: TextFormat(fontSize: 16, fontFamily: regularFont),
-      ),
-    );
-    listOfTextLine.add(
-      PrinterText(
-        'ARQC:${maskedHexString ?? 'N/A'.toUpperCase()}',
-        format: TextFormat(
-          fontSize: 16,
-          fontFamily: regularFont,
-        ),
-      ),
-    );
+      ));
 
-    String? aid;
-    final auxAid1 = await emv.getTagValue(0x9f06);
-    final auxAid2 = await emv.getTagValue(0x84);
-    if (auxAid1 != null) {
-      aid = auxAid1.toHexStr();
-    } else if (auxAid2 != null) {
-      aid = auxAid2.toHexStr();
-    }
-    if (aid != null) {
+      listOfTextLine.add(PrinterText.emptyLine(32));
+
+      final cardTag = transactionArgs?.pan;
+      if (cardTag != null) {
+        final cardlength = cardTag.length;
+        String cardResult =
+            cardTag.replaceRange(0, cardlength - 4, '*' * (cardlength - 4));
+        listOfTextLine.add(PrinterText('Tarjeta: ${cardResult.toUpperCase()}',
+            format:
+                TextFormat(fontSize: 16, bold: true, fontFamily: regularFont)));
+        final cardBrand = getCardName(infoTags?.cardNo?.toHexStr());
+        listOfTextLine.add(PrinterText.emptyLine(32));
+        listOfTextLine.add(
+          PrinterText(cardBrand.toUpperCase(),
+              format: TextFormat(fontSize: 16, fontFamily: regularFont),
+              alignment: TextAlignment.Center),
+        );
+        listOfTextLine.add(PrinterText.emptyLine(16));
+      }
+
+      if (transactionArgs!.emvTransactionType == EmvTransactionType.Refund) {
+        listOfTextLine.add(
+          PrinterText("Devolución".toUpperCase(),
+              format: TextFormat(fontSize: 16, fontFamily: regularFont),
+              alignment: TextAlignment.Center),
+        );
+      } else {
+        final paymentBody = (ModalRoute.of(context)?.settings.arguments!
+            as List)[2] as AddPaymentBodyAtt;
+
+        listOfTextLine.add(
+          PrinterText("Venta #${paymentBody.invoiceNumber}".toUpperCase(),
+              format: TextFormat(fontSize: 16, fontFamily: regularFont),
+              alignment: TextAlignment.Center),
+        );
+      }
+
+      final ticketMessage = transactionResult == EmvTransactionResult.Approved
+          ? 'PAGO APROBADO'
+          : transactionResult == EmvTransactionResult.CmdError
+              ? 'TARJETA RETIRADA'
+              : transactionArgs!.timeout || transactionArgs!.stan == null
+                  ? 'TIEMPO DE ESPERA AGOTADO'
+                  : 'PAGO FALLIDO';
+
       listOfTextLine.add(
         PrinterText(
-          "AID:".toUpperCase() + aid.toUpperCase(),
+          ticketMessage,
           format: TextFormat(
             fontSize: 16,
             fontFamily: regularFont,
           ),
         ),
       );
-    }
-
-    listOfTextLine.add(PrinterText.emptyLine(16));
-
-    if (!transactionArgs!.timeout &&
-        transactionArgs!.stan != null &&
-        transactionResult == EmvTransactionResult.Approved) {
       listOfTextLine.add(
-        PrinterText(
-          'FIRMA:______________________________',
+        PrinterSplitText(
+          "Total:".toUpperCase(),
+          _amountString,
           format: TextFormat(
             fontSize: 16,
             fontFamily: regularFont,
           ),
         ),
       );
-    }
 
-    listOfTextLine.add(PrinterText.emptyLine(16));
+      final contactlessBool = transactionArgs?.transactionInfo?.isContactless;
 
-    final nombreTarjetahabiente = await emv.getTagValue(0x5f20);
+      listOfTextLine.add(PrinterText.emptyLine(16));
+      listOfTextLine.add(
+        PrinterText(
+          "Stan: ${transactionArgs!.stan}".toUpperCase(),
+          format: TextFormat(
+            fontSize: 16,
+            fontFamily: regularFont,
+          ),
+        ),
+      );
+      listOfTextLine.add(
+        PrinterText(
+          "Numero de Referencia: ${int.parse(transactionArgs!.referenceNumber ?? '0')}"
+              .toUpperCase(),
+          format: TextFormat(fontSize: 16, fontFamily: regularFont),
+        ),
+      );
+      listOfTextLine.add(
+        PrinterText(
+          'ARQC:${maskedHexString ?? 'N/A'.toUpperCase()}',
+          format: TextFormat(
+            fontSize: 16,
+            fontFamily: regularFont,
+          ),
+        ),
+      );
 
-    switch (contactlessBool) {
-      case false:
-        if (_getCvmTypeStr(infoTags?.cvmResults) == "FIRMA") {
-          if (nombreTarjetahabiente != null) {
+      String? aid;
+      final auxAid1 = await emv.getTagValue(0x9f06);
+      final auxAid2 = await emv.getTagValue(0x84);
+      if (auxAid1 != null) {
+        aid = auxAid1.toHexStr();
+      } else if (auxAid2 != null) {
+        aid = auxAid2.toHexStr();
+      }
+      if (aid != null) {
+        listOfTextLine.add(
+          PrinterText(
+            "AID:".toUpperCase() + aid.toUpperCase(),
+            format: TextFormat(
+              fontSize: 16,
+              fontFamily: regularFont,
+            ),
+          ),
+        );
+      }
+
+      listOfTextLine.add(PrinterText.emptyLine(16));
+
+      if (!transactionArgs!.timeout &&
+          transactionArgs!.stan != null &&
+          transactionResult == EmvTransactionResult.Approved) {
+        listOfTextLine.add(
+          PrinterText(
+            'FIRMA:______________________________',
+            format: TextFormat(
+              fontSize: 16,
+              fontFamily: regularFont,
+            ),
+          ),
+        );
+      }
+
+      listOfTextLine.add(PrinterText.emptyLine(16));
+
+      final nombreTarjetahabiente = await emv.getTagValue(0x5f20);
+
+      switch (contactlessBool) {
+        case false:
+          if (_getCvmTypeStr(infoTags?.cvmResults) == "FIRMA") {
+            if (nombreTarjetahabiente != null) {
+              listOfTextLine.add(PrinterText(
+                  const AsciiCodec()
+                      .decode(nombreTarjetahabiente)
+                      .toUpperCase(),
+                  format: TextFormat(fontSize: 16, fontFamily: regularFont),
+                  alignment: TextAlignment.Center));
+            }
+          } else if (_getCvmTypeStr(infoTags?.cvmResults) ==
+              'PIN OFFLINE EN CLARO') {
             listOfTextLine.add(PrinterText(
-                const AsciiCodec().decode(nombreTarjetahabiente).toUpperCase(),
-                format: TextFormat(fontSize: 16, fontFamily: regularFont),
+                "AUTORIZADO MEDIANTE FIRMA ELECTRÓNICA".toUpperCase(),
+                format: TextFormat(fontSize: 14, fontFamily: regularFont),
                 alignment: TextAlignment.Center));
+            if (nombreTarjetahabiente != null) {
+              listOfTextLine.add(PrinterText(
+                  const AsciiCodec()
+                      .decode(nombreTarjetahabiente)
+                      .toUpperCase(),
+                  format: TextFormat(fontSize: 14, fontFamily: regularFont),
+                  alignment: TextAlignment.Center));
+            }
+          } else {
+            if (nombreTarjetahabiente != null) {
+              listOfTextLine.add(PrinterText(
+                  const AsciiCodec()
+                      .decode(nombreTarjetahabiente)
+                      .toUpperCase(),
+                  format: TextFormat(fontSize: 14, fontFamily: regularFont),
+                  alignment: TextAlignment.Center));
+            }
           }
-        } else if (_getCvmTypeStr(infoTags?.cvmResults) ==
-            'PIN OFFLINE EN CLARO') {
+          break;
+        case true:
           listOfTextLine.add(PrinterText(
-              "AUTORIZADO MEDIANTE FIRMA ELECTRÓNICA".toUpperCase(),
+              "AUTORIZADO SIN AUTENTICACIÓN DEL TARJETAHABIENTE".toUpperCase(),
               format: TextFormat(fontSize: 14, fontFamily: regularFont),
               alignment: TextAlignment.Center));
           if (nombreTarjetahabiente != null) {
-            listOfTextLine.add(PrinterText(
+            listOfTextLine.add(
+              PrinterText(
                 const AsciiCodec().decode(nombreTarjetahabiente).toUpperCase(),
                 format: TextFormat(fontSize: 14, fontFamily: regularFont),
-                alignment: TextAlignment.Center));
+                alignment: TextAlignment.Center,
+              ),
+            );
           }
-        } else {
-          if (nombreTarjetahabiente != null) {
-            listOfTextLine.add(PrinterText(
-                const AsciiCodec().decode(nombreTarjetahabiente).toUpperCase(),
-                format: TextFormat(fontSize: 14, fontFamily: regularFont),
-                alignment: TextAlignment.Center));
-          }
-        }
-        break;
-      case true:
-        listOfTextLine.add(PrinterText(
-            "AUTORIZADO SIN AUTENTICACIÓN DEL TARJETAHABIENTE".toUpperCase(),
-            format: TextFormat(fontSize: 14, fontFamily: regularFont),
-            alignment: TextAlignment.Center));
-        if (nombreTarjetahabiente != null) {
-          listOfTextLine.add(
-            PrinterText(
-              const AsciiCodec().decode(nombreTarjetahabiente).toUpperCase(),
-              format: TextFormat(fontSize: 14, fontFamily: regularFont),
-              alignment: TextAlignment.Center,
-            ),
-          );
-        }
-        break;
+          break;
+      }
+
+      listOfTextLine.add(PrinterText.emptyLine(16));
+
+      listOfTextLine.add(PrinterText(
+          'he leido y acepto los terminos y condiciones.'.toUpperCase(),
+          format: TextFormat(fontSize: 14, fontFamily: regularFont),
+          alignment: TextAlignment.Center));
+
+      listOfTextLine.add(PrinterText('powered by pharos payments'.toUpperCase(),
+          format: TextFormat(fontSize: 14, fontFamily: regularFont),
+          alignment: TextAlignment.Center));
+
+      listOfTextLine.add(PrinterText.emptyLine(16));
+
+      final printerScript =
+          PrinterScript(listOfTextLine, gray: GrayIntensity.Dark);
+      await printScript(printerScript, bottomFeed: true);
+      await cutPaper();
     }
-
-    listOfTextLine.add(PrinterText.emptyLine(16));
-
-    listOfTextLine.add(PrinterText(
-        'he leido y acepto los terminos y condiciones.'.toUpperCase(),
-        format: TextFormat(fontSize: 14, fontFamily: regularFont),
-        alignment: TextAlignment.Center));
-
-    listOfTextLine.add(PrinterText('powered by pharos payments'.toUpperCase(),
-        format: TextFormat(fontSize: 14, fontFamily: regularFont),
-        alignment: TextAlignment.Center));
-
-    listOfTextLine.add(PrinterText.emptyLine(16));
-
-    final printerScript =
-        PrinterScript(listOfTextLine, gray: GrayIntensity.Dark);
-    await printScript(printerScript, bottomFeed: true);
-    await cutPaper();
   }
 
   String get _amountString {
