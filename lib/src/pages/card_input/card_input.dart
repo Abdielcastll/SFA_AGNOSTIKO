@@ -274,6 +274,7 @@ class _CardInputViewState extends State<CardInputView> {
             paymentBody!.client, paymentBody!.invoiceNumber);
       }
       await closeCardReader();
+      await cancelEmvTransaction();
       transactionArgs!.responseCode = "88"; //vamos a usar 88 para timeout
       final arguments = (ModalRoute.of(context)?.settings.arguments! as List);
       Navigator.pushReplacementNamed(context, EmvTransactionInfoView.route,

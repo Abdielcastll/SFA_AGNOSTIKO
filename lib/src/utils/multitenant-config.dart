@@ -8,6 +8,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/firebase_options.dart';
+import 'package:pwa_sales2go_flutter/src/features/product/domain/repositories/detalle_producto_labels.dart';
 import 'package:pwa_sales2go_flutter/src/global/global.dart';
 import 'package:pwa_sales2go_flutter/src/pages/auth/login/email_page.dart';
 import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
@@ -208,6 +209,28 @@ class _MultitenantConfig {
       return true;
     } catch (e) {
       throw (e);
+    }
+  }
+
+  Future<void> getLabelsDetalleProducto() async {
+    try {
+      FirebaseFirestore firestore =
+          FirebaseFirestore.instanceFor(app: tenantApp!);
+      DocumentSnapshot snapshot = await firestore
+          .collection('tenant')
+          .doc('etiquetas_detalles_producto')
+          .get();
+
+      if (snapshot.exists) {
+        Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+        DetalleLabels().setValues(
+          diseno: data['diseno'] ?? '',
+          linea: data['linea'] ?? '',
+          tamano: data['tamano'] ?? '',
+        );
+      }
+    } catch (e) {
+      print('Error fetching DetalleLabels: $e');
     }
   }
 
