@@ -57,12 +57,12 @@ class _ProductDetailUIState extends State<ProductDetailUI> {
     if (!isFirstBuild) return;
     
     stockValues = Provider.of<StockModel?>(context)?.stock ?? {};
-
     await Future.delayed(const Duration(milliseconds: 100));
 
     if (widget.products.isNotEmpty) {
       int firstAvailable = widget.products.indexWhere((product) {
         final stock = stockValues[product.sku];
+        print(stock);
         return stock != null && stock > 0;
       });
 
@@ -76,7 +76,9 @@ class _ProductDetailUIState extends State<ProductDetailUI> {
       selectedDropdownColor = currentProduct.line;
       selectedProduct = firstAvailable;
 
-      isFirstBuild = false;
+      if (stockValues[widget.products[firstAvailable].sku] != null) {
+        isFirstBuild = false;
+      }
     }
   }
 

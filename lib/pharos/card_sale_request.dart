@@ -8,6 +8,7 @@ class PharosCardSaleRequest extends PharosSaleRequest {
   CardData card;
   String ksn;
   int referenceNumber;
+  String? payments;
 
   PharosCardSaleRequest({
     required String date,
@@ -21,6 +22,7 @@ class PharosCardSaleRequest extends PharosSaleRequest {
     required this.card,
     required this.ksn,
     required this.referenceNumber,
+    this.payments,
   }) : super(
           date,
           amount,
@@ -37,6 +39,7 @@ class PharosCardSaleRequest extends PharosSaleRequest {
       'stan': stan,
       'card': card.toJson(),
       'ksn': ksn.toUpperCase(),
+      if(payments != null) 'payments': payments,
     });
 
     if (!isSale) {

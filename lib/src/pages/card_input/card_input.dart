@@ -9,7 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:agnostiko/agnostiko.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/core/constants/msi_constants.dart';
+import 'package:pwa_sales2go_flutter/dialogs/confirm_dialog.dart';
 import 'package:pwa_sales2go_flutter/dialogs/try_again_dialog.dart';
+import 'package:pwa_sales2go_flutter/src/features/payment/data/datasources/payment_host_datasource_pharos.dart';
+import 'package:pwa_sales2go_flutter/src/features/payment/data/repositories/payment_repository_impl.dart';
+import 'package:pwa_sales2go_flutter/src/features/payment/domain/entitites/bin_entitites/bin_response_entity.dart';
+import 'package:pwa_sales2go_flutter/src/features/payment/domain/repositories/payment_repository.dart';
+import 'package:pwa_sales2go_flutter/src/features/payment/presentation/dialogs/msi_dialog.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
 import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
@@ -526,6 +533,25 @@ class _CardInputViewState extends State<CardInputView> {
 
       transactionArgs.currencyCode = currency;
 
+      // TODO Este PaymentRepository no debería quedarse aquí
+      print("Aqui voy a gener los msi");
+      final PaymentRepository payment =
+          PaymentRepositoryImpl(datasource: PaymentHostDatasourcePharos());
+      final BinResponseEntity? binMsi =
+          await payment.getAvailableMsi(transactionArgs);
+      if (binMsi != null && binMsi.goToMsi) {
+        print("Go to MSI");
+        await showConfirmDialog(
+          context,
+          title: MSIConstants.msiAvailable,
+          message: MSIConstants.msiDescription,
+          textAccept: MSIConstants.wantPromo,
+          onAccept: () async =>
+              await showMSIDialog(transProvider: transactionArgs, binResponse: binMsi, context: context),
+          textCancel: MSIConstants.noThanks,
+          onCancel: () => Navigator.pop(context),
+        );
+      }
       final pharosMsg = await pharosGenerateSaleMsg(transactionArgs, currency);
       print("PHAROS MSG: ${jsonEncode(pharosMsg)}");
 

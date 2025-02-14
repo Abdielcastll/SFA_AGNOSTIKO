@@ -80,7 +80,7 @@ class ProductsDetailsMiddleSection extends StatelessWidget {
 
             if (stockText.isNotEmpty) SizedBox(height: screenHeight * 0.008),
 
-            if (genderOptions.isNotEmpty)
+            if (genderOptions.isNotEmpty && !genderOptions.contains("NA"))
               TextDetail(
                 label: "Selecciona ${DetalleLabels().diseno}:",
                 descriptor: DropdownButton<String>(
@@ -105,7 +105,7 @@ class ProductsDetailsMiddleSection extends StatelessWidget {
                 ),
               ),
 
-            if (colorNames.isNotEmpty)
+            if (colorNames.isNotEmpty && !colorNames.contains("NA"))
               TextDetail(
                 label: "Selecciona ${DetalleLabels().linea}: ",
                 descriptor: DropdownButton<String>(
