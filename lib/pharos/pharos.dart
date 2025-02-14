@@ -104,6 +104,7 @@ Future<Map<String, dynamic>> pharosGenerateSaleMsg(
       isSale: isSale,
       ksn: ksn,
       referenceNumber: referenceNumber,
+      payments: transactionArgs.msi
     ).toJson();
   } else {
     final pan = transactionArgs.pan;

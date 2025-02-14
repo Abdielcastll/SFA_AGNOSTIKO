@@ -30,6 +30,7 @@ class TransactionArgs {
   String? authCode;
   String? currencyCode;
   String? responseCode;
+  String? msi;
   bool timeout = false;
 
   Stream<dynamic>? emvStream;
@@ -63,6 +64,7 @@ class TransactionArgs {
     this.invoice,
     this.authCode,
     this.responseCode,
+    this.msi,
   });
 }
 
