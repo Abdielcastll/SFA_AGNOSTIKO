@@ -593,6 +593,15 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                 ],
               ),
             ),
+            if (transactionArgs!.msi != null)
+              ListTile(
+                enableFeedback: true,
+                title: const Text('Meses sin intereses'),
+                subtitle: Text(
+                  _msiString,
+                ),
+                onTap: () {},
+              ),
             ListTile(
               enableFeedback: true,
               title: const Text('STAN'),
@@ -1239,6 +1248,10 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     return _amountBytesToString(infoTags?.amount);
   }
 
+  String get _msiString {
+    return _amountMSIBytesToString(infoTags?.amount, transactionArgs!.msi!);
+  }
+
   double get _amountDouble {
     return _amountBytesToDouble(infoTags?.amount);
   }
@@ -1260,6 +1273,18 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       final amountInt = int.parse(amountBytes.toHexStr());
       final currencyFormat = NumberFormat.currency(locale: "en", symbol: "\$");
       return currencyFormat.format(amountInt / 100);
+    }
+    return '-';
+  }
+
+  String _amountMSIBytesToString(Uint8List? amountBytes, String msi) {
+    if (amountBytes != null) {
+      int amountInt = int.parse(amountBytes.toHexStr());
+      int months = int.parse(msi.startsWith('0')
+          ? msi.substring(1)
+          : msi); // Remove leading 0 if present
+      final currencyFormat = NumberFormat.currency(locale: "en", symbol: "\$");
+      return "$months pagos de ${currencyFormat.format((amountInt / 100) / months)}";
     }
     return '-';
   }
