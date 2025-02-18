@@ -281,7 +281,6 @@ class _CardInputViewState extends State<CardInputView> {
             paymentBody!.client, paymentBody!.invoiceNumber);
       }
       await closeCardReader();
-      await cancelEmvTransaction();
       transactionArgs!.responseCode = "88"; //vamos a usar 88 para timeout
       final arguments = (ModalRoute.of(context)?.settings.arguments! as List);
       Navigator.pushReplacementNamed(context, EmvTransactionInfoView.route,
@@ -407,16 +406,25 @@ class _CardInputViewState extends State<CardInputView> {
 
   void _processEMVException(dynamic e, String message) async {
     await cancelEmvTransaction();
+
     print('Error EMV $e');
     if (!mounted) return; // si la pantalla no está activa cancelamos
-    print("Error: $e");
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(message),
     ));
     final deviceType = await getDeviceType();
     MPOSController.instance.showHomeScreen();
-    transactionArgs?.pan ??=
-        (await EmvModule.instance.getTagValue(0x57))?.toHexStr().split('d')[0];
+    String? pan = '';
+    try {
+      pan = (await EmvModule.instance.getTagValue(0x57))
+          ?.toHexStr()
+          .split('d')[0];
+    } catch (e) {
+      await emvPreTransaction();
+      print("sub error: $e");
+    }
+    transactionArgs?.pan ??= pan;
+    transactionArgs?.responseCode = '999';
     // en caso de error, nos movemos a la pantalla de cierre
     final arguments = (ModalRoute.of(context)?.settings.arguments! as List);
     if (globalRemoteConfig.onlyFullPaymentWithCard!) {
@@ -546,8 +554,10 @@ class _CardInputViewState extends State<CardInputView> {
           title: MSIConstants.msiAvailable,
           message: MSIConstants.msiDescription,
           textAccept: MSIConstants.wantPromo,
-          onAccept: () async =>
-              await showMSIDialog(transProvider: transactionArgs, binResponse: binMsi, context: context),
+          onAccept: () async => await showMSIDialog(
+              transProvider: transactionArgs,
+              binResponse: binMsi,
+              context: context),
           textCancel: MSIConstants.noThanks,
           onCancel: () => Navigator.pop(context),
         );

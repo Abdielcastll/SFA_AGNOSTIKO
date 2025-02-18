@@ -265,6 +265,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                   if (globalRemoteConfig.onlyFullPaymentWithCard!) {
                     Navigator.pop(context);
                     Navigator.pop(context);
+                    if (transactionArgs!.responseCode == '999') {
+                      Navigator.pop(context);
+                    }
                     if (transactionResult == EmvTransactionResult.Fail ||
                         transactionResult == EmvTransactionResult.Denied ||
                         transactionResult == null) {
@@ -307,7 +310,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   }
 
   Future<String> getARQC() async {
-    if (transactionArgs?.responseCode == '88' ) {
+    if (transactionArgs?.responseCode == '88') {
       return TransactionResultConstants.notFound;
     }
 
@@ -335,7 +338,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
 
   @override
   Widget build(BuildContext context) {
-    getEmvTags();
+    //getEmvTags();
     String approvedStr = AppLocalizations.of(context)!.approved.toUpperCase();
     String declinedStr = AppLocalizations.of(context)!.declined.toUpperCase();
     String failedStr = AppLocalizations.of(context)!.failed.toUpperCase();
@@ -636,39 +639,49 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
             ListTile(
               enableFeedback: true,
               title: const Text(TransactionResultConstants.arqcLabel),
-              subtitle: FutureBuilder<String>(
-                future: getARQC(), // The async function
-                builder:
-                    (BuildContext context, AsyncSnapshot<String> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Text(
-                        'Loading...'); // Placeholder while waiting for data
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}'); // Error message
-                  } else {
-                    return Text(snapshot.data as String); // Display the result
-                  }
-                },
-              ),
+              subtitle: transactionArgs!.responseCode == '999'
+                  ? const Text("N/A")
+                  : FutureBuilder<String>(
+                      future: getARQC(), // The async function
+                      builder: (BuildContext context,
+                          AsyncSnapshot<String> snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Text(
+                              'Loading...'); // Placeholder while waiting for data
+                        } else if (snapshot.hasError) {
+                          return Text(
+                              'Error: ${snapshot.error}'); // Error message
+                        } else {
+                          return Text(
+                              snapshot.data as String); // Display the result
+                        }
+                      },
+                    ),
               onTap: () {},
             ),
             ListTile(
               enableFeedback: true,
               title: const Text(TransactionResultConstants.aidLabel),
-              subtitle: FutureBuilder<String>(
-                future: getAid(), // The async function
-                builder:
-                    (BuildContext context, AsyncSnapshot<String> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Text(
-                        'Loading...'); // Placeholder while waiting for data
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}'); // Error message
-                  } else {
-                    return Text(snapshot.data as String); // Display the result
-                  }
-                },
-              ),
+              subtitle: transactionArgs!.responseCode == '999'
+                  ? const Text("N/A")
+                  : FutureBuilder<String>(
+                      future: getAid(), // The async function
+                      builder: (BuildContext context,
+                          AsyncSnapshot<String> snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Text(
+                              'Loading...'); // Placeholder while waiting for data
+                        } else if (snapshot.hasError) {
+                          return Text(
+                              'Error: ${snapshot.error}'); // Error message
+                        } else {
+                          return Text(
+                              snapshot.data as String); // Display the result
+                        }
+                      },
+                    ),
               onTap: () {},
             ),
             ListTile(
@@ -1139,12 +1152,11 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
         //     fontFamily: regularFont,
         //   ),
         // ),
-        PrinterText("${TransactionResultConstants.arqcLabel}: $maskedArqc", 
-          format: TextFormat(
-            fontSize: 16,
-            fontFamily: regularFont,
-          )
-        ),
+        PrinterText("${TransactionResultConstants.arqcLabel}: $maskedArqc",
+            format: TextFormat(
+              fontSize: 16,
+              fontFamily: regularFont,
+            )),
       );
 
       // String? aid;
@@ -1170,11 +1182,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       // }
 
       final String aid = await getAid();
-      listOfTextLine.add(
-        PrinterText("${TransactionResultConstants.aidLabel}: $aid", format: TextFormat(
-          fontSize: 16, fontFamily: regularFont
-        ))
-      );
+      listOfTextLine.add(PrinterText(
+          "${TransactionResultConstants.aidLabel}: $aid",
+          format: TextFormat(fontSize: 16, fontFamily: regularFont)));
       listOfTextLine.add(PrinterText.emptyLine(16));
 
       if (!transactionArgs!.timeout &&
