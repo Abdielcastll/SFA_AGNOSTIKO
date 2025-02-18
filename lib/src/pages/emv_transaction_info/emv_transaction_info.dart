@@ -53,7 +53,6 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   Map<int, Uint8List?>? secondGenerateTags;
   String razonsocial = '';
   EmvTransactionResult? transactionResult;
-  String urlLogoTicket = '';
   bool dialogOn = false;
 
   getEmvTags() async {
@@ -123,17 +122,16 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     }
   }
 
-  void fetchDownloadLink() async {
+  Future<String?> fetchDownloadLink() async {
     String? filePath = globalRemoteConfig.refLogoTicket!;
     String? downloadUrl = await getDownloadUrl(filePath);
 
     if (downloadUrl != null) {
-      setState(() {
-        urlLogoTicket = downloadUrl;
-      });
       print('Download URL: $downloadUrl');
+      return downloadUrl;
     } else {
       print('Failed to retrieve download URL');
+      return null;
     }
   }
 
@@ -163,7 +161,6 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getEmpresaNombre();
-      fetchDownloadLink();
       if (globalRemoteConfig.conversionKiosko == true) {
         if (transactionResult == EmvTransactionResult.Approved) {
           onAccept();
@@ -673,7 +670,8 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
               onTap: () {},
             ),
             if (!transactionArgs!.isFallback)
-              if (globalRemoteConfig.conversionKiosko == false)
+              if (globalRemoteConfig.conversionKiosko == false &&
+                  (transactionArgs!.responseCode != "88"))
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     vertical: 4.0,
@@ -972,7 +970,8 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       //NetworkImage assetsLogo = NetworkImage(urlLogoTicket);
       //AssetImage("assets/images/agn_blue.png");
 
-      ui.Image? logo = await networkImageToUiImage(urlLogoTicket);
+      String? urlLogoTicket = await fetchDownloadLink();
+      ui.Image? logo = await networkImageToUiImage(urlLogoTicket ?? '');
 
       final byteDataLogo =
           await logo!.toByteData(format: ui.ImageByteFormat.rawRgba);
@@ -1123,7 +1122,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       );
       listOfTextLine.add(
         PrinterText(
-          'ARQC:${maskedHexString ?? 'N/A'.toUpperCase()}',
+          transactionArgs!.responseCode == "88"
+              ? 'ARQC: N/A'
+              : 'ARQC:${maskedHexString ?? 'N/A'.toUpperCase()}',
           format: TextFormat(
             fontSize: 16,
             fontFamily: regularFont,
@@ -1142,7 +1143,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       if (aid != null) {
         listOfTextLine.add(
           PrinterText(
-            "AID:".toUpperCase() + aid.toUpperCase(),
+            transactionArgs!.responseCode == "88"
+                ? 'AID: N/A'
+                : "AID:".toUpperCase() + aid.toUpperCase(),
             format: TextFormat(
               fontSize: 16,
               fontFamily: regularFont,
