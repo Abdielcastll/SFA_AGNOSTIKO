@@ -534,13 +534,13 @@ class _CardInputViewState extends State<CardInputView> {
       transactionArgs.currencyCode = currency;
 
       // TODO Este PaymentRepository no debería quedarse aquí
-      print("Aqui voy a gener los msi");
+      debugPrint("Check if msi is available");
       final PaymentRepository payment =
           PaymentRepositoryImpl(datasource: PaymentHostDatasourcePharos());
       final BinResponseEntity? binMsi =
           await payment.getAvailableMsi(transactionArgs);
       if (binMsi != null && binMsi.goToMsi) {
-        print("Go to MSI");
+        debugPrint("Go to MSI");
         await showConfirmDialog(
           context,
           title: MSIConstants.msiAvailable,
