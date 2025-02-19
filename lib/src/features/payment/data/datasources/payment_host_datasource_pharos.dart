@@ -21,6 +21,7 @@ class PaymentHostDatasourcePharos implements PaymentHostDatasource {
   @override
   Future<BinResponseEntity?> getAvailableMsi(TransactionArgs? transProv) async {
     try {
+      debugPrint("getAvailableMsi in");
       BinQueryModel binQuery = await _buildBinQuery();
 
       final response = await _fetchBin(binQuery);
@@ -55,6 +56,7 @@ class PaymentHostDatasourcePharos implements PaymentHostDatasource {
 
   Future<http.Response> _fetchBin(BinQueryModel binQuery) async {
     try {
+      debugPrint("fetching bin...");
       final Uri uri = Uri.parse("${url.binUrl}${binQuery.bin}");
 
       final headers = {
@@ -62,7 +64,7 @@ class PaymentHostDatasourcePharos implements PaymentHostDatasource {
         "Authorization": binQuery.apiKey,
       };
 
-      final response = await http.get(uri, headers: headers);
+      final response = await http.get(uri, headers: headers).timeout(const Duration(seconds: 10));
       // TODO Mejorar el manejo de errores
       if (response.statusCode != 200) {
         throw Exception(
