@@ -21,21 +21,18 @@ class PaymentHostDatasourcePharos implements PaymentHostDatasource {
   @override
   Future<BinResponseEntity?> getAvailableMsi(TransactionArgs? transProv) async {
     try {
-      debugPrint("Let's build amount bin query");
+      debugPrint("getAvailableMsi in");
       BinQueryModel binQuery = await _buildBinQuery();
 
-      debugPrint("Let's send query");
       final response = await _fetchBin(binQuery);
-      debugPrint("Let's parse the response to entity");
       BinResponseEntity binResponse =
           BinResponseModel.fromJson(jsonDecode(response.body)[0]).toEntity();
-      debugPrint("Let's see the builded entity ${binResponse.toString()}");
+      debugPrint("Bin entity ${binResponse.toString()}");
 
-      debugPrint("Let's obtain the msi according to amount");
       final double amount = transProv?.amountInCents?.toDouble() ?? 0.00;
       binResponse.listMsi = _checkAmount(amount / 100, binResponse.listMsi);
       binResponse.goToMsi = binResponse.listMsi.isNotEmpty;
-      debugPrint("Let's see the available msi ${binResponse.listMsi.toString()}");
+      debugPrint("Available msi list: ${binResponse.listMsi.toString()}");
 
       return binResponse;
     } catch (e) {
@@ -45,7 +42,6 @@ class PaymentHostDatasourcePharos implements PaymentHostDatasource {
   }
 
   Future<BinQueryModel> _buildBinQuery() async {
-    // TODO obtener el bin de otra manera, el tag 5A a veces viene vacio
     final String cardBin = (await EmvModule.instance.getTagValue(0x57))
             ?.toHexStr()
             .substring(0, 6) ??
@@ -60,6 +56,7 @@ class PaymentHostDatasourcePharos implements PaymentHostDatasource {
 
   Future<http.Response> _fetchBin(BinQueryModel binQuery) async {
     try {
+      debugPrint("fetching bin...");
       final Uri uri = Uri.parse("${url.binUrl}${binQuery.bin}");
 
       final headers = {
@@ -67,14 +64,14 @@ class PaymentHostDatasourcePharos implements PaymentHostDatasource {
         "Authorization": binQuery.apiKey,
       };
 
-      final response = await http.get(uri, headers: headers);
+      final response = await http.get(uri, headers: headers).timeout(const Duration(seconds: 10));
       // TODO Mejorar el manejo de errores
       if (response.statusCode != 200) {
         throw Exception(
             "Something went wrong retrieving BIN data ${response.body}\n status_code ${response.statusCode}");
       }
 
-      debugPrint("This is the pharos response ${response.body}");
+      debugPrint("pharos bin response ${response.body}");
       return response;
     } catch (e) {
       rethrow;
@@ -85,7 +82,7 @@ class PaymentHostDatasourcePharos implements PaymentHostDatasource {
     List<MSI> msi = [];
     int msiListLen = binMsi.length;
 
-    debugPrint("Let's see the amount for msi $amount");
+    debugPrint("msi amount to check: $amount");
     if (amount >= 1200) {
       msi.addAll(binMsi);
     } else if (amount >= 900) {
@@ -95,8 +92,6 @@ class PaymentHostDatasourcePharos implements PaymentHostDatasource {
     } else if (amount >= 300) {
       msi.addAll(binMsi.sublist(0, min(1, msiListLen)));
     }
-
-    print("This is the final msi list ${msi.toString()}");
 
     return msi;
   }

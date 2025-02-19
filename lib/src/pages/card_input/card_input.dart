@@ -238,10 +238,12 @@ class _CardInputViewState extends State<CardInputView> {
       _expectedCardTypes = cardTypes;
     });
 
+    int eventCounter = 0;
     try {
       print('try card reader');
 
       await for (final event in cardReaderStream) {
+        eventCounter++;
         print('card reader event: ${event.cardType}');
         // todo hacer caso para timeout de ir a emv result en vacio
         if (!mounted) {
@@ -281,7 +283,6 @@ class _CardInputViewState extends State<CardInputView> {
             paymentBody!.client, paymentBody!.invoiceNumber);
       }
       await closeCardReader();
-      await cancelEmvTransaction();
       transactionArgs!.responseCode = "88"; //vamos a usar 88 para timeout
       final arguments = (ModalRoute.of(context)?.settings.arguments! as List);
       Navigator.pushReplacementNamed(context, EmvTransactionInfoView.route,
@@ -326,6 +327,21 @@ class _CardInputViewState extends State<CardInputView> {
         Navigator.popUntil(context, (route) => route.isFirst == true);
       }
     }
+
+    // TODO Se debe mejorar esto
+    // Si hubo un error en la detección de tarjeta
+    // Y no fue por timeout, mostramos mensaje y regresamos a la pantalla de cobro
+    if (eventCounter == 0 && transactionArgs?.responseCode != '88') {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Error en la deteccion"),
+          ),
+        );
+
+        Navigator.pop(context); // Regresa a la pantalla de cobro manual
+        Navigator.pop(context); // Regresa a la pantalla de resumen de transacción
+    }
+
     await closeCardReader();
     print("****************CARD READER CLOSED*****************");
   }
@@ -407,16 +423,25 @@ class _CardInputViewState extends State<CardInputView> {
 
   void _processEMVException(dynamic e, String message) async {
     await cancelEmvTransaction();
+
     print('Error EMV $e');
     if (!mounted) return; // si la pantalla no está activa cancelamos
-    print("Error: $e");
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(message),
     ));
     final deviceType = await getDeviceType();
     MPOSController.instance.showHomeScreen();
-    transactionArgs?.pan ??=
-        (await EmvModule.instance.getTagValue(0x57))?.toHexStr().split('d')[0];
+    String? pan = '';
+    try {
+      pan = (await EmvModule.instance.getTagValue(0x57))
+          ?.toHexStr()
+          .split('d')[0];
+    } catch (e) {
+      await emvPreTransaction();
+      print("sub error: $e");
+    }
+    transactionArgs?.pan ??= pan;
+    transactionArgs?.responseCode = '999';
     // en caso de error, nos movemos a la pantalla de cierre
     final arguments = (ModalRoute.of(context)?.settings.arguments! as List);
     if (globalRemoteConfig.onlyFullPaymentWithCard!) {
@@ -534,20 +559,22 @@ class _CardInputViewState extends State<CardInputView> {
       transactionArgs.currencyCode = currency;
 
       // TODO Este PaymentRepository no debería quedarse aquí
-      print("Aqui voy a gener los msi");
+      debugPrint("Check if msi is available");
       final PaymentRepository payment =
           PaymentRepositoryImpl(datasource: PaymentHostDatasourcePharos());
       final BinResponseEntity? binMsi =
           await payment.getAvailableMsi(transactionArgs);
       if (binMsi != null && binMsi.goToMsi) {
-        print("Go to MSI");
+        debugPrint("Go to MSI");
         await showConfirmDialog(
           context,
           title: MSIConstants.msiAvailable,
           message: MSIConstants.msiDescription,
           textAccept: MSIConstants.wantPromo,
-          onAccept: () async =>
-              await showMSIDialog(transProvider: transactionArgs, binResponse: binMsi, context: context),
+          onAccept: () async => await showMSIDialog(
+              transProvider: transactionArgs,
+              binResponse: binMsi,
+              context: context),
           textCancel: MSIConstants.noThanks,
           onCancel: () => Navigator.pop(context),
         );
