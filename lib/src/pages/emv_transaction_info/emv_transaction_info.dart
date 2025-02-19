@@ -15,6 +15,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/core/constants/transaction_result_constants.dart';
 import 'package:pwa_sales2go_flutter/dialogs/confirm_dialog.dart';
 import 'package:pwa_sales2go_flutter/dialogs/info_dialog.dart';
 import 'package:pwa_sales2go_flutter/dialogs/try_chip_dialog.dart';
@@ -53,8 +54,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   Map<int, Uint8List?>? secondGenerateTags;
   String razonsocial = '';
   EmvTransactionResult? transactionResult;
-  String urlLogoTicket = '';
   bool dialogOn = false;
+  String? transactionArqc;
+  String? transactionAid;
 
   getEmvTags() async {
     final emvModule = EmvModule.instance;
@@ -123,17 +125,16 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     }
   }
 
-  void fetchDownloadLink() async {
+  Future<String?> fetchDownloadLink() async {
     String? filePath = globalRemoteConfig.refLogoTicket!;
     String? downloadUrl = await getDownloadUrl(filePath);
 
     if (downloadUrl != null) {
-      setState(() {
-        urlLogoTicket = downloadUrl;
-      });
       print('Download URL: $downloadUrl');
+      return downloadUrl;
     } else {
       print('Failed to retrieve download URL');
+      return null;
     }
   }
 
@@ -163,7 +164,6 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getEmpresaNombre();
-      fetchDownloadLink();
       if (globalRemoteConfig.conversionKiosko == true) {
         if (transactionResult == EmvTransactionResult.Approved) {
           onAccept();
@@ -181,18 +181,18 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   bool timerExpired = false;
   void startTimerFullPaymentWithCard() {
     printTicket();
-    Future.delayed(Duration(seconds: 18), () {
+    Future.delayed(const Duration(seconds: 18), () {
+      if (!mounted) return;
+
       if (transactionResult == EmvTransactionResult.Approved) {
-        setState(() {
-          timerExpired = true;
-        });
         onAccept();
       } else {
-        setState(() {
-          timerExpired = true;
-        });
         kioskoDialog();
       }
+
+      setState(() {
+        timerExpired = true;
+      });
     });
   }
 
@@ -267,6 +267,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                   if (globalRemoteConfig.onlyFullPaymentWithCard!) {
                     Navigator.pop(context);
                     Navigator.pop(context);
+                    if (transactionArgs!.responseCode == '999') {
+                      Navigator.pop(context);
+                    }
                     if (transactionResult == EmvTransactionResult.Fail ||
                         transactionResult == EmvTransactionResult.Denied ||
                         transactionResult == null) {
@@ -291,6 +294,12 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   String transactionOnlineStr = '';
 
   Future<String> getAid() async {
+    if (transactionAid != null) return transactionAid!;
+
+    if (transactionArgs?.responseCode == '88') {
+      return TransactionResultConstants.notFound;
+    }
+
     final emv = EmvModule.instance;
 
     String? aid;
@@ -301,12 +310,19 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     } else if (auxAid2 != null) {
       aid = auxAid2.toHexStr();
     }
-    return aid ?? 'No encontrado';
+
+    transactionAid = aid ?? TransactionResultConstants.notFound;
+    return transactionAid!;
   }
 
   Future<String> getARQC() async {
-    final emv = EmvModule.instance;
+    if (transactionArqc != null) return transactionArqc!;
 
+    if (transactionArgs?.responseCode == '88') {
+      return TransactionResultConstants.notFound;
+    }
+
+    final emv = EmvModule.instance;
     String? maskedHexString;
     Uint8List? arqc = await emv.getTagValue(0x9f26);
     if (arqc != null) {
@@ -317,7 +333,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       maskedHexString = '*' * (hexString.length - 4) +
           hexString.substring(hexString.length - 4);
     }
-    return maskedHexString ?? 'no encontrado';
+
+    transactionArqc = maskedHexString ?? TransactionResultConstants.notFound; 
+    return transactionArqc!;
   }
 
   final Handler handler = Handler();
@@ -330,7 +348,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
 
   @override
   Widget build(BuildContext context) {
-    getEmvTags();
+    //getEmvTags();
     String approvedStr = AppLocalizations.of(context)!.approved.toUpperCase();
     String declinedStr = AppLocalizations.of(context)!.declined.toUpperCase();
     String failedStr = AppLocalizations.of(context)!.failed.toUpperCase();
@@ -573,7 +591,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                   Column(
                     children: [
                       const Text(
-                        "Monto",
+                        TransactionResultConstants.amountLabel,
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -596,7 +614,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
             if (transactionArgs!.msi != null)
               ListTile(
                 enableFeedback: true,
-                title: const Text('Meses sin intereses'),
+                title: const Text(TransactionResultConstants.msiLabel),
                 subtitle: Text(
                   _msiString,
                 ),
@@ -604,7 +622,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
               ),
             ListTile(
               enableFeedback: true,
-              title: const Text('STAN'),
+              title: const Text(TransactionResultConstants.stanLabel),
               subtitle: Text(
                 transactionArgs!.stan.toString(),
               ),
@@ -612,68 +630,79 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
             ),
             ListTile(
               enableFeedback: true,
-              title: const Text('Referencia'),
+              title: const Text(TransactionResultConstants.referenceLabel),
               subtitle: Text(
-                transactionArgs!.referenceNumber ?? 'N/A'.toString(),
+                transactionArgs!.referenceNumber ??
+                    TransactionResultConstants.notApply,
               ),
               onTap: () {},
             ),
             ListTile(
               enableFeedback: true,
-              title: const Text('Autorizacion'),
+              title: const Text(TransactionResultConstants.authorizationLabel),
               subtitle: Text(
-                transactionArgs!.authCode ?? 'N/A'.toString(),
+                transactionArgs!.authCode ??
+                    TransactionResultConstants.notApply,
               ),
               onTap: () {},
             ),
             ListTile(
               enableFeedback: true,
-              title: const Text('ARQC'),
-              subtitle: FutureBuilder<String>(
-                future: getARQC(), // The async function
-                builder:
-                    (BuildContext context, AsyncSnapshot<String> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Text(
-                        'Loading...'); // Placeholder while waiting for data
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}'); // Error message
-                  } else {
-                    return Text(
-                        snapshot.data ?? 'No ARQC found'); // Display the result
-                  }
-                },
-              ),
+              title: const Text(TransactionResultConstants.arqcLabel),
+              subtitle: transactionArgs!.responseCode == '999'
+                  ? const Text("N/A")
+                  : FutureBuilder<String>(
+                      future: getARQC(), // The async function
+                      builder: (BuildContext context,
+                          AsyncSnapshot<String> snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Text(
+                              'Loading...'); // Placeholder while waiting for data
+                        } else if (snapshot.hasError) {
+                          return Text(
+                              'Error: ${snapshot.error}'); // Error message
+                        } else {
+                          return Text(
+                              snapshot.data as String); // Display the result
+                        }
+                      },
+                    ),
               onTap: () {},
             ),
             ListTile(
               enableFeedback: true,
-              title: const Text('AID'),
-              subtitle: FutureBuilder<String>(
-                future: getAid(), // The async function
-                builder:
-                    (BuildContext context, AsyncSnapshot<String> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Text(
-                        'Loading...'); // Placeholder while waiting for data
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}'); // Error message
-                  } else {
-                    return Text(
-                        snapshot.data ?? 'No AID found'); // Display the result
-                  }
-                },
-              ),
+              title: const Text(TransactionResultConstants.aidLabel),
+              subtitle: transactionArgs!.responseCode == '999'
+                  ? const Text("N/A")
+                  : FutureBuilder<String>(
+                      future: getAid(), // The async function
+                      builder: (BuildContext context,
+                          AsyncSnapshot<String> snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Text(
+                              'Loading...'); // Placeholder while waiting for data
+                        } else if (snapshot.hasError) {
+                          return Text(
+                              'Error: ${snapshot.error}'); // Error message
+                        } else {
+                          return Text(
+                              snapshot.data as String); // Display the result
+                        }
+                      },
+                    ),
               onTap: () {},
             ),
             ListTile(
               enableFeedback: true,
-              title: const Text('Response code: '),
+              title: const Text(TransactionResultConstants.responseCodeLabel),
               subtitle: Text(transactionArgs!.responseCode ?? '09'),
               onTap: () {},
             ),
             if (!transactionArgs!.isFallback)
-              if (globalRemoteConfig.conversionKiosko == false)
+              if (globalRemoteConfig.conversionKiosko == false &&
+                  (transactionArgs!.responseCode != "88"))
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     vertical: 4.0,
@@ -702,7 +731,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                       backgroundColor: Colors.blue.shade800,
                     ),
                     child: Text(
-                      'imprimir comprobante'.toUpperCase(),
+                      TransactionResultConstants.printTicketLabel.toUpperCase(),
                       style: const TextStyle(
                         fontFamily: 'Poppins-Regular',
                         color: Colors.white,
@@ -961,7 +990,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   }
 
   Future<void> printTicket() async {
-    if (transactionArgs!.responseCode == "88") {
+    if (transactionArgs?.responseCode == "88") {
     } else {
       print('ticket emv');
       final emv = EmvModule.instance;
@@ -972,7 +1001,8 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       //NetworkImage assetsLogo = NetworkImage(urlLogoTicket);
       //AssetImage("assets/images/agn_blue.png");
 
-      ui.Image? logo = await networkImageToUiImage(urlLogoTicket);
+      String? urlLogoTicket = await fetchDownloadLink();
+      ui.Image? logo = await networkImageToUiImage(urlLogoTicket ?? '');
 
       final byteDataLogo =
           await logo!.toByteData(format: ui.ImageByteFormat.rawRgba);
@@ -1007,16 +1037,17 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
 
       final fechaTag = await emv.getTagValue(0x9a);
       final horaTag = await emv.getTagValue(0x9f21);
-      Uint8List? arqc = await emv.getTagValue(0x9f26);
-      String? maskedHexString;
-      if (arqc != null) {
-        final hexString = arqc
-            .map((byte) => byte.toRadixString(16).padLeft(2, '0'))
-            .join()
-            .toUpperCase();
-        maskedHexString = '*' * (hexString.length - 4) +
-            hexString.substring(hexString.length - 4);
-      }
+      // Uint8List? arqc = await emv.getTagValue(0x9f26);
+      final String maskedArqc = await getARQC();
+      // String? maskedHexString;
+      // if (arqc != null) {
+      //   final hexString = arqc
+      //       .map((byte) => byte.toRadixString(16).padLeft(2, '0'))
+      //       .join()
+      //       .toUpperCase();
+      //   maskedHexString = '*' * (hexString.length - 4) +
+      //       hexString.substring(hexString.length - 4);
+      // }
       String fecha = "";
       String hora = "";
       if (fechaTag != null) {
@@ -1116,41 +1147,54 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       );
       listOfTextLine.add(
         PrinterText(
-          "Numero de Referencia: ${int.parse(transactionArgs!.referenceNumber ?? '0')}"
+          "Numero de Referencia: ${int.tryParse(transactionArgs!.referenceNumber ?? '') ?? '-'}"
               .toUpperCase(),
           format: TextFormat(fontSize: 16, fontFamily: regularFont),
         ),
       );
       listOfTextLine.add(
-        PrinterText(
-          'ARQC:${maskedHexString ?? 'N/A'.toUpperCase()}',
-          format: TextFormat(
-            fontSize: 16,
-            fontFamily: regularFont,
-          ),
-        ),
-      );
-
-      String? aid;
-      final auxAid1 = await emv.getTagValue(0x9f06);
-      final auxAid2 = await emv.getTagValue(0x84);
-      if (auxAid1 != null) {
-        aid = auxAid1.toHexStr();
-      } else if (auxAid2 != null) {
-        aid = auxAid2.toHexStr();
-      }
-      if (aid != null) {
-        listOfTextLine.add(
-          PrinterText(
-            "AID:".toUpperCase() + aid.toUpperCase(),
+        // PrinterText(
+        //   transactionArgs!.responseCode == "88"
+        //       ? 'ARQC: N/A'
+        //       : 'ARQC:${maskedHexString ?? 'N/A'.toUpperCase()}',
+        //   format: TextFormat(
+        //     fontSize: 16,
+        //     fontFamily: regularFont,
+        //   ),
+        // ),
+        PrinterText("${TransactionResultConstants.arqcLabel}: $maskedArqc",
             format: TextFormat(
               fontSize: 16,
               fontFamily: regularFont,
-            ),
-          ),
-        );
-      }
+            )),
+      );
 
+      // String? aid;
+      // final auxAid1 = await emv.getTagValue(0x9f06);
+      // final auxAid2 = await emv.getTagValue(0x84);
+      // if (auxAid1 != null) {
+      //   aid = auxAid1.toHexStr();
+      // } else if (auxAid2 != null) {
+      //   aid = auxAid2.toHexStr();
+      // }
+      // if (aid != null) {
+      //   listOfTextLine.add(
+      //     PrinterText(
+      //       transactionArgs!.responseCode == "88"
+      //           ? 'AID: N/A'
+      //           : "AID:".toUpperCase() + aid.toUpperCase(),
+      //       format: TextFormat(
+      //         fontSize: 16,
+      //         fontFamily: regularFont,
+      //       ),
+      //     ),
+      //   );
+      // }
+
+      final String aid = await getAid();
+      listOfTextLine.add(PrinterText(
+          "${TransactionResultConstants.aidLabel}: $aid",
+          format: TextFormat(fontSize: 16, fontFamily: regularFont)));
       listOfTextLine.add(PrinterText.emptyLine(16));
 
       if (!transactionArgs!.timeout &&
