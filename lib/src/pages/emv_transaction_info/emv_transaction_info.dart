@@ -55,6 +55,8 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   String razonsocial = '';
   EmvTransactionResult? transactionResult;
   bool dialogOn = false;
+  String? transactionArqc;
+  String? transactionAid;
 
   getEmvTags() async {
     final emvModule = EmvModule.instance;
@@ -292,6 +294,8 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   String transactionOnlineStr = '';
 
   Future<String> getAid() async {
+    if (transactionAid != null) return transactionAid!;
+
     if (transactionArgs?.responseCode == '88') {
       return TransactionResultConstants.notFound;
     }
@@ -306,10 +310,14 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
     } else if (auxAid2 != null) {
       aid = auxAid2.toHexStr();
     }
-    return aid ?? TransactionResultConstants.notFound;
+
+    transactionAid = aid ?? TransactionResultConstants.notFound;
+    return transactionAid!;
   }
 
   Future<String> getARQC() async {
+    if (transactionArqc != null) return transactionArqc!;
+
     if (transactionArgs?.responseCode == '88') {
       return TransactionResultConstants.notFound;
     }
@@ -325,7 +333,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       maskedHexString = '*' * (hexString.length - 4) +
           hexString.substring(hexString.length - 4);
     }
-    return maskedHexString ?? TransactionResultConstants.notFound;
+
+    transactionArqc = maskedHexString ?? TransactionResultConstants.notFound; 
+    return transactionArqc!;
   }
 
   final Handler handler = Handler();
@@ -1027,7 +1037,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
 
       final fechaTag = await emv.getTagValue(0x9a);
       final horaTag = await emv.getTagValue(0x9f21);
-      Uint8List? arqc = await emv.getTagValue(0x9f26);
+      // Uint8List? arqc = await emv.getTagValue(0x9f26);
       final String maskedArqc = await getARQC();
       // String? maskedHexString;
       // if (arqc != null) {
@@ -1137,7 +1147,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       );
       listOfTextLine.add(
         PrinterText(
-          "Numero de Referencia: ${int.parse(transactionArgs!.referenceNumber ?? '0')}"
+          "Numero de Referencia: ${int.tryParse(transactionArgs!.referenceNumber ?? '') ?? '-'}"
               .toUpperCase(),
           format: TextFormat(fontSize: 16, fontFamily: regularFont),
         ),
