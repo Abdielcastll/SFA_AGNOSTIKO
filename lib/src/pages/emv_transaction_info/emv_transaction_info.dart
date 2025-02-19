@@ -179,18 +179,18 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   bool timerExpired = false;
   void startTimerFullPaymentWithCard() {
     printTicket();
-    Future.delayed(Duration(seconds: 18), () {
+    Future.delayed(const Duration(seconds: 18), () {
+      if (!mounted) return;
+
       if (transactionResult == EmvTransactionResult.Approved) {
-        setState(() {
-          timerExpired = true;
-        });
         onAccept();
       } else {
-        setState(() {
-          timerExpired = true;
-        });
         kioskoDialog();
       }
+
+      setState(() {
+        timerExpired = true;
+      });
     });
   }
 
@@ -980,7 +980,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   }
 
   Future<void> printTicket() async {
-    if (transactionArgs!.responseCode == "88") {
+    if (transactionArgs?.responseCode == "88") {
     } else {
       print('ticket emv');
       final emv = EmvModule.instance;

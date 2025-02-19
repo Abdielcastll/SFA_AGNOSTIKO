@@ -238,10 +238,12 @@ class _CardInputViewState extends State<CardInputView> {
       _expectedCardTypes = cardTypes;
     });
 
+    int eventCounter = 0;
     try {
       print('try card reader');
 
       await for (final event in cardReaderStream) {
+        eventCounter++;
         print('card reader event: ${event.cardType}');
         // todo hacer caso para timeout de ir a emv result en vacio
         if (!mounted) {
@@ -325,6 +327,21 @@ class _CardInputViewState extends State<CardInputView> {
         Navigator.popUntil(context, (route) => route.isFirst == true);
       }
     }
+
+    // TODO Se debe mejorar esto
+    // Si hubo un error en la detección de tarjeta
+    // Y no fue por timeout, mostramos mensaje y regresamos a la pantalla de cobro
+    if (eventCounter == 0 && transactionArgs?.responseCode != '88') {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Error en la deteccion"),
+          ),
+        );
+
+        Navigator.pop(context); // Regresa a la pantalla de cobro manual
+        Navigator.pop(context); // Regresa a la pantalla de resumen de transacción
+    }
+
     await closeCardReader();
     print("****************CARD READER CLOSED*****************");
   }
