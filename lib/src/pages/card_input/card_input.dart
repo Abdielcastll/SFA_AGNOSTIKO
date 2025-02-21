@@ -308,10 +308,13 @@ class _CardInputViewState extends State<CardInputView> {
               paymentBody!.client, paymentBody!.invoiceNumber);
           Navigator.pop(context);
           Navigator.pop(context);
+          return;
         } else {
           Navigator.popUntil(context, (route) => route.isFirst == true);
+          return;
         }
       }
+
       if (globalRemoteConfig.onlyFullPaymentWithCard!) {
         await cancelPaymentProcess(
             paymentBody!.client, paymentBody!.invoiceNumber);
