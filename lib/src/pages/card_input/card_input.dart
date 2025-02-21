@@ -311,8 +311,7 @@ class _CardInputViewState extends State<CardInputView> {
         } else {
           Navigator.popUntil(context, (route) => route.isFirst == true);
         }
-      }
-      if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+      } else if (globalRemoteConfig.onlyFullPaymentWithCard!) {
         await cancelPaymentProcess(
             paymentBody!.client, paymentBody!.invoiceNumber);
         Navigator.pop(context);
