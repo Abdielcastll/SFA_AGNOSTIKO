@@ -159,7 +159,7 @@ class _AmountInputViewState extends State<AmountInputView> {
             final date = DateTime.now();
             final dateFormat = DateFormat('yyyyMMddHHmmss');
             await setDateTime(dateFormat.format(date));
-            await emvPreTransaction();
+            await emvPreTransaction(false);
             Navigator.pop(context); // y cerramos el popup antes de seguir
           }
 

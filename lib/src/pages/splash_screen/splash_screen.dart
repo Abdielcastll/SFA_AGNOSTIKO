@@ -186,7 +186,7 @@ class SplashScreenViewState extends State<SplashScreenView> {
           return false;
         } else {
           await initSDK(authToken: authToken);
-          await emvPreTransaction();
+          await emvPreTransaction(true);
         }
       } else {
         await initSDK();
