@@ -7,39 +7,41 @@ import 'parameters.dart';
 
 bool _alreadyInitialized = false;
 
-Future<void> emvPreTransaction() async {
+Future<void> emvPreTransaction(bool? reInit) async {
   final emv = EmvModule.instance;
 
   final terminalParameters = await loadTerminalParameters();
   final deviceType = await getDeviceType();
-  if(_alreadyInitialized && deviceType == DeviceType.PINPAD) {
+  if (_alreadyInitialized &&
+      deviceType == DeviceType.PINPAD &&
+      reInit == false) {
   } else {
     await emv.initKernel(terminalParameters);
     _alreadyInitialized = true;
-  print("EMV initialized!");
+    print("EMV initialized!");
 
-  final appList = await loadEmvAppList();
-  for (final app in appList) {
-    try {
-      await emv.addApp(app);
-    } catch (e) {
-      print("Error: '${app.aid.toHexStr()}'");
+    final appList = await loadEmvAppList();
+    for (final app in appList) {
+      try {
+        await emv.addApp(app);
+      } catch (e) {
+        print("Error: '${app.aid.toHexStr()}'");
+      }
     }
-  }
 
-  var capkList = await loadCAPKList();
-  for (final capk in capkList) {
-    try {
-      await emv.addCAPK(capk);
-    } on CAPKChecksumException {
-      print("CAPK Checksum Error: '${capk.rid.toHexStr()} - " +
-          "${capk.index.toHexStr()}'");
-    } catch (e) {
-      print(
-        "Error: '${capk.rid.toHexStr()} - " + "${capk.index.toHexStr()}'",
-      );
+    var capkList = await loadCAPKList();
+    for (final capk in capkList) {
+      try {
+        await emv.addCAPK(capk);
+      } on CAPKChecksumException {
+        print("CAPK Checksum Error: '${capk.rid.toHexStr()} - " +
+            "${capk.index.toHexStr()}'");
+      } catch (e) {
+        print(
+          "Error: '${capk.rid.toHexStr()} - " + "${capk.index.toHexStr()}'",
+        );
+      }
     }
-  }
   }
 }
 

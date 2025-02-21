@@ -333,13 +333,13 @@ class _CardInputViewState extends State<CardInputView> {
     // Y no fue por timeout, mostramos mensaje y regresamos a la pantalla de cobro
     if (eventCounter == 0 && transactionArgs?.responseCode != '88') {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Error en la deteccion"),
-          ),
-        );
+        const SnackBar(
+          content: Text("Error en la deteccion"),
+        ),
+      );
 
-        Navigator.pop(context); // Regresa a la pantalla de cobro manual
-        Navigator.pop(context); // Regresa a la pantalla de resumen de transacción
+      Navigator.pop(context); // Regresa a la pantalla de cobro manual
+      Navigator.pop(context); // Regresa a la pantalla de resumen de transacción
     }
 
     await closeCardReader();
@@ -437,7 +437,7 @@ class _CardInputViewState extends State<CardInputView> {
           ?.toHexStr()
           .split('d')[0];
     } catch (e) {
-      await emvPreTransaction();
+      await emvPreTransaction(true);
       print("sub error: $e");
     }
     transactionArgs?.pan ??= pan;

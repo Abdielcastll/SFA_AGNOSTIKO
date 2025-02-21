@@ -334,7 +334,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
           hexString.substring(hexString.length - 4);
     }
 
-    transactionArqc = maskedHexString ?? TransactionResultConstants.notFound; 
+    transactionArqc = maskedHexString ?? TransactionResultConstants.notFound;
     return transactionArqc!;
   }
 
@@ -571,10 +571,13 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                                 fit: BoxFit.contain,
                               ),
                             ),
-                          Text(
-                            '''**** ${(infoTags?.cardNo?.toHexStr() ?? transactionArgs?.pan)?.substring(12) ?? '-'}''',
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
+                          transactionArgs?.pan == ''
+                              ? Text("N/A")
+                              : Text(
+                                  '''**** ${(infoTags?.cardNo?.toHexStr() ?? transactionArgs?.pan)?.substring(12) ?? '-'}''',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
                         ],
                       )),
                 ],
