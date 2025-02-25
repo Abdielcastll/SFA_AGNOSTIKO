@@ -137,6 +137,10 @@ class _CompletedPayBody extends State<CompletedPayBody> {
   bool dialogOn = false;
 
   onGoBack() {
+    if (!mounted) {
+      return;
+    }
+    
     if (dialogOn) {
       Navigator.pop(context);
     }

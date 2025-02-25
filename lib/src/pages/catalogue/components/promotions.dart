@@ -39,6 +39,8 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
 
   wait() async {
     await Future.delayed(Duration(seconds: 4));
+    if (!mounted) return;
+    
     setState(() {
       loading = false;
     });
