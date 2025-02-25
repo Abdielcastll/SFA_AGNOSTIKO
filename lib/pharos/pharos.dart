@@ -67,8 +67,9 @@ Future<Map<String, dynamic>> pharosGenerateSaleMsg(
   if (transactionArgs.entryMode == EntryMode.Contact ||
       transactionArgs.entryMode == EntryMode.Contactless ||
       transactionArgs.entryMode == EntryMode.Magstripe) {
-    final stan = await getSTANCounterAndIncrement();
-    transactionArgs.stan = stan;
+        // Aquí esta el stan, solo hay que asignarlo antes de llegar aquí
+    // final stan = await getSTANCounterAndIncrement();
+    // transactionArgs.stan = stan;
 
     String track2;
     String ksn;
@@ -93,7 +94,7 @@ Future<Map<String, dynamic>> pharosGenerateSaleMsg(
       tags: tags,
     );
     return PharosCardSaleRequest(
-      stan: stan.toString(),
+      stan: transactionArgs.stan.toString(),
       date: dateStr,
       card: card,
       amount: amount,

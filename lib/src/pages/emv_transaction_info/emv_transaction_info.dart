@@ -1112,7 +1112,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
           ? 'PAGO APROBADO'
           : transactionResult == EmvTransactionResult.CmdError
               ? 'TARJETA RETIRADA'
-              : transactionArgs!.timeout || transactionArgs!.stan == null
+              : transactionArgs!.timeout
                   ? 'TIEMPO DE ESPERA AGOTADO'
                   : 'PAGO FALLIDO';
 
