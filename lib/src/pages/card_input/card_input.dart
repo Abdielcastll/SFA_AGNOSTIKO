@@ -377,6 +377,9 @@ class _CardInputViewState extends State<CardInputView> {
     _pinProcessFlag = false;
     final transactionStream = startEmvTransaction(params);
     transactionArgs?.emvStream = transactionStream;
+    // ? Si ya se está ejecutando una transacción, se debe asignar el STAN
+    transactionArgs?.stan = await getSTANCounterAndIncrement();
+    debugPrint("STAN de la transacción ${transactionArgs?.stan}");
 
     try {
       await for (final event in transactionStream) {
