@@ -408,6 +408,7 @@ class _CardInputViewState extends State<CardInputView> {
         } else if (event is EmvFinishedEvent) {
           print('emv finished evebt');
 
+          // throw Exception("Generic exception just to track the '999' error");
           return _onEmvFinished(event);
         }
       }
