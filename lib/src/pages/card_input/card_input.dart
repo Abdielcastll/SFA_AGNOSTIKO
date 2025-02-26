@@ -285,6 +285,7 @@ class _CardInputViewState extends State<CardInputView> {
       await closeCardReader();
       transactionArgs!.responseCode = "88"; //vamos a usar 88 para timeout
       final arguments = (ModalRoute.of(context)?.settings.arguments! as List);
+      transactionArgs?.stan = await getSTANCounterAndIncrement();
       Navigator.pushReplacementNamed(context, EmvTransactionInfoView.route,
           arguments: [
             transactionArgs,
