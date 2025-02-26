@@ -23,22 +23,26 @@ Future<bool> Function() cancelTransactionDialogFn(
       title: 'Confirmar',
       message: "¿Seguro que desea cancelar?",
       onAccept: () async {
-        // Importante cerrar estos procesos correctamente para no tener problemas
-        await closeCardReader();
-        await cancelEmvTransaction();
-
-        if (cancelPedido && globalRemoteConfig.onlyFullPaymentWithCard!) {
-          await cancelPaymentProcess(currentClient!, nroCorrelativo!);
-        }
         // Navigator.popUntil(context, (route) => route.isFirst == true);
         Navigator.pop(context, true);
-        if (globalRemoteConfig.conversionKiosko! ||
-            globalRemoteConfig.clientesEnabled! == false) {
+        print("pop 1");
+
+        if (globalRemoteConfig.conversionKiosko ??
+            false || globalRemoteConfig.clientesEnabled == false) {
           Navigator.pop(context, true);
           Navigator.pop(context, true);
         } else if (globalRemoteConfig.onlyFullPaymentWithCard!) {
           Navigator.pop(context, true);
-          Navigator.pop(context, true);
+        }
+        // Importante cerrar estos procesos correctamente para no tener problemas
+        await closeCardReader();
+        print("closed readers");
+        await cancelEmvTransaction();
+        print("canceled emv");
+
+        if (cancelPedido && globalRemoteConfig.onlyFullPaymentWithCard!) {
+          await cancelPaymentProcess(currentClient!, nroCorrelativo!);
+          print("cancel payment");
         }
       },
       onCancel: () {
