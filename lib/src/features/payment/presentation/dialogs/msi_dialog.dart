@@ -71,7 +71,20 @@ class _DialogFooter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: FilledButton(
+      child: OutlinedButton(
+        style: OutlinedButton.styleFrom(
+          side: BorderSide(
+            color: Theme.of(context).colorScheme.primary,
+            width: 2,
+          ),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 24,
+            vertical: 12,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
         onPressed: () => Navigator.pop(context),
         child: const Text("Cancelar"),
       ),
@@ -82,6 +95,7 @@ class _DialogFooter extends StatelessWidget {
 class _DialogBody extends StatelessWidget {
   final List<MSI> msiOptions;
   final TransactionArgs transProvider;
+
   const _DialogBody({
     required this.msiOptions,
     required this.transProvider,
@@ -92,21 +106,45 @@ class _DialogBody extends StatelessWidget {
     final double totalAmount =
         (transProvider.amountInCents?.toDouble() ?? 0.00) / 100;
 
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 8,
-        mainAxisSpacing: 8,
+    return Center(
+      child: Container(
+        width: MediaQuery.of(context).size.width *
+            0.6, // Limit width to 60% of screen
+        padding: const EdgeInsets.symmetric(vertical: 16), // Add some padding
+        child: msiOptions.length == 1
+            ? Column(
+                mainAxisSize: MainAxisSize.min, // Only takes required space
+                mainAxisAlignment:
+                    MainAxisAlignment.center, // Center vertically
+                children: [
+                  _MSIOptionButton(
+                    msi: msiOptions[0].msi,
+                    msiAmount: totalAmount / msiOptions[0].msi,
+                    transProvider: transProvider,
+                  ),
+                ],
+              )
+            : GridView.builder(
+                shrinkWrap: true, // Prevents unnecessary scrolling
+                physics:
+                    const NeverScrollableScrollPhysics(), // Disables scrolling
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, // Two items per row
+                  crossAxisSpacing: 16, // Space between columns
+                  mainAxisSpacing: 16, // Space between rows
+                  childAspectRatio: 1, // Ensures square buttons
+                ),
+                itemCount: msiOptions.length,
+                itemBuilder: (context, index) {
+                  final int currentMsi = msiOptions[index].msi;
+                  return _MSIOptionButton(
+                    msi: currentMsi,
+                    msiAmount: totalAmount / currentMsi,
+                    transProvider: transProvider,
+                  );
+                },
+              ),
       ),
-      itemCount: msiOptions.length,
-      itemBuilder: (context, index) {
-        final int currentMsi = msiOptions[index].msi;
-        return _MSIOptionButton(
-          msi: currentMsi,
-          msiAmount: totalAmount / currentMsi,
-          transProvider: transProvider,
-        );
-      },
     );
   }
 }
@@ -125,6 +163,7 @@ class _DialogHeader extends StatelessWidget {
     return Center(
       child: Column(
         children: [
+          SizedBox(height: 25),
           Text(
             MSIConstants.enjoyCardPromo.toUpperCase(),
             textAlign: TextAlign.center,
@@ -132,8 +171,16 @@ class _DialogHeader extends StatelessWidget {
               fontSize: FontSize.font2XL,
             ),
           ),
+          SizedBox(height: 15),
           Text(
             "${brand ?? ''} ${level ?? ''}",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontSize: FontSize.font2XL, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 35),
+          Text(
+            MSIConstants.eligeMeses,
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontSize: FontSize.font2XL, fontWeight: FontWeight.bold),
@@ -148,6 +195,7 @@ class _MSIOptionButton extends StatelessWidget {
   final int msi;
   final double msiAmount;
   final TransactionArgs transProvider;
+
   const _MSIOptionButton({
     required this.msi,
     required this.msiAmount,
@@ -156,22 +204,13 @@ class _MSIOptionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final buttonStyle = ButtonStyle(
-      shape: MaterialStatePropertyAll<OutlinedBorder?>(
-        RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
-        ),
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor:
+            Theme.of(context).colorScheme.primary, // Custom primary color
+        shape: const CircleBorder(), // Makes the button round
+        padding: const EdgeInsets.all(20), // Adjust padding for better spacing
       ),
-      backgroundColor: MaterialStatePropertyAll<Color>(
-        Theme.of(context).colorScheme.primary,
-      ),
-      textStyle: MaterialStatePropertyAll<TextStyle>(
-        TextStyle(fontSize: FontSize.font2XL),
-      ),
-    );
-
-    return FilledButton(
-      style: buttonStyle,
       onPressed: () {
         showConfirmDialog(
           context,
@@ -179,7 +218,6 @@ class _MSIOptionButton extends StatelessWidget {
           message: MSIConstants.msiSelectedMessage(msi, msiAmount),
           onAccept: () {
             transProvider.msi = MSIConstants.msiFormatter.format(msi);
-            // TODO mejorar como se regresa a la pantalla para continuar la transacción
             Navigator.pop(context);
             Navigator.pop(context);
             Navigator.pop(context);
@@ -187,7 +225,26 @@ class _MSIOptionButton extends StatelessWidget {
           onCancel: () => Navigator.pop(context),
         );
       },
-      child: Text(MSIConstants.msiOptionButtonText(msi, msiAmount)),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            '$msi', // Large MSI number
+            style: const TextStyle(
+              fontSize: 24, // Larger font size
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          Text(
+            'meses', // Smaller "meses" text
+            style: const TextStyle(
+              fontSize: 14, // Smaller font size
+              color: Colors.white70, // Slightly faded white
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

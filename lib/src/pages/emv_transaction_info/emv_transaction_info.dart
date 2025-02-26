@@ -1114,7 +1114,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
               ? 'TARJETA RETIRADA'
               : transactionArgs!.timeout
                   ? 'TIEMPO DE ESPERA AGOTADO'
-                  : 'PAGO FALLIDO';
+                  : 'ERROR';
 
       listOfTextLine.add(
         PrinterText(

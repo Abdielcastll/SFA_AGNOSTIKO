@@ -10,7 +10,8 @@ class MSIConstants {
   static const msiTicketLabel = "Meses sin intereses: ";
   static const chooseMsi = "Elige el número de Meses sin Intereses a aplicar";
   static const confirmSelection = "¿Estás seguro?";
-
+  static const eligeMeses =
+      "Eliste el número de Meses sin Intereses a applicar";
   static final msiFormatter = NumberFormat("00");
   static final msiAmountFormatter = NumberFormat("\$#,##0.00", "es_MX");
 
