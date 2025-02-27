@@ -7,16 +7,20 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:agnostiko/agnostiko.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/core/constants/msi_constants.dart';
+import 'package:pwa_sales2go_flutter/dialogs/auto_cancel_dialog.dart';
 import 'package:pwa_sales2go_flutter/dialogs/confirm_dialog.dart';
+import 'package:pwa_sales2go_flutter/dialogs/custom_alert_dialog.dart';
 import 'package:pwa_sales2go_flutter/dialogs/try_again_dialog.dart';
 import 'package:pwa_sales2go_flutter/src/features/payment/data/datasources/payment_host_datasource_pharos.dart';
 import 'package:pwa_sales2go_flutter/src/features/payment/data/repositories/payment_repository_impl.dart';
 import 'package:pwa_sales2go_flutter/src/features/payment/domain/entitites/bin_entitites/bin_response_entity.dart';
 import 'package:pwa_sales2go_flutter/src/features/payment/domain/repositories/payment_repository.dart';
 import 'package:pwa_sales2go_flutter/src/features/payment/presentation/dialogs/msi_dialog.dart';
+import 'package:pwa_sales2go_flutter/src/models/enums/EUIStates.dart';
 import 'package:pwa_sales2go_flutter/src/pages/place_order/add_payment.dart';
 import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
@@ -59,6 +63,13 @@ class _CardInputViewState extends State<CardInputView> {
   /// Flag para evitar doble proceso de detección
   bool _detectionStarted = false;
 
+  //Contador de intentos de lectura de chip
+  int _cardTry = 0;
+  bool _onlyChip = false;
+
+  int errorCardCounter = 0;
+  EUiStates state = EUiStates.INSERT_CARD;
+
   List<CardType> _supportedCardTypes = [];
   List<CardType> _expectedCardTypes = [];
 
@@ -70,6 +81,7 @@ class _CardInputViewState extends State<CardInputView> {
   @override
   void dispose() {
     closeCardReader();
+    cancelEmvTransaction();
     super.dispose();
   }
 
@@ -230,20 +242,34 @@ class _CardInputViewState extends State<CardInputView> {
     if (cardTypes.isEmpty) {
       Navigator.popUntil(context, (route) => route.isFirst == true);
     }
-
-    final cardReaderStream = openCardReader(cardTypes: cardTypes, timeout: 50);
-    print('Open readers stream');
+    Stream<CardDetectedEvent> cardReaderStream;
+    try {
+      await closeCardReader();
+      cardReaderStream = openCardReader(cardTypes: cardTypes, timeout: 40);
+    } catch (e) {
+      await closeCardReader();
+      print('ERRROR OPEN $e');
+      cardReaderStream = openCardReader(cardTypes: cardTypes, timeout: 40);
+    }
 
     setState(() {
+      state = (_onlyChip || !_supportedCardTypes.contains(CardType.RF))
+          ? EUiStates.ONLY_CHIP
+          : _isFallback
+              ? EUiStates.SWEEP_CARD
+              : EUiStates.INSERT_CARD;
       _expectedCardTypes = cardTypes;
+      if (cardTypes.isNotEmpty &&
+          cardTypes.length == 1 &&
+          cardTypes.contains(CardType.Magnetic)) {
+        state = EUiStates.SWEEP_CARD;
+      }
     });
 
-    int eventCounter = 0;
     try {
       print('try card reader');
 
       await for (final event in cardReaderStream) {
-        eventCounter++;
         print('card reader event: ${event.cardType}');
         // todo hacer caso para timeout de ir a emv result en vacio
         if (!mounted) {
@@ -258,24 +284,31 @@ class _CardInputViewState extends State<CardInputView> {
             CipherMode.CBC,
             iv,
           );
+          _onProcessing(EntryMode.Magstripe);
           await _onMagneticCard(encryptedTracksData);
         } else if (event.cardType == CardType.IC) {
+          _onCardInserted();
           await _onICCard();
         } else if (event.cardType == CardType.RF) {
+          _onCardInserted();
           await _onRFCard();
         }
       }
     } on ChipCardException {
       print('Chip exception');
-
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Tarjeta con chip, usar chip"),
-      ));
-      await closeCardReader();
-      // reiniciamos la detección sin banda
-      _startCardDetection(_supportedCardTypes
-          .where((type) => type != CardType.Magnetic)
-          .toList());
+      displayCustomDialog(
+        dismissible: true,
+        context: context,
+        alertType: AlertType.USE_CHIP,
+        icon: Icons.warning_amber,
+        title: 'Alerta',
+        messages: ['Su tarjeta tiene chip.', 'Por favor inserte tarjeta'],
+        actionButton1: 'Aceptar',
+      ).then((value) => _startCardDetection(
+            _supportedCardTypes
+                .where((type) => type != CardType.Magnetic)
+                .toList(),
+          ));
     } on TimeoutException {
       print("timeout");
       if (globalRemoteConfig.onlyFullPaymentWithCard!) {
@@ -293,57 +326,106 @@ class _CardInputViewState extends State<CardInputView> {
             if (arguments.length >= 3) arguments[2] else null,
             if (arguments.length >= 4) arguments[3] else null
           ]);
+    } on PlatformException {
+      print('PlatformException');
+      await closeCardReader();
+      if (errorCardCounter < 2) {
+        errorCardCounter++;
+        displayCustomDialog(
+          dismissible: true,
+          context: context,
+          alertType: AlertType.CARD_READER_ERROR,
+          icon: Icons.warning_amber,
+          title: 'Error en lectura',
+          messages: ['Reintente ingresando la tarjeta por CHIP'],
+          actionButton1: 'Aceptar',
+        ).then((value) {
+          _onlyChip = true;
+          _startCardDetection([CardType.IC, CardType.Magnetic]);
+        });
+      } else {
+        //stopTimer();
+        await displayAutoCancelDialog(context,
+            key: const Key('card_reader_timeout'),
+            title: 'Error en Tarjeta',
+            message: 'Transacción Cancelada');
+
+        // Navigator.popUntil(context, ModalRoute.withName(routes.HOME));
+      }
     } catch (e, stackTrace) {
       print('catch card Detection: $e');
+      if (errorCardCounter < 2 && !e.toString().contains("CardReaderCancel")) {
+        errorCardCounter++;
+        displayCustomDialog(
+          dismissible: true,
+          context: context,
+          alertType: AlertType.CARD_READER_ERROR,
+          icon: Icons.warning_amber,
+          title: 'Error de lectura',
+          messages: ['Reintente ingresando la tarjeta por CHIP'],
+          actionButton1: 'Aceptar',
+        ).then((value) {
+          _onlyChip = true;
+          _startCardDetection([CardType.IC, CardType.Magnetic]);
+        });
+      } else {
+        print("Error: $e");
+        print(stackTrace);
+        if (e.toString().contains("CardReaderCancel")) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Lectura cancelada"),
+            ),
+          );
+          if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+            await cancelPaymentProcess(
+                paymentBody!.client, paymentBody!.invoiceNumber);
+            Navigator.popUntil(context, (route) => route.isFirst == true);
+            return;
+          } else {
+            Navigator.popUntil(context, (route) => route.isFirst == true);
+            return;
+          }
+        }
 
-      print("Error: $e");
-      print(stackTrace);
-      if (e.toString().contains("CardReaderCancel")) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Lectura cancelada"),
-          ),
-        );
         if (globalRemoteConfig.onlyFullPaymentWithCard!) {
           await cancelPaymentProcess(
               paymentBody!.client, paymentBody!.invoiceNumber);
           Navigator.pop(context);
           Navigator.pop(context);
-          return;
+          tryAgainDialog(context);
         } else {
+          print("deteccion1");
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Error en la deteccion"),
+            ),
+          );
           Navigator.popUntil(context, (route) => route.isFirst == true);
-          return;
         }
       }
 
-      if (globalRemoteConfig.onlyFullPaymentWithCard!) {
-        await cancelPaymentProcess(
-            paymentBody!.client, paymentBody!.invoiceNumber);
-        Navigator.pop(context);
-        Navigator.pop(context);
-        tryAgainDialog(context);
-      } else {
+      if (transactionArgs?.responseCode != '88') {
+        print("deteccion2");
+
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text("Error en la deteccion"),
           ),
         );
-        Navigator.popUntil(context, (route) => route.isFirst == true);
+        await closeCardReader();
+        transactionArgs!.responseCode =
+            "999"; //vamos a usar 999 para error total
+        final arguments = (ModalRoute.of(context)?.settings.arguments! as List);
+        transactionArgs?.stan = await getSTANCounterAndIncrement();
+        Navigator.pushReplacementNamed(context, EmvTransactionInfoView.route,
+            arguments: [
+              transactionArgs,
+              if (arguments.length >= 2) arguments[1] else null,
+              if (arguments.length >= 3) arguments[2] else null,
+              if (arguments.length >= 4) arguments[3] else null
+            ]);
       }
-    }
-
-    // TODO Se debe mejorar esto
-    // Si hubo un error en la detección de tarjeta
-    // Y no fue por timeout, mostramos mensaje y regresamos a la pantalla de cobro
-    if (eventCounter == 0 && transactionArgs?.responseCode != '88') {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Error en la deteccion"),
-        ),
-      );
-
-      Navigator.pop(context); // Regresa a la pantalla de cobro manual
-      Navigator.pop(context); // Regresa a la pantalla de resumen de transacción
     }
 
     await closeCardReader();
@@ -366,6 +448,8 @@ class _CardInputViewState extends State<CardInputView> {
   }
 
   Future<void> _runTransaction() async {
+    print('==> read_card_page::_runTransaction');
+
     final amount = transactionArgs?.amountInCents ?? 0;
     final sequenceCounter = await getSequenceCounterAndIncrement();
     //final sequenceCounter = 1;
@@ -384,6 +468,8 @@ class _CardInputViewState extends State<CardInputView> {
 
     try {
       await for (final event in transactionStream) {
+        _onProcessing(transactionArgs!.entryMode!);
+        print('* _runTransaction:::_runTransaction.event [$event]');
         if (!mounted) return; // si la pantalla no está activa cancelamos
 
         if (event is EmvCandidateListEvent) {
@@ -416,17 +502,22 @@ class _CardInputViewState extends State<CardInputView> {
     } on SocketException catch (e) {
       return _processEMVException(e, "Error de conexion");
     } catch (e) {
+      print('_runTransaction_otherError');
+      print(e);
       return _processEMVException(e, "Error interno");
     }
     print('se cancela en pantalla card input');
 
     if (!mounted) return;
     // si llegamos aquí es porque se canceló la transacción en esta pantalla
-    if (globalRemoteConfig.onlyFullPaymentWithCard!) {
-      await cancelPaymentProcess(
-          paymentBody!.client, paymentBody!.invoiceNumber);
+
+    if (state != EUiStates.NOT_REMOVE_CARD) {
+      if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+        await cancelPaymentProcess(
+            paymentBody!.client, paymentBody!.invoiceNumber);
+      }
+      Navigator.popUntil(context, (route) => route.isFirst == true);
     }
-    Navigator.popUntil(context, (route) => route.isFirst == true);
   }
 
   void _processEMVException(dynamic e, String message) async {
@@ -537,6 +628,20 @@ class _CardInputViewState extends State<CardInputView> {
       return '484';
     }
     return '484';
+  }
+
+  _onCardInserted() {
+    print('_onCardInserted Entro');
+    setState(() {
+      state = EUiStates.NOT_REMOVE_CARD;
+    });
+  }
+
+  _onProcessing(EntryMode entryMode) {
+    print('_onProcessing Entro');
+    setState(() {
+      state = EUiStates.PROCESSING;
+    });
   }
 
   Future<void> _onOnlineRequested(EmvOnlineRequestedEvent event) async {
@@ -650,6 +755,7 @@ class _CardInputViewState extends State<CardInputView> {
   }
 
   void _onEmvFinished(EmvFinishedEvent event) async {
+    print('==> read_card_page::_onEmvFinished Entro');
     print(event.transactionInfo.result);
 
     final transactionArgs = this.transactionArgs;
@@ -661,87 +767,112 @@ class _CardInputViewState extends State<CardInputView> {
       changeRFCardDialogFn!(false); // Cambiamos el semáforo a rojo
       await waitUntilRFCardRemoved();
     }
-    final deviceType = await getDeviceType();
-    if (deviceType == DeviceType.PINPAD) {
-      showPinpadHome();
-    }
-    MPOSController.instance.showHomeScreen();
+
     Navigator.pop(context); // quitamos el popup de progreso
     if (event.transactionInfo.result == EmvTransactionResult.Fallback) {
-      if (globalRemoteConfig.onlyFullPaymentWithCard!) {
-        await cancelPaymentProcess(
-          paymentBody!.client,
-          paymentBody!.invoiceNumber,
-        );
-      }
       transactionArgs?.isFallback = true;
       setState(() {
-        this._isFallback = true;
+        _cardTry++;
+        _isFallback = _cardTry < 3 ? false : true;
       });
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Error de lectura de chip"),
-      ));
-    } else if (event.transactionInfo.result ==
-        EmvTransactionResult.PinTimeout) {
-      if (globalRemoteConfig.onlyFullPaymentWithCard!) {
-        await cancelPaymentProcess(
-          paymentBody!.client,
-          paymentBody!.invoiceNumber,
-        );
-      }
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Tiempo de ingreso de pin agotado"),
-      ));
-      Navigator.popUntil(context, (route) => route.isFirst == true);
-    } else if (event.transactionInfo.result == EmvTransactionResult.Denied) {
-      if (globalRemoteConfig.onlyFullPaymentWithCard!) {
-        await cancelPaymentProcess(
-          paymentBody!.client,
-          paymentBody!.invoiceNumber,
-        );
-      }
-    } else if (event.transactionInfo.result == EmvTransactionResult.Fail) {
-      if (globalRemoteConfig.onlyFullPaymentWithCard!) {
-        await cancelPaymentProcess(
-          paymentBody!.client,
-          paymentBody!.invoiceNumber,
-        );
-      }
-    } else if (event.transactionInfo.result == EmvTransactionResult.CmdError) {
-      if (globalRemoteConfig.onlyFullPaymentWithCard!) {
-        await cancelPaymentProcess(
-          paymentBody!.client,
-          paymentBody!.invoiceNumber,
-        );
-      }
-    }
-
-    if (event.transactionInfo.onlineRequested &&
-        !event.transactionInfo.isContactless) {
-      // si la transacción terminó tras irse online, ya el 1st GENERATE AC
-      // debería haberse guardado y necesitamos guardar el 2nd GENERATE AC
-      // si no es Contactless
-      transactionArgs?.secondGenerateTags = await emvGetGenerateCommandTags();
+      displayCustomDialog(
+        dismissible: false,
+        context: context,
+        alertType: AlertType.FALLBACK_ERROR,
+        icon: Icons.warning_amber,
+        title: 'Falla lectura chip',
+        messages: [
+          'Retire su Tarjeta',
+          _cardTry < 3
+              ? 'Reintente Insertando su Tarjeta'
+              : 'Deslice su Tarjeta'
+        ],
+      ).then((value) {
+        switch (_cardTry) {
+          case 1:
+            _startCardDetection(_supportedCardTypes
+                .where((item) =>
+                    (item == CardType.IC || item == CardType.Magnetic))
+                .toList());
+            break;
+          case 3:
+            _startCardDetection(_supportedCardTypes
+                .where((type) => type == CardType.Magnetic)
+                .toList());
+            break;
+          default:
+            _startCardDetection(
+              _supportedCardTypes.toList(),
+            );
+        }
+      });
     } else {
-      // si la transacción terminó sin irse online, solo hubo 1st GENERATE AC
-      transactionArgs?.infoTags = await loadInfoTags();
-      transactionArgs?.firstGenerateTags = await emvGetGenerateCommandTags();
-    }
-    transactionArgs?.pan ??=
-        (await EmvModule.instance.getTagValue(0x57))?.toHexStr().split('d')[0];
+      if (event.transactionInfo.result == EmvTransactionResult.PinTimeout) {
+        if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+          await cancelPaymentProcess(
+            paymentBody!.client,
+            paymentBody!.invoiceNumber,
+          );
+        }
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Tiempo de ingreso de pin agotado"),
+        ));
+        Navigator.popUntil(context, (route) => route.isFirst == true);
+      } else if (event.transactionInfo.result == EmvTransactionResult.Denied) {
+        if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+          await cancelPaymentProcess(
+            paymentBody!.client,
+            paymentBody!.invoiceNumber,
+          );
+        }
+      } else if (event.transactionInfo.result == EmvTransactionResult.Fail) {
+        if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+          await cancelPaymentProcess(
+            paymentBody!.client,
+            paymentBody!.invoiceNumber,
+          );
+        }
+      } else if (event.transactionInfo.result ==
+          EmvTransactionResult.CmdError) {
+        if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+          await cancelPaymentProcess(
+            paymentBody!.client,
+            paymentBody!.invoiceNumber,
+          );
+        }
+      }
 
-    final arguments = (ModalRoute.of(context)?.settings.arguments! as List);
-    if (deviceType == DeviceType.PINPAD) {
-      showPinpadHome();
+      if (event.transactionInfo.onlineRequested &&
+          !event.transactionInfo.isContactless) {
+        // si la transacción terminó tras irse online, ya el 1st GENERATE AC
+        // debería haberse guardado y necesitamos guardar el 2nd GENERATE AC
+        // si no es Contactless
+        transactionArgs?.secondGenerateTags = await emvGetGenerateCommandTags();
+      } else {
+        // si la transacción terminó sin irse online, solo hubo 1st GENERATE AC
+        transactionArgs?.infoTags = await loadInfoTags();
+        transactionArgs?.firstGenerateTags = await emvGetGenerateCommandTags();
+      }
+      transactionArgs?.pan ??= (await EmvModule.instance.getTagValue(0x57))
+          ?.toHexStr()
+          .split('d')[0];
+
+      final arguments = (ModalRoute.of(context)?.settings.arguments! as List);
+      final deviceType = await getDeviceType();
+      if (deviceType == DeviceType.PINPAD) {
+        showPinpadHome();
+      } else {
+        MPOSController.instance.showHomeScreen();
+      }
+      await closeCardReader();
+      Navigator.pushReplacementNamed(context, EmvTransactionInfoView.route,
+          arguments: [
+            transactionArgs,
+            if (arguments.length >= 2) arguments[1] else null,
+            if (arguments.length >= 3) arguments[2] else null,
+            if (arguments.length >= 4) arguments[3] else null
+          ]);
     }
-    await closeCardReader();
-    Navigator.pushReplacementNamed(context, EmvTransactionInfoView.route,
-        arguments: [
-          transactionArgs,
-          if (arguments.length >= 2) arguments[1] else null,
-          if (arguments.length >= 3) arguments[2] else null,
-          if (arguments.length >= 4) arguments[3] else null
-        ]);
   }
 
   Future<void> _onMagneticCard(DUKPTEncryptedTracksData? tracksData) async {
@@ -787,11 +918,32 @@ class _CardInputViewState extends State<CardInputView> {
     print("PHAROS MSG: ${jsonEncode(pharosMsg)}");
     final response = await processSalePharos(pharosMsg);
     String responseCode = response.resultCode;
+    print('responseCode maag');
+    print(responseCode);
+    transactionArgs.referenceNumber = response.referenceNumber;
+    transactionArgs.authCode = response.authCode;
+    transactionArgs.responseCode = response.resultCode;
 
+    await emvCompleteOnline(EmvOnlineResponse(
+      authorisationResponseCode: responseCode,
+    ));
     Navigator.pop(context);
-    showInfoDialog(context, "Result: $responseCode", onClose: () {
-      Navigator.pop(context);
-    });
+
+    final arguments = (ModalRoute.of(context)?.settings.arguments! as List);
+    final deviceType = await getDeviceType();
+    if (deviceType == DeviceType.PINPAD) {
+      showPinpadHome();
+    } else {
+      MPOSController.instance.showHomeScreen();
+    }
+    await closeCardReader();
+    Navigator.pushReplacementNamed(context, EmvTransactionInfoView.route,
+        arguments: [
+          transactionArgs,
+          if (arguments.length >= 2) arguments[1] else null,
+          if (arguments.length >= 3) arguments[2] else null,
+          if (arguments.length >= 4) arguments[3] else null
+        ]);
   }
 }
 

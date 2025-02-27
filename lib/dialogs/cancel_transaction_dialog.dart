@@ -30,8 +30,9 @@ Future<bool> Function() cancelTransactionDialogFn(
         if (globalRemoteConfig.conversionKiosko ??
             false || globalRemoteConfig.clientesEnabled == false) {
           Navigator.pop(context, true);
-          Navigator.pop(context, true);
         } else if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+          print("pop 2 //maybe en pinpad no funciona igual");
+          Navigator.pop(context, true);
           Navigator.pop(context, true);
         }
         // Importante cerrar estos procesos correctamente para no tener problemas

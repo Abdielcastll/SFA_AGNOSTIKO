@@ -1,0 +1,8 @@
+enum EUiStates {
+  INSERT_CARD,
+  ONLY_CHIP,
+  PROCESSING,
+  ERROR,
+  SWEEP_CARD,
+  NOT_REMOVE_CARD,
+}

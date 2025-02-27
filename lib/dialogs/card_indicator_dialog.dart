@@ -37,7 +37,7 @@ void Function(bool) showCardIndicatorDialog(
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.circle, color: waiting ? Colors.green : Colors.red),
+                Icon(Icons.circle, color: waiting ? Colors.red : Colors.green),
                 SizedBox(width: 20),
                 Text(
                     "${waiting ? pleaseWaitMessage : removeCardMessage}\nContactless...",
