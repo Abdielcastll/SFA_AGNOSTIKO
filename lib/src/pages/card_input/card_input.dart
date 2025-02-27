@@ -11,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/core/constants/msi_constants.dart';
+import 'package:pwa_sales2go_flutter/core/constants/transaction_result_constants.dart';
 import 'package:pwa_sales2go_flutter/dialogs/auto_cancel_dialog.dart';
 import 'package:pwa_sales2go_flutter/dialogs/confirm_dialog.dart';
 import 'package:pwa_sales2go_flutter/dialogs/custom_alert_dialog.dart';
@@ -923,7 +924,15 @@ class _CardInputViewState extends State<CardInputView> {
     transactionArgs.referenceNumber = response.referenceNumber;
     transactionArgs.authCode = response.authCode;
     transactionArgs.responseCode = response.resultCode;
-
+    transactionArgs.transactionInfo = EmvTransactionInfo(
+      result: responseCode == '00'
+          ? EmvTransactionResult.Approved
+          : EmvTransactionResult.Denied,
+      pinRequested: false,
+      onlineRequested: true,
+      scriptResults: Uint8List(0),
+      isContactless: false,
+    );
     await emvCompleteOnline(EmvOnlineResponse(
       authorisationResponseCode: responseCode,
     ));

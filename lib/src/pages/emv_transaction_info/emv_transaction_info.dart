@@ -660,7 +660,14 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                               ),
                             ),
                             Text(
-                              _amountString,
+                              transactionArgs!.entryMode == EntryMode.Magstripe
+                                  ? NumberFormat.currency(
+                                          locale: 'en_US',
+                                          symbol: '\$',
+                                          decimalDigits: 2)
+                                      .format(
+                                          transactionArgs!.amountInCents! / 100)
+                                  : _amountString,
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
@@ -709,54 +716,56 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
                     ),
                     onTap: () {},
                   ),
-                  ListTile(
-                    enableFeedback: true,
-                    title: const Text(TransactionResultConstants.arqcLabel),
-                    subtitle: transactionArgs!.responseCode == '999'
-                        ? const Text("N/A")
-                        : FutureBuilder<String>(
-                            future: getARQC(), // The async function
-                            builder: (BuildContext context,
-                                AsyncSnapshot<String> snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Text(
-                                    'Loading...'); // Placeholder while waiting for data
-                              } else if (snapshot.hasError) {
-                                return Text(
-                                    'Error: ${snapshot.error}'); // Error message
-                              } else {
-                                return Text(snapshot.data
-                                    as String); // Display the result
-                              }
-                            },
-                          ),
-                    onTap: () {},
-                  ),
-                  ListTile(
-                    enableFeedback: true,
-                    title: const Text(TransactionResultConstants.aidLabel),
-                    subtitle: transactionArgs!.responseCode == '999'
-                        ? const Text("N/A")
-                        : FutureBuilder<String>(
-                            future: getAid(), // The async function
-                            builder: (BuildContext context,
-                                AsyncSnapshot<String> snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Text(
-                                    'Loading...'); // Placeholder while waiting for data
-                              } else if (snapshot.hasError) {
-                                return Text(
-                                    'Error: ${snapshot.error}'); // Error message
-                              } else {
-                                return Text(snapshot.data
-                                    as String); // Display the result
-                              }
-                            },
-                          ),
-                    onTap: () {},
-                  ),
+                  if (transactionArgs!.entryMode != EntryMode.Magstripe)
+                    ListTile(
+                      enableFeedback: true,
+                      title: const Text(TransactionResultConstants.arqcLabel),
+                      subtitle: transactionArgs!.responseCode == '999'
+                          ? const Text("N/A")
+                          : FutureBuilder<String>(
+                              future: getARQC(), // The async function
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<String> snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Text(
+                                      'Loading...'); // Placeholder while waiting for data
+                                } else if (snapshot.hasError) {
+                                  return Text(
+                                      'Error: ${snapshot.error}'); // Error message
+                                } else {
+                                  return Text(snapshot.data
+                                      as String); // Display the result
+                                }
+                              },
+                            ),
+                      onTap: () {},
+                    ),
+                  if (transactionArgs!.entryMode != EntryMode.Magstripe)
+                    ListTile(
+                      enableFeedback: true,
+                      title: const Text(TransactionResultConstants.aidLabel),
+                      subtitle: transactionArgs!.responseCode == '999'
+                          ? const Text("N/A")
+                          : FutureBuilder<String>(
+                              future: getAid(), // The async function
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<String> snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Text(
+                                      'Loading...'); // Placeholder while waiting for data
+                                } else if (snapshot.hasError) {
+                                  return Text(
+                                      'Error: ${snapshot.error}'); // Error message
+                                } else {
+                                  return Text(snapshot.data
+                                      as String); // Display the result
+                                }
+                              },
+                            ),
+                      onTap: () {},
+                    ),
                   ListTile(
                     enableFeedback: true,
                     title: const Text(
