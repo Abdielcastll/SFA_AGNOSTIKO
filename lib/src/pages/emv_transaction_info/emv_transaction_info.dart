@@ -510,271 +510,343 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
           title: Text(AppLocalizations.of(context)!.emvTransactionInfo),
           automaticallyImplyLeading: false,
         ),
-        body: ListView(
-          children: [
-            const Text(''),
-            Text(
-              transactionArgs!.responseCode == '88'
-                  ? "Tiempo de espera excedido"
-                  : "${AppLocalizations.of(context)!.transaction} $transactionResultStr - $transactionOnlineStr",
-              style: TextStyle(
-                color: this.transactionResult == EmvTransactionResult.Approved
-                    ? Colors.green
-                    : Colors.red,
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            if (errorResultStr != '')
-              Text(
-                errorResultStr,
-                style: TextStyle(
-                  color: this.transactionResult == EmvTransactionResult.Approved
-                      ? Colors.green
-                      : Colors.red,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            const Divider(
-              color: Colors.grey,
-            ),
-            if (!transactionArgs!.isFallback && transactionArgs!.pan != null)
-              Row(
+        body: transactionArgs!.responseCode == '88'
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  if (globalRemoteConfig.onlyFullPaymentWithCard! == false)
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      height: 50,
-                      width: 120,
-                      child: SvgPicture.asset(
-                        getCardAsset(infoTags?.cardNo?.toHexStr(),
-                            transactionArgs?.transactionInfo?.kernelType),
-                        fit: BoxFit.contain,
+                  Text(
+                    "Tiempo de espera excedido",
+                    style: TextStyle(
+                      color: this.transactionResult ==
+                              EmvTransactionResult.Approved
+                          ? Colors.green
+                          : Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 26,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(
+                    height: 40,
+                  ),
+                  if (globalRemoteConfig.conversionKiosko == false)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 4.0, horizontal: 16.0),
+                      child: OutlinedButton(
+                        onPressed: () {
+                          onAccept();
+                        },
+                        style: TextButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          side: const BorderSide(
+                            color: Colors.black12,
+                          ),
+                          foregroundColor:
+                              themeProvider.myTheme.colorScheme.primary,
+                          backgroundColor: Colors.blue.shade800,
+                        ),
+                        child: Text(
+                          'aceptar'.toUpperCase(),
+                          style: const TextStyle(
+                            fontFamily: 'Poppins-Regular',
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
-                  Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          if (transactionArgs?.transactionInfo?.isContactless ==
-                              true)
-                            Container(
-                              margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                              height: 50,
-                              width: 120,
-                              child: Image.asset(
-                                'assets/images/contactless.jpeg',
-                                fit: BoxFit.contain,
+                ],
+              )
+            : ListView(
+                children: [
+                  const Text(''),
+                  Text(
+                    transactionArgs!.responseCode == '999'
+                        ? "Error de lectura"
+                        : "${AppLocalizations.of(context)!.transaction} $transactionResultStr - $transactionOnlineStr",
+                    style: TextStyle(
+                      color: this.transactionResult ==
+                              EmvTransactionResult.Approved
+                          ? Colors.green
+                          : Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  if (errorResultStr != '')
+                    Text(
+                      errorResultStr,
+                      style: TextStyle(
+                        color: this.transactionResult ==
+                                EmvTransactionResult.Approved
+                            ? Colors.green
+                            : Colors.red,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  const Divider(
+                    color: Colors.grey,
+                  ),
+                  if (!transactionArgs!.isFallback &&
+                      transactionArgs!.pan != null)
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        if (globalRemoteConfig.onlyFullPaymentWithCard! ==
+                            false)
+                          Container(
+                            margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            height: 50,
+                            width: 120,
+                            child: SvgPicture.asset(
+                              getCardAsset(infoTags?.cardNo?.toHexStr(),
+                                  transactionArgs?.transactionInfo?.kernelType),
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                if (transactionArgs
+                                        ?.transactionInfo?.isContactless ==
+                                    true)
+                                  Container(
+                                    margin:
+                                        const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                    height: 50,
+                                    width: 120,
+                                    child: Image.asset(
+                                      'assets/images/contactless.jpeg',
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                transactionArgs?.pan == ''
+                                    ? Text("N/A")
+                                    : Text(
+                                        '''**** ${(infoTags?.cardNo?.toHexStr() ?? transactionArgs?.pan)?.substring(12) ?? '-'}''',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                              ],
+                            )),
+                      ],
+                    ),
+                  if (!transactionArgs!.isFallback)
+                    const Divider(
+                      color: Colors.grey,
+                    ),
+                  Container(
+                    padding: EdgeInsets.all(20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Column(
+                          children: [
+                            const Text(
+                              TransactionResultConstants.amountLabel,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
                               ),
                             ),
-                          transactionArgs?.pan == ''
-                              ? Text("N/A")
-                              : Text(
-                                  '''**** ${(infoTags?.cardNo?.toHexStr() ?? transactionArgs?.pan)?.substring(12) ?? '-'}''',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
-                                ),
-                        ],
-                      )),
-                ],
-              ),
-            if (!transactionArgs!.isFallback)
-              const Divider(
-                color: Colors.grey,
-              ),
-            Container(
-              padding: EdgeInsets.all(20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Column(
-                    children: [
-                      const Text(
-                        TransactionResultConstants.amountLabel,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                            Text(
+                              transactionArgs!.entryMode == EntryMode.Magstripe
+                                  ? NumberFormat.currency(
+                                          locale: 'en_US',
+                                          symbol: '\$',
+                                          decimalDigits: 2)
+                                      .format(
+                                          transactionArgs!.amountInCents! / 100)
+                                  : _amountString,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24,
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  if (transactionArgs!.msi != null)
+                    ListTile(
+                      enableFeedback: true,
+                      title: const Text(TransactionResultConstants.msiLabel),
+                      subtitle: Text(
+                        _msiString,
+                      ),
+                      onTap: () {},
+                    ),
+                  ListTile(
+                    enableFeedback: true,
+                    title: const Text(TransactionResultConstants.stanLabel),
+                    subtitle: Text(
+                      transactionArgs!.stan.toString(),
+                    ),
+                    onTap: () {},
+                  ),
+                  ListTile(
+                    enableFeedback: true,
+                    title:
+                        const Text(TransactionResultConstants.referenceLabel),
+                    subtitle: Text(
+                      transactionArgs!.referenceNumber ??
+                          TransactionResultConstants.notApply,
+                    ),
+                    onTap: () {},
+                  ),
+                  ListTile(
+                    enableFeedback: true,
+                    title: const Text(
+                        TransactionResultConstants.authorizationLabel),
+                    subtitle: Text(
+                      transactionArgs!.authCode ??
+                          TransactionResultConstants.notApply,
+                    ),
+                    onTap: () {},
+                  ),
+                  if (transactionArgs!.entryMode != EntryMode.Magstripe)
+                    ListTile(
+                      enableFeedback: true,
+                      title: const Text(TransactionResultConstants.arqcLabel),
+                      subtitle: transactionArgs!.responseCode == '999'
+                          ? const Text("N/A")
+                          : FutureBuilder<String>(
+                              future: getARQC(), // The async function
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<String> snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Text(
+                                      'Loading...'); // Placeholder while waiting for data
+                                } else if (snapshot.hasError) {
+                                  return Text(
+                                      'Error: ${snapshot.error}'); // Error message
+                                } else {
+                                  return Text(snapshot.data
+                                      as String); // Display the result
+                                }
+                              },
+                            ),
+                      onTap: () {},
+                    ),
+                  if (transactionArgs!.entryMode != EntryMode.Magstripe)
+                    ListTile(
+                      enableFeedback: true,
+                      title: const Text(TransactionResultConstants.aidLabel),
+                      subtitle: transactionArgs!.responseCode == '999'
+                          ? const Text("N/A")
+                          : FutureBuilder<String>(
+                              future: getAid(), // The async function
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<String> snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Text(
+                                      'Loading...'); // Placeholder while waiting for data
+                                } else if (snapshot.hasError) {
+                                  return Text(
+                                      'Error: ${snapshot.error}'); // Error message
+                                } else {
+                                  return Text(snapshot.data
+                                      as String); // Display the result
+                                }
+                              },
+                            ),
+                      onTap: () {},
+                    ),
+                  ListTile(
+                    enableFeedback: true,
+                    title: const Text(
+                        TransactionResultConstants.responseCodeLabel),
+                    subtitle: Text(transactionArgs!.responseCode ?? '09'),
+                    onTap: () {},
+                  ),
+                  if (!transactionArgs!.isFallback)
+                    if (globalRemoteConfig.conversionKiosko == false &&
+                        (transactionArgs!.responseCode != "88"))
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 4.0,
+                          horizontal: 16.0,
+                        ),
+                        child: OutlinedButton(
+                          onPressed: () async {
+                            if (ticketPrinted) {
+                              showModalTicketPrinted();
+                            } else {
+                              handlerPress();
+                              setState(() {
+                                ticketPrinted = true;
+                              });
+                            }
+                          },
+                          style: TextButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            side: const BorderSide(
+                              color: Colors.black12,
+                            ),
+                            foregroundColor:
+                                themeProvider.myTheme.colorScheme.primary,
+                            backgroundColor: Colors.blue.shade800,
+                          ),
+                          child: Text(
+                            TransactionResultConstants.printTicketLabel
+                                .toUpperCase(),
+                            style: const TextStyle(
+                              fontFamily: 'Poppins-Regular',
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ),
-                      Text(
-                        _amountString,
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24,
+                  if (globalRemoteConfig.conversionKiosko == false)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 4.0, horizontal: 16.0),
+                      child: OutlinedButton(
+                        onPressed: () {
+                          onAccept();
+                        },
+                        style: TextButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          side: const BorderSide(
+                            color: Colors.black12,
+                          ),
+                          foregroundColor:
+                              themeProvider.myTheme.colorScheme.primary,
+                          backgroundColor: Colors.blue.shade800,
                         ),
-                      )
-                    ],
-                  )
+                        child: Text(
+                          'aceptar'.toUpperCase(),
+                          style: const TextStyle(
+                            fontFamily: 'Poppins-Regular',
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    )
                 ],
               ),
-            ),
-            if (transactionArgs!.msi != null)
-              ListTile(
-                enableFeedback: true,
-                title: const Text(TransactionResultConstants.msiLabel),
-                subtitle: Text(
-                  _msiString,
-                ),
-                onTap: () {},
-              ),
-            ListTile(
-              enableFeedback: true,
-              title: const Text(TransactionResultConstants.stanLabel),
-              subtitle: Text(
-                transactionArgs!.stan.toString(),
-              ),
-              onTap: () {},
-            ),
-            ListTile(
-              enableFeedback: true,
-              title: const Text(TransactionResultConstants.referenceLabel),
-              subtitle: Text(
-                transactionArgs!.referenceNumber ??
-                    TransactionResultConstants.notApply,
-              ),
-              onTap: () {},
-            ),
-            ListTile(
-              enableFeedback: true,
-              title: const Text(TransactionResultConstants.authorizationLabel),
-              subtitle: Text(
-                transactionArgs!.authCode ??
-                    TransactionResultConstants.notApply,
-              ),
-              onTap: () {},
-            ),
-            ListTile(
-              enableFeedback: true,
-              title: const Text(TransactionResultConstants.arqcLabel),
-              subtitle: transactionArgs!.responseCode == '999'
-                  ? const Text("N/A")
-                  : FutureBuilder<String>(
-                      future: getARQC(), // The async function
-                      builder: (BuildContext context,
-                          AsyncSnapshot<String> snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Text(
-                              'Loading...'); // Placeholder while waiting for data
-                        } else if (snapshot.hasError) {
-                          return Text(
-                              'Error: ${snapshot.error}'); // Error message
-                        } else {
-                          return Text(
-                              snapshot.data as String); // Display the result
-                        }
-                      },
-                    ),
-              onTap: () {},
-            ),
-            ListTile(
-              enableFeedback: true,
-              title: const Text(TransactionResultConstants.aidLabel),
-              subtitle: transactionArgs!.responseCode == '999'
-                  ? const Text("N/A")
-                  : FutureBuilder<String>(
-                      future: getAid(), // The async function
-                      builder: (BuildContext context,
-                          AsyncSnapshot<String> snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Text(
-                              'Loading...'); // Placeholder while waiting for data
-                        } else if (snapshot.hasError) {
-                          return Text(
-                              'Error: ${snapshot.error}'); // Error message
-                        } else {
-                          return Text(
-                              snapshot.data as String); // Display the result
-                        }
-                      },
-                    ),
-              onTap: () {},
-            ),
-            ListTile(
-              enableFeedback: true,
-              title: const Text(TransactionResultConstants.responseCodeLabel),
-              subtitle: Text(transactionArgs!.responseCode ?? '09'),
-              onTap: () {},
-            ),
-            if (!transactionArgs!.isFallback)
-              if (globalRemoteConfig.conversionKiosko == false &&
-                  (transactionArgs!.responseCode != "88"))
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 4.0,
-                    horizontal: 16.0,
-                  ),
-                  child: OutlinedButton(
-                    onPressed: () async {
-                      if (ticketPrinted) {
-                        showModalTicketPrinted();
-                      } else {
-                        handlerPress();
-                        setState(() {
-                          ticketPrinted = true;
-                        });
-                      }
-                    },
-                    style: TextButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      side: const BorderSide(
-                        color: Colors.black12,
-                      ),
-                      foregroundColor:
-                          themeProvider.myTheme.colorScheme.primary,
-                      backgroundColor: Colors.blue.shade800,
-                    ),
-                    child: Text(
-                      TransactionResultConstants.printTicketLabel.toUpperCase(),
-                      style: const TextStyle(
-                        fontFamily: 'Poppins-Regular',
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-            if (globalRemoteConfig.conversionKiosko == false)
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
-                child: OutlinedButton(
-                  onPressed: () {
-                    onAccept();
-                  },
-                  style: TextButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    side: const BorderSide(
-                      color: Colors.black12,
-                    ),
-                    foregroundColor: themeProvider.myTheme.colorScheme.primary,
-                    backgroundColor: Colors.blue.shade800,
-                  ),
-                  child: Text(
-                    'aceptar'.toUpperCase(),
-                    style: const TextStyle(
-                      fontFamily: 'Poppins-Regular',
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              )
-          ],
-        ),
       ),
     );
   }
@@ -885,6 +957,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       if (globalRemoteConfig.onlyFullPaymentWithCard!) {
         Navigator.pop(context);
         Navigator.pop(context);
+        if (transactionArgs!.responseCode == '999') {
+          Navigator.pop(context);
+        }
         if (transactionResult == EmvTransactionResult.Fail ||
             transactionResult == EmvTransactionResult.Denied ||
             transactionResult == null) {
@@ -1111,10 +1186,10 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
       final ticketMessage = transactionResult == EmvTransactionResult.Approved
           ? 'PAGO APROBADO'
           : transactionResult == EmvTransactionResult.CmdError
-              ? 'TARJETA RETIRADA'
+              ? 'TARJETA DECLINADA'
               : transactionArgs!.timeout
                   ? 'TIEMPO DE ESPERA AGOTADO'
-                  : 'PAGO FALLIDO';
+                  : 'ERROR DE LECTURA';
 
       listOfTextLine.add(
         PrinterText(
