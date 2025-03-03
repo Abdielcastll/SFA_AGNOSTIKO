@@ -355,7 +355,22 @@ class _CardInputViewState extends State<CardInputView> {
       }
     } catch (e, stackTrace) {
       print('catch card Detection: $e');
-      if (errorCardCounter < 2 && !e.toString().contains("CardReaderCancel")) {
+      if (e.toString().contains("CardReaderCancel")) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Lectura cancelada"),
+          ),
+        );
+        if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+          await cancelPaymentProcess(
+              paymentBody!.client, paymentBody!.invoiceNumber);
+          Navigator.popUntil(context, (route) => route.isFirst == true);
+          return;
+        } else {
+          Navigator.popUntil(context, (route) => route.isFirst == true);
+          return;
+        }
+      } else if (errorCardCounter < 2) {
         errorCardCounter++;
         displayCustomDialog(
           dismissible: true,
@@ -372,22 +387,6 @@ class _CardInputViewState extends State<CardInputView> {
       } else {
         print("Error: $e");
         print(stackTrace);
-        if (e.toString().contains("CardReaderCancel")) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text("Lectura cancelada"),
-            ),
-          );
-          if (globalRemoteConfig.onlyFullPaymentWithCard!) {
-            await cancelPaymentProcess(
-                paymentBody!.client, paymentBody!.invoiceNumber);
-            Navigator.popUntil(context, (route) => route.isFirst == true);
-            return;
-          } else {
-            Navigator.popUntil(context, (route) => route.isFirst == true);
-            return;
-          }
-        }
 
         if (globalRemoteConfig.onlyFullPaymentWithCard!) {
           await cancelPaymentProcess(
