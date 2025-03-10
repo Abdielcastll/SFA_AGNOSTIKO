@@ -121,6 +121,7 @@ class _DialogBody extends StatelessWidget {
                     msi: msiOptions[0].msi,
                     msiAmount: totalAmount / msiOptions[0].msi,
                     transProvider: transProvider,
+                    scale: 1.25,
                   ),
                 ],
               )
@@ -187,18 +188,20 @@ class _MSIOptionButton extends StatelessWidget {
   final int msi;
   final double msiAmount;
   final TransactionArgs transProvider;
+  final double scale;
 
   const _MSIOptionButton({
     required this.msi,
     required this.msiAmount,
     required this.transProvider,
+    this.scale = 1.0, // Default scale is 1.0
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 100, // Fixed width
-      height: 100, // Fixed height
+      width: 100 * scale, // Scale width
+      height: 100 * scale, // Scale height
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: Theme.of(context).colorScheme.primary,
@@ -225,16 +228,16 @@ class _MSIOptionButton extends StatelessWidget {
           children: [
             Text(
               '$msi',
-              style: const TextStyle(
-                fontSize: 20, // Adjust text size
+              style: TextStyle(
+                fontSize: 20 * scale, // Scale text size
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
             ),
             Text(
               'meses',
-              style: const TextStyle(
-                fontSize: 14,
+              style: TextStyle(
+                fontSize: 14 * scale, // Scale text size
                 color: Colors.white70,
               ),
             ),
