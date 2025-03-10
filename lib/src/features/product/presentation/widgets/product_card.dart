@@ -180,7 +180,7 @@ class ProductDescription extends StatelessWidget {
             prefix: "Diseños",
           ),
           _buildConditionalAvailableList(
-            List.from(baseProduct.availableSizes.map((e) => e.abbr)),
+            baseProduct.availableSizes,
             ligthText,
             prefix: "Tallas",
           ),

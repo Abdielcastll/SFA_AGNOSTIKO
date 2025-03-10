@@ -124,25 +124,17 @@ class _DialogBody extends StatelessWidget {
                   ),
                 ],
               )
-            : GridView.builder(
-                shrinkWrap: true, // Prevents unnecessary scrolling
-                physics:
-                    const NeverScrollableScrollPhysics(), // Disables scrolling
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, // Two items per row
-                  crossAxisSpacing: 16, // Space between columns
-                  mainAxisSpacing: 16, // Space between rows
-                  childAspectRatio: 1, // Ensures square buttons
-                ),
-                itemCount: msiOptions.length,
-                itemBuilder: (context, index) {
-                  final int currentMsi = msiOptions[index].msi;
+            : Wrap(
+                spacing: 18, // Horizontal spacing between buttons
+                runSpacing: 18, // Vertical spacing between rows
+                alignment: WrapAlignment.center, // Center align buttons
+                children: msiOptions.map((msiOption) {
                   return _MSIOptionButton(
-                    msi: currentMsi,
-                    msiAmount: totalAmount / currentMsi,
+                    msi: msiOption.msi,
+                    msiAmount: totalAmount / msiOption.msi,
                     transProvider: transProvider,
                   );
-                },
+                }).toList(),
               ),
       ),
     );

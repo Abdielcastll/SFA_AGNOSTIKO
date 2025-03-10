@@ -74,6 +74,8 @@ class _CardInputViewState extends State<CardInputView> {
   List<CardType> _supportedCardTypes = [];
   List<CardType> _expectedCardTypes = [];
 
+  bool errorContactless = false;
+  String activeMethods = "APROXIME/INSERTE/DESLICE";
   @override
   void initState() {
     super.initState();
@@ -163,20 +165,20 @@ class _CardInputViewState extends State<CardInputView> {
 
   Widget get _expectedCardsWidget {
     if (MediaQuery.of(context).orientation == Orientation.portrait) {
-      return const Column(
+      return Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Center(
                 child: Text(
-                  "INSERTE/APROXIME/DESLICE",
-                  style: TextStyle(fontSize: 24),
+                  activeMethods,
+                  style: const TextStyle(fontSize: 24),
                 ),
               ),
             ],
           ),
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Center(
@@ -238,6 +240,26 @@ class _CardInputViewState extends State<CardInputView> {
 
   void _startCardDetection(List<CardType> cardTypes) async {
     print('Start Detection');
+    print(cardTypes);
+
+    // Map card types to their respective strings
+    List<String> methods = [];
+
+    if (cardTypes.contains(CardType.IC)) {
+      methods.add("INSERTA");
+    }
+    if (cardTypes.contains(CardType.Magnetic)) {
+      methods.add("DESLIZA");
+    }
+    if (cardTypes.contains(CardType.RF)) {
+      methods.add("ACERCA");
+    }
+
+    // Join methods with '/' if there are multiple
+    setState(() {
+      activeMethods = methods.join('/');
+    });
+
     await checkPinpadConnection();
     // Si no hay tarjetas para leer es que llegamos a un punto de error
     if (cardTypes.isEmpty) {
@@ -305,11 +327,17 @@ class _CardInputViewState extends State<CardInputView> {
         title: 'Alerta',
         messages: ['Su tarjeta tiene chip.', 'Por favor inserte tarjeta'],
         actionButton1: 'Aceptar',
-      ).then((value) => _startCardDetection(
+      ).then((value) {
+        if (_onlyChip) {
+          _startCardDetection([CardType.IC]);
+        } else {
+          _startCardDetection(
             _supportedCardTypes
                 .where((type) => type != CardType.Magnetic)
                 .toList(),
-          ));
+          );
+        }
+      });
     } on TimeoutException {
       print("timeout");
       if (globalRemoteConfig.onlyFullPaymentWithCard!) {
@@ -327,33 +355,8 @@ class _CardInputViewState extends State<CardInputView> {
             if (arguments.length >= 3) arguments[2] else null,
             if (arguments.length >= 4) arguments[3] else null
           ]);
-    } on PlatformException {
-      print('PlatformException');
-      await closeCardReader();
-      if (errorCardCounter < 2) {
-        errorCardCounter++;
-        displayCustomDialog(
-          dismissible: true,
-          context: context,
-          alertType: AlertType.CARD_READER_ERROR,
-          icon: Icons.warning_amber,
-          title: 'Error en lectura',
-          messages: ['Reintente ingresando la tarjeta por CHIP'],
-          actionButton1: 'Aceptar',
-        ).then((value) {
-          _onlyChip = true;
-          _startCardDetection([CardType.IC, CardType.Magnetic]);
-        });
-      } else {
-        //stopTimer();
-        await displayAutoCancelDialog(context,
-            key: const Key('card_reader_timeout'),
-            title: 'Error en Tarjeta',
-            message: 'Transacción Cancelada');
-
-        // Navigator.popUntil(context, ModalRoute.withName(routes.HOME));
-      }
     } catch (e, stackTrace) {
+      print('aaaaaaaaaaa');
       print('catch card Detection: $e');
       if (e.toString().contains("CardReaderCancel")) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -377,35 +380,16 @@ class _CardInputViewState extends State<CardInputView> {
           context: context,
           alertType: AlertType.CARD_READER_ERROR,
           icon: Icons.warning_amber,
-          title: 'Error de lectura',
+          title: 'Error en lectura',
           messages: ['Reintente ingresando la tarjeta por CHIP'],
           actionButton1: 'Aceptar',
         ).then((value) {
-          _onlyChip = true;
+          setState(() {
+            _onlyChip = true;
+          });
           _startCardDetection([CardType.IC, CardType.Magnetic]);
         });
-      } else {
-        print("Error: $e");
-        print(stackTrace);
-
-        if (globalRemoteConfig.onlyFullPaymentWithCard!) {
-          await cancelPaymentProcess(
-              paymentBody!.client, paymentBody!.invoiceNumber);
-          Navigator.pop(context);
-          Navigator.pop(context);
-          tryAgainDialog(context);
-        } else {
-          print("deteccion1");
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text("Error en la deteccion"),
-            ),
-          );
-          Navigator.popUntil(context, (route) => route.isFirst == true);
-        }
-      }
-
-      if (transactionArgs?.responseCode != '88') {
+      } else if (transactionArgs?.responseCode != '88') {
         print("deteccion2");
 
         ScaffoldMessenger.of(context).showSnackBar(
@@ -425,6 +409,25 @@ class _CardInputViewState extends State<CardInputView> {
               if (arguments.length >= 3) arguments[2] else null,
               if (arguments.length >= 4) arguments[3] else null
             ]);
+      } else {
+        print("Error: $e");
+        print(stackTrace);
+
+        if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+          await cancelPaymentProcess(
+              paymentBody!.client, paymentBody!.invoiceNumber);
+          Navigator.pop(context);
+          Navigator.pop(context);
+          tryAgainDialog(context);
+        } else {
+          print("deteccion1");
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Error en la deteccion"),
+            ),
+          );
+          Navigator.popUntil(context, (route) => route.isFirst == true);
+        }
       }
     }
 

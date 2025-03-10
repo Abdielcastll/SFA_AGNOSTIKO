@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
 import 'package:pwa_sales2go_flutter/src/features/product/domain/entitites/product_variant_entity.dart';
-import 'package:pwa_sales2go_flutter/src/features/product/domain/enums/product_size_enum.dart';
 import 'package:pwa_sales2go_flutter/src/features/product/presentation/widgets/button.dart';
 import 'package:pwa_sales2go_flutter/src/features/product/presentation/widgets/middle.dart';
 import 'package:pwa_sales2go_flutter/src/features/product/presentation/widgets/productos_detail_body.dart';
@@ -35,7 +34,7 @@ class ProductDetailUI extends StatefulWidget {
 
   final String productName;
   final String priceText;
-  final List<ProductSize> sizes;
+  final List<String> sizes;
   final List<String> colorOptions;
   final List<String> genderOptions;
   final List<ProductVariantEntity> products;
@@ -45,7 +44,7 @@ class ProductDetailUI extends StatefulWidget {
 }
 
 class _ProductDetailUIState extends State<ProductDetailUI> {
-  ProductSize selectedSize = ProductSize.std;
+  String selectedSize = '';
   String selectedGender = "";
   String selectedDropdownColor = "";
   int selectedProduct = 0;
@@ -55,7 +54,7 @@ class _ProductDetailUIState extends State<ProductDetailUI> {
 
   Future<void> getFirstAvailable(context) async {
     if (!isFirstBuild) return;
-    
+
     stockValues = Provider.of<StockModel?>(context)?.stock ?? {};
     await Future.delayed(const Duration(milliseconds: 100));
 
@@ -82,10 +81,11 @@ class _ProductDetailUIState extends State<ProductDetailUI> {
     }
   }
 
-  int productIndexFind(
-      {required ProductSize selectedSize,
-      required String selectedDropdownColor,
-      required String selectedGender}) {
+  int productIndexFind({
+    required String selectedSize,
+    required String selectedDropdownColor,
+    required String selectedGender,
+  }) {
     final productIndex = widget.products.indexWhere((product) {
       final isSizeMatch = product.size == selectedSize;
       final isLineMatch = product.line == selectedDropdownColor;
