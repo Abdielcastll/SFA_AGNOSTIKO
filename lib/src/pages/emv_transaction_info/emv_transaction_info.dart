@@ -511,56 +511,58 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
           automaticallyImplyLeading: false,
         ),
         body: transactionArgs!.responseCode == '88'
-            ? Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "Tiempo de espera excedido",
-                    style: TextStyle(
-                      color: this.transactionResult ==
-                              EmvTransactionResult.Approved
-                          ? Colors.green
-                          : Colors.red,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 26,
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Tiempo de espera excedido",
+                      style: TextStyle(
+                        color: this.transactionResult ==
+                                EmvTransactionResult.Approved
+                            ? Colors.green
+                            : Colors.red,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 26,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(
-                    height: 40,
-                  ),
-                  if (globalRemoteConfig.conversionKiosko == false)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 4.0, horizontal: 16.0),
-                      child: OutlinedButton(
-                        onPressed: () {
-                          onAccept();
-                        },
-                        style: TextButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    if (globalRemoteConfig.conversionKiosko == false)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 4.0, horizontal: 16.0),
+                        child: OutlinedButton(
+                          onPressed: () {
+                            onAccept();
+                          },
+                          style: TextButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            side: const BorderSide(
+                              color: Colors.black12,
+                            ),
+                            foregroundColor:
+                                themeProvider.myTheme.colorScheme.primary,
+                            backgroundColor: Colors.blue.shade800,
                           ),
-                          side: const BorderSide(
-                            color: Colors.black12,
-                          ),
-                          foregroundColor:
-                              themeProvider.myTheme.colorScheme.primary,
-                          backgroundColor: Colors.blue.shade800,
-                        ),
-                        child: Text(
-                          'aceptar'.toUpperCase(),
-                          style: const TextStyle(
-                            fontFamily: 'Poppins-Regular',
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
+                          child: Text(
+                            'aceptar'.toUpperCase(),
+                            style: const TextStyle(
+                              fontFamily: 'Poppins-Regular',
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                ],
+                  ],
+                ),
               )
             : ListView(
                 children: [

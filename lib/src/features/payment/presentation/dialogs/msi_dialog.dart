@@ -109,7 +109,7 @@ class _DialogBody extends StatelessWidget {
     return Center(
       child: Container(
         width: MediaQuery.of(context).size.width *
-            0.6, // Limit width to 60% of screen
+            0.7, // Limit width to 70% of screen
         padding: const EdgeInsets.symmetric(vertical: 16), // Add some padding
         child: msiOptions.length == 1
             ? Column(
@@ -124,25 +124,17 @@ class _DialogBody extends StatelessWidget {
                   ),
                 ],
               )
-            : GridView.builder(
-                shrinkWrap: true, // Prevents unnecessary scrolling
-                physics:
-                    const NeverScrollableScrollPhysics(), // Disables scrolling
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, // Two items per row
-                  crossAxisSpacing: 16, // Space between columns
-                  mainAxisSpacing: 16, // Space between rows
-                  childAspectRatio: 1, // Ensures square buttons
-                ),
-                itemCount: msiOptions.length,
-                itemBuilder: (context, index) {
-                  final int currentMsi = msiOptions[index].msi;
+            : Wrap(
+                spacing: 18, // Horizontal spacing between buttons
+                runSpacing: 18, // Vertical spacing between rows
+                alignment: WrapAlignment.center, // Center align buttons
+                children: msiOptions.map((msiOption) {
                   return _MSIOptionButton(
-                    msi: currentMsi,
-                    msiAmount: totalAmount / currentMsi,
+                    msi: msiOption.msi,
+                    msiAmount: totalAmount / msiOption.msi,
                     transProvider: transProvider,
                   );
-                },
+                }).toList(),
               ),
       ),
     );
@@ -204,46 +196,50 @@ class _MSIOptionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor:
-            Theme.of(context).colorScheme.primary, // Custom primary color
-        shape: const CircleBorder(), // Makes the button round
-        padding: const EdgeInsets.all(20), // Adjust padding for better spacing
-      ),
-      onPressed: () {
-        showConfirmDialog(
-          context,
-          title: MSIConstants.confirmSelection,
-          message: MSIConstants.msiSelectedMessage(msi, msiAmount),
-          onAccept: () {
-            transProvider.msi = MSIConstants.msiFormatter.format(msi);
-            Navigator.pop(context);
-            Navigator.pop(context);
-            Navigator.pop(context);
-          },
-          onCancel: () => Navigator.pop(context),
-        );
-      },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            '$msi', // Large MSI number
-            style: const TextStyle(
-              fontSize: 24, // Larger font size
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+    return SizedBox(
+      width: 100, // Fixed width
+      height: 100, // Fixed height
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          shape: const CircleBorder(),
+          padding: EdgeInsets.zero, // Remove extra padding
+        ),
+        onPressed: () {
+          showConfirmDialog(
+            context,
+            title: MSIConstants.confirmSelection,
+            message: MSIConstants.msiSelectedMessage(msi, msiAmount),
+            onAccept: () {
+              transProvider.msi = MSIConstants.msiFormatter.format(msi);
+              Navigator.pop(context);
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+            onCancel: () => Navigator.pop(context),
+          );
+        },
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              '$msi',
+              style: const TextStyle(
+                fontSize: 20, // Adjust text size
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
-          ),
-          Text(
-            'meses', // Smaller "meses" text
-            style: const TextStyle(
-              fontSize: 14, // Smaller font size
-              color: Colors.white70, // Slightly faded white
+            Text(
+              'meses',
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.white70,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -1,5 +1,3 @@
-import 'package:pwa_sales2go_flutter/src/features/product/domain/enums/product_size_enum.dart';
-
 class ProductVariantEntity {
   final String productId;
   final String quality;
@@ -11,7 +9,7 @@ class ProductVariantEntity {
   final String brand;
   final String name;
   final String subCategory;
-  final ProductSize size;
+  final String size;
   final double price;
   final List<String> imageUrl;
   final int stock;
@@ -49,7 +47,7 @@ class ProductVariantEntity {
       brand: json['marca'] as String? ?? '',
       name: json['nombre'] as String? ?? '',
       subCategory: json['subcategoria'] as String? ?? '',
-      size: ProductSizeExtension.fromString(json['tamano'] as String? ?? ''),
+      size: json['tamano'] as String? ?? '',
       price: (json['precio'] as num?)?.toDouble() ?? 0.0,
       imageUrl: [], // Placeholder if no image URLs available in the JSON
       stock: 0, // Placeholder if no stock info is available in the JSON

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pwa_sales2go_flutter/core/font_size.dart';
-import 'package:pwa_sales2go_flutter/src/features/product/domain/enums/product_size_enum.dart';
 import 'package:pwa_sales2go_flutter/src/features/product/domain/repositories/detalle_producto_labels.dart';
 import 'package:pwa_sales2go_flutter/src/features/product/presentation/widgets/image_network.dart';
 
@@ -18,9 +17,9 @@ class ProductsDetailsTopSections extends StatelessWidget {
   final String sku;
   final String productName;
   final String? descripcion;
-  final ProductSize selectedSize;
-  final List<ProductSize> sizes;
-  final ValueChanged<ProductSize>? onSizeSelected;
+  final String selectedSize;
+  final List<String> sizes;
+  final ValueChanged<String>? onSizeSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -86,15 +85,14 @@ class ProductsDetailsTopSections extends StatelessWidget {
                         width: ancho * 0.008,
                       ),
                       DropdownButton<String>(
-                        value: selectedSize
-                            .size, // assuming selectedSize is of type ProductSize
+                        value:
+                            selectedSize, // assuming selectedSize is of type ProductSize
                         icon: const Icon(Icons.arrow_drop_down),
-                        items: sizes.map((ProductSize size) {
+                        items: sizes.map((String size) {
                           return DropdownMenuItem<String>(
-                            value:
-                                size.size, // use the string value of the enum
+                            value: size, // use the string value of the enum
                             child: Text(
-                              size.size,
+                              size,
                               style: TextStyle(fontSize: FontSize.fontM),
                             ), // display the string value of the enum
                           );
@@ -102,8 +100,7 @@ class ProductsDetailsTopSections extends StatelessWidget {
                         onChanged: (newValue) {
                           if (newValue != null) {
                             // Convert string back to enum
-                            onSizeSelected?.call(
-                                ProductSizeExtension.fromString(newValue));
+                            onSizeSelected!(newValue);
                           }
                         },
                       )

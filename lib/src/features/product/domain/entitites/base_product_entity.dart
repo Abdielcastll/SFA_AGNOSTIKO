@@ -1,12 +1,11 @@
 import 'package:pwa_sales2go_flutter/src/features/product/domain/entitites/product_variant_entity.dart';
-import 'package:pwa_sales2go_flutter/src/features/product/domain/enums/product_size_enum.dart';
 
 class BaseProductEntity {
   final String nameProduct;
   final String mainImageUrl;
   final String description;
   final double basePrice;
-  final List<ProductSize> availableSizes;
+  final List<String> availableSizes;
   final List<String> availableDesigns;
   final List<String> availableLines;
   final List<ProductVariantEntity> products;
@@ -59,7 +58,7 @@ class BaseProductEntity {
 
     // Map availableSizes from "tamanio"
     final availableSizes = (json['tamanio'] as List<dynamic>)
-        .map((size) => ProductSizeExtension.fromString(size.toString()))
+        .map((size) => size.toString())
         .toList();
     print("See Sizes: $availableSizes");
 
