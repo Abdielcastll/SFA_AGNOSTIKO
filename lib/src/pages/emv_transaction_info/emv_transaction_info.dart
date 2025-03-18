@@ -198,6 +198,12 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
 
   void kioskoDialog() {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    Timer? timer;
+
+    // Start a timer that auto-cancels after 30 seconds
+    timer = Timer(const Duration(seconds: 30), () {
+      onCancel();
+    });
 
     showDialog(
       context: context,
@@ -232,11 +238,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
             content: const Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(
-                  height: 10,
-                ),
+                SizedBox(height: 10),
                 Text(
-                  "O\nSolicité ayuda antes de continuar",
+                  "O\nSolicite ayuda antes de continuar",
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 13),
                 ),
@@ -287,7 +291,9 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
           ),
         );
       },
-    );
+    ).then((_) {
+      timer?.cancel(); // Ensure timer is canceled when dialog closes
+    });
   }
 
   String transactionResultStr = '';
@@ -854,6 +860,7 @@ class _EmvTransactionInfoViewState extends State<EmvTransactionInfoView> {
   }
 
   onCancel() {
+    print("onCancel called");
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     Navigator.pop(context);

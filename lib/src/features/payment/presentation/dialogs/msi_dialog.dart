@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pwa_sales2go_flutter/core/constants/msi_constants.dart';
@@ -22,43 +23,97 @@ Future<T?> showMSIDialog<T>({
           ));
 }
 
-class _MSIDialog extends StatelessWidget {
+class _MSIDialog extends StatefulWidget {
   final BinResponseEntity binResponse;
   final TransactionArgs transProvider;
+
   const _MSIDialog(
     this.binResponse,
     this.transProvider,
   );
 
   @override
+  State<_MSIDialog> createState() => _MSIDialogState();
+}
+
+class _MSIDialogState extends State<_MSIDialog> {
+  int _timeLeft = 30; // 40 seconds countdown
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _startCountdown();
+  }
+
+  void _startCountdown() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_timeLeft > 1) {
+        setState(() {
+          _timeLeft--;
+        });
+      } else {
+        _timer?.cancel();
+        if (mounted) {
+          Navigator.pop(context); // Auto close after 40 seconds
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Dialog.fullscreen(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                flex: 2,
-                child: _DialogHeader(
-                  brand: binResponse.cardBrand.brand,
-                  level: binResponse.cardLevel,
-                ),
-              ),
-              Expanded(
-                flex: 5,
-                child: Center(
-                  child: _DialogBody(
-                    msiOptions: binResponse.listMsi,
-                    transProvider: transProvider,
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: _DialogHeader(
+                      brand: widget.binResponse.cardBrand.brand,
+                      level: widget.binResponse.cardLevel,
+                    ),
                   ),
+                  Expanded(
+                    flex: 5,
+                    child: Center(
+                      child: _DialogBody(
+                        msiOptions: widget.binResponse.listMsi,
+                        transProvider: widget.transProvider,
+                      ),
+                    ),
+                  ),
+                  const Expanded(flex: 1, child: _DialogFooter()),
+                ],
+              ),
+            ),
+            Positioned(
+              top: 16,
+              right: 16,
+              child: CircleAvatar(
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                radius: 20,
+                child: Text(
+                  '$_timeLeft',
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      fontSize: 18),
                 ),
               ),
-              const Expanded(flex: 1, child: _DialogFooter()),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -173,7 +228,7 @@ class _DialogHeader extends StatelessWidget {
           ),
           SizedBox(height: 35),
           Text(
-            MSIConstants.eligeMeses,
+            MSIConstants.chooseMsi,
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontSize: FontSize.font2XL, fontWeight: FontWeight.bold),
@@ -200,8 +255,8 @@ class _MSIOptionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 100 * scale, // Scale width
-      height: 100 * scale, // Scale height
+      width: MediaQuery.of(context).size.width * 0.2 * scale, // Scale width
+      height: MediaQuery.of(context).size.width * 0.2 * scale, // Scale height
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: Theme.of(context).colorScheme.primary,

@@ -72,13 +72,16 @@ class _CardInputViewState extends State<CardInputView> {
   EUiStates state = EUiStates.INSERT_CARD;
 
   List<CardType> _supportedCardTypes = [];
-  List<CardType> _expectedCardTypes = [];
 
   bool errorContactless = false;
   String activeMethods = "APROXIME/INSERTE/DESLICE";
+  int _timeLeft = 180;
+  Timer? _timer;
+
   @override
   void initState() {
     super.initState();
+    _startCountdown();
   }
 
   @override
@@ -86,6 +89,39 @@ class _CardInputViewState extends State<CardInputView> {
     closeCardReader();
     cancelEmvTransaction();
     super.dispose();
+  }
+
+  void _startCountdown() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_timeLeft > 1) {
+        setState(() {
+          _timeLeft--;
+        });
+      } else {
+        _timer?.cancel();
+        if (mounted) {
+          timeoutTotal();
+        }
+      }
+    });
+  }
+
+  void timeoutTotal() async {
+    if (globalRemoteConfig.onlyFullPaymentWithCard!) {
+      await cancelPaymentProcess(
+          paymentBody!.client, paymentBody!.invoiceNumber);
+    }
+    await closeCardReader();
+    transactionArgs!.responseCode = "88"; //vamos a usar 88 para timeout
+    final arguments = (ModalRoute.of(context)?.settings.arguments! as List);
+    transactionArgs?.stan = await getSTANCounterAndIncrement();
+    Navigator.pushReplacementNamed(context, EmvTransactionInfoView.route,
+        arguments: [
+          transactionArgs,
+          if (arguments.length >= 2) arguments[1] else null,
+          if (arguments.length >= 3) arguments[2] else null,
+          if (arguments.length >= 4) arguments[3] else null
+        ]);
   }
 
   final pinpadManager = PinpadManager();
@@ -281,7 +317,6 @@ class _CardInputViewState extends State<CardInputView> {
           : _isFallback
               ? EUiStates.SWEEP_CARD
               : EUiStates.INSERT_CARD;
-      _expectedCardTypes = cardTypes;
       if (cardTypes.isNotEmpty &&
           cardTypes.length == 1 &&
           cardTypes.contains(CardType.Magnetic)) {
@@ -332,9 +367,7 @@ class _CardInputViewState extends State<CardInputView> {
           _startCardDetection([CardType.IC]);
         } else {
           _startCardDetection(
-            _supportedCardTypes
-                .where((type) => type != CardType.Magnetic)
-                .toList(),
+            [CardType.IC, CardType.RF],
           );
         }
       });
@@ -682,19 +715,37 @@ class _CardInputViewState extends State<CardInputView> {
           await payment.getAvailableMsi(transactionArgs);
       if (binMsi != null && binMsi.goToMsi) {
         debugPrint("Go to MSI");
+
+        Completer<bool> confirmCompleter = Completer<bool>();
+
         await showConfirmDialog(
           context,
           title: MSIConstants.msiAvailable,
           message: MSIConstants.msiDescription,
           textAccept: MSIConstants.wantPromo,
-          onAccept: () async => await showMSIDialog(
-              transProvider: transactionArgs,
-              binResponse: binMsi,
-              context: context),
+          onAccept: () {
+            Navigator.pop(context); // Close confirmation dialog
+            confirmCompleter.complete(true); // User accepted
+          },
           textCancel: MSIConstants.noThanks,
-          onCancel: () => Navigator.pop(context),
+          onCancel: () {
+            Navigator.pop(context);
+            confirmCompleter.complete(false);
+          },
+          useTimeout: true,
         );
+
+        bool confirmResult = await confirmCompleter.future;
+
+        if (confirmResult) {
+          await showMSIDialog(
+            transProvider: transactionArgs,
+            binResponse: binMsi,
+            context: context,
+          );
+        }
       }
+
       final pharosMsg = await pharosGenerateSaleMsg(transactionArgs, currency);
       print("PHAROS MSG: ${jsonEncode(pharosMsg)}");
 
@@ -792,21 +843,14 @@ class _CardInputViewState extends State<CardInputView> {
         ],
       ).then((value) {
         switch (_cardTry) {
-          case 1:
-            _startCardDetection(_supportedCardTypes
-                .where((item) =>
-                    (item == CardType.IC || item == CardType.Magnetic))
-                .toList());
-            break;
           case 3:
-            _startCardDetection(_supportedCardTypes
-                .where((type) => type == CardType.Magnetic)
-                .toList());
+            _startCardDetection([CardType.Magnetic]);
             break;
           default:
-            _startCardDetection(
-              _supportedCardTypes.toList(),
-            );
+            _startCardDetection(_onlyChip
+                ? [CardType.Magnetic, CardType.IC]
+                : [CardType.Magnetic, CardType.IC, CardType.RF]);
+            break;
         }
       });
     } else {

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
@@ -12,8 +13,16 @@ Future<T?> showConfirmDialog<T>(
   required void Function() onCancel,
   String textAccept = 'Aceptar',
   String textCancel = 'Cancelar',
+  bool useTimeout = false, // Optional timeout
 }) {
   final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+  Timer? timer;
+
+  if (useTimeout) {
+    timer = Timer(const Duration(seconds: 25), () {
+      onCancel();
+    });
+  }
 
   return showDialog<T>(
     context: context,
@@ -24,12 +33,18 @@ Future<T?> showConfirmDialog<T>(
         focusNode: FocusNode(),
         onKey: rawKeypadHandler(
           context,
-          onEnter: onAccept,
-          onEscape: onCancel,
+          onEnter: () {
+            timer?.cancel(); // Cancel timer on accept
+            onAccept();
+          },
+          onEscape: () {
+            timer?.cancel(); // Cancel timer on cancel
+            onCancel();
+          },
         ),
         child: AlertDialog(
           actionsOverflowButtonSpacing: 1,
-          actionsPadding: EdgeInsets.symmetric(
+          actionsPadding: const EdgeInsets.symmetric(
             horizontal: 10,
             vertical: 10,
           ),
@@ -41,9 +56,7 @@ Future<T?> showConfirmDialog<T>(
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               Text(
                 message ?? '',
                 textAlign: TextAlign.center,
@@ -60,14 +73,20 @@ Future<T?> showConfirmDialog<T>(
                 foregroundColor:
                     MaterialStateProperty.all(Colors.grey.shade400),
               ),
-              onPressed: onAccept,
+              onPressed: () {
+                timer?.cancel(); // Cancel timer
+                onAccept();
+              },
               child: Text(
                 textAccept,
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
               ),
             ),
             ElevatedButton(
-              onPressed: onCancel,
+              onPressed: () {
+                timer?.cancel(); // Cancel timer
+                onCancel();
+              },
               style: ButtonStyle(
                 backgroundColor:
                     MaterialStateProperty.all(Colors.grey.shade400),
@@ -76,12 +95,15 @@ Future<T?> showConfirmDialog<T>(
               ),
               child: Text(
                 textCancel,
-                style: TextStyle(color: Colors.black),
+                style: const TextStyle(color: Colors.black),
               ),
-            )
+            ),
           ],
         ),
       );
     },
-  );
+  ).then((value) {
+    timer?.cancel(); // Ensure timer is cancelled when dialog closes
+    return value;
+  });
 }

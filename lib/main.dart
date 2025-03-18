@@ -208,6 +208,8 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
           });
           _startInactivityTimer();
         });
+      } else {
+        _resetInactivityTimer();
       }
     });
   }
