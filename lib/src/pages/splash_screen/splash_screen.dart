@@ -192,7 +192,6 @@ class SplashScreenViewState extends State<SplashScreenView> {
         await initSDK();
       }
       print("Librería Universal de Pagos inicializada!");
-      await _validateKeyInitialization();
 
       initCompleted = true;
     } on PlatformException {
@@ -218,94 +217,6 @@ class SplashScreenViewState extends State<SplashScreenView> {
     ]);
     if (future[0] && future[1] && widget.redirect) {
       Navigator.pushReplacementNamed(context, 'wrapper');
-    }
-  }
-
-  Future<void> _validateKeyInitialization() async {
-    bool keyExists = await cryptoDUKPTCheckKeyExists(1);
-    if (keyExists) {
-      print('Ya existe la llave');
-
-      _tryKeyInitialization();
-    } else {
-      _tryKeyInitialization();
-    }
-  }
-
-  Future<void> _tryKeyInitialization() async {
-    // showCircularProgressDialog(context, 'Procesando');
-    try {
-      await _keyInitializationPharos();
-
-      print('Llaves inicializadas');
-    } on SocketException catch (e) {
-      Navigator.pop(context);
-
-      print('error ${e.message}');
-    } on StateError catch (e) {
-      Navigator.pop(context);
-      print('error ${e.message}');
-    } catch (e) {
-      // Navigator.pop(context);
-      print('error $e');
-    }
-  }
-
-  Future<void> _keyInitializationPharos() async {
-    AuthService authService = AuthService();
-    //todo hacer cambio de mail dinamico dependiendo
-    bool success = await authService.authenticateUser(
-      // "psh@gmail.com", // usuario prosa real
-      // "Psh%1234",
-      "pvt@gmail.com", //pruebas productivas
-      "Pvt%1234",
-    );
-
-    if (success) {
-      print("Authentication success.");
-    } else {
-      print("Authentication failed.");
-    }
-    // creamos un objeto de "Capítulo X" para la sesión de inicialización de
-    // llaves
-    final capx = CapX(1);
-
-    // solicitamos la llave de transporte encriptada mediante su
-    // correspondiente llave RSA
-    final tk =
-        await capx.getEncryptedTransportKey("assets/capx/public_pharos.pem");
-    // generamos el mensaje de solicitud para el host
-    final pharosMsgKeyInit = await pharosGenerateKeyInitialization(
-      cipheredTK: tk.keyData,
-      kcv: tk.kcv,
-    );
-    print('Generar mensaje a pharos');
-    print(pharosMsgKeyInit);
-    final pharosResponse = await processKeyInitPharos(pharosMsgKeyInit);
-    print('pharos responde $pharosResponse');
-
-    final encryptedK0 = pharosResponse.encryptedNewKey;
-    final ksn = pharosResponse.newKeyKsn;
-    //await capx.loadEncryptedIPEK(ksn.toHexBytes(), encryptedK0.toHexBytes());
-
-    // cargamos la llave fija del entorno de prueba
-    // esta llave está encriptada con un KEK de valor '1D7BA112D144429260D2C219A6A80798'
-    // la llave en claro es 'A66AB26590D3186E8A4C5A40D6F4F15D'
-
-    //Carga de llaves en terminales de forma manual
-    //cosas de dev
-    //await loadTestKEK();
-    try {
-      await cryptoLoadIPEK(
-        1,
-        ksn.toHexBytes(),
-        encryptedK0.toHexBytes(),
-        kekIndex: 10,
-      );
-      var ksno = await cryptoDUKPTGetKSN(1);
-      print("setksn: ${ksno!.toHexStr()}");
-    } catch (e) {
-      print(e);
     }
   }
 
