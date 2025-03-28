@@ -912,13 +912,16 @@ class _CardInputViewState extends State<CardInputView> {
         MPOSController.instance.showHomeScreen();
       }
       await closeCardReader();
-      Navigator.pushReplacementNamed(context, EmvTransactionInfoView.route,
-          arguments: [
-            transactionArgs,
-            if (arguments.length >= 2) arguments[1] else null,
-            if (arguments.length >= 3) arguments[2] else null,
-            if (arguments.length >= 4) arguments[3] else null
-          ]);
+      Navigator.pushReplacementNamed(
+        context,
+        EmvTransactionInfoView.route,
+        arguments: [
+          transactionArgs,
+          if (arguments.length >= 2) arguments[1] else null,
+          if (arguments.length >= 3) arguments[2] else null,
+          if (arguments.length >= 4) arguments[3] else null
+        ],
+      );
     }
   }
 
