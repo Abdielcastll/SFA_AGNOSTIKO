@@ -88,6 +88,7 @@ class _CardInputViewState extends State<CardInputView> {
   void dispose() {
     closeCardReader();
     cancelEmvTransaction();
+    _timer?.cancel();
     super.dispose();
   }
 

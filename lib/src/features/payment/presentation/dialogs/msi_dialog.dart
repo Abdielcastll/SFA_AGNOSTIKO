@@ -272,7 +272,6 @@ class _MSIOptionButton extends StatelessWidget {
               transProvider.msi = MSIConstants.msiFormatter.format(msi);
               Navigator.pop(context);
               Navigator.pop(context);
-              Navigator.pop(context);
             },
             onCancel: () => Navigator.pop(context),
           );
