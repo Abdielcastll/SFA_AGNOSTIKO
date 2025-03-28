@@ -203,8 +203,7 @@ class NavigationPages extends StatelessWidget {
       print("Using default user credentials...");
       if (!context.mounted) return;
 
-      _showMessage(
-          context, "Usando usuario por defecto: svazquez8@necsweb.com");
+      _showMessage(context, "Usando usuario por defecto: pvt@gmail.com");
 
       success = await authService.authenticateUser(
         // "psh@gmail.com", // usuario prosa real
