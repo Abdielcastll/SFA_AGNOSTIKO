@@ -296,16 +296,15 @@ class _CheckoutBodyState extends State<CheckoutBody> {
         context,
         MaterialPageRoute(
           builder: (context) => CompletedOrderPage(
-            client: widget.client?.name,
-            address: selectedValue == 'Fiscal'
-                ? widget.client!.fiscalAdress
-                : widget.client!.dispatchAdress,
-            orderNumber: numberOrder ?? 0000,
-            date: dateFormatter.format(today),
-            method: selectedValue2,
-            total: totalPriceOfTheOrder,
-            completedMessage: '¡Pedido guardado!',
-          ),
+              client: widget.client?.name,
+              address: selectedValue == 'Fiscal'
+                  ? widget.client!.fiscalAdress
+                  : widget.client!.dispatchAdress,
+              orderNumber: numberOrder ?? 0000,
+              date: dateFormatter.format(today),
+              method: selectedValue2,
+              total: totalPriceOfTheOrder,
+              completedMessage: '¡Pedido guardado!'),
         ),
       );
     }
