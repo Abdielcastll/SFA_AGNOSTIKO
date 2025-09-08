@@ -1,4 +1,5 @@
 {
     "cmake.configureOnOpen": true,
-    "cmake.sourceDirectory": "${workspaceFolder}/windows/flutter"
+    "cmake.sourceDirectory": "${workspaceFolder}/windows/flutter",
+    "dart.flutterSdkPath": ".fvm/flutter_sdk",
 }

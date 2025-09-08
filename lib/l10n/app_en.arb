@@ -186,7 +186,8 @@
   "tap": "Tap",
   "insert": "Insert",
   "swipe": "Swipe",
-  "close": "Close"
+  "close": "Close",
+  "retry": "Retry"
     
 
 

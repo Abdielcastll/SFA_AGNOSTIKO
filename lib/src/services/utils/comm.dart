@@ -16,24 +16,24 @@ import '../../../pharos/void_response.dart';
 import 'iso8583.dart';
 
 //dev
-//final pharosUsername = "NECS01Oeyx";
+const pharosUsername = "NECS01Oeyx";
 //prod
-final pharosUsername = "NecsProd03";
+//final pharosUsername = "NecsProd03";
 
 //dev
-//final pharosPassword = dotenv.env['pharosPasswordSandbox'] ?? '';
+final pharosPassword = dotenv.env['pharosPasswordSandbox'] ?? '';
 //prod
-final pharosPassword = dotenv.env['pharosPasswordProsa'] ?? '';
+//final pharosPassword = dotenv.env['pharosPasswordProsa'] ?? '';
 
 //  PROD
-const EnvUrl = 'https://api.pharospayments.com/payments/v1/charge';
+//const EnvUrl = 'https://api.pharospayments.com/payments/v1/charge';
 // DEV
-//const EnvUrl = 'http://api-sandbox.pharospayments.com/gateway/charge';
+const EnvUrl = 'http://api-sandbox.pharospayments.com/gateway/charge';
 
 Future<Uint8List> getToken(String serialNumber) async {
   final brand = (await getPlatformInfo()).deviceBrand;
   const appId = "com.agnostiko.field_sales";
-  var authToken;
+  Uint8List? authToken;
   try {
     const productionUrl = "https://insightone-server.agnostiko.com";
     authToken = await getSDKToken(productionUrl, brand, serialNumber, appId);
@@ -43,17 +43,16 @@ Future<Uint8List> getToken(String serialNumber) async {
       authToken = await getSDKToken(demoUrl, brand, serialNumber, appId);
     } catch (e) {}
   }
-  return authToken;
+  return authToken ?? Uint8List.fromList([]);
 }
 
 Future<PharosSaleResponse> processSalePharos(
     Map<String, dynamic> pharosMsg) async {
-  final usernameAndPassword = pharosUsername + ":" + pharosPassword;
+  final usernameAndPassword = "$pharosUsername:$pharosPassword";
   final bytes = utf8.encode(usernameAndPassword);
   final encoded = base64.encode(bytes);
-  final authorizationStr = "Basic " + encoded;
-
-  var header = {"Authorization": authorizationStr};
+  final authorizationStr = "Basic $encoded";
+  var header = {"Authorization": "Basic TkVDUzAxT2V5eDp4TmpVZzVuS3dIWWdDSGd0SnJLeGR6U1o="};
   try {
     final response = await http
         .post(Uri.parse(EnvUrl), headers: header, body: jsonEncode(pharosMsg))
@@ -63,6 +62,7 @@ Future<PharosSaleResponse> processSalePharos(
     print("Pharos Sale response : ${response.body.toString()}");
     return saleResponse;
   } catch (e) {
+    print("EXCEPTION $e");
     return PharosSaleResponse(
       successful: false,
       displayMessage: '',
@@ -80,10 +80,10 @@ Future<PharosSaleResponse> processSalePharos(
 
 Future<PharosVoidResponse> processVoidPharos(
     Map<String, dynamic> pharosVoidMsg) async {
-  final usernameAndPassword = pharosUsername + ":" + pharosPassword;
+  final usernameAndPassword = "$pharosUsername:$pharosPassword";
   final bytes = utf8.encode(usernameAndPassword);
   final encoded = base64.encode(bytes);
-  final authorizationStr = "Basic " + encoded;
+  final authorizationStr = "Basic $encoded";
 
   var header = {"Authorization": authorizationStr};
   final response = await http.post(Uri.parse(EnvUrl),
@@ -113,7 +113,8 @@ Future<PharosKeyInitResponse> processKeyInitPharos(
   final bytes = utf8.encode(usernameAndPassword);
   final encoded = base64.encode(bytes);
   final authorizationStr = "Basic $encoded";
-  var header = {"Authorization": authorizationStr};
+  var header = {"Authorization": "Basic TkVDUzAxT2V5eDp4TmpVZzVuS3dIWWdDSGd0SnJLeGR6U1o="};
+  print("HEADDERR $header");
   var body = jsonEncode(pharosMsgKeyInit);
   final response = await http.post(
     Uri.parse(EnvUrl),
@@ -122,7 +123,7 @@ Future<PharosKeyInitResponse> processKeyInitPharos(
   );
   final pharosResponseJson = jsonDecode(response.body.toString());
   final keyInitResponse = PharosKeyInitResponse.fromJson(pharosResponseJson);
-  print("Pharos Key init response: ${response.body.toString()}");
+  print("Pharos Key init response: ${response.body.toString()} $authorizationStr");
   return keyInitResponse;
 }
 

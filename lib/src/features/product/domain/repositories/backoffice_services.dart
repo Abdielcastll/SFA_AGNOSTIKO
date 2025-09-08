@@ -38,9 +38,9 @@ class AuthService {
 
   Future<bool> authenticateUserBySerialNumber(String serialNumber) async {
     final Uri url = Uri.https(
-      'bankaool.pharospayments.com',
+      'backoffice.pharospayments.com',
       '/api/v2/users/authenticate_by_serial',
-      {'serial_number': "NEBC00040368"},
+      {'serial_number': "NCA400047364"},
     );
     try {
       print("try serial");
@@ -49,7 +49,7 @@ class AuthService {
         url,
         headers: {
           'Authorization':
-              'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6Im5lY3MgbWV0YSBhcHAiLCJjb21wYW55IjoibmVjcyIsImFkbWluIjp0cnVlLCJpYXQiOjE1MTYyMzkwMjJ9.SJjwjp1h5TlzmaXsF89H8iDqF6bjzOMbv1zNnXfRORI'
+              'Basic eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6Im5lY3MgbWV0YSBhcHAiLCJjb21wYW55IjoibmVjcyIsImFkbWluIjp0cnVlLCJpYXQiOjE1MTYyMzkwMjJ9.SJjwjp1h5TlzmaXsF89H8iDqF6bjzOMbv1zNnXfRORI'
         },
       );
       print("try response:");

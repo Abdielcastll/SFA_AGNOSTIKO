@@ -1,10 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/helper/object_box.dart';
 import 'package:pwa_sales2go_flutter/l10n/l10n.dart';
+import 'package:pwa_sales2go_flutter/src/features/device/presentation/blocs/device_bloc/device_bloc.dart'
+    as d;
+import 'package:pwa_sales2go_flutter/src/features/device/presentation/view/camera_scanner_screen.dart';
+import 'package:pwa_sales2go_flutter/src/features/discount/presentation/bloc/discount_bloc.dart';
 import 'package:pwa_sales2go_flutter/src/models/products_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/user_model.dart';
 import 'package:pwa_sales2go_flutter/src/pages/amount_input/amount_input.dart';
@@ -44,6 +49,8 @@ import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'core/services/injector_container.dart';
+
 late ObjectBox objectBox;
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -51,6 +58,7 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   objectBox = await ObjectBox.init();
+  await initInjector();
 
   await dotenv.load();
 
@@ -80,75 +88,84 @@ class SfaAgnostiko extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-    return FutureBuilder<bool>(
-      future: multitenantConfig.initialize(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            supportedLocales: L10n.all,
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            title: 'Field Sales',
-            theme: myThemeBase,
-            home: const SplashScreenView(redirect: false),
-          );
-        }
-        return StreamProvider<UserModel?>.value(
-          value: AuthService().user,
-          initialData: null,
-          child: MultiProvider(
-            providers: [
-              ChangeNotifierProvider<LocaleProvider>(
-                create: (context) => LocaleProvider(),
-              ),
-              ChangeNotifierProvider<NotificationService>(
-                create: (context) => NotificationService(),
-              ),
-              ChangeNotifierProvider<CurrencyProvider>(
-                create: (context) => CurrencyProvider(),
-              ),
-              ChangeNotifierProvider<OrderProvider>(
-                create: (context) => OrderProvider(),
-              ),
-              ChangeNotifierProvider<CounterLimitFirestore>(
-                create: (context) => CounterLimitFirestore(),
-              ),
-              ChangeNotifierProvider<ThemeProvider>(
-                create: (context) => ThemeProvider(),
-              ),
-            ],
-            builder: (context, child) {
-              final productsLimit =
-                  Provider.of<CounterLimitFirestore>(context).getProductsLimit;
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => sl<d.DeviceBloc>()..add(d.GetDeviceEvent()),
+        ),
+        BlocProvider(create: (_) => sl<DiscountBloc>()),
+      ],
+      child: FutureBuilder<bool>(
+        future: multitenantConfig.initialize(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              supportedLocales: L10n.all,
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              title: 'Field Sales',
+              theme: myThemeBase,
+              home: const SplashScreenView(redirect: false),
+            );
+          }
+          return StreamProvider<UserModel?>.value(
+            value: AuthService().user,
+            initialData: null,
+            child: MultiProvider(
+              providers: [
+                ChangeNotifierProvider<LocaleProvider>(
+                  create: (context) => LocaleProvider(),
+                ),
+                ChangeNotifierProvider<NotificationService>(
+                  create: (context) => NotificationService(),
+                ),
+                ChangeNotifierProvider<CurrencyProvider>(
+                  create: (context) => CurrencyProvider(),
+                ),
+                ChangeNotifierProvider<OrderProvider>(
+                  create: (context) => OrderProvider(),
+                ),
+                ChangeNotifierProvider<CounterLimitFirestore>(
+                  create: (context) => CounterLimitFirestore(),
+                ),
+                ChangeNotifierProvider<ThemeProvider>(
+                  create: (context) => ThemeProvider(),
+                ),
+              ],
+              builder: (context, child) {
+                final productsLimit =
+                    Provider.of<CounterLimitFirestore>(context)
+                        .getProductsLimit;
 
-              return StreamProvider<List<Products>?>.value(
-                value: productsLimit == 0
-                    ? productsCollection
-                        .orderBy('codigo')
-                        .snapshots()
-                        .map(productsListFromSnapshot)
-                    : productsCollection
-                        .orderBy('codigo')
-                        .limit(productsLimit)
-                        .snapshots()
-                        .map(productsListFromSnapshot),
-                initialData: const [],
-                catchError: (context, error) {
-                  print(error);
-                  print('PROVIDER PRODUCT ERROR');
-                  return;
-                },
-                child: const LifecycleWatcher(),
-              );
-            },
-          ),
-        );
-      },
+                return StreamProvider<List<Products>?>.value(
+                  value: productsLimit == 0
+                      ? productsCollection
+                          .orderBy('codigo')
+                          .snapshots()
+                          .map(productsListFromSnapshot)
+                      : productsCollection
+                          .orderBy('codigo')
+                          .limit(productsLimit)
+                          .snapshots()
+                          .map(productsListFromSnapshot),
+                  initialData: const [],
+                  catchError: (context, error) {
+                    print(error);
+                    print('PROVIDER PRODUCT ERROR');
+                    return;
+                  },
+                  child: const LifecycleWatcher(),
+                );
+              },
+            ),
+          );
+        },
+      ),
     );
   }
 }
@@ -289,6 +306,8 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
             DiaryTabs.route: (BuildContext context) => const DiaryTabs(),
             'order': (BuildContext context) => const OrderPage(),
             'promo': (BuildContext context) => const PromoVideoPlayer(),
+            CameraBarcodeScannerScreen.routeName: (BuildContext context) =>
+                const CameraBarcodeScannerScreen(),
           },
         ),
       ),

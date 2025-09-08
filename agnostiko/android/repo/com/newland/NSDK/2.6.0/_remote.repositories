@@ -1,0 +1,4 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Mon Nov 20 17:05:27 VET 2023
+NSDK-2.6.0.aar>=
+NSDK-2.6.0.pom>=

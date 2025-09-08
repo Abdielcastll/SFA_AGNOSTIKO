@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:pwa_sales2go_flutter/src/features/discount/presentation/widgets/modal_discount.dart';
+import 'package:pwa_sales2go_flutter/src/provider/remote_config_provider.dart';
 import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 
 class AppBarCheckout extends StatelessWidget implements PreferredSizeWidget {
@@ -34,6 +36,18 @@ class AppBarCheckout extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: themeProvider.myTheme.colorScheme.primary,
       foregroundColor: Colors.white,
       elevation: 0,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.loyalty_outlined),
+          onPressed: () {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return const ModalDiscount();
+                });
+          },
+        ),
+      ],
     );
   }
 }

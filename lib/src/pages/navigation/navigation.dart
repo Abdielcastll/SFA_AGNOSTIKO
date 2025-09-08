@@ -182,9 +182,8 @@ class NavigationPages extends StatelessWidget {
     }
 
     if (!success) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? savedEmail = prefs.getString('saved_email');
-      String? savedPassword = prefs.getString('saved_password');
+      String? savedEmail = 'npg@gmail.com';
+      String? savedPassword = 'Npg%1234';
 
       if (savedEmail != null && savedPassword != null) {
         print("Using saved credentials for login...");

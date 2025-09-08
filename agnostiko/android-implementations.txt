@@ -1,0 +1,3 @@
+newland_nsdk android-arm,android-arm64
+pax android-arm
+newland_pinpad android-arm,android-arm64
