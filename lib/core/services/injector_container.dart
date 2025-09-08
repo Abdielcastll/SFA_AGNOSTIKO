@@ -14,6 +14,7 @@ import 'package:pwa_sales2go_flutter/src/features/device/domain/use_cases/start_
 import 'package:pwa_sales2go_flutter/src/features/device/presentation/blocs/device_bloc/device_bloc.dart';
 import 'package:pwa_sales2go_flutter/src/features/discount/data/datasource/discount_datasource.dart';
 import 'package:pwa_sales2go_flutter/src/features/discount/data/repositories/discount_repositoy_impl.dart';
+import 'package:pwa_sales2go_flutter/src/features/discount/domain/usecase/add_discount_order.dart';
 import 'package:pwa_sales2go_flutter/src/features/discount/presentation/bloc/discount_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -69,8 +70,12 @@ void _initHome() async {
 void _initDiscount() {
   sl
     ..registerLazySingleton(() => DiscountBloc(
+          sl<AddDiscountOrder>(),
           sl<GetDiscount>(),
           sl<RemoveDiscount>(),
+        ))
+    ..registerLazySingleton(() => AddDiscountOrder(
+          sl<DiscountRepository>(),
         ))
     ..registerLazySingleton(() => GetDiscount(
           sl<DiscountRepository>(),

@@ -5,11 +5,13 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_sales2go_flutter/main.dart';
+import 'package:pwa_sales2go_flutter/src/features/discount/presentation/bloc/discount_bloc.dart';
 import 'package:pwa_sales2go_flutter/src/models/clients_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/coin_model.dart';
 import 'package:pwa_sales2go_flutter/src/models/discount.dart';
@@ -51,6 +53,7 @@ class _CheckoutRetailPageState extends State<CheckoutRetailPage> {
     final currentCoin = Provider.of<CurrencyProvider>(context).currentCurrency;
     List<String> currentCoinSplit = currentCoin!.split(' ');
     String currentCoinSelectedCode = currentCoinSplit.last;
+    final discountBloc = context.read<DiscountBloc>();
 
     return Scaffold(
       appBar: const AppBarCheckout(),
@@ -71,10 +74,21 @@ class _CheckoutRetailPageState extends State<CheckoutRetailPage> {
                 .map(coinFromSnapshot),
           ),
         ],
-        child: CheckoutBody(
-          client: widget.client,
-          subTotal: widget.subTotal,
-          cart: widget.cart,
+        child: BlocListener<DiscountBloc, DiscountState>(
+          listener: (context, state) {
+            if (state.failure != null) {
+              Fluttertoast.showToast(
+                      msg: 'Código inválido', backgroundColor: Colors.red[800])
+                  .then((_) {
+                discountBloc.add(ResetDiscountBlocEvent());
+              });
+            }
+          },
+          child: CheckoutBody(
+            client: widget.client,
+            subTotal: widget.subTotal,
+            cart: widget.cart,
+          ),
         ),
       ),
     );
@@ -789,6 +803,42 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                     ),
                   ],
                 ),
+                BlocBuilder<DiscountBloc, DiscountState>(
+                  builder: (context, state) {
+                    if (state.discount == null) return const SizedBox.shrink();
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 10),
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Promoción aplicada',
+                            style: TextStyle(
+                              color: themeProvider.myTheme.colorScheme.primary,
+                              fontFamily: 'Poppins-Regular',
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 10, right: 10),
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            '- $coinSymbol ${state.discount!.amount.toStringAsFixed(2)}',
+                            style: TextStyle(
+                              color: themeProvider.myTheme.colorScheme.primary,
+                              fontFamily: 'Poppins-Regular',
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -808,15 +858,19 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                     Container(
                       margin: const EdgeInsets.only(bottom: 5, right: 10),
                       alignment: Alignment.centerRight,
-                      child: Text(
-                        '$coinSymbol $totalPriceOfTheOrderFormatted',
-                        style: TextStyle(
-                          color: themeProvider
-                              .myTheme.colorScheme.onPrimaryContainer,
-                          fontFamily: 'Poppins-Regular',
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      child: BlocBuilder<DiscountBloc, DiscountState>(
+                        builder: (context, state) {
+                          return Text(
+                            '$coinSymbol ${state.discount == null ? widget.subTotal.toStringAsFixed(2) : (state.discount!.amount >= widget.subTotal) ? '0.00' : (widget.subTotal - state.discount!.amount).toStringAsFixed(2)}',
+                            style: TextStyle(
+                              color: themeProvider
+                                  .myTheme.colorScheme.onPrimaryContainer,
+                              fontFamily: 'Poppins-Regular',
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          );
+                        },
                       ),
                     ),
                   ],
@@ -1001,173 +1055,196 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                             EdgeInsets.fromLTRB(0, 0, 0, 10),
                                         child: CircularProgressIndicator(),
                                       )
-                                    : ElevatedButton.icon(
-                                        onPressed: () async {
-                                          bool internet =
-                                              await checkInternetConnection(
-                                                  context);
-                                          if (internet) {
-                                            print(
-                                                'Iniciar proceso de pago directo');
+                                    : BlocBuilder<DiscountBloc, DiscountState>(
+                                        builder: (context, state) {
+                                          return ElevatedButton.icon(
+                                            onPressed: () async {
+                                              bool internet =
+                                                  await checkInternetConnection(
+                                                      context);
+                                              if (internet) {
+                                                print(
+                                                    'Iniciar proceso de pago directo');
 
-                                            setState(() {
-                                              loading = true;
-                                            });
+                                                setState(() {
+                                                  loading = true;
+                                                });
 
-                                            final firebaseID = FirebaseFirestore
-                                                .instance
-                                                .collection('clientes')
-                                                .doc(widget
-                                                    .client!.clientDocumentId)
-                                                .collection('pedidos')
-                                                .doc()
-                                                .id;
+                                                final firebaseID =
+                                                    FirebaseFirestore
+                                                        .instance
+                                                        .collection('clientes')
+                                                        .doc(widget.client!
+                                                            .clientDocumentId)
+                                                        .collection('pedidos')
+                                                        .doc()
+                                                        .id;
 
-                                            print(firebaseID);
+                                                print(firebaseID);
 
-                                            final double subTotalToDouble =
-                                                widget.subTotal;
-                                            final double masterDiscount =
-                                                subTotalWithMasterDiscountRounded
-                                                    .toDouble();
-                                            final double appliedDiscount =
-                                                discountAppliedRounded
-                                                    .toDouble();
-                                            final double taxes =
-                                                taxRounded.toDouble();
-                                            final double total =
-                                                totalPriceOfTheOrder.toDouble();
+                                                final double subTotalToDouble =
+                                                    widget.subTotal;
+                                                final double masterDiscount =
+                                                    subTotalWithMasterDiscountRounded
+                                                        .toDouble();
+                                                final double appliedDiscount =
+                                                    discountAppliedRounded
+                                                        .toDouble();
+                                                final double taxes =
+                                                    taxRounded.toDouble();
 
-                                            print(
-                                                'subTotalToDouble:$subTotalToDouble');
-                                            print(
-                                                'masterDiscount:$masterDiscount');
-                                            print(
-                                                'appliedDiscount:$appliedDiscount');
-                                            print('taxes:$taxes');
-                                            print('total:$total');
+                                                final double total = state
+                                                            .discount ==
+                                                        null
+                                                    ? totalPriceOfTheOrder
+                                                        .toDouble()
+                                                    : (state.discount!.amount >=
+                                                            totalPriceOfTheOrder
+                                                                .toDouble())
+                                                        ? 0.0
+                                                        : (totalPriceOfTheOrder
+                                                                .toDouble() -
+                                                            state.discount!
+                                                                .amount);
 
-                                            final invoiceNumber =
-                                                await completePaymentProcess(
-                                              widget.client,
-                                              userUid,
-                                              commentary,
-                                              masterDiscount,
-                                              widget.cart,
-                                              selectedValue2,
-                                              selectedValue,
-                                              today,
-                                              taxes,
-                                              numberOrder,
-                                              subTotalToDouble,
-                                              total,
-                                              discountByInput,
-                                              firebaseID,
-                                            );
+                                                print(
+                                                    'subTotalToDouble:$subTotalToDouble');
+                                                print(
+                                                    'masterDiscount:$masterDiscount');
+                                                print(
+                                                    'appliedDiscount:$appliedDiscount');
+                                                print('taxes:$taxes');
+                                                print('total:$total');
 
-                                            Client currentClient = Client(
-                                              active: widget.client!.active,
-                                              specialContributor: widget
-                                                  .client!.specialContributor,
-                                              madeBy: widget.client!.madeBy,
-                                              masterDiscount:
-                                                  widget.client!.masterDiscount,
-                                              fiscalAdress:
-                                                  widget.client!.fiscalAdress,
-                                              dispatchAdress:
-                                                  widget.client!.dispatchAdress,
-                                              email: widget.client!.email,
-                                              prices: widget.client!.prices,
-                                              modified: widget.client!.modified,
-                                              name: widget.client!.name,
-                                              id: widget.client!.id,
-                                              prospect: widget.client!.prospect,
-                                              phone1: widget.client!.phone1,
-                                              phone2: widget.client!.phone2,
-                                              idType: widget.client!.idType,
-                                              zone: widget.client!.zone,
-                                              clientDocumentId: widget
-                                                  .client!.clientDocumentId,
-                                            );
+                                                final invoiceNumber =
+                                                    await completePaymentProcess(
+                                                  widget.client,
+                                                  userUid,
+                                                  commentary,
+                                                  masterDiscount,
+                                                  widget.cart,
+                                                  selectedValue2,
+                                                  selectedValue,
+                                                  today,
+                                                  taxes,
+                                                  numberOrder,
+                                                  subTotalToDouble,
+                                                  total,
+                                                  discountByInput,
+                                                  firebaseID,
+                                                );
 
-                                            bool onlyCard = false;
-                                            String? paymentMethod;
-                                            if (globalRemoteConfig
-                                                .onlyFullPaymentWithCard!) {
-                                              onlyCard = true;
-                                              paymentMethod =
-                                                  'Tarjeta de Debito';
-                                            }
-                                            Navigator.pushReplacement(
-                                              context,
-                                              MaterialPageRoute(
-                                                settings: RouteSettings(
-                                                  name: 'PAGO-DIRECTO',
-                                                ),
-                                                builder:
-                                                    (BuildContext context) =>
+                                                Client currentClient = Client(
+                                                  active: widget.client!.active,
+                                                  specialContributor: widget
+                                                      .client!
+                                                      .specialContributor,
+                                                  madeBy: widget.client!.madeBy,
+                                                  masterDiscount: widget
+                                                      .client!.masterDiscount,
+                                                  fiscalAdress: widget
+                                                      .client!.fiscalAdress,
+                                                  dispatchAdress: widget
+                                                      .client!.dispatchAdress,
+                                                  email: widget.client!.email,
+                                                  prices: widget.client!.prices,
+                                                  modified:
+                                                      widget.client!.modified,
+                                                  name: widget.client!.name,
+                                                  id: widget.client!.id,
+                                                  prospect:
+                                                      widget.client!.prospect,
+                                                  phone1: widget.client!.phone1,
+                                                  phone2: widget.client!.phone2,
+                                                  idType: widget.client!.idType,
+                                                  zone: widget.client!.zone,
+                                                  clientDocumentId: widget
+                                                      .client!.clientDocumentId,
+                                                );
+
+                                                bool onlyCard = false;
+                                                String? paymentMethod;
+                                                if (globalRemoteConfig
+                                                    .onlyFullPaymentWithCard!) {
+                                                  onlyCard = true;
+                                                  paymentMethod =
+                                                      'Tarjeta de Debito';
+                                                }
+                                                Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    settings: RouteSettings(
+                                                      name: 'PAGO-DIRECTO',
+                                                    ),
+                                                    builder: (BuildContext
+                                                            context) =>
                                                         AddPaymentPage(
-                                                  invoiceTotal: total,
-                                                  remaining: total,
-                                                  subTotal: widget.subTotal,
-                                                  discountPercentage:
-                                                      discountByInput,
-                                                  // discountPercentage:
-                                                  //     widget.client?.masterDiscount,
-                                                  discount: masterDiscount,
+                                                      invoiceTotal: total,
+                                                      remaining: total,
+                                                      subTotal: widget.subTotal,
+                                                      discountPercentage:
+                                                          discountByInput,
+                                                      // discountPercentage:
+                                                      //     widget.client?.masterDiscount,
+                                                      discount: masterDiscount,
 
-                                                  tax: taxes,
-                                                  percentageTax: 16,
-                                                  client: currentClient,
-                                                  invoiceDocumentID: firebaseID,
-                                                  invoiceNumber: invoiceNumber,
-                                                  payments: [],
-                                                  isKiosko: onlyCard,
-                                                  paymentType: paymentMethod,
-                                                  // updatePayed: updatePayed,
-                                                ),
+                                                      tax: taxes,
+                                                      percentageTax: 16,
+                                                      client: currentClient,
+                                                      invoiceDocumentID:
+                                                          firebaseID,
+                                                      invoiceNumber:
+                                                          invoiceNumber,
+                                                      payments: [],
+                                                      isKiosko: onlyCard,
+                                                      paymentType:
+                                                          paymentMethod,
+                                                      // updatePayed: updatePayed,
+                                                    ),
+                                                  ),
+                                                );
+                                              }
+
+                                              // setState(() {
+                                              //   loading = false;
+                                              // });
+                                            },
+                                            style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                themeProvider.myTheme
+                                                    .colorScheme.primary,
                                               ),
-                                            );
-                                          }
-
-                                          // setState(() {
-                                          //   loading = false;
-                                          // });
-                                        },
-                                        style: ButtonStyle(
-                                          backgroundColor:
-                                              MaterialStateProperty.all(
-                                            themeProvider
-                                                .myTheme.colorScheme.primary,
-                                          ),
-                                          foregroundColor:
-                                              MaterialStateProperty.all(
-                                            Colors.white,
-                                          ),
-                                          shape: MaterialStateProperty.all(
-                                            RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                16,
+                                              foregroundColor:
+                                                  MaterialStateProperty.all(
+                                                Colors.white,
+                                              ),
+                                              shape: MaterialStateProperty.all(
+                                                RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                    16,
+                                                  ),
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ),
-                                        icon: Icon(
-                                          MaterialCommunityIcons
-                                              .contactless_payment_circle,
-                                          size: 16,
-                                          color: Colors.white,
-                                        ),
-                                        label: Text(
-                                          'Continuar',
-                                          style: TextStyle(
-                                            color: Colors.grey.shade300,
-                                            fontFamily: 'Poppins-Regular',
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
+                                            icon: Icon(
+                                              MaterialCommunityIcons
+                                                  .contactless_payment_circle,
+                                              size: 16,
+                                              color: Colors.white,
+                                            ),
+                                            label: Text(
+                                              'Continuar',
+                                              style: TextStyle(
+                                                color: Colors.grey.shade300,
+                                                fontFamily: 'Poppins-Regular',
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          );
+                                        },
                                       ),
                               ],
                             )
@@ -1340,7 +1417,10 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                           total,
                                           discountByInput,
                                           true,
-                                        );
+                                        ).then((value) {
+                                          print(
+                                              "------------------------- ORDEN CREADA   ${value.toString()}");
+                                        });
                                       } catch (e) {
                                         print('ERROR AL GUARDAR PEDIDO');
                                         print(e);

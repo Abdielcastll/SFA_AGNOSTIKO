@@ -25,12 +25,14 @@ class DiscountDatasourceFirebase extends DiscountDatasource {
       DiscountModel? discountModel;
 
       if (discountdata.isEmpty) {
+        print(" ************* ERROR No discounts were found");
         throw const ApiException(
             message: 'No discounts were found', statusCode: 401);
       }
       for (var discount in discountdata) {
         if (discount['codigo'] == codigo) {
           if (discount['activo'] == false) {
+            print(" ************* ERROR The discount is not active");
             throw const ApiException(
                 message: 'The discount is not active', statusCode: 401);
           }
@@ -39,18 +41,21 @@ class DiscountDatasourceFirebase extends DiscountDatasource {
         }
       }
       if (discountModel == null) {
+        print(" ************* ERROR The discount does not exist");
         throw const ApiException(
             message: 'The discount does not exist', statusCode: 401);
       }
 
       return discountModel;
     } on Exception catch (e, s) {
+      print(" ************* ERROR  Exception${e.toString()}");
       debugPrintStack(stackTrace: s);
       throw ApiException(
         message: e.toString(),
         statusCode: 505,
       );
     } catch (e) {
+      print(" ************* ERROR catch ${e.toString()}");
       throw ApiException(
         message: e.toString(),
         statusCode: 500,

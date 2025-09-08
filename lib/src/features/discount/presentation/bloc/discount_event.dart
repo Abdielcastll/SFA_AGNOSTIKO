@@ -14,11 +14,19 @@ class GetDiscountEvent extends DiscountEvent {
 }
 
 class RemoveDiscountEvent extends DiscountEvent {
-  final String idOrder;
+  final String idDiscount;
 
-  const RemoveDiscountEvent(this.idOrder);
+  const RemoveDiscountEvent(this.idDiscount);
   @override
-  List<Object> get props => [idOrder];
+  List<Object> get props => [idDiscount];
+}
+
+class AddDiscountOrderEvent extends DiscountEvent {
+  final AddDiscountOrderParam params;
+
+  const AddDiscountOrderEvent(this.params);
+  @override
+  List<Object> get props => [params];
 }
 
 class ResetDiscountBlocEvent extends DiscountEvent {}
