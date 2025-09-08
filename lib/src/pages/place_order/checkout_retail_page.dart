@@ -1134,6 +1134,12 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                                                   firebaseID,
                                                 );
 
+                                                print('''
+--------------------------------------
+${widget.client}
+--------------------------------------
+''');
+
                                                 Client currentClient = Client(
                                                   active: widget.client!.active,
                                                   specialContributor: widget
