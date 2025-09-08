@@ -1,29 +1,34 @@
 import 'package:flutter/foundation.dart';
 import 'package:pwa_sales2go_flutter/core/error/exception.dart';
-import 'package:pwa_sales2go_flutter/src/utils/typedef.dart';
+import 'package:pwa_sales2go_flutter/src/services/database_functions.dart';
 
 import '../models/discount_model.dart';
 
 abstract class DiscountDatasource {
-  DiscountModel getDiscounts({required String codigo});
-  Future<void> removeDiscount({required String idOrder});
+  Future<DiscountModel> getDiscounts({required String codigo});
+  Future<void> removeDiscount({required String idDiscount});
+  Future<void> addDiscountOrder(
+      {required String idDiscount,
+      required String idOrder,
+      required String idClient});
+  Future<void> addDiscountInvoice(
+      {required String idDiscount,
+      required String idInvoice,
+      required String idClient});
 }
 
 class DiscountDatasourceFirebase extends DiscountDatasource {
-  // final InventaryLocal _inventory = InventaryLocal();
-  // final FirebaseServiceManager _firebaseService = FirebaseServiceManager();
-
   @override
-  DiscountModel getDiscounts({required String codigo}) {
+  Future<DiscountModel> getDiscounts({required String codigo}) async {
     try {
-      /* final inventoryData = _inventory.getInventory;
-      final List<DataMap>? discountInventory = inventoryData.discount;
+      final discountdata = await getDiscountData();
       DiscountModel? discountModel;
-      if (discountInventory == null) {
+
+      if (discountdata.isEmpty) {
         throw const ApiException(
             message: 'No discounts were found', statusCode: 401);
       }
-      for (var discount in discountInventory) {
+      for (var discount in discountdata) {
         if (discount['codigo'] == codigo) {
           if (discount['activo'] == false) {
             throw const ApiException(
@@ -37,8 +42,8 @@ class DiscountDatasourceFirebase extends DiscountDatasource {
         throw const ApiException(
             message: 'The discount does not exist', statusCode: 401);
       }
-*/
-      return DiscountModel.empty();
+
+      return discountModel;
     } on Exception catch (e, s) {
       debugPrintStack(stackTrace: s);
       throw ApiException(
@@ -54,31 +59,50 @@ class DiscountDatasourceFirebase extends DiscountDatasource {
   }
 
   @override
-  Future<void> removeDiscount({required String idOrder}) async {
+  Future<void> removeDiscount({required String idDiscount}) async {
     try {
-      /*final inventoryData = _inventory.getInventory;
-      final OrderModel? order = inventoryData.order;
-
-      if (order == null) {
-        throw const ApiException(
-            message: 'It is necessary to create an order', statusCode: 401);
-      }
-      if (order.discount == null) {
-        return;
-      }
-
-      await _firebaseService.disableDiscount(
+      await disableDiscount(
         isDisabled: true,
-        idDiscount: order.discount!.codigo,
+        idDiscount: idDiscount,
       );
-
-      order.discount = null;*/
     } on Exception catch (e, s) {
       debugPrintStack(stackTrace: s);
       throw ApiException(
         message: e.toString(),
         statusCode: 505,
       );
+    } catch (e) {
+      throw ApiException(
+        message: e.toString(),
+        statusCode: 500,
+      );
+    }
+  }
+
+  @override
+  Future<void> addDiscountInvoice(
+      {required String idDiscount,
+      required String idInvoice,
+      required String idClient}) async {
+    try {
+      await addInvoiceDiscount(
+          idClient: idClient, idInvoice: idInvoice, idDiscount: idDiscount);
+    } catch (e) {
+      throw ApiException(
+        message: e.toString(),
+        statusCode: 500,
+      );
+    }
+  }
+
+  @override
+  Future<void> addDiscountOrder(
+      {required String idDiscount,
+      required String idOrder,
+      required String idClient}) async {
+    try {
+      await addOrdenDiscount(
+          idClient: idClient, idOrden: idOrder, idDiscount: idDiscount);
     } catch (e) {
       throw ApiException(
         message: e.toString(),

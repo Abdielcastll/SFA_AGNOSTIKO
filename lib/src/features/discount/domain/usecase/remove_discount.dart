@@ -10,18 +10,18 @@ class RemoveDiscount extends UseCaseWithParams<void, RemoveDiscountParam> {
 
   @override
   ResultParams<void> call(RemoveDiscountParam params) =>
-      _repository.removeDiscount(idOrder: params.idOrder);
+      _repository.removeDiscount(idDiscount: params.idDiscount);
 }
 
 class RemoveDiscountParam extends Equatable {
-  final String idOrder;
+  final String idDiscount;
 
-  const RemoveDiscountParam({required this.idOrder});
+  const RemoveDiscountParam({required this.idDiscount});
 
-  const RemoveDiscountParam.empty() : this(idOrder: '');
+  const RemoveDiscountParam.empty() : this(idDiscount: '');
 
   @override
   List<Object?> get props => [
-        idOrder,
+        idDiscount,
       ];
 }

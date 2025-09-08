@@ -4,13 +4,13 @@ import 'package:pwa_sales2go_flutter/src/utils/usecase.dart';
 import '../entities/discount.dart';
 import '../repositories/discount_repository.dart';
 
-class GetDiscount extends UseCaseWithParam<Discount, GetDiscountParam> {
+class GetDiscount extends UseCaseWithParams<Discount, GetDiscountParam> {
   final DiscountRepository _repository;
 
   GetDiscount(this._repository);
 
   @override
-  ResultParam<Discount> call(GetDiscountParam params) =>
+  ResultParams<Discount> call(GetDiscountParam params) =>
       _repository.getDiscount(codigo: params.codigo);
 }
 

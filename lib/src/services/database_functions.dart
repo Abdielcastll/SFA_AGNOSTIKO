@@ -17,6 +17,7 @@ import 'package:pwa_sales2go_flutter/src/theme/theme.dart';
 import 'package:pwa_sales2go_flutter/src/utils/functions.dart';
 import 'package:pwa_sales2go_flutter/src/utils/multitenant-config.dart';
 
+import '../../core/error/exception.dart';
 import '../models/user_rol_model.dart';
 
 // Funciones de Visitas
@@ -124,6 +125,91 @@ Future deleteVisit(
   return await usuariosRef.doc(uid).collection('visitas').doc(docId).delete();
 }
 
+//Descuentos
+Future<List<Map<String, dynamic>>> getDiscountData() async {
+  try {
+    final QuerySnapshot<Map<String, dynamic>> documentSnapshotUser =
+        await firebase.collection('descuentos').get();
+    final descuentosMap = documentSnapshotUser.docChanges;
+    final List<Map<String, dynamic>> listDiscount = [];
+
+    if (descuentosMap.isNotEmpty) {
+      for (final discount in descuentosMap) {
+        final data = discount.doc.data();
+        if (data != null) {
+          listDiscount.add(data);
+        }
+      }
+    }
+
+    return listDiscount;
+  } catch (e) {
+    throw ApiException(
+      message: e.toString(),
+      statusCode: 505,
+    );
+  }
+}
+
+Future<void> disableDiscount(
+    {required String idDiscount, required bool isDisabled}) async {
+  try {
+    return firebase
+        .collection('descuentos')
+        .doc(idDiscount)
+        .update({'activo': isDisabled});
+  } on FirebaseException catch (e) {
+    throw ApiException(
+      message: e.toString(),
+      statusCode: 505,
+    );
+  }
+}
+Future<void> addInvoiceDiscount({
+  required String idClient,
+  required String idInvoice,
+  required String idDiscount,
+}) async {
+  try {
+    final refdiscount = await firebase.collection('descuentos').doc(idDiscount).get();
+    
+    await firebase
+        .collection('clientes')
+        .doc(idClient)
+        .collection('facturas')
+        .doc(idInvoice)
+        .update({'descuento': refdiscount});
+  } on FirebaseException catch (e) {
+   throw ApiException(
+  message: e.toString(),
+  statusCode: 505,
+);
+}
+}
+Future<void> addOrdenDiscount({
+  required String idClient,
+  required String idOrden,
+  required String idDiscount,
+}) async {
+  try {
+    final refdiscount = await firebase.collection('descuentos').doc(idDiscount).get();
+    
+    await firebase
+        .collection('clientes')
+        .doc(idClient)
+        .collection('pedidos')
+        .doc(idOrden)
+        .update({'descuento': refdiscount});
+
+  } on FirebaseException catch (e) {
+   throw ApiException(
+  message: e.toString(),
+  statusCode: 505,
+);
+}
+}
+
+
 // Funciones de Pedidos
 
 Future createOrder(
@@ -142,6 +228,7 @@ Future createOrder(
   int? discountPercentage,
   bool? reduceStock,
 ) async {
+
   print('/// CREAR PEDIDO ///');
 
   final List quantitiesList = [];
@@ -250,6 +337,7 @@ Future createOrder(
       'totalAPagar': totalOfTheOrder,
       'ultimaModificacion': Timestamp.fromDate(DateTime.now()),
       'vendedor': usuariosRef.doc(userUid),
+      
     },
   ).whenComplete(
     () => print('//////////////// PEDIDO CREADO ////////////////'),
@@ -283,6 +371,11 @@ Future createInvoice(
   subTotalOfTheOrder,
   userID,
 ) async {
+    
+  
+   
+   
+
   print('/// CREAR FACTURA ///');
 
   final clientID = clientesRef.doc(client.clientDocumentId);
@@ -375,6 +468,7 @@ Future createInvoice(
       'ultimaModificacion': lastModification,
       'vendedor': seller,
       'tasasDeCambio': exchangeRates,
+      
     }).whenComplete(() async {
       return await configRef
           .doc('contador_pedidos')
@@ -879,6 +973,7 @@ Future<int> completePaymentProcess(
   double subTotal,
   double totalOfTheOrder,
   int? discountPercentage,
+
   randomID,
 ) async {
   print('CREAR PEDIDO COMPLETADO');
